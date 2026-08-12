@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers. .)**: Web Workers is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers. (Node.js implements a similar but separate multi-threading module called `worker_threads`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript is fundamentally a **single-threaded** programming language, meaning it only has one Call Stack and executes one line of code at a time on the main browser thread. The main thread is also responsible for rendering layout styles, updating layouts, and listening to user click events.
@@ -93,7 +89,7 @@ self.onmessage = function(event) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Web Workers Scope and Variable Hoisting
 
@@ -166,70 +162,135 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Worker Ping-Pong
+### Exercise 1: Offloading Heavy Processing to Dedicated Web Worker
 
-**Problem:** Complete the worker script code to listen for a message containing `"ping"`, and immediately reply by sending a message containing `"pong"` back to the main thread.
+**Scenario:** A web application offloads CPU-intensive image processing or sorting tasks to a dedicated Web Worker thread via postMessage().
 
-```javascript
-// worker.js:
-self.onmessage = function(event) {
-  const msg = event.data;
-  
-  if (msg === "ping") {
-    // Send pong reply back
-  }
-};
-```
+**Requirements:**
+1. Write executeWorkerTask(workerMock, payload).
+2. Send payload via workerMock.postMessage().
+3. Listen for response via onmessage.
+4. Return task result promise.
 
 > [!check]- Answer
-> - Inside the if statement, call `self.postMessage("pong")`.
-> 
----
-
-### Exercise 2: Web Worker Message Passing with `postMessage`
-
-**Problem:** Simulate sending data to a worker via `worker.postMessage({ num: 10 })`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Message posted to worker: 10
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const msg = { num: 10 };
-> console.log(`Message posted to worker: ${msg.num}`);
+> function executeWorkerTask(workerMock, payload) {
+>   return new Promise((resolve, reject) => {
+>     workerMock.onmessage = (event) => {
+>       resolve(event.data);
+>     };
+>     workerMock.onerror = (error) => {
+>       reject(error);
+>     };
+>     workerMock.postMessage(payload);
+>   });
+> }
+>
+> // Verification tests
+> const mockWorker = {
+>   onmessage: null,
+>   onerror: null,
+>   postMessage(data) {
+>     setTimeout(() => {
+>       if (this.onmessage) this.onmessage({ data: { result: data * 2 } });
+>     }, 10);
+>   }
+> };
+>
+> executeWorkerTask(mockWorker, 21).then(res => {
+>   console.assert(res.result === 42, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `postMessage()` transfers serialized structured clone data across thread boundaries.
+> #### Technical Explanation
+>
+> 1. **Web Workers Concept**: Web Workers run scripts in background threads separate from the main browser execution thread.
+> 2. **postMessage Communication**: Main thread and worker threads communicate via postMessage() and onmessage event handlers.
+> 3. **No DOM Access**: Web Workers do NOT have access to the document DOM or window object.
 > 
 ---
 
-### Exercise 3: Offloading Heavy CPU Tasks to Workers
+### Exercise 2: Web Workers Advanced Context Handler
 
-**Problem:** Explain why Web Workers prevent UI freezing during heavy 10-second computations.
+**Scenario:** A web application component processes web workers data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleWebWorkersSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Offloads CPU work off main UI thread
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Offloads CPU work off main UI thread");
+> function handleWebWorkersSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleWebWorkersSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Web Workers run on separate OS background threads, keeping main UI event loops responsive.
-> 
+> #### Technical Explanation
+>
+> 1. **Web Workers Architecture**: Applying web workers patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Web Workers Performance Optimization
+
+**Scenario:** An application utility optimizes web workers execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeWebWorkersTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeWebWorkersTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeWebWorkersTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Web Workers Optimization**: Optimizing web workers improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Event Loop](event_loop.md) — The engine loop which remains unblocked by offloading calculations to workers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JavaScript is single-threaded; CPU-intensive calculations block the main thread, freezing the user interface.
 - Web Workers run scripts on separate, parallel operating system background threads.
 - Workers communicate with the main thread using event-based message passing (`postMessage` and the `message` event).

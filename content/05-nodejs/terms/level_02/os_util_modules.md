@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Module**
+
+**Core Module (Node.js Core Architecture .)**: The os & util Modules is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Provides interfaces linking JavaScript to the host operating system resources).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Node.js applications often need to query details about the host machine's hardware (e.g. checking how many CPU cores are available to determine clustering strategies, or checking available memory). They also require helper utilities for code conversion (like converting legacy error-first callbacks into Promises).
@@ -85,7 +81,7 @@ run();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hardcoding CPU core workers in clustering strategies
 
@@ -137,7 +133,7 @@ const promiseFn = util.promisify(custom);
 const logicalCores = os.cpus().length; // Understand logical threads vs physical cores
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Promisifier
 
@@ -208,13 +204,13 @@ execute();
 >
 > **Explanation:** `util.promisify` converts callback functions into Promise-based functions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Promisification (util.promisify)](../level_05/promisification.md) — The concept behind async callback conversion.
 - [PM2 (Process Manager)](../level_10/pm2.md) — Multiple processes that scale dynamically based on CPU core counts.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The built-in `os` and `util` modules query system hardware and translate legacy APIs.
 - Use `os.cpus()` to find the number of logical cores, which is critical for process clustering.
 - `os.freemem()` and `os.totalmem()` calculate available system memory.

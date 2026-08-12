@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: some() is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you don't need to know *which* item matches a condition, or *how many* items match. You just need a simple "Yes or No" answer to the question: "Does this array contain at least one thing I'm looking for?"
@@ -66,7 +62,7 @@ if (hasSlacker) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Some Scope and Variable Hoisting
 
@@ -139,71 +135,50 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Banned Words
+### Exercise 1: Fraud Detection Risk Flag Detector
 
-**Problem:** You have an array of words from a user's comment: `["I", "really", "love", "JavaScript"]`. You also have a list of banned words: `["hate", "stupid", "dumb"]`. Use `some()` on the comment array to check if it includes any banned words. (Hint: use `bannedWords.includes(word)` inside the callback).
+**Scenario:** A financial fraud engine checks if any transaction in a batch triggers high-risk security flags using some().
 
-**Expected output:**
+**Requirements:**
+1. Write hasHighRiskTransaction(transactions).
+2. Check if any transaction has riskScore > 80 using some().
+3. Return boolean indicator.
+
 > [!check]- Answer
-> ```text
-> false
-> ```
-> - `commentWords.some(word => bannedWords.includes(word))`
-> 
----
-
-### Exercise 2: Testing Negative Numbers Existence
-
-**Problem:** Check if `[1, -2, 3]` contains any negative numbers using `.some()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [1, -2, 3];
-> console.log(nums.some(x => x < 0));
+> function hasHighRiskTransaction(transactions) {
+>   if (!Array.isArray(transactions) || transactions.length === 0) return false;
+>   return transactions.some(tx => typeof tx.riskScore === "number" && tx.riskScore > 80);
+> }
+>
+> // Verification tests
+> const txBatch = [{ riskScore: 10 }, { riskScore: 85 }, { riskScore: 30 }];
+> console.assert(hasHighRiskTransaction(txBatch) === true, "Test 1 Failed");
+>
+> const safeBatch = [{ riskScore: 10 }, { riskScore: 20 }];
+> console.assert(hasHighRiskTransaction(safeBatch) === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `.some()` returns `true` if at least one element passes the predicate test.
-> 
----
-
-### Exercise 3: Short-Circuiting Behavior of `.some()`
-
-**Problem:** Demonstrate that `.some()` halts iteration immediately upon finding the first `true` match.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Checked: 1
-> Checked: 2
-> true
-> ```
-> ```javascript
-> const res = [1, 2, 3].some(x => {
->   console.log(`Checked: ${x}`);
->   return x === 2;
-> });
-> console.log(res);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `.some()` short-circuits execution as soon as any truthy condition is encountered.
-> 
-> 
+> 1. **some() Short-Circuiting**: Array.prototype.some(predicate) returns true as soon as it encounters the first truthy predicate match.
+> 2. **Falsy Fallback for Empty Arrays**: Calling some() on an empty array [] always returns false.
+> 3. **Existence Verification**: Ideal for checking if at least one element satisfies condition criteria.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [every()](every.md) — Checks if *all* elements pass the test (the strict sibling of `some`).
 - [find()](find.md) — Stops at the first match, but returns the *item* instead of a boolean.
 - [indexOf / includes / findIndex](indexof_includes_findindex.md) — Related concept: indexOf / includes / findIndex.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `some()` returns a strict boolean: `true` or `false`.
 - It returns `true` if **at least one** element passes the test.
 - It "short-circuits" (stops executing) the moment it finds a truthy result, making it very fast.

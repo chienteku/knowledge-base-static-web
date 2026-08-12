@@ -493,7 +493,7 @@ You are tasked with implementing a fallible thread-safe authentication manager:
 - [Static (`static`)](../level_01/static_static.md) — The mechanism these types are almost always paired with.
 - [Interior Mutability](../level_03/interior_mutability.md) — The general pattern (mutating through a shared `&T`) that `OnceLock` relies on internally.
 - [`Mutex<T>`](mutex_t.md) — A related but different tool: `Mutex` allows repeated mutation; `OnceLock` allows exactly one initialization, then read-only access forever after.
-- [Closure](../level_06/closure.md) — What `LazyLock::new()` and `.get_or_init()` both accept as the "how to compute the value" argument.
+- [Closures (`|args| body`)](../level_06/closure.md) — What `LazyLock::new()` and `.get_or_init()` both accept as the "how to compute the value" argument.
 - [`thread_local!` Macro](thread_local_macro.md) — Related concept: `thread_local!` Macro.
 
 ---

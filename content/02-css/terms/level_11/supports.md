@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS At-Rule**
+
+**CSS At-Rule (Universal Modern Standard .)**: `@supports` (Feature Queries) is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Evaluated early during stylesheet compilation. Allows the browser layout engine to skip code blocks targeting unsupported rendering APIs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 CSS evolves rapidly. Amazing new features like CSS Grid, Backdrop Filters, and Container Queries are constantly introduced. 
@@ -150,7 +146,7 @@ Checking modern display properties:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting parentheses around the query declaration
 
@@ -196,7 +192,7 @@ Checking modern display properties:
 @supports (display: grid) { ... }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Property Fallback
 
@@ -263,13 +259,13 @@ Checking modern display properties:
 >
 > **Explanation:** `@supports not (...)` provides fallback styling for unsupported CSS features.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport sizing at-rules.
 - [Container Queries (`@container`)](container_queries.md) — Component container queries.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `@supports` feature queries test if browser engines support specific CSS properties.
 - They are the foundation of Progressive Enhancement: build fallbacks first, then upgrade.
 - Always include parentheses around the query (e.g. `(display: grid)`).

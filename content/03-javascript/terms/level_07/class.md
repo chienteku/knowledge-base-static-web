@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal)**: Class is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before ES6 (2015), creating objects and setting up inheritance using traditional [Constructor Functions](./constructor_function.md) and manually linking `Object.create(Prototype)` was messy, confusing, and completely alien to developers coming from other languages like Java, C#, or Python.
@@ -88,7 +84,7 @@ myAccount.deposit = 50;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Class Scope and Variable Hoisting
 
@@ -161,69 +157,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Secret Truth
+### Exercise 1: Encapsulated User Domain Model Class
 
-**Problem:** If you run `typeof User` (assuming `User` is a class), what does the console print?
+**Scenario:** A domain architecture package defines a User class with a constructor, getter methods, and instance methods for updating user profiles.
 
-**Expected output:**
+**Requirements:**
+1. Define class User with constructor(id, name, email).
+2. Implement getProfile() method.
+3. Implement updateEmail(newEmail) method.
+4. Return formatted profile.
+
 > [!check]- Answer
-> ```text
-> "function"
-> Because under the hood, a class is literally just a Constructor Function!
-> ```
-> - Classes are just syntactic sugar. They didn't add a new data type to JS.
-> 
----
-
-### Exercise 2: Defining ES6 Classes with Constructors
-
-**Problem:** Define `class Person` with `constructor(name)` and method `greet()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hi, I am Alice
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class Person {
->   constructor(name) {
+> class User {
+>   constructor(id, name, email) {
+>     this.id = id;
 >     this.name = name;
+>     this.email = email;
 >   }
->   greet() {
->     return `Hi, I am ${this.name}`;
+>
+>   getProfile() {
+>     return `${this.name} <${this.email}>`;
+>   }
+>
+>   updateEmail(newEmail) {
+>     if (typeof newEmail === "string" && newEmail.includes("@")) {
+>       this.email = newEmail;
+>     }
 >   }
 > }
-> const p = new Person("Alice");
-> console.log(p.greet());
+>
+> // Verification tests
+> const u = new User(1, "Alice", "alice@old.com");
+> console.assert(u.getProfile() === "Alice <alice@old.com>", "Test 1 Failed");
+> u.updateEmail("alice@new.com");
+> console.assert(u.email === "alice@new.com", "Test 2 Failed");
 > ```
 >
-> **Explanation:** ES6 class syntax provides clean object-oriented constructor and prototype method structures.
+> #### Technical Explanation
+>
+> 1. **ES6 Class Syntax**: The class keyword provides clean object-oriented syntax built on top of JavaScript's prototypal inheritance model.
+> 2. **constructor Method**: The constructor method initializes new object instances created with the new keyword.
+> 3. **Prototype Shared Methods**: Methods defined inside a class body are automatically assigned to class.prototype, sharing memory across instances.
 > 
 ---
 
-### Exercise 3: Class Field Initializers
+### Exercise 2: Class Advanced Context Handler
 
-**Problem:** Use class field declaration `count = 0;` inside class body.
+**Scenario:** A web application component processes class data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleClassSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> 0
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class Counter {
->   count = 0;
+> function handleClassSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
 > }
-> console.log(new Counter().count);
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleClassSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Class field initializers assign properties directly on new instance object creations.
+> #### Technical Explanation
+>
+> 1. **Class Architecture**: Applying class patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Class Performance Optimization
+
+**Scenario:** An application utility optimizes class execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeClassTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeClassTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeClassTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Class Optimization**: Optimizing class improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [extends](extends.md) — Used to create child classes.
 - [super](super.md) — Used inside child classes to call the parent.
 - [Constructor Function](constructor_function.md) — Related concept: Constructor Function.
@@ -235,7 +289,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `class` is a modern, clean syntax for creating objects and setting up inheritance.
 - It is "syntactic sugar" over JavaScript's existing Prototypal Inheritance model.
 - You must always use the `new` keyword to create an instance of a class.

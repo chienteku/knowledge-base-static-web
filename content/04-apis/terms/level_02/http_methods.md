@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **HTTP Standard / Protocol Action**
+
+**HTTP Standard / Protocol Action (Universal Standard .)**: HTTP Methods (Verbs) is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Essential for building and consuming REST APIs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a Client sends a request to `https://api.github.com/users/chienteku`, what does it want? 
@@ -65,7 +61,7 @@ fetch('https://api.example.com/users', {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using GET to modify data
 
@@ -118,65 +114,163 @@ PATCH /users/5 HTTP/1.1
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Shopping Cart
+### Exercise 1: REST API Method Router Dispatcher
 
-**Problem:** You are building an e-commerce site. 
-1. The user clicks "View Cart". Which HTTP method is sent?
-2. The user clicks "Checkout", which finalizes the order in the database. Which HTTP method is sent?
+**Scenario:** A lightweight API router dispatches HTTP requests to resource handlers based on HTTP method verb.
 
-**Expected output:**
+**Requirements:**
+1. Write dispatchRestMethod(method, resourceId, payload, dbStore).
+2. GET: Read resource.
+3. POST: Create resource.
+4. DELETE: Remove resource.
+
 > [!check]- Answer
-> ```text
-> 1. `GET`. You are just reading data.
-> 2. `POST`. You are creating a new "Order" record in the database.
+>
+> #### Implementation
+>
+> ```javascript
+> function dispatchRestMethod(method, resourceId, payload, dbStore = new Map()) {
+>   const m = method.toUpperCase();
+>
+>   switch (m) {
+>     case "GET":
+>       if (!dbStore.has(resourceId)) return { status: 404, data: null };
+>       return { status: 200, data: dbStore.get(resourceId) };
+>
+>     case "POST":
+>       if (dbStore.has(resourceId)) return { status: 409, error: "Already Exists" };
+>       dbStore.set(resourceId, payload);
+>       return { status: 201, data: payload };
+>
+>     case "DELETE":
+>       if (!dbStore.has(resourceId)) return { status: 404, data: null };
+>       dbStore.delete(resourceId);
+>       return { status: 204, data: null };
+>
+>     default:
+>       return { status: 45, error: "Method Not Allowed" };
+>   }
+> }
+>
+> // Verification tests
+> const db = new Map();
+>
+> const postRes = dispatchRestMethod("POST", "u101", { name: "Alice" }, db);
+> console.assert(postRes.status === 201, "Test 1 Failed");
+>
+> const getRes = dispatchRestMethod("GET", "u101", null, db);
+> console.assert(getRes.status === 200 && getRes.data.name === "Alice", "Test 2 Failed");
+>
+> const delRes = dispatchRestMethod("DELETE", "u101", null, db);
+> console.assert(delRes.status === 204, "Test 3 Failed");
 > ```
-> - Does the action create something new, or just read existing data?
+>
+> #### Technical Explanation
+>
+> 1. **HTTP Method Verbs**: GET (retrieve), POST (create), PUT (replace), PATCH (update), DELETE (remove).
+> 2. **REST Semantics**: HTTP methods specify desired action on identified URL resource.
+> 3. **204 No Content Response**: Standard response code for successful DELETE operations returning no response body.
 > 
 ---
 
-### Exercise 2: HTTP Method Selection Matrix
+### Exercise 2: PATCH Partial Update vs PUT Full Replacement Handler
 
-**Problem:** Select the correct HTTP method for each action:
-1. Fetch a list of products.
-2. Create a new user account with server-generated ID.
-3. Completely replace an existing user profile.
-4. Delete a user account.
+**Scenario:** A REST service distinguishes between PUT (full entity replacement) and PATCH (partial property updates).
 
-**Expected output:**
+**Requirements:**
+1. Write applyResourceUpdate(existingObj, updateData, method).
+2. PUT: Replace object entirely.
+3. PATCH: Merge updated fields only.
+
 > [!check]- Answer
-> ```text
-> 1. GET
-> 2. POST
-> 3. PUT
-> 4. DELETE
+>
+> #### Implementation
+>
+> ```javascript
+> function applyResourceUpdate(existingObj, updateData, method) {
+>   if (!existingObj) return updateData;
+>   const m = method.toUpperCase();
+>
+>   if (m === "PUT") {
+>     // Full replacement: ID is retained, all other properties replaced
+>     return { id: existingObj.id, ...updateData };
+>   }
+>   if (m === "PATCH") {
+>     // Partial update: merge fields into existing object
+>     return { ...existingObj, ...updateData };
+>   }
+>   throw new Error(`Invalid update method: ${method}`);
+> }
+>
+> // Verification tests
+> const current = { id: 1, name: "Alice", role: "User", active: true };
+>
+> const putResult = applyResourceUpdate(current, { name: "Alice Smith" }, "PUT");
+> console.assert(putResult.role === undefined, "Test 1 Failed: PUT replaces unmentioned fields");
+>
+> const patchResult = applyResourceUpdate(current, { name: "Alice Smith" }, "PATCH");
+> console.assert(patchResult.role === "User", "Test 2 Failed: PATCH preserves unmentioned fields");
 > ```
-> ```text
-> 1. GET
-> 2. POST
-> 3. PUT
-> 4. DELETE
-> ```
-> - **Explanation:** Standard REST architecture maps CRUD actions to semantic HTTP verbs.
+>
+> #### Technical Explanation
+>
+> 1. **PUT Semantics**: PUT replaces the target resource representation entirely with request payload.
+> 2. **PATCH Semantics**: PATCH applies partial modifications specified in payload to the target resource.
+> 3. **Data Safety**: Using PATCH prevents accidentally overwriting unmentioned properties with nulls.
+> 
 ---
 
-### Exercise 3: HEAD Request Behavior
+### Exercise 3: CORS Preflight OPTIONS Request Handler
 
-**Problem:** What distinguishes a `HEAD` request from a `GET` request?
+**Scenario:** An API server handles CORS preflight OPTIONS requests, returning allowed methods and origin headers.
 
-**Expected output:**
+**Requirements:**
+1. Write handleCorsPreflight(requestHeaders, allowedMethods).
+2. Check Access-Control-Request-Method.
+3. Return 204 response with CORS headers.
+
 > [!check]- Answer
-> ```text
-> HEAD requests return the exact same HTTP status code and response headers as GET, but omit the response body.
+>
+> #### Implementation
+>
+> ```javascript
+> function handleCorsPreflight(requestHeaders, allowedMethods = ["GET", "POST", "PUT", "DELETE"]) {
+>   const reqMethod = requestHeaders?.["access-control-request-method"] || requestHeaders?.["Access-Control-Request-Method"];
+>   if (!reqMethod) {
+>     return { status: 400, headers: {} };
+>   }
+>
+>   if (!allowedMethods.includes(reqMethod.toUpperCase())) {
+>     return { status: 403, headers: {} };
+>   }
+>
+>   return {
+>     status: 204,
+>     headers: {
+>       "Access-Control-Allow-Origin": "*",
+>       "Access-Control-Allow-Methods": allowedMethods.join(", "),
+>       "Access-Control-Allow-Headers": "Content-Type, Authorization",
+>       "Access-Control-Max-Age": "86400"
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const res = handleCorsPreflight({ "Access-Control-Request-Method": "POST" });
+> console.assert(res.status === 204, "Test 1 Failed");
+> console.assert(res.headers["Access-Control-Allow-Methods"].includes("POST"), "Test 2 Failed");
 > ```
-> ```text
-> HEAD requests return the exact same HTTP status code and response headers as GET, but omit the response body.
-> ```
-> - **Explanation:** `HEAD` checks resource existence or content-length without downloading body bytes.
+>
+> #### Technical Explanation
+>
+> 1. **OPTIONS Method Purpose**: Queries target server for supported communication options without triggering side-effects.
+> 2. **CORS Preflight Mechanics**: Browsers automatically send OPTIONS request before cross-origin non-simple requests.
+> 3. **Access-Control-Max-Age**: Caches preflight response in browser to reduce preflight latency on subsequent calls.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [CRUD Operations](../level_03/crud.md) — The programming concept that HTTP Methods map to.
 - [Idempotency](../level_06/idempotency.md) — The mathematical concept explaining why `PUT` and `POST` are treated differently in network retry logic.
 - [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
@@ -185,7 +279,7 @@ PATCH /users/5 HTTP/1.1
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Every HTTP request must include a **Method (Verb)** indicating its intention.
 - **GET**: Read data. **POST**: Create data. **PUT**: Replace data. **PATCH**: Update data. **DELETE**: Destroy data.
 - Never use `GET` for destructive actions, because browsers assume `GET` requests are safe to pre-fetch and cache!

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Performance Optimization**
+
+**Design Pattern / Performance Optimization (Browser Only)**: Event Delegation is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine a shopping cart list with 1,000 items. Next to each item is a "Delete" button. The naive approach is to use `querySelectorAll` to find all 1,000 buttons and attach 1,000 separate `addEventListener` functions to them. This consumes a massive amount of computer memory and makes the page slow. Furthermore, if the user adds a *new* item to the cart later, you have to manually remember to attach a new listener to that specific new button.
@@ -81,7 +77,7 @@ addBtn.addEventListener("click", () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Delegation Scope and Variable Hoisting
 
@@ -154,61 +150,149 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The `matches` method
+### Exercise 1: Dynamic List Event Delegation Handler
 
-**Problem:** You have a delegated click listener on a parent `<div>`. You only want the code to run if the user clicked an element with the `data-action="save"` attribute. How do you write the `if` statement?
+**Scenario:** An interactive list attaches a single click listener to parent <ul> container, delegating event processing for dynamically added <li> item buttons.
 
-**Expected output:**
+**Requirements:**
+1. Write delegateListClick(event, buttonClass, actionCallback).
+2. Check if event.target matches buttonClass via .closest().
+3. Invoke actionCallback if matched.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> if (event.target.matches('[data-action="save"]')) {
->   // save logic...
+> function delegateListClick(event, buttonClass, actionCallback) {
+>   if (!event || !event.target) return false;
+>   const button = typeof event.target.closest === "function" ? event.target.closest("." + buttonClass) : null;
+>   if (button) {
+>     actionCallback(button);
+>     return true;
+>   }
+>   return false;
 > }
-> ```
-> - `element.matches('css-selector')` is the cleanest way to check if `event.target` is the element you want!
-> 
----
-
-### Exercise 2: Event Delegation Pattern with `closest()`
-
-**Problem:** Attach 1 listener to parent `<ul>` and handle dynamic `<li>` clicks using `event.target.closest('li')`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Delegated li clicked: item-1
-> ```
-> ```javascript
-> const target = { closest: (sel) => ({ dataset: { id: "item-1" } }) };
-> const li = target.closest("li");
-> console.log(`Delegated li clicked: ${li.dataset.id}`);
+>
+> // Verification tests
+> const mockBtn = { className: "delete-btn" };
+> const mockEvt = {
+>   target: {
+>     closest(sel) { return sel === ".delete-btn" ? mockBtn : null; }
+>   }
+> };
+> let handledBtn = null;
+> delegateListClick(mockEvt, "delete-btn", btn => { handledBtn = btn; });
+> console.assert(handledBtn === mockBtn, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Event delegation routes clicks on child elements to a single shared parent listener.
+> #### Technical Explanation
+>
+> 1. **Event Delegation Pattern**: Attaching a single event listener to a parent element to manage events for all current and future child elements.
+> 2. **Memory Optimization**: Dramatically reduces total event listener allocations in large or dynamic DOM lists.
+> 3. **Dynamic Child Support**: Automatically handles events for newly inserted child nodes without re-binding listeners.
 > 
 ---
 
-### Exercise 3: Performance Benefits of Event Delegation
+### Exercise 2: Infinite Scroll List Item Event Delegation
 
-**Problem:** Explain why event delegation avoids attaching 1,000 separate event listeners to dynamic list items.
+**Scenario:** An infinite scroll feed delegates item action clicks to a single top-level container, handling dynamically appended items seamlessly.
 
-**Expected output:**
+**Requirements:**
+1. Write setupFeedDelegation(feedContainer, actionCallback).
+2. Listen to click event on feedContainer.
+3. Inspect event.target for data-action.
+4. Invoke actionCallback(action, itemId).
+
 > [!check]- Answer
-> ```text
-> Single listener handles 1000 dynamic items
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Single listener handles 1000 dynamic items");
+> function setupFeedDelegation(feedContainer, actionCallback) {
+>   if (!feedContainer || typeof feedContainer.addEventListener !== "function") return false;
+>
+>   feedContainer.addEventListener("click", (event) => {
+>     const actionBtn = event.target ? event.target.closest("[data-action]") : null;
+>     if (actionBtn) {
+>       const action = actionBtn.dataset.action;
+>       const itemId = actionBtn.dataset.id;
+>       actionCallback(action, itemId);
+>     }
+>   });
+>   return true;
+> }
+>
+> // Verification tests
+> let actionFired = null;
+> const mockBtn = { dataset: { action: "like", id: "101" } };
+> const mockEvt = { target: { closest(sel) { return mockBtn; } } };
+> const mockContainer = {
+>   addEventListener(evt, fn) { fn(mockEvt); }
+> };
+>
+> setupFeedDelegation(mockContainer, (act, id) => { actionFired = `${act}:${id}`; });
+> console.assert(actionFired === "like:101", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Delegating events to parent elements conserves memory and handles dynamically inserted elements automatically.
-> 
+> #### Technical Explanation
+>
+> 1. **Dynamic Node Delegation**: Event delegation eliminates the need to attach listeners to newly appended infinite scroll items.
+> 2. **Memory Optimization**: Replaces hundreds of individual event listeners with a single container listener.
+> 3. **Dataset Attribute Inspection**: Uses data-* attributes to extract item action parameters directly from clicked elements.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Form Field Change Delegation Engine
+
+**Scenario:** A dynamic form engine listens for 'change' events at the <form> level to track form field updates centrally.
+
+**Requirements:**
+1. Write delegateFormChange(formEl, changeCallback).
+2. Listen to change event on formEl.
+3. Extract field name and value.
+4. Invoke changeCallback(fieldName, fieldValue).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function delegateFormChange(formEl, changeCallback) {
+>   if (!formEl || typeof formEl.addEventListener !== "function") return false;
+>
+>   formEl.addEventListener("change", (event) => {
+>     const field = event.target;
+>     if (field && field.name) {
+>       changeCallback(field.name, field.value);
+>     }
+>   });
+>   return true;
+> }
+>
+> // Verification tests
+> let updatedField = null;
+> const mockInput = { name: "email", value: "alice@test.com" };
+> const mockEvt = { target: mockInput };
+> const mockForm = {
+>   addEventListener(evt, fn) { fn(mockEvt); }
+> };
+>
+> delegateFormChange(mockForm, (name, val) => { updatedField = `${name}=${val}`; });
+> console.assert(updatedField === "email=alice@test.com", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Centralized Form Tracking**: Delegating form input events to the parent form centralizes data collection.
+> 2. **Bubbling Change Events**: The change event bubbles up from input/select/textarea controls to parent forms.
+> 3. **Dynamic Input Support**: Automatically captures changes on dynamically injected input fields.
+> 
+---
+
+## 6. Related Terms
 - [Event Bubbling](event_bubbling.md) — The mechanical process that makes Delegation possible.
 - [Event Bubbling](event_bubbling.md) — The property used to identify the specific child that fired the event.
 - [DOM Traversal](dom_traversal.md) — Related concept: DOM Traversal.
@@ -218,7 +302,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Event Delegation is a performance optimization pattern.
 - It involves placing a single listener on a parent element instead of multiple listeners on child elements.
 - It relies on Event Bubbling to catch child events as they rise up.

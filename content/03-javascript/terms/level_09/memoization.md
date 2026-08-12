@@ -8,21 +8,17 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — The process being optimized.
 - [Closure](../level_03/closure.md) — Used to keep the "cache" hidden and persistent.
-- [Object](../level_02/object.md)
+- [Object](../level_02/object.md) — 
 
 ---
 
 ## 2. Term Category
-- **Design Pattern / Optimization**
+
+**Design Pattern / Optimization (Universal)**: Memoization is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes, functions perform incredibly heavy calculations (like processing a large image, running complex math formulas, or searching through a million records). If a user clicks a button that runs an expensive function `calculate(50)`, the computer might freeze for 3 seconds. If the user accidentally clicks the button *again* with the exact same input of `50`, the computer freezes for *another* 3 seconds to do the exact same math it just did.
@@ -90,7 +86,7 @@ console.log(fastFib(50)); // Instantly returns 12586269025
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Memoization Scope and Variable Hoisting
 
@@ -163,89 +159,172 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-argument Memoization
+### Exercise 1: Generic Multi-Argument Cache Memoizer
 
-**Problem:** The basic `memoize` function above only handles a single argument `arg`. How would you modify it to handle a function that takes multiple arguments, like `add(a, b)`?
+**Scenario:** A heavy math engine provides a generic `memoize(fn, resolver)` utility that caches function results based on argument signature keys.
 
-**Expected output:**
+**Requirements:**
+1. Write memoize(fn, resolver).
+2. Maintain internal Map cache.
+3. Construct cache key from resolver or arguments.
+4. Return cached or freshly computed result.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> function memoize(fn) {
->   const cache = {};
->   // Use the Rest Parameter to gather all arguments!
+> function memoize(fn, resolver) {
+>   const cache = new Map();
+>
 >   return function(...args) {
->     // Stringify the arguments to use as a single cache key
->     const key = JSON.stringify(args); 
->     if (cache[key]) return cache[key];
->     
->     // Use Spread Syntax to pass them to the function
->     const result = fn(...args);
->     cache[key] = result;
+>     const key = typeof resolver === "function" 
+>       ? resolver.apply(this, args) 
+>       : JSON.stringify(args);
+>
+>     if (cache.has(key)) {
+>       return cache.get(key);
+>     }
+>
+>     const result = fn.apply(this, args);
+>     cache.set(key, result);
 >     return result;
 >   };
 > }
+>
+> // Verification tests
+> let computations = 0;
+> const slowSquare = memoize((n) => {
+>   computations++;
+>   return n * n;
+> });
+>
+> console.assert(slowSquare(4) === 16, "Test 1 Failed");
+> console.assert(slowSquare(4) === 16, "Test 2 Failed");
+> console.assert(computations === 1, "Test 3 Failed: Second call must use memoized cache");
 > ```
-> - Object keys must be strings. You need to combine `a` and `b` into a single string key!
+>
+> #### Technical Explanation
+>
+> 1. **Memoization Concept**: An optimization technique that speeds up function execution by caching computed results for specific inputs.
+> 2. **Cache Key Serializer**: Serializing arguments (e.g. via JSON.stringify or custom resolver) generates unique keys for multi-argument functions.
+> 3. **Space vs Time Trade-off**: Trades memory storage space (Map cache) to save CPU execution time on expensive computations.
 > 
 ---
 
-### Exercise 2: Implementing Memoize Cache Function
+### Exercise 2: Recursive Fibonacci Memoization Optimizer
 
-**Problem:** Write a generic `memoize(fn)` wrapper using a `Map` cache.
+**Scenario:** An algorithm suite speeds up exponential-time recursive Fibonacci calculations ($O(2^n)$) to linear time ($O(n)$) using memoization.
 
-**Expected output:**
+**Requirements:**
+1. Write memoizedFibonacci().
+2. Use closure Map cache.
+3. Recursively calculate fib(n) using cached values.
+
 > [!check]- Answer
-> ```text
-> Computed: 10
-> Cached: 10
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function memoize(fn) {
+> function createFibonacci() {
+>   const cache = new Map([[0, 0], [1, 1]]);
+>
+>   function fib(n) {
+>     if (cache.has(n)) {
+>       return cache.get(n);
+>     }
+>     const result = fib(n - 1) + fib(n - 2);
+>     cache.set(n, result);
+>     return result;
+>   }
+>
+>   return fib;
+> }
+>
+> // Verification tests
+> const fib = createFibonacci();
+>
+> console.assert(fib(10) === 55, "Test 1 Failed");
+> console.assert(fib(50) === 12586269025, "Test 2 Failed: Fast computation of fib(50)");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Dynamic Programming via Memoization**: Transforms overlapping subproblems in recursive algorithms from exponential to linear complexity.
+> 2. **Top-Down Computation**: Computes subproblems on demand and stores results in cache for subsequent recursive branches.
+> 3. **Stack Overflow Prevention for Moderate N**: Reduces recursive call depth by reusing previously cached values instantly.
+> 
+---
+
+### Exercise 3: LRU-Bounded Memoization Cache Registry
+
+**Scenario:** A graphics rendering engine limits memoization cache size using a Least Recently Used (LRU) eviction strategy to prevent unbounded memory growth.
+
+**Requirements:**
+1. Write memoizeLRU(fn, capacity = 3).
+2. Use Map insertion order behavior.
+3. Evict oldest key when cache size exceeds capacity.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function memoizeLRU(fn, capacity = 3) {
 >   const cache = new Map();
+>
 >   return function(...args) {
 >     const key = JSON.stringify(args);
->     if (cache.has(key)) return cache.get(key);
->     const res = fn(...args);
->     cache.set(key, res);
->     return res;
+>
+>     if (cache.has(key)) {
+>       const val = cache.get(key);
+>       cache.delete(key);
+>       cache.set(key, val); // Re-insert to mark as recently used
+>       return val;
+>     }
+>
+>     const result = fn.apply(this, args);
+>     cache.set(key, result);
+>
+>     if (cache.size > capacity) {
+>       const firstKey = cache.keys().next().value;
+>       cache.delete(firstKey); // Evict least recently used entry
+>     }
+>
+>     return result;
 >   };
 > }
-> const add = memoize((a, b) => a + b);
-> console.log(`Computed: ${add(5, 5)}`);
-> console.log(`Cached: ${add(5, 5)}`);
+>
+> // Verification tests
+> let runs = 0;
+> const calc = memoizeLRU(x => { runs++; return x * 2; }, 2);
+>
+> calc(1); // cache: [1]
+> calc(2); // cache: [1, 2]
+> calc(1); // cache: [2, 1] (re-ordered)
+> calc(3); // cache: [1, 3] (2 evicted)
+>
+> console.assert(runs === 3, "Test 1 Failed");
+> calc(2); // Must re-compute because 2 was evicted
+> console.assert(runs === 4, "Test 2 Failed: Evicted key must be recomputed");
 > ```
 >
-> **Explanation:** Memoization caches function computation results mapped to argument keys.
-> 
----
-
-### Exercise 3: Cache Memory Size Management
-
-**Problem:** Explain why unbounded memoization caches cause memory leaks in long-running applications.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Unbounded caches retain memory indefinitely
-> ```
-> ```javascript
-> console.log("Unbounded caches retain memory indefinitely");
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Caching every unique input argument without eviction policies (e.g. LRU) causes memory growth.
-> 
-> 
+> 1. **Map Keys Insertion Order**: JavaScript Map maintains key insertion order; Map.keys().next().value yields the oldest inserted key.
+> 2. **LRU Eviction Strategy**: Re-inserting accessed keys keeps active entries fresh and evicts least recently used items when capacity is exceeded.
+> 3. **Bounded Memory Footprint**: Prevents memory leak vulnerabilities caused by unbounded memoization caches in long-running applications.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Closure](../level_03/closure.md) — The mechanic that keeps the cache alive without making it a global variable.
 - [Higher-Order Function](../level_03/higher_order_function.md) — `memoize()` takes a function and returns a new function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Memoization caches the output of expensive functions based on their input.
 - It provides massive performance boosts by skipping redundant calculations.
 - It should ONLY be used on **Pure Functions** (functions that always return the same output for the same input).

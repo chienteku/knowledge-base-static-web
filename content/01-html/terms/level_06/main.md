@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag / Landmark**
+
+**Semantic Tag / Landmark (Universal Browser Support)**: `<main>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard webpage usually has a header, a footer, maybe a sidebar, and the actual content the user came to read (the article, the video, the product). 
@@ -72,7 +68,7 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Multiple `<main>` tags on one page
 
@@ -150,7 +146,7 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 </main>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Core
 
@@ -202,14 +198,14 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 >
 > **Explanation:** `<main>` acts as the primary content accessibility landmark.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<article>` and `<section>`](article_section.md) — The tags that usually live *inside* the `<main>` tag to break up the content.
 - [`<aside>`](aside.md) — The tangential layout block placed outside main content boundaries.
 - [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<main>` tag wraps the primary, unique content of a webpage.
 - It is the most critical "landmark" for accessibility, allowing users to "Skip to Main Content."
 - There should only ever be **one** visible `<main>` tag per page.

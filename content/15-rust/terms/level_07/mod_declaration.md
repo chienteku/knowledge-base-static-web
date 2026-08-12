@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [`fn` (Functions)](../level_01/fn.md) — The blocks of code you are trying to organize.
+- [fn](../level_01/fn.md) — The blocks of code you are trying to organize.
 - [Struct](../level_02/struct.md) — The data structures you want to separate into different files.
 
 ---

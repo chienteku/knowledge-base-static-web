@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Modern Standard .)**: Breakpoints is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Governs the conditional compilation breakpoints of responsive style modules inside the browser's CSS evaluation thread).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you resize a browser window, you reach a point where a mobile single-column layout looks stretched and sparse on a tablet, or a tablet layout starts squishing text columns on a desktop. 
@@ -125,7 +121,7 @@ body { background-color: white; }
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Defining too many micro-breakpoints
 
@@ -246,7 +242,7 @@ body { background-color: white; }
 /* Use fluid clamp() and 3-4 major breakpoints (640px, 768px, 1024px) */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Content Break Search
 
@@ -312,14 +308,14 @@ body { background-color: white; }
 >
 > **Explanation:** `em` breakpoints adapt seamlessly to user font scaling settings.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The code container.
 - [Mobile-First Design](mobile_first.md) — The styling logic direction.
 - [Responsive Design (Concept)](responsive_design.md) — Related concept: Responsive Design (Concept).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Breakpoints are the width thresholds where CSS styles change layout.
 - Always use content-first breakpoints: add a query only when the layout breaks during resizes.
 - Never write media queries targeting exact smartphone model parameters.

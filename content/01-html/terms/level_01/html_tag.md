@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<html>` is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A web browser needs to know where the actual content of a web document begins and ends. The `<html>` tag acts as the ultimate container, often referred to as the "Root Element." 
@@ -64,7 +60,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `lang` attribute
 
@@ -121,7 +117,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 </html>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Root Hierarchy
 
@@ -170,7 +166,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 >
 > **Explanation:** The `lang` attribute can be applied to inline elements to override document language for screen readers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<head>`](head.md) — The first child of the `<html>` element.
 - [`<body>`](body.md) — The second child of the `<html>` element.
 - [`<!DOCTYPE html>`](doctype_html.md) — Related concept: `<!DOCTYPE html>`.
@@ -179,7 +175,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<html>` element is the root of an HTML document.
 - It contains exactly two main child elements: `<head>` and `<body>`.
 - You should always include the `lang` attribute (e.g., `lang="en"`) for accessibility and SEO.

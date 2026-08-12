@@ -289,11 +289,11 @@ Use tokio::sync::Mutex or limit std::sync::Mutex lock scope to a short synchrono
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`Path` / `PathBuf`](../level_01/path_pathbuf.md)
-- [`Read` / `Write` / `BufRead` Traits](../level_04/read_write_bufread.md)
-- [Prelude](../level_07/prelude.md)
+- [`Path` / `PathBuf`](../level_01/path_pathbuf.md) — 
+- [`Read` / `Write` / `BufRead` Traits](../level_04/read_write_bufread.md) — 
+- [Prelude](../level_07/prelude.md) — 
 - [`core` Library](core_library.md) — Core dependency.
 - [`alloc` Library](alloc_library.md) — Alloc dependency.
 

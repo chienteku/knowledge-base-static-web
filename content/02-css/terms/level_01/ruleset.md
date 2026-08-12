@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Syntax**
+
+**CSS Syntax (Universal Browser Support)**: Ruleset (Declaration, Property, Value) is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To write a language that computers can read, you need strict grammar. The W3C designed CSS around the concept of a **Ruleset**. 
@@ -59,7 +55,7 @@ h1 {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the semicolon (`;`)
 
@@ -141,7 +137,7 @@ div {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Syntax Dissection
 
@@ -197,7 +193,7 @@ div {
 >
 > **Explanation:** Comma-separated selectors apply a single declaration block to multiple targets.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Selectors (Element, Class, ID)](selectors.md) — The first part of the ruleset.
 - [The Cascade](the_cascade.md) — How the browser decides which ruleset wins if two rulesets conflict.
 - [Shorthand vs Longhand Properties](shorthand_longhand.md) — Formatting style parameters compactly.
@@ -206,7 +202,7 @@ div {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Ruleset** is the entire block of code (Selector + Declaration Block).
 - A **Property** is the feature you want to change (e.g., `color`, `width`).
 - A **Value** is the specific setting you apply (e.g., `red`, `100px`).

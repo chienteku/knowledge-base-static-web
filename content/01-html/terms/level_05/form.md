@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<form>` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before JavaScript existed, if you wanted to send information from the user back to the web server (like a login username and password), you couldn't just click a button and have code run. The browser had to literally package up all the data the user typed, leave the current page, and submit that package to a URL on the server.
@@ -64,7 +60,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to wrap inputs in a form
 
@@ -131,7 +127,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 <input type="email" name="email" required> <!-- Built-in HTML5 validation -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Form Boundaries
 
@@ -190,7 +186,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 >
 > **Explanation:** `novalidate` bypasses native browser input validation popups.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`action` & `method` Attributes](action_method.md) — The destination and request details for form data.
 - [`<input>`](input.md) — The text boxes and checkboxes that go *inside* the form.
 - [`<button>`](button.md) — The trigger that actually submits the form.
@@ -199,7 +195,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<form>` element groups input fields together into a single submission package.
 - It enables native browser features, like pressing the "Enter" key to submit.
 - The `action` attribute defines where the data is sent.

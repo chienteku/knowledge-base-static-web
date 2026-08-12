@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Universal concept across frontend clients and backend database parsers.)**: Deserialization / Parsing is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Universal concept across frontend clients and backend database parsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While **Serialization** flattens an active, in-memory object (like a JavaScript Object) into a text string (like JSON) so it can travel across a network, **Deserialization (or Parsing)** is the reverse process. It reads the incoming flat string from the network card, interprets its syntax, and recreates a live, interactive object in the receiver's memory.
@@ -85,7 +81,7 @@ function safeDeserializeUser(rawJsonString) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Invoking `JSON.parse` directly on API responses without error wrapping
 
@@ -143,67 +139,145 @@ const data = schema.parse(JSON.parse(req.body)); // Validates type schema
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bug Spotter
+### Exercise 1: Safe API Payload Deserializer with Custom Reviver
 
-**Problem:** Review this backend handler. Under what scenario will this route crash the server process?
+**Scenario:** A resilient API client parses incoming JSON payloads, using a custom reviver to convert ISO date strings into Date instances while sanitizing keys.
 
-```javascript
-app.post('/api/settings', (req, res) => {
-  const settings = JSON.parse(req.body.rawSettingsString);
-  saveSettingsToDatabase(settings);
-  res.send("Success");
-});
-```
+**Requirements:**
+1. Write deserializeApiPayload(jsonStr).
+2. Revive ISO date strings.
+3. Return deserialized object.
 
 > [!check]- Answer
-> - If the client submits a request where `req.body.rawSettingsString` is empty, undefined, or contains invalid JSON formatting (like missing closing brackets), `JSON.parse` will throw an unhandled exception, terminating the Express server process.
-> 
-> 
----
-
-### Exercise 2: Serialization vs Deserialization Definition
-
-**Problem:** Distinguish between Serialization and Deserialization.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Serialization converts in-memory data objects into a transferable string/binary stream. Deserialization reconstructs a stream into in-memory data objects.
-> ```
-> ```text
-> Serialization -> Object in RAM ===> Byte Stream / JSON String
-> Deserialization -> Byte Stream / JSON String ===> Object in RAM
-> ```
-> - **Explanation:** Serialization prepares data for transport; Deserialization reconstructs objects.
----
-
-### Exercise 3: Zod Schema Deserialization Validation
-
-**Problem:** Write Zod schema enforcing string `username` and positive integer `age`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const userSchema = z.object({ username: z.string(), age: z.number().int().positive() });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const userSchema = z.object({
-> username: z.string(),
-> age: z.number().int().positive()
-> });
+> function deserializeApiPayload(jsonStr) {
+>   if (!jsonStr || typeof jsonStr !== "string") return null;
+>
+>   const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/;
+>
+>   return JSON.parse(jsonStr, (key, value) => {
+>     if (typeof value === "string" && isoDateRegex.test(value)) {
+>       return new Date(value);
+>     }
+>     return value;
+>   });
+> }
+>
+> // Verification tests
+> const json = '{"user":"Alice","createdAt":"2026-08-12T10:00:00.000Z"}';
+> const data = deserializeApiPayload(json);
+>
+> console.assert(data.user === "Alice", "Test 1 Failed");
+> console.assert(data.createdAt instanceof Date, "Test 2 Failed: Must revive ISO string to Date instance");
 > ```
-> - **Explanation:** Schema validation verifies deserialized data against structural rules.
+>
+> #### Technical Explanation
+>
+> 1. **Deserialization Concept**: Process of converting a serialized text/binary format (JSON) back into native language objects in memory.
+> 2. **JSON Reviver Function**: JSON.parse(text, reviver) inspects each key-value pair during object construction.
+> 3. **Type Hydration**: Hydrates primitive text strings back into rich domain types (Dates, BigInts, Maps).
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: Prototype Pollution Security Guard in Object Deserialization
+
+**Scenario:** A secure JSON deserializer strips dangerous keys (`__proto__`, `constructor`, `prototype`) to defend against Prototype Pollution attacks.
+
+**Requirements:**
+1. Write safeObjectDeserializer(jsonStr).
+2. Reject or strip dangerous keys in JSON reviver.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function safeObjectDeserializer(jsonStr) {
+>   if (!jsonStr || typeof jsonStr !== "string") return null;
+>
+>   return JSON.parse(jsonStr, (key, value) => {
+>     if (key === "__proto__" || key === "constructor" || key === "prototype") {
+>       return undefined; // Strip dangerous key
+>     }
+>     return value;
+>   });
+> }
+>
+> // Verification tests
+> const maliciousJson = '{"name":"Normal","__proto__":{"admin":true}}';
+> const parsed = safeObjectDeserializer(maliciousJson);
+>
+> console.assert(parsed.name === "Normal", "Test 1 Failed");
+> console.assert(Object.prototype.admin === undefined, "Test 2 Failed: Prototype pollution prevented");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Prototype Pollution Vulnerability**: Attackers inject __proto__ keys into JSON payloads to pollute Object.prototype, triggering Remote Code Execution.
+> 2. **Sanitizing Revivers**: Filtering dangerous keys during deserialization prevents polluting base Object prototypes.
+> 3. **Object.create(null)**: Creating dictionary objects with Object.create(null) avoids prototype inheritance risks.
+> 
+---
+
+### Exercise 3: Polymorphic Class Instance Deserializer Factory
+
+**Scenario:** An API payload factory maps deserialized JSON objects to specific class instances based on a `type` discriminator attribute.
+
+**Requirements:**
+1. Write instantiatePayloadClass(jsonObj, classRegistry).
+2. Instantiate matching class based on type attribute.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> class UserAccount {
+>   constructor(data) { this.id = data.id; this.role = "USER"; }
+> }
+>
+> class AdminAccount {
+>   constructor(data) { this.id = data.id; this.role = "ADMIN"; }
+> }
+>
+> function instantiatePayloadClass(jsonObj, classRegistry) {
+>   if (!jsonObj || !jsonObj.type) return jsonObj;
+>
+>   const TargetClass = classRegistry[jsonObj.type];
+>   if (!TargetClass) return jsonObj;
+>
+>   return new TargetClass(jsonObj);
+> }
+>
+> // Verification tests
+> const registry = { USER: UserAccount, ADMIN: AdminAccount };
+>
+> const userInst = instantiatePayloadClass({ type: "USER", id: 1 }, registry);
+> console.assert(userInst instanceof UserAccount && userInst.role === "USER", "Test 1 Failed");
+>
+> const adminInst = instantiatePayloadClass({ type: "ADMIN", id: 2 }, registry);
+> console.assert(adminInst instanceof AdminAccount && adminInst.role === "ADMIN", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Type Discriminators**: Attributes (e.g. type: 'USER') indicating which concrete domain class an object belongs to.
+> 2. **Polymorphic Deserialization**: Instantiates specialized class behavior based on payload type fields.
+> 3. **Domain-Driven Design (DDD)**: Bridge between untyped DTO payloads and domain class methods.
+---
+
+## 6. Related Terms
 - [JSON Methods (parse / stringify)](json_methods.md) — The functions executing standard serialization and deserialization in JavaScript.
 - [XML](xml.md) — The alternative markup data format requiring parsing libraries.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Deserialization turns serialized text streams back into active memory objects.
 - Parsing untrusted text input without safety measures is a leading cause of software crashes and security breaches.
 - Always wrap `JSON.parse()` in a `try/catch` block to handle syntax formatting errors.

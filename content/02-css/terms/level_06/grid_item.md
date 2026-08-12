@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Modern Standard .)**: `grid-column` / `grid-row` (Grid Item Placement) is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Supported natively by all modern browsers. Stretches child layout boxes across computed track offsets).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, the browser places grid items automatically: Card 1 goes into the first grid square, Card 2 goes into the second, and so on. 
@@ -149,7 +145,7 @@ Full-width header placement:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing line numbers with track counts
 
@@ -274,7 +270,7 @@ Full-width header placement:
 .parent > .item { grid-column: 1 / -1; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Full-Width Footer
 
@@ -329,13 +325,13 @@ Full-width header placement:
 >
 > **Explanation:** `span N` specifies relative track span count.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`grid-template-areas`](grid_template_areas.md) — The visual name placement alternative.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `grid-column` and `grid-row` are child-level properties.
 - They position items on the grid by targeting numbered grid lines (1-indexed).
 - Shorthand syntax uses a slash: `start / end` (e.g. `grid-column: 2 / 5`).

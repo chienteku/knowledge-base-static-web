@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: Headings (`<h1>` to `<h6>`) is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A wall of uninterrupted text is unreadable. When the web was designed to share documents, it needed a way to break that text down into chapters, sections, and subsections—just like a newspaper or a textbook.
@@ -67,7 +63,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using headings for visual styling
 
@@ -224,7 +220,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 <h2>Our Services</h2>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Outline
 
@@ -278,7 +274,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 >
 > **Explanation:** Heading tags dictate structural hierarchy; CSS dictates visual font size.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<p>` (Paragraph)](p.md) — The text that usually follows a heading.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing headings.
 - [Semantic HTML](../level_06/semantic_html.md) — The overarching concept of using tags for their structural meaning.
@@ -286,7 +282,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `<h1>` to `<h6>` to create a logical outline for your webpage.
 - Never skip heading levels (e.g., don't jump from `<h1>` to `<h3>`).
 - Never use headings just to make text big or bold; use CSS for styling.

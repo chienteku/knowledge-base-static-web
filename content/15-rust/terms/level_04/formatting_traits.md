@@ -266,7 +266,7 @@ Use #[derive(Debug)] for structural metadata!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

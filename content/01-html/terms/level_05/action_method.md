@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support .)**: `action` & `method` Attributes is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers since early HTML specs. The foundational data transfer mechanism of the web).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A `<form>` is designed to collect data from a user. But once that data is collected, it needs to travel to a web server to be processed (e.g., checking credentials, saving an order, or running a search).
@@ -116,7 +112,7 @@ Comparing GET and POST form definitions:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Submitting passwords or credit card data using GET
 
@@ -173,7 +169,7 @@ Comparing GET and POST form definitions:
 </form>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Method Selection
 
@@ -240,13 +236,13 @@ Comparing GET and POST form definitions:
 >
 > **Explanation:** Omitted form attributes target current page with GET requests by default.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<form>`](form.md) — The parent container wrapper.
 - [`<button>`](button.md) — The button element which acts as the submission trigger.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `action` attribute specifies the URL destination for the form data package.
 - The `method` attribute defines the HTTP verb (GET or POST) used to transmit the data.
 - GET appends data to the URL query string (insecure, limited size, bookmarkable).

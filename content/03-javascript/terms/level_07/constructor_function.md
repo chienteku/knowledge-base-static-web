@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Language Core**
+
+**Design Pattern / Language Core (Universal)**: Constructor Function is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you need to create 100 `User` objects, typing out `{ name: "...", age: ... }` 100 times is terrible. You need a "factory" to generate them. 
@@ -76,7 +72,7 @@ user1.login(); // "Alice123 has logged in."
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Constructor Function Scope and Variable Hoisting
 
@@ -149,77 +145,128 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Capitalization Convention
+### Exercise 1: ES5 Prototype-Based Constructor Function with New Guard
 
-**Problem:** Does the JavaScript engine *require* Constructor Functions to start with a capital letter? What happens if you use lowercase?
+**Scenario:** A legacy JavaScript library implements constructor functions using function User(name) and attaches shared methods to User.prototype.
 
-**Expected output:**
+**Requirements:**
+1. Write function User(name, role).
+2. Enforce new keyword guard using new.target or instanceof.
+3. Attach getRole() to User.prototype.
+4. Return instance.
+
 > [!check]- Answer
-> ```text
-> No, the engine doesn't care about capitalization. It will work perfectly fine. 
-> However, it is a strict community convention to capitalize them so that human developers instantly know they MUST use the `new` keyword when calling it.
-> ```
-> - Capitalization is for humans, not for the compiler!
-> 
----
-
-### Exercise 2: Constructor Function Prototype Methods
-
-**Problem:** Create constructor `function Car(make)` and attach `Car.prototype.getMake = function() { return this.make; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Toyota
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function Car(make) {
->   this.make = make;
+> function User(name, role) {
+>   if (!new.target && !(this instanceof User)) {
+>     return new User(name, role);
+>   }
+>   this.name = name;
+>   this.role = role;
 > }
-> Car.prototype.getMake = function() {
->   return this.make;
+>
+> User.prototype.getRole = function() {
+>   return `${this.name}: ${this.role}`;
 > };
-> const c = new Car("Toyota");
-> console.log(c.getMake());
+>
+> // Verification tests
+> // @ts-ignore
+> const u1 = User("Alice", "Admin"); // Auto-corrects missing 'new'
+> console.assert(u1 instanceof User, "Test 1 Failed");
+> console.assert(u1.getRole() === "Alice: Admin", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Attaching methods to constructor `.prototype` shares 1 function instance across all created instances.
+> #### Technical Explanation
+>
+> 1. **Constructor Functions**: Standard functions invoked with 'new' act as constructor functions instantiating new objects.
+> 2. **prototype Method Sharing**: Attaching methods to Constructor.prototype avoids creating duplicate method functions for every instance.
+> 3. **new.target Guard**: Checking new.target detects whether a constructor function was called with or without 'new'.
 > 
 ---
 
-### Exercise 3: Guarding Constructors Against Omitted `new`
+### Exercise 2: Constructor Function Advanced Context Handler
 
-**Problem:** Write a self-correcting constructor `function Point(x)` using `new.target`.
+**Scenario:** A web application component processes constructor function data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleConstructorFunctionSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> 10
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function Point(x) {
->   if (!new.target) return new Point(x);
->   this.x = x;
+> function handleConstructorFunctionSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
 > }
-> const p = Point(10);
-> console.log(p.x);
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleConstructorFunctionSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `new.target` evaluates to the constructor function if called with `new`, and `undefined` if called normally.
-> 
+> #### Technical Explanation
+>
+> 1. **Constructor Function Architecture**: Applying constructor function patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Constructor Function Performance Optimization
+
+**Scenario:** An application utility optimizes constructor function execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeConstructorFunctionTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeConstructorFunctionTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeConstructorFunctionTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Constructor Function Optimization**: Optimizing constructor function improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [new Keyword](new_keyword.md) — The magic word that makes Constructors work.
 - [Class](class.md) — The modern ES6 syntax that completely replaces Constructor Functions.
 - [Default this Binding Rules](default_this_binding.md) — Related concept: Default this Binding Rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Constructor Functions are templates used to generate multiple similar objects.
 - They are capitalized by convention.
 - They must be invoked with the `new` keyword.

@@ -578,7 +578,7 @@ A logging system requires a custom trait `AuditDump` with `fn dump_audit(&self) 
 - [Supertraits](supertraits.md) — Trait inheritance relationships (`trait A: B`).
 - [`TryFrom` / `TryInto`](try_from_try_into.md) — Related concept: `TryFrom` / `TryInto`.
 - [Extension Trait](../level_18/extension_trait.md) — Related concept: Extension Trait.
-- [Specialization](../level_19/specialization.md) — Related concept: Specialization.
+- [Specialization (Unstable)](../level_19/specialization.md) — Related concept: Specialization.
 
 ---
 

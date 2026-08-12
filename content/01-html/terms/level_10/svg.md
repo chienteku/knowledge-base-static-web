@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Graphic Element**
+
+**Graphic Element (HTML5 Standard)**: `<svg>` (Scalable Vector Graphics) is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **HTML5 Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 There are two ways to draw images on a computer: **Raster** (like JPG or Canvas), which uses a grid of tiny colored squares (pixels), and **Vector** (like SVG), which uses mathematical formulas to draw lines and curves.
@@ -56,7 +52,7 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Canvas when you should use SVG (or vice versa)
 
@@ -170,7 +166,7 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 <svg class="icon"><use href="#icon-id"></use></svg> <!-- CSS can style fill/stroke -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: CSS Interaction
 
@@ -227,14 +223,14 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 >
 > **Explanation:** `<use>` clones pre-defined SVG symbol definitions for efficient vector reusability.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<canvas>`](canvas.md) — The pixel-based alternative for graphics.
 - [`<map>` & `<area>` (Image Maps)](map_area.md) — Traditional pixel coordinate click targets.
 - [Web Components](web_components.md) — Related concept: Web Components.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<svg>` stands for Scalable Vector Graphics.
 - It uses mathematical tags (`<circle>`, `<rect>`, `<path>`) to draw shapes that stay perfectly crisp at any zoom level.
 - SVG shapes become real elements in the DOM, meaning you can style them with CSS and add JavaScript click events to them.

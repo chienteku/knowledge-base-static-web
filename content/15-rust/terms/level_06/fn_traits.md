@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [Closure](closure.md) — The anonymous functions these traits describe.
+- [Closures (`|args| body`)](closure.md) — The anonymous functions these traits describe.
 - [Trait Bound](../level_04/trait_bound.md) — How you apply these traits to generic functions.
 - [Borrowing (`&`)](../level_03/borrowing.md) — The core mechanism that separates these three traits.
 
@@ -311,7 +311,7 @@ fn run_once<F: FnOnce()>(f: F) {
 
 - [`move` Closure](move_closure.md) — A keyword that forces a closure to take ownership of its environment, which heavily interacts with `FnOnce`.
 - [Trait Bound](../level_04/trait_bound.md) — The generic mechanism you use to apply `Fn`, `FnMut`, and `FnOnce` to functions.
-- [Closure](closure.md) — Related concept: Closure.
+- [Closures (`|args| body`)](closure.md) — Related concept: Closure.
 - [`Function Pointers` (`fn()`)](function_pointers.md) — Related concept: `Function Pointers` (`fn()`).
 
 ---

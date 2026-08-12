@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Database / Third-Party Library**
+
+**Database / Third-Party Library (Web App Server Layer .)**: Mongoose (MongoDB ODM) is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Bridges Node.js application models to a MongoDB database).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 MongoDB is a document database. By design, MongoDB is **schema-less**, meaning documents in the same collection do not need to share the same structure. 
@@ -96,7 +92,7 @@ createUser({ username: "Jo", email: "jo@example.com" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Mongoose validations are enforced inside the database engine
 
@@ -145,7 +141,7 @@ const users = await User.find(); // ❌ Heavy Mongoose Document wrapper memory o
 const users = await User.find().lean(); // Fast plain JS objects
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Schema Construction
 
@@ -214,13 +210,13 @@ const Product = mongoose.model('Product', ProductSchema);
 >
 > **Explanation:** `.populate()` replaces ObjectId references with actual referenced document data.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The general concept of bridging databases to object logic.
 - [SQL vs NoSQL](sql_vs_nosql.md) — The database engines mapped by Mongoose.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Mongoose is a schema-validation ODM library for MongoDB and Node.js.
 - MongoDB is natively schema-less; Mongoose enforces consistency at the application layer.
 - A Mongoose Schema defines the structure, validations, and default values.

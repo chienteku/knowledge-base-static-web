@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Selector Hook**
+
+**CSS Selector Hook (Universal Modern Standard .)**: Advanced Pseudo-classes is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Evaluated directly inside the browser selector-matching engine during DOM modifications or state updates).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In complex web interfaces, you constantly need to target elements based on layout structures or interactive states:
@@ -166,7 +162,7 @@ li:nth-child(even) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `:nth-child` with element count
 
@@ -222,7 +218,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 /* Use simple class selectors inside :not(.disabled) */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Menu Item Spacing
 
@@ -278,7 +274,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 >
 > **Explanation:** `:where()` simplifies CSS resets by applying 0 specificity.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Base active selector states.
 - [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Virtual node generators.
 - [`accent-color`](../level_11/accent_color.md) — Related concept: `accent-color`.
@@ -286,7 +282,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Advanced pseudo-classes match elements without requiring manual class additions.
 - `:first-child` and `:last-child` target boundaries.
 - `:nth-child(n)` accepts formulas (like `even`/`odd`) to alternate styles.

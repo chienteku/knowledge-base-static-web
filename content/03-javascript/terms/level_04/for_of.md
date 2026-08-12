@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal: Works everywhere)**: for...of is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While the traditional `for` loop (`for (let i = 0; i < arr.length; i++)`) is powerful, it is verbose and prone to "off-by-one" errors. Array methods like `.forEach()` solved this, but they have a massive limitation: you cannot use `break` to stop the loop early, or `continue` to skip an iteration. 
@@ -70,7 +66,7 @@ for (const num of numbers) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `for...of` on standard Objects
 
@@ -153,64 +149,46 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Finding the sum
+### Exercise 1: Iterable Collection & Map Iteration
 
-**Problem:** You have an array: `[5, 10, 15]`. Create a variable `let sum = 0;`. Use a `for...of` loop to add each number to the `sum`.
+**Scenario:** A cache manager iterates over key-value entries in a Map instance using a for...of loop.
 
-**Expected output:**
+**Requirements:**
+1. Write processMapEntries(mapInstance).
+2. Iterate entries using for (const [key, val] of mapInstance).
+3. Return processed object.
+
 > [!check]- Answer
-> ```text
-> 30
-> ```
-> - `for (const num of array) { sum += num; }`
-> 
----
-
-### Exercise 2: Iterating Strings with `for...of`
-
-**Problem:** Iterate over string `"JS"` using `for...of` and print characters.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> J
-> S
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> for (const char of "JS") {
->   console.log(char);
+> function processMapEntries(mapInstance) {
+>   const result = {};
+>   if (!(mapInstance instanceof Map)) return result;
+>
+>   for (const [key, val] of mapInstance) {
+>     result[key] = val;
+>   }
+>   return result;
 > }
+>
+> // Verification tests
+> const myMap = new Map([["a", 1], ["b", 2]]);
+> const res = processMapEntries(myMap);
+> console.assert(res.a === 1 && res.b === 2, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Strings implement `Symbol.iterator`, enabling `for...of` grapheme character iteration.
-> 
----
-
-### Exercise 3: Iterating Object Entries with Destructuring
-
-**Problem:** Iterate `Object.entries({ a: 10, b: 20 })` with `for...of` destructuring `for (const [key, val] of ...)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> a = 10
-> b = 20
-> ```
-> ```javascript
-> const data = { a: 10, b: 20 };
-> for (const [key, val] of Object.entries(data)) {
->   console.log(`${key} = ${val}`);
-> }
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `Object.entries()` produces `[key, value]` entry arrays compatible with `for...of` destructuring.
-> 
-> 
+> 1. **for...of Iteration Protocol**: Iterates over iterable objects (Arrays, Maps, Sets, Strings, arguments) invoking their @@iterator method.
+> 2. **Destructuring Support**: Supports destructuring directly in loop variable declarations (for (const [k, v] of map)).
+> 3. **Early Loop Control**: Supports break, continue, and return statements to control execution flow.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [for...in](for_in.md) — Used for iterating over the *keys* of an Object.
 - [forEach()](for_each.md) — An array method that cannot be stopped with `break`.
 - [querySelectorAll & NodeList](../level_05/queryselectorall_nodelist.md) — Related concept: querySelectorAll & NodeList.
@@ -219,7 +197,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `for...of` iterates over the **Values** of an iterable data structure.
 - It works beautifully on Arrays and Strings.
 - It does **not** work on plain Objects.

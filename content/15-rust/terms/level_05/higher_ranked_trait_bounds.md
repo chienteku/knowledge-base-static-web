@@ -10,7 +10,7 @@
 
 - [Trait Bound](../level_04/trait_bound.md) — Constraining generic types.
 - [Lifetime (`'a`)](lifetime.md) — Reference validity annotations.
-- [Closure](../level_06/closure.md) — Closures that take references as parameters.
+- [Closures (`|args| body`)](../level_06/closure.md) — Closures that take references as parameters.
 
 ---
 
@@ -268,7 +268,7 @@ Return owned data (String) or pass references to caller-owned buffers!
 
 - [Lifetime (`'a`)](lifetime.md) — The reference lifetime parameter.
 - [Trait Bound](../level_04/trait_bound.md) — Generic constraints.
-- [Closure](../level_06/closure.md) — Functional argument types where HRTB is most useful.
+- [Closures (`|args| body`)](../level_06/closure.md) — Functional argument types where HRTB is most useful.
 - [Lifetime Elision](lifetime_elision.md) — Related concept: Lifetime Elision.
 
 ---

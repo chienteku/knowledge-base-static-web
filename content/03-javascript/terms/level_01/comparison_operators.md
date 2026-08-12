@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Comparison Operators is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Programs cannot make decisions in a vacuum; they must react to data. To determine if a user is old enough to log in, if a cart value is high enough for free shipping, or if a game character has run out of health, we need a way to evaluate relative numeric relationships. The TC39 committee implemented standard mathematical comparison operators: `>` (greater than), `<` (less than), `>=` (greater than or equal to), and `<=` (less than or equal to). These operators compare two operands and resolve to a boolean value (`true` or `false`), which then feeds directly into control flow statements like `if/else`.
@@ -68,7 +64,7 @@ if (isOldEnough && isTallEnough) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Chaining Comparisons Incorrectly
 
@@ -159,72 +155,108 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Shipping Cost Calculator
+### Exercise 1: E-Commerce Inventory Stock Level Guard
 
-**Problem:** Complete the code to check if a user is eligible for free shipping. Free shipping is granted if their `cartTotal` is greater than or equal to 50.
+**Scenario:** An inventory management service evaluates customer order quantities against available warehouse stock and reorder thresholds using relational comparison operators (>, <, >=, <=).
 
-```javascript
-const cartTotal = 45.99;
-const isEligibleForFreeShipping = // Write comparison here
+**Requirements:**
+1. Write a function checkInventoryState(availableStock, requestedQty, minThreshold).
+2. Check if requested quantity exceeds available stock using >.
+3. Check if available stock falls below reorder threshold using <=.
+4. Return an object { canFulfill: boolean, needsReorder: boolean }.
 
-console.log("Eligible:", isEligibleForFreeShipping);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Eligible: false
-> ```
-> - Use the `>=` operator to test if a value is greater than or equal to a target.
-> 
----
-
-### Exercise 2: Relational Comparison Type Coercion
-
-**Problem:** Predict `5 > "3"`, `"5" > 3`, `null >= 0`, `null > 0`, and `undefined >= 0`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> true
-> true
-> false
-> false
-> ```
+> #### Implementation
 > ```javascript
-> console.log(5 > "3");     // true ("3" -> 3)
-> console.log("5" > 3);     // true ("5" -> 5)
-> console.log(null >= 0);  // true (null -> 0)
-> console.log(null > 0);   // false (0 > 0 is false)
-> console.log(undefined >= 0); // false (undefined -> NaN)
+> function checkInventoryState(availableStock, requestedQty, minThreshold) {
+>   const canFulfill = availableStock >= requestedQty;
+>   const needsReorder = availableStock <= minThreshold;
+> return { canFulfill, needsReorder };
+> }
+> // Verification tests
+> const state1 = checkInventoryState(100, 20, 15);
+> console.assert(state1.canFulfill === true && state1.needsReorder === false, "Test 1 Failed");
+> const state2 = checkInventoryState(10, 15, 15);
+> console.assert(state2.canFulfill === false && state2.needsReorder === true, "Test 2 Failed");
 > ```
->
-> **Explanation:** Relational operators (`>`, `>=`, `<`, `<=`) coerce nullish/string operands to numbers. `null` becomes `0`, while `undefined` becomes `NaN` (making all comparisons `false`).
+> #### Technical Explanation
+> 1. **Relational Operators**: Comparison operators (>, <, >=, <=) compare two numeric operands and return a primitive boolean value.
+> 2. **Boundary Testing**: Inclusive operators (>= and <=) evaluate equality along boundary thresholds.
+> 3. **Operand Coercion**: If operands are different types, relational operators attempt implicit numeric coercion.
 > 
 ---
 
-### Exercise 3: Object Relational ValueOf Coercion
+### Exercise 2: User Age Tier Classifier
 
-**Problem:** Create an object `{ valueOf() { return 10; } }` and compare it with number `5` using `>`.
+**Scenario:** An identity compliance service categorizes users into age tiers (minor, adult, senior) for content regulation using chained comparison conditions.
 
-**Expected output:**
+**Requirements:**
+1. Write a function getAgeTier(age).
+2. Return "minor" if age is less than 18.
+3. Return "adult" if age is between 18 and 64 inclusive.
+4. Return "senior" if age is 65 or greater.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
+> #### Implementation
 > ```javascript
-> const obj = { valueOf() { return 10; } };
-> console.log(obj > 5);
+> function getAgeTier(age) {
+>   if (typeof age !== "number" || age < 0) return "invalid";
+> if (age < 18) {
+>     return "minor";
+>   } else if (age <= 64) {
+>     return "adult";
+>   } else {
+>     return "senior";
+>   }
+> }
+> // Verification tests
+> console.assert(getAgeTier(15) === "minor", "Test 1 Failed");
+> console.assert(getAgeTier(30) === "adult", "Test 2 Failed");
+> console.assert(getAgeTier(70) === "senior", "Test 3 Failed");
 > ```
->
-> **Explanation:** Comparison operators call `.valueOf()` or `.toString()` to convert objects into primitives before comparing.
+> #### Technical Explanation
+> 1. **Numeric Comparison**: Comparing numbers evaluates standard mathematical order.
+> 2. **Chained Evaluation**: Logical branch conditions evaluate comparisons in sequential top-down order.
+> 3. **Type Guarding**: Verifying typeof age === "number" prevents unexpected comparisons against undefined or string values.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Lexicographical String Identifier Comparator
+
+**Scenario:** A database indexing engine compares string keys or semver build tags using relational comparison operators according to Unicode code point order.
+
+**Requirements:**
+1. Write a function compareStringKeys(keyA, keyB).
+2. Return -1 if keyA comes before keyB lexicographically.
+3. Return 1 if keyA comes after keyB.
+4. Return 0 if keys are equal.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function compareStringKeys(keyA, keyB) {
+>   if (keyA < keyB) {
+>     return -1;
+>   } else if (keyA > keyB) {
+>     return 1;
+>   } else {
+>     return 0;
+>   }
+> }
+> // Verification tests
+> console.assert(compareStringKeys("alpha", "beta") === -1, "Test 1 Failed");
+> console.assert(compareStringKeys("zone", "apple") === 1, "Test 2 Failed");
+> console.assert(compareStringKeys("same", "same") === 0, "Test 3 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Lexicographical Order**: When both operands are strings, relational operators compare character code points sequentially.
+> 2. **Case Sensitivity**: Uppercase ASCII letters (e.g. "A" = 65) precede lowercase letters (e.g. "a" = 97) in code point comparison.
+> 3. **Deterministic Sorting**: Relational operators provide deterministic string ordering compatible with sorting algorithms.
+---
+
+## 6. Related Terms
 - [Strict vs Loose Equality (=== vs ==)](strict_vs_loose_equality.md) — Equality checking.
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — How non-boolean values evaluate in conditions.
 - [if / else](../level_02/if_else.md) — Executing code blocks based on conditions.
@@ -233,7 +265,7 @@ console.log("Eligible:", isEligibleForFreeShipping);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Comparison operators (`>`, `<`, `>=`, `<=`) are binary operators that check mathematical relations.
 - They always evaluate to a boolean primitive value (`true` or `false`).
 - Relational operators will coerce strings to numbers if one operand is a number, but they perform alphabetic (lexicographical) sorting comparisons if both operands are strings.

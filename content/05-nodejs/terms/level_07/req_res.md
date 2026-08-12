@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Core Objects**
+
+**API Core Objects (Express.js Route Callbacks)**: The req & res Objects is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Express.js Route Callbacks**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a user clicks "Submit" on a login form, that data travels across the ocean, through fiber optic cables, and hits your server.
@@ -46,7 +42,7 @@ Crucial methods:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to send two responses
 
@@ -176,7 +172,7 @@ res.send('Done'); // ❌ ERR_HTTP_HEADERS_SENT!
 return res.json({ user: 'Alice' }); // Single response call
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Extracting the Data
 
@@ -236,7 +232,7 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 >
 > **Explanation:** `req.ip` returns client IP; `req.get(headerName)` gets request header values.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Routing](routing.md) — The system that passes these objects to your function.
 - [HTTP Status Codes](../level_09/status_codes.md) — What you inject into `res.status()`.
 - [Body Parsing (express.json())](body_parsing.md) — Related concept: Body Parsing (express.json()).
@@ -249,7 +245,7 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`req` (Request)** contains all incoming data: `req.body` (JSON payload), `req.params` (URL paths), and `req.query` (Search queries).
 - **`res` (Response)** is the toolbox to send data back: `res.json()` and `res.status()`.
 - You must have the `express.json()` middleware enabled to read `req.body`.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography / Formatting Property**
+
+**Typography / Formatting Property (Universal Browser Support)**: `list-style` is a fundamental concept in this technology stack. **Level 7 — Text & List Formatting**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, the browser renders `<ul>` items with solid black circle bullets, and `<ol>` items with standard decimal numbers (1, 2, 3). 
@@ -62,7 +58,7 @@ Because semantic HTML dictates that navigation menus should be built using `<ul>
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that `list-style: none` doesn't remove the indentation
 
@@ -107,7 +103,7 @@ ul { list-style: none; } /* ❌ Leaves 40px left padding indent! */
 ul { list-style: none; padding: 0; margin: 0; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Icons
 
@@ -164,12 +160,12 @@ ul { list-style: none; padding: 0; margin: 0; }
 >
 > **Explanation:** `::marker` pseudo-element styles list bullet points directly.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - None!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `list-style` controls the bullets/numbers of HTML lists.
 - `list-style: none;` is used constantly to remove bullets when building Navigation Bars.
 - Always remember to combine `list-style: none;` with `padding-left: 0;` to remove the default browser indentation!

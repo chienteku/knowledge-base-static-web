@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core API**
+
+**Node.js Core API (Node.js Server Code)**: Readable & Writable Streams is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Server Code**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Readable Streams (The Source)
 A Readable Stream is where data *comes from*. 
@@ -63,7 +59,7 @@ writeStream.end(); // Closes the file
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Memory Leaks from forgotten `.end()`
 
@@ -113,7 +109,7 @@ writable.on('end', () => console.log('Done')); // ❌ Writable streams emit 'fin
 writable.on('finish', () => console.log('Write complete'));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Identify the Stream
 
@@ -175,7 +171,7 @@ writable.on('finish', () => console.log('Write complete'));
 >
 > **Explanation:** `.write()` pushes data to the writable buffer; `.end()` flushes and closes the stream.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Piping (.pipe())](piping.md) — The magical method used to connect a Readable Stream directly to a Writable Stream.
 - [Backpressure](backpressure.md) — Related concept: Backpressure.
 - [Duplex & Transform Streams](duplex_transform_streams.md) — Related concept: Duplex & Transform Streams.
@@ -183,7 +179,7 @@ writable.on('finish', () => console.log('Write complete'));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Readable Streams** are sources of data. You read them by listening to the `'data'` event.
 - **Writable Streams** are destinations for data. You send data using `.write()` and close them with `.end()`.
 - HTTP Requests (`req`) are Readable. HTTP Responses (`res`) are Writable.

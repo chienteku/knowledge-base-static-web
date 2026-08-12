@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Query Language**
+
+**API Architecture / Query Language (Modern Backend/Frontend Architecture)**: GraphQL (The REST Alternative) is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Modern Backend/Frontend Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a traditional REST API, the Server decides what data to send. 
@@ -62,7 +58,7 @@ Notice how there are no emails or addresses? Over-fetching is solved! Notice how
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming GraphQL is a database
 
@@ -114,62 +110,142 @@ validationRules: [ depthLimit(5) ]
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: REST vs GraphQL
+### Exercise 1: Client-Side GraphQL Request Serializer
 
-**Problem:** You are building an app that shows a list of 100 blog posts. You only need the `title` of each post. 
-In a REST API, `GET /posts` returns the title, the author ID, the date, and the full 5,000-word body of every post. 
-Why is GraphQL a better choice here?
+**Scenario:** A lightweight GraphQL client constructs standard POST request payloads containing `query` strings and `variables` objects.
 
-**Expected output:**
+**Requirements:**
+1. Write buildGraphQLPayload(queryStr, variablesObj).
+2. Return formatted JSON payload object.
+
 > [!check]- Answer
-> ```text
-> Because of Over-fetching! 
-> In REST, you are forced to download the 5,000-word body for 100 posts, which might be 5 Megabytes of useless data. 
-> In GraphQL, you simply query `query { posts { title } }`. The server only sends the titles, turning a 5MB payload into a 5KB payload, making the app 1000x faster!
+>
+> #### Implementation
+>
+> ```javascript
+> function buildGraphQLPayload(queryStr, variablesObj = {}) {
+>   if (!queryStr || typeof queryStr !== "string") {
+>     throw new Error("GraphQL query string is required");
+>   }
+>
+>   // Minify whitespace in query
+>   const minifiedQuery = queryStr.replace(/\s+/g, " ").trim();
+>
+>   return {
+>     query: minifiedQuery,
+>     variables: variablesObj
+>   };
+> }
+>
+> // Verification tests
+> const query = `
+>   query GetUser($id: ID!) {
+>     user(id: $id) {
+>       id
+>       name
+>     }
+>   }
+> `;
+>
+> const payload = buildGraphQLPayload(query, { id: "u42" });
+> console.assert(payload.variables.id === "u42", "Test 1 Failed");
+> console.assert(payload.query.startsWith("query GetUser"), "Test 2 Failed");
 > ```
-> - Who decides what data is sent in REST? Who decides in GraphQL?
+>
+> #### Technical Explanation
+>
+> 1. **GraphQL Request Structure**: GraphQL HTTP POST requests transmit JSON body: { query, variables, operationName }.
+> 2. **Single Endpoint Architecture**: All GraphQL operations target a single endpoint (e.g. POST /graphql).
+> 3. **Minification & Query Optimization**: Trimming extra whitespace reduces request payload size over the wire.
 > 
 ---
 
-### Exercise 2: GraphQL 3 Operation Types
+### Exercise 2: GraphQL Field Execution & Partial Error Evaluator
 
-**Problem:** Identify the 3 root operation types supported by GraphQL schemas.
+**Scenario:** A GraphQL client parser handles GraphQL response structures, processing `data` payloads alongside `errors` arrays.
 
-**Expected output:**
+**Requirements:**
+1. Write parseGraphQLResponse(responseJson).
+2. Return object { data, errors, hasErrors }.
+
 > [!check]- Answer
-> ```text
-> 1. query (Read operations)
-> 2. mutation (Write/Update operations)
-> 3. subscription (Real-time event streams)
+>
+> #### Implementation
+>
+> ```javascript
+> function parseGraphQLResponse(responseJson) {
+>   if (!responseJson || typeof responseJson !== "object") {
+>     return { data: null, errors: [{ message: "Invalid GraphQL response" }], hasErrors: true };
+>   }
+>
+>   const hasErrors = Array.isArray(responseJson.errors) && responseJson.errors.length > 0;
+>
+>   return {
+>     data: responseJson.data || null,
+>     errors: responseJson.errors || [],
+>     hasErrors
+>   };
+> }
+>
+> // Verification tests
+> const resWithPartialError = {
+>   data: { user: { id: "u1", name: "Alice" } },
+>   errors: [{ message: "Failed to fetch user permissions", path: ["user", "permissions"] }]
+> };
+>
+> const parsed = parseGraphQLResponse(resWithPartialError);
+> console.assert(parsed.data.user.name === "Alice", "Test 1 Failed: Partial data preserved");
+> console.assert(parsed.hasErrors === true && parsed.errors.length === 1, "Test 2 Failed");
 > ```
-> ```text
-> 1. query -> Fetch read data
-> 2. mutation -> Execute write/update actions
-> 3. subscription -> Real-time WebSocket event streams
-> ```
-> - **Explanation:** GraphQL categorizes operations into queries, mutations, and subscriptions.
+>
+> #### Technical Explanation
+>
+> 1. **Partial Data Execution**: GraphQL can return partial data in res.data even if some field resolvers fail and populate res.errors.
+> 2. **200 OK Status Code for Errors**: GraphQL HTTP servers return 200 OK even when execution errors occur inside fields.
+> 3. **Field-Level Error Granularity**: Errors array lists exact field paths (e.g. ['user', 'permissions']) where execution failed.
+> 
 ---
 
-### Exercise 3: GraphQL Single Endpoint Architecture
+### Exercise 3: GraphQL vs REST Selection Resolver
 
-**Problem:** Contrast REST multi-endpoint URIs (`/users`, `/posts`) with GraphQL endpoint architecture.
+**Scenario:** An API architect helper chooses between GraphQL (for dynamic mobile UIs avoiding overfetching) and REST (for simple CRUD/caching).
 
-**Expected output:**
+**Requirements:**
+1. Write recommendApiProtocol(options).
+2. Recommend 'GRAPHQL' or 'REST'.
+
 > [!check]- Answer
-> ```text
-> GraphQL exposes a single HTTP POST endpoint (e.g. `/graphql`) accepting query payloads in request bodies.
+>
+> #### Implementation
+>
+> ```javascript
+> function recommendApiProtocol(options = {}) {
+>   const { requiresDynamicFieldSelection, hasHeavyCdnCachingNeeds, multipleAggregatedViews } = options;
+>
+>   if (hasHeavyCdnCachingNeeds) {
+>     return "REST"; // REST HTTP URLs cache naturally on CDNs
+>   }
+>   if (requiresDynamicFieldSelection || multipleAggregatedViews) {
+>     return "GRAPHQL";
+>   }
+>   return "REST";
+> }
+>
+> // Verification tests
+> console.assert(recommendApiProtocol({ requiresDynamicFieldSelection: true }) === "GRAPHQL", "Test 1 Failed");
+> console.assert(recommendApiProtocol({ hasHeavyCdnCachingNeeds: true }) === "REST", "Test 2 Failed");
 > ```
-> ```http
-> POST /graphql HTTP/1.1
-> Content-Type: application/json
-> {"query": "{ user(id: 5) { name email } }"}
-> ```
-> - **Explanation:** GraphQL routes all data operations through a unified endpoint.
+>
+> #### Technical Explanation
+>
+> 1. **GraphQL Strengths**: Single query fetches exact nested fields needed, solving overfetching/underfetching.
+> 2. **REST Caching Advantage**: Distinct HTTP URLs (/users/1) leverage standard HTTP/CDN caching proxies naturally.
+> 3. **Architectural Trade-offs**: GraphQL shifts query complexity to server resolvers; REST uses static endpoint contracts.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [REST (Representational State Transfer)](../level_03/rest.md) — The architecture GraphQL is slowly replacing in highly complex applications.
 - [Swagger / OpenAPI Specification](../level_10/openapi.md) — Related concept: Swagger / OpenAPI Specification.
 - [API Versioning (v1, v2)](../level_10/versioning.md) — Related concept: API Versioning (v1, v2).
@@ -179,7 +255,7 @@ Why is GraphQL a better choice here?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **GraphQL** is an alternative to REST APIs.
 - It solves **Over-fetching** (getting too much data) and **Under-fetching** (not getting enough data).
 - The Client is in control: it explicitly asks for the exact fields it needs.

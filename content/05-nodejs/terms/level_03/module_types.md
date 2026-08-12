@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Ecosystem Concept**
+
+**Ecosystem Concept (Node.js Ecosystem)**: Built-in vs External Modules is a fundamental concept in this technology stack. **Level 3 — Module Systems**
 
 ---
 
-## 3. Environment Context
-- **Node.js Ecosystem**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Core (Built-in) Modules
 When you install Node.js on your computer, it comes with a standard library of powerful tools already baked into the C++ binary. You do **not** need to download these from the internet. You just `require` them instantly.
@@ -48,7 +44,7 @@ For complex tasks, developers rely on the open-source community. These are **Ext
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to NPM install a built-in module
 
@@ -100,7 +96,7 @@ import data from './data.json'; // ❌ ERR_IMPORT_ASSERTION_MISSING in Node.js E
 import data from './data.json' with { type: 'json' }; // Import attribute for JSON
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Categorize the Imports
 
@@ -168,14 +164,14 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 >
 > **Explanation:** Conditional exports direct CJS `require()` and ESM `import` statements to appropriate build formats.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [NPM (Node Package Manager)](../level_04/npm.md) — The registry where you download all External Modules.
 - [node_modules](../level_04/node_modules.md) — The folder where External Modules physically live on your hard drive once downloaded.
 - [Module Resolution](module_resolution.md) — How Node finds these modules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Built-in Modules** (Core) come pre-installed with Node.js (e.g., `fs`, `path`, `http`). Never NPM install them.
 - **External Modules** are built by the community and must be downloaded via NPM (e.g., `express`, `react`).
 - Using the `node:` prefix (like `node:fs`) is the modern way to explicitly identify built-in modules.

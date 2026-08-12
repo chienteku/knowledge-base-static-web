@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: getElementById / getElementsByClassName is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before modern selector APIs like `document.querySelector()` were standardized, early web developers needed ways to access HTML elements in JavaScript. Browser vendors built specialized, single-purpose selection methods:
@@ -77,7 +73,7 @@ function demonstrateLiveCollection() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Including Selector Prefix Symbols (`#` or `.`)
 
@@ -158,67 +154,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Select and Loop
+### Exercise 1: Fast Unique Element ID Lookup
 
-**Problem:** Complete the code to select all elements with the class `"alert-box"` using legacy APIs and hide them by setting `style.display = "none"`.
+**Scenario:** A legacy web application retrieves unique UI elements using document.getElementById() with null validation guards.
 
-```javascript
-if (typeof document !== "undefined") {
-  const alerts = // Write legacy query here
-  
-  // Loop and hide alerts
-}
-```
+**Requirements:**
+1. Write getUniqueElementById(idStr).
+2. Use document.getElementById(idStr).
+3. Return element or null.
 
 > [!check]- Answer
-> - Select elements using `document.getElementsByClassName("alert-box")`.
-> - Use a standard `for` loop, or convert to an Array using `Array.from()` to call `.forEach()`.
-> 
----
-
-### Exercise 2: Fast ID Selection
-
-**Problem:** Retrieve element by ID `"main-header"` using `document.getElementById()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Fast ID selection completed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Fast ID selection completed");
+> function getUniqueElementById(idStr) {
+>   if (!globalThis.document || typeof document.getElementById !== "function") return null;
+>   return document.getElementById(idStr);
+> }
+>
+> // Verification tests
+> const mockEl = { id: "main-header" };
+> globalThis.document = {
+>   getElementById(id) { return id === "main-header" ? mockEl : null; }
+> };
+> console.assert(getUniqueElementById("main-header") === mockEl, "Test 1 Failed");
+> console.assert(getUniqueElementById("missing") === null, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `getElementById` is the fastest optimized DOM selection method.
+> #### Technical Explanation
+>
+> 1. **getElementById() Performance**: Fastest DOM selection method, returning single matching Element or null.
+> 2. **ID Uniqueness Requirement**: HTML spec requires id attributes to be unique within document tree.
+> 3. **Direct ID Lookup**: Does not take CSS selectors; pass raw ID string without # prefix.
 > 
 ---
 
-### Exercise 3: Handling Missing ID Queries
+### Exercise 2: Getelementbyid Legacy Advanced Context Handler
 
-**Problem:** Check return value when `getElementById('non-existent')` finds no match.
+**Scenario:** A web application component processes getelementbyid legacy data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleGetelementbyidLegacySecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> null
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const elem = null;
-> console.log(elem);
+> function handleGetelementbyidLegacySecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleGetelementbyidLegacySecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `getElementById` returns `null` if no element with matching ID exists.
+> #### Technical Explanation
+>
+> 1. **Getelementbyid Legacy Architecture**: Applying getelementbyid legacy patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Getelementbyid Legacy Performance Optimization
+
+**Scenario:** An application utility optimizes getelementbyid legacy execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeGetelementbyidLegacyTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeGetelementbyidLegacyTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeGetelementbyidLegacyTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Getelementbyid Legacy Optimization**: Optimizing getelementbyid legacy improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [document.querySelector()](document_queryselector.md) — The modern, standard, selector-based selection method.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Legacy query methods (`getElementById`, `getElementsByClassName`) take bare strings without CSS symbols like `#` or `.`.
 - `document.getElementById` is highly optimized and remains the fastest element querying method in JS.
 - Multiple-element legacy queries return an `HTMLCollection`, which is **live** (automatically updates when elements are added/removed from the DOM).

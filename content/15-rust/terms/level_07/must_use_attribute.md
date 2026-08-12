@@ -10,7 +10,7 @@
 
 - [`Result<T, E>`](../level_02/result_t_e.md) — The most famous type carrying this attribute in the standard library.
 - [Lazy Evaluation](../level_06/lazy_evaluation.md) — Why iterators are also marked `#[must_use]`.
-- [`fn` (Functions)](../level_01/fn.md) — What this attribute can also be applied directly to, on the function itself.
+- [fn](../level_01/fn.md) — What this attribute can also be applied directly to, on the function itself.
 
 ---
 
@@ -182,7 +182,7 @@ fn main() {
 ## 6. Related Terms
 
 
-- [`Result<T, E>`](../level_02/result_t_e.md)
+- [`Result<T, E>`](../level_02/result_t_e.md) — 
 - [Lazy Evaluation](../level_06/lazy_evaluation.md) — Why `Iterator`-returning adapter methods are also `#[must_use]`: an unused iterator chain silently does nothing at all.
 - [`?` Operator](../level_04/question_mark_operator.md) — The most common, idiomatic way to properly "use" a `Result` that would otherwise trigger this warning.
 

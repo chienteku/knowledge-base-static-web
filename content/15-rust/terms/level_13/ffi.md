@@ -110,7 +110,7 @@ fn main() {
 
 ---
 
-## 5. FFI Type Mapping (Rust vs C)
+### (4) FFI Type Mapping (Rust vs C)
 
 When passing data across FFI boundaries, primitive types must map to equivalent C types from `std::os::raw` or `core::ffi`:
 
@@ -124,7 +124,7 @@ When passing data across FFI boundaries, primitive types must map to equivalent 
 
 ---
 
-## 6. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing Rust `String` or `&str` Directly to C Functions
 
@@ -218,7 +218,7 @@ pub struct Point {
 
 ---
 
-## 7. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Telemetry C-String Parser & Safe Buffer Exporter
 

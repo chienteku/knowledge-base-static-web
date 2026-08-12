@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps / Performance Debugging**
+
+**Production / DevOps / Performance Debugging (Node.js / V8 Engine .)**: Memory Leaks & Garbage Collection is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Node.js / V8 Engine** (Governed by V8 heap memory garbage collection algorithms).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Node.js executes inside the V8 JavaScript engine. To manage memory, V8 uses a **Garbage Collector (GC)** to clean up unused memory. When variables fall out of scope (e.g., when a function exits), V8 automatically marks that memory as free and reclaims it.
@@ -104,7 +100,7 @@ You can use the Chrome DevTools to profile Node.js memory usage:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to resolve memory leaks by forcing garbage collection using `global.gc()`
 
@@ -158,7 +154,7 @@ function process() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Spot the Leak
 
@@ -218,13 +214,13 @@ app.get('/status', (req, res) => {
 >
 > **Explanation:** Objects reachable from GC Roots cannot be garbage-collected by V8.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Blocking the Event Loop](../level_01/blocking_event_loop.md) — Freezing the main execution thread.
 - [Buffers](../level_06/buffers.md) — High-memory byte allocations that require garbage collection.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A memory leak occurs when V8 cannot reclaim memory because references to unused objects remain.
 - Unhandled memory leaks will eventually crash the server with an Out Of Memory (OOM) error.
 - Common causes of memory leaks include dangling event listeners and global variables.

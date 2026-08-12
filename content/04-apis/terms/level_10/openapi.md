@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Documentation / Standard**
+
+**API Documentation / Standard (Architecture / Backend Documentation)**: Swagger / OpenAPI Specification is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Architecture / Backend Documentation**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a company builds a massive API with 200 endpoints, how do the frontend developers know how to use it? 
@@ -50,7 +46,7 @@ paths:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing the Swagger file manually and letting it rot
 
@@ -101,69 +97,166 @@ nullable: true
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Postman vs Swagger
+### Exercise 1: OpenAPI 3.0 Document Specification Validator
 
-**Problem:** Your manager says: "We already have Postman Collections for our API, why do we need to bother with Swagger?" What is the main difference in their purpose?
+**Scenario:** An API linter validates structural compliance of OpenAPI 3.0 document schemas (`openapi`, `info`, `paths`).
 
-**Expected output:**
+**Requirements:**
+1. Write validateOpenApiSpec(specObj).
+2. Check openapi version string '3.0.x'.
+3. Check info title/version.
+4. Check paths object.
+
 > [!check]- Answer
-> ```text
-> Postman is primarily for Testing. Swagger is primarily for Documentation and Discovery.
-> While Postman can generate docs, Swagger is an open-source standard. You can use a Swagger file to automatically generate SDKs (code libraries), generate strict validation rules for your backend, and create interactive web portals for third-party developers.
+>
+> #### Implementation
+>
+> ```javascript
+> function validateOpenApiSpec(specObj = {}) {
+>   const errors = [];
+>
+>   if (!specObj.openapi || typeof specObj.openapi !== "string" || !specObj.openapi.startsWith("3.")) {
+>     errors.push("Missing or invalid 'openapi' version string (expected 3.x.x)");
+>   }
+>
+>   if (!specObj.info || typeof specObj.info.title !== "string" || typeof specObj.info.version !== "string") {
+>     errors.push("Missing or invalid 'info.title' or 'info.version'");
+>   }
+>
+>   if (!specObj.paths || typeof specObj.paths !== "object") {
+>     errors.push("Missing or invalid 'paths' object");
+>   }
+>
+>   return { valid: errors.length === 0, errors };
+> }
+>
+> // Verification tests
+> const validSpec = {
+>   openapi: "3.0.3",
+>   info: { title: "User API", version: "1.0.0" },
+>   paths: { "/users": {} }
+> };
+>
+> console.assert(validateOpenApiSpec(validSpec).valid === true, "Test 1 Failed");
+> console.assert(validateOpenApiSpec({}).valid === false, "Test 2 Failed");
 > ```
-> - Which one is an application? Which one is a standardized blueprint?
+>
+> #### Technical Explanation
+>
+> 1. **OpenAPI Specification (Swagger)**: Standard machine-readable specification language for describing RESTful APIs in YAML or JSON.
+> 2. **Root Structure**: Requires openapi version, info (metadata), and paths (endpoints & operations) top-level attributes.
+> 3. **API Documentation Automation**: OpenAPI specs automatically render interactive Swagger UI documentation and SDK generators.
 > 
 ---
 
-### Exercise 2: OpenAPI 3.0 YAML Path Definition Structure
+### Exercise 2: OpenAPI Path & Method Router Generator
 
-**Problem:** Write OpenAPI 3.0 snippet defining GET `/users` returning 200 OK response.
+**Scenario:** Generates route configuration objects from an OpenAPI `paths` specification definition.
 
-**Expected output:**
+**Requirements:**
+1. Write generateRoutesFromOpenApi(pathsObj).
+2. Iterate paths and HTTP methods (get, post, put, delete).
+
 > [!check]- Answer
-> ```yaml
-> paths:
->   /users:
->     get:
->       summary: List users
->       responses:
->         '200':
->           description: Success
+>
+> #### Implementation
+>
+> ```javascript
+> function generateRoutesFromOpenApi(pathsObj = {}) {
+>   const routes = [];
+>
+>   for (const [path, operations] of Object.entries(pathsObj)) {
+>     for (const [method, config] of Object.entries(operations)) {
+>       if (["get", "post", "put", "delete", "patch"].includes(method.toLowerCase())) {
+>         routes.push({
+>           method: method.toUpperCase(),
+>           path,
+>           operationId: config.operationId || `${method}_${path}`,
+>           summary: config.summary || ""
+>         });
+>       }
+>     }
+>   }
+>
+>   return routes;
+> }
+>
+> // Verification tests
+> const paths = {
+>   "/users": {
+>     get: { operationId: "listUsers", summary: "Get all users" },
+>     post: { operationId: "createUser", summary: "Add user" }
+>   }
+> };
+>
+> const routes = generateRoutesFromOpenApi(paths);
+> console.assert(routes.length === 2, "Test 1 Failed");
+> console.assert(routes[0].operationId === "listUsers", "Test 2 Failed");
 > ```
-> ```yaml
-> paths:
-> /users:
-> get:
-> summary: List users
-> responses:
-> '200':
-> description: Success
-> ```
-> - **Explanation:** OpenAPI paths map URIs, HTTP methods, and response schemas.
+>
+> #### Technical Explanation
+>
+> 1. **Code-First vs Spec-First API Design**: Spec-first defines OpenAPI specs before coding; code-first generates OpenAPI specs from annotations.
+> 2. **Automated Route Binding**: Generates Express/Fastify server routing logic directly from OpenAPI spec definitions.
+> 3. **Single Source of Truth**: Ensures server code, documentation, and SDKs remain synchronized with the OpenAPI spec.
+> 
 ---
 
-### Exercise 3: OpenAPI Ecosystem Tooling
+### Exercise 3: OpenAPI Spec Component Schema Resolver
 
-**Problem:** List 3 popular tools powered by OpenAPI specifications.
+**Scenario:** Resolves `$ref` schema references inside OpenAPI specs (e.g. `"$ref": "#/components/schemas/User"`).
 
-**Expected output:**
+**Requirements:**
+1. Write resolveOpenApiRef(refString, specObj).
+2. Parse pointer path and return schema object.
+
 > [!check]- Answer
-> ```text
-> 1. Swagger UI (Interactive API documentation)
-> 2. OpenAPI Generator (Automated SDK client code generation)
-> 3. Prism (Contract-compliant mock API server)
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveOpenApiRef(refString, specObj = {}) {
+>   if (!refString || typeof refString !== "string" || !refString.startsWith("#/")) {
+>     return null;
+>   }
+>
+>   const parts = refString.substring(2).split("/");
+>   let current = specObj;
+>
+>   for (const part of parts) {
+>     if (current && typeof current === "object" && part in current) {
+>       current = current[part];
+>     } else {
+>       return null;
+>     }
+>   }
+>
+>   return current;
+> }
+>
+> // Verification tests
+> const spec = {
+>   components: {
+>     schemas: {
+>       User: { type: "object", properties: { name: { type: "string" } } }
+>     }
+>   }
+> };
+>
+> const userSchema = resolveOpenApiRef("#/components/schemas/User", spec);
+> console.assert(userSchema.properties.name.type === "string", "Test 1 Failed");
 > ```
-> ```text
-> 1. Swagger UI (Interactive API documentation)
-> 2. OpenAPI Generator (Automated SDK client code generation)
-> 3. Prism / MSW (Mock API servers)
-> ```
-> - **Explanation:** OpenAPI powers documentation, SDK generation, and mock servers.
+>
+> #### Technical Explanation
+>
+> 1. **$ref JSON Pointers**: Allows re-using shared data model schemas across multiple endpoints in OpenAPI specs.
+> 2. **DRY Spec Definitions**: Defines data models once under components.schemas to avoid code duplication.
+> 3. **Recursive Schema Resolution**: Tooling recursively expands $ref pointers to construct full validation schemas.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [REST (Representational State Transfer)](../level_03/rest.md) — The architecture this specification documents.
 - [GraphQL (The REST Alternative)](../level_07/graphql.md) — GraphQL doesn't need Swagger, because GraphQL has "Introspection" (it inherently documents itself!).
 - [Postman / Insomnia (API Clients)](api_clients.md) — Related concept: Postman / Insomnia (API Clients).
@@ -173,7 +266,7 @@ nullable: true
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **OpenAPI** is a standardized format (YAML/JSON) for describing a REST API.
 - **Swagger UI** is the tool that reads that format and generates a beautiful, interactive documentation website.
 - It allows for auto-generation of Frontend code and Backend validation.

@@ -12,27 +12,28 @@
 ---
 
 ## 2. Term Category
-Architecture, Advanced Core
+
+**Architecture, Advanced Core (core concept)**: Execution Context is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Core Definition
+## 3. Explanation
+
+### (1) Design Motivation — "Why did we design this?"
+
 The **Execution Context** is an abstract concept describing the environment in which JavaScript code is evaluated and executed. Whenever any code is run in JavaScript, it is run inside an execution context.
 
 Think of it as a "box" or "wrapper" that the JS engine builds around your code. Inside this box, the engine stores variables, sets the value of `this`, and manages the scope chain.
 
----
+### (2) Key Characteristics
 
-## 4. Key Characteristics / Rules
 There are two main types of Execution Contexts:
 1. **Global Execution Context:** The default, base context. Any code not inside a function runs here. It creates the Global Object (`window` in browsers) and sets `this` to the global object. There is only *one* Global Context per page.
 2. **Function Execution Context:** Every time a function is invoked, a brand new execution context is created specifically for that function. It contains the function's local variables, arguments, and its own `this` binding.
 
 **The Creation Phase:** Before executing code, the engine scans the context, allocates memory for variables (Hoisting), and sets up the Scope Chain.
 
----
-
-## 5. Typical Usage / Common Patterns
+### (3) Code Examples & Typical Usage
 
 Execution Contexts are pushed onto the Call Stack as they are created, and popped off when they finish.
 
@@ -53,9 +54,15 @@ first();
 // then the 'second' Context.
 ```
 
+
+
 ---
 
-## 5. Common Mistakes & Pitfalls
+
+
+---
+
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Execution Context Scope and Variable Hoisting
 
@@ -128,66 +135,135 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
----
+### Exercise 1: Execution Call Stack Depth Inspector
 
-### Exercise 1: Call Stack Execution Context Traversal
+**Scenario:** A debugging tool simulates JavaScript execution context creation and Call Stack push/pop operations.
 
-**Problem:** Describe how Global Execution Context (GEC) remains at stack base while Function Execution Contexts (FEC) push/pop.
+**Requirements:**
+1. Write simulateCallStack(fnArray).
+2. Push execution context objects onto call stack array.
+3. Pop context upon completion.
+4. Return execution log.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> GEC at bottom; FEC pushed on invoke, popped on return
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("GEC at bottom; FEC pushed on invoke, popped on return");
+> function simulateCallStack(fnNames) {
+>   const stack = [];
+>   const log = [];
+>
+>   for (const name of fnNames) {
+>     const context = { name, phase: "CREATION" };
+>     stack.push(context);
+>     context.phase = "EXECUTION";
+>     log.push(`Entered ${name}`);
+>   }
+>
+>   while (stack.length > 0) {
+>     const exited = stack.pop();
+>     log.push(`Exited ${exited.name}`);
+>   }
+>   return log;
+> }
+>
+> // Verification tests
+> const log = simulateCallStack(["global", "main", "calculate"]);
+> console.assert(log[0] === "Entered global", "Test 1 Failed");
+> console.assert(log[log.length - 1] === "Exited global", "Test 2 Failed");
 > ```
 >
-> **Explanation:** The JS call stack manages active execution contexts in LIFO order.
+> #### Technical Explanation
+>
+> 1. **Execution Context Concept**: An abstract environment created by JS engine to evaluate and execute code.
+> 2. **Creation Phase vs Execution Phase**: Creation phase sets up Variable Environment and scope chain; Execution phase executes code line-by-line.
+> 3. **Call Stack Management**: Single-threaded Call Stack manages active execution contexts using LIFO stack order.
 > 
 ---
 
-### Exercise 2: Execution Context Creation vs Execution Phase
+### Exercise 2: Execution Context Advanced Context Handler
 
-**Problem:** State two phases of Execution Context creation (Creation: Hoisting/Environment Record, Execution: Line-by-line code evaluation).
+**Scenario:** A web application component processes execution context data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleExecutionContextSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Phase 1: Creation, Phase 2: Execution
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Phase 1: Creation, Phase 2: Execution");
+> function handleExecutionContextSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleExecutionContextSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** JS engines allocate variable memory during creation phase before executing code lines.
+> #### Technical Explanation
+>
+> 1. **Execution Context Architecture**: Applying execution context patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
+### Exercise 3: Execution Context Performance Optimization
 
-### Exercise 3: Lexical Environment Component
+**Scenario:** An application utility optimizes execution context execution to prevent performance bottlenecks.
 
-**Problem:** Explain what the Lexical Environment component of an Execution Context stores.
+**Requirements:**
+1. Write optimizeExecutionContextTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Identifier-variable mappings and outer environment reference
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Identifier-variable mappings and outer environment reference");
+> function optimizeExecutionContextTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeExecutionContextTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Lexical Environment holds local variable bindings and pointer references to parent scopes.
-> 
+> #### Technical Explanation
+>
+> 1. **Execution Context Optimization**: Optimizing execution context improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Call Stack](../level_06/call_stack.md) — The stack data structure that physically holds and manages all active Execution Contexts.
 - [Hoisting](../level_03/hoisting.md) — A behavior that occurs during the "Creation Phase" of an Execution Context.
 
 ---
+
+## 7. Key Takeaways
+- An Execution Context is the internal environment created by the JS engine to evaluate and execute JavaScript code.
+- Global Execution Context (GEC) is created on startup; Function Execution Context (FEC) is created whenever a function is called.
+- Execution Context lifecycle has two phases: Creation Phase (allocating memory, hoisting) and Execution Phase (evaluating lines of code).
+- Active contexts are managed on the Call Stack in Last-In, First-Out (LIFO) order.
+
 

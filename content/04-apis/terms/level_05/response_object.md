@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Client-Side  and Node.js.)**: The Response Object (res.json(), res.ok) is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser)** and **Node.js**.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When the server sends data back to the browser, it doesn't just send the JSON payload. It sends an entire HTTP message, including the `200 OK` status and the `Content-Type` headers.
@@ -63,7 +59,7 @@ async function getUser() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `await` on `.json()`
 
@@ -118,69 +114,168 @@ const type = res.headers.get('content-type'); // Correct Headers.get() method
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Why the wrapper?
+### Exercise 1: Fetch Response Object Property & Header Inspector
 
-**Problem:** Why doesn't `fetch('/api')` just directly return the JSON data `{ username: "Bob" }`? Why does it force us to deal with this annoying `Response` wrapper object first?
+**Scenario:** An API developer tool inspects native Fetch `Response` objects to extract HTTP status, ok state, type, and headers.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectFetchResponse(responseObj).
+2. Extract status, ok, statusText, headers map, type.
+
 > [!check]- Answer
-> ```text
-> Because sometimes you need to check the Metadata! 
-> What if the server returned a `404 Not Found`? If `fetch` just gave you the body, you wouldn't know it was an error. The `Response` object allows you to check `response.status` to see if the request actually succeeded before you try to parse the data.
+>
+> #### Implementation
+>
+> ```javascript
+> function inspectFetchResponse(responseObj) {
+>   if (!responseObj) return null;
+>
+>   const headersMap = {};
+>   if (responseObj.headers && typeof responseObj.headers.forEach === "function") {
+>     responseObj.headers.forEach((val, key) => {
+>       headersMap[key] = val;
+>     });
+>   }
+>
+>   return {
+>     status: responseObj.status,
+>     ok: responseObj.ok,
+>     statusText: responseObj.statusText,
+>     type: responseObj.type || "basic",
+>     headers: headersMap,
+>     redirected: responseObj.redirected || false
+>   };
+> }
+>
+> // Verification tests
+> const mockRes = {
+>   status: 200,
+>   ok: true,
+>   statusText: "OK",
+>   type: "cors",
+>   headers: new Map([["content-type", "application/json"]]),
+>   redirected: false
+> };
+>
+> const inspected = inspectFetchResponse(mockRes);
+> console.assert(inspected.status === 200 && inspected.ok === true, "Test 1 Failed");
+> console.assert(inspected.headers["content-type"] === "application/json", "Test 2 Failed");
 > ```
-> - Does the Server only send a body, or does it also send Status Codes and Headers?
+>
+> #### Technical Explanation
+>
+> 1. **Response Object Architecture**: Represents the HTTP response returned by fetch() containing headers, status, and body stream.
+> 2. **response.ok Property**: Boolean flag indicating whether HTTP status code is in 200-299 range.
+> 3. **response.type Property**: Identifies response origin type: 'basic', 'cors', 'opaque', or 'error'.
 > 
 ---
 
-### Exercise 2: Response Property Inspection Matrix
+### Exercise 2: Dual Response Body Reader via response.clone()
 
-**Problem:** Match the `Response` instance property to its description:
-1. `res.ok` 
-2. `res.status` 
-3. `res.statusText` 
-4. `res.url` 
+**Scenario:** A logging middleware reads the fetch response body as text for logging, then clones the response so calling code can parse it as JSON.
 
-**Expected output:**
+**Requirements:**
+1. Write logAndParseResponse(responseObj).
+2. Use response.clone() to create independent body stream copy.
+
 > [!check]- Answer
-> ```text
-> 1. Boolean (true if status is 200-299)
-> 2. HTTP 3-digit status code (e.g. 200, 404)
-> 3. Status message string (e.g. "OK", "Not Found")
-> 4. Final redirected URL string of response
+>
+> #### Implementation
+>
+> ```javascript
+> async function logAndParseResponse(responseObj) {
+>   // Clone response BEFORE reading body stream
+>   const clonedResponse = responseObj.clone();
+>
+>   // Read first body stream for logging
+>   const rawText = await responseObj.text();
+>
+>   // Read second cloned body stream for JSON payload
+>   const jsonPayload = await clonedResponse.json();
+>
+>   return {
+>     rawText,
+>     jsonPayload
+>   };
+> }
+>
+> // Verification tests
+> const bodyData = JSON.stringify({ message: "Hello World" });
+> const mockRes = {
+>   text: async () => bodyData,
+>   json: async () => JSON.parse(bodyData),
+>   clone() {
+>     return {
+>       text: async () => bodyData,
+>       json: async () => JSON.parse(bodyData)
+>     };
+>   }
+> };
+>
+> logAndParseResponse(mockRes).then(res => {
+>   console.assert(res.rawText.includes("Hello World"), "Test 1 Failed");
+>   console.assert(res.jsonPayload.message === "Hello World", "Test 2 Failed");
+> });
 > ```
-> ```text
-> 1. res.ok -> Boolean (true if 200 <= status <= 299)
-> 2. res.status -> 3-digit status code integer
-> 3. res.statusText -> Status phrase string
-> 4. res.url -> Final response URL string
-> ```
-> - **Explanation:** Web `Response` objects expose HTTP metadata properties.
+>
+> #### Technical Explanation
+>
+> 1. **Single-Use Body Streams**: Fetch response bodies are ReadableStream streams that can ONLY be consumed ONCE.
+> 2. **TypeError Body Used Exception**: Attempting to read res.json() after res.text() throws TypeError: Already read.
+> 3. **response.clone() Solution**: clone() creates an exact duplicate response object with an unread body stream.
+> 
 ---
 
-### Exercise 3: Response Body Reader Methods
+### Exercise 3: Content-Type Response Body Parser Router
 
-**Problem:** List 4 methods available on `Response` for consuming body streams.
+**Scenario:** An API response parser inspects `Content-Type` headers and routes body reading to `.json()`, `.text()`, or `.blob()`.
 
-**Expected output:**
+**Requirements:**
+1. Write parseResponseBodyByContentType(responseObj).
+2. Route based on Content-Type header.
+
 > [!check]- Answer
-> ```text
-> 1. res.json()
-> 2. res.text()
-> 3. res.blob()
-> 4. res.arrayBuffer() (or res.formData())
+>
+> #### Implementation
+>
+> ```javascript
+> async function parseResponseBodyByContentType(responseObj) {
+>   const contentType = responseObj.headers.get("content-type") || "";
+>
+>   if (contentType.includes("application/json")) {
+>     return { format: "JSON", data: await responseObj.json() };
+>   }
+>   if (contentType.includes("text/")) {
+>     return { format: "TEXT", data: await responseObj.text() };
+>   }
+>   if (contentType.includes("image/") || contentType.includes("application/octet-stream")) {
+>     return { format: "BLOB", data: await responseObj.blob() };
+>   }
+>
+>   return { format: "UNKNOWN", data: await responseObj.text() };
+> }
+>
+> // Verification tests
+> const jsonRes = {
+>   headers: new Map([["content-type", "application/json"]]),
+>   json: async () => ({ status: "OK" })
+> };
+>
+> parseResponseBodyByContentType(jsonRes).then(res => {
+>   console.assert(res.format === "JSON" && res.data.status === "OK", "Test 1 Failed");
+> });
 > ```
-> ```text
-> 1. res.json()
-> 2. res.text()
-> 3. res.blob()
-> 4. res.arrayBuffer()
-> ```
-> - **Explanation:** Body reader methods consume body streams into specific JS formats.
+>
+> #### Technical Explanation
+>
+> 1. **Polymorphic Body Reading**: Fetch Response provides .json(), .text(), .blob(), .arrayBuffer(), and .formData() reader methods.
+> 2. **Content-Type Guided Parsing**: Inspects header before invoking parser method to prevent syntax exceptions.
+> 3. **Binary vs Text Payload Handling**: Routes images to Blob buffers and JSON payloads to native objects.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Error Handling (try / catch)](error_handling.md) — The `try` block is where we check `response.ok`.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The format `response.json()` expects the body to be in.
 - [Content Negotiation (Accept)](../level_02/content_negotiation.md) — Related concept: Content Negotiation (Accept).
@@ -189,7 +284,7 @@ const type = res.headers.get('content-type'); // Correct Headers.get() method
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `fetch()` returns a **`Response`** object, representing the entire HTTP response.
 - Always check **`response.ok`**. If it is false, manually `throw new Error()` so your catch block can handle the `404` or `500` status.
 - You must use **`await`** a second time when calling **`response.json()`** to parse the body.

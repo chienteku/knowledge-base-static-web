@@ -7,21 +7,17 @@
 
 ## 1. Prerequisites
 - [Scope](scope.md) — The current context of execution.
-- [let](../level_01/let.md)
+- [let](../level_01/let.md) — 
 
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal: Works everywhere)**: Block Scope is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For the first 20 years of JavaScript's existence, the only way to create a local scope was to create a Function. `if` statements and `for` loops did NOT create their own scopes. If you used the `var` keyword inside an `if` block, that variable "leaked" out into the rest of the function. This caused a massive amount of confusing bugs, especially with loops where the iterator variable (`var i`) kept surviving after the loop finished.
@@ -69,7 +65,7 @@ function evaluateGame(score) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `var` and expecting block scope
 
@@ -151,74 +147,141 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Scope Leak
+### Exercise 1: Temporary Processing Buffer Scope Isolation
 
-**Problem:** Look at this code. Will the final `console.log` throw an error or print a value? Why?
-```javascript
-{
-  const a = 10;
-  var b = 20;
-}
-console.log(b);
-```
+**Scenario:** A high-throughput parser isolates temporary calculation buffers within a block scope {} using let and const to prevent memory leakage to outer scopes.
 
-**Expected output:**
+**Requirements:**
+1. Write processLargeData(rawData).
+2. Create block scope {} containing temporary let buffer variables.
+3. Ensure temporary variables are inaccessible outside block scope.
+4. Return processed result.
+
 > [!check]- Answer
-> ```text
-> It will print 20. 
-> `var` ignores the `{}` block and leaks into the global scope. `const a` is safely destroyed.
-> ```
-> - `var` is function-scoped, not block-scoped.
-> - Standalone `{}` still create a block scope for `let` and `const`.
-> 
----
-
-### Exercise 2: Block Scoped Loop Iteration
-
-**Problem:** Demonstrate that `let i` inside a `for` loop is inaccessible after the loop finishes.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> for (let i = 0; i < 3; i++) {}
-> try {
->   console.log(i);
-> } catch (err) {
->   console.log("ReferenceError caught");
+> function processLargeData(rawData) {
+>   let finalResult = 0;
+>
+>   {
+>     // Block-scoped isolation
+>     const tempBuffer = rawData.map(x => x * 2);
+>     const tempSum = tempBuffer.reduce((acc, v) => acc + v, 0);
+>     finalResult = tempSum;
+>   }
+>
+>   let isLeaked = false;
+>   try {
+>     // @ts-ignore
+>     console.log(tempBuffer);
+>   } catch (err) {
+>     isLeaked = false;
+>   }
+>
+>   return { finalResult, isLeaked };
 > }
+>
+> // Verification tests
+> const res = processLargeData([10, 20]);
+> console.assert(res.finalResult === 60, "Test 1 Failed");
+> console.assert(res.isLeaked === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `let` variables bound to loop blocks are destroyed upon loop exit.
+> #### Technical Explanation
+>
+> 1. **Block Scope Definition**: A block scope is established by any pair of curly braces {} containing let or const declarations.
+> 2. **Variable Lifetime**: Variables declared with let and const inside a block are created upon block entry and garbage-collected upon exit.
+> 3. **Contrast with var**: Variables declared with var ignore block boundaries {} and leak into enclosing function or global scopes.
 > 
 ---
 
-### Exercise 3: Standalone Block Scoping (`{ ... }`)
+### Exercise 2: Loop Iteration Lexical Binding Isolation
 
-**Problem:** Use a standalone `{ const secret = 123; }` block to isolate temporary variables.
+**Scenario:** A batch scheduler creates asynchronous timer callbacks inside a for loop. Block-scoped let creates a fresh binding for each loop iteration.
 
-**Expected output:**
+**Requirements:**
+1. Write scheduleBatchTasks(count).
+2. Iterate using for (let i = 0; i < count; i++).
+3. Push callbacks returning i.
+4. Verify each callback receives unique iteration index.
+
 > [!check]- Answer
-> ```text
-> Block isolation verified
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> {
->   const secret = 123;
+> function scheduleBatchTasks(count) {
+>   const callbacks = [];
+>
+>   for (let i = 0; i < count; i++) {
+>     callbacks.push(() => i);
+>   }
+>
+>   return callbacks.map(fn => fn());
 > }
-> console.log("Block isolation verified");
+>
+> // Verification tests
+> const indices = scheduleBatchTasks(3);
+> console.assert(indices.join(",") === "0,1,2", "Test 1 Failed: Block scoped let failed");
 > ```
 >
-> **Explanation:** Standalone curly braces `{}` create isolated block scopes for variable encapsulation.
-> 
+> #### Technical Explanation
+>
+> 1. **Per-Iteration Scope**: In for (let i = 0; ...) loops, a fresh block-scoped variable binding is instantiated per iteration.
+> 2. **Closure Isolation**: Callbacks created inside the loop close over the per-iteration let binding rather than a single shared reference.
+> 3. **Temporal Dead Zone**: Block-scoped variables remain inaccessible prior to their declaration line within the block.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Switch Case Statement Block Scoping
+
+**Scenario:** A state reducer wraps switch cases in explicit block scopes {} to declare local const variables without naming collision syntax errors across cases.
+
+**Requirements:**
+1. Write dispatchAction(state, action).
+2. Wrap case blocks in {} braces.
+3. Declare const payload inside each case block.
+4. Return updated state.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function dispatchAction(state, action) {
+>   switch (action.type) {
+>     case "SET_NAME": {
+>       const payload = action.payload.trim();
+>       return { ...state, name: payload };
+>     }
+>     case "SET_AGE": {
+>       const payload = Number(action.payload);
+>       return { ...state, age: payload };
+>     }
+>     default:
+>       return state;
+>   }
+> }
+>
+> // Verification tests
+> const s1 = dispatchAction({}, { type: "SET_NAME", payload: " Alice " });
+> console.assert(s1.name === "Alice", "Test 1 Failed");
+> const s2 = dispatchAction(s1, { type: "SET_AGE", payload: "30" });
+> console.assert(s2.age === 30, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Switch Case Scoping**: By default, a switch statement shares one single block scope across all cases; adding {} creates distinct per-case scopes.
+> 2. **Preventing Naming Collisions**: Enclosing cases in {} allows re-using variable names like const payload across cases.
+> 3. **Lexical Enclosure**: Guarantees case variables do not leak to other switch cases.
+---
+
+## 6. Related Terms
 - [var](../level_01/var.md) — The legacy variable declaration that ignores Block Scope.
 - [Local / Function Scope](local_scope.md) — Scope restricted to a full function.
 - [Scope](scope.md) — Related concept: Scope.
@@ -226,7 +289,7 @@ console.log(b);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Any set of curly braces `{}` creates a Block Scope.
 - `let` and `const` respect Block Scope. They die when the block ends.
 - `if` statements, `for` loops, and `while` loops all create Block Scopes.

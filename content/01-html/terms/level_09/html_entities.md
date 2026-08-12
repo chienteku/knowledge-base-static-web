@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Syntax / Concept**
+
+**Syntax / Concept (Universal Browser Support .)**: HTML Entities is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers. Parsed during DOM tree parsing to substitute text tokens).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 There are three main scenarios where you cannot simply type a character into your HTML text:
@@ -100,7 +96,7 @@ Displaying code examples safely:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the closing semicolon
 
@@ -162,7 +158,7 @@ Displaying code examples safely:
 <p>&copy; 2026 Company</p>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Entity Translation
 
@@ -226,14 +222,14 @@ Displaying code examples safely:
 >
 > **Explanation:** `&nbsp;` prevents automatic line wrapping between adjacent words.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tags that require less-than/greater-than signs.
 - [Character Encoding (`charset`)](../level_08/character_encoding.md) — The underlying byte mapping.
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The default browser behavior that `&nbsp;` bypasses.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - HTML Entities display reserved tags, special keyboard characters, and custom spacings.
 - All entities follow the pattern: `&[EntityName];`.
 - The less-than (`&lt;`) and greater-than (`&gt;`) entities prevent browsers from confusing text for HTML elements.

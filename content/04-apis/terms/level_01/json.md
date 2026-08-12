@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal Standard .)**: JSON (JavaScript Object Notation) is a fundamental concept in this technology stack. **Level 1 — The Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Used by virtually every programming language, not just JavaScript!).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, if a Server wanted to send data to a Client, they used XML (eXtensible Markup Language). XML looked like HTML (`<user><name>John</name><age>30</age></user>`). It was incredibly bloated, hard to read, and difficult for programming languages to parse efficiently.
@@ -53,7 +49,7 @@ JSON looks exactly like a JavaScript object, but it is **strictly text**, and it
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing a JS Object with a JSON String
 
@@ -115,77 +111,137 @@ console.log(JSON.stringify(data)); // '{"name":"Bob","score":null}'
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Spot the Syntax Error
+### Exercise 1: Safe JSON Parsing with Fallback Default
 
-**Problem:** Why is this JSON invalid?
-```json
-{
-  name: 'John',
-  "age": 30,
-}
-```
+**Scenario:** A resilient API client parses incoming JSON payload strings safely, returning a fallback default value if the JSON is malformed.
 
-**Expected output:**
+**Requirements:**
+1. Write safeJsonParse(jsonStr, fallbackValue).
+2. Wrap JSON.parse in try...catch block.
+3. Return parsed object or fallbackValue on syntax error.
+
 > [!check]- Answer
-> ```text
-> There are 3 errors here!
-> 1. The key `name` is missing double quotes (`"name"`).
-> 2. The value `'John'` is using single quotes instead of double quotes.
-> 3. There is a trailing comma after `30`.
+>
+> #### Implementation
+>
+> ```javascript
+> function safeJsonParse(jsonStr, fallbackValue = null) {
+>   if (typeof jsonStr !== "string") {
+>     return fallbackValue;
+>   }
+>   try {
+>     return JSON.parse(jsonStr);
+>   } catch (err) {
+>     return fallbackValue;
+>   }
+> }
+>
+> // Verification tests
+> const validRes = safeJsonParse('{"user":"Alice","role":"admin"}', {});
+> console.assert(validRes.user === "Alice", "Test 1 Failed");
+>
+> const invalidRes = safeJsonParse('{bad json}', { error: true });
+> console.assert(invalidRes.error === true, "Test 2 Failed: Malformed JSON must return fallback");
 > ```
-> - JSON is incredibly strict compared to standard JavaScript. Check the quotes!
+>
+> #### Technical Explanation
+>
+> 1. **JSON Format Specification**: JSON (JavaScript Object Notation) requires double quotes for string keys and values: {"key": "value"}.
+> 2. **Syntax Error Prevention**: JSON.parse() throws a SyntaxError on malformed text; try...catch prevents application crashes.
+> 3. **Strict Parsing Rules**: Single quotes, trailing commas, and unquoted keys are invalid in standard JSON.
 > 
 ---
 
-### Exercise 2: Valid JSON Validator
+### Exercise 2: Custom JSON Reviver for Date Deserialization
 
-**Problem:** Identify the 2 invalid lines in the following JSON snippet:
-```json
-{
-  "id": 101,
-  "title": "API Essentials",
-  "active": true,
-  "tags": ['rest', 'http'],
-  "author": undefined
-}
-```
+**Scenario:** An API payload deserializer uses a custom `JSON.parse(str, reviver)` function to automatically convert ISO date strings into Date objects.
 
-**Expected output:**
+**Requirements:**
+1. Write parseJsonWithDates(jsonStr).
+2. Implement reviver function checking ISO 8601 date string pattern.
+3. Return parsed object with Date instances.
+
 > [!check]- Answer
-> ```text
-> Line 5: Single quotes on string array items ['rest', 'http']
-> Line 6: undefined is not a valid JSON primitive value
-> ```
-> ```json
-> {
-> "id": 101,
-> "title": "API Essentials",
-> "active": true,
-> "tags": ["rest", "http"],
-> "author": null
+>
+> #### Implementation
+>
+> ```javascript
+> function parseJsonWithDates(jsonStr) {
+>   const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/;
+>
+>   return JSON.parse(jsonStr, (key, value) => {
+>     if (typeof value === "string" && isoDateRegex.test(value)) {
+>       return new Date(value);
+>     }
+>     return value;
+>   });
 > }
+>
+> // Verification tests
+> const json = '{"name":"Order #1","createdAt":"2026-08-12T10:00:00.000Z"}';
+> const parsed = parseJsonWithDates(json);
+>
+> console.assert(parsed.name === "Order #1", "Test 1 Failed");
+> console.assert(parsed.createdAt instanceof Date, "Test 2 Failed: ISO string must be converted to Date");
+> console.assert(parsed.createdAt.getUTCFullYear() === 2026, "Test 3 Failed");
 > ```
-> - **Explanation:** JSON requires double quotes for strings and `null` instead of `undefined`.
+>
+> #### Technical Explanation
+>
+> 1. **JSON Reviver Parameter**: The second reviver argument in JSON.parse(text, reviver) transforms parsed value nodes before return.
+> 2. **No Native Date Type in JSON**: JSON supports strings, numbers, booleans, null, arrays, objects, but NO native Date type.
+> 3. **Automatic ISO Deserialization**: Converts serialized date string representations back into native Date object instances.
+> 
 ---
 
-### Exercise 3: Date Object Serialization Behavior
+### Exercise 3: Sensitive Data Redaction via Custom JSON Replacer
 
-**Problem:** What data type does a JavaScript `Date` object serialize to when passed to `JSON.stringify()`?
+**Scenario:** A logging library uses `JSON.stringify(obj, replacer)` to automatically sanitize sensitive keys (like passwords and credit cards) during serialization.
 
-**Expected output:**
+**Requirements:**
+1. Write stringifySanitized(obj, sensitiveKeys).
+2. Implement replacer function.
+3. Replace matching sensitive key values with "[REDACTED]".
+
 > [!check]- Answer
-> ```text
-> An ISO 8601 string representation (e.g. "2026-07-25T01:00:00.000Z").
+>
+> #### Implementation
+>
+> ```javascript
+> function stringifySanitized(obj, sensitiveKeys = ["password", "token", "ssn"]) {
+>   const keysSet = new Set(sensitiveKeys.map(k => k.toLowerCase()));
+>
+>   return JSON.stringify(obj, (key, value) => {
+>     if (keysSet.has(key.toLowerCase())) {
+>       return "[REDACTED]";
+>     }
+>     return value;
+>   });
+> }
+>
+> // Verification tests
+> const payload = {
+>   username: "alice",
+>   password: "super-secret-password",
+>   profile: { token: "abc-123", age: 30 }
+> };
+>
+> const jsonStr = stringifySanitized(payload);
+> console.assert(jsonStr.includes('"password":"[REDACTED]"'), "Test 1 Failed");
+> console.assert(jsonStr.includes('"token":"[REDACTED]"'), "Test 2 Failed");
+> console.assert(jsonStr.includes('"username":"alice"'), "Test 3 Failed");
 > ```
-> ```text
-> An ISO 8601 string representation (e.g. "2026-07-25T01:00:00.000Z").
-> ```
-> - **Explanation:** Date instances implement `.toJSON()` which returns ISO formatted strings.
+>
+> #### Technical Explanation
+>
+> 1. **JSON Replacer Function**: The second replacer argument in JSON.stringify(value, replacer) filters or modifies properties during serialization.
+> 2. **Security Audit Safeguard**: Prevents accidentally logging plaintext passwords or authorization tokens in server log files.
+> 3. **Recursive Object Traversal**: The replacer function is called recursively for every key-value pair in the object tree.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Request Body & Payloads](../level_02/request_body.md) — JSON is the most common format placed inside the Body of an HTTP request.
 - [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — How we extract JSON out of a network response using `.json()`.
 - [API (Application Programming Interface)](../level_03/api.md) — Related concept: API (Application Programming Interface).
@@ -196,7 +252,7 @@ console.log(JSON.stringify(data)); // '{"name":"Bob","score":null}'
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JSON is a **text format** used to send data across the internet.
 - It is language-agnostic (Python, Java, and Go all use it to talk to each other).
 - JSON is incredibly strict: **Double quotes only**, and no trailing commas.

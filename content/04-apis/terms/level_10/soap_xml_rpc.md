@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Primarily encountered when integrating with legacy enterprise bank APIs, governmental registries, and telecommunications systems.)**: SOAP & XML-RPC (legacy) is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Primarily encountered when integrating with legacy enterprise bank APIs, governmental registries, and telecommunications systems.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before REST emerged in the early 2000s, software systems required a standardized mechanism to execute functions on remote servers over the internet. 
@@ -77,7 +73,7 @@ Imagine mailing a document.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming SOAP is completely obsolete and dead
 
@@ -124,67 +120,137 @@ Imagine mailing a document.
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Protocol Diagnostic
+### Exercise 1: Legacy SOAP XML Envelope Builder
 
-**Problem:** You are reviewing an API documentation file and encounter a `.wsdl` file containing nested schemas. What type of API protocol is this endpoint using?
+**Scenario:** Constructs W3C standard `SOAP-ENV:Envelope` XML request payloads containing Header and Body elements for enterprise SOAP services.
 
-- **A.** REST over JSON
-- **B.** SOAP over XML
-- **C.** gRPC over Protocol Buffers
+**Requirements:**
+1. Write buildSoapEnvelope(actionName, bodyContentXml, authToken).
+2. Format `<SOAP-ENV:Envelope>`.
+3. Add Header and Body.
 
 > [!check]- Answer
-> - **B (SOAP over XML).** WSDL files are the standard XML contract format used to describe SOAP web services.
+>
+> #### Implementation
+>
+> ```javascript
+> function buildSoapEnvelope(actionName, bodyContentXml, authToken) {
+>   const headerXml = authToken
+>     ? `<SOAP-ENV:Header><AuthToken>${authToken}</AuthToken></SOAP-ENV:Header>`
+>     : "<SOAP-ENV:Header/>";
+>
+>   return `<?xml version="1.0" encoding="UTF-8"?>
+> <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+>   ${headerXml}
+>   <SOAP-ENV:Body>
+>     <m:${actionName} xmlns:m="http://example.com/soap">
+>       ${bodyContentXml}
+>     </m:${actionName}>
+>   </SOAP-ENV:Body>
+> </SOAP-ENV:Envelope>`.replace(/
+> \s*/g, "");
+> }
+>
+> // Verification tests
+> const soap = buildSoapEnvelope("GetUser", "<UserId>42</UserId>", "token_secret");
+> console.assert(soap.includes("<SOAP-ENV:Envelope"), "Test 1 Failed");
+> console.assert(soap.includes("<AuthToken>token_secret</AuthToken>"), "Test 2 Failed");
+> console.assert(soap.includes("<m:GetUser"), "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SOAP (Simple Object Access Protocol)**: Strict XML-based protocol specification for web service communication.
+> 2. **SOAP Envelope Structure**: Consists of mandatory Envelope, optional Header (metadata/auth), and mandatory Body (RPC action payload).
+> 3. **Strict XML Namespaces**: SOAP relies heavily on XML namespaces (xmlns:SOAP-ENV) for element disambiguation.
 > 
+---
+
+### Exercise 2: XML-RPC Method Call Serializer & Response Parser
+
+**Scenario:** Constructs XML-RPC `<methodCall>` payloads and parses `<methodResponse>` XML text into JavaScript data types.
+
+**Requirements:**
+1. Write buildXmlRpcCall(methodName, paramsArray).
+2. Parse XML-RPC response.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function buildXmlRpcCall(methodName, paramsArray = []) {
+>   const paramTags = paramsArray.map(p => {
+>     const typeTag = typeof p === "number" ? `<int>${p}</int>` : `<string>${p}</string>`;
+>     return `<param><value>${typeTag}</value></param>`;
+>   }).join("");
+>
+>   return `<?xml version="1.0"?><methodCall><methodName>${methodName}</methodName><params>${paramTags}</params></methodCall>`;
+> }
+>
+> // Verification tests
+> const xmlRpc = buildXmlRpcCall("calculator.add", [10, 20]);
+> console.assert(xmlRpc.includes("<methodName>calculator.add</methodName>"), "Test 1 Failed");
+> console.assert(xmlRpc.includes("<int>10</int><int>20</int>"), "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **XML-RPC Protocol**: Simple Remote Procedure Call (RPC) protocol using XML text over HTTP.
+> 2. **Explicit Type Tagging**: Parameters are explicitly tagged by primitive XML types (<int>, <string>, <boolean>, <struct>).
+> 3. **Predecessor to SOAP & REST**: Historical protocol specification created in 1998 that evolved into SOAP and later REST/JSON.
 > 
 ---
 
-### Exercise 2: SOAP Message Envelope Structure
+### Exercise 3: SOAPAction HTTP Header Router
 
-**Problem:** Identify the 4 elements of a standard SOAP XML Envelope message.
+**Scenario:** An API gateway inspects the mandatory `SOAPAction` HTTP header on incoming SOAP POST requests to route to backend RPC handlers.
 
-**Expected output:**
+**Requirements:**
+1. Write routeSoapAction(soapActionHeader, handlersMap).
+2. Extract action name.
+3. Execute handler.
+
 > [!check]- Answer
-> ```text
-> 1. <soap:Envelope> (Root element)
-> 2. <soap:Header> (Optional metadata/security)
-> 3. <soap:Body> (Mandatory request/response payload)
-> 4. <soap:Fault> (Optional error details inside Body)
+>
+> #### Implementation
+>
+> ```javascript
+> function routeSoapAction(soapActionHeader = "", handlersMap = {}) {
+>   // SOAPAction header format: "http://example.com/soap/GetUser" or "GetUser"
+>   const cleanAction = soapActionHeader.replace(/"/g, "").split("/").pop();
+>
+>   const handler = handlersMap[cleanAction];
+>   if (!handler) {
+>     return { status: 500, error: `SOAP Fault: Action '${cleanAction}' not found` };
+>   }
+>
+>   return { status: 200, action: cleanAction, handler };
+> }
+>
+> // Verification tests
+> const handlers = { GetUser: () => "OK" };
+> const res = routeSoapAction('"http://example.com/soap/GetUser"', handlers);
+>
+> console.assert(res.status === 200 && res.action === "GetUser", "Test 1 Failed");
 > ```
-> ```xml
-> <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
-> <soap:Header>...</soap:Header>
-> <soap:Body>
-> <soap:Fault>...</soap:Fault>
-> </soap:Body>
-> </soap:Envelope>
-> ```
-> - **Explanation:** SOAP envelopes structure enterprise XML web service payloads.
+>
+> #### Technical Explanation
+>
+> 1. **SOAPAction HTTP Header**: HTTP request header required by SOAP 1.1 specifying the target operation name.
+> 2. **SOAP Fault Responses**: SOAP servers return `<SOAP-ENV:Fault>` XML payloads when errors occur.
+> 3. **WSDL Contract**: Web Services Description Language (WSDL) XML files describe available SOAP actions and XML schemas.
 ---
 
-### Exercise 3: WSDL Definition Purpose
-
-**Problem:** What is the purpose of a WSDL (Web Services Description Language) file in SOAP architectures?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> An XML file that formally defines the contract, available operations, data types, and network endpoints of a SOAP web service.
-> ```
-> ```text
-> An XML file that formally defines the contract, available operations, data types, and network endpoints of a SOAP web service.
-> ```
-> - **Explanation:** WSDL provides machine-readable contract specifications for SOAP services.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [gRPC (Remote Procedure Call)](grpc.md) — The modern binary remote procedure call alternative.
 - [XML](../level_07/xml.md) — The data format that structures SOAP messages.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - XML-RPC and SOAP were the primary pre-REST protocols for remote procedure execution.
 - SOAP is a rigid protocol requiring all data to be wrapped in XML envelopes.
 - WSDL files serve as the XML-based contract schemas defining SOAP API capabilities.

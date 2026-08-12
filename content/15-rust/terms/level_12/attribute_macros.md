@@ -10,7 +10,6 @@
 
 - [Procedural Macros](procedural_macros.md) — Understanding compile-time Rust code transformation function definitions and proc-macro crate requirements.
 - [Token Stream](token_stream.md) — The input (`attr` and `item`) and output token sequences (`proc_macro::TokenStream`) manipulated by procedural attribute macros.
-- [Attributes (`#[...]`)](../level_07/attributes.md) — Basic syntax and mechanics of built-in attributes like `#[inline]`, `#[test]`, and `#[allow(...)]`.
 
 ---
 

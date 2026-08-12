@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **HTML5 API / Concept**
+
+**HTML5 API / Concept (Modern Browsers . For security reasons, browsers block the Geolocation API on non-secure HTTP connections, except for local testing on `localhost`).)**: Geolocation API is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers** (Requires a **Secure Context (HTTPS)**. For security reasons, browsers block the Geolocation API on non-secure HTTP connections, except for local testing on `localhost`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Many modern web features rely on knowing the user's physical location:
@@ -125,7 +121,7 @@ A location scanner displaying coordinates or errors:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming the API is available in non-secure HTTP pages
 
@@ -251,7 +247,7 @@ navigator.geolocation.getCurrentPosition(
 );
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Coordinate Scanner
 
@@ -310,14 +306,14 @@ navigator.geolocation.getCurrentPosition(
 >
 > **Explanation:** `watchPosition` streams real-time GPS coordinate updates.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<script>`](../level_08/script.md) — The script environment executing API commands.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Used to save coordinate preferences locally.
 - [Content Security Policy (CSP) & HTML Security](security.md) — Defining secure context parameters.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Geolocation API requests GPS/Wi-Fi coordinate data from the host device.
 - It requires an HTTPS secure connection to run.
 - The browser must prompt the user for permission; if blocked, the code fails.

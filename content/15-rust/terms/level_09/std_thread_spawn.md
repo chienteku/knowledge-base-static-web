@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [Closure](../level_06/closure.md) — The anonymous function syntax used to give the new thread its instructions.
+- [Closures (`|args| body`)](../level_06/closure.md) — The anonymous function syntax used to give the new thread its instructions.
 - [`move` Closure](../level_06/move_closure.md) — The keyword required to safely transfer variables into the new thread.
 
 ---

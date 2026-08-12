@@ -9,7 +9,7 @@
 
 
 - [Macros](../level_01/macros.md) — The code-generating system (denoted by `!`) that powers these assertions.
-- [`panic!` Macro](../level_04/panic.md) — The action these macros take when an assertion fails.
+- [`panic!`](../level_04/panic.md) — The action these macros take when an assertion fails.
 
 ---
 

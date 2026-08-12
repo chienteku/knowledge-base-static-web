@@ -9,7 +9,7 @@
 
 
 - [Generics (`<T>`)](generics.md) — The feature that triggers this compiler mechanism.
-- [`fn` (Functions)](../level_01/fn.md) — The primary place where this code duplication happens.
+- [fn](../level_01/fn.md) — The primary place where this code duplication happens.
 
 ---
 

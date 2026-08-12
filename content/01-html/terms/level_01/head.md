@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata**
+
+**Metadata (Universal Browser Support)**: `<head>` is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A webpage requires a lot of "behind-the-scenes" data to function properly. It needs to know what character set to use, what the title of the browser tab should be, where to download the CSS styles to make the page look pretty, and what description to show if the page is shared on Twitter or Google.
@@ -49,7 +45,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting visible content in the head
 
@@ -122,7 +118,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 </head>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Head vs Body Sorting
 
@@ -182,7 +178,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 >
 > **Explanation:** `<head>` contents are non-rendered document metadata.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<body>`](body.md) — The sibling to `<head>` that handles all visible content.
 - [`title` Attribute](../level_07/title.md) — The most important tag that lives inside the `<head>`.
 - [`<html>`](html_tag.md) — Related concept: `<html>`.
@@ -196,7 +192,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<head>` element is the brain of the document.
 - It contains metadata, CSS links, and browser instructions.
 - It is processed *before* the visible page is loaded.

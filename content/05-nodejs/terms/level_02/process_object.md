@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core API**
+
+**Node.js Core API (Node.js Only .)**: The process Object is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Browser JS cannot talk to the Operating System).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A backend application doesn't exist in a vacuum. It lives inside a server (a physical computer running Linux). 
@@ -45,7 +41,7 @@ If you run `node app.js --force --silent` in the terminal, your code can read th
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hardcoding sensitive keys instead of using `process.env`
 
@@ -96,7 +92,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Dev vs Prod Switch
 
@@ -153,7 +149,7 @@ process.on('unhandledRejection', (reason, promise) => {
 >
 > **Explanation:** Listening for `SIGTERM` allows servers to close active socket connections cleanly before exiting.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Environment Variables (dotenv)](../level_10/env_vars.md) — The ecosystem tool used to manage `process.env` files easily on your laptop.
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — `process` is a member of this family.
 - [The Node.js REPL](repl.md) — Related concept: The Node.js REPL.
@@ -162,7 +158,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`process`** object is your bridge to the Operating System.
 - **`process.env`** is used to securely read passwords, ports, and API keys.
 - **`process.exit(1)`** instantly kills the Node.js application due to an error.

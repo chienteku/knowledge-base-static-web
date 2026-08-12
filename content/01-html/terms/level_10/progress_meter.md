@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Form Element**
+
+**Form Element (Universal Browser Support .)**: `<progress>` & `<meter>` Elements is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (HTML5 elements rendered natively by all browsers. Browsers apply default visual stylings, which can be modified using CSS).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We often need to show numerical measurements to users:
@@ -114,7 +110,7 @@ Basic progress and meter tags:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the two elements
 
@@ -236,7 +232,7 @@ Basic progress and meter tags:
 <progress id="p" value="40" max="100">40%</progress>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Password Strength Gauge
 
@@ -295,15 +291,15 @@ Basic progress and meter tags:
 >
 > **Explanation:** Omitting the `value` attribute renders an indeterminate loading animation.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`value` Attribute (in Form Fields)](../level_05/value.md) — The data value tag.
-- [`<output>` Element](../level_05/output.md) — The semantic tag displaying calculation results.
+- [The `<output>` Element](../level_05/output.md) — The semantic tag displaying calculation results.
 - [`style` Attribute](../level_07/style.md) — Used for overriding default progress styles.
 - [`<canvas>`](canvas.md) — Related concept: `<canvas>`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<progress>` represents the completion progress of a dynamic task.
 - `<meter>` represents a static scalar measurement within a known range (a gauge).
 - Always include fallback text inside the tags (e.g. `70%`) for legacy browsers and screen reader accessibility.

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<div>` (Block container) is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We have tags for specific structural meanings: `<h1>` for titles, `<p>` for paragraphs, `<ul>` for lists. But what if a developer wants to group an `<h1>`, a `<p>`, and a `<ul>` together into a single logical "box" so they can put a border around it, or move it to the right side of the screen using CSS?
@@ -61,7 +57,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Divitis (Using too many divs)
 
@@ -203,7 +199,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 <button type="button" class="btn" onclick="save()">Save</button>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Invisible Box
 
@@ -249,7 +245,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 >
 > **Explanation:** `<div>` is the designated element for non-semantic CSS layout grouping.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<span>` (Inline container)](span.md) — The inline equivalent of the `<div>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic divisions.
 - [Semantic HTML](../level_06/semantic_html.md) — The modern alternative to using `<div>` for everything.
@@ -260,7 +256,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<div>` is a generic container with zero semantic meaning.
 - It is a "block-level" element, meaning it takes up the full width available and starts on a new line.
 - It is primarily used to group elements together for CSS styling or JavaScript targeting.

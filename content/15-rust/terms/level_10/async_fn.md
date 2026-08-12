@@ -9,7 +9,7 @@
 
 
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The heavy, OS-level concurrency we used in Level 9.
-- [`fn` (Functions)](../level_01/fn.md) — The standard, synchronous way to run code.
+- [fn](../level_01/fn.md) — The standard, synchronous way to run code.
 - [Trait](../level_04/trait.md) — The core interface that powers async Rust under the hood.
 
 ---
@@ -586,7 +586,7 @@ Write an async pipeline that validates and transforms incoming telemetry batches
 ## 6. Related Terms
 
 - [`async` / `.await`](../level_09/async_await.md) — Related concept: `async` / `.await`.
-- [Generators Coroutines](../level_19/generators_coroutines.md) — Related concept: Generators Coroutines.
+- [Generators / Coroutines (Unstable)](../level_19/generators_coroutines.md) — Related concept: Generators Coroutines.
 
 ---
 

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Form Element**
+
+**Form Element (Universal Browser Support)**: `<textarea>` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 An `<input type="text">` is great for short data like a first name or an email address. But what if the user needs to write a 5-paragraph review, a long comment, or a bug report? A single-line input box would force them to type blindly off the edge of the screen.
@@ -58,7 +54,7 @@ I have been writing code for 5 years.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use a `value` attribute
 
@@ -133,7 +129,7 @@ textarea {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: CSS Resizing
 
@@ -185,7 +181,7 @@ textarea {
 >
 > **Explanation:** `white-space: pre-wrap` preserves newlines and wraps text output.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The single-line equivalent for short data.
 - [`placeholder` Attribute](placeholder.md) — The visual cue comparison.
 - [`value` Attribute (in Form Fields)](value.md) — The value differences from textareas.
@@ -194,7 +190,7 @@ textarea {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<textarea>` element is used for long-form, multi-line text input.
 - It is NOT a void element; it has opening and closing tags.
 - You set its default text by placing content *between* the tags, not by using a `value` attribute.

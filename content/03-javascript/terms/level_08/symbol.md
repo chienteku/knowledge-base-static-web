@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Symbol is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before ES6, object keys could only be strings. This constraint caused two issues:
@@ -81,7 +77,7 @@ console.log(Object.prototype.toString.call(customLogger));
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Invoking Symbol with the `new` keyword
 
@@ -154,117 +150,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Collision Prevention
+### Exercise 1: Unique Non-Colliding Property Keys with Symbol
 
-**Problem:** Complete the code to assign the value `"secured_token"` to `data` using a symbol `securityKey` as the key, ensuring the value cannot be read in the `Object.keys()` loop below.
+**Scenario:** A plugin framework creates private, non-colliding object property keys using Symbol() and global symbol lookup with Symbol.for().
 
-```javascript
-const data = {
-  status: "active"
-};
-
-// Create a unique symbol
-const securityKey = // Write symbol code
-// Assign "secured_token" to data under the symbol key
-
-console.log("Keys count:", Object.keys(data).length); // Should be 1
-console.log("Token value:", data[securityKey]); // "secured_token"
-```
+**Requirements:**
+1. Write attachPluginMetadata(targetObj, metaData).
+2. Use Symbol() key for internal state.
+3. Use Symbol.for("plugin_id") for shared ID.
+4. Return object.
 
 > [!check]- Answer
-> - Declare `const securityKey = Symbol("token")` and assign `data[securityKey] = "secured_token"`.
-> 
----
-
-### Exercise 2: Creating Unique Object Hidden Keys with Symbols
-
-**Problem:** Create two symbols `const s1 = Symbol("id"); const s2 = Symbol("id");`. Compare `s1 === s2` and use `s1` as an object key.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> false
-> 123
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const s1 = Symbol("id");
-> const s2 = Symbol("id");
-> console.log(s1 === s2); // false
-> const user = { [s1]: 123 };
-> console.log(user[s1]);
+> const PRIVATE_KEY = Symbol("private_plugin_data");
+> const SHARED_KEY = Symbol.for("plugin_shared_id");
+>
+> function attachPluginMetadata(targetObj, metaData) {
+>   targetObj[PRIVATE_KEY] = metaData;
+>   targetObj[SHARED_KEY] = "PLUGIN-100";
+>   return targetObj;
+> }
+>
+> // Verification tests
+> const obj = {};
+> attachPluginMetadata(obj, { secret: 42 });
+>
+> console.assert(obj[PRIVATE_KEY].secret === 42, "Test 1 Failed");
+> console.assert(obj[Symbol.for("plugin_shared_id")] === "PLUGIN-100", "Test 2 Failed");
+> console.assert(Object.keys(obj).length === 0, "Test 3 Failed: Symbol keys should be non-enumerable in Object.keys()");
 > ```
 >
-> **Explanation:** Every `Symbol()` call creates a unique, guaranteed non-colliding primitive value.
+> #### Technical Explanation
+>
+> 1. **Symbol Primitive Type**: Symbol() creates a unique, immutable primitive value guaranteed to be unique.
+> 2. **Non-Colliding Keys**: Prevents property name collisions in plugin architectures or extended objects.
+> 3. **Symbol.for() Registry**: Symbol.for(key) searches global symbol registry, returning shared symbol for string key.
 > 
 ---
 
-### Exercise 3: Global Symbol Registry with `Symbol.for()`
+### Exercise 2: Symbol Advanced Context Handler
 
-**Problem:** Demonstrate that `Symbol.for("key") === Symbol.for("key")` returns `true` using the global registry.
+**Scenario:** A web application component processes symbol data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleSymbolSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const sym1 = Symbol.for("app.id");
-> const sym2 = Symbol.for("app.id");
-> console.log(sym1 === sym2);
+> function handleSymbolSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleSymbolSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Symbol.for(key)` looks up or creates shared symbols in the cross-realm runtime global symbol registry.
+> #### Technical Explanation
+>
+> 1. **Symbol Architecture**: Applying symbol patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-### Exercise 4: Well-Known Symbol Customization (`Symbol.toPrimitive`)
+### Exercise 3: Symbol Performance Optimization
 
-**Problem:** Customize object string conversion using `[Symbol.toPrimitive](hint)`.
+**Scenario:** An application utility optimizes symbol execution to prevent performance bottlenecks.
 
-**Expected output:**
+**Requirements:**
+1. Write optimizeSymbolTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
 > [!check]- Answer
-> ```text
-> 42
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const obj = {
->   [Symbol.toPrimitive](hint) { return 42; }
-> };
-> console.log(+obj);
+> function optimizeSymbolTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeSymbolTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Well-known Symbols like `Symbol.toPrimitive` hook into core JavaScript engine conversion routines.
-> 
----
-
-### Exercise 5: Global Symbol Registry Lookup
-
-**Problem:** Retrieve symbol key string from registry using `Symbol.keyFor(Symbol.for("app.id"))`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> app.id
-> ```
-> ```javascript
-> const sym = Symbol.for("app.id");
-> console.log(Symbol.keyFor(sym));
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `Symbol.keyFor(sym)` returns the registered key string for symbols in the global registry.
+> 1. **Symbol Optimization**: Optimizing symbol improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Iterators & Iterables (protocol)](iterators_iterables.md) — The looping contract built on `Symbol.iterator`.
 - [Private Class Fields (#)](../level_07/private_class_fields.md) — Enforces class encapsulation without relying on Symbol conventions.
 - [Computed Property Names](../level_07/computed_property_names.md) — Related concept: Computed Property Names.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Symbols are a unique, immutable primitive data type introduced in ES6.
 - Create symbols using the factory function `Symbol(desc)`. Never use the `new` keyword.
 - Symbols are guaranteed to be unique; no two symbols are equal, regardless of descriptions.

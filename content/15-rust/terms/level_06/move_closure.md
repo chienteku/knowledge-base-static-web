@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [Closure](closure.md) — The anonymous functions this keyword applies to.
+- [Closures (`|args| body`)](closure.md) — The anonymous functions this keyword applies to.
 - [Ownership](../level_03/ownership.md) — The core mechanism that the `move` keyword enforces.
 - [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The traits that categorize closures based on what they do with their data.
 
@@ -266,7 +266,7 @@ let f = move || println!("{name}"); // If name is not needed in outer scope
 
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The most common standard library function that strictly requires `move` closures.
 - [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The trait that beginners frequently confuse with `move`.
-- [Closure](closure.md) — Related concept: Closure.
+- [Closures (`|args| body`)](closure.md) — Related concept: Closure.
 
 ---
 

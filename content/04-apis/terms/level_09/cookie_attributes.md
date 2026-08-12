@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Universal: Configured on backend application server response headers and processed by client-side browser engines.)**: Cookie Attributes (HttpOnly, Secure, SameSite) is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Configured on backend application server response headers and processed by client-side browser engines.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, cookies are simple key-value strings stored in the browser and sent automatically with every matching HTTP request. However, when cookies store session IDs or JWTs, they become high-value targets for attackers:
@@ -68,7 +64,7 @@ Set-Cookie: session_id=xyz987654321; Path=/; HttpOnly; Secure; SameSite=Lax; Max
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `HttpOnly` protects against CSRF attacks
 
@@ -117,72 +113,178 @@ Set-Cookie: token=xyz; SameSite=None; Secure
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Header Auditor
+### Exercise 1: Secure HTTP Cookie Header Builder
 
-**Problem:** Review this response header from a production login API. Identify the security vulnerability present:
+**Scenario:** An authentication server constructs RFC 6265 compliant `Set-Cookie` response headers with strict security flags.
 
-`Set-Cookie: auth_token=jwt_value_here; SameSite=Strict; Path=/;`
-
-- **A.** The cookie is missing the `SameSite` flag.
-- **B.** JavaScript can steal this cookie because it is missing `HttpOnly`, and it can be intercepted over unsecured HTTP because it is missing `Secure`.
-- **C.** The cookie path scope is too narrow.
+**Requirements:**
+1. Write buildSecureCookieHeader(name, value, options).
+2. Support HttpOnly, Secure, SameSite, Path, Max-Age.
 
 > [!check]- Answer
-> - **B** (The header is missing the `HttpOnly` and `Secure` attributes, leaving it vulnerable to XSS theft and packet sniffing).
+>
+> #### Implementation
+>
+> ```javascript
+> function buildSecureCookieHeader(name, value, options = {}) {
+>   if (!name || value === undefined) throw new Error("Cookie name and value required");
+>
+>   const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`];
+>
+>   if (options.maxAgeSeconds !== undefined) {
+>     parts.push(`Max-Age=${options.maxAgeSeconds}`);
+>   }
+>   if (options.domain) {
+>     parts.push(`Domain=${options.domain}`);
+>   }
+>
+>   parts.push(`Path=${options.path || "/"}`);
+>
+>   if (options.sameSite) {
+>     const ss = options.sameSite.toLowerCase();
+>     const formattedSs = ss === "strict" ? "Strict" : ss === "lax" ? "Lax" : "None";
+>     parts.push(`SameSite=${formattedSs}`);
+>   } else {
+>     parts.push("SameSite=Lax");
+>   }
+>
+>   if (options.httpOnly !== false) {
+>     parts.push("HttpOnly");
+>   }
+>   if (options.secure !== false) {
+>     parts.push("Secure");
+>   }
+>
+>   return parts.join("; ");
+> }
+>
+> // Verification tests
+> const header = buildSecureCookieHeader("session_id", "xyz123", {
+>   maxAgeSeconds: 3600,
+>   sameSite: "strict"
+> });
+>
+> console.assert(header.includes("session_id=xyz123"), "Test 1 Failed");
+> console.assert(header.includes("HttpOnly"), "Test 2 Failed");
+> console.assert(header.includes("Secure"), "Test 3 Failed");
+> console.assert(header.includes("SameSite=Strict"), "Test 4 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **HttpOnly Attribute**: Prevents client-side JavaScript (document.cookie) from accessing the cookie, mitigating XSS attacks.
+> 2. **Secure Attribute**: Ensures cookie is ONLY transmitted over encrypted HTTPS connections.
+> 3. **SameSite Attribute**: Controls cross-site cookie transmission (`Strict`, `Lax`, `None`) to prevent CSRF attacks.
 > 
+---
+
+### Exercise 2: SameSite Anti-CSRF Policy Auditor
+
+**Scenario:** An API security linter evaluates cookie attributes to ensure session cookies are protected against Cross-Site Request Forgery.
+
+**Requirements:**
+1. Write auditSameSitePolicy(cookieHeaderStr).
+2. Check SameSite=Strict/Lax.
+3. Check HttpOnly and Secure.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditSameSitePolicy(cookieHeaderStr) {
+>   if (!cookieHeaderStr || typeof cookieHeaderStr !== "string") {
+>     return { secure: false, risks: ["Missing Set-Cookie header"] };
+>   }
+>
+>   const parts = cookieHeaderStr.split(";").map(p => p.trim().toLowerCase());
+>   const risks = [];
+>
+>   const hasHttpOnly = parts.includes("httponly");
+>   const hasSecure = parts.includes("secure");
+>
+>   let sameSiteValue = "none";
+>   for (const part of parts) {
+>     if (part.startsWith("samesite=")) {
+>       sameSiteValue = part.split("=")[1];
+>     }
+>   }
+>
+>   if (!hasHttpOnly) risks.push("Cookie vulnerable to XSS theft (missing HttpOnly)");
+>   if (!hasSecure) risks.push("Cookie sent over unencrypted HTTP (missing Secure)");
+>   if (sameSiteValue === "none") risks.push("Cookie vulnerable to CSRF attacks (SameSite=None)");
+>
+>   return {
+>     secure: risks.length === 0,
+>     sameSiteValue,
+>     risks
+>   };
+> }
+>
+> // Verification tests
+> const weakCookie = "session=123; Path=/; SameSite=None";
+> const audit = auditSameSitePolicy(weakCookie);
+>
+> console.assert(audit.secure === false, "Test 1 Failed");
+> console.assert(audit.risks.length === 3, "Test 2 Failed: Identifies XSS, HTTPS, and CSRF risks");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SameSite=Strict**: Cookie is NEVER sent in cross-site requests (e.g. following external links).
+> 2. **SameSite=Lax**: Default browser policy: cookie sent on top-level GET navigation from external sites, but withheld on cross-site POSTs.
+> 3. **SameSite=None Requirement**: SameSite=None MUST be paired with Secure attribute (`SameSite=None; Secure`).
 > 
 ---
 
-### Exercise 2: Cookie Security Attribute Matrix
+### Exercise 3: Cookie Max-Age vs Expires Format Converter
 
-**Problem:** Match cookie attribute to protection function:
-1. `HttpOnly` 
-2. `Secure` 
-3. `SameSite=Strict` 
-4. `Domain` 
+**Scenario:** Converts modern `Max-Age` (delta seconds) into UTC `Expires` header date strings (`Wdy, DD-Mon-YYYY HH:MM:SS GMT`).
 
-**Expected output:**
+**Requirements:**
+1. Write maxAgeToExpiresString(maxAgeSeconds).
+2. Return formatted UTC HTTP date string.
+
 > [!check]- Answer
-> ```text
-> 1. Blocks JavaScript access (document.cookie) to prevent XSS theft
-> 2. Restricts cookie transmission to HTTPS requests only
-> 3. Blocks cross-site cookie transmission to prevent CSRF
-> 4. Defines hostnames permitted to receive the cookie
+>
+> #### Implementation
+>
+> ```javascript
+> function maxAgeToExpiresString(maxAgeSeconds) {
+>   if (typeof maxAgeSeconds !== "number" || maxAgeSeconds < 0) {
+>     return "Expires=Thu, 01 Jan 1970 00:00:00 GMT";
+>   }
+>
+>   const expiryDate = new Date(Date.now() + maxAgeSeconds * 1000);
+>   return `Expires=${expiryDate.toUTCString()}`;
+> }
+>
+> // Verification tests
+> const expiresStr = maxAgeToExpiresString(3600);
+> console.assert(expiresStr.startsWith("Expires="), "Test 1 Failed");
+> console.assert(expiresStr.includes("GMT"), "Test 2 Failed");
+>
+> const deleteStr = maxAgeToExpiresString(-1);
+> console.assert(deleteStr.includes("1970"), "Test 3 Failed: Negative Max-Age sets 1970 deletion date");
 > ```
-> ```text
-> 1. HttpOnly -> Protects against XSS token extraction.
-> 2. Secure -> Protects against HTTP plaintext packet sniffing.
-> 3. SameSite=Strict -> Protects against cross-site CSRF attacks.
-> 4. Domain -> Restricts cookie scope to specified hosts.
-> ```
-> - **Explanation:** Combining cookie attributes creates defense-in-depth security.
+>
+> #### Technical Explanation
+>
+> 1. **Max-Age vs Expires**: Max-Age specifies relative lifetime in seconds; Expires specifies absolute UTC date.
+> 2. **Max-Age Precedence**: If both attributes are present, modern browsers prioritize Max-Age over Expires.
+> 3. **Deleting Cookies**: Setting Max-Age=0 or an Expires date in the past immediately purges the cookie from browser storage.
 ---
 
-### Exercise 3: Cookie Max-Age vs Expires
-
-**Problem:** Which attribute parameter takes precedence if both `Expires` and `Max-Age` are present on a cookie?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Max-Age takes precedence in modern browsers.
-> ```
-> ```text
-> Max-Age (takes relative lifetime in seconds and overrides Expires).
-> ```
-> - **Explanation:** `Max-Age` is the modern relative lifespan parameter in seconds.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [CSRF (Cross-Site Request Forgery)](../level_04/csrf.md) — The cross-origin vulnerability mitigated by SameSite attributes.
 - [XSS (Cross-Site Scripting)](../level_04/xss.md) — The injection vulnerability mitigated by HttpOnly.
 - [Cookies](cookies.md) — Related concept: Cookies.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Cookie attributes configure security parameters directly inside `Set-Cookie` headers.
 - `HttpOnly` blocks JavaScript access, protecting cookies from XSS script theft.
 - `Secure` restricts cookie transmission to encrypted HTTPS connections.

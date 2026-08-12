@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect / Shorthand Property**
+
+**Visual Effect / Shorthand Property (Universal Browser Support .)**: `background` Shorthand & `background-image` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Parsed natively. Browsers make asynchronous HTTP network requests to fetch files referenced in image URLs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A modern web page needs more than simple solid colors behind text. Designers want to display hero banners, textured graphic backgrounds, or custom patterns.
@@ -129,7 +125,7 @@ Centered background image cover:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving off the slash before `background-size` in shorthand
 
@@ -193,7 +189,7 @@ div { background: red url('img1.png'), url('img2.png'); } /* ❌ Color must be o
 div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Shorthand Builder
 
@@ -247,14 +243,14 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 >
 > **Explanation:** First listed background image renders on top of subsequent layers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The color properties.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The syntax concept.
 - [The Box Model (Concept)](../level_02/box_model.md) — The visual frame boundaries.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `background-image` property loads visual files behind text containers.
 - The `background` shorthand combines color, image, position, size, and repeat styles.
 - Always separate position and size with a slash (`position/size`) in shorthand (e.g. `center/cover`).

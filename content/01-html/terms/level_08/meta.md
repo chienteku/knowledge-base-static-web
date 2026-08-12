@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata Tag**
+
+**Metadata Tag (Universal Browser Support)**: `<meta>` is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A webpage is more than just the visible text and images. Browsers need to know what character set to use to render foreign languages. Search engines like Google need a short summary of the page to display in search results. Social media sites like Twitter need to know which image to show when someone pastes a link to your site.
@@ -60,7 +56,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the viewport meta tag on mobile
 
@@ -126,7 +122,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Meta
 
@@ -179,7 +175,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 >
 > **Explanation:** `noindex, nofollow` prevents search engine crawlers from indexing private pages.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The parent container for all `<meta>` tags.
 - [`title` Attribute](../level_07/title.md) — Another form of metadata (the name of the browser tab).
 - [Character Encoding (`charset`)](character_encoding.md) — The tag encoding parameter used in meta definitions.
@@ -189,7 +185,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<meta>` tag provides invisible data to browsers and search engines.
 - It is a void element and must live inside the `<head>`.
 - The `charset="UTF-8"` meta tag is required for modern text rendering (like emojis).

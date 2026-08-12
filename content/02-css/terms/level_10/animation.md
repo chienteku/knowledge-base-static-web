@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS At-Rule & Animation Property**
+
+**CSS At-Rule & Animation Property (Universal Modern Standard .)**: `@keyframes` & `animation` is a fundamental concept in this technology stack. **Level 10 — Transitions & Animations**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Runs directly on GPU composition layers. Does not trigger browser reflow layouts when animating transform parameters).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `transition` is great for simple, interactive changes (like changing a button color on `:hover`), it has three massive limitations:
@@ -150,7 +146,7 @@ Single slide-in loading overlay:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `animation-fill-mode: forwards` on single-run animations
 
@@ -264,7 +260,7 @@ Single slide-in loading overlay:
 @keyframes move { from { transform: translateX(0); } to { transform: translateX(200px); } }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Pulsing Alert
 
@@ -342,13 +338,13 @@ Single slide-in loading overlay:
 >
 > **Explanation:** `animation` shorthand combines name, duration, easing, and iteration count.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`transition`](transition.md) — Two-state animated shifts.
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The positioning multipliers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `@keyframes` defines the animation timeline milestones (from 0% to 100%).
 - The `animation` property applies the keyframe timeline to an element.
 - Animations run automatically, support multi-step frames, and can loop infinitely.

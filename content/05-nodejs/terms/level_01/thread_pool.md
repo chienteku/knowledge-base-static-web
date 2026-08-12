@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture**
+
+**Node.js Core Architecture (Node.js Core Architecture .)**: The Thread Pool (libuv) is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Implemented within the Libuv C++ system library layer).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We are taught that Node.js is single-threaded and non-blocking. But how can it read a 5GB file from a hard drive or encrypt a user's password without freezing the single main thread?
@@ -88,7 +84,7 @@ To resolve this congestion, you can adjust the thread pool size via environment 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing the Thread Pool runs your JavaScript code
 
@@ -134,7 +130,7 @@ process.env.UV_THREADPOOL_SIZE = 10000; // ❌ Unnecessary! Network sockets don'
 // Default socket event polling handles thousands of concurrent socket connections natively
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Thread Sizing Analysis
 
@@ -185,13 +181,13 @@ Explain why this happens, and how to configure the system to resolve the bottlen
 >
 > **Explanation:** `UV_THREADPOOL_SIZE` must be set in the shell environment before libuv initializes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop that collects tasks finished by the Thread Pool.
 - [Single-Threaded Architecture](single_threaded.md) — The architecture protected from blocking by the Thread Pool.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Libuv Thread Pool allocates a default of 4 background C++ worker threads.
 - It handles blocking operations (`fs`, `crypto`, DNS lookups) off the main thread.
 - Network operations bypass the Thread Pool and are handled natively by the OS kernel.

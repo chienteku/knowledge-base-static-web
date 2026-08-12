@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Operator Precedence & Associativity is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing software, we often combine multiple operations in a single line of code (e.g., `const result = 5 + 3 * 2;`). If the parser evaluated this purely from left to right, it would calculate `(5 + 3) * 2 = 16`. However, standard mathematics dictates that multiplication happens before addition, yielding `5 + (3 * 2) = 11`. 
@@ -78,7 +74,7 @@ console.log(x, y, z); // 5 5 5
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Logical AND (`&&`) and Logical OR (`||`) Have Equal Priority
 
@@ -175,71 +171,100 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Evaluate the Precedence
+### Exercise 1: Compound Financial Interest Precedence Disambiguation
 
-**Problem:** Predict the result of the following expression: `const calc = 10 + 5 * 2 ** 3;`
+**Scenario:** A banking calculation engine computes final account balances using multi-operator mathematical formulas. Explicit parentheses must be added to override default operator precedence rules.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateCompoundInterest(principal, rate, years).
+2. Enforce addition (1 + rate) to execute before exponentiation **.
+3. Enforce exponentiation to execute before multiplication with principal.
+
 > [!check]- Answer
-> ```text
-> Result: 50
-> ```
-> - Precedence order: Exponentiation (`**`) > Multiplication (`*`) > Addition (`+`).
-> - Calculate `2 ** 3` first (8).
-> - Multiply the result by `5` (40).
-> - Add `10` (50).
-> 
----
-
-### Exercise 2: Operator Precedence Trace
-
-**Problem:** Predict the result of `3 + 4 * 5`, `(3 + 4) * 5`, and `!true || true && false`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 23
-> 35
-> false
-> ```
+> #### Implementation
 > ```javascript
-> console.log(3 + 4 * 5); // 23 (* has higher precedence than +)
-> console.log((3 + 4) * 5); // 35 (parentheses override precedence)
-> console.log(!true || true && false); // false (&& has higher precedence than ||)
+> function calculateCompoundInterest(principal, rate, years) {
+>   const growthFactor = (1 + rate) ** years;
+>   const finalBalance = principal * growthFactor;
+>   return Number(finalBalance.toFixed(2));
+> }
+> // Verification tests
+> const bal = calculateCompoundInterest(1000, 0.05, 2);
+> console.assert(bal === 1102.50, "Test 1 Failed");
 > ```
->
-> **Explanation:** Multiplication `*` and logical AND `&&` have higher operator precedence than addition `+` and logical OR `||`.
+> #### Technical Explanation
+> 1. **Grouping Operator ()**: Parentheses () have the highest operator precedence (21), forcing inner expressions to evaluate first.
+> 2. **Precedence Hierarchy**: Exponentiation ** (precedence 15) evaluates before multiplication * (precedence 14).
+> 3. **Code Readability**: Explicit parentheses eliminate ambiguity, making complex equations self-documenting.
 > 
 ---
 
-### Exercise 3: Exponentiation Operator Precedence
+### Exercise 2: Logical & Comparison Operator Order Disambiguation
 
-**Problem:** Evaluate `2 ** 3 ** 2` and explain why right-associativity yields `512` instead of `64`.
+**Scenario:** An authentication access gateway evaluates user access permissions. Logical AND (&&) has higher precedence than logical OR (||), which can cause security bypass bugs if unparenthesized.
 
-**Expected output:**
+**Requirements:**
+1. Disambiguate condition: User can access if they are isAdmin OR (isVIP AND hasToken).
+2. Use explicit grouping parentheses to ensure logical AND groups together.
+3. Return access decision boolean.
+
 > [!check]- Answer
-> ```text
-> 512
-> ```
+> #### Implementation
 > ```javascript
-> console.log(2 ** 3 ** 2); // 512 (evaluated as 2 ** (3 ** 2) = 2 ** 9)
+> function evaluateAccessRights(user) {
+>   return Boolean(user.isAdmin || (user.isVIP && user.hasToken));
+> }
+> // Verification tests
+> console.assert(evaluateAccessRights({ isAdmin: true, isVIP: false, hasToken: false }) === true, "Test 1 Failed");
+> console.assert(evaluateAccessRights({ isAdmin: false, isVIP: true, hasToken: true }) === true, "Test 2 Failed");
+> console.assert(evaluateAccessRights({ isAdmin: false, isVIP: true, hasToken: false }) === false, "Test 3 Failed");
 > ```
->
-> **Explanation:** Exponentiation `**` is right-associative, evaluating `3 ** 2` first to get `9`, then `2 ** 9 = 512`.
-> 
+> #### Technical Explanation
+> 1. **Logical Precedence**: && (precedence 6) evaluates before || (precedence 5).
+> 2. **Parenthetical Grouping**: Adding () around (isVIP && hasToken) ensures logical intent is preserved regardless of operator defaults.
+> 3. **Precedence Bugs**: Omitting grouping in mixed logical expressions is a common source of authorization logic flaws.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Right-Associativity Verification in Exponentiation & Assignment
+
+**Scenario:** A game engine computes exponential damage scaling. Exponentiation ** and assignment = are right-associative, evaluating from right to left.
+
+**Requirements:**
+1. Demonstrate right-to-left evaluation of 2 ** 3 ** 2 (equals 2 ** (3 ** 2) = 512, NOT (2 ** 3) ** 2 = 64).
+2. Demonstrate chained assignment a = b = 10.
+3. Return calculated values.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function testRightAssociativity() {
+>   const powerResult = 2 ** 3 ** 2;
+>   let a, b;
+>   a = b = 10;
+>   return { powerResult, a, b };
+> }
+> // Verification tests
+> const res = testRightAssociativity();
+> console.assert(res.powerResult === 512, "Test 1 Failed: Should be 512, not 64");
+> console.assert(res.a === 10 && res.b === 10, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Associativity Direction**: Most binary operators are left-associative, but exponentiation ** and assignment = are right-associative (evaluate right-to-left).
+> 2. **Exponentiation Chaining**: a ** b ** c is parsed as a ** (b ** c).
+> 3. **Chained Assignments**: a = b = c evaluates b = c first, returning the assigned value to be assigned to a.
+---
+
+## 6. Related Terms
 - [Arithmetic Operators](arithmetic_operators.md) — Mathematical calculation symbols.
 - [Logical Operators](../level_02/logical_operators.md) — Boolean logic symbols.
 - [Expression](expression.md) — Any piece of code that yields a value.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Operator Precedence determines which operations are evaluated first in a complex expression.
 - Associativity determines the direction of evaluation (Left-to-Right or Right-to-Left) when operators have equal precedence.
 - Grouping parentheses `()` have the highest precedence in JavaScript and should always be used to make complex logic explicit and readable.

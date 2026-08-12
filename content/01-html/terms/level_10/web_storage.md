@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **HTML5 API**
+
+**HTML5 API (HTML5 Standard)**: Web Storage (Local/Session Storage) is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **HTML5 Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before HTML5, if a website wanted to remember something about a user (like their preferred "Dark Mode" setting, or the items in their shopping cart), the only option was to use **Cookies**. Cookies are terrible for storing application data: they only hold 4 Kilobytes of data, and worse, they are automatically sent to the server over the network on *every single HTTP request*, slowing down the website unnecessarily.
@@ -69,7 +65,7 @@ const userTheme = localStorage.getItem("theme");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing sensitive data in Local Storage
 
@@ -187,7 +183,7 @@ localStorage.setItem('user', { id: 1 }); // ❌ Stores string '[object Object]'!
 localStorage.setItem('user', JSON.stringify({ id: 1 }));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Session vs Local
 
@@ -236,14 +232,14 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 >
 > **Explanation:** `JSON.parse()` deserializes string data back into JavaScript objects.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<script>`](../level_08/script.md) — Web Storage is an API accessed entirely through JavaScript.
 - [Content Security Policy (CSP) & HTML Security](security.md) — Securing local database structures against injection exploits.
 - [Geolocation API](geolocation.md) — Related concept: Geolocation API.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The HTML5 Web Storage API provides `localStorage` (persistent) and `sessionStorage` (temporary).
 - It replaces Cookies for storing application data (like shopping carts or UI preferences).
 - It only stores plain strings; use JSON to store complex data.

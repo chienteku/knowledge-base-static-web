@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Dynamic & Weak Typing is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When JavaScript was created in 1995, it was designed for web designers and amateur programmers who wanted to add simple scripts to web pages. Forcing these users to learn static type systems (declaring every variable with `int`, `float`, or `String` like in Java or C++) would make writing scripts slow and intimidating. 
@@ -77,7 +73,7 @@ console.log(typeof badResult); // "number"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Dynamic Weak Typing Scope and Variable Hoisting
 
@@ -150,86 +146,119 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify Coercions
+### Exercise 1: Polymorphic Input Payload Sanitizer
 
-**Problem:** Predict the output and data type of each statement due to weak typing:
+**Scenario:** A data ingestion endpoint accepts flex-typed payloads where fields can arrive as strings, numbers, or boolean values due to JavaScript's dynamic typing. The sanitizer must normalize incoming values safely.
 
-```javascript
-console.log("5" - 2);
-console.log("5" + 2);
-console.log(true + 1);
-```
+**Requirements:**
+1. Inspect runtime input types using typeof.
+2. Convert valid string numbers to numeric primitives.
+3. Handle boolean primitives explicitly.
+4. Return a normalized structure.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 3 (type: number)
-> "52" (type: string)
-> 2 (type: number)
-> ```
-> - The subtraction operator `-` is purely mathematical, coercing `"5"` to a number.
-> - The addition operator `+` favors string concatenation if one operand is a string.
-> - The boolean `true` coerces to `1` in mathematical operations.
-> 
----
-
-### Exercise 2: Variable Type Mutation across Execution
-
-**Problem:** Declare `let x = 10;`, reassign `x = "hello"`, then `x = true`. Print `typeof x` at each step.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> number
-> string
-> boolean
-> ```
+> #### Implementation
 > ```javascript
-> let x = 10;
-> console.log(typeof x);
-> x = "hello";
-> console.log(typeof x);
-> x = true;
-> console.log(typeof x);
-> ```
->
-> **Explanation:** JavaScript is dynamically typed: variable bindings hold values of any type and can change types at runtime.
-> 
----
-
-### Exercise 3: Safeguarding Dynamic Inputs
-
-**Problem:** Write a function `safeAdd(a, b)` that validates both inputs are typeof `"number"` before adding, or returns `NaN`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 15
-> NaN
-> ```
-> ```javascript
-> function safeAdd(a, b) {
->   if (typeof a !== "number" || typeof b !== "number") return NaN;
->   return a + b;
+> function sanitizePayload(input) {
+>   if (typeof input === "number") {
+>     return { type: "number", value: input };
+>   }
+> if (typeof input === "string") {
+>     const parsed = Number(input);
+>     if (!Number.isNaN(parsed) && input.trim() !== "") {
+>       return { type: "number", value: parsed };
+>     }
+>     return { type: "string", value: input.trim() };
+>   }
+> if (typeof input === "boolean") {
+>     return { type: "boolean", value: input };
+>   }
+> return { type: "unknown", value: null };
 > }
-> console.log(safeAdd(10, 5));
-> console.log(safeAdd("10", 5));
+> // Verification tests
+> console.assert(sanitizePayload(42).value === 42, "Test 1 Failed");
+> console.assert(sanitizePayload("100").value === 100, "Test 2 Failed");
+> console.assert(sanitizePayload("hello").value === "hello", "Test 3 Failed");
 > ```
->
-> **Explanation:** Type guards (`typeof a === "number"`) protect dynamic functions against unexpected runtime coercion.
+> #### Technical Explanation
+> 1. **Dynamic Typing**: In JavaScript, variables hold values of dynamic types, and type bindings can change at runtime.
+> 2. **Weak Typing Hazards**: Weak typing allows implicit type coercion during operations (e.g. "100" - 50 = 50), requiring explicit validation guards.
+> 3. **Runtime Type Inspection**: Using typeof allows developers to guard code execution paths against unexpected runtime types.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Implicit Coercion Addition Guard
+
+**Scenario:** A financial reporting tool calculates user balances. Due to weak typing, adding a string number "500" to a number 100 produces "500100" via concatenation instead of numeric addition 600.
+
+**Requirements:**
+1. Demonstrate the weak typing bug with +.
+2. Fix the bug using explicit type coercion (Number()).
+3. Ensure additions are strictly numeric.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function addBalances(currentBalance, depositAmount) {
+>   const numCurrent = Number(currentBalance);
+>   const numDeposit = Number(depositAmount);
+> if (Number.isNaN(numCurrent) || Number.isNaN(numDeposit)) {
+>     throw new Error("Invalid numeric input");
+>   }
+> return numCurrent + numDeposit;
+> }
+> // Verification tests
+> console.assert(addBalances("500", 100) === 600, "Test 1 Failed: Implicit string concatenation occurred");
+> console.assert(addBalances(200, "300") === 500, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Weak Typing Operator Dualities**: The + operator performs both numeric addition and string concatenation based on runtime operand types.
+> 2. **Implicit Coercion Priority**: If either operand in a + expression is a string, JavaScript implicitly coerces the other operand to a string.
+> 3. **Defensive Explicit Conversion**: Explicitly converting values using Number() neutralizes weak typing concatenation pitfalls.
+> 
+---
+
+### Exercise 3: Dynamic Property Type Parser
+
+**Scenario:** An application framework parses environment variables from string pairs into dynamic primitive types (booleans, numbers, or strings).
+
+**Requirements:**
+1. Parse string "true" / "false" into boolean primitives.
+2. Parse numeric strings into numbers.
+3. Fallback to raw string for text.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function parseEnvValue(raw) {
+>   if (raw === "true") return true;
+>   if (raw === "false") return false;
+> if (raw !== "" && !Number.isNaN(Number(raw))) {
+>     return Number(raw);
+>   }
+> return raw;
+> }
+> // Verification tests
+> console.assert(parseEnvValue("true") === true, "Test 1 Failed");
+> console.assert(parseEnvValue("8080") === 8080, "Test 2 Failed");
+> console.assert(parseEnvValue("postgres") === "postgres", "Test 3 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Dynamic Return Types**: JavaScript functions can return different primitive types dynamically based on runtime branching.
+> 2. **Type Flexibility**: Dynamic typing allows writing flexible parsing utilities without requiring generic class boilerplate.
+> 3. **Type Rigor**: While dynamic typing offers flexibility, explicit type checks preserve system predictability.
+---
+
+## 6. Related Terms
 - [Primitive Types](primitive_types.md) — Foundational data types.
 - [Type Coercion](type_coercion.md) — The mechanism enabling weak typing.
 - [ECMAScript](ecmascript.md) — Related concept: ECMAScript.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JavaScript is dynamically typed: variables are just references; they do not have fixed types. Value types are evaluated at runtime.
 - JavaScript is weakly typed: the engine implicitly converts types (coercion) to allow mixed-type operations to succeed instead of throwing errors.
 - Dynamic, weak typing allows fast prototyping but requires disciplined testing to avoid silent runtime errors.

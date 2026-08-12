@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Handling**
+
+**Data Handling (Node.js Core Architecture .)**: Backpressure is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Governs stream memory buffer limits inside the Libuv I/O lifecycle).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When piping data between streams, the source (Readable Stream) and destination (Writable Stream) often process data at different speeds. 
@@ -89,7 +85,7 @@ reader.on('end', () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing data directly in a `data` event listener without check values
 
@@ -149,7 +145,7 @@ const { pipeline } = require('stream/promises');
 await pipeline(readable, transform, writable); // Automatically manages errors & backpressure
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Stream Analysis
 
@@ -215,14 +211,14 @@ app.get('/download-good', (req, res) => {
 >
 > **Explanation:** `pipeline` manages stream lifecycle and closes open streams when errors occur.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Piping (.pipe())](piping.md) — The abstraction layer that automates backpressure handling.
 - [Readable & Writable Streams](readable_writable.md) — The components that exchange flow-control signals.
 - [Streams (General Concept)](streams.md) — Related concept: Streams (General Concept).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Backpressure regulates data flow when a reader is faster than a writer.
 - Writable streams return `false` from `.write()` when their internal buffer is full.
 - The `highWaterMark` setting defines the maximum buffer limit of a stream.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Vulnerability**
+
+**Security / Vulnerability (Database Queries)**: SQL Injection is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Database Queries**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) The Attack (How SQL Injection works)
 Imagine you write a raw SQL query that takes a username from the login form (`req.body.username`) and inserts it directly into the string using template literals:
@@ -57,7 +53,7 @@ If you use an ORM like Prisma, you don't even have to think about this. **ORMs u
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trusting the Admin panel
 
@@ -103,7 +99,7 @@ const cleanInput = input.replace(/'/g, ''); // ❌ Unsafe custom sanitization!
 db.query('SELECT * FROM items WHERE id = $1', [input]); // Always use parameterized queries
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Fix
 
@@ -160,14 +156,14 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = '${color}'`);
 >
 > **Explanation:** Column/table identifiers require strict whitelist validation since they cannot be parameterized.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The best way to never worry about SQL Injection again.
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — Related concept: Parameterized Queries / Prepared Statements.
 - [Input Validation (joi / zod)](../level_09/input_validation.md) — Related concept: Input Validation (joi / zod).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **SQL Injection** is a hack where users type database commands into text inputs to steal or destroy data.
 - It is caused by concatenating (injecting) user input directly into raw SQL strings.
 - You prevent it by using **Parameterized Queries** (placeholders like `$1`), which forces the database to treat the input strictly as text, not code.

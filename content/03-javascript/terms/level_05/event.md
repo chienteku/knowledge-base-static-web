@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Primarily: Node.js has its own `EventEmitter`, but browser DOM Events are specific to the web.)**: Event is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Primarily**: Node.js has its own `EventEmitter`, but browser DOM Events are specific to the web.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A static webpage just sits there. To make a webpage interactive, the browser needs to know when the user actually does something. Does the user click the mouse? Do they scroll down? Do they type on the keyboard? Does the browser finish loading an image?
@@ -65,7 +61,7 @@ textInput.addEventListener("keydown", (event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Scope and Variable Hoisting
 
@@ -138,70 +134,147 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Event Name
+### Exercise 1: Custom Synthetic Event Dispatcher
 
-**Problem:** Look at this code snippet. What is the specific name of the Event the browser is listening for?
-```javascript
-window.addEventListener("scroll", () => {
-  console.log("The user is scrolling!");
-});
-```
+**Scenario:** A component library creates and dispatches custom synthetic events using CustomEvent and dispatchEvent().
 
-**Expected output:**
+**Requirements:**
+1. Write dispatchCustomWidgetEvent(targetEl, eventName, detailPayload).
+2. Create CustomEvent with detail payload.
+3. Invoke targetEl.dispatchEvent().
+4. Return boolean indicating if event was not prevented.
+
 > [!check]- Answer
-> ```text
-> "scroll"
-> ```
-> - The event name is always a string, passed as the first argument.
-> 
----
-
-### Exercise 2: Dispatching Custom Events
-
-**Problem:** Create and dispatch a `CustomEvent('userLogin', { detail: { id: 42 } })`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Custom event received: 42
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const detail = { id: 42 };
-> console.log(`Custom event received: ${detail.id}`);
+> function dispatchCustomWidgetEvent(targetEl, eventName, detailPayload) {
+>   if (!targetEl || typeof targetEl.dispatchEvent !== "function") return false;
+>
+>   const customEvent = new globalThis.CustomEvent(eventName, {
+>     detail: detailPayload,
+>     bubbles: true,
+>     cancelable: true
+>   });
+>
+>   return targetEl.dispatchEvent(customEvent);
+> }
+>
+> // Verification tests
+> let eventFired = false;
+> globalThis.CustomEvent = function(name, opts) {
+>   this.type = name;
+>   this.detail = opts.detail;
+> };
+> const mockTarget = {
+>   dispatchEvent(evt) { eventFired = true; return true; }
+> };
+>
+> dispatchCustomWidgetEvent(mockTarget, "widgetOpen", { id: 42 });
+> console.assert(eventFired === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `CustomEvent` transmits arbitrary data payloads via event listeners.
+> #### Technical Explanation
+>
+> 1. **CustomEvent Constructor**: new CustomEvent(name, { detail, bubbles, cancelable }) initializes custom synthetic events carrying custom data.
+> 2. **dispatchEvent() Method**: Dispatches an Event at the specified EventTarget, invoking affected event listeners synchronously.
+> 3. **detail Property**: The detail property passes custom payload data into listener callbacks.
 > 
 ---
 
-### Exercise 3: Event Once Parameter Flag
+### Exercise 2: Event Subscription & Unsubscribe Registry
 
-**Problem:** Attach an event listener that executes only once using `{ once: true }`.
+**Scenario:** An event bus manager registers event listener callbacks and returns an unsubscribe function.
 
-**Expected output:**
+**Requirements:**
+1. Write subscribeToEvent(targetEl, eventName, listenerFn).
+2. Attach addEventListener.
+3. Return unsubscribe function calling removeEventListener.
+
 > [!check]- Answer
-> ```text
-> Listener executed once
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Listener executed once");
+> function subscribeToEvent(targetEl, eventName, listenerFn) {
+>   if (!targetEl || typeof targetEl.addEventListener !== "function") return () => {};
+>
+>   targetEl.addEventListener(eventName, listenerFn);
+>
+>   return function unsubscribe() {
+>     targetEl.removeEventListener(eventName, listenerFn);
+>   };
+> }
+>
+> // Verification tests
+> let added = false, removed = false;
+> const mockTarget = {
+>   addEventListener(e, fn) { added = true; },
+>   removeEventListener(e, fn) { removed = true; }
+> };
+> const unsub = subscribeToEvent(mockTarget, "click", () => {});
+> console.assert(added === true, "Test 1 Failed");
+> unsub();
+> console.assert(removed === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `{ once: true }` automatically removes event listeners after initial execution.
-> 
+> #### Technical Explanation
+>
+> 1. **Observer Pattern**: Subscribing and unsubscribing cleanly manages event lifecycle bindings.
+> 2. **Memory Leak Prevention**: Unsubscribing prevents retaining detached DOM element references in listener sets.
+> 3. **Synchronous Dispatch**: Event listeners execute synchronously when events trigger.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Event Phase Inspector & Logging
+
+**Scenario:** A diagnostic logging tool inspects event.eventPhase during event dispatch.
+
+**Requirements:**
+1. Write logEventPhase(event).
+2. Inspect event.eventPhase.
+3. Return phase name ("NONE", "CAPTURING_PHASE", "AT_TARGET", "BUBBLING_PHASE").
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function logEventPhase(event) {
+>   if (!event || typeof event.eventPhase !== "number") return "UNKNOWN";
+>
+>   switch (event.eventPhase) {
+>     case 0: return "NONE";
+>     case 1: return "CAPTURING_PHASE";
+>     case 2: return "AT_TARGET";
+>     case 3: return "BUBBLING_PHASE";
+>     default: return "UNKNOWN";
+>   }
+> }
+>
+> // Verification tests
+> console.assert(logEventPhase({ eventPhase: 2 }) === "AT_TARGET", "Test 1 Failed");
+> console.assert(logEventPhase({ eventPhase: 3 }) === "BUBBLING_PHASE", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **eventPhase Property**: Indicates current phase of event flow (1 = Capturing, 2 = Target, 3 = Bubbling).
+> 2. **Event Lifecycle Tracking**: Useful for debugging complex nested event listeners across capturing and bubbling phases.
+> 3. **Standard W3C Event Model**: Follows standard DOM level 2/3 event specification constants.
+---
+
+## 6. Related Terms
 - [Event Listener](event_listener.md) — The method used to wait for these events.
 - [Callback Function](../level_03/callback_function.md) — The code that runs when the event happens.
 - [DOM (Document Object Model)](dom.md) — Related concept: DOM (Document Object Model).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An Event is a signal that something happened in the browser (click, typing, scrolling, loading).
 - The browser creates an `Event` object containing useful data about the action.
 - JavaScript responds to Events to make websites interactive.

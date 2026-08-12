@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Positioning Stacking Property**
+
+**Positioning Stacking Property (Universal Browser Support)**: `z-index` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard layout, elements sit next to each other or below each other (the X and Y axes). However, the moment you use `absolute`, `fixed`, or `relative` positioning, or negative margins, elements can physically overlap each other. 
@@ -58,7 +54,7 @@ Imagine a stack of papers on a desk.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to z-index a static element
 
@@ -191,7 +187,7 @@ div { position: relative; z-index: 999; } /* Position relative enables z-index *
 .modal { z-index: var(--z-modal); }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Victor
 
@@ -243,7 +239,7 @@ Which box is visible on top?
 >
 > **Explanation:** Flex and Grid specifications allow `z-index` directly on child items.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — Required positioning properties.
 - [Stacking Context](stacking_context.md) — The parent layer grouping logic that shapes z-index behaviors.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Related concept: `overflow` (hidden, scroll, auto, visible).
@@ -251,7 +247,7 @@ Which box is visible on top?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `z-index` controls which overlapping element is on top.
 - Higher numbers sit on top of lower numbers.
 - **You MUST apply `position: relative` (or absolute/fixed) for `z-index` to work!**

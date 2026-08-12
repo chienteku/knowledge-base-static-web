@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Applies to public API architecture designs.)**: HATEOAS is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applies to public API architecture designs.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard APIs, responses return raw properties. For example, getting an order returns:
@@ -81,7 +77,7 @@ The server provides the navigation links directly:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Over-engineering internal private APIs with HATEOAS
 
@@ -235,164 +231,168 @@ const depositUrl = account._links.deposit.href;
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: State Transition Builder
+### Exercise 1: HATEOAS Hypermedia Link Generator (HAL Format)
 
-**Problem:** You are building a HATEOAS endpoint. The order status has transitioned from `"unpaid"` to `"shipped"`. Which links should you remove, and which should you add to the JSON links array?
+**Scenario:** A RESTful API engine decorates order resources with HATEOAS `_links` allowing clients to discover valid state transitions.
 
-**Available link relations:** `payment`, `cancel`, `track-shipment`, `return-item`.
+**Requirements:**
+1. Write buildHateoasOrderResponse(orderObj, baseUrl).
+2. Generate self, cancel, and pay hypermedia links depending on order status.
 
 > [!check]- Answer
-> - You cannot pay for or cancel a package that has already been shipped.
-> - You cannot return an item that hasn't been delivered yet.
-> 
-> [!check]- Answer
-> - **Remove:** `payment` and `cancel` (These actions are no longer valid for a shipped order).
-> - **Add:** `track-shipment` (Allows the client to query tracking info).
-> 
-> 
----
-
-### Exercise 2: HATEOAS HAL JSON Response Design
-
-**Problem:** Write HAL-compliant JSON payload for order (`id: 99`, `status: "shipped"`) containing HATEOAS links for `self` and `track` actions.
-
-**Expected output:**
-> [!check]- Answer
-> ```json
-> {
->   "id": 99,
->   "status": "shipped",
->   "_links": {
->     "self": { "href": "/api/orders/99" },
->     "track": { "href": "/api/orders/99/tracking" }
+>
+> #### Implementation
+>
+> ```javascript
+> function buildHateoasOrderResponse(order, baseUrl = "https://api.example.com") {
+>   if (!order || !order.id) return null;
+>
+>   const links = {
+>     self: { href: `${baseUrl}/orders/${order.id}`, method: "GET" }
+>   };
+>
+>   if (order.status === "PENDING") {
+>     links.pay = { href: `${baseUrl}/orders/${order.id}/payment`, method: "POST" };
+>     links.cancel = { href: `${baseUrl}/orders/${order.id}`, method: "DELETE" };
+>   } else if (order.status === "PAID") {
+>     links.shipment = { href: `${baseUrl}/orders/${order.id}/shipment`, method: "GET" };
 >   }
+>
+>   return {
+>     ...order,
+>     _links: links
+>   };
 > }
+>
+> // Verification tests
+> const pendingOrder = { id: "ord-1001", status: "PENDING", total: 49.99 };
+> const res1 = buildHateoasOrderResponse(pendingOrder);
+>
+> console.assert(res1._links.self.href.includes("ord-1001"), "Test 1 Failed");
+> console.assert(res1._links.pay !== undefined, "Test 2 Failed: Pending order must include pay link");
+> console.assert(res1._links.cancel !== undefined, "Test 3 Failed: Pending order must include cancel link");
+>
+> const paidOrder = { id: "ord-1002", status: "PAID", total: 99.00 };
+> const res2 = buildHateoasOrderResponse(paidOrder);
+> console.assert(res2._links.pay === undefined, "Test 4 Failed: Paid order must NOT include pay link");
 > ```
-> ```json
-> {
-> "id": 99,
-> "status": "shipped",
-> "_links": {
-> "self": { "href": "/api/orders/99" },
-> "track": { "href": "/api/orders/99/tracking" }
-> }
-> }
-> ```
-> - **Explanation:** HATEOAS payloads embed hypermedia controls so clients can discover valid state transitions.
+>
+> #### Technical Explanation
+>
+> 1. **HATEOAS Concept**: Hypermedia As The Engine Of Application State: clients navigate APIs via hypermedia links embedded in responses.
+> 2. **Dynamic State Machine**: Available _links dynamically change based on current resource status (e.g. pay link disappears once PAID).
+> 3. **Decoupled Client Navigation**: Clients do not hardcode URL paths; they follow hypermedia link relations (rel names).
+> 
 ---
 
-### Exercise 3: Richardson Maturity Model HATEOAS Level
+### Exercise 2: HATEOAS Role-Based Action Discovery Engine
 
-**Problem:** Which level of the Richardson Maturity Model requires HATEOAS hypermedia controls?
+**Scenario:** An API endpoint filters hypermedia action links based on authenticated user roles (Admin vs User).
 
-**Expected output:**
+**Requirements:**
+1. Write buildUserHateoasLinks(targetUser, currentUserRole, baseUrl).
+2. Expose edit/delete links ONLY if role === "ADMIN".
+
 > [!check]- Answer
-> ```text
-> Level 3 (The highest level of REST maturity).
-> ```
-> ```text
-> Level 3 (Hypermedia Controls / HATEOAS).
-> ```
-> - **Explanation:** Level 3 APIs use hypermedia to drive application state transitions dynamically.
----
-
-### Exercise 4: HATEOAS HAL JSON Response Design
-
-**Problem:** Write HAL-compliant JSON payload for order (`id: 99`, `status: "shipped"`) containing HATEOAS links for `self` and `track` actions.
-
-**Expected output:**
-> [!check]- Answer
-> ```json
-> {
->   "id": 99,
->   "status": "shipped",
->   "_links": {
->     "self": { "href": "/api/orders/99" },
->     "track": { "href": "/api/orders/99/tracking" }
+>
+> #### Implementation
+>
+> ```javascript
+> function buildUserHateoasLinks(targetUser, currentUserRole, baseUrl = "https://api.com") {
+>   const links = {
+>     self: { href: `${baseUrl}/users/${targetUser.id}`, method: "GET" }
+>   };
+>
+>   if (currentUserRole === "ADMIN") {
+>     links.edit = { href: `${baseUrl}/users/${targetUser.id}`, method: "PUT" };
+>     links.delete = { href: `${baseUrl}/users/${targetUser.id}`, method: "DELETE" };
 >   }
+>
+>   return {
+>     id: targetUser.id,
+>     name: targetUser.name,
+>     _links: links
+>   };
 > }
+>
+> // Verification tests
+> const user = { id: "u-1", name: "Alice" };
+>
+> const adminView = buildUserHateoasLinks(user, "ADMIN");
+> console.assert(adminView._links.edit !== undefined && adminView._links.delete !== undefined, "Test 1 Failed");
+>
+> const userView = buildUserHateoasLinks(user, "USER");
+> console.assert(userView._links.edit === undefined && userView._links.delete === undefined, "Test 2 Failed");
 > ```
-> ```json
-> {
-> "id": 99,
-> "status": "shipped",
-> "_links": {
-> "self": { "href": "/api/orders/99" },
-> "track": { "href": "/api/orders/99/tracking" }
-> }
-> }
-> ```
-> - **Explanation:** HATEOAS payloads embed hypermedia controls so clients can discover valid state transitions.
+>
+> #### Technical Explanation
+>
+> 1. **Role-Based Link Filtering**: HATEOAS advertises only actions the current authenticated user is authorized to perform.
+> 2. **Self-Describing Responses**: Reduces client-side authorization check errors by concealing unauthorized links.
+> 3. **Richardson Maturity Model Level 3**: HATEOAS represents the highest level (Level 3) of REST API maturity.
+> 
 ---
 
-### Exercise 5: Richardson Maturity Model HATEOAS Level
+### Exercise 3: HAL Document Collection Link Extractor
 
-**Problem:** Which level of the Richardson Maturity Model requires HATEOAS hypermedia controls?
+**Scenario:** A REST client helper extracts pagination hypermedia links (`next`, `prev`, `first`, `last`) from HAL JSON collections.
 
-**Expected output:**
+**Requirements:**
+1. Write extractPaginationLinks(halResponse).
+2. Return object with next, prev, first, last URL strings.
+
 > [!check]- Answer
-> ```text
-> Level 3 (The highest level of REST maturity).
-> ```
-> ```text
-> Level 3 (Hypermedia Controls / HATEOAS).
-> ```
-> - **Explanation:** Level 3 APIs use hypermedia to drive application state transitions dynamically.
----
-
-### Exercise 6: HATEOAS HAL JSON Response Design
-
-**Problem:** Write HAL-compliant JSON payload for order (`id: 99`, `status: "shipped"`) containing HATEOAS links for `self` and `track` actions.
-
-**Expected output:**
-> [!check]- Answer
-> ```json
-> {
->   "id": 99,
->   "status": "shipped",
->   "_links": {
->     "self": { "href": "/api/orders/99" },
->     "track": { "href": "/api/orders/99/tracking" }
+>
+> #### Implementation
+>
+> ```javascript
+> function extractPaginationLinks(halResponse) {
+>   if (!halResponse || !halResponse._links) {
+>     return { hasNext: false, nextUrl: null, prevUrl: null };
 >   }
+>
+>   const links = halResponse._links;
+>   return {
+>     firstUrl: links.first?.href || null,
+>     prevUrl: links.prev?.href || null,
+>     nextUrl: links.next?.href || null,
+>     lastUrl: links.last?.href || null,
+>     hasNext: Boolean(links.next?.href),
+>     hasPrev: Boolean(links.prev?.href)
+>   };
 > }
+>
+> // Verification tests
+> const halDoc = {
+>   _embedded: { items: [1, 2, 3] },
+>   _links: {
+>     self: { href: "/items?page=2" },
+>     prev: { href: "/items?page=1" },
+>     next: { href: "/items?page=3" }
+>   }
+> };
+>
+> const paginated = extractPaginationLinks(halDoc);
+> console.assert(paginated.hasNext === true && paginated.nextUrl === "/items?page=3", "Test 1 Failed");
+> console.assert(paginated.hasPrev === true && paginated.prevUrl === "/items?page=1", "Test 2 Failed");
 > ```
-> ```json
-> {
-> "id": 99,
-> "status": "shipped",
-> "_links": {
-> "self": { "href": "/api/orders/99" },
-> "track": { "href": "/api/orders/99/tracking" }
-> }
-> }
-> ```
-> - **Explanation:** HATEOAS payloads embed hypermedia controls so clients can discover valid state transitions.
+>
+> #### Technical Explanation
+>
+> 1. **HAL Specification**: Hypertext Application Language defines standard JSON conventions for _links and _embedded items.
+> 2. **Hypermedia Pagination**: Clients navigate paginated collections by following next/prev links instead of computing offset page math.
+> 3. **Loose Coupling**: Server can change pagination query parameters without breaking client code.
 ---
 
-### Exercise 7: Richardson Maturity Model HATEOAS Level
-
-**Problem:** Which level of the Richardson Maturity Model requires HATEOAS hypermedia controls?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Level 3 (The highest level of REST maturity).
-> ```
-> ```text
-> Level 3 (Hypermedia Controls / HATEOAS).
-> ```
-> - **Explanation:** Level 3 APIs use hypermedia to drive application state transitions dynamically.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Endpoints & Resources](endpoints_resources.md) — The target nodes navigated via hypermedia links.
 - [Richardson Maturity Model](richardson_maturity_model.md) — The grading scale where HATEOAS represents the highest level of REST design.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - HATEOAS stands for Hypermedia As The Engine Of Application State.
 - It embeds hypermedia links inside API payloads to guide clients on available next actions.
 - Each link record specifies a relationship title (`rel`), a path (`href`), and an HTTP verb (`method`).

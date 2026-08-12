@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Function is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you need to calculate the tax on an item, you write the math logic once. But what if you have 1,000 different items in a shopping cart? Copying and pasting the exact same math logic 1,000 times violates the DRY (Don't Repeat Yourself) principle, makes the file massive, and makes fixing bugs a nightmare. 
@@ -66,7 +62,7 @@ console.log(`Cart Total: $${shirtPrice + pantsPrice}`);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to invoke the function
 
@@ -148,60 +144,111 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Multiplier
+### Exercise 1: Modular Business Logic Unit Encapsulation
 
-**Problem:** Write a function named `multiply` that takes two numbers, multiplies them together, and logs the result to the console. Call the function twice with different numbers.
+**Scenario:** An e-commerce order service encapsulates pricing calculation logic inside reusable, parameterized function units.
 
-**Expected output:**
-*(Depends on inputs, e.g., 50 and 12)*
+**Requirements:**
+1. Write calculateOrderTotal(subtotal, taxRate).
+2. Encapsulate arithmetic inside function body.
+3. Return calculated value.
 
 > [!check]- Answer
-> - `function multiply(a, b) { ... }`
-> - Use `console.log(a * b);` inside the block.
-> - Call it using `multiply(5, 10);`
-> 
----
-
-### Exercise 2: Function Arity Property (`.length`)
-
-**Problem:** Inspect `.length` on `function sum(a, b, c = 0) {}`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 2
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function sum(a, b, c = 0) {}
-> console.log(sum.length);
+> function calculateOrderTotal(subtotal, taxRate) {
+>   const tax = subtotal * taxRate;
+>   const total = subtotal + tax;
+>   return Number(total.toFixed(2));
+> }
+>
+> // Verification tests
+> const res = calculateOrderTotal(100, 0.08);
+> console.assert(res === 108.00, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `fn.length` measures positional expected parameters prior to default parameters.
+> #### Technical Explanation
+>
+> 1. **Function Encapsulation**: Functions encapsulate blocks of reusable code designed to perform specific tasks.
+> 2. **Parameters & Arguments**: Functions accept input parameters and execute logic within local scopes.
+> 3. **Return Values**: Functions evaluate logic and return results to caller invocation sites.
 > 
 ---
 
-### Exercise 3: Function Constructor Prototype Property
+### Exercise 2: Scope Isolation in Function Bodies
 
-**Problem:** Check `typeof function(){}.prototype`.
+**Scenario:** An authentication module demonstrates that variables declared inside function bodies remain isolated from external scope pollution.
 
-**Expected output:**
+**Requirements:**
+1. Write authenticateUser(username, password).
+2. Declare local variables inside function body.
+3. Verify local variables are not accessible globally.
+
 > [!check]- Answer
-> ```text
-> object
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function Demo() {}
-> console.log(typeof Demo.prototype);
+> function authenticateUser(username, password) {
+>   const isUserValid = username === "admin";
+>   const isPassValid = password === "secret123";
+>   return isUserValid && isPassValid;
+> }
+>
+> // Verification tests
+> console.assert(authenticateUser("admin", "secret123") === true, "Test 1 Failed");
+> // @ts-ignore
+> console.assert(typeof isUserValid === "undefined", "Test 2 Failed: Local variable leaked");
 > ```
 >
-> **Explanation:** Standard function declarations automatically instantiate prototype object references.
-> 
+> #### Technical Explanation
+>
+> 1. **Function Scope**: Functions create local scope boundaries isolating internal variables.
+> 2. **Reusability**: Functions allow executing identical logic multiple times with different argument inputs.
+> 3. **Callable Objects**: Functions are specialized objects that possess a [[Call]] internal method.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: State Machine Execution Functions
+
+**Scenario:** A workflow engine uses dedicated functions to transition states and return updated status descriptors.
+
+**Requirements:**
+1. Write transitionState(currentState, action).
+2. Process state transitions in function logic.
+3. Return new state descriptor.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function transitionState(currentState, action) {
+>   if (action === "START" && currentState === "IDLE") {
+>     return "RUNNING";
+>   } else if (action === "STOP" && currentState === "RUNNING") {
+>     return "STOPPED";
+>   }
+>   return currentState;
+> }
+>
+> // Verification tests
+> console.assert(transitionState("IDLE", "START") === "RUNNING", "Test 1 Failed");
+> console.assert(transitionState("RUNNING", "STOP") === "STOPPED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Deterministic Functions**: Given identical arguments, pure state transition functions return predictable output states.
+> 2. **Control Flow**: Functions combine conditional statements and logic into structured units.
+> 3. **Interface Abstraction**: Hides internal computation steps behind clean function invocation interfaces.
+---
+
+## 6. Related Terms
 - [Parameters](parameters.md) — The variables listed in the function definition.
 - [return Statement](return_statement.md) — Ends execution and outputs a value.
 - [Arrow Function](arrow_function.md) — A shorter syntax for writing functions.
@@ -212,7 +259,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Functions are reusable blocks of code that perform specific tasks.
 - You must use parentheses `()` to invoke (execute) a function.
 - Functions allow you to adhere to the DRY (Don't Repeat Yourself) principle.

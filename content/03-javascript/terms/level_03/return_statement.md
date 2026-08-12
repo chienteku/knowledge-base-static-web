@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: return Statement is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A function is designed to be a machine that takes inputs and produces an output. But if a function just calculates a value internally and never hands it back to the main program, the value is trapped inside the function and lost forever when the function finishes.
@@ -67,7 +63,7 @@ console.log(finalPrice); // 108
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `console.log()` with `return`
 
@@ -150,73 +146,133 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Early Exit
+### Exercise 1: Early Return Guard Pattern in Auth Middleware
 
-**Problem:** Write a function `checkAge(age)`. If the age is less than 18, use an early `return` to return `"Too young"`. If they are 18 or older, return `"Welcome"`. Do not use an `else` block!
+**Scenario:** An API authorization middleware uses the early return pattern to reject invalid requests early, flattening code indentation and avoiding nested if blocks.
 
-**Expected output:**
+**Requirements:**
+1. Write authorizeRequest(req).
+2. Return { error: 'Unauthorized' } early if token missing.
+3. Return { error: 'Expired' } early if token expired.
+4. Return { success: true } if valid.
+
 > [!check]- Answer
-> ```text
-> checkAge(16) -> "Too young"
-> checkAge(20) -> "Welcome"
-> ```
-> - `if (age < 18) { return "Too young"; }`
-> - Since `return` exits the function immediately, any code written *after* the `if` block will only run if they are 18 or older. No `else` needed!
-> 
----
-
-### Exercise 2: Multiple Conditional Return Guard Exits
-
-**Problem:** Write `findUser(id)` returning `null` if `id <= 0`, else `{ id }` object.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> null
-> {"id":5}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function findUser(id) {
->   if (id <= 0) return null;
->   return { id };
+> function authorizeRequest(req) {
+>   if (!req || !req.token) {
+>     return { status: 401, error: "Missing token" };
+>   }
+>
+>   if (req.isTokenExpired) {
+>     return { status: 403, error: "Token expired" };
+>   }
+>
+>   return { status: 200, user: req.user };
 > }
-> console.log(findUser(-1));
-> console.log(JSON.stringify(findUser(5)));
+>
+> // Verification tests
+> console.assert(authorizeRequest(null).status === 401, "Test 1 Failed");
+> console.assert(authorizeRequest({ token: "abc", isTokenExpired: true }).status === 403, "Test 2 Failed");
+> console.assert(authorizeRequest({ token: "abc", isTokenExpired: false, user: "alice" }).status === 200, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `return` immediately halts function execution and passes values back to callers.
+> #### Technical Explanation
+>
+> 1. **Early Return Pattern**: Using return statements early for error checks eliminates deeply nested if...else blocks.
+> 2. **Execution Termination**: A return statement immediately halts function execution and returns control to the caller.
+> 3. **Single Responsibility**: Improves code readability and reduces cognitive complexity.
 > 
 ---
 
-### Exercise 3: Bare Return Defaulting to `undefined`
+### Exercise 2: Multi-Value Object Return & Destructuring
 
-**Problem:** Demonstrate that bare `return;` evaluates to `undefined`.
+**Scenario:** A data processing function calculates subtotal, tax, and total values, returning a multi-value object that callers destructure cleanly.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateReceipt(items, taxRate).
+2. Compute subtotal and tax.
+3. Return object { subtotal, tax, total }.
+4. Destructure return value in caller.
+
 > [!check]- Answer
-> ```text
-> undefined
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function emptyReturn() { return; }
-> console.log(emptyReturn());
+> function calculateReceipt(items, taxRate) {
+>   const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+>   const tax = subtotal * taxRate;
+>   const total = subtotal + tax;
+>
+>   return {
+>     subtotal: Number(subtotal.toFixed(2)),
+>     tax: Number(tax.toFixed(2)),
+>     total: Number(total.toFixed(2))
+>   };
+> }
+>
+> // Verification tests
+> const { subtotal, tax, total } = calculateReceipt([{ price: 50 }, { price: 50 }], 0.10);
+> console.assert(subtotal === 100.00, "Test 1 Failed");
+> console.assert(tax === 10.00, "Test 2 Failed");
+> console.assert(total === 110.00, "Test 3 Failed");
 > ```
 >
-> **Explanation:** Functions exiting via bare `return;` return primitive `undefined`.
-> 
+> #### Technical Explanation
+>
+> 1. **Single Expression Value**: Functions can only return a single value expression; returning objects/arrays enables multi-value output.
+> 2. **Caller Destructuring**: Callers destructure object return values directly ({ subtotal, total } = fn()).
+> 3. **Evaluated Expression**: The expression following return is evaluated before control is passed back to caller.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Implicit 'undefined' Return in Void Functions
+
+**Scenario:** A diagnostic tool verifies that functions executing to completion without encountering an explicit return statement return undefined implicitly.
+
+**Requirements:**
+1. Write logMessage(msg).
+2. Execute side-effect log without return keyword.
+3. Verify returned result === undefined.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function logDiagnosticMessage(msg) {
+>   const formatted = "[LOG]: " + msg;
+> }
+>
+> function checkImplicitReturn() {
+>   const result = logDiagnosticMessage("Test message");
+>   return result === undefined;
+> }
+>
+> // Verification tests
+> console.assert(checkImplicitReturn() === true, "Test 1 Failed: Function without return must return undefined");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Implicit Return Value**: Functions without a return statement (or with bare return;) evaluate to undefined.
+> 2. **ASI Semicolon Insertion Hazard**: Placing returned expressions on a new line below return causes ASI to insert a semicolon, returning undefined.
+> 3. **Value Hand-Off**: The return statement passes evaluation control and memory values back to caller stack frames.
+---
+
+## 6. Related Terms
 - [Function](function.md) — The block of code that the `return` statement exits.
 - [Arrow Function](arrow_function.md) — Has a feature called "implicit return" where the `return` keyword can be omitted.
 - [Recursion](recursion.md) — Related concept: Recursion.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `return` statement outputs a value from a function.
 - Execution of the function stops *immediately* when a `return` is reached.
 - Functions that do not explicitly return a value will automatically return `undefined`.

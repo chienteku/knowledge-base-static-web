@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Universal Browser Support .)**: `<sup>` & `<sub>` is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all web browsers since the earliest HTML standards).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When presenting documents on the web, developers often need to display content that requires special typographic formatting:
@@ -95,7 +91,7 @@ Basic math and chemistry markup:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Wrapping the entire word instead of the offset character
 
@@ -217,7 +213,7 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Formulating Chemistry
 
@@ -263,13 +259,13 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 >
 > **Explanation:** `<sup>` wraps footnote numbers above the baseline.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — Standard inline formatting tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<sup>` shifts characters above the baseline (superscript).
 - `<sub>` shifts characters below the baseline (subscript).
 - Both tags render text in a smaller font size by default.

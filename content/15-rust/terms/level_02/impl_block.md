@@ -10,7 +10,7 @@
 
 - [Struct](struct.md) — The custom data types that `impl` blocks are most commonly attached to.
 - [Enum](enum.md) — You can also attach `impl` blocks to enums!
-- [`fn` (Functions)](../level_01/fn.md) — The functions that actually live inside the `impl` block.
+- [fn](../level_01/fn.md) — The functions that actually live inside the `impl` block.
 
 ---
 

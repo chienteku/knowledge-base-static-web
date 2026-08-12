@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: reduce() is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Often, you need to take an entire array of data and "boil it down" into a single value. For example, summing up the total price of all items in a shopping cart, or finding the highest score in a list of test grades. 
@@ -63,7 +59,7 @@ console.log(`Your total is $${totalCost}`); // Your total is $85
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Initial Value
 
@@ -146,71 +142,59 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: String Concatenation
+### Exercise 1: Order Total Financial Aggregator & Category Grouping
 
-**Problem:** You have an array of words: `["Hello", " ", "World", "!"]`. Use `reduce` to combine them into a single string. (Hint: the initial value should be an empty string `""`).
+**Scenario:** An inventory reporter uses reduce() to group items by category and compute aggregate financial totals.
 
-**Expected output:**
+**Requirements:**
+1. Write groupAndSumByCategory(items).
+2. Use reduce() to group items by item.category.
+3. Accumulate category total prices.
+4. Return dictionary object.
+
 > [!check]- Answer
-> ```text
-> "Hello World!"
-> ```
-> - `words.reduce((acc, word) => acc + word, "")`
-> 
----
-
-### Exercise 2: Array Sum Accumulation
-
-**Problem:** Sum `[10, 20, 30]` using `.reduce((acc, x) => acc + x, 0)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 60
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [10, 20, 30];
-> const sum = nums.reduce((acc, x) => acc + x, 0);
-> console.log(sum);
+> function groupAndSumByCategory(items) {
+>   if (!Array.isArray(items)) return {};
+>
+>   return items.reduce((acc, item) => {
+>     const cat = item.category || "uncategorized";
+>     acc[cat] = (acc[cat] || 0) + item.price;
+>     return acc;
+>   }, {});
+> }
+>
+> // Verification tests
+> const inventory = [
+>   { category: "Tech", price: 100 },
+>   { category: "Tech", price: 50 },
+>   { category: "Books", price: 20 }
+> ];
+> const res = groupAndSumByCategory(inventory);
+> console.assert(res.Tech === 150, "Test 1 Failed");
+> console.assert(res.Books === 20, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `reduce` accumulates array items into a single consolidated value.
-> 
----
-
-### Exercise 3: Grouping Items into Frequency Map Object
-
-**Problem:** Count occurrences of items in `["a", "b", "a"]` using `.reduce()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"a":2,"b":1}
-> ```
-> ```javascript
-> const items = ["a", "b", "a"];
-> const counts = items.reduce((acc, item) => {
->   acc[item] = (acc[item] || 0) + 1;
->   return acc;
-> }, {});
-> console.log(JSON.stringify(counts));
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `reduce` with object initial values `{}` builds lookup frequency maps dynamically.
-> 
-> 
+> 1. **reduce() Mechanism**: Array.prototype.reduce(reducer, initialValue) accumulates array elements into a single value (number, object, array).
+> 2. **Accumulator Value**: The reducer callback receives (accumulator, currentValue, index, array) and returns updated accumulator.
+> 3. **Initial Value Importance**: Always specify initialValue to prevent runtime TypeError exceptions on empty arrays.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Map](../level_08/map.md) — Returns an array of the same length, rather than a single accumulated value.
 - [filter()](filter.md) — Returns a shorter array, rather than a single accumulated value.
 - [flat / flatMap](flat_flatmap.md) — Related concept: flat / flatMap.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `reduce()` is used to boil an array down into a single value (a number, string, or even a new object).
 - The callback function receives the `accumulator` (the running total) and the `currentValue`.
 - You MUST `return` the new accumulator value inside the callback so it can be passed to the next iteration.

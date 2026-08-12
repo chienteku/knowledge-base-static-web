@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Styling Property**
+
+**Styling Property (Universal Browser Support)**: `color` vs `background-color` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 One of the most basic tasks in visual design is changing colors. You need to color the text itself (the foreground) and the box containing the text (the background). 
@@ -56,7 +52,7 @@ The **`color`** is the color of the Sharpie marker you use to write the words on
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `color` means background color
 
@@ -106,7 +102,7 @@ div { background-color: #222; color: #444; } /* ❌ Low contrast ratio! Unreadab
 div { background-color: #222; color: #fff; } /* High contrast ratio */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Bug
 
@@ -167,7 +163,7 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 >
 > **Explanation:** `transparent` removes solid background fills.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Color Values (hex, rgb, rgba, hsl, named)](color_values.md) — Color notation formats.
 - [`background` Shorthand & `background-image`](background_shorthand.md) — Advanced background styling.
 - [`opacity`](../level_09/opacity.md) — Another way to adjust the transparency of colors.
@@ -176,7 +172,7 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `color` changes the text (foreground).
 - `background-color` changes the box (background).
 - You can use Keywords, HEX codes (e.g., `#ffffff`), or RGB/RGBA values.

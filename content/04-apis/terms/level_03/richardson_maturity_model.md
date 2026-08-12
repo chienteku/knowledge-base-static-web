@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Used to evaluate and design web service architectures.)**: Richardson Maturity Model is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Used to evaluate and design web service architectures.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Many APIs describe themselves as "RESTful," but their designs differ significantly. Some send all requests via `POST` to a single endpoint, some include verbs in URL paths, and some ignore HTTP status codes. 
@@ -68,7 +64,7 @@ Imagine visiting a **customer service desk at a department store**:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Level 3 is mandatory for a successful API
 
@@ -189,147 +185,150 @@ DELETE /users/5 HTTP/1.1 -> 204 No Content ; Level 2 REST compliance
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Maturity Grader
+### Exercise 1: Richardson Maturity Model (RMM) Level Evaluator
 
-**Problem:** Classify the maturity level (Level 0, 1, 2, or 3) of each API description:
+**Scenario:** An API architecture auditor evaluates endpoints against the 4 levels of the Richardson Maturity Model.
 
-1. An API exposing endpoints `/v1/getProfile`, `/v1/updateProfile`, and `/v1/deleteProfile`, all queried via `POST` requests.
-2. A GraphQL endpoint `/graphql` that accepts all queries and mutations via `POST` requests.
-3. An API exposing `/products` where `GET /products/42` reads a product, `DELETE /products/42` deletes it, and returns `200 OK` or `404 Not Found`.
-4. The same products API, but the JSON response includes a `links` list detailing how to purchase the item or write a review.
+**Requirements:**
+1. Write evaluateRmmLevel(apiSpec).
+2. Level 0 (RPC/HTTP), Level 1 (Resources), Level 2 (HTTP Verbs & Statuses), Level 3 (HATEOAS).
 
 > [!check]- Answer
-> - 1. **Level 1** (Exposes individual resources in the path, but uses a single HTTP method for all actions).
-> - 2. **Level 0** (Tunnels all operations through a single endpoint).
-> - 3. **Level 2** (Uses resource URIs, HTTP verbs, and status codes).
-> - 4. **Level 3** (Integrates hypermedia controls/HATEOAS).
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluateRmmLevel(apiSpec) {
+>   if (!apiSpec) return { level: 0, description: "Level 0: Swamp of POX / RPC" };
+>
+>   const hasResources = apiSpec.hasMultipleResourceUris === true;
+>   const usesVerbs = apiSpec.usesHttpVerbsAndStatuses === true;
+>   const hasHateoas = apiSpec.includesHypermediaLinks === true;
+>
+>   if (hasResources && usesVerbs && hasHateoas) {
+>     return { level: 3, description: "Level 3: Hypermedia Controls (HATEOAS)" };
+>   }
+>   if (hasResources && usesVerbs) {
+>     return { level: 2, description: "Level 2: HTTP Verbs & Status Codes" };
+>   }
+>   if (hasResources) {
+>     return { level: 1, description: "Level 1: Resources" };
+>   }
+>
+>   return { level: 0, description: "Level 0: The Swamp of POX (Single URI RPC)" };
+> }
+>
+> // Verification tests
+> const l0 = evaluateRmmLevel({ hasMultipleResourceUris: false });
+> console.assert(l0.level === 0, "Test 1 Failed");
+>
+> const l2 = evaluateRmmLevel({ hasMultipleResourceUris: true, usesHttpVerbsAndStatuses: true });
+> console.assert(l2.level === 2, "Test 2 Failed");
+>
+> const l3 = evaluateRmmLevel({ hasMultipleResourceUris: true, usesHttpVerbsAndStatuses: true, includesHypermediaLinks: true });
+> console.assert(l3.level === 3, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Level 0: Swamp of POX**: Single URI endpoint (e.g. /api) using POST for all RPC operations.
+> 2. **Level 1: Resources**: Multiple URIs representing individual resources (/users, /orders), but using single method.
+> 3. **Level 2: HTTP Verbs**: Uses distinct HTTP methods (GET, POST, PUT, DELETE) and standard HTTP status codes.
+> 4. **Level 3: Hypermedia Controls**: Embeds HATEOAS links allowing clients to discover valid state transitions.
 > 
+---
+
+### Exercise 2: Upgrading Level 0 RPC to Level 2 REST Verbs
+
+**Scenario:** Refactors a legacy Level 0 RPC endpoint (`POST /doAction?action=deleteUser&id=5`) into a Level 2 REST endpoint (`DELETE /users/5`).
+
+**Requirements:**
+1. Write refactorRpcToLevel2(rpcReq).
+2. Map RPC action to HTTP verb and clean URI.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function refactorRpcToLevel2(rpcRequest) {
+>   const { url, body } = rpcRequest;
+>   const action = body?.action || new URL(url, "http://a.com").searchParams.get("action");
+>   const id = body?.id || new URL(url, "http://a.com").searchParams.get("id");
+>
+>   if (action === "getUser") {
+>     return { method: "GET", path: `/users/${id}`, status: 200 };
+>   }
+>   if (action === "createUser") {
+>     return { method: "POST", path: "/users", status: 201 };
+>   }
+>   if (action === "deleteUser") {
+>     return { method: "DELETE", path: `/users/${id}`, status: 204 };
+>   }
+>
+>   return { method: "POST", path: "/rpc", status: 200 };
+> }
+>
+> // Verification tests
+> const rpc1 = { url: "http://api.com/rpc", body: { action: "deleteUser", id: "42" } };
+> const res1 = refactorRpcToLevel2(rpc1);
+> console.assert(res1.method === "DELETE" && res1.path === "/users/42" && res1.status === 204, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Level 0 to Level 2 Refactoring**: Replaces single RPC endpoint paths with distinct resource URIs and HTTP verbs.
+> 2. **HTTP Status Code Alignment**: Level 2 introduces 201 Created, 204 No Content, 404 Not Found instead of 200 OK with error bodies.
+> 3. **Standard Tooling Support**: Level 2 APIs leverage standard HTTP caching proxies and security gateways.
 > 
 ---
 
-### Exercise 2: Richardson Maturity Model Levels Breakdown
+### Exercise 3: Level 3 Hypermedia Controls Navigation Adapter
 
-**Problem:** Match each level of the Richardson Maturity Model to its core characteristic:
-1. Level 0
-2. Level 1
-3. Level 2
-4. Level 3
+**Scenario:** Implements a Level 3 API response wrapper that decorates resource representations with HATEOAS hypermedia controls.
 
-**Expected output:**
+**Requirements:**
+1. Write wrapLevel3Response(resourceData, relLinks).
+2. Return payload with `_links` object.
+
 > [!check]- Answer
-> ```text
-> 1. Level 0: The Swamp of POX (Single URI, POST only)
-> 2. Level 1: Resources (Individual URIs, single verb)
-> 3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
-> 4. Level 3: Hypermedia Controls (HATEOAS links)
+>
+> #### Implementation
+>
+> ```javascript
+> function wrapLevel3Response(data, linksArray) {
+>   const _links = {};
+>   for (const link of linksArray) {
+>     _links[link.rel] = { href: link.href, method: link.method || "GET" };
+>   }
+>   return {
+>     ...data,
+>     _links
+>   };
+> }
+>
+> // Verification tests
+> const dataObj = { id: "u-10", name: "Alice" };
+> const links = [
+>   { rel: "self", href: "/users/u-10" },
+>   { rel: "orders", href: "/users/u-10/orders" }
+> ];
+>
+> const l3 = wrapLevel3Response(dataObj, links);
+> console.assert(l3._links.self.href === "/users/u-10", "Test 1 Failed");
+> console.assert(l3._links.orders.href === "/users/u-10/orders", "Test 2 Failed");
 > ```
-> ```text
-> Level 0 -> Single URI, single HTTP method (SOAP/RPC over HTTP)
-> Level 1 -> Multiple URIs for individual resources
-> Level 2 -> Standard HTTP Verbs (GET, POST, etc.) and Status Codes
-> Level 3 -> HATEOAS Hypermedia Controls
-> ```
-> - **Explanation:** The model measures progress towards full RESTful maturity.
+>
+> #### Technical Explanation
+>
+> 1. **Glory of REST**: Level 3 (HATEOAS) is considered the complete realization of REST architectural principles.
+> 2. **Self-Navigating APIs**: Clients inspect _links to discover next available actions without reading external docs.
+> 3. **Evolving APIs**: Server can change URL structures safely as long as relation names (rel) remain unchanged.
 ---
 
-### Exercise 3: Evaluating API Maturity Level
-
-**Problem:** An API has endpoints `/api/v1/orders` and `/api/v1/orders/42`, uses `GET`, `POST`, `DELETE` with `201` and `404` status codes, but includes no `_links` object in JSON responses. What level is it?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-> ```
-> ```text
-> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-> ```
-> - **Explanation:** Most modern production REST APIs operate at Level 2.
----
-
-### Exercise 4: Richardson Maturity Model Levels Breakdown
-
-**Problem:** Match each level of the Richardson Maturity Model to its core characteristic:
-1. Level 0
-2. Level 1
-3. Level 2
-4. Level 3
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Level 0: The Swamp of POX (Single URI, POST only)
-> 2. Level 1: Resources (Individual URIs, single verb)
-> 3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
-> 4. Level 3: Hypermedia Controls (HATEOAS links)
-> ```
-> ```text
-> Level 0 -> Single URI, single HTTP method (SOAP/RPC over HTTP)
-> Level 1 -> Multiple URIs for individual resources
-> Level 2 -> Standard HTTP Verbs (GET, POST, etc.) and Status Codes
-> Level 3 -> HATEOAS Hypermedia Controls
-> ```
-> - **Explanation:** The model measures progress towards full RESTful maturity.
----
-
-### Exercise 5: Evaluating API Maturity Level
-
-**Problem:** An API has endpoints `/api/v1/orders` and `/api/v1/orders/42`, uses `GET`, `POST`, `DELETE` with `201` and `404` status codes, but includes no `_links` object in JSON responses. What level is it?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-> ```
-> ```text
-> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-> ```
-> - **Explanation:** Most modern production REST APIs operate at Level 2.
----
-
-### Exercise 6: Richardson Maturity Model Levels Breakdown
-
-**Problem:** Match each level of the Richardson Maturity Model to its core characteristic:
-1. Level 0
-2. Level 1
-3. Level 2
-4. Level 3
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Level 0: The Swamp of POX (Single URI, POST only)
-> 2. Level 1: Resources (Individual URIs, single verb)
-> 3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
-> 4. Level 3: Hypermedia Controls (HATEOAS links)
-> ```
-> ```text
-> Level 0 -> Single URI, single HTTP method (SOAP/RPC over HTTP)
-> Level 1 -> Multiple URIs for individual resources
-> Level 2 -> Standard HTTP Verbs (GET, POST, etc.) and Status Codes
-> Level 3 -> HATEOAS Hypermedia Controls
-> ```
-> - **Explanation:** The model measures progress towards full RESTful maturity.
----
-
-### Exercise 7: Evaluating API Maturity Level
-
-**Problem:** An API has endpoints `/api/v1/orders` and `/api/v1/orders/42`, uses `GET`, `POST`, `DELETE` with `201` and `404` status codes, but includes no `_links` object in JSON responses. What level is it?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-> ```
-> ```text
-> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-> ```
-> - **Explanation:** Most modern production REST APIs operate at Level 2.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Endpoints & Resources](endpoints_resources.md) — The resource URIs introduced in Level 1.
 - [CRUD Operations](crud.md) — The HTTP-to-database actions standardized in Level 2.
 - [HATEOAS](hateoas.md) — Related concept: HATEOAS.
@@ -337,7 +336,7 @@ DELETE /users/5 HTTP/1.1 -> 204 No Content ; Level 2 REST compliance
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Richardson Maturity Model evaluates how closely an API follows REST principles.
 - Level 0 tunnels requests to a single endpoint using `POST`.
 - Level 1 introduces separate endpoints for individual resources.

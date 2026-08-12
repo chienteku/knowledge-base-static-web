@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: concat / join / split is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In programming, we constantly translate data between single raw text strings and structured arrays. For instance, you might receive a comma-separated string from a database (e.g. `"tag1,tag2,tag3"`) and need to parse it into an array of tags, or merge multiple arrays together, or serialize an array of names into a readable sentence. 
@@ -73,7 +69,7 @@ console.log("UI Display String:", tagsDisplay); // "Alice | Bob | Charlie | Davi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Swapping targets for `join` and `split`
 
@@ -152,75 +148,126 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Clean Tags
+### Exercise 1: CSV Export Line Formatting & Parsing
 
-**Problem:** Complete the code to split the raw tag string `"coding, web , javascript"` by commas, remove any trailing/leading spaces from each tag, and join them back together with a hyphen (`"-"`).
+**Scenario:** A reporting engine formats user records into CSV line strings using join() and parses raw CSV text lines back into arrays using split().
 
-```javascript
-const rawTags = "coding, web , javascript";
+**Requirements:**
+1. Write formatCsvRow(fields).
+2. Write parseCsvRow(csvLine).
+3. Use join(",") and split(",").
+4. Verify round-trip conversion.
 
-// Split tags by comma
-// Map/Clean tags (or manually target them)
-// Join with hyphen
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> coding-web-javascript
-> ```
-> - Split by `","` first.
-> - Since we are in Level 4, you can loop through the parsed array using a loop or `.map(tag => tag.trim())` to clean up the spaces.
-> - Join the final array with `"-"`.
-> 
----
-
-### Exercise 2: Joining Array Elements into CSV Strings
-
-**Problem:** Join `["Apple", "Banana", "Cherry"]` with `", "` using `.join(", ")`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Apple, Banana, Cherry
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const fruits = ["Apple", "Banana", "Cherry"];
-> console.log(fruits.join(", "));
+> function formatCsvRow(fields) {
+>   return fields.join(",");
+> }
+>
+> function parseCsvRow(csvLine) {
+>   if (typeof csvLine !== "string" || csvLine.trim() === "") return [];
+>   return csvLine.split(",").map(field => field.trim());
+> }
+>
+> // Verification tests
+> const row = formatCsvRow(["Alice", "30", "Developer"]);
+> console.assert(row === "Alice,30,Developer", "Test 1 Failed");
+>
+> const fields = parseCsvRow("Bob, 25, Manager");
+> console.assert(fields.length === 3 && fields[0] === "Bob", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `.join(separator)` concatenates array items into a single string with the specified delimiter.
+> #### Technical Explanation
+>
+> 1. **join() Method**: Array.prototype.join(separator) converts all array elements to strings and concatenates them with a separator.
+> 2. **split() Method**: String.prototype.split(separator) divides a string into an array of substrings based on a delimiter.
+> 3. **Immutability**: Both join() and split() create new string or array instances without mutating original data.
 > 
 ---
 
-### Exercise 3: Combining Arrays with `.concat()` vs Spread
+### Exercise 2: Immutable Paginated Dataset Concatenation
 
-**Problem:** Combine `[1, 2]` and `[3, 4]` using `.concat()`.
+**Scenario:** A data grid component appends newly fetched page items to existing records using concat() without mutating the original array.
 
-**Expected output:**
+**Requirements:**
+1. Write appendPageData(currentItems, newPageItems).
+2. Use currentItems.concat(newPageItems).
+3. Verify original currentItems array is not mutated.
+
 > [!check]- Answer
-> ```text
-> [ 1, 2, 3, 4 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const a = [1, 2];
-> const b = [3, 4];
-> console.log(a.concat(b));
+> function appendPageData(currentItems, newPageItems) {
+>   const combined = currentItems.concat(newPageItems);
+>   return combined;
+> }
+>
+> // Verification tests
+> const page1 = [{ id: 1 }, { id: 2 }];
+> const page2 = [{ id: 3 }];
+> const total = appendPageData(page1, page2);
+>
+> console.assert(total.length === 3, "Test 1 Failed");
+> console.assert(page1.length === 2, "Test 2 Failed: Original array mutated");
 > ```
 >
-> **Explanation:** `.concat()` merges arrays into a new array without mutating input arrays.
+> #### Technical Explanation
+>
+> 1. **concat() Non-Mutating Behavior**: Array.prototype.concat() creates a new array containing elements from the original array and merged items.
+> 2. **Array & Element Merging**: concat() flattens top-level array arguments while appending individual non-array arguments directly.
+> 3. **Shallow Copy Reference**: Elements merged by concat() retain shallow object reference addresses.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Multi-Segment URL Path Sanitizer
+
+**Scenario:** A client router normalizes and parses URL paths using split("/") to extract segments and join("/") to rebuild canonical paths.
+
+**Requirements:**
+1. Write sanitizeUrlPath(rawPath).
+2. Split raw path by "/".
+3. Filter out empty segments.
+4. Rejoin segments using join("/") with leading "/".
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function sanitizeUrlPath(rawPath) {
+>   if (typeof rawPath !== "string") return "/";
+>   const segments = rawPath.split("/").filter(seg => seg.length > 0);
+>   return "/" + segments.join("/");
+> }
+>
+> // Verification tests
+> const clean1 = sanitizeUrlPath("//users//42/profile/");
+> console.assert(clean1 === "/users/42/profile", "Test 1 Failed");
+> const clean2 = sanitizeUrlPath("/");
+> console.assert(clean2 === "/", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **String Splitting Delimiters**: split("/") separates string paths into constituent route segment strings.
+> 2. **Filter Integration**: Combining split() with array filtering strips redundant empty delimiters.
+> 3. **Canonical Re-assembly**: join("/") cleanly reconstructs path strings with uniform single delimiters.
+---
+
+## 6. Related Terms
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Alternative way to merge arrays: `[...arrA, ...arrB]`.
 - [String Methods](../level_02/string_methods.md) — Generic text helper methods.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `concat()` merges arrays and returns a new combined array without changing the inputs.
 - `join(separator)` converts an Array to a String, placing the separator string between elements.
 - `split(separator)` converts a String to an Array, cutting the text wherever the separator matches.

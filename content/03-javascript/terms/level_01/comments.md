@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Comments is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Code is read by humans far more often than it is executed by machines. While modern languages aim for readable syntax, complex logic often requires context that code alone cannot provide: *Why* was this algorithm chosen? *What* is the purpose of this bizarre workaround? 
@@ -63,7 +59,7 @@ function calculateDiscount(price, userType) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Commenting the "What" instead of the "Why"
 
@@ -148,71 +144,116 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Disabling Code
+### Exercise 1: JSDoc Documentation for Financial Interest Engine
 
-**Problem:** You have a function call `launchMissiles();` that you want to temporarily prevent from running while you test something else. How do you do it?
+**Scenario:** A financial software library requires structured JSDoc comments to document parameter types, return values, and mathematical formulas for automated documentation generators and IDE IntelliSense.
 
-**Expected output:**
+**Requirements:**
+1. Add JSDoc block comments (/** ... */) to calculateCompoundInterest.
+2. Document parameters (@param) and return type (@returns).
+3. Include inline single-line comments (//) explaining non-obvious steps.
+
 > [!check]- Answer
-> ```text
-> The function should not run.
-> ```
-> - Just place `//` at the very beginning of the line. This is called "commenting out" code.
-> 
----
-
-### Exercise 2: JSDoc Comment Syntax
-
-**Problem:** Write a JSDoc comment for a function `add(a, b)` describing parameter types `@param {number}` and return type `@returns {number}`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 3
-> ```
+> #### Implementation
 > ```javascript
 > /**
->  * Adds two numbers together.
->  * @param {number} a
->  * @param {number} b
->  * @returns {number}
+>  * Calculates compound interest for a principal amount.
+>  * 
+>  * @param {number} principal - Initial investment amount.
+>  * @param {number} rate - Annual interest rate (e.g. 0.05 for 5%).
+>  * @param {number} years - Duration in years.
+>  * @returns {number} Final accumulated balance.
 >  */
-> function add(a, b) {
->   return a + b;
+> function calculateCompoundInterest(principal, rate, years) {
+>   // Formula: A = P(1 + r)^t
+>   const growthFactor = (1 + rate) ** years;
+>   const totalAmount = principal * growthFactor;
+> return Number(totalAmount.toFixed(2));
 > }
-> console.log(add(1, 2));
+> // Verification tests
+> const total = calculateCompoundInterest(1000, 0.05, 2);
+> console.assert(total === 1102.50, "Test 1 Failed");
 > ```
->
-> **Explanation:** JSDoc comments start with `/**` and provide structured metadata for documentation generators and IDE type checkers.
+> #### Technical Explanation
+> 1. **JSDoc Syntax**: JSDoc comments start with /** and provide structured metadata tags (@param, @returns) for IDE autocompletion.
+> 2. **Ignored at Runtime**: Comments are completely ignored by the JS engine parser and do not impact runtime performance.
+> 3. **Inline Comments**: Single-line comments (//) explain internal implementation details and business logic intent.
 > 
 ---
 
-### Exercise 3: Multi-Line Comment Edge Cases
+### Exercise 2: Intent Clarification & Compliance Guard Comments
 
-**Problem:** Demonstrate commenting out code containing string literals with `*/` safely using single-line `//` comments.
+**Scenario:** A payment gateway integration handles regulatory compliance checks. Non-obvious compliance rules require inline comments explaining 'why' specific validations occur.
 
-**Expected output:**
+**Requirements:**
+1. Use single-line comments (//) to document compliance mandates (e.g. PCI-DSS regulations).
+2. Use multi-line comments (/* ... */) for complex multi-step transaction policies.
+3. Write clean, working code implementing transaction validations.
+
 > [!check]- Answer
-> ```text
-> Commented safely
+> #### Implementation
+> ```javascript
+> function validatePaymentTransaction(cardDetails) {
+>   /* 
+>    * Multi-line Compliance Note:
+>    * PCI-DSS Requirement 3.4 requires PAN masking before log output.
+>    * Never store or log raw 16-digit primary account numbers.
+>    */
+> if (!cardDetails || !cardDetails.cardNumber) {
+>     return false;
+>   }
+> // Validate length is exactly 16 digits
+>   const isValidLength = cardDetails.cardNumber.length === 16;
+> return isValidLength;
+> }
+> // Verification tests
+> console.assert(validatePaymentTransaction({ cardNumber: "1234567812345678" }) === true, "Test 1 Failed");
+> console.assert(validatePaymentTransaction({ cardNumber: "123" }) === false, "Test 2 Failed");
 > ```
-> // const regex = /*/; 
-> console.log("Commented safely");
-> ```
->
-> **Explanation:** Using single line `//` avoids accidental termination by embedded `*/` text in regex or strings.
-> 
+> #### Technical Explanation
+> 1. **Single-Line Comments (//)**: Terminate at the end of the line; useful for brief inline annotations.
+> 2. **Multi-Line Comments (/* ... */)**: Span multiple lines; ideal for architectural notes and regulatory documentation.
+> 3. **Documentation Best Practices**: Effective comments document non-obvious business requirements ('why') rather than restating self-explanatory code ('what').
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Build Pipeline Minification & Comment Preservation
+
+**Scenario:** A production build pipeline strips comments during minification. However, legal license notices must be preserved using copyright comment markers (/*! ... */).
+
+**Requirements:**
+1. Create a legal license header comment using the /*! preservation syntax.
+2. Implement a simple utility function below the comment.
+3. Verify that the function executes normally.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> /*!
+>  * @license MIT
+>  * Core Utility Module v1.0.0
+>  * Copyright (c) 2026 Acme Corp.
+>  */
+> function formatCurrency(amount) {
+>   return "$" + Number(amount).toFixed(2);
+> }
+> // Verification tests
+> console.assert(formatCurrency(49.9) === "$49.90", "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Minifier Preservation (/*!)**: Build minifiers (Terser, Esbuild) recognize /*! comments as legal copyright blocks and preserve them in output bundles.
+> 2. **Zero Runtime Footprint**: In unminified code, comments are skipped by the lexical scanner without generating AST nodes or bytecode.
+> 3. **Clean Code Hygiene**: Stale or commented-out code blocks should be deleted rather than left in source files, relying on version control for history.
+---
+
+## 6. Related Terms
 - [Automatic Semicolon Insertion (ASI)](asi.md) — Related concept: Automatic Semicolon Insertion (ASI).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `//` for single-line comments.
 - Use `/* */` for multi-line block comments.
 - The JavaScript engine completely ignores comments when executing the code.

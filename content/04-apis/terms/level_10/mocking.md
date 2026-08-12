@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Developer Workflow / Tooling**
+
+**Developer Workflow / Tooling (Local Development)**: Mocking APIs is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Local Development**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a professional tech company, Frontend and Backend teams work at the same time (in parallel). 
@@ -37,7 +33,7 @@ How do you build a fake server?
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mocking the "Happy Path" only
 
@@ -86,68 +82,184 @@ if (process.env.NODE_ENV === 'development') return MOCK_DATA; // ❌ Risky produ
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Parallel Engineering
+### Exercise 1: MSW Mock Service Worker Interceptor Simulator
 
-**Problem:** You are the Frontend lead. The Backend lead says, "I will have the `/checkout` API ready next Friday." What exact steps do you take today to ensure your team isn't blocked?
+**Scenario:** Simulates Mock Service Worker (MSW) by intercepting outgoing fetch requests and returning mocked JSON HTTP responses in test suites.
 
-**Expected output:**
+**Requirements:**
+1. Write createMockServer(handlersArray).
+2. Intercept matching method and path.
+3. Return mocked status and JSON body.
+
 > [!check]- Answer
-> ```text
-> 1. Meet with the Backend lead today to agree upon the EXACT JSON schema (what the keys and data types will be).
-> 2. Write a `db.json` file containing that exact dummy data.
-> 3. Use a tool like JSON Server to launch a mock API.
-> 4. Have the frontend team build the entire checkout UI using the mock API.
-> 5. Next Friday, swap the base URL to the real backend.
+>
+> #### Implementation
+>
+> ```javascript
+> function createMockServer(handlersArray = []) {
+>   const handlerMap = new Map();
+>   handlersArray.forEach(h => {
+>     handlerMap.set(`${h.method.toUpperCase()}:${h.path}`, h.resolver);
+>   });
+>
+>   return {
+>     async fetch(url, options = {}) {
+>       const method = (options.method || "GET").toUpperCase();
+>       const path = new URL(url, "https://dummy.com").pathname;
+>       const key = `${method}:${path}`;
+>
+>       if (handlerMap.has(key)) {
+>         const resolver = handlerMap.get(key);
+>         const mockRes = await resolver(options);
+>         return {
+>           ok: mockRes.status >= 200 && mockRes.status < 300,
+>           status: mockRes.status || 200,
+>           json: async () => mockRes.body
+>         };
+>       }
+>
+>       throw new Error(`Unhandled mock request: ${method} ${path}`);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const handlers = [
+>   { method: "GET", path: "/api/users", resolver: async () => ({ status: 200, body: [{ id: 1 }] }) }
+> ];
+>
+> const mockServer = createMockServer(handlers);
+> mockServer.fetch("https://api.com/api/users").then(res => {
+>   console.assert(res.ok === true && res.status === 200, "Test 1 Failed");
+>   return res.json().then(body => {
+>     console.assert(body.length === 1 && body[0].id === 1, "Test 2 Failed");
+>   });
+> });
 > ```
-> - What must both teams agree upon *before* you can write the dummy data?
+>
+> #### Technical Explanation
+>
+> 1. **API Mocking Concept**: Simulating API responses during testing or development without connecting to live backend servers.
+> 2. **MSW (Mock Service Worker)**: Standard tool intercepting network requests at the Service Worker / Node.js process layer.
+> 3. **Decoupled Frontend Development**: Allows UI developers to build features before backend APIs are deployed.
 > 
 ---
 
-### Exercise 2: Mock Service Worker (MSW) Request Handler Pattern
+### Exercise 2: Dynamic Mock Data Generator with Failure Injection
 
-**Problem:** Write MSW REST handler intercepting `GET /api/user` and returning HTTP 200 JSON `{ id: 1, name: 'Alice' }`.
+**Scenario:** A testing utility generates mock API responses with configurable artificial network delay and failure probability.
 
-**Expected output:**
+**Requirements:**
+1. Write generateMockResponse(dataObj, delayMs, failureRatePct).
+2. Simulate delay.
+3. Fail with 500 error if failure hit.
+
 > [!check]- Answer
-> ```text
-> http.get('/api/user', () => { return HttpResponse.json({ id: 1, name: 'Alice' }); })
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> import { http, HttpResponse } from 'msw';
-> export const handlers = [
-> http.get('/api/user', () => {
-> return HttpResponse.json({ id: 1, name: 'Alice' });
-> })
-> ];
+> async function generateMockResponse(dataObj, delayMs = 50, failureRatePct = 0, mockSleep) {
+>   const sleep = mockSleep || ((ms) => new Promise(r => setTimeout(r, ms)));
+>
+>   await sleep(delayMs);
+>
+>   const randomVal = Math.random() * 100;
+>   if (randomVal < failureRatePct) {
+>     return {
+>       ok: false,
+>       status: 500,
+>       error: "Mock Injected Server Error"
+>     };
+>   }
+>
+>   return {
+>     ok: true,
+>     status: 200,
+>     data: dataObj
+>   };
+> }
+>
+> // Verification tests
+> const mockSleep = async () => {};
+>
+> generateMockResponse({ name: "Alice" }, 10, 0, mockSleep).then(res => {
+>   console.assert(res.ok === true && res.data.name === "Alice", "Test 1 Failed");
+> });
+>
+> generateMockResponse({ name: "Alice" }, 10, 100, mockSleep).then(res => {
+>   console.assert(res.ok === false && res.status === 500, "Test 2 Failed: Must inject failure when rate 100%");
+> });
 > ```
-> - **Explanation:** MSW intercepts network requests at the Service Worker level.
+>
+> #### Technical Explanation
+>
+> 1. **Chaos Engineering Simulation**: Injecting artificial errors and latency tests UI resiliency under adverse network conditions.
+> 2. **Latency Simulation**: Simulating 3G/4G delays reveals missing loading spinners and skeleton screens.
+> 3. **Deterministic Test Stubs**: Providing reliable mock stubs ensures test suites run fast and reproducibly.
+> 
 ---
 
-### Exercise 3: Prism OpenAPI Mocking Server
+### Exercise 3: Contract-Based Mock Provider
 
-**Problem:** Which CLI command starts an instant mock API server from an `openapi.yaml` specification file using Prism?
+**Scenario:** Generates dynamic mock object instances directly from JSON Schema definitions for unit test suites.
 
-**Expected output:**
+**Requirements:**
+1. Write generateMockFromSchema(schemaObj).
+2. Generate fallback values for primitive types.
+
 > [!check]- Answer
-> ```text
-> prism mock openapi.yaml
+>
+> #### Implementation
+>
+> ```javascript
+> function generateMockFromSchema(schemaObj = {}) {
+>   const mock = {};
+>   const props = schemaObj.properties || {};
+>
+>   for (const [key, rules] of Object.entries(props)) {
+>     if (rules.type === "string") {
+>       mock[key] = rules.example || `mock_${key}`;
+>     } else if (rules.type === "number" || rules.type === "integer") {
+>       mock[key] = rules.example !== undefined ? rules.example : 42;
+>     } else if (rules.type === "boolean") {
+>       mock[key] = rules.example !== undefined ? rules.example : true;
+>     }
+>   }
+>
+>   return mock;
+> }
+>
+> // Verification tests
+> const schema = {
+>   properties: {
+>     username: { type: "string", example: "alice_test" },
+>     age: { type: "number" }
+>   }
+> };
+>
+> const mock = generateMockFromSchema(schema);
+> console.assert(mock.username === "alice_test", "Test 1 Failed");
+> console.assert(mock.age === 42, "Test 2 Failed");
 > ```
-> ```bash
-> npx @stoplight/prism-cli mock openapi.yaml
-> ```
-> - **Explanation:** Prism reads OpenAPI specs and serves instant contract-compliant mock APIs.
+>
+> #### Technical Explanation
+>
+> 1. **Schema-Driven Test Mocks**: Generates realistic mock data automatically from OpenAPI or JSON Schema definitions.
+> 2. **Consistent Test Fixtures**: Eliminates hardcoded test data files across frontend unit test suites.
+> 3. **Schema Alignment Guard**: Guarantees test mocks update automatically when API schemas change.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Swagger / OpenAPI Specification](openapi.md) — You can actually feed an OpenAPI file into a mocking tool, and it will automatically generate the fake API for you!
 - [Postman / Insomnia (API Clients)](api_clients.md) — Postman has built-in Mock Server capabilities.
 - [API Contract / Schema-First Design](api_contract.md) — Related concept: API Contract / Schema-First Design.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Mocking** is creating a fake API that returns hardcoded JSON.
 - It unblocks Frontend developers, allowing them to build the UI while the Backend is still being developed.
 - Tools like `json-server` or `MSW` make spinning up a mock API take less than 5 minutes.

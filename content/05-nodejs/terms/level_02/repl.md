@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Module / Tooling**
+
+**Core Module / Tooling (Node.js Core Architecture .)**: The Node.js REPL is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Governed by the command-line interface runtime loop).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before building complex applications, developers often need to quickly test small blocks of JavaScript: checking how a path parses, inspecting a global object, formatting dates, or testing regular expressions.
@@ -75,7 +71,7 @@ undefined
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to reference `__dirname` or `__filename` inside the REPL
 
@@ -127,7 +123,7 @@ const data = fetch();
 console.log(data); // Use explicit variable names
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: REPL Sandbox Session
 
@@ -191,13 +187,13 @@ undefined
 >
 > **Explanation:** `.save` writes the current REPL interactive command history to disk.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — The properties loaded in the REPL runtime scope.
 - [The process Object](process_object.md) — The system environment configurations checked via the REPL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Node.js REPL is an interactive command-line environment for quick JavaScript prototyping.
 - Start the REPL by running `node` in your command terminal with no file target.
 - It operates on a continuous Read-Eval-Print-Loop cycle.

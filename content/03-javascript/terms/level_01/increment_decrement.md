@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Increment / Decrement (++ / --) is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In programming, loops and iteration are fundamental. We frequently need to increment or decrement a counter by exactly `1` (e.g., `count = count + 1` or `count += 1`). To make this extremely common operation concise, JavaScript inherited the increment (`++`) and decrement (`--`) operators from languages like C and Java. 
@@ -78,7 +74,7 @@ purchaseWidget(); // Purchase successful! Items left: 1
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to Increment Values directly (Literals)
 
@@ -153,78 +149,117 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Tracking Operations
+### Exercise 1: API Rate Limiter Counter
 
-**Problem:** Trace the value of the variables `a`, `b`, and `result` in the code below.
+**Scenario:** An API gateway tracks request volume using increment (++) and decrement (--) operators to maintain active request counts and remaining quota limits.
 
-```javascript
-let a = 10;
-let b = 20;
-const result = a++ + --b;
-```
+**Requirements:**
+1. Write a RateLimiter object with requestCount and remainingQuota.
+2. Use prefix increment ++requestCount when logging new requests.
+3. Use postfix decrement remainingQuota-- when consuming quota.
+4. Verify difference between prefix and postfix return values.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> a: 11
-> b: 19
-> result: 29
-> ```
-> - `a++` returns the current value `10` first, then increments `a` to `11`.
-> - `--b` decrements `b` to `19` first, and returns `19`.
-> - Add the returned values: `10 + 19`.
-> 
----
-
-### Exercise 2: Prefix vs Postfix Evaluation Trace
-
-**Problem:** Trace variables `a` and `b`: `let x = 5; let a = x++; let b = ++x;`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> a: 5, b: 7, x: 7
-> ```
+> #### Implementation
 > ```javascript
-> let x = 5;
-> let a = x++; // a gets 5, x becomes 6
-> let b = ++x; // x becomes 7, b gets 7
-> console.log(`a: ${a}, b: ${b}, x: ${x}`);
+> function createRateLimiter(initialQuota) {
+>   let requestCount = 0;
+>   let remainingQuota = initialQuota;
+> return {
+>     processRequest() {
+>       const currentCount = ++requestCount;
+>       const quotaBeforeUse = remainingQuota--;
+>       return { currentCount, quotaBeforeUse, remainingQuota };
+>     }
+>   };
+> }
+> // Verification tests
+> const limiter = createRateLimiter(10);
+> const step1 = limiter.processRequest();
+> console.assert(step1.currentCount === 1, "Test 1 Failed: Prefix ++ should return 1");
+> console.assert(step1.quotaBeforeUse === 10, "Test 2 Failed: Postfix -- should return 10");
+> console.assert(step1.remainingQuota === 9, "Test 3 Failed: Remaining quota should be 9");
 > ```
->
-> **Explanation:** `x++` evaluates to `5` before mutating `x` to `6`; `++x` mutates `x` to `7` before evaluating to `7`.
+> #### Technical Explanation
+> 1. **Prefix Operator (++x / --x)**: Increments or decrements the operand variable first, then evaluates to the new updated value.
+> 2. **Postfix Operator (x++ / x--)**: Evaluates to the original value first, then increments or decrements the operand variable as a side effect.
+> 3. **Variable Mutation**: Increment and decrement operators modify the underlying variable binding in place.
 > 
 ---
 
-### Exercise 3: Incrementing String Numbers
+### Exercise 2: UI Pagination Cursor Navigator
 
-**Problem:** Predict `let str = "5"; str++; console.log(typeof str, str);`.
+**Scenario:** A UI data table controller manages page navigation. It increments or decrements the current page index pointer while enforcing upper and lower page bounds.
 
-**Expected output:**
+**Requirements:**
+1. Write navigatePage(currentPage, direction, totalPages).
+2. If direction is "next", increment page index if below totalPages.
+3. If direction is "prev", decrement page index if above 1.
+4. Return updated page number.
+
 > [!check]- Answer
-> ```text
-> number 6
-> ```
+> #### Implementation
 > ```javascript
-> let str = "5";
-> str++;
-> console.log(typeof str, str);
+> function navigatePage(currentPage, direction, totalPages) {
+>   let page = currentPage;
+> if (direction === "next" && page < totalPages) {
+>     page++;
+>   } else if (direction === "prev" && page > 1) {
+>     page--;
+>   }
+> return page;
+> }
+> // Verification tests
+> console.assert(navigatePage(1, "next", 5) === 2, "Test 1 Failed");
+> console.assert(navigatePage(2, "prev", 5) === 1, "Test 2 Failed");
+> console.assert(navigatePage(1, "prev", 5) === 1, "Test 3 Failed");
 > ```
->
-> **Explanation:** The `++` operator automatically coerces string operands to numbers before incrementing.
+> #### Technical Explanation
+> 1. **Step Mutation**: page++ and page-- provide clean shorthand for page = page + 1 and page = page - 1.
+> 2. **Boundary Guards**: Enclosing increment/decrement inside boundary checks prevents state corruption.
+> 3. **Operand Coercion**: Increment/decrement operators implicitly convert non-numeric operands to numbers before operating.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Circular Ring Buffer Pointer
+
+**Scenario:** An audio stream processor updates write head pointers in a fixed-capacity ring buffer using postfix increment and modulo arithmetic.
+
+**Requirements:**
+1. Write a function advanceWritePointer(currentPointer, bufferCapacity).
+2. Increment the pointer.
+3. Wrap the pointer around to 0 when reaching bufferCapacity.
+4. Return updated pointer index.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function advanceWritePointer(currentPointer, bufferCapacity) {
+>   let ptr = currentPointer;
+>   ptr++;
+>   ptr %= bufferCapacity;
+>   return ptr;
+> }
+> // Verification tests
+> console.assert(advanceWritePointer(0, 4) === 1, "Test 1 Failed");
+> console.assert(advanceWritePointer(3, 4) === 0, "Test 2 Failed: Wrap around failed");
+> ```
+> #### Technical Explanation
+> 1. **Sequential Mutation**: Increments mutate the variable state before subsequent modulo expressions evaluate.
+> 2. **Side-Effect Awareness**: Avoid embedding ++ inside complex mathematical expressions to maintain code clarity.
+> 3. **Statement Simplicity**: Isolating increment operations on dedicated lines avoids prefix/postfix confusion.
+---
+
+## 6. Related Terms
 - [Arithmetic Operators](arithmetic_operators.md) — General mathematical operators.
 - [Assignment Operators](assignment_operators.md) — Shorthand operators to update variable values.
 - [for Loop](../level_02/for_loop.md) — Repetitive execution blocks that typically rely on increment counters.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The increment (`++`) and decrement (`--`) operators increase or decrease a variable's value by 1.
 - Postfix (`x++`) returns the value *before* changing it.
 - Prefix (`++x`) returns the value *after* changing it.

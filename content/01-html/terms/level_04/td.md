@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<td>` (Table Data) is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you've built a table (`<table>`) and added a horizontal row (`<tr>`), you need a place to put the actual information. 
@@ -62,7 +58,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Uneven columns
 
@@ -142,7 +138,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 </thead>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Cell
 
@@ -207,7 +203,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 >
 > **Explanation:** `empty-cells` controls rendering behavior for table cells with no content.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<th>` (Table Header)](th.md) — The bold header equivalent of the data cell.
 - [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing table data.
@@ -216,7 +212,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<td>` stands for Table Data.
 - It is the standard cell that holds information.
 - Every `<td>` you add to a row creates a new column.

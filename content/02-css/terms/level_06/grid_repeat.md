@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Function**
+
+**CSS Function (Universal Modern Standard .)**: `repeat()` Function is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Instantly expands arguments into full track arrays during page reflow calculations).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to build a simple three-column grid, writing `grid-template-columns: 1fr 1fr 1fr;` is easy.
@@ -118,7 +114,7 @@ A clean 12-column grid:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `repeat()` for non-grid values
 
@@ -243,7 +239,7 @@ grid-template-columns: repeat(auto-fill, 1fr 2fr);
 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Clean Up Layout Code
 
@@ -300,14 +296,14 @@ Simplify this layout blueprint line using the `repeat()` function.
 >
 > **Explanation:** `repeat(3, 100px 1fr)` repeats multi-track patterns 3 times (6 columns total).
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — Keywords used inside `repeat()` to automate responsive grid counts.
 - [`minmax()` Function](grid_minmax.md) — Related concept: `minmax()` Function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `repeat()` is a shorthand CSS function that automates grid track duplication.
 - It is only valid within grid-template definitions (columns/rows).
 - The syntax is `repeat(count, pattern)`.

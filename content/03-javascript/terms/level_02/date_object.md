@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Date object is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications must frequently work with time: logging when a transaction occurred, setting a deadline for a task, or rendering calendars. To represent specific moments in time, JavaScript provides the built-in **`Date`** object constructor. 
@@ -69,7 +65,7 @@ console.log("Plan Expiration Date:", expirationDate.toDateString());
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that Months are Zero-Indexed
 
@@ -146,82 +142,140 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format Date String
+### Exercise 1: Subscription Expiration & Renewal Calculator
 
-**Problem:** Complete the function `getFormattedDate` to return a string in the format `YYYY-MM-DD` from a given Date object. Remember that months are zero-indexed.
+**Scenario:** A SaaS billing engine calculates subscription expiration dates by adding billing cycles (30 days) to a start date and determining if an account has expired compared to Date.now().
 
-```javascript
-function getFormattedDate(dateObj) {
-  const year = dateObj.getFullYear();
-  // Extract month (+1)
-  // Extract date
-  // Return formatted string
-}
+**Requirements:**
+1. Write isSubscriptionExpired(startDateIso, billingDays).
+2. Parse startDateIso into a Date instance.
+3. Add billingDays * 86400000 milliseconds to start date time.
+4. Return object { expirationIso, isExpired }.
 
-const testDate = new Date("2026-07-17T00:00:00");
-console.log(getFormattedDate(testDate));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 2026-7-17
-> ```
-> - Add `1` to `dateObj.getMonth()`.
-> - Use `.getDate()` to get the day of the month.
-> - Concatenate the values separated by hyphens.
-> 
----
-
-### Exercise 2: Parsing ISO Date Strings safely
-
-**Problem:** Create a Date from `"2026-01-01T00:00:00Z"` and print `date.getUTCFullYear()` and `date.getUTCMonth()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 2026
-> 0
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const d = new Date("2026-01-01T00:00:00Z");
-> console.log(d.getUTCFullYear());
-> console.log(d.getUTCMonth()); // 0 = January
+> function isSubscriptionExpired(startDateIso, billingDays) {
+>   const startDate = new Date(startDateIso);
+>   const durationMs = billingDays * 24 * 60 * 60 * 1000;
+>   const expirationTime = startDate.getTime() + durationMs;
+>   const expirationDate = new Date(expirationTime);
+>   const now = Date.now();
+>
+>   return {
+>     expirationIso: expirationDate.toISOString(),
+>     isExpired: now > expirationTime
+>   };
+> }
+>
+> // Verification tests
+> const res = isSubscriptionExpired("2026-01-01T00:00:00.000Z", 30);
+> console.assert(res.expirationIso === "2026-01-31T00:00:00.000Z", "Test 1 Failed");
+> console.assert(res.isExpired === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** UTC methods on `Date` return standardized UTC values independent of local machine timezones.
+> #### Technical Explanation
+>
+> 1. **Epoch Representation**: JavaScript Date objects store time internally as milliseconds since Unix Epoch (Jan 1, 1970 UTC).
+> 2. **Date.now() Accessor**: Date.now() returns current timestamp milliseconds directly without instantiating Date objects.
+> 3. **ISO Standard Formatting**: The .toISOString() method formats dates as standardized ISO 8601 UTC strings.
 > 
 ---
 
-### Exercise 3: Calculating Date Differences in Days
+### Exercise 2: Flight Duration & Timezone Offset Calculator
 
-**Problem:** Calculate the difference in days between two Date objects 48 hours apart.
+**Scenario:** An international flight booking service calculates flight duration in hours between departure and arrival UTC ISO timestamps.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateFlightDurationHours(departureIso, arrivalIso).
+2. Parse ISO strings into Date instances.
+3. Calculate time difference using getTime().
+4. Return duration formatted in hours.
+
 > [!check]- Answer
-> ```text
-> 2
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const d1 = new Date("2026-01-01");
-> const d2 = new Date("2026-01-03");
-> const diffDays = (d2 - d1) / (1000 * 60 * 60 * 24);
-> console.log(diffDays);
+> function calculateFlightDurationHours(departureIso, arrivalIso) {
+>   const depDate = new Date(departureIso);
+>   const arrDate = new Date(arrivalIso);
+>
+>   if (Number.isNaN(depDate.getTime()) || Number.isNaN(arrDate.getTime())) {
+>     throw new Error("Invalid date input");
+>   }
+>
+>   const diffMs = arrDate.getTime() - depDate.getTime();
+>   const hours = diffMs / (1000 * 60 * 60);
+>   return Number(hours.toFixed(2));
+> }
+>
+> // Verification tests
+> const duration = calculateFlightDurationHours("2026-06-01T10:00:00.000Z", "2026-06-01T15:30:00.000Z");
+> console.assert(duration === 5.50, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Subtracting two Date objects yields their difference in milliseconds.
+> #### Technical Explanation
+>
+> 1. **Timestamp Subtraction**: Subtracting Date instances or getTime() results evaluates total elapsed milliseconds.
+> 2. **Date Validation**: Passing invalid strings to Date constructor produces Date instance where getTime() returns NaN.
+> 3. **UTC Standardization**: ISO 8601 timestamps eliminate local system timezone ambiguity.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Audit Log Date Boundary Filter
+
+**Scenario:** A security compliance system filters audit log records falling within a specified start and end Date range.
+
+**Requirements:**
+1. Write filterLogsByDateRange(logs, startDate, endDate).
+2. Convert log timestamp strings to Date objects.
+3. Filter log entries where logDate >= startDate and logDate <= endDate.
+4. Return filtered log entries.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function filterLogsByDateRange(logs, startDate, endDate) {
+>   const startTime = startDate.getTime();
+>   const endTime = endDate.getTime();
+>
+>   return logs.filter(log => {
+>     const logTime = new Date(log.timestamp).getTime();
+>     return logTime >= startTime && logTime <= endTime;
+>   });
+> }
+>
+> // Verification tests
+> const logs = [
+>   { id: 1, timestamp: "2026-05-01T10:00:00.000Z" },
+>   { id: 2, timestamp: "2026-05-15T10:00:00.000Z" },
+>   { id: 3, timestamp: "2026-06-01T10:00:00.000Z" }
+> ];
+> const filtered = filterLogsByDateRange(logs, new Date("2026-05-01T00:00:00Z"), new Date("2026-05-20T00:00:00Z"));
+> console.assert(filtered.length === 2, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Relational Comparisons**: Date objects or numeric timestamps support relational operators (>=, <=).
+> 2. **Date Instance Mutability**: Methods like .setDate() or .setHours() mutate the Date instance state in place.
+> 3. **Constructor Overloads**: The Date constructor accepts ISO strings, millisecond numbers, or date component integers.
+---
+
+## 6. Related Terms
 - [Timers (setTimeout / setInterval / clearTimeout)](../level_05/timers.md) — Functions used to execute code after delays or periodically.
 - [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — Text data representation (Note: JSON has no date type, so Date objects are serialized to strings).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `Date` object represents a single moment in time, stored as milliseconds since the Unix Epoch (January 1, 1970 UTC).
 - You must instantiate Date objects using the `new` keyword (e.g. `new Date()`) to get a true Date object with access to time manipulation methods.
 - Months are zero-indexed (`0` = January, `11` = December); days of the month (`.getDate()`) are 1-indexed.

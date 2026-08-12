@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Typography / Overflow Property**
+
+**Typography / Overflow Property (Universal Browser Support)**: `text-overflow` & `overflow-wrap` is a fundamental concept in this technology stack. **Level 7 — Text & List Formatting**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Text is unpredictable. Sometimes a user uploads a file with a ridiculously long name like `my_vacation_photos_from_hawaii_2024.jpg`, and the browser tries to display it inside a tiny 100px wide sidebar. 
@@ -61,7 +57,7 @@ This requires an exact combo of 3 specific properties to work!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `overflow: hidden` for Ellipsis
 
@@ -114,7 +110,7 @@ This requires an exact combo of 3 specific properties to work!
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Long URL
 
@@ -173,12 +169,12 @@ This requires an exact combo of 3 specific properties to work!
 >
 > **Explanation:** `-webkit-line-clamp` truncates multi-line text blocks after N lines.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`white-space`](white_space.md) — The property that forces the single line required for `ellipsis` to work.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Related concept: `overflow` (hidden, scroll, auto, visible).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `text-overflow: ellipsis` adds "..." to cut-off text. It requires `white-space: nowrap` and `overflow: hidden` to work.
 - `overflow-wrap: break-word` aggressively snaps long, unbroken words (like URLs) into multiple lines to prevent layout blowouts.

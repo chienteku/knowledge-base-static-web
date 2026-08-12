@@ -379,7 +379,7 @@ unsafe impl<T: Send> Send for RawBuffer<T> {}
 
 
 - [`Send` Trait](send_trait.md)
-- [`Unpin` Trait](../level_10/unpin_trait.md) — A third auto trait, relevant to `Pin`/async code.
+- [`unpin_trait.md` (Unpin Trait)](../level_10/unpin_trait.md) — A third auto trait, relevant to `Pin`/async code.
 - [Marker Traits](../level_14/marker_traits.md) — The broader category (traits with no methods) that auto traits are a special, automatically-derived subset of.
 - [Derive Macro](../level_04/derive_macro.md) — A useful contrast: `#[derive(...)]` requires explicit annotation; auto traits require none at all.
 

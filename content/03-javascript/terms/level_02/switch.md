@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: switch is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `if / else if` chains are great for complex logical checks (e.g., `score > 90 && isPassing`), they become extremely repetitive and hard to read when you are simply comparing a single variable against a long list of exact potential values. 
@@ -77,7 +73,7 @@ console.log(getHttpStatusMessage(404)); // "Not Found"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `break` keyword
 
@@ -169,81 +165,162 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Traffic Light
+### Exercise 1: Order Fulfillment State Machine Router
 
-**Problem:** Create a switch statement that evaluates a variable `color` (which can be "red", "yellow", or "green"). Log "Stop" for red, "Caution" for yellow, "Go" for green, and "Broken light" for any other value.
+**Scenario:** An e-commerce fulfillment engine transitions order states based on incoming event status strings using a switch statement with explicit break handlers.
 
-**Expected output (if color is "yellow"):**
-```text
-Caution
-```
+**Requirements:**
+1. Write processOrderStatus(currentStatus, action).
+2. Handle cases "PENDING", "SHIPPED", "DELIVERED", "CANCELLED".
+3. Include break statements.
+4. Return next status.
 
 > [!check]- Answer
-> - Start with `switch(color) { ... }`
-> - Use `case "red":`
-> - Don't forget your `break` statements!
-> - Use `default:` for the "Broken light" scenario.
-> 
----
-
-### Exercise 2: Strict Type Matching in Switch Statements
-
-**Problem:** Pass string `"5"` into a `switch` with numeric `case 5:` and show that no match occurs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Default arm executed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const val = "5";
-> switch (val) {
->   case 5:
->     console.log("Matched number");
->     break;
->   default:
->     console.log("Default arm executed");
+> function processOrderStatus(currentStatus, action) {
+>   let nextStatus = currentStatus;
+>
+>   switch (action) {
+>     case "PAY":
+>       if (currentStatus === "PENDING") nextStatus = "PAID";
+>       break;
+>     case "SHIP":
+>       if (currentStatus === "PAID") nextStatus = "SHIPPED";
+>       break;
+>     case "CANCEL":
+>       if (currentStatus !== "DELIVERED") nextStatus = "CANCELLED";
+>       break;
+>     default:
+>       break;
+>   }
+>   return nextStatus;
 > }
+>
+> // Verification tests
+> console.assert(processOrderStatus("PENDING", "PAY") === "PAID", "Test 1 Failed");
+> console.assert(processOrderStatus("PAID", "SHIP") === "SHIPPED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `switch` statements evaluate case clauses using strict equality `===` (no type coercion).
+> #### Technical Explanation
+>
+> 1. **Switch Evaluation**: Matches expression against case clauses using strict equality (===).
+> 2. **Break Prevention**: The break statement prevents fall-through into subsequent case blocks.
+> 3. **Default Case**: The default clause executes when no matching case label is found.
 > 
 ---
 
-### Exercise 3: Grouping Multiple Cases
+### Exercise 2: Multi-Case Grouping HTTP Status Classifier
 
-**Problem:** Group `case 1: case 2: case 3:` to execute shared logic printing `"Low"`.
+**Scenario:** An HTTP API response handler groups multiple status code cases together without break statements to categorize response types.
 
-**Expected output:**
+**Requirements:**
+1. Write categorizeHttpStatus(code).
+2. Group 200, 201, 204 into "SUCCESS".
+3. Group 400, 401, 403, 404 into "CLIENT_ERROR".
+4. Group 500, 502, 503 into "SERVER_ERROR".
+5. Return category string.
+
 > [!check]- Answer
-> ```text
-> Low
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const num = 2;
-> switch (num) {
->   case 1:
->   case 2:
->   case 3:
->     console.log("Low");
->     break;
+> function categorizeHttpStatus(code) {
+>   let category = "UNKNOWN";
+>
+>   switch (code) {
+>     case 200:
+>     case 201:
+>     case 204:
+>       category = "SUCCESS";
+>       break;
+>     case 400:
+>     case 401:
+>     case 403:
+>     case 404:
+>       category = "CLIENT_ERROR";
+>       break;
+>     case 500:
+>     case 502:
+>     case 503:
+>       category = "SERVER_ERROR";
+>       break;
+>     default:
+>       category = "UNKNOWN";
+>       break;
+>   }
+>   return category;
 > }
+>
+> // Verification tests
+> console.assert(categorizeHttpStatus(201) === "SUCCESS", "Test 1 Failed");
+> console.assert(categorizeHttpStatus(404) === "CLIENT_ERROR", "Test 2 Failed");
+> console.assert(categorizeHttpStatus(503) === "SERVER_ERROR", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Stacking consecutive `case` statements executes shared code blocks for multiple matching cases.
-> 
+> #### Technical Explanation
+>
+> 1. **Case Fall-Through**: Omitting break allows multiple case labels to execute the same statement block.
+> 2. **Strict Matching**: Switch matching uses ===, so "200" does not match numeric 200.
+> 3. **Multi-Case Design**: Provides clean structure for multi-value categorical dispatching.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: CLI Command Action Dispatcher
+
+**Scenario:** A command line interface routes user flag strings (--version, --help, --build) to action handlers using switch.
+
+**Requirements:**
+1. Write dispatchCliFlag(flag).
+2. Handle "--version" / "-v", "--help" / "-h", "--build" / "-b".
+3. Return action identifier.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function dispatchCliFlag(flag) {
+>   switch (flag) {
+>     case "--version":
+>     case "-v":
+>       return "SHOW_VERSION";
+>     case "--help":
+>     case "-h":
+>       return "SHOW_HELP";
+>     case "--build":
+>     case "-b":
+>       return "EXECUTE_BUILD";
+>     default:
+>       return "INVALID_FLAG";
+>   }
+> }
+>
+> // Verification tests
+> console.assert(dispatchCliFlag("-v") === "SHOW_VERSION", "Test 1 Failed");
+> console.assert(dispatchCliFlag("--build") === "EXECUTE_BUILD", "Test 2 Failed");
+> console.assert(dispatchCliFlag("--unknown") === "INVALID_FLAG", "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Direct Case Return**: Returning directly from a case block exits the switch and function simultaneously without needing explicit break.
+> 2. **String Matching**: Evaluates string matching cleanly across multi-alias command flags.
+> 3. **Fall-Through Aliasing**: Stacking case labels creates clear alias groups for command handlers.
+---
+
+## 6. Related Terms
 - [if / else](if_else.md) — The more flexible alternative for conditional branching.
 - [break / continue](break_continue.md) — Related concept: break / continue.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `switch` when comparing a single expression against many possible exact values.
 - `switch` uses strict equality (`===`) to match cases.
 - **Always** remember to use `break` (or `return`) to stop execution from "falling through" into the next case.

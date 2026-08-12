@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "02-css",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-12",
   "terms": {
     "comments": {
       "level": 1,
@@ -56,8 +56,8 @@
           "description": "Notes ignored by the browser parser."
         },
         {
-          "module": "02-css",
           "term": "the_cascade",
+          "module": "02-css",
           "description": "The CSS Cascade."
         }
       ]
@@ -217,13 +217,13 @@
           "description": "Related concept: CSS (Cascading Style Sheets)."
         },
         {
-          "module": "02-css",
           "term": "combinators",
+          "module": "02-css",
           "description": "Selector combinators."
         },
         {
-          "module": "02-css",
           "term": "attribute_selectors",
+          "module": "02-css",
           "description": "Attribute selectors."
         }
       ]
@@ -359,8 +359,8 @@
           "description": "Related concept: `@import`."
         },
         {
-          "module": "02-css",
           "term": "css",
+          "module": "02-css",
           "description": "Related concept: CSS (Cascading Style Sheets)."
         }
       ]
@@ -1237,8 +1237,8 @@
           "description": "Related concept: `top`, `bottom`, `left`, `right`."
         },
         {
-          "module": "02-css",
           "term": "stacking_context",
+          "module": "02-css",
           "description": "Stacking context."
         }
       ]
@@ -1369,8 +1369,8 @@
           "description": "Another visual trigger that creates a context."
         },
         {
-          "module": "02-css",
           "term": "position_absolute_fixed",
+          "module": "02-css",
           "description": "Related concept: `position: absolute` vs `fixed`."
         }
       ]
@@ -1504,8 +1504,8 @@
           "description": "Related concept: Flexbox (Concept) & `display: flex`."
         },
         {
-          "module": "02-css",
           "term": "display_flex",
+          "module": "02-css",
           "description": "Related concept: `display: flex`."
         }
       ]
@@ -1541,6 +1541,58 @@
           "term": "flex_direction",
           "module": "02-css",
           "description": "Related concept: `flex-direction`."
+        }
+      ]
+    },
+    "display_flex": {
+      "level": 5,
+      "file": "terms/level_05/display_flex.md",
+      "display_name": "`display: flex` — Flexbox Container",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Understanding content, padding, border, and margin dimensions."
+        },
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "Block vs inline layout formatting contexts."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Controls the main axis direction (row vs column)."
+        },
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "Controls item alignment along the main axis."
+        },
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "Controls item alignment along the cross axis."
+        },
+        {
+          "term": "flex_wrap",
+          "module": "02-css",
+          "description": "Controls multi-line wrapping behavior."
+        },
+        {
+          "term": "display_grid",
+          "module": "02-css",
+          "description": "Two-dimensional grid layout module."
+        },
+        {
+          "module": "02-css",
+          "term": "display"
+        },
+        {
+          "module": "02-css",
+          "term": "float_clear"
         }
       ]
     },
@@ -1587,8 +1639,8 @@
           "description": "Related concept: `@media` (Media Queries Basics)."
         },
         {
-          "module": "02-css",
           "term": "display_flex",
+          "module": "02-css",
           "description": "Related concept: `display: flex`."
         }
       ]
@@ -1699,8 +1751,8 @@
           "description": "Distributes multiple rows of wrapped items."
         },
         {
-          "module": "02-css",
           "term": "display_flex",
+          "module": "02-css",
           "description": "Related concept: `display: flex`."
         }
       ]
@@ -1743,8 +1795,8 @@
           "description": "Related concept: Flexbox (Concept) & `display: flex`."
         },
         {
-          "module": "02-css",
           "term": "display_flex",
+          "module": "02-css",
           "description": "Flexbox parent container."
         }
       ]
@@ -1789,8 +1841,8 @@
           "description": "The parent blueprint properties where the `fr` unit is declared."
         },
         {
-          "module": "02-css",
           "term": "grid_concept",
+          "module": "02-css",
           "description": "Fractional fr unit in CSS Grid layout."
         }
       ],
@@ -1823,8 +1875,8 @@
           "description": "`gap` only works if the parent container is a Grid or a Flexbox!"
         },
         {
-          "module": "02-css",
           "term": "display",
+          "module": "02-css",
           "description": "Row and column spacing in Grid and Flexbox containers."
         }
       ],
@@ -1901,8 +1953,8 @@
           "description": "Grid uses similar concepts (like Parent/Child relationships and `gap`), but takes them to the next level."
         },
         {
-          "module": "02-css",
           "term": "display",
+          "module": "02-css",
           "description": "CSS Grid two-dimensional layout model."
         }
       ],
@@ -1928,8 +1980,8 @@
           "description": "The fractional grid track unit."
         },
         {
-          "module": "02-css",
           "term": "grid_template_areas",
+          "module": "02-css",
           "description": "Named grid areas."
         },
         {
@@ -1950,8 +2002,8 @@
           "description": "The parent properties that define the grid lines items place themselves against."
         },
         {
-          "module": "02-css",
           "term": "grid_concept",
+          "module": "02-css",
           "description": "Placing grid items inside CSS Grid containers."
         }
       ],
@@ -2006,8 +2058,8 @@
           "description": "Related concept: `fr` Unit (Fractional Unit)."
         },
         {
-          "module": "02-css",
           "term": "grid_repeat",
+          "module": "02-css",
           "description": "repeat() function."
         }
       ]
@@ -2040,8 +2092,8 @@
           "description": "Keywords used inside `repeat()` to automate responsive grid counts."
         },
         {
-          "module": "02-css",
           "term": "grid_minmax",
+          "module": "02-css",
           "description": "Related concept: `minmax()` Function."
         }
       ]
@@ -2123,8 +2175,8 @@
           "description": "Placing items manually."
         },
         {
-          "module": "02-css",
           "term": "grid_concept",
+          "module": "02-css",
           "description": "Related concept: CSS Grid (Concept) & `display: grid`."
         }
       ]
@@ -2140,8 +2192,8 @@
           "description": "If `line-height` is vertical spacing for text, these are the horizontal equivalents."
         },
         {
-          "module": "02-css",
           "term": "font_size_weight",
+          "module": "02-css",
           "description": "Text spacing relative to font sizing."
         }
       ],
@@ -2193,8 +2245,8 @@
           "description": "`text-overflow` relies entirely on `white-space: nowrap` to work!"
         },
         {
-          "module": "02-css",
           "term": "overflow",
+          "module": "02-css",
           "description": "Handling text overflow with text-overflow: ellipsis."
         }
       ],
@@ -2222,8 +2274,8 @@
           "description": "The shadow needs a color value."
         },
         {
-          "module": "02-css",
           "term": "color_values",
+          "module": "02-css",
           "description": "Applying drop shadows to text elements."
         }
       ],
@@ -2540,8 +2592,8 @@
           "description": "Sizing relative to the viewport."
         },
         {
-          "module": "02-css",
           "term": "responsive_design",
+          "module": "02-css",
           "description": "Related concept: Responsive Design (Concept)."
         }
       ]
@@ -2589,13 +2641,13 @@
           "description": "Related concept: `min()`, `max()`, `clamp()` (Responsive Functions)."
         },
         {
-          "module": "02-css",
           "term": "rem_em",
+          "module": "02-css",
           "description": "Relative font units."
         },
         {
-          "module": "02-css",
           "term": "viewport_units",
+          "module": "02-css",
           "description": "Viewport units (vw, vh)."
         }
       ]
@@ -2628,8 +2680,8 @@
           "description": "Fluid constraints to pair with viewport heights."
         },
         {
-          "module": "02-css",
           "term": "responsive_design",
+          "module": "02-css",
           "description": "Related concept: Responsive Design (Concept)."
         }
       ]
@@ -2838,8 +2890,8 @@
           "description": "The parent container properties."
         },
         {
-          "module": "02-css",
           "term": "color_values",
+          "module": "02-css",
           "description": "Linear and radial color gradients."
         }
       ],
@@ -3193,8 +3245,8 @@
           "description": "Base color value properties."
         },
         {
-          "module": "02-css",
           "term": "color_values",
+          "module": "02-css",
           "description": "Styling native form controls with accent-color."
         }
       ],
@@ -3258,8 +3310,8 @@
           "description": "Target elements relative to parent-child tree layouts."
         },
         {
-          "module": "02-css",
           "term": "selectors",
+          "module": "02-css",
           "description": "Related concept: Selectors (Element, Class, ID)."
         }
       ]
@@ -3321,8 +3373,8 @@
           "description": "Positional structural styling hooks."
         },
         {
-          "module": "02-css",
           "term": "selectors",
+          "module": "02-css",
           "description": "Related concept: Selectors (Element, Class, ID)."
         }
       ]
@@ -3393,7 +3445,7 @@
     "import": {
       "level": 11,
       "file": "terms/level_11/import.md",
-      "display_name": "`@import` Rule",
+      "display_name": "`@import`",
       "prerequisites": [],
       "related": [
         {
@@ -3625,42 +3677,6 @@
           "description": "Related concept: `calc()`."
         }
       ]
-    },
-    "display_flex": {
-      "file": "terms/level_05/display_flex.md",
-      "prerequisites": [],
-      "related": [
-        {
-          "module": "02-css",
-          "term": "display"
-        },
-        {
-          "module": "02-css",
-          "term": "float_clear"
-        },
-        {
-          "module": "02-css",
-          "term": "flex_direction",
-          "description": "flex-direction."
-        },
-        {
-          "module": "02-css",
-          "term": "justify_content",
-          "description": "justify-content."
-        },
-        {
-          "module": "02-css",
-          "term": "align_items",
-          "description": "align-items."
-        },
-        {
-          "module": "02-css",
-          "term": "flex_wrap",
-          "description": "flex-wrap."
-        }
-      ],
-      "display_name": "`display: flex`",
-      "level": 5
     }
   }
 }

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `accent-color` is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Supported natively. Tells the browser's form control renderer to replace default User-Agent coloring hooks with custom values).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Native HTML form elements—like checkboxes, radio buttons, sliders, and progress bars—have default designs applied by the browser. 
@@ -163,7 +159,7 @@ input[type="radio"] {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to style text inputs or buttons with `accent-color`
 
@@ -209,7 +205,7 @@ input[type="radio"] { accent-color: #ffff00; } /* ❌ Low contrast against white
 input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility tint */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Form Colors Theme
 
@@ -272,12 +268,12 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 >
 > **Explanation:** `accent-color` applies brand tinting to native interactive form controls.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — `:checked` and `:disabled` form selectors.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `accent-color` sets the primary theme color of native HTML form controls.
 - Supported controls include checkboxes, radio buttons, range sliders, and progress bars.
 - Eliminates the need to write complex pseudo-element hacks to color form controls.

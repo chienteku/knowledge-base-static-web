@@ -308,7 +308,7 @@ fn get_dangling<'a>() -> &'a str {
 - [Borrow Checker](../level_03/borrow_checker.md) — The system NLL is the modern operating model for.
 - [Lifetime (`'a`)](lifetime.md) — What NLL redefines the practical *ending point* of.
 - [Reborrowing & Two-Phase Borrows](../level_03/reborrowing.md) — A closely related refinement that also loosened overly strict early borrow-checker behavior.
-- [Polonius](../level_19/polonius.md) — Related concept: Polonius.
+- [Polonius (Next Borrow Checker)](../level_19/polonius.md) — Related concept: Polonius.
 
 ---
 

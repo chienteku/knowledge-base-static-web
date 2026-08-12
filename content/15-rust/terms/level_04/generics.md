@@ -8,8 +8,8 @@
 ## 1. Prerequisites
 
 
-- [`fn` (Functions)](../level_01/fn.md) — The primary place you will write generic code.
-- [Struct](../level_02/struct.md)
+- [fn](../level_01/fn.md) — The primary place you will write generic code.
+- [Struct](../level_02/struct.md) — 
 - [Trait](trait.md) — The mechanism used to restrict what a generic type is allowed to do.
 
 ---

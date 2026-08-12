@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support .)**: `tabindex` Attribute is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Natively supported by all browsers to control keyboard tab navigation paths).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Many users navigate websites without a mouse. They might have visual or motor control impairments, or they might simply prefer using keyboard shortcuts. These users navigate by pressing the **`Tab` key** to move focus forward through interactive elements, and **`Shift + Tab`** to move backward.
@@ -118,7 +114,7 @@ Comparing focus properties:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Making static text focusable
 
@@ -169,7 +165,7 @@ Comparing focus properties:
 <div class="custom-btn" tabindex="0" role="button" onclick="save()">Save</div>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Menu Navigation Repair
 
@@ -225,7 +221,7 @@ Comparing focus properties:
 >
 > **Explanation:** `tabindex="-1"` allows programmatic JS `.focus()` without inserting element into tab flow.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<button>`](../level_05/button.md) — The standard focusable trigger.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Focusable navigation elements.
 - [`id` Attribute](id.md) — Unique identifiers.
@@ -234,7 +230,7 @@ Comparing focus properties:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `tabindex` attribute manages keyboard focus sequences.
 - Use `tabindex="0"` to insert non-interactive elements (like custom toggles) into the natural focus order.
 - Use `tabindex="-1"` to block focus on elements that are hidden or off-screen.

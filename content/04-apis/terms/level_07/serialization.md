@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Computer Science Concept / Networking**
+
+**Computer Science Concept / Networking (Universal .)**: Serialization & Deserialization is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Applies to all programming languages).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Inside your computer's RAM, a JavaScript Object (or a Python Dictionary, or a Java Class) is incredibly complex. It has memory addresses, hidden prototype chains, and attached functions. 
@@ -43,7 +39,7 @@ Only raw Data survives serialization:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to send a literal Object
 
@@ -101,63 +97,150 @@ JSON.stringify({ socketId: activeSocket.id }); // Serialize primitive identifier
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Phase
+### Exercise 1: Canonical JSON Serializer for Cryptographic Signatures
 
-**Problem:** You make a `GET` request. The server replies with a payload. You run `await response.json()`. Which concept is happening here? Serialization or Deserialization?
+**Scenario:** A security library serializes objects into canonical sorted-key JSON strings to guarantee consistent SHA-256 signature generation.
 
-**Expected output:**
+**Requirements:**
+1. Write canonicalJsonStringify(obj).
+2. Sort object keys recursively.
+3. Return canonical JSON string.
+
 > [!check]- Answer
-> ```text
-> Deserialization. 
-> The server sent you a flat string of text over the network. The `.json()` method takes that flat string and "rebuilds the LEGO castle," turning it back into a usable JavaScript object in your browser's RAM.
+>
+> #### Implementation
+>
+> ```javascript
+> function canonicalJsonStringify(obj) {
+>   if (obj === null || typeof obj !== "object") {
+>     return JSON.stringify(obj);
+>   }
+>
+>   if (Array.isArray(obj)) {
+>     return `[${obj.map(canonicalJsonStringify).join(",")}]`;
+>   }
+>
+>   const sortedKeys = Object.keys(obj).sort();
+>   const keyValues = sortedKeys.map(key => {
+>     return `${JSON.stringify(key)}:${canonicalJsonStringify(obj[key])}`;
+>   });
+>
+>   return `{${keyValues.join(",")}}`;
+> }
+>
+> // Verification tests
+> const objA = { b: 2, a: 1 };
+> const objB = { a: 1, b: 2 };
+>
+> const strA = canonicalJsonStringify(objA);
+> const strB = canonicalJsonStringify(objB);
+>
+> console.assert(strA === '{"a":1,"b":2}', "Test 1 Failed");
+> console.assert(strA === strB, "Test 2 Failed: Objects with different key orders must produce identical canonical string");
 > ```
-> - Are you flattening a castle into a box, or taking it out of the box and building it?
+>
+> #### Technical Explanation
+>
+> 1. **Serialization Definition**: Process of converting in-memory data structures into a string or byte stream for transmission/storage.
+> 2. **Key Order Instability**: Standard JSON.stringify does NOT guarantee key iteration order, causing cryptographic signature mismatches.
+> 3. **Canonical JSON**: Deterministic serialization format ensuring identical objects produce byte-for-byte identical output.
 > 
 ---
 
-### Exercise 2: DTO (Data Transfer Object) Pattern
+### Exercise 2: Complex Map & Set Serialization Decorator
 
-**Problem:** What is the primary role of a DTO (Data Transfer Object) in API serialization?
+**Scenario:** A serialization helper extends `JSON.stringify` to support native JavaScript `Map` and `Set` collections.
 
-**Expected output:**
+**Requirements:**
+1. Write stringifyWithMapsAndSets(obj).
+2. Convert Map to object/entries array, Set to array in replacer.
+
 > [!check]- Answer
-> ```text
-> A DTO defines a clean, explicit data structure specifically formatted for network transmission, decoupling internal database entities from external API contracts.
-> ```
-> ```text
-> A DTO defines a clean, explicit data structure specifically formatted for network transmission, decoupling internal database entities from external API contracts.
-> ```
-> - **Explanation:** DTOs isolate API contracts from database schema changes.
----
-
-### Exercise 3: Custom toJSON Method
-
-**Problem:** How does defining a `.toJSON()` method on a JavaScript class customize its `JSON.stringify()` output?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> JSON.stringify() automatically calls an object's .toJSON() method and serializes whatever value it returns.
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class User {
-> constructor(id, pass) { this.id = id; this.pass = pass; }
-> toJSON() { return { id: this.id }; } // Omits password during JSON.stringify()
+> function stringifyWithMapsAndSets(obj) {
+>   return JSON.stringify(obj, (key, value) => {
+>     if (value instanceof Map) {
+>       return { _dataType: "Map", value: Array.from(value.entries()) };
+>     }
+>     if (value instanceof Set) {
+>       return { _dataType: "Set", value: Array.from(value.values()) };
+>     }
+>     return value;
+>   });
 > }
+>
+> // Verification tests
+> const data = {
+>   tags: new Set(["js", "api"]),
+>   users: new Map([["u1", "Alice"]])
+> };
+>
+> const json = stringifyWithMapsAndSets(data);
+> console.assert(json.includes('"_dataType":"Set"'), "Test 1 Failed");
+> console.assert(json.includes('"_dataType":"Map"'), "Test 2 Failed");
 > ```
-> - **Explanation:** `.toJSON()` provides explicit serialization controls on JS objects.
+>
+> #### Technical Explanation
+>
+> 1. **Map/Set Serialization Defect**: By default, JSON.stringify serializes Map and Set objects as empty `{}` objects.
+> 2. **Custom Replacer Types**: Decorating serialized payloads with type hints (_dataType) enables accurate deserialization.
+> 3. **Data Loss Prevention**: Ensures modern ES6 collection structures survive JSON transport.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Binary Struct Serialization Engine
+
+**Scenario:** Serializes JavaScript objects directly into fixed-width binary ArrayBuffer byte streams.
+
+**Requirements:**
+1. Write serializeStruct(dataObj).
+2. Pack fields into ArrayBuffer.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function serializeStruct(dataObj) {
+>   // Struct: id (Uint32, 4B), score (Uint16, 2B) = 6 Bytes
+>   const buf = new ArrayBuffer(6);
+>   const view = new DataView(buf);
+>
+>   view.setUint32(0, dataObj.id || 0);
+>   view.setUint16(4, dataObj.score || 0);
+>
+>   return buf;
+> }
+>
+> // Verification tests
+> const buf = serializeStruct({ id: 100, score: 95 });
+> console.assert(buf.byteLength === 6, "Test 1 Failed");
+>
+> const view = new DataView(buf);
+> console.assert(view.getUint32(0) === 100, "Test 2 Failed");
+> console.assert(view.getUint16(4) === 95, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Binary Struct Serialization**: Packs object attributes into low-level binary memory buffers without text encoding.
+> 2. **Zero Overhead**: Eliminates string quote, colon, and comma characters.
+> 3. **Embedded Systems Use**: Standard serialization method for C/C++ microcontrollers and low-latency networking.
+---
+
+## 6. Related Terms
 - [JSON Methods (parse / stringify)](json_methods.md) — The actual JavaScript functions used to execute this concept.
 - [Content-Type & MIME Types](../level_02/content_type.md) — Related concept: Content-Type & MIME Types.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — Related concept: JSON (JavaScript Object Notation).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Serialization** is converting a live code object into a flat string of text (for network travel or saving to a database).
 - **Deserialization** is parsing that string of text back into a live code object.
 - Functions and complex memory references cannot be serialized.

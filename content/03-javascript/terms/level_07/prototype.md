@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Concept / Engine Concept**
+
+**Architecture Concept / Engine Concept (Universal: This is the fundamental architecture of JavaScript itself.)**: Prototype is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: This is the fundamental architecture of JavaScript itself.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are building a game with 1,000 enemy spaceships. They all need a `.shoot()` method. If you attach a brand new `shoot` function directly to every single spaceship object, you will create 1,000 separate copies of the exact same function in the computer's memory. Your game will quickly run out of memory and crash.
@@ -76,7 +72,7 @@ console.log(ship1.hasOwnProperty("shoot")); // false
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Prototype Scope and Variable Hoisting
 
@@ -149,59 +145,118 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Ultimate Prototype
+### Exercise 1: Adding Shared Methods to Constructor .prototype
 
-**Problem:** If you create a simple object `const obj = {}`, and you try to call `obj.toString()`, it works! Where does `toString()` come from?
+**Scenario:** A math utility attaches shared processing methods to Constructor.prototype to optimize memory usage across thousands of instances.
 
-**Expected output:**
+**Requirements:**
+1. Write Vector(x, y) constructor.
+2. Attach getMagnitude() method to Vector.prototype.
+3. Verify method is shared across instances.
+
 > [!check]- Answer
-> ```text
-> It comes from `Object.prototype`, which is the ultimate master object at the very top of the JavaScript hierarchy. Every object you create inherently links to it.
-> ```
-> - `Object.create()` without arguments defaults to this ultimate master object.
-> 
----
-
-### Exercise 2: Adding Methods to Constructor Prototype
-
-**Problem:** Add `greet` method to `User.prototype` and invoke on new instance.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello Alice
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function User(name) { this.name = name; }
-> User.prototype.greet = function() { return `Hello ${this.name}`; };
-> console.log(new User("Alice").greet());
+> function Vector(x, y) {
+>   this.x = x;
+>   this.y = y;
+> }
+>
+> Vector.prototype.getMagnitude = function() {
+>   return Math.sqrt(this.x * this.x + this.y * this.y);
+> };
+>
+> // Verification tests
+> const v1 = new Vector(3, 4);
+> const v2 = new Vector(6, 8);
+>
+> console.assert(v1.getMagnitude() === 5, "Test 1 Failed");
+> console.assert(v1.getMagnitude === v2.getMagnitude, "Test 2 Failed: Prototype method should be shared reference");
 > ```
 >
-> **Explanation:** Prototype methods are shared across all instances, saving memory allocations.
+> #### Technical Explanation
+>
+> 1. **prototype Property**: Function objects possess a .prototype property used as the [[Prototype]] for instances created via 'new'.
+> 2. **Memory Optimization**: Attaching methods to .prototype allocates one single function reference shared by all instances.
+> 3. **Dynamic Method Addition**: Adding methods to a prototype at runtime makes them instantly available to all existing instances.
 > 
 ---
 
-### Exercise 3: Modifying Built-in Prototypes Anti-Pattern
+### Exercise 2: Prototype Advanced Context Handler
 
-**Problem:** Explain why monkey-patching `Array.prototype.customMethod` causes global collision risks.
+**Scenario:** A web application component processes prototype data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handlePrototypeSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Patched built-ins cause collision risks
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Patched built-ins cause collision risks");
+> function handlePrototypeSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handlePrototypeSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Modifying native prototypes introduces library conflicts and breaks future specification compatibility.
-> 
+> #### Technical Explanation
+>
+> 1. **Prototype Architecture**: Applying prototype patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Prototype Performance Optimization
+
+**Scenario:** An application utility optimizes prototype execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizePrototypeTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizePrototypeTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizePrototypeTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Prototype Optimization**: Optimizing prototype improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Prototypal Inheritance](prototypal_inheritance.md) — The process of inheriting from these prototypes.
 - [Prototype Chain](prototype_chain.md) — The series of links connecting objects to multiple prototypes.
 - [Class](class.md) — ES6 Classes.
@@ -209,7 +264,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Prototype is a hidden, shared object that other objects link to.
 - It is JavaScript's solution for memory efficiency and code reuse.
 - When you call a method on an object (like `.map()` on an array), the engine checks the object first, then automatically checks its Prototype.

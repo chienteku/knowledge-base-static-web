@@ -237,7 +237,7 @@ let val = parse().ok().and_then(|p| p.get());
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

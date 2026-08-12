@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Pseudo-class**
+
+**CSS Pseudo-class (Universal Modern Standard .)**: `:hover` & `:focus` (Pseudo-classes) is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The foundation of interactive UI).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A website shouldn't feel like a static painting; it should respond to the user. When a user points their mouse at a button, the button should react (maybe turning a darker color) to confirm, "Yes, I am a button, and you are currently pointing at me."
@@ -60,7 +56,7 @@ When you walk away, it instantly turns back off.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that Mobile Phones don't have mice
 
@@ -118,7 +114,7 @@ button:focus-visible {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Active Input
 
@@ -174,7 +170,7 @@ button:focus-visible {
 >
 > **Explanation:** `@media (hover: hover)` prevents sticky hover states on mobile touchscreens.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`transition`](../level_10/transition.md) — Making state adjustments smooth and animated.
 - [`cursor`](cursor.md) — Changing pointer graphics on hover states.
 - [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Double-colon structural selectors.
@@ -183,7 +179,7 @@ button:focus-visible {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Pseudo-classes (starting with `:`) style elements based on their current state.
 - `:hover` triggers when the mouse pointer is over the element. (Does not work on Mobile!).
 - `:focus` triggers when the element is actively selected (clicked on or tabbed to).

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Design Patterns (Module, Singleton, Observer, Factory) is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing applications, developers repeatedly face identical architectural challenges: "How do we hide internal variables?" or "How do we guarantee that only one configuration manager ever exists?" or "How do we notify multiple components when a state updates?"
@@ -141,7 +137,7 @@ clickSubject.notify({ buttonClicked: "submit" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Design Patterns Scope and Variable Hoisting
 
@@ -214,85 +210,186 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Factory
+### Exercise 1: Singleton Database Connection Manager
 
-**Problem:** Complete the `toyFactory` function to return a new object depending on the `type` parameter.
+**Scenario:** An enterprise application enforces a Singleton pattern on its database connection pool to ensure only a single instance exists across the app runtime.
 
-```javascript
-function toyFactory(type, name) {
-  // If type is "car", return { name, roll() { return "Vroom!"; } }
-  // If type is "doll", return { name, speak() { return "Hello!"; } }
-}
-
-const toy1 = toyFactory("car", "Speedy");
-const toy2 = toyFactory("doll", "Barbie");
-
-console.log(toy1.roll()); // "Vroom!"
-console.log(toy2.speak()); // "Hello!"
-```
+**Requirements:**
+1. Write DatabasePool class.
+2. Store static #instance reference.
+3. Constructor returns #instance if already created.
+4. Provide query() method.
 
 > [!check]- Answer
-> - Use an `if/else` or `switch` check on `type` to return the appropriate object literal structure.
-> 
----
-
-### Exercise 2: Singleton Pattern with Static Instance
-
-**Problem:** Implement a Singleton `DatabaseConnection` class returning a single shared instance.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class DatabaseConnection {
->   static instance;
->   constructor() {
->     if (DatabaseConnection.instance) return DatabaseConnection.instance;
->     DatabaseConnection.instance = this;
+> class DatabasePool {
+>   static #instance = null;
+>
+>   constructor(connectionString) {
+>     if (DatabasePool.#instance) {
+>       return DatabasePool.#instance;
+>     }
+>     this.connectionString = connectionString;
+>     this.connected = true;
+>     DatabasePool.#instance = this;
+>   }
+>
+>   static getInstance(connectionString) {
+>     if (!DatabasePool.#instance) {
+>       DatabasePool.#instance = new DatabasePool(connectionString);
+>     }
+>     return DatabasePool.#instance;
+>   }
+>
+>   query(sql) {
+>     return `Executed: ${sql}`;
 >   }
 > }
-> console.log(new DatabaseConnection() === new DatabaseConnection());
+>
+> // Verification tests
+> const db1 = new DatabasePool("postgres://localhost:5432/main");
+> const db2 = new DatabasePool("postgres://remote:5432/other");
+>
+> console.assert(db1 === db2, "Test 1 Failed: Singleton must return identical instance");
+> console.assert(db2.connectionString === "postgres://localhost:5432/main", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Singletons guarantee that only one instance of a class exists across applications.
+> #### Technical Explanation
+>
+> 1. **Singleton Pattern Purpose**: Ensures a class has only one instance and provides a global access point to that instance.
+> 2. **Constructor Return Override**: Returning an existing instance from a constructor overrides standard new object allocation.
+> 3. **Resource Sharing**: Prevents duplicate database connection pools and resource exhaustion across module imports.
 > 
 ---
 
-### Exercise 3: Observer Pub/Sub Pattern
+### Exercise 2: Observer Pattern Event Publisher & Subscriber
 
-**Problem:** Create a `EventEmitter` supporting `.on(event, cb)` and `.emit(event, data)`.
+**Scenario:** A real-time state management store implements the Observer pattern, allowing UI components to subscribe to state change notifications.
 
-**Expected output:**
+**Requirements:**
+1. Write EventPublisher class.
+2. Maintain private subscribers map.
+3. Implement subscribe(event, listener), unsubscribe, and publish(event, data).
+
 > [!check]- Answer
-> ```text
-> Event data: 42
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class EventEmitter {
->   events = {};
->   on(evt, cb) { (this.events[evt] ||= []).push(cb); }
->   emit(evt, data) { this.events[evt]?.forEach(cb => cb(data)); }
+> class EventPublisher {
+>   constructor() {
+>     this.subscribers = new Map();
+>   }
+>
+>   subscribe(event, listener) {
+>     if (!this.subscribers.has(event)) {
+>       this.subscribers.set(event, new Set());
+>     }
+>     this.subscribers.get(event).add(listener);
+>
+>     return () => {
+>       const set = this.subscribers.get(event);
+>       if (set) set.delete(listener);
+>     };
+>   }
+>
+>   publish(event, data) {
+>     const set = this.subscribers.get(event);
+>     if (set) {
+>       set.forEach(listener => listener(data));
+>     }
+>   }
 > }
-> const ee = new EventEmitter();
-> ee.on("test", d => console.log(`Event data: ${d}`));
-> ee.emit("test", 42);
+>
+> // Verification tests
+> const bus = new EventPublisher();
+> let received = null;
+> const unsubscribe = bus.subscribe("USER_LOGIN", user => { received = user.name; });
+>
+> bus.publish("USER_LOGIN", { name: "Alice" });
+> console.assert(received === "Alice", "Test 1 Failed");
+>
+> unsubscribe();
+> bus.publish("USER_LOGIN", { name: "Bob" });
+> console.assert(received === "Alice", "Test 2 Failed: Unsubscribed listener should not receive updates");
 > ```
 >
-> **Explanation:** Observer/PubSub patterns decouple event producers from event consumers.
-> 
+> #### Technical Explanation
+>
+> 1. **Observer Pattern Purpose**: Defines a one-to-many dependency between objects so that when one object changes state, all dependents are notified.
+> 2. **Decoupled Architecture**: Publishers and subscribers operate independently without hardcoded cross-component references.
+> 3. **Set Collection for Listeners**: Using Set instances prevents duplicate listener registrations and provides fast deletion.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Factory Method Pattern for Payment Gateways
+
+**Scenario:** A multi-tenant billing platform uses the Factory Method pattern to instantiate appropriate payment processor implementations dynamically based on provider type.
+
+**Requirements:**
+1. Write PaymentGatewayFactory.
+2. Implement createProcessor(providerType).
+3. Support "stripe" and "paypal" processors.
+4. Throw error for unsupported provider.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> class StripeProcessor {
+>   processPayment(amount) {
+>     return { status: "SUCCESS", provider: "stripe", charged: amount };
+>   }
+> }
+>
+> class PayPalProcessor {
+>   processPayment(amount) {
+>     return { status: "SUCCESS", provider: "paypal", charged: amount };
+>   }
+> }
+>
+> class PaymentGatewayFactory {
+>   static createProcessor(providerType) {
+>     switch (providerType.toLowerCase()) {
+>       case "stripe":
+>         return new StripeProcessor();
+>       case "paypal":
+>         return new PayPalProcessor();
+>       default:
+>         throw new Error(`Unsupported payment provider: ${providerType}`);
+>     }
+>   }
+> }
+>
+> // Verification tests
+> const stripe = PaymentGatewayFactory.createProcessor("stripe");
+> const res1 = stripe.processPayment(50);
+> console.assert(res1.provider === "stripe" && res1.charged === 50, "Test 1 Failed");
+>
+> const paypal = PaymentGatewayFactory.createProcessor("paypal");
+> const res2 = paypal.processPayment(100);
+> console.assert(res2.provider === "paypal", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Factory Method Pattern Purpose**: Defines an interface for creating objects, delegating instantiation logic to factory subclasses or static methods.
+> 2. **Polymorphic Interfaces**: All created processor objects implement a common processPayment(amount) method contract.
+> 3. **Open-Closed Principle**: Adding new payment providers requires creating a new processor class and updating factory routing without altering consumer code.
+---
+
+## 6. Related Terms
 - [Class](../level_07/class.md) — The object-oriented blueprint wrapper.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Design Patterns are reusable solutions to recurring software architecture challenges.
 - The Module Pattern uses closures to seal private state, exposing a public API object.
 - The Singleton Pattern locks a class to exactly one instance throughout execution.

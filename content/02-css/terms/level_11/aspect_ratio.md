@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Modern Standard .)**: `aspect-ratio` is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Instructs the browser layout engine to allocate canvas dimensions immediately before resources finish downloading over the network stream).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building responsive websites, you often need boxes to maintain a specific shape:
@@ -141,7 +137,7 @@ Alternative layouts:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Locking both width and height explicitly
 
@@ -200,7 +196,7 @@ Alternative layouts:
 .card { width: 300px; height: auto; aspect-ratio: 16 / 9; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Square Profile Grid
 
@@ -262,12 +258,12 @@ Alternative layouts:
 >
 > **Explanation:** `object-fit: cover` pairs with `aspect-ratio` to prevent image distortion.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`object-fit` & `object-position`](../level_09/object_fit.md) — Standard scaling for cropped media contents inside locked boxes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `aspect-ratio` maintains a fixed width-to-height ratio during resizes.
 - Standard format syntax is width-to-height (e.g., `16 / 9`).
 - Prevents Cumulative Layout Shift (CLS) by reserving space before files download.

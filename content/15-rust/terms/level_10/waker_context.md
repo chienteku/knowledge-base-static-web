@@ -329,7 +329,7 @@ Always update saved wakers: self.waker = Some(cx.waker().clone());
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`Future` Trait](future_trait.md) — Polling futures via Waker.
 - [Executor / Runtime](executor_runtime.md) — Task executors.

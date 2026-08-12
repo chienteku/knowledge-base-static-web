@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Client-Side Database**
+
+**Browser API / Client-Side Database (Client-Side)**: IndexedDB is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser Only)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to save a few strings of text in the browser, [localStorage](../level_09/web_storage.md) is great. But what if you are building an offline web app (like Google Docs) and need to save 500 Megabytes of documents, images, and user data so the app works without Wi-Fi?
@@ -40,7 +36,7 @@ IndexedDB is notoriously difficult to code from scratch.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not preparing for Data Wipes
 
@@ -93,67 +89,186 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Which Storage?
+### Exercise 1: IndexedDB Promisified ObjectStore Wrapper
 
-**Problem:** For the following 3 scenarios, would you use `localStorage` or `IndexedDB`?
-1. Saving a simple boolean `{"soundEnabled": false}`.
-2. Saving 5,000 JSON records of a user's previous workouts so the app works on an airplane.
-3. Saving a 10MB audio file recorded by the user.
+**Scenario:** A client data layer wraps low-level asynchronous `IndexedDB` transaction requests into modern Promise-returning functions.
 
-**Expected output:**
+**Requirements:**
+1. Write putIndexedDbItem(mockDb, storeName, key, value).
+2. Open readwrite transaction.
+3. Put item and resolve promise.
+
 > [!check]- Answer
-> ```text
-> 1. localStorage (It's tiny text).
-> 2. IndexedDB (localStorage would crash trying to stringify and store 5,000 complex records, plus IndexedDB allows for fast searching/indexing).
-> 3. IndexedDB (localStorage literally cannot store binary audio files).
+>
+> #### Implementation
+>
+> ```javascript
+> function putIndexedDbItem(mockDb, storeName, key, value) {
+>   return new Promise((resolve, reject) => {
+>     const tx = mockDb.transaction(storeName, "readwrite");
+>     const store = tx.objectStore(storeName);
+>     const request = store.put(value, key);
+>
+>     request.onsuccess = () => resolve(true);
+>     request.onerror = (e) => reject(request.error || new Error("IndexedDB Put Failed"));
+>   });
+> }
+>
+> // Verification tests
+> const mockStore = new Map();
+> const mockDb = {
+>   transaction: () => ({
+>     objectStore: () => ({
+>       put: (val, k) => {
+>         mockStore.set(k, val);
+>         const req = {};
+>         setTimeout(() => { if (req.onsuccess) req.onsuccess(); }, 5);
+>         return req;
+>       }
+>     })
+>   })
+> };
+>
+> putIndexedDbItem(mockDb, "users", "u1", { name: "Alice" }).then(res => {
+>   console.assert(res === true, "Test 1 Failed");
+>   console.assert(mockStore.get("u1").name === "Alice", "Test 2 Failed");
+> });
 > ```
-> - Does it exceed 5MB? Is it a file?
+>
+> #### Technical Explanation
+>
+> 1. **IndexedDB Purpose**: Low-level browser NoSQL database for storing large amounts of structured data (blobs, objects, files).
+> 2. **Event Request Architecture**: IndexedDB operations are asynchronous and return IDBRequest objects with onsuccess/onerror callbacks.
+> 3. **Transaction Scoping**: All data mutations must occur inside explicit readwrite or readonly transactions.
 > 
 ---
 
-### Exercise 2: IndexedDB vs Web Storage (LocalStorage)
+### Exercise 2: IndexedDB Schema Upgrade & Migration Handler
 
-**Problem:** Compare IndexedDB vs LocalStorage across:
-1. Storage capacity limits
-2. Asynchronous vs Synchronous
-3. Binary & Indexed Object support
+**Scenario:** Implements an `onupgradeneeded` handler to create ObjectStores and index definitions during database schema version upgrades.
 
-**Expected output:**
+**Requirements:**
+1. Write handleDbUpgrade(db, oldVersion, newVersion).
+2. Create ObjectStore 'orders' with keyPath 'id'.
+3. Create index 'userId'.
+
 > [!check]- Answer
-> ```text
-> 1. LocalStorage: ~5MB limit; IndexedDB: Hundreds of MBs / GBs
-> 2. LocalStorage: Synchronous (blocks UI); IndexedDB: Asynchronous
-> 3. LocalStorage: Strings only; IndexedDB: Complex structured objects and binary Blobs
-> ```
-> ```text
-> Capacity   -> LocalStorage: ~5MB, IndexedDB: Hundreds of MBs / GBs
-> Execution  -> LocalStorage: Synchronous (UI blocking), IndexedDB: Asynchronous
-> Data Types -> LocalStorage: Strings only, IndexedDB: Objects, Blobs, ArrayBuffers
-> ```
-> - **Explanation:** IndexedDB is a high-capacity asynchronous object database in the browser.
----
-
-### Exercise 3: IndexedDB Schema Upgrade Event
-
-**Problem:** Which event handler MUST be used to create Object Stores or Indexes when opening a new IndexedDB database version?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> onupgradeneeded (or db.on('upgradeneeded'))
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> request.onupgradeneeded = (evt) => {
-> const db = evt.target.result;
-> db.createObjectStore('users', { keyPath: 'id' });
+> function handleDbUpgrade(db, oldVersion, newVersion) {
+>   const createdStores = [];
+>
+>   if (oldVersion < 1) {
+>     const orderStore = db.createObjectStore("orders", { keyPath: "id" });
+>     orderStore.createIndex("userId", "userId", { unique: false });
+>     createdStores.push("orders");
+>   }
+>
+>   if (oldVersion < 2) {
+>     db.createObjectStore("logs", { autoIncrement: true });
+>     createdStores.push("logs");
+>   }
+>
+>   return createdStores;
+> }
+>
+> // Verification tests
+> const mockDb = {
+>   createObjectStore: (name, opts) => {
+>     return { createIndex: () => {} };
+>   }
 > };
+>
+> const stores = handleDbUpgrade(mockDb, 0, 2);
+> console.assert(stores.length === 2 && stores.includes("orders") && stores.includes("logs"), "Test 1 Failed");
 > ```
-> - **Explanation:** `onupgradeneeded` executes when database version numbers increment.
+>
+> #### Technical Explanation
+>
+> 1. **onupgradeneeded Lifecycle Event**: Fires ONLY when opening a database with a higher version number than currently exists.
+> 2. **ObjectStore Creation Scope**: ObjectStores and indexes can ONLY be created or deleted inside onupgradeneeded event handlers.
+> 3. **Schema Version Management**: Enables graceful database migrations across client PWA updates.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: IndexedDB Cursor Index Query Filter
+
+**Scenario:** Queries an IndexedDB index using a cursor iterator to filter records matching specific criteria.
+
+**Requirements:**
+1. Write queryIndexByCursor(mockIndex, targetValue).
+2. Iterate cursor.
+3. Return matching records array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function queryIndexByCursor(mockIndex, targetValue) {
+>   return new Promise((resolve) => {
+>     const matches = [];
+>     const request = mockIndex.openCursor();
+>
+>     request.onsuccess = (event) => {
+>       const cursor = event.target.result;
+>       if (cursor) {
+>         if (cursor.value.category === targetValue) {
+>           matches.push(cursor.value);
+>         }
+>         cursor.continue();
+>       } else {
+>         resolve(matches); // Cursor iteration finished
+>       }
+>     };
+>   });
+> }
+>
+> // Verification tests
+> const mockItems = [
+>   { id: 1, category: "books" },
+>   { id: 2, category: "tech" }
+> ];
+>
+> let idx = 0;
+> const mockIndex = {
+>   openCursor: () => {
+>     const req = { target: {} };
+>     req.target.result = null;
+>     const iterate = () => {
+>       if (idx < mockItems.length) {
+>         const item = mockItems[idx++];
+>         req.target.result = {
+>           value: item,
+>           continue: iterate
+>         };
+>       } else {
+>         req.target.result = null;
+>       }
+>       if (req.onsuccess) req.onsuccess(req);
+>     };
+>     setTimeout(iterate, 5);
+>     return req;
+>   }
+> };
+>
+> queryIndexByCursor(mockIndex, "books").then(results => {
+>   console.assert(results.length === 1 && results[0].id === 1, "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **IndexedDB Cursors**: Iterates through rows in an ObjectStore or Index without loading the entire dataset into memory.
+> 2. **cursor.continue() Mechanics**: Advances the cursor pointer to the next record, re-triggering the onsuccess callback.
+> 3. **Indexed Search Performance**: Index cursors provide high-speed lookups over millions of client-side records.
+---
+
+## 6. Related Terms
 - [localStorage & sessionStorage](web_storage.md) — The lightweight, synchronous alternative.
 - [Service Workers](service_workers.md) — The technology that uses IndexedDB to build Progressive Web Apps (PWAs) that work entirely offline.
 - [Cache API](cache_api.md) — Related concept: Cache API.
@@ -162,7 +277,7 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **IndexedDB** is a massive, complex database built into the browser.
 - It can store Objects, Arrays, and binary Files (unlike localStorage).
 - It is entirely asynchronous (Promise/Event based) to prevent freezing the browser.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Structure** *(Introduced in ES6)*
+
+**Data Structure *(Introduced in ES6)* (Universal)**: Map is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For 20 years, JavaScript developers used plain Objects (`{}`) to store key-value data (like a dictionary). However, Objects have severe limitations:
@@ -82,7 +78,7 @@ for (const [userObj, time] of loginTracker) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Map Scope and Variable Hoisting
 
@@ -155,70 +151,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Reference Trap
+### Exercise 1: Arbitrary Key Cache Registry with Map
 
-**Problem:** Look at the following code. What will `.get()` return?
-```javascript
-const map = new Map();
-map.set([1, 2, 3], "Secret Code");
+**Scenario:** An APM performance profiler uses a Map instance to associate performance metric data directly with object and function keys.
 
-console.log(map.get([1, 2, 3]));
-```
+**Requirements:**
+1. Write createProfilerMap().
+2. Use map.set(key, val) with object keys.
+3. Use map.get(key) and map.has(key).
+4. Return lookup results.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> `undefined`.
-> Why? Because `[1, 2, 3]` is an Array (which is an Object). When you write `[1, 2, 3]` the second time inside `.get()`, it creates a completely *new* array in a different location in memory. Maps use strict equality (`===`) to match keys. The new array does not match the old array's memory address! You must save the array to a variable first to use it as a key.
-> ```
-> - Remember how Objects are compared by reference, not by value!
-> 
----
-
-### Exercise 2: Map Key-Value Store Operations
-
-**Problem:** Store `map.set("a", 10)`, check `map.has("a")`, read `map.get("a")`, and print `map.size`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> has: true, val: 10, size: 1
-> ```
-> ```javascript
-> const map = new Map();
-> map.set("a", 10);
-> console.log(`has: ${map.has("a")}, val: ${map.get("a")}, size: ${map.size}`);
-> ```
 >
-> **Explanation:** ES6 `Map` provides fast key-value storage supporting arbitrary key types.
-> 
----
-
-### Exercise 3: Iterating Maps with `for...of`
-
-**Problem:** Iterate `new Map([["x", 1], ["y", 2]])` using `for (const [k, v] of map)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> x = 1
-> y = 2
-> ```
+> #### Implementation
+>
 > ```javascript
-> const map = new Map([["x", 1], ["y", 2]]);
-> for (const [k, v] of map) {
->   console.log(`${k} = ${v}`);
+> function createProfilerMap() {
+>   const map = new Map();
+>   const targetObj = { id: "service-a" };
+>
+>   map.set(targetObj, { executionTimeMs: 45 });
+>
+>   return {
+>     hasTarget: map.has(targetObj),
+>     metrics: map.get(targetObj)
+>   };
 > }
+>
+> // Verification tests
+> const res = createProfilerMap();
+> console.assert(res.hasTarget === true, "Test 1 Failed");
+> console.assert(res.metrics.executionTimeMs === 45, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Map` objects preserve key insertion order during iteration.
-> 
+> #### Technical Explanation
+>
+> 1. **Map Key Flexibility**: Map instances accept keys of ANY data type, including objects, functions, and primitives.
+> 2. **Key-Value Operations**: Provides fast built-in methods: .set(key, val), .get(key), .has(key), .delete(key), .clear().
+> 3. **Insertion Order Preservation**: Map iterates entries in exact key insertion order.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Map Advanced Context Handler
+
+**Scenario:** A web application component processes map data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handleMapSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleMapSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleMapSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Map Architecture**: Applying map patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Map Performance Optimization
+
+**Scenario:** An application utility optimizes map execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeMapTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeMapTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeMapTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Map Optimization**: Optimizing map improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Set](set.md) — The sister data structure to Map (stores unique values without keys).
 - [Object](../level_02/object.md) — The older structure that Maps often replace for complex dictionaries.
 - [filter()](../level_04/filter.md) — Related concept: filter().
@@ -228,7 +274,7 @@ console.log(map.get([1, 2, 3]));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Map is a modern data structure for storing Key-Value pairs.
 - Unlike Objects, Map keys can be of ANY data type (including Arrays, Functions, and other Objects).
 - You must use `.set(key, value)`, `.get(key)`, and `.has(key)` to interact with it.

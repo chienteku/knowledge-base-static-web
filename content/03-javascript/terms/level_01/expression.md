@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Expression is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While statements are the "actions" a program takes, expressions are the "things" the program manipulates. A programming language needs a way to calculate new data from existing data. Expressions serve as the mechanism to evaluate code down to a single value so that the program can make decisions or store the result.
@@ -57,7 +53,7 @@ if (price - discount > 10) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing statements and expressions in Arrow Functions
 
@@ -133,71 +129,100 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Spot the Expression
+### Exercise 1: Dynamic Pricing Formula Evaluator
 
-**Problem:** Identify the expressions in the following line of code: `const result = addNumbers(10, 20) * 2;`
+**Scenario:** An e-commerce pricing engine calculates the final checkout price by evaluating a compound expression that incorporates base price, percentage discounts, volume multipliers, and fixed tax.
 
-**Expected output:**
+**Requirements:**
+1. Write a function evaluatePriceExpression(base, qty, discountRate, taxRate).
+2. Construct a single expression calculating discounted subtotal and tax.
+3. Return the evaluated total value.
+
 > [!check]- Answer
-> ```text
-> Expressions:
-> 1. `10` (resolves to 10)
-> 2. `20` (resolves to 20)
-> 3. `addNumbers(10, 20)` (resolves to whatever the function returns)
-> 4. `2` (resolves to 2)
-> 5. `addNumbers(10, 20) * 2` (resolves to the final calculated value)
-> ```
-> - Any piece of code that you could `console.log()` is an expression.
-> 
----
-
-### Exercise 2: Evaluating Expressions inside Template Literals
-
-**Problem:** Embed a ternary expression `${age >= 18 ? "Adult" : "Minor"}` inside a template literal string.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Status: Adult
-> ```
+> #### Implementation
 > ```javascript
-> const age = 20;
-> console.log(`Status: ${age >= 18 ? "Adult" : "Minor"}`);
+> function evaluatePriceExpression(base, qty, discountRate, taxRate) {
+>   const total = (base * qty * (1 - discountRate)) * (1 + taxRate);
+>   return Number(total.toFixed(2));
+> }
+> // Verification tests
+> const finalPrice = evaluatePriceExpression(50, 2, 0.1, 0.08);
+> console.assert(finalPrice === 97.20, "Test 1 Failed");
 > ```
->
-> **Explanation:** Template literal interpolations `${expression}` accept any valid JavaScript expression.
+> #### Technical Explanation
+> 1. **Expression Definition**: An expression is any valid unit of code that evaluates to a single value.
+> 2. **Expression Composition**: Expressions can be nested and combined using operators; sub-expressions evaluate first according to operator precedence.
+> 3. **Side-Effect Free Evaluation**: Pure mathematical expressions produce a value without modifying external application state.
 > 
 ---
 
-### Exercise 3: Comma Operator Expression Evaluation
+### Exercise 2: Short-Circuit Permission Expression Evaluator
 
-**Problem:** Evaluate `let x = (1 + 1, 2 + 2, 3 + 3);` and explain why `x` gets `6`.
+**Scenario:** An API router determines resource access permissions by evaluating a short-circuit logical expression without using if statements.
 
-**Expected output:**
+**Requirements:**
+1. Evaluate user permission using logical AND (&&) and logical OR (||) expressions.
+2. Ensure user isAdmin grants instant access (short-circuit).
+3. Ensure non-admins require both isSubscriber AND hasActiveToken.
+
 > [!check]- Answer
-> ```text
-> 6
-> ```
+> #### Implementation
 > ```javascript
-> let x = (1 + 1, 2 + 2, 3 + 3);
-> console.log(x);
+> function evaluateAccessExpression(user) {
+>   return Boolean(user && (user.isAdmin || (user.isSubscriber && user.hasActiveToken)));
+> }
+> // Verification tests
+> console.assert(evaluateAccessExpression({ isAdmin: true }) === true, "Test 1 Failed");
+> console.assert(evaluateAccessExpression({ isAdmin: false, isSubscriber: true, hasActiveToken: true }) === true, "Test 2 Failed");
+> console.assert(evaluateAccessExpression({ isAdmin: false, isSubscriber: true, hasActiveToken: false }) === false, "Test 3 Failed");
 > ```
->
-> **Explanation:** The comma operator evaluates each operand left-to-right and yields the value of the final rightmost expression.
-> 
+> #### Technical Explanation
+> 1. **Logical Expressions**: Logical expressions evaluate operands and return the value of the deciding operand.
+> 2. **Short-Circuiting**: In A || B, if A evaluates to truthy, B is never evaluated; in A && B, if A is falsy, B is skipped.
+> 3. **Expression As Operand**: Expressions can serve as operands inside larger containing expressions.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Immediately Invoked Function Expression (IIFE) Config Module
+
+**Scenario:** A frontend component uses an Immediately Invoked Function Expression (IIFE) to encapsulate private setup logic and evaluate an initial state configuration object.
+
+**Requirements:**
+1. Create an IIFE using expression syntax (function() { ... })().
+2. Calculate private setup variables inside the IIFE body.
+3. Return a frozen configuration object.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> const appConfig = (function() {
+>   const env = "production";
+>   const maxConnections = 100;
+> return Object.freeze({
+>     endpoint: `https://${env}.example.com/api`,
+>     maxConnections: maxConnections
+>   });
+> })();
+> // Verification tests
+> console.assert(appConfig.endpoint === "https://production.example.com/api", "Test 1 Failed");
+> console.assert(appConfig.maxConnections === 100, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Function Expressions**: A function defined within an expression context (such as parenthetical wrapping) is a Function Expression rather than a Function Declaration.
+> 2. **Immediate Invocation**: Appending () to a function expression executes it immediately, returning its evaluated return value.
+> 3. **Encapsulation**: IIFEs create an isolated lexical scope, keeping temporary setup variables from polluting the outer scope.
+---
+
+## 6. Related Terms
 - [Statement](statement.md) — An instruction that performs an action.
 - [Operator Precedence & Associativity](operator_precedence.md) — Related concept: Operator Precedence & Associativity.
 - [Template Literals](../level_08/template_literals.md) — Related concept: Template Literals.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An expression is any code that resolves to a value.
 - Expressions can be used anywhere JavaScript expects a value (e.g., passing arguments to a function, assigning a variable).
 - An expression can be as simple as a primitive value (`42`) or highly complex (`getUser().profile.age + 5`).

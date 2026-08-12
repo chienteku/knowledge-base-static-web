@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Positioning Coordinate Property**
+
+**Positioning Coordinate Property (Universal Browser Support)**: `top`, `bottom`, `left`, `right` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you declare that an element is `absolute` or `relative`, the browser needs to know *where* to put it. The W3C created four directional coordinates: `top`, `bottom`, `left`, and `right`.
@@ -53,7 +49,7 @@ If you say `top: 10px; right: 10px;`, you are telling the browser: "Start at the
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Opposing coordinates without a set width/height
 
@@ -171,7 +167,7 @@ button { position: relative; left: 15px; } /* ❌ Leaves original space gap */
 button { margin-left: 15px; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Invisible Box
 
@@ -229,14 +225,14 @@ button { margin-left: 15px; }
 >
 > **Explanation:** `inset: 0` is shorthand for top, right, bottom, and left zero offsets.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — The primary positioning properties.
 - [`position: sticky`](position_sticky.md) — The hybrid boundary scrolling property.
 - [`position: static` vs `relative`](position_static_relative.md) — These four properties **do absolutely nothing** unless the element is positioned!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `top`, `bottom`, `left`, and `right` are coordinates used to move positioned elements.
 - They are completely ignored if `position: static` (the default) is active.
 - Pinning opposing sides (e.g., `left: 0; right: 0;`) will stretch the element to fill the space.

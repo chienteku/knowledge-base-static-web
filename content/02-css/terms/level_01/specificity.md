@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept / Browser Architecture**
+
+**Core Concept / Browser Architecture (Universal Browser Support)**: Specificity is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The Cascade says that "the last rule wins." But what if you have a rule at the top of your file that says "Make the button with ID `#submit-btn` red", and a rule at the bottom that says "Make all `<button>` tags blue"?
@@ -66,7 +62,7 @@ button {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using the `!important` flag as a crutch
 
@@ -128,7 +124,7 @@ button {
 .main-box { color: blue; } /* Equal specificity rules rely on source order */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Calculating the Winner
 
@@ -197,7 +193,7 @@ p { color: black; }
 >
 > **Explanation:** `:where()` provides zero-specificity utility style grouping.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Cascade](the_cascade.md) — The system that uses Specificity to resolve conflicts.
 - [Selectors (Element, Class, ID)](selectors.md) — The tools that generate the specificity score.
 - [`!important` Declaration](important.md) — The specificity override flag.
@@ -205,7 +201,7 @@ p { color: black; }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Specificity is a point system used to determine which CSS rule is the most powerful.
 - ID Selectors (100) > Class Selectors (10) > Element Selectors (1).
 - **Specificity beats Source Order.** The only time the browser looks at which rule came last in the file is if there is a Specificity tie.

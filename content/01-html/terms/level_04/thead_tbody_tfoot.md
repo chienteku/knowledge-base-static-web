@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag**
+
+**Semantic Tag (Universal Browser Support)**: `<thead>`, `<tbody>`, `<tfoot>` is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a table with 1,000 rows of data, scrolling through it becomes a nightmare. If you scroll down to row 500, the headers at the top of the table scroll off the screen, and you forget what the columns mean!
@@ -86,7 +82,7 @@ The `<tfoot>` is the "Grand Total" printed at the very bottom of the last page.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing `<tfoot>` in the wrong order
 
@@ -141,7 +137,7 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 <tfoot><tr><th>Total:</th><td>$10</td></tr></tfoot>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Styling the Groups
 
@@ -202,13 +198,13 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 >
 > **Explanation:** Semantic table headers and footers persist across printed page breaks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<table>`](table.md) — The master container that holds these semantic groups.
 - [`<tr>` (Table Row)](tr.md) — The horizontal row elements nested inside these group containers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<thead>`, `<tbody>`, and `<tfoot>` are used to semantically group rows in a table.
 - They do not change the visual appearance of the table by default.
 - They are incredibly useful for scrolling large tables (keeping headers frozen) and for printing multi-page tables.

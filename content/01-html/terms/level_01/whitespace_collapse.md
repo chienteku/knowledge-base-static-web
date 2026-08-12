@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Whitespace Collapse is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing code, developers need to format, indent, and organize text so it is easy to read:
@@ -87,7 +83,7 @@ Whitespace collapse demonstration showing different source formatting yielding t
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mashing the spacebar to align page layout elements
 
@@ -138,7 +134,7 @@ Whitespace collapse demonstration showing different source formatting yielding t
 <div style="display: flex; gap: 20px;"><button>B1</button><button>B2</button></div>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Spacing Analysis
 
@@ -203,14 +199,14 @@ Whitespace collapse demonstration showing different source formatting yielding t
 >
 > **Explanation:** `white-space: pre-wrap` preserves source spaces and newlines while wrapping lines.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Nesting](nesting.md) — Proper tag structure which relies on source code indentation.
 - [`<pre>` & `<code>`](../level_02/pre_code.md) — Related concept: `<pre>` & `<code>`.
 - [HTML Entities](../level_09/html_entities.md) — Related concept: HTML Entities.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Whitespace collapse condenses all consecutive spaces, tabs, and newlines into one space.
 - It gives developers the freedom to format and indent source code for readability.
 - Hitting Enter in HTML does not create a visible newline on the screen.

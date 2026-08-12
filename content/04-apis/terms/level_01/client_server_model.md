@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Web Architecture / Core Concept**
+
+**Web Architecture / Core Concept (Universal Standard .)**: Client-Server Model is a fundamental concept in this technology stack. **Level 1 — The Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (The foundation of the entire World Wide Web).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before the internet, computers were isolated. If you wanted a file, you needed to physically carry a floppy disk from one computer to another. 
@@ -39,7 +35,7 @@ The Web works exactly the same way. Your web browser (Chrome) is the Client, and
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trusting the Client
 
@@ -95,62 +91,173 @@ fetch('https://api.example.com/users/45/data');
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Role
+### Exercise 1: Client Request Dispatch & Server Response Processing
 
-**Problem:** You are building a weather app. 
-1. Where does the code live that actually knows the temperature in Tokyo?
-2. Where does the code live that displays a picture of a sun on the screen?
+**Scenario:** A full-stack web application implements a client request dispatcher that transmits payload data to a server endpoint and processes the returned HTTP response.
 
-**Expected output:**
+**Requirements:**
+1. Write simulateClientServerExchange(endpoint, payload, serverHandler).
+2. Format request payload.
+3. Pass request to serverHandler.
+4. Validate response status and return payload.
+
 > [!check]- Answer
-> ```text
-> 1. The Server. It holds the actual data and the connection to weather satellites.
-> 2. The Client. It is responsible for the UI (User Interface) and drawing the sun based on the data the Server provided.
+>
+> #### Implementation
+>
+> ```javascript
+> async function simulateClientServerExchange(endpoint, payload, serverHandler) {
+>   if (typeof serverHandler !== "function") {
+>     throw new Error("Server handler function is required");
+>   }
+>
+>   const clientRequest = {
+>     endpoint,
+>     headers: { "Content-Type": "application/json" },
+>     body: JSON.stringify(payload)
+>   };
+>
+>   const serverResponse = await serverHandler(clientRequest);
+>
+>   if (serverResponse.status !== 200) {
+>     return { success: false, error: serverResponse.message || "Server Error" };
+>   }
+>
+>   return {
+>     success: true,
+>     data: JSON.parse(serverResponse.body)
+>   };
+> }
+>
+> // Verification tests
+> const mockServer = async (req) => {
+>   const data = JSON.parse(req.body);
+>   return {
+>     status: 200,
+>     body: JSON.stringify({ receivedId: data.id, status: "PROCESSED" })
+>   };
+> };
+>
+> simulateClientServerExchange("/api/users", { id: 42 }, mockServer).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+>   console.assert(res.data.receivedId === 42, "Test 2 Failed");
+> });
 > ```
-> - Who stores data vs who displays data?
+>
+> #### Technical Explanation
+>
+> 1. **Client-Server Separation of Concerns**: Clients initiate requests; servers process requests statelessly and return responses.
+> 2. **HTTP Message Boundary**: Data serialized as JSON strings passes across network boundaries between client and server runtimes.
+> 3. **Status Code Contract**: Clients inspect response status codes (200 OK vs 4xx/5xx errors) before consuming payload data.
 > 
 ---
 
-### Exercise 2: Client-Server Responsibility Separation
+### Exercise 2: Client-Side Offline Degradation Guard
 
-**Problem:** Categorize the following tasks as either Client (C) or Server (S) responsibilities:
-1. Hashing and verifying user passwords.
-2. Rendering animated loading spinners.
-3. Querying the SQL database for orders.
+**Scenario:** A mobile Web API client detects network disconnection status and queues requests locally until server connection is restored.
 
-**Expected output:**
+**Requirements:**
+1. Write handleClientOfflineRequest(request, isOnline, requestQueue).
+2. If online, execute request.
+3. If offline, push request to requestQueue and return queued status.
+
 > [!check]- Answer
-> ```text
-> 1. Server (S)
-> 2. Client (C)
-> 3. Server (S)
+>
+> #### Implementation
+>
+> ```javascript
+> function handleClientOfflineRequest(request, isOnline, requestQueue) {
+>   if (!Array.isArray(requestQueue)) return { status: "ERROR" };
+>
+>   if (isOnline) {
+>     return {
+>       status: "DISPATCHED",
+>       requestId: request.id
+>     };
+>   }
+>
+>   requestQueue.push({ ...request, queuedAt: Date.now() });
+>   return {
+>     status: "QUEUED",
+>     queueLength: requestQueue.length
+>   };
+> }
+>
+> // Verification tests
+> const queue = [];
+> const req1 = { id: "req-101", action: "SYNC_PROFILE" };
+>
+> const onlineRes = handleClientOfflineRequest(req1, true, queue);
+> console.assert(onlineRes.status === "DISPATCHED", "Test 1 Failed");
+>
+> const offlineRes = handleClientOfflineRequest(req1, false, queue);
+> console.assert(offlineRes.status === "QUEUED", "Test 2 Failed");
+> console.assert(queue.length === 1, "Test 3 Failed");
 > ```
-> ```text
-> 1. Server (S) - Password cryptography must occur on the secure backend.
-> 2. Client (C) - UI visual rendering occurs on the browser/app client.
-> 3. Server (S) - Direct database queries must remain behind the server firewall.
-> ```
-> - **Explanation:** Security and data integrity tasks belong on the Server; UI rendering belongs on the Client.
+>
+> #### Technical Explanation
+>
+> 1. **Unreliable Network Assumption**: Full-stack architectures must treat client-to-server networks as inherently transient and prone to disconnects.
+> 2. **Optimistic & Deferred Processing**: Queuing requests offline preserves user data until connectivity is re-established.
+> 3. **State Recovery**: Replays queued client mutations sequentially when the server connection recovers.
+> 
 ---
 
-### Exercise 3: Identifying Client-Side Security Bypasses
+### Exercise 3: Stateless Server Request Disambiguation
 
-**Problem:** A client sends `{ price: 0.01 }` in an order payload to `/checkout`. How should the server respond?
+**Scenario:** A REST server endpoint processes client requests statelessly, extracting authorization context from explicit request headers.
 
-**Expected output:**
+**Requirements:**
+1. Write processStatelessServerRequest(request).
+2. Extract Authorization header token.
+3. If token is valid, return success response; else 401 Unauthorized.
+
 > [!check]- Answer
-> ```text
-> The server must ignore client-provided prices and fetch the canonical price from its own database before charging the user.
+>
+> #### Implementation
+>
+> ```javascript
+> function processStatelessServerRequest(request) {
+>   if (!request || !request.headers) {
+>     return { status: 401, body: JSON.stringify({ error: "Missing headers" }) };
+>   }
+>
+>   const authHeader = request.headers["Authorization"] || request.headers["authorization"];
+>   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+>     return { status: 401, body: JSON.stringify({ error: "Unauthorized" }) };
+>   }
+>
+>   const token = authHeader.substring(7);
+>   if (token !== "valid-secret-token") {
+>     return { status: 403, body: JSON.stringify({ error: "Forbidden" }) };
+>   }
+>
+>   return {
+>     status: 200,
+>     body: JSON.stringify({ status: "AUTHORIZED", userId: "usr-99" })
+>   };
+> }
+>
+> // Verification tests
+> const res1 = processStatelessServerRequest({ headers: {} });
+> console.assert(res1.status === 401, "Test 1 Failed");
+>
+> const res2 = processStatelessServerRequest({
+>   headers: { "Authorization": "Bearer valid-secret-token" }
+> });
+> console.assert(res2.status === 200, "Test 2 Failed");
 > ```
-> ```text
-> The server must ignore client-provided prices and fetch the canonical price from its own database before charging the user.
-> ```
-> - **Explanation:** Never trust client payload values for financial transactions or pricing calculations.
+>
+> #### Technical Explanation
+>
+> 1. **Stateless Architecture**: The server stores no client session state between requests; every request contains all context needed for execution.
+> 2. **Explicit Credentials**: Authorization tokens (e.g. JWT) passed in HTTP headers establish client identity statelessly.
+> 3. **Scalability Advantage**: Stateless servers can scale horizontally behind load balancers without session synchronization overhead.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP / HTTPS](http_https.md) — The specific language the Client and Server use to talk to each other.
 - [API (Application Programming Interface)](../level_03/api.md) — The waiter in the restaurant metaphor.
 - [Request & Response Lifecycle](request_response.md) — Request/Response model.
@@ -158,7 +265,7 @@ fetch('https://api.example.com/users/45/data');
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **Client** requests data and displays it to the user.
 - The **Server** listens for requests, processes logic, and returns data.
 - The Client and Server are completely separate entities (often physically located thousands of miles apart).

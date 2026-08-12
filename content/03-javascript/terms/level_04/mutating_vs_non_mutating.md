@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Mutating vs Non-mutating Methods is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, arrays are objects, meaning they are stored in memory and passed around by reference. When we perform operations on arrays, different methods behave in fundamentally different ways:
@@ -81,7 +77,7 @@ console.log("Original players 2 array:", playersList2); // [ 'Eve', 'David', 'Fr
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `.sort()` and `.reverse()` are Non-mutating
 
@@ -163,81 +159,44 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Mutating Check
+### Exercise 1: Immutable State Update Guard
 
-**Problem:** Identify which of the following operations are mutating and which are non-mutating.
+**Scenario:** A state management library compares mutating methods (push, splice, sort) against non-mutating equivalents (concat, slice, toSorted).
 
-```javascript
-const items = ["A", "B", "C"];
+**Requirements:**
+1. Write safeSortArray(items).
+2. Use non-mutating spread [...items].sort().
+3. Verify source array is untouched.
+4. Return sorted copy.
 
-// Action 1
-items.pop();
-
-// Action 2
-const subItems = items.slice(0, 1);
-
-// Action 3
-items.reverse();
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Action 1 (.pop()): Mutating (modifies size of 'items' in-place).
-> Action 2 (.slice()): Non-mutating (returns a new sub-array, 'items' unchanged).
-> Action 3 (.reverse()): Mutating (reverses order of 'items' in-place).
-> ```
-> - Methods that add, remove, or reorder elements of the calling array in-place are mutating.
-> - Methods that extract sections or map values into new instances are non-mutating.
-> 
----
-
-### Exercise 2: Categorizing Mutating vs Non-Mutating Methods
-
-**Problem:** Classify `push`, `map`, `sort`, `filter`, `splice`, `slice` as Mutating or Non-Mutating.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> push: Mutating
-> map: Non-Mutating
-> sort: Mutating
-> filter: Non-Mutating
-> splice: Mutating
-> slice: Non-Mutating
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("push: Mutating\nmap: Non-Mutating\nsort: Mutating\nfilter: Non-Mutating\nsplice: Mutating\nslice: Non-Mutating");
+> function safeSortArray(items) {
+>   if (!Array.isArray(items)) return [];
+>   // Spread creates copy before mutating sort() is called
+>   return [...items].sort((a, b) => a - b);
+> }
+>
+> // Verification tests
+> const original = [3, 1, 2];
+> const sorted = safeSortArray(original);
+> console.assert(original.join(",") === "3,1,2", "Test 1 Failed: Source array was mutated");
+> console.assert(sorted.join(",") === "1,2,3", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Mutating methods alter target array memory directly; non-mutating methods return new collection references.
-> 
----
-
-### Exercise 3: Non-Mutating Array Sorting with `toSorted()`
-
-**Problem:** Sort `[3, 1, 2]` without mutating original using `.toSorted()` concept or `[...arr].sort()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Original: [3, 1, 2], Sorted: [1, 2, 3]
-> ```
-> ```javascript
-> const orig = [3, 1, 2];
-> const sorted = [...orig].sort();
-> console.log(`Original: JSON.stringify(orig), Sorted: JSON.stringify(sorted)`);
-> console.log(`Original: [${orig}], Sorted: [${sorted}]`);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Copying arrays before sorting prevents collateral mutation side effects.
-> 
-> 
+> 1. **Mutating Methods**: Methods like push, pop, shift, unshift, splice, sort, and reverse mutate the target array in place.
+> 2. **Non-Mutating Methods**: Methods like concat, slice, map, filter, and flat return new array copies leaving target untouched.
+> 3. **Immutability Best Practice**: Always copy source arrays before invoking mutating operations in functional/React architectures.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Immutability](../level_09/immutability.md) — Designing data flow that never mutates state.
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Shorthand syntax (`[...]`) used to easily clone arrays before performing mutations.
 - [Array Index & .length](../level_02/array_index_length.md) — Related concept: Array Index & .length.
@@ -246,7 +205,7 @@ items.reverse();
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Mutating methods (like `push`, `pop`, `splice`, `sort`) modify the original array directly in memory.
 - Non-mutating methods (like `slice`, `concat`, `map`, `filter`) return a new array instance, preserving the original array.
 - `.sort()` and `.reverse()` are mutating methods; always clone the array using spread syntax (`[...arr]`) first if you want to preserve the original order.

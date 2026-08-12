@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Structure**
+
+**Data Structure (Universal: Works everywhere)**: Array is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a program needs to store the names of 100 students, creating 100 separate variables (`let student1 = "Alice"; let student2 = "Bob";`) is completely unmanageable. We needed a single data structure that could hold a list of multiple values, keep them in a specific order, and provide an easy way to access, add, or remove items. 
@@ -61,7 +57,7 @@ const mixedArray = ["Alice", 42, true, null];
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Off-by-one errors with `.length`
 
@@ -140,57 +136,128 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Array Manipulation
+### Exercise 1: Order Processing Queue Manager
 
-**Problem:** Create an array called `todos` with two strings: `"Wake up"` and `"Eat breakfast"`. Use an array method to add `"Go to work"` to the end of the array. Then log the entire array.
+**Scenario:** An inventory fulfillment service stores ordered item objects in an array. It adds incoming batch items to the end using .push(), removes processed items from the front using .shift(), and tracks queue length.
 
-**Expected output:**
+**Requirements:**
+1. Write a function processOrderQueue(initialQueue, newItems).
+2. Use .push() to add new item objects.
+3. Use .shift() to remove the first processed item.
+4. Return an object containing { updatedQueue, processedItem, queueLength }.
+
 > [!check]- Answer
-> ```text
-> ["Wake up", "Eat breakfast", "Go to work"]
-> ```
-> - Use `todos.push("Go to work");` to add an item to the end of the array.
-> 
----
-
-### Exercise 2: Filling Sparse Arrays safely
-
-**Problem:** Create a 5-element array filled with number `0` using `Array(5).fill(0)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 0, 0, 0, 0, 0 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const arr = Array(5).fill(0);
-> console.log(arr);
+> function processOrderQueue(initialQueue, newItems) {
+>   const queue = [...initialQueue];
+>   for (const item of newItems) {
+>     queue.push(item);
+>   }
+>   const processedItem = queue.shift();
+>   return {
+>     updatedQueue: queue,
+>     processedItem: processedItem,
+>     queueLength: queue.length
+>   };
+> }
+>
+> // Verification tests
+> const res = processOrderQueue([{ id: 1 }, { id: 2 }], [{ id: 3 }]);
+> console.assert(res.processedItem.id === 1, "Test 1 Failed");
+> console.assert(res.queueLength === 2, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Array(n).fill(val)` populates empty sparse array slots with default initial values.
+> #### Technical Explanation
+>
+> 1. **Ordered Indexing**: Arrays store ordered sequences of elements accessible via zero-based integer indices.
+> 2. **Mutating Array Methods**: Methods like .push() and .shift() modify the underlying array length and element placement in place.
+> 3. **Dynamic Resizing**: JavaScript arrays automatically expand or shrink memory allocation as elements are added or removed.
 > 
 ---
 
-### Exercise 3: Array Reference Comparison
+### Exercise 2: User Role Permission Array Merger
 
-**Problem:** Compare `[1, 2] === [1, 2]` and explain why array equality checks return `false`.
+**Scenario:** An authorization middleware merges existing user role arrays with new granted capability roles, ensuring unique non-duplicate entries.
 
-**Expected output:**
+**Requirements:**
+1. Write mergePermissions(existingRoles, newRoles).
+2. Combine role arrays into a single array.
+3. Remove duplicate role entries.
+4. Return the combined permissions array.
+
 > [!check]- Answer
-> ```text
-> false
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log([1, 2] === [1, 2]);
+> function mergePermissions(existingRoles, newRoles) {
+>   const combined = existingRoles.concat(newRoles);
+>   const uniqueRoles = [];
+>   for (const role of combined) {
+>     if (!uniqueRoles.includes(role)) {
+>       uniqueRoles.push(role);
+>     }
+>   }
+>   return uniqueRoles;
+> }
+>
+> // Verification tests
+> const perms = mergePermissions(["read", "write"], ["write", "execute"]);
+> console.assert(perms.length === 3, "Test 1 Failed");
+> console.assert(perms.includes("execute"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** Arrays are reference types in JavaScript; two separate literals reside at distinct memory addresses.
+> #### Technical Explanation
+>
+> 1. **Non-Mutating Combination**: The .concat() method produces a new array combining elements without mutating source arrays.
+> 2. **Element Searching**: The .includes() method inspects array element presence returning a boolean primitive.
+> 3. **Reference Identity**: Arrays are reference objects stored on the heap; two distinct arrays with identical elements are not reference-equal.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Sliding Metric Window Buffer
+
+**Scenario:** A server monitoring agent maintains a sliding window array of CPU usage metrics, capping maximum array length by removing old readings when limits are exceeded.
+
+**Requirements:**
+1. Write pushTelemetryReading(windowArray, newReading, maxSize).
+2. Push new metric reading to array.
+3. If array length exceeds maxSize, remove oldest element from front.
+4. Return updated window array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function pushTelemetryReading(windowArray, newReading, maxSize) {
+>   const updated = [...windowArray];
+>   updated.push(newReading);
+>   while (updated.length > maxSize) {
+>     updated.shift();
+>   }
+>   return updated;
+> }
+>
+> // Verification tests
+> const buffer = pushTelemetryReading([45, 50, 55], 60, 3);
+> console.assert(buffer.length === 3, "Test 1 Failed");
+> console.assert(buffer[0] === 50 && buffer[2] === 60, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Array Length Bound**: The .length property reflects the highest integer index plus one.
+> 2. **Sliding Window Pattern**: Combining .push() and .shift() converts an array into a fixed-capacity FIFO queue.
+> 3. **Shallow Copying**: Using spread syntax [...arr] creates a shallow copy, preserving original input immutability.
+---
+
+## 6. Related Terms
 - [Object](object.md) — A collection of key-value pairs (Arrays are technically a type of Object).
 - [for Loop](for_loop.md) — The most common way to iterate through an Array.
 - [Array Index & .length](array_index_length.md) — Related concept: Array Index & .length.
@@ -199,7 +266,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Arrays are ordered lists of values enclosed in square brackets `[]`.
 - They are **0-indexed**, meaning the first item is at index `0`.
 - The `.length` property returns the total number of items in the array.

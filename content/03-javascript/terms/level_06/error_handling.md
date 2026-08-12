@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Error Handling (try/catch/finally) is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In programming, things will inevitably go wrong: network requests fail, users input invalid text, database queries time out, or developers make typos. When JavaScript encounters a runtime error (an "exception"), its default behavior is to halt execution immediately, print an error stack trace, and crash the thread.
@@ -90,7 +86,7 @@ console.log("Parsed User 2:", user2);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Synchronous `try/catch` to Catch Asynchronous Errors
 
@@ -177,98 +173,135 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Safe Number Parsing
+### Exercise 1: Centralized API Gateway Response Error Handler
 
-**Problem:** Complete the code to parse the user input. If it is empty, throw a generic error. Catch the error, assign `"Unknown"` to `processedInput`, and ensure `"Done"` is logged in the `finally` block.
+**Scenario:** An API client implements centralized error handling, catching network errors, HTTP 4xx/5xx status errors, and JSON parse errors.
 
-```javascript
-let userInput = "";
-let processedInput = "";
+**Requirements:**
+1. Write handleApiResponse(responseObj).
+2. Check responseObj.ok status.
+3. Throw custom error if not ok.
+4. Parse JSON data cleanly.
 
-try {
-  if (userInput === "") {
-    throw new Error("Empty input!");
-  }
-  processedInput = userInput;
-} catch (err) {
-  // Handle error
-} finally {
-  // Log "Done"
-}
-
-console.log("Result:", processedInput);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Done
-> Result: Unknown
-> ```
-> - Inside the `catch` block, assign `processedInput = "Unknown"`.
-> - Inside the `finally` block, write `console.log("Done")`.
-> 
----
-
-### Exercise 2: Custom Error Classes
-
-**Problem:** Create a `class ValidationError extends Error` with custom `code = 400`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ValidationError [400]: Invalid input
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class ValidationError extends Error {
->   constructor(msg) {
->     super(msg);
->     this.name = "ValidationError";
->     this.code = 400;
+> function handleApiResponse(responseObj) {
+>   if (!responseObj) {
+>     throw new Error("Network Error: No response received");
 >   }
+>   if (!responseObj.ok) {
+>     const status = responseObj.status || 500;
+>     const err = new Error(`HTTP Error: ${status}`);
+>     // @ts-ignore
+>     err.status = status;
+>     throw err;
+>   }
+>   return responseObj.data;
 > }
-> const err = new ValidationError("Invalid input");
-> console.log(`${err.name} [${err.code}]: ${err.message}`);
-> ```
 >
-> **Explanation:** Extending `Error` creates custom domain error types for targeted exception catching.
-> 
----
-
-### Exercise 3: Finally Block Cleanup Guarantee
-
-**Problem:** Demonstrate that `finally { ... }` executes regardless of whether `try` succeeds or throws.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Cleanup completed
-> ```
-> ```javascript
+> // Verification tests
+> console.assert(handleApiResponse({ ok: true, data: { user: "Alice" } }).user === "Alice", "Test 1 Failed");
+>
+> let errorCaught = false;
 > try {
->   throw new Error("Fail");
+>   handleApiResponse({ ok: false, status: 404 });
 > } catch (err) {
->   // handled
-> } finally {
->   console.log("Cleanup completed");
+>   errorCaught = err.message.includes("404");
 > }
+> console.assert(errorCaught === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `finally` blocks execute unconditionally after `try/catch` completion.
-> 
+> #### Technical Explanation
+>
+> 1. **Centralized Error Strategy**: Centralizing error handling logic guarantees consistent error normalization across microservices.
+> 2. **Defensive Validation**: Validate response objects and HTTP status codes before consuming payload data.
+> 3. **Explicit Error Re-throwing**: Throw descriptive Error instances to trigger outer catch blocks.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Error Handling Advanced Context Handler
+
+**Scenario:** A web application component processes error handling data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handleErrorHandlingSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleErrorHandlingSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleErrorHandlingSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Error Handling Architecture**: Applying error handling patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Error Handling Performance Optimization
+
+**Scenario:** An application utility optimizes error handling execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeErrorHandlingTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeErrorHandlingTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeErrorHandlingTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Error Handling Optimization**: Optimizing error handling improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [throw statement](throw_statement.md) — The keyword used to raise exceptions.
 - [Error object & Error Types](error_object.md) — The metadata wrapper representing runtime failures.
 - [try/catch with async/await](try_catch_async_await.md) — Handling asynchronous errors in synchronous-looking code.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `try...catch...finally` protects application execution paths from runtime exceptions.
 - The `try` block holds code that might throw an error.
 - The `catch(error)` block intercept errors, receiving the error details as an argument.

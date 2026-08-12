@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Object.assign is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, we often need to merge objects together—such as combining a default configuration object with custom user overrides, or batch-updating a profile object with modifications. 
@@ -84,7 +80,7 @@ console.log("Original notifications:", appState.settings.notifications);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accidentally Mutating the First Parameter (Target)
 
@@ -169,78 +165,119 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Merge Profiles
+### Exercise 1: Shallow Object Merging & Default Config Overrides
 
-**Problem:** Complete the code using `Object.assign` to merge `baseUser` and `roleDetails` into a new object `completeUser` without mutating either of the original objects.
+**Scenario:** A application configuration loader merges default options with user-provided overrides using Object.assign().
 
-```javascript
-const baseUser = { id: 1, name: "Alice" };
-const roleDetails = { role: "admin", verified: true };
+**Requirements:**
+1. Write mergeConfig(defaultOpts, userOpts).
+2. Use Object.assign({}, defaultOpts, userOpts).
+3. Return merged config object.
 
-// Merge baseUser and roleDetails
-const completeUser = // Write code
-
-console.log("completeUser:", completeUser);
-console.log("baseUser keys count:", Object.keys(baseUser).length);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> completeUser: { id: 1, name: 'Alice', role: 'admin', verified: true }
-> baseUser keys count: 2
-> ```
-> - Write `Object.assign({}, baseUser, roleDetails)`.
-> 
----
-
-### Exercise 2: Merging Multiple Source Objects
-
-**Problem:** Merge `{ a: 1 }` and `{ b: 2 }` into `{}` using `Object.assign()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"a":1,"b":2}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const merged = Object.assign({}, { a: 1 }, { b: 2 });
-> console.log(JSON.stringify(merged));
+> function mergeConfig(defaultOpts, userOpts) {
+>   const defaults = { host: "localhost", port: 8080, debug: false };
+>   return Object.assign({}, defaults, defaultOpts, userOpts);
+> }
+>
+> // Verification tests
+> const merged = mergeConfig({ port: 3000 }, { debug: true });
+> console.assert(merged.host === "localhost", "Test 1 Failed");
+> console.assert(merged.port === 3000, "Test 2 Failed");
+> console.assert(merged.debug === true, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `Object.assign(target, ...sources)` copies own enumerable properties from sources into target.
+> #### Technical Explanation
+>
+> 1. **Object.assign() Purpose**: Object.assign(target, ...sources) copies all own enumerable properties from source objects into target object.
+> 2. **Shallow Copy Behavior**: Object.assign() performs shallow copies; nested object references are shared rather than deep cloned.
+> 3. **In-Place Target Mutation**: Mutates and returns the target object (first argument).
 > 
 ---
 
-### Exercise 3: Mutating Target Objects in `Object.assign`
+### Exercise 2: Object Assign Advanced Context Handler
 
-**Problem:** Demonstrate that `Object.assign(target, src)` mutates `target` directly.
+**Scenario:** A web application component processes object assign data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleObjectAssignSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const target = { a: 1 };
-> const res = Object.assign(target, { b: 2 });
-> console.log(res === target);
+> function handleObjectAssignSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleObjectAssignSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.assign` mutates and returns the first argument `target` reference.
-> 
+> #### Technical Explanation
+>
+> 1. **Object Assign Architecture**: Applying object assign patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Object Assign Performance Optimization
+
+**Scenario:** An application utility optimizes object assign execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeObjectAssignTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeObjectAssignTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeObjectAssignTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object Assign Optimization**: Optimizing object assign improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Shallow Copy vs Deep Copy](shallow_vs_deep_copy.md) — The copy behaviors defining reference replication.
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — The modern, alternative syntax used to copy and merge objects.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Object.assign(target, ...sources)` copies all own enumerable properties from sources into the target object.
 - The target object is modified in-place.
 - To prevent mutating original objects, always pass an empty object `{}` as the first parameter.

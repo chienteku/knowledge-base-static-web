@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Browser Support .)**: Color Values (hex, rgb, rgba, hsl, named) is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Parsed natively. Browsers convert all color formats into a unified internal RGB color space before drawing pixels).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Color is one of the most powerful tools in web design. Sighted users rely on color to read text, identify brand elements, and recognize call-to-action buttons.
@@ -135,7 +131,7 @@ Different formats for the same red color:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `#` symbol in Hex codes
 
@@ -201,7 +197,7 @@ div { color: ff0000; } /* ❌ Missing '#' symbol! Property ignored! */
 div { color: #ff0000; } /* Valid 6-digit hex color */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Format Translation
 
@@ -259,13 +255,13 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 >
 > **Explanation:** `currentColor` inherits computed text color for borders and SVG fills.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The parent properties using these colors.
 - [`opacity`](../level_09/opacity.md) — The alternative way to manage element transparency.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSS supports four primary color systems: Named, HEX, RGB, and HSL.
 - HEX codes are base-16 channels (`#RRGGBB`) widely used in design packages.
 - Always include the `#` prefix for HEX codes.

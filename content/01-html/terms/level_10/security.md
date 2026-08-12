@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Security Architecture**
+
+**Concept / Security Architecture (Web Browser Security .)**: Content Security Policy (CSP) & HTML Security is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Web Browser Security** (Supported natively by modern browsers. Executed as security interceptors during the asset downloading and execution stages of the rendering pipeline).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Webpages are vulnerable to malicious attacks. The most common threat is **Cross-Site Scripting (XSS)**. 
@@ -120,7 +116,7 @@ If the file content shifts by even a single character, the cryptographic hash fa
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using CSP `unsafe-inline` without constraint
 
@@ -237,7 +233,7 @@ div.textContent = userInput; // Safe text-only assignment
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Secure Tag Constructor
 
@@ -287,14 +283,14 @@ div.textContent = userInput; // Safe text-only assignment
 >
 > **Explanation:** `X-Frame-Options` blocks Clickjacking iframe embedding attacks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<noscript>`](../level_08/noscript.md) — Fallbacks displayed when scripting is turned off.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Storage blocks vulnerable to XSS data theft.
 - [Geolocation API](geolocation.md) — Related concept: Geolocation API.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Content Security Policy (CSP) restricts what resources browsers are allowed to download and execute.
 - Always escape input strings (converting `<` to `&lt;`) to prevent raw HTML code injections.
 - Use the `sandbox` attribute on `<iframe>` to lock down untrusted third-party embeds.

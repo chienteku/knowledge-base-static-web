@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Data Handling**
+
+**Data Handling (Node.js Core Architecture .)**: Character Encoding & Buffer ↔ String is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Core binary formatting rules implemented across V8 and Node system layers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 At the hardware level, computers only read and write raw binary bytes (zeros and ones). Humans read and write text characters. 
@@ -72,7 +68,7 @@ console.log("Restored Text String:", restoredStr); // Output: "Fire 🔥"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Splitting multi-byte characters when reading stream chunks
 
@@ -146,7 +142,7 @@ stream.on('data', (chunk) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Decoder Script
 
@@ -206,13 +202,13 @@ function decodeHexFile(filePath) {
 >
 > **Explanation:** `StringDecoder` buffers partial multi-byte UTF-8 bytes to prevent text corruption.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Buffers](buffers.md) — The raw byte structure translated by encodings.
 - [Data Chunks](chunks.md) — The chunk payloads that risk character boundary corruption.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Character encodings translate binary bytes to readable text strings.
 - `Buffer.from()` encodes strings to bytes; `buffer.toString()` decodes bytes to strings.
 - UTF-8 is the standard variable-length encoding: English characters take 1 byte; symbols/emojis take up to 4 bytes.

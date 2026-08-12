@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Modern Standard .)**: Combinator Selectors is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Evaluated directly inside the browser's CSSOM parsing thread to index parent-child DOM structures).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In HTML, elements are nested in a tree structure. 
@@ -133,7 +129,7 @@ Comparing descendant vs child selectors:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting sibling combinators to work backwards or upwards
 
@@ -179,7 +175,7 @@ h2 + p { color: blue; } /* ❌ Targets ONLY the first immediately following para
 h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Clean Spacing
 
@@ -243,14 +239,14 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 >
 > **Explanation:** `+` targets immediately adjacent sibling elements.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Attribute Selectors](attribute_selectors.md) — Selective attribute matching.
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — Positional structural styling hooks.
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Related concept: Selectors (Element, Class, ID).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Combinators target elements based on their relationships in the DOM tree.
 - Space (` `) matches any descendant (child, grandchild, etc.).
 - Greater than (`>`) matches only direct children.

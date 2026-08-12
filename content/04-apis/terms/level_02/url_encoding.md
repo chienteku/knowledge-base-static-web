@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Executed inside browsers and server HTTP routing systems.)**: URL Encoding (Percent-Encoding) is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Executed inside browsers and server HTTP routing systems.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 URLs are restricted to a small subset of the US-ASCII character set—primarily alphanumeric characters (`a-z`, `A-Z`, `0-9`) and a few safe symbols (like `-`, `_`, `.`, `~`). 
@@ -80,7 +76,7 @@ console.log(encodeURIComponent(completeUrl));
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `encodeURI()` to escape individual query parameter values
 
@@ -144,77 +140,128 @@ const param = encodeURIComponent('hello world'); // Converts to 'hello%20world'
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: URL Encoder
+### Exercise 1: Safe Query Parameter Encoding Utility
 
-**Problem:** Complete the function `buildSearchUrl` to return a fully URL-encoded search query path using JavaScript helper functions.
+**Scenario:** An API client implements a query parameter encoding function using `encodeURIComponent()` to prevent URL syntax breakage.
 
-```javascript
-function buildSearchUrl(baseURL, searchTerm) {
-  // Return the complete safe URL path
-}
+**Requirements:**
+1. Write encodeQueryParam(key, val).
+2. Encode key and val.
+3. Return `encodedKey=encodedVal`.
 
-const target = buildSearchUrl("/search", "Node.js & Express");
-console.log("Encoded Path:", target);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Encoded Path: /search?q=Node.js%20%26%20Express
+>
+> #### Implementation
+>
+> ```javascript
+> function encodeQueryParam(key, val) {
+>   if (key === null || key === undefined) return "";
+>   const k = encodeURIComponent(String(key));
+>   const v = encodeURIComponent(String(val ?? ""));
+>   return `${k}=${v}`;
+> }
+>
+> // Verification tests
+> console.assert(encodeQueryParam("search", "hello world") === "search=hello%20world", "Test 1 Failed");
+> console.assert(encodeQueryParam("price", "$100 & up") === "price=%24100%20%26%20up", "Test 2 Failed");
 > ```
-> - Inside the function, return `baseURL + "?q=" + encodeURIComponent(searchTerm)`.
+>
+> #### Technical Explanation
+>
+> 1. **Percent-Encoding Syntax**: Replaces reserved characters with % followed by 2 hexadecimal digits (space = %20, & = %26, $ = %24).
+> 2. **encodeURIComponent Purpose**: Encodes special characters that carry structural meaning in URLs (?, &, =, #, /).
+> 3. **URL Syntax Protection**: Prevents user inputs containing & or = from splitting into unintended extra query parameters.
 > 
 ---
 
-### Exercise 2: Percent-Encoding Character Map
+### Exercise 2: Percent-Decoding Form Parameter Extractor
 
-**Problem:** Identify the percent-encoded ASCII representations for:
-1. Space ` `
-2. Ampersand `&` 
-3. Equals `=` 
+**Scenario:** A server request parser decodes percent-encoded form parameter strings safely using `decodeURIComponent()`.
 
-**Expected output:**
+**Requirements:**
+1. Write decodeQueryValue(encodedStr).
+2. Replace + with space.
+3. Decode using decodeURIComponent().
+
 > [!check]- Answer
-> ```text
-> 1. %20 (or +)
-> 2. %26
-> 3. %3D
-> ```
-> ```text
-> 1. Space -> %20 (or +)
-> 2. Ampersand -> %26
-> 3. Equals -> %3D
-> ```
-> - **Explanation:** Percent-encoding replaces reserved ASCII characters with `%HEX` equivalents.
----
-
-### Exercise 3: encodeURI vs encodeURIComponent Choice
-
-**Problem:** Which function should be used to encode an entire complete URL string vs an individual query parameter value?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Use encodeURI() for complete URLs; use encodeURIComponent() for individual query parameter values.
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> // Complete URL:
-> const fullUrl = encodeURI('https://example.com/my page.html');
-> // Parameter value:
-> const paramUrl = 'https://example.com/search?q=' + encodeURIComponent('salt & pepper');
+> function decodeQueryValue(encodedStr) {
+>   if (!encodedStr || typeof encodedStr !== "string") return "";
+>   try {
+>     // Replace + with space (application/x-www-form-urlencoded convention)
+>     const normalized = encodedStr.replace(/\+/g, "%20");
+>     return decodeURIComponent(normalized);
+>   } catch (err) {
+>     return encodedStr;
+>   }
+> }
+>
+> // Verification tests
+> console.assert(decodeQueryValue("hello%20world") === "hello world", "Test 1 Failed");
+> console.assert(decodeQueryValue("hello+world") === "hello world", "Test 2 Failed: + should decode to space");
+> console.assert(decodeQueryValue("%24100") === "$100", "Test 3 Failed");
 > ```
-> - **Explanation:** `encodeURI` preserves valid URL structural syntax; `encodeURIComponent` escapes all delimiters.
+>
+> #### Technical Explanation
+>
+> 1. **decodeURIComponent Method**: Converts percent-encoded sequences (%20) back into original UTF-8 characters.
+> 2. **Plus (+) to Space Conversion**: In form-urlencoded query strings, spaces are encoded as +; in standard percent-encoding as %20.
+> 3. **URIError Handling**: Malformed percent sequences (e.g. %ZZ) throw URIError; try...catch prevents crashes.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Double Percent-Encoding Sanitizer
+
+**Scenario:** A security gateway detects and fixes double percent-encoded URLs (e.g. `%2520` instead of `%20`) to prevent security filter evasion.
+
+**Requirements:**
+1. Write fixDoubleEncoding(urlStr).
+2. Detect `%25` sequences.
+3. Decode double-encoded percent signs.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function fixDoubleEncoding(urlStr) {
+>   if (!urlStr || typeof urlStr !== "string") return urlStr;
+>
+>   // %25 is the percent-encoded representation of the % symbol itself
+>   if (/%25[0-9a-fA-F]{2}/.test(urlStr)) {
+>     return urlStr.replace(/%25([0-9a-fA-F]{2})/g, "%$1");
+>   }
+>
+>   return urlStr;
+> }
+>
+> // Verification tests
+> const doubleEncoded = "https://api.com/search?q=hello%2520world";
+> const fixed = fixDoubleEncoding(doubleEncoded);
+>
+> console.assert(fixed === "https://api.com/search?q=hello%20world", "Test 1 Failed");
+> console.assert(fixDoubleEncoding("https://api.com/search?q=hello%20world") === "https://api.com/search?q=hello%20world", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Double Encoding Security Risk**: Attackers double-encode characters (%252E for .) to bypass web application firewall (WAF) filters.
+> 2. **%25 Encoding**: %25 is the percent-encoded value of the % character itself.
+> 3. **Sanitization Order**: Decoding double-encoded URIs before security validation prevents WAF filter evasion.
+---
+
+## 6. Related Terms
 - [Query Parameters & Path Variables](query_params.md) — The URL data inputs escaped by percent-encoding.
 - [Request Body & Payloads](request_body.md) — Un-encoded data payloads that do not require URL character escaping.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - URL Encoding (Percent-Encoding) replaces non-ASCII and reserved delimiter characters with hexadecimal byte codes.
 - It prevents special characters (like `&`, `=`, `?`) from breaking URL structure parsing.
 - Use `encodeURIComponent()` to escape individual query parameter values or path variables.

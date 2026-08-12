@@ -486,7 +486,7 @@ thread::spawn(move || {
 ## 6. Related Terms
 
 - [String vs &str](../level_01/string_vs_&str.md) — Related concept: String vs &str.
-- [Cow For Flexibility](../level_18/cow_for_flexibility.md) — Related concept: Cow For Flexibility.
+- [`Cow` for API Flexibility](../level_18/cow_for_flexibility.md) — Related concept: Cow For Flexibility.
 
 ---
 

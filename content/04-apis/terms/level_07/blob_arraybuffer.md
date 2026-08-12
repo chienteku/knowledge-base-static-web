@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Browser-Specific: Standard interfaces implemented in modern web browsers. .)**: Blob & ArrayBuffer is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Standard interfaces implemented in modern web browsers. (Node.js uses `Buffer` as its primary binary interface).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web applications frequently download files other than text-based JSON—such as PDF receipts, JPEG photos, audio files, or compressed zip archives.
@@ -100,7 +96,7 @@ async function verifyPdfFile() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to read index values directly from an `ArrayBuffer`
 
@@ -163,59 +159,144 @@ const reader = res.body.getReader(); // Stream chunked binary reader
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Signature Search
+### Exercise 1: Blob to ArrayBuffer Reader for In-Memory Cryptographic Hash
 
-**Problem:** You are building an upload validator. You read a file's ArrayBuffer and create a `Uint8Array` view. The first three index positions return:
-`[71, 73, 70]` (ASCII codes for `G`, `I`, `F`). Which file type did the user upload?
+**Scenario:** A client-side file upload utility reads a browser `Blob` object as an `ArrayBuffer` to compute SHA-256 checksums before upload.
+
+**Requirements:**
+1. Write readBlobAsArrayBuffer(blobObject).
+2. Convert Blob to ArrayBuffer.
+3. Return ArrayBuffer.
 
 > [!check]- Answer
-> - **A GIF image.** (ASCII codes: 71 = G, 73 = I, 70 = F. Together, they represent the `'GIF'` file header).
-> 
-> 
----
-
-### Exercise 2: Blob vs ArrayBuffer Distinction
-
-**Problem:** Distinguish between a `Blob` and an `ArrayBuffer` in Web APIs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Blob represents immutable raw file-like blob data (with MIME type metadata); ArrayBuffer represents mutable raw byte memory in RAM.
-> ```
-> ```text
-> Blob -> Immutable file-like data with MIME type (e.g. image/png).
-> ArrayBuffer -> Raw in-memory byte buffer manipulated via TypedArrays.
-> ```
-> - **Explanation:** Blobs represent file objects; ArrayBuffers represent memory byte arrays.
----
-
-### Exercise 3: Creating Object URL from Blob
-
-**Problem:** Write JavaScript line creating temporary DOM URL string for a image `Blob`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const url = URL.createObjectURL(blob);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const url = URL.createObjectURL(blob);
-> // Remember to revoke URL when done:
-> URL.revokeObjectURL(url);
+> async function readBlobAsArrayBuffer(blobObject) {
+>   if (!blobObject) throw new Error("Blob object required");
+>
+>   if (typeof blobObject.arrayBuffer === "function") {
+>     return await blobObject.arrayBuffer();
+>   }
+>
+>   return new Promise((resolve, reject) => {
+>     const reader = new FileReader();
+>     reader.onload = () => resolve(reader.result);
+>     reader.onerror = () => reject(reader.error);
+>     reader.readAsArrayBuffer(blobObject);
+>   });
+> }
+>
+> // Verification tests
+> const mockBlob = {
+>   arrayBuffer: async () => new ArrayBuffer(8)
+> };
+>
+> readBlobAsArrayBuffer(mockBlob).then(buf => {
+>   console.assert(buf.byteLength === 8, "Test 1 Failed");
+> });
 > ```
-> - **Explanation:** `URL.createObjectURL(blob)` generates temporary `blob:http://...` DOM links.
+>
+> #### Technical Explanation
+>
+> 1. **Blob vs ArrayBuffer Difference**: Blob represents higher-level immutable file-like raw data; ArrayBuffer represents fixed-length low-level memory bytes.
+> 2. **arrayBuffer() Async Method**: Modern Web API method returning a promise resolving to the Blob's underlying ArrayBuffer.
+> 3. **Cryptographic Hashing**: Web Crypto API (crypto.subtle.digest) requires ArrayBuffer inputs to calculate SHA-256 hashes.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: DataView TypedArray Byte Manipulator
+
+**Scenario:** A binary parser uses `Uint8Array` views to inspect and modify individual byte elements of an ArrayBuffer payload.
+
+**Requirements:**
+1. Write setBufferFlag(arrayBuffer, byteIndex, bitMask).
+2. Modify specific bit flag.
+3. Return updated Uint8Array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function setBufferFlag(arrayBuffer, byteIndex, bitMask) {
+>   const bytes = new Uint8Array(arrayBuffer);
+>   if (byteIndex < 0 || byteIndex >= bytes.length) {
+>     throw new Error("Byte index out of bounds");
+>   }
+>
+>   bytes[byteIndex] = bytes[byteIndex] | bitMask;
+>   return bytes;
+> }
+>
+> // Verification tests
+> const buf = new ArrayBuffer(4);
+> const bytes = setBufferFlag(buf, 0, 0b00000001);
+>
+> console.assert(bytes[0] === 1, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Uint8Array View**: Creates a 1-byte unsigned integer view over the underlying ArrayBuffer memory.
+> 2. **Bitwise Flag Operations**: Allows manipulating individual bit flags in binary protocol headers.
+> 3. **Shared Memory Views**: Multiple TypedArray views can inspect the SAME underlying ArrayBuffer without copying memory.
+> 
+---
+
+### Exercise 3: Client-Side Downloadable Blob File Generator
+
+**Scenario:** A dashboard export module converts JSON data strings into a downloadable file `Blob` and generates object URLs (`URL.createObjectURL(blob)`).
+
+**Requirements:**
+1. Write createDownloadableJsonBlob(jsonDataObj).
+2. Construct Blob with type application/json.
+3. Return object URL.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createDownloadableJsonBlob(jsonDataObj, mockUrlCreator) {
+>   const jsonStr = JSON.stringify(jsonDataObj, null, 2);
+>   const blob = new Blob([jsonStr], { type: "application/json" });
+>
+>   const urlCreator = mockUrlCreator || globalThis.URL;
+>   const objectUrl = urlCreator ? urlCreator.createObjectURL(blob) : "blob:fake-url";
+>
+>   return {
+>     blob,
+>     objectUrl,
+>     sizeBytes: blob.size
+>   };
+> }
+>
+> // Verification tests
+> const mockUrl = { createObjectURL: (b) => `blob:http://app.com/uuid-123` };
+> const res = createDownloadableJsonBlob({ report: "sales" }, mockUrl);
+>
+> console.assert(res.objectUrl === "blob:http://app.com/uuid-123", "Test 1 Failed");
+> console.assert(res.sizeBytes > 0, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Blob Constructor Syntax**: new Blob([parts], { type: mimeType }) creates immutable binary blob object.
+> 2. **URL.createObjectURL()**: Generates temporary blob: URI pointing to in-memory Blob file for browser download links.
+> 3. **Memory Management (revokeObjectURL)**: URL.revokeObjectURL(url) must be called when download finishes to release memory.
+---
+
+## 6. Related Terms
 - [FormData & Multipart Uploads](../level_05/formdata.md) — The payload format used to send files back to the server.
 - [Binary vs Text Formats](binary_vs_text_formats.md) — The network data serialization paradigms.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use Blobs to represent opaque, immutable file-like data in the browser.
 - Use `URL.createObjectURL(blob)` to map a binary Blob to a local URL for rendering or downloading.
 - Use ArrayBuffers to represent raw, fixed-length memory blocks for byte-level manipulation.

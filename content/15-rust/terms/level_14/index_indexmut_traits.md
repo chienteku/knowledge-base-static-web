@@ -308,7 +308,7 @@ impl IndexMut<usize> for Grid { fn index_mut(&mut self, idx: usize) -> &mut i32 
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Operator Overloading](operator_overloading.md) — Operator overloading.
 

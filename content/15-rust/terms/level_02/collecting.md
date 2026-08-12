@@ -509,7 +509,7 @@ Requirements:
 
 
 - [Iterator](iterator.md) — The underlying system that makes `.collect()` possible.
-- [Closure](../level_06/closure.md) — The anonymous inline functions (like `|x| x * 2`) used inside `.map()` and `.filter()`.
+- [Closures (`|args| body`)](../level_06/closure.md) — The anonymous inline functions (like `|x| x * 2`) used inside `.map()` and `.filter()`.
 - [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — Related concept: `FromIterator` / `Extend` Traits.
 - [Iterator Adapters](iterator_adapters.md) — Related concept: Iterator Adapters.
 - [`Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`)](iterator_consumers.md) — Related concept: `Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`).

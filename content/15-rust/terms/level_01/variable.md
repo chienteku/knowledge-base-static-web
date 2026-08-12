@@ -653,7 +653,7 @@ You must build a thread-safe configuration processing system using `std::sync::A
 - [Shadowing](shadowing.md) — Reusing a variable name in the same scope to create a new binding.
 - [Constants (`const`)](constants_const.md) — Values that are inherently immutable and evaluated at compile time.
 - [Compound Types](compound_types.md) — Related concept: Compound Types.
-- [`fn` (Functions)](fn.md) — Related concept: fn.
+- [fn](fn.md) — Related concept: fn.
 - [Static (`static`)](static_static.md) — Related concept: Static (`static`).
 - [Type Annotation](type_annotation.md) — Specifying variable types.
 

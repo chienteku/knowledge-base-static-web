@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **DevOps / Cloud Architecture**
+
+**DevOps / Cloud Architecture (Deployment / System Architecture)**: Docker is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Deployment / System Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 **The infamous developer excuse: "But it works on my machine!"**
@@ -41,7 +37,7 @@ To manage thousands of containers (starting them, stopping them, load-balancing 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Copying `node_modules` into the Image
 
@@ -91,7 +87,7 @@ node_modules
 .git
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Virtual Machines vs Docker
 
@@ -152,7 +148,7 @@ node_modules
 >
 > **Explanation:** Node.js as PID 1 does not handle default kernel signals properly without an init wrapper.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — While you can use PM2 inside Docker, Docker itself usually handles the "restarting if crashed" logic natively.
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — The language you are containerizing!
 - [Environment Variables (dotenv)](env_vars.md) — Related concept: Environment Variables (dotenv).
@@ -161,7 +157,7 @@ node_modules
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Docker** packages your app and its specific environment into a standardized container.
 - It completely eliminates the "it works on my machine" problem, because the environment is frozen inside the container.
 - **Images** are the read-only templates. **Containers** are the running instances.

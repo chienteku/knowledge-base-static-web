@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **JavaScript Core Concept / Syntax**
+
+**JavaScript Core Concept / Syntax (Universal JavaScript .)**: async / await is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal JavaScript** (ES2017+ standard).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While Promises and `.then()` solved the problem of freezing the browser, they introduced a new problem: **Callback Hell**. 
@@ -65,7 +61,7 @@ async function getUserData() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `async` keyword
 
@@ -134,83 +130,144 @@ async function getData() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Translate to Modern Syntax
+### Exercise 1: Sequential Async Task Pipeline Runner
 
-**Problem:** Convert this `.then()` chain into `async/await`.
-```javascript
-const loadProduct = () => {
-  fetch('/api/products/1')
-    .then(res => res.json())
-    .then(product => console.log(product.name));
-};
-```
+**Scenario:** An API data pipeline executes asynchronous processing tasks sequentially, passing intermediate results to the next step.
 
-**Expected output:**
+**Requirements:**
+1. Write runAsyncPipeline(initialData, taskFunctions).
+2. Execute each async function sequentially with await.
+3. Return final processed data.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const loadProduct = async () => {
->   const res = await fetch('/api/products/1');
->   const product = await res.json();
->   console.log(product.name);
-> };
+> async function runAsyncPipeline(initialData, taskFunctions = []) {
+>   let currentResult = initialData;
+>
+>   for (const task of taskFunctions) {
+>     if (typeof task !== "function") {
+>       throw new Error("Pipeline task must be a function");
+>     }
+>     currentResult = await task(currentResult);
+>   }
+>
+>   return currentResult;
+> }
+>
+> // Verification tests
+> const step1 = async (val) => val + 10;
+> const step2 = async (val) => val * 2;
+> const step3 = async (val) => `Result: ${val}`;
+>
+> runAsyncPipeline(5, [step1, step2, step3]).then(finalVal => {
+>   console.assert(finalVal === "Result: 30", "Test 1 Failed: 5 -> +10=15 -> *2=30 -> Result: 30");
+> });
 > ```
-> - Arrow functions can be `async` too! Just put the keyword before the `()`.
-> - Every `.then()` becomes a new line with `await`.
+>
+> #### Technical Explanation
+>
+> 1. **Async Function Return**: async functions ALWAYS return a Promise resolving to the returned value.
+> 2. **Sequential await in Loops**: Using await inside a for...of loop pauses loop execution until each promise settles.
+> 3. **Readable Control Flow**: Eliminates nested promise .then() chains in favor of synchronous-looking code.
 > 
 ---
 
-### Exercise 2: Converting Promises to Async/Await
+### Exercise 2: Safe Async Error Wrapper (Go-style tuple return)
 
-**Problem:** Convert this `.then()` chain into `async / await` syntax:
-```javascript
-fetch('/api/user')
-  .then(res => res.json())
-  .then(user => console.log(user.name))
-  .catch(err => console.error(err));
-```
+**Scenario:** A utility wraps async functions to catch errors gracefully, returning `[data, error]` tuples instead of throwing exceptions.
 
-**Expected output:**
+**Requirements:**
+1. Write safeAsync(asyncFn).
+2. Execute asyncFn.
+3. Return `[data, null]` on success, `[null, error]` on failure.
+
 > [!check]- Answer
-> ```text
-> try { const res = await fetch('/api/user'); const user = await res.json(); console.log(user.name); } catch (err) { console.error(err); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> try {
-> const res = await fetch('/api/user');
-> const user = await res.json();
-> console.log(user.name);
-> } catch (err) {
-> console.error(err);
+> async function safeAsync(asyncFn) {
+>   try {
+>     const data = await asyncFn();
+>     return [data, null];
+>   } catch (err) {
+>     return [null, err];
+>   }
 > }
+>
+> // Verification tests
+> const successTask = async () => ({ id: 42 });
+> const failTask = async () => { throw new Error("Database offline"); };
+>
+> safeAsync(successTask).then(([data, err]) => {
+>   console.assert(data.id === 42 && err === null, "Test 1 Failed");
+> });
+>
+> safeAsync(failTask).then(([data, err]) => {
+>   console.assert(data === null && err.message === "Database offline", "Test 2 Failed");
+> });
 > ```
-> - **Explanation:** `async/await` turns asynchronous promise chains into synchronous-looking code.
+>
+> #### Technical Explanation
+>
+> 1. **Tuple Error Handling**: Pattern inspired by Go language (val, err) that avoids try...catch block boilerplate.
+> 2. **Explicit Error Checks**: Forces calling code to handle error parameter explicitly before consuming data.
+> 3. **Uncaught Promise Rejections**: Prevents unhandled promise rejections by capturing errors at boundary.
+> 
 ---
 
-### Exercise 3: Async Function Return Value Type
+### Exercise 3: Parallel Execution with await Promise.all() vs Sequential await
 
-**Problem:** What does an `async` function ALWAYS return, regardless of what value is inside the return statement?
+**Scenario:** An API aggregator compares performance of sequential `await` execution vs parallel `Promise.all()` execution for fetching independent user profiles.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchUsersParallel(userIds, fetchFn).
+2. Use Promise.all() to run fetch requests concurrently.
+3. Return array of resolved profiles.
+
 > [!check]- Answer
-> ```text
-> A Promise (resolving to the returned value).
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchUsersParallel(userIds = [], fetchFn) {
+>   if (!Array.isArray(userIds) || userIds.length === 0) return [];
+>
+>   const promiseArray = userIds.map(id => fetchFn(id));
+>
+>   const profiles = await Promise.all(promiseArray);
+>   return profiles;
+> }
+>
+> // Verification tests
+> const mockFetch = async (id) => ({ id, name: `User ${id}` });
+>
+> fetchUsersParallel(["u1", "u2", "u3"], mockFetch).then(results => {
+>   console.assert(results.length === 3, "Test 1 Failed");
+>   console.assert(results[0].name === "User u1", "Test 2 Failed");
+> });
 > ```
-> ```text
-> A Promise (resolving to the returned value).
-> ```
-> - **Explanation:** `async` functions automatically wrap return values in resolved Promises.
+>
+> #### Technical Explanation
+>
+> 1. **Sequential Waterfall Risk**: Awaiting inside a loop sequentially adds latency (RTT * N); parallel Promise.all reduces latency to max(RTT).
+> 2. **Concurrency vs Parallelism**: Executes multiple asynchronous HTTP requests concurrently on the event loop.
+> 3. **Fail-Fast Behavior**: Promise.all rejects immediately if any single promise rejects.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Error Handling (try / catch)](error_handling.md) — Because we no longer use `.catch()`, we need a new way to handle errors with `async/await`.
 - [Promises (in the context of networks)](promises.md) — Related concept: Promises (in the context of networks).
 - [The fetch() API](fetch.md) — Related concept: The fetch() API.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`async/await`** is the modern, readable way to handle Promises.
 - It allows you to write asynchronous network code in a flat, top-to-bottom style.
 - **`await`** literally pauses the execution of the function until the network request finishes.

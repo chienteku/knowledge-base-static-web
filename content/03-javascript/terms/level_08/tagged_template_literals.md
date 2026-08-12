@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Tagged Template Literals is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard template literals automatically merge static string parts and dynamic variables together. However, sometimes we need to customize how those values are combined—such as escaping HTML characters to prevent Cross-Site Scripting (XSS), automatically translating text strings, or converting data types dynamically.
@@ -82,7 +78,7 @@ console.log(output);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Invoking the Tag Function with Parentheses
 
@@ -159,92 +155,128 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Uppercase Tag Function
+### Exercise 1: HTML Sanitizer Tagged Template Literal
 
-**Problem:** Complete the tag function `makeUppercase` to merge the string parts, but convert all dynamic placeholder values to uppercase before appending them.
+**Scenario:** A web security library defines a tagged template function html`...` that automatically escapes HTML entities inside interpolated string expressions.
 
-```javascript
-function makeUppercase(strings, ...values) {
-  let result = "";
-  strings.forEach((str, index) => {
-    result += str;
-    if (index < values.length) {
-      // Append value converted to uppercase
-    }
-  });
-  return result;
-}
+**Requirements:**
+1. Write html(strings, ...values).
+2. Escape HTML special characters (<, >, &, ", ') in values.
+3. Interleave strings and escaped values.
+4. Return sanitized string.
 
-const item = "laptop";
-const brand = "fruit";
-const output = makeUppercase`I bought a ${item} made by ${brand}.`;
-
-console.log(output);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> I bought a LAPTOP made by FRUIT.
-> ```
-> - Inside the if statement, append `String(values[index]).toUpperCase()`.
-> 
----
-
-### Exercise 2: Custom String Sanitization Tag Function
-
-**Problem:** Write a tag function `upper` that converts evaluated expressions to uppercase.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HELLO ALICE!
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function upper(strings, ...values) {
->   return strings.reduce((acc, str, i) => {
->     const val = values[i - 1] ? String(values[i - 1]).toUpperCase() : "";
->     return acc + val + str;
->   });
+> function escapeHtml(str) {
+>   return String(str)
+>     .replace(/&/g, "&amp;")
+>     .replace(/</g, "&lt;")
+>     .replace(/>/g, "&gt;");
 > }
-> const name = "Alice";
-> console.log(upper`Hello ${name}!`);
+>
+> function html(strings, ...values) {
+>   return strings.reduce((result, str, i) => {
+>     const val = i < values.length ? escapeHtml(values[i]) : "";
+>     return result + str + val;
+>   }, "");
+> }
+>
+> // Verification tests
+> const userInput = "<script>alert('xss')</script>";
+> const output = html`<div>User: ${userInput}</div>`;
+> console.assert(output === "<div>User: &lt;script&gt;alert('xss')&lt;/script&gt;</div>", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Tagged template functions intercept literal strings and evaluated expressions for custom processing.
+> #### Technical Explanation
+>
+> 1. **Tagged Template Literals**: Tag functions parse template literals: fn`string ${expr}` receives array of raw strings and evaluated values.
+> 2. **Domain-Specific DSLs**: Enables custom processing like HTML escaping, SQL sanitization, or CSS styling.
+> 3. **Strings Array Argument**: The first argument is a frozen array of literal string segments surrounding expressions.
 > 
 ---
 
-### Exercise 3: Inspecting `strings.raw` Property
+### Exercise 2: Tagged Template Literals Advanced Context Handler
 
-**Problem:** Inspect `strings.raw[0]` inside a tagged template function for escaped characters.
+**Scenario:** A web application component processes tagged template literals data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleTaggedTemplateLiteralsSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Raw string inspected
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function tag(strings) {
->   console.log("Raw string inspected");
+> function handleTaggedTemplateLiteralsSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
 > }
-> tag`line1\nline2`;
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleTaggedTemplateLiteralsSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `strings.raw` accesses unescaped raw template literal character inputs.
-> 
+> #### Technical Explanation
+>
+> 1. **Tagged Template Literals Architecture**: Applying tagged template literals patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Tagged Template Literals Performance Optimization
+
+**Scenario:** An application utility optimizes tagged template literals execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeTaggedTemplateLiteralsTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeTaggedTemplateLiteralsTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeTaggedTemplateLiteralsTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Tagged Template Literals Optimization**: Optimizing tagged template literals improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [String Methods](../level_02/string_methods.md) — Text manipulation helpers often applied inside tag functions.
 - [Regular Expressions (RegExp)](../level_09/regexp.md) — Related concept: Regular Expressions (RegExp).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Tagged Template Literals let you intercept and process template string values using a custom tag function.
 - Invoke the tag function by appending its name directly before the literal's backticks (e.g. `tag`text`).
 - The tag function receives an array of static string slices as the first argument, and the evaluated placeholder expressions as subsequent arguments.

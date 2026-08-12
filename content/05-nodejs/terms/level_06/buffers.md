@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Concept / Data Structure**
+
+**Node.js Core Concept / Data Structure (Node.js Only .)**: Buffers is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Though browsers have `ArrayBuffer`, the `Buffer` class is unique to Node).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript was originally built to handle strings and numbers in the browser. It was terrible at handling raw binary data (1s and 0s) because web developers rarely needed to manipulate video files or raw network packets.
@@ -47,7 +43,7 @@ In Node.js, when a video downloads over the internet, it arrives in tiny, random
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to stringify a Buffer
 
@@ -95,7 +91,7 @@ const buf = Buffer.alloc(100); // Safe zero-initialized memory
 res.send(buf);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Creating a Buffer
 
@@ -147,7 +143,7 @@ res.send(buf);
 >
 > **Explanation:** `Buffer.concat()` combines multiple buffer segments into a single contiguous buffer.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Streams (General Concept)](streams.md) — Streams are literally just continuous flows of Buffers!
 - [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.
 - [The fs Module (File System)](../level_02/fs_module.md) — Related concept: The fs Module (File System).
@@ -157,7 +153,7 @@ res.send(buf);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Buffer** is a way for Node.js to handle raw binary data (like images and videos).
 - It looks like an array of hexadecimal numbers (e.g., `<Buffer 48 65>`).
 - If you read a text file without specifying `'utf8'`, Node.js will return a Buffer instead of a String.

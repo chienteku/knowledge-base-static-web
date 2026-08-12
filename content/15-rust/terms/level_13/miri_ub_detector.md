@@ -244,11 +244,11 @@ Ensure pointer arithmetic remains strictly within valid array bounds!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Undefined Behavior (UB)](undefined_behavior.md) — UB detection.
 - [Cargo CLI](../level_07/cargo_cli.md) — Cargo integration.
-- [Mir Mid Level Ir](../level_19/mir_mid_level_ir.md) — Related concept: Mir Mid Level Ir.
+- [MIR (Mid-level IR)](../level_19/mir_mid_level_ir.md) — Related concept: Mir Mid Level Ir.
 
 ---
 

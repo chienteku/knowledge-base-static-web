@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Third-Party Framework**
+
+**Third-Party Framework (Node.js)**: Express.js is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Node.js (Server Infrastructure)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build an API using only Node's built-in `http` module, you have to write manual code to parse incoming JSON Buffers, manual `if/else` statements for every single URL route, and manual code to set headers and status codes.
@@ -38,7 +34,7 @@ Unlike massive frameworks like Django (Python) or Spring Boot (Java), Express is
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to require it without installing it
 
@@ -199,7 +195,7 @@ app.get('/data', async (req, res, next) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hello World in Express
 
@@ -261,7 +257,7 @@ app.get('/data', async (req, res, next) => {
 >
 > **Explanation:** Express 5 natively catches rejected async promises automatically.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Routing](routing.md) — The feature Express uses `app.get` and `app.post` for.
 - [Middleware](middleware.md) — The most powerful feature of the Express framework.
 - [The http Module](../level_02/http_module.md) — Related concept: The http Module.
@@ -271,7 +267,7 @@ app.get('/data', async (req, res, next) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Express.js** is a minimalist, third-party web framework for Node.js.
 - It acts as a wrapper around the built-in `http` module, removing the tedious boilerplate of parsing data and managing routes.
 - It provides helper methods like `res.json()` and `app.get()`.

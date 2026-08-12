@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard)**: `flex-wrap` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, Flexbox is incredibly stubborn. If you put ten 200px boxes inside a Flex Container that is only 500px wide, Flexbox will refuse to break them into two rows. Instead, it will forcibly shrink all ten boxes down to 50px so they all fit on a single horizontal line!
@@ -58,7 +54,7 @@ Imagine typing a sentence in Microsoft Word.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Wondering why `width` is being ignored
 
@@ -102,7 +98,7 @@ Imagine typing a sentence in Microsoft Word.
 .item { flex: 1 1 250px; } /* Wraps onto new line when container falls below 250px */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Shrinking Buttons
 
@@ -155,14 +151,14 @@ Imagine typing a sentence in Microsoft Word.
 >
 > **Explanation:** `flex-flow` combines `flex-direction` and `flex-wrap` properties.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`gap` (Grid Gap)](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
 - [`align-content`](align_content.md) — Distributes multiple rows of wrapped items.
-- [`display: flex`](display_flex.md) — Related concept: `display: flex`.
+- [`display: flex` — Flexbox Container](display_flex.md) — Related concept: `display: flex`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `flex-wrap: nowrap` is the default. It squishes children to fit on one line.
 - `flex-wrap: wrap` allows children to keep their width and wrap to new lines.
 - This is essential for building responsive layouts like photo galleries and card grids.

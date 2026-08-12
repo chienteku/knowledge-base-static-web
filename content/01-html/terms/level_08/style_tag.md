@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata Tag**
+
+**Metadata Tag (Universal Browser Support .)**: `<style>` Element is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively. The browser pauses HTML construction to compile CSS selectors declared inside this tag).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We want our webpages to look appealing (with colors, custom layouts, fonts, and borders) instead of plain black text on a white background. 
@@ -114,7 +110,7 @@ A simple internal CSS block:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing HTML tags inside the `<style>` tag
 
@@ -172,7 +168,7 @@ A simple internal CSS block:
 <link rel="stylesheet" href="styles.css"> <!-- Cached external stylesheet -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Stylesheet Conversion
 
@@ -235,14 +231,14 @@ A simple internal CSS block:
 >
 > **Explanation:** `type="text/css"` is redundant in modern HTML5.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`style` Attribute](../level_07/style.md) — The inline styling attribute.
 - [`<link>`](link.md) — The element used to connect external CSS.
 - [`class` Attribute](../level_07/class.md) — The category naming selector.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<style>` element houses internal CSS code inside the HTML file.
 - It is placed in the `<head>` section of the document.
 - Use `<style>` for quick styling sandboxes or standalone pages.

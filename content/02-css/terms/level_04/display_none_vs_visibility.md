@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support .)**: `display: none` vs `visibility: hidden` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Processed during the layout phase. `display: none` prevents layout box construction, whereas `visibility: hidden` constructs the box but skips painting it).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern interactive web pages, developers frequently need to hide and show elements. For instance, hiding a mobile sidebar menu until the user clicks the hamburger button, or displaying a custom tooltip popup when hovering over a button.
@@ -143,7 +139,7 @@ Comparing declarations:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to animate `display: none` using transitions
 
@@ -300,7 +296,7 @@ Comparing declarations:
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Layout Analysis
 
@@ -369,13 +365,13 @@ If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what 
 >
 > **Explanation:** Combining `opacity` and `visibility` allows smooth fade transitions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](display.md) — The parent display rules.
 - [`opacity`](../level_09/opacity.md) — The styling property that adjusts visibility percentage from 0 to 100.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `display: none` completely deletes the element from the layout flow, collapsing its space.
 - `visibility: hidden` hides the element visually, but preserves its layout space (renders as an empty gap).
 - Neither property is accessible; both hide content from screen readers.

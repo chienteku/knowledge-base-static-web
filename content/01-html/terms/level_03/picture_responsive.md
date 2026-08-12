@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Modern Browsers  .)**: `<picture>` & Responsive Images is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers (HTML5)** (Supported natively by all modern browsers. Older browsers fall back automatically to the nested `<img>`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Users visit websites on everything from tiny watches and mobile phones to massive 4K desktop monitors. 
@@ -86,7 +82,7 @@ Serving a desktop image versus a mobile image:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the fallback `<img>` tag inside `<picture>`
 
@@ -146,7 +142,7 @@ Serving a desktop image versus a mobile image:
 <source media="(min-width: 500px)" srcset="small.jpg">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Responsive Banner
 
@@ -203,14 +199,14 @@ Serving a desktop image versus a mobile image:
 >
 > **Explanation:** `<picture>` supports structural art direction changes via media queries.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<img>`](img.md) — The rendering image element.
 - [`<source>` Element](source.md) — The sibling element specifying source lists.
 - [`alt` Attribute](alt.md) — The required visual descriptor.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<picture>` is an HTML5 wrapper tag used to serve responsive images.
 - It matches image assets to the user's screen width using the `media` query attribute.
 - The `srcset` attribute on `<source>` defines the path to load.

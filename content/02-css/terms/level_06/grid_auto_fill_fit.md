@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Modern Standard .)**: `auto-fill` / `auto-fit` is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Evaluates column count dynamically on container resize).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard responsive web design, you have to write media queries to change column structures for different screens:
@@ -139,7 +135,7 @@ Auto-responsive grid (no media queries!):
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `1fr` directly inside auto-repeat
 
@@ -266,7 +262,7 @@ grid-template-columns: repeat(auto-fit, 250px); /* ❌ Non-fluid fixed columns *
 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive fluid grid */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Fill vs Fit Selection
 
@@ -323,14 +319,14 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 >
 > **Explanation:** `auto-fit` stretches items across full width; `auto-fill` preserves empty track slots.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`repeat()` Function](grid_repeat.md) — The loop container.
 - [`minmax()` Function](grid_minmax.md) — The required track bounds function.
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — The legacy responsive breakpoint method.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `auto-fill` and `auto-fit` replace fixed loop counts inside `repeat()`.
 - They calculate columns dynamically based on the width of the container.
 - `auto-fill` preserves empty column tracks, leaving gaps on the right.

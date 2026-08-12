@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Affects network socket configurations, database collations, and HTTP header properties.)**: Character Encoding (UTF-8) is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Affects network socket configurations, database collations, and HTTP header properties.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers cannot store or transmit characters like `"A"`, `"ñ"`, or `"🚀"` directly. They only understand binary numbers (0s and 1s). 
@@ -81,7 +77,7 @@ const headers = {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting `Content-Length` using `string.length` instead of byte length
 
@@ -137,59 +133,142 @@ Content-Type: text/html; charset=utf-8
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Byte Analyzer
+### Exercise 1: UTF-8 vs ASCII TextEncoder / TextDecoder Converter
 
-**Problem:** Calculate the exact byte size of the following payload string when encoded in UTF-8:
+**Scenario:** A web application uses `TextEncoder` and `TextDecoder` to convert multi-byte Unicode strings (e.g. emojis, non-Latin scripts) into UTF-8 byte arrays.
 
-`"Café"` (Hint: `C`, `a`, `f` are basic ASCII characters; `é` is an accented Latin character).
+**Requirements:**
+1. Write encodeStringToUtf8Bytes(textStr).
+2. Write decodeUtf8BytesToString(uint8Array).
+3. Verify lossless Unicode roundtrip.
 
 > [!check]- Answer
-> - **5 bytes** (Calculation: `C` = 1 byte, `a` = 1 byte, `f` = 1 byte, `é` = 2 bytes. Total = 5 bytes. Note: calling `"Café".length` in JS returns `4`, showing the byte mismatch).
+>
+> #### Implementation
+>
+> ```javascript
+> function encodeStringToUtf8Bytes(textStr) {
+>   const encoder = new TextEncoder();
+>   return encoder.encode(textStr);
+> }
+>
+> function decodeUtf8BytesToString(uint8Array) {
+>   const decoder = new TextDecoder("utf-8");
+>   return decoder.decode(uint8Array);
+> }
+>
+> // Verification tests
+> const unicodeText = "Hello 🚀 世界";
+> const bytes = encodeStringToUtf8Bytes(unicodeText);
+>
+> console.assert(bytes.length > unicodeText.length, "Test 1 Failed: UTF-8 byte length > char length for multi-byte Unicode");
+> console.assert(decodeUtf8BytesToString(bytes) === unicodeText, "Test 2 Failed: Lossless decode");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **TextEncoder / TextDecoder APIs**: Standard Web API for converting strings to/from UTF-8 Uint8Array byte arrays.
+> 2. **UTF-8 Variable-Width Encoding**: ASCII characters use 1 byte (0-127); emojis and non-Latin characters use 2 to 4 bytes.
+> 3. **String.length vs Byte Count**: JavaScript string.length counts UTF-16 code units, NOT raw UTF-8 byte count.
 > 
+---
+
+### Exercise 2: Malformed UTF-8 Sequence Sanitizer & Replacement Character Guard
+
+**Scenario:** An API payload decoder handles invalid UTF-8 byte sequences gracefully using the Unicode Replacement Character (`�`).
+
+**Requirements:**
+1. Write safeDecodeUtf8(uint8Array).
+2. Use TextDecoder with fatal: false option.
+3. Detect replacement characters.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function safeDecodeUtf8(uint8Array) {
+>   const decoder = new TextDecoder("utf-8", { fatal: false });
+>   const decodedStr = decoder.decode(uint8Array);
+>
+>   const hasMalformedBytes = decodedStr.includes("�");
+>
+>   return {
+>     decodedStr,
+>     hasMalformedBytes
+>   };
+> }
+>
+> // Verification tests
+> const validBytes = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]); // "Hello"
+> console.assert(safeDecodeUtf8(validBytes).hasMalformedBytes === false, "Test 1 Failed");
+>
+> const invalidBytes = new Uint8Array([0xFF, 0xFE, 0xFD]); // Invalid UTF-8 bytes
+> console.assert(safeDecodeUtf8(invalidBytes).hasMalformedBytes === true, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Unicode Replacement Character (U+FFFD)**: Substituted when a byte sequence cannot be decoded as valid UTF-8.
+> 2. **TextDecoder fatal Option**: Setting fatal: true forces TextDecoder to throw a TypeError on malformed bytes.
+> 3. **Character Encoding Security**: Validating UTF-8 encoding prevents security bypasses caused by invalid byte sequences.
 > 
 ---
 
-### Exercise 2: UTF-8 Byte Length Variation
+### Exercise 3: Content-Type Charset Header Verification Guard
 
-**Problem:** How many bytes does a single character consume in UTF-8 encoding for ASCII characters vs Emojis?
+**Scenario:** An HTTP response inspector verifies that text response bodies match declared `Content-Type: text/plain; charset=utf-8` headers.
 
-**Expected output:**
+**Requirements:**
+1. Write verifyResponseCharset(contentTypeHeader).
+2. Extract charset directive.
+3. Flag non-UTF8 charsets (e.g. ISO-8859-1).
+
 > [!check]- Answer
-> ```text
-> ASCII characters: 1 byte
-> Emojis / Special characters: Up to 4 bytes
+>
+> #### Implementation
+>
+> ```javascript
+> function verifyResponseCharset(contentTypeHeader) {
+>   if (!contentTypeHeader || typeof contentTypeHeader !== "string") {
+>     return { valid: false, charset: "UTF-8", warning: "Missing charset header (defaults to UTF-8)" };
+>   }
+>
+>   const parts = contentTypeHeader.split(";").map(p => p.trim());
+>   for (const part of parts) {
+>     if (part.toLowerCase().startsWith("charset=")) {
+>       const charset = part.split("=")[1].toUpperCase();
+>       return {
+>         valid: charset === "UTF-8" || charset === "UTF8",
+>         charset
+>       };
+>     }
+>   }
+>
+>   return { valid: true, charset: "UTF-8" };
+> }
+>
+> // Verification tests
+> console.assert(verifyResponseCharset("text/html; charset=utf-8").valid === true, "Test 1 Failed");
+> console.assert(verifyResponseCharset("text/html; charset=ISO-8859-1").valid === false, "Test 2 Failed");
 > ```
-> ```text
-> ASCII characters -> 1 byte (0x00 to 0x7F)
-> Emojis / Asian characters -> 3 to 4 bytes
-> ```
-> - **Explanation:** UTF-8 is a variable-width encoding using 1 to 4 bytes per Unicode code point.
+>
+> #### Technical Explanation
+>
+> 1. **Web Standard Encoding**: UTF-8 is the mandatory default character encoding for modern JSON APIs and HTML5.
+> 2. **Legacy Charset Risks**: Using legacy charsets (ISO-8859-1, Windows-1252) causes corrupted text rendering (mojibake).
+> 3. **HTTP Header Specification**: Content-Type specifies media type and character set encoding parameters.
 ---
 
-### Exercise 3: Mojibake Definition
-
-**Problem:** What does the term "Mojibake" describe in character encoding context?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Garbled unreadable text resulting from decoding a character string using an incorrect character encoding standard.
-> ```
-> ```text
-> Garbled unreadable text resulting from decoding a character string using an incorrect character encoding standard.
-> ```
-> - **Explanation:** Mismatched character encodings corrupt rendered character glyphs.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Base64 Encoding](base64.md) — The binary-to-text format that translates raw bytes back into printable ASCII characters.
 - [Binary vs Text Formats](binary_vs_text_formats.md) — The architectural trade-off between sending byte-streams vs character-encoded text.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Characters must be converted to binary bytes using a Character Encoding before transmission.
 - UTF-8 is a variable-width encoding that supports Unicode while remaining backwards compatible with ASCII.
 - Standard English characters consume 1 byte; accented letters consume 2, Asian characters consume 3, and emojis consume 4 bytes.

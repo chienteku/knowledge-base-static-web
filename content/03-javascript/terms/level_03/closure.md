@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Closure is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, when a function finishes executing, all of its local variables are destroyed to free up memory. However, JavaScript allows you to return a *new* function from inside a function. If that inner function relies on variables from the outer function, destroying those variables would break the inner function.
@@ -82,7 +78,7 @@ console.log(jamesBond.health); // undefined
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Closure Scope and Variable Hoisting
 
@@ -155,76 +151,137 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Greeter
+### Exercise 1: Encapsulated Private State Bank Ledger
 
-**Problem:** Write a function `createGreeter(greeting)` that returns an inner function. The inner function should accept a `name` and log `"[greeting], [name]!"`. 
-Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createGreeter("Howdy")`.
+**Scenario:** A financial security package creates bank account objects with private enclosed balance variables accessible only through closure accessor methods.
 
-**Expected output:**
+**Requirements:**
+1. Write createPrivateAccount(initialBalance).
+2. Declare private let balance inside outer function.
+3. Return object with deposit, withdraw, and getBalance methods.
+4. Verify outer scope cannot access balance directly.
+
 > [!check]- Answer
-> ```text
-> sayHello("Alice") -> "Hello, Alice!"
-> sayHowdy("Bob") -> "Howdy, Bob!"
-> ```
-> - `function createGreeter(greeting) { return function(name) { console.log(...) } }`
-> - Each time you call `createGreeter`, it creates a *new*, independent closure backpack.
-> 
----
-
-### Exercise 2: Private Variable Counter Closure
-
-**Problem:** Create `createCounter()` returning `{ inc(), dec(), get() }` wrapping a private `count` variable.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1
-> 2
-> 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function createCounter() {
->   let count = 0;
+> function createPrivateAccount(initialBalance) {
+>   let balance = initialBalance;
+>
 >   return {
->     inc() { count++; return count; },
->     dec() { count--; return count; },
->     get() { return count; }
+>     deposit(amount) {
+>       if (amount > 0) balance += amount;
+>       return balance;
+>     },
+>     withdraw(amount) {
+>       if (amount > 0 && amount <= balance) balance -= amount;
+>       return balance;
+>     },
+>     getBalance() {
+>       return balance;
+>     }
 >   };
 > }
-> const c = createCounter();
-> console.log(c.inc());
-> console.log(c.inc());
-> console.log(c.dec());
+>
+> // Verification tests
+> const acc = createPrivateAccount(100);
+> console.assert(acc.deposit(50) === 150, "Test 1 Failed");
+> console.assert(acc.getBalance() === 150, "Test 2 Failed");
+> // @ts-ignore
+> console.assert(acc.balance === undefined, "Test 3 Failed: Private balance leaked");
 > ```
 >
-> **Explanation:** Closures retain access to outer function scope variables even after parent functions return.
+> #### Technical Explanation
+>
+> 1. **Closure Definition**: A closure is the combination of a function bundled together with references to its surrounding lexical environment.
+> 2. **Private Variable Encapsulation**: Variables in outer functions remain accessible to inner methods via closure, while hidden from external scopes.
+> 3. **Persistent Environment**: Outer scope variable bindings persist in memory as long as inner closure methods remain referenced.
 > 
 ---
 
-### Exercise 3: Function Factory with Closures
+### Exercise 2: Memoized Computation Cache Factory
 
-**Problem:** Write `multiplier(factor)` returning a function multiplying inputs by `factor`.
+**Scenario:** A performance optimization utility creates memoized functions that store calculation results in a private closure cache dictionary.
 
-**Expected output:**
+**Requirements:**
+1. Write memoize(fn).
+2. Create private cache object inside outer closure.
+3. Check cache before invoking target fn.
+4. Return cached or computed result.
+
 > [!check]- Answer
-> ```text
-> 30
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function multiplier(factor) {
->   return (num) => num * factor;
+> function memoize(fn) {
+>   const cache = {};
+>
+>   return function(arg) {
+>     const key = String(arg);
+>     if (key in cache) {
+>       return cache[key];
+>     }
+>     const result = fn(arg);
+>     cache[key] = result;
+>     return result;
+>   };
 > }
-> const triple = multiplier(3);
-> console.log(triple(10));
+>
+> // Verification tests
+> let callCount = 0;
+> const square = memoize(x => { callCount++; return x * x; });
+> console.assert(square(4) === 16, "Test 1 Failed");
+> console.assert(square(4) === 16, "Test 2 Failed");
+> console.assert(callCount === 1, "Test 3 Failed: Memoization failed to use closure cache");
 > ```
 >
-> **Explanation:** Closures capture configuration arguments (`factor`) across multiple subsequent invocations.
+> #### Technical Explanation
+>
+> 1. **Closure Caching**: Inner functions retain access to the private cache object across multiple invocations.
+> 2. **State Retainment**: Outer function execution context remains allocated in heap memory via closure.
+> 3. **Higher-Order Utility**: Memoization factories wrap standard functions without modifying original function signatures.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Function Currying & Config Factory
+
+**Scenario:** A logging service uses function currying via closures to pre-populate log level parameters before processing log message strings.
+
+**Requirements:**
+1. Write createLogger(level).
+2. Return inner function accepting message string.
+3. Return formatted string `[${level}]: ${message}`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createLogger(level) {
+>   return function(message) {
+>     return "[" + level.toUpperCase() + "]: " + message;
+>   };
+> }
+>
+> // Verification tests
+> const errorLogger = createLogger("error");
+> const infoLogger = createLogger("info");
+> console.assert(errorLogger("Database down") === "[ERROR]: Database down", "Test 1 Failed");
+> console.assert(infoLogger("User logged in") === "[INFO]: User logged in", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Currying via Closure**: Currying decomposes multi-parameter functions into nested single-parameter functions via closures.
+> 2. **Partial Parameter Application**: Outer arguments (like log level) are stored in closure memory for future invocations.
+> 3. **Factory Design Pattern**: Generates configured function instances sharing common lexical environments.
+---
+
+## 6. Related Terms
 - [Scope](scope.md) — The rules defining variable visibility.
 - [Higher-Order Function](higher_order_function.md) — A function that returns another function.
 - [Lexical (Static) Scope / Environment](lexical_scope.md) — Related concept: Lexical (Static) Scope / Environment.
@@ -237,7 +294,7 @@ Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createG
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Closure happens automatically when a function is defined inside another function.
 - The inner function "remembers" the variables from the outer function, even after the outer function finishes executing.
 - Closures are widely used in JavaScript to create private variables and encapsulate logic.

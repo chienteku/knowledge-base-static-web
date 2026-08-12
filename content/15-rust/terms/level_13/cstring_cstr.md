@@ -256,7 +256,7 @@ let s = unsafe { CStr::from_ptr(raw_c_ptr) }.to_string_lossy(); // Safe lossy co
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [FFI (Foreign Function Interface)](ffi.md) — C FFI boundary.
 - [`extern "C"`](extern_c.md) — C calling convention.

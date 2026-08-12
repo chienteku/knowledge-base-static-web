@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: for...in is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `for...of` handles ordered, iterable data like Arrays and Strings, plain Objects in JavaScript are unstructured collections of keys and values. If you want to dynamically check every property inside an object (e.g., checking all the settings in a configuration object), you can't use a normal loop because you don't know the exact names of the keys.
@@ -71,7 +67,7 @@ for (const prop in car) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `for...in` on Arrays
 
@@ -153,76 +149,58 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Count the Properties
+### Exercise 1: Dynamic Object Property Inspection
 
-**Problem:** You have an object: `const scores = { math: 90, english: 85, science: 95 };`. Write a `for...in` loop that adds up all the values and logs the total score.
+**Scenario:** A dynamic configuration exporter iterates over object property keys using a for...in loop with Object.hasOwn() guards.
 
-**Expected output:**
+**Requirements:**
+1. Write extractConfigKeys(configObj).
+2. Iterate keys using for (const key in configObj).
+3. Guard using Object.hasOwn(configObj, key).
+4. Return array of own keys.
+
 > [!check]- Answer
-> ```text
-> 270
-> ```
-> - Create `let total = 0;` before the loop.
-> - Inside the loop: `total += scores[key];`
-> 
----
-
-### Exercise 2: Iterating Enumerable Object Keys
-
-**Problem:** Iterate over `{ a: 1, b: 2 }` using `for...in` and log key-value pairs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> a: 1
-> b: 2
-> ```
-> ```javascript
-> const obj = { a: 1, b: 2 };
-> for (const key in obj) {
->   console.log(`${key}: ${obj[key]}`);
-> }
-> ```
 >
-> **Explanation:** `for...in` iterates over all enumerable string property keys of objects.
-> 
----
-
-### Exercise 3: Filtering Prototype Properties in `for...in`
-
-**Problem:** Use `Object.hasOwn(obj, key)` inside `for...in` to ignore prototype chain keys.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> own: x
-> ```
+> #### Implementation
+>
 > ```javascript
-> const proto = { inherited: true };
-> const obj = Object.create(proto);
-> obj.own = "x";
-> for (const key in obj) {
->   if (Object.hasOwn(obj, key)) {
->     console.log(`own: ${key}`);
+> function extractConfigKeys(configObj) {
+>   if (!configObj || typeof configObj !== "object") return [];
+>   const ownKeys = [];
+>   for (const key in configObj) {
+>     if (Object.hasOwn(configObj, key)) {
+>       ownKeys.push(key);
+>     }
 >   }
+>   return ownKeys;
 > }
+>
+> // Verification tests
+> const proto = { inherited: "yes" };
+> const obj = Object.create(proto);
+> obj.own = "real";
+>
+> const keys = extractConfigKeys(obj);
+> console.assert(keys.length === 1 && keys[0] === "own", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `Object.hasOwn` guards `for...in` loops against processing inherited prototype properties.
-> 
-> 
+> #### Technical Explanation
+>
+> 1. **for...in Enumeration**: The for...in loop enumerates all enumerable string properties of an object including prototype chain properties.
+> 2. **Object.hasOwn() Protection**: Always check Object.hasOwn() to filter out inherited prototype properties.
+> 3. **Avoid for...in on Arrays**: for...in iterates array indices as string keys and includes custom prototype properties; use for...of for arrays.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [for...of](for_of.md) — Used for iterating over the *values* of Arrays and Strings.
 - [Object](../level_02/object.md) — The data structure that `for...in` is designed for.
 - [hasOwnProperty / Object.getPrototypeOf](../level_07/hasownproperty_getprototypeof.md) — Related concept: hasOwnProperty / Object.getPrototypeOf.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `for...in` iterates over the **Keys** (properties) of an Object.
 - You must use Bracket Notation (`object[key]`) inside the loop to access the actual values.
 - **Never use `for...in` on an Array.** Always use `for...of` or `.forEach()` for Arrays.

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [Comments](../level_01/comments.md) — Standard comments vs doc comments /// and //!.
-- [Attributes (`#[...]`)](attributes.md) — Doc comments desugar to #[doc = '...'] attributes.
 
 ---
 

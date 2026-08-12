@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 
 
-- [`#[test]` Attribute](test_attribute.md) — The #[test] attribute for unit tests.
-- [Attributes (`#[...]`)](../level_07/attributes.md) — Attribute syntax #[ignore].
+- None!
 
 ---
 

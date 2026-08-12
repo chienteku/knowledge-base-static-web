@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: find() is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `filter()` is great for finding *all* items that match a condition, sometimes you only need to find a single specific item (like looking up a user by their unique ID). If you use `filter()`, the engine will test every single item in the entire array, even if it found the match on the very first try. This is highly inefficient.
@@ -70,7 +66,7 @@ console.log(getUserById(999)); // "User not found"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `find()` to return an array
 
@@ -149,69 +145,80 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Find the Admin
+### Exercise 1: User Account Lookup by Unique ID or Email
 
-**Problem:** You have an array of users: `[{name: "Alice", role: "user"}, {name: "Bob", role: "admin"}, {name: "Charlie", role: "admin"}]`. Use `find()` to get the first admin. What is their name?
+**Scenario:** A user directory service searches an array of user objects to find the first matching record by ID using find().
 
-**Expected output:**
+**Requirements:**
+1. Write findUserById(users, targetId).
+2. Use users.find(user => user.id === targetId).
+3. Return matching user object or undefined.
+
 > [!check]- Answer
-> ```text
-> Bob
-> ```
-> - `users.find(u => u.role === "admin")`
-> - Notice that even though Charlie is also an admin, `find()` stops as soon as it hits Bob!
-> 
----
-
-### Exercise 2: Finding Object by Property
-
-**Problem:** Find the first user with `id: 2` in `[{ id: 1 }, { id: 2 }, { id: 3 }]` using `.find()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"id":2}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const users = [{ id: 1 }, { id: 2 }, { id: 3 }];
-> const user = users.find(u => u.id === 2);
-> console.log(JSON.stringify(user));
+> function findUserById(users, targetId) {
+>   if (!Array.isArray(users)) return undefined;
+>   return users.find(user => user.id === targetId);
+> }
+>
+> // Verification tests
+> const users = [{ id: 101, name: "Alice" }, { id: 102, name: "Bob" }];
+> console.assert(findUserById(users, 102).name === "Bob", "Test 1 Failed");
+> console.assert(findUserById(users, 999) === undefined, "Test 2 Failed: Non-existent ID must return undefined");
 > ```
 >
-> **Explanation:** `find()` returns the first matching element value or `undefined`.
+> #### Technical Explanation
+>
+> 1. **find() Short-Circuit Behavior**: Array.prototype.find(predicate) returns the FIRST element that satisfies the predicate and stops iterating.
+> 2. **Undefined Fallback**: If no element satisfies the predicate, find() returns undefined.
+> 3. **Direct Object Reference**: Returns the actual element value (or object reference) rather than its array index.
 > 
 ---
 
-### Exercise 3: Handling Unmatched `find()` Defaults
+### Exercise 2: Product SKU Match Locator
 
-**Problem:** Safely read property of `.find()` result using optional chaining `?.name`.
+**Scenario:** A retail POS service searches inventory arrays for a product matching a specific bar code SKU.
 
-**Expected output:**
+**Requirements:**
+1. Write findProductBySku(inventory, skuStr).
+2. Use inventory.find(item => item.sku === skuStr).
+3. Return product object.
+
 > [!check]- Answer
-> ```text
-> undefined
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const users = [{ id: 1, name: "Alice" }];
-> const user = users.find(u => u.id === 99);
-> console.log(user?.name);
+> function findProductBySku(inventory, skuStr) {
+>   if (!Array.isArray(inventory)) return undefined;
+>   return inventory.find(item => item.sku === skuStr);
+> }
+>
+> // Verification tests
+> const items = [{ sku: "SKU-A", price: 10 }, { sku: "SKU-B", price: 20 }];
+> console.assert(findProductBySku(items, "SKU-B").price === 20, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Optional chaining prevents `TypeError` when `.find()` evaluates to `undefined`.
-> 
-> 
+> #### Technical Explanation
+>
+> 1. **First Match Guarantee**: If multiple elements match, find() returns strictly the first matching element.
+> 2. **Predicate Execution**: Executes predicate for each index until a truthy match is found.
+> 3. **Comparison with filter()**: Unlike filter() (which checks all items and returns an array), find() checks until first match and returns single element.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [filter()](filter.md) — Finds *all* elements that match a condition and returns them in an Array.
 - [some()](some.md) — Checks if an element exists, but returns `true`/`false` instead of the element itself.
 - [indexOf / includes / findIndex](indexof_includes_findindex.md) — Related concept: indexOf / includes / findIndex.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `find()` returns the **first element** that passes the test.
 - It is highly efficient because it stops iterating as soon as it finds a match.
 - If no elements pass the test, it returns `undefined`.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Statement is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Every programming language needs a way to tell the computer *what to do*. A JavaScript program is essentially a sequence of instructions executed by the engine. These individual instructions are called "Statements". 
@@ -63,7 +59,7 @@ initializeApp();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to assign a statement to a variable
 
@@ -138,78 +134,133 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Counting Statements
+### Exercise 1: Order Processing Control Flow Engine
 
-**Problem:** Look at the code below. How many statements are there?
+**Scenario:** An e-commerce fulfillment service processes a batch of orders using control flow statements (if/else, for, break, continue).
 
-```javascript
-let score = 0;
-score = score + 10;
-console.log(score);
-```
+**Requirements:**
+1. Iterate over an order list using a for statement.
+2. Use continue to skip cancelled orders.
+3. Use break if a critical system alert flag is met.
+4. Accumulate and return total processed order revenue.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 3 statements
-> ```
-> - Look for the semicolons! In JavaScript, semicolons generally mark the end of a statement.
-> 
----
-
-### Exercise 2: Distinguishing Statements from Expressions
-
-**Problem:** Classify `let x = 5;`, `5 + 5`, `if (true) {}`, and `x > 0 ? 1 : 0` as Statements or Expressions.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Statement
-> Expression
-> Statement
-> Expression
-> ```
+> #### Implementation
 > ```javascript
-> // let x = 5;         -> Statement
-> // 5 + 5              -> Expression
-> // if (true) {}       -> Statement
-> // x > 0 ? 1 : 0      -> Expression
-> console.log("Statement\nExpression\nStatement\nExpression");
+> function processOrderQueue(orders) {
+>   let totalRevenue = 0;
+>   let processedCount = 0;
+> for (let i = 0; i < orders.length; i++) {
+>     const order = orders[i];
+>     if (order.status === "cancelled") continue;
+>     if (order.status === "CRITICAL_HALT") break;
+> totalRevenue += order.amount;
+>     processedCount++;
+>   }
+> return { totalRevenue, processedCount };
+> }
+> // Verification tests
+> const queue = [
+>   { amount: 100, status: "completed" },
+>   { amount: 50, status: "cancelled" },
+>   { amount: 200, status: "completed" }
+> ];
+> const res = processOrderQueue(queue);
+> console.assert(res.totalRevenue === 300 && res.processedCount === 2, "Test 1 Failed");
 > ```
->
-> **Explanation:** Statements perform control flow actions; expressions evaluate to concrete values.
+> #### Technical Explanation
+> 1. **Statement vs Expression**: A statement performs an action or controls program flow; it does not evaluate to a value.
+> 2. **Control Flow Jump Statements**: Keywords like break and continue alter standard sequential statement execution flow.
+> 3. **Block Statement Scope**: Enclosing statements inside braces {} forms a Block Statement, establishing a local lexical scope.
 > 
 ---
 
-### Exercise 3: Expression Statements with Side Effects
+### Exercise 2: Switch-Case State Dispatcher
 
-**Problem:** Turn an expression `counter++` into a valid statement line with semicolon.
+**Scenario:** An application state manager routes incoming event actions using a switch statement with explicit break commands to prevent case fall-through.
 
-**Expected output:**
+**Requirements:**
+1. Write dispatchAction(state, action).
+2. Handle "INCREMENT", "DECREMENT", and "RESET" cases.
+3. Include a default case returning current state.
+
 > [!check]- Answer
-> ```text
-> 1
-> ```
+> #### Implementation
 > ```javascript
-> let counter = 0;
-> counter++; // Expression statement
-> console.log(counter);
+> function dispatchAction(count, action) {
+>   let nextCount = count;
+>   switch (action.type) {
+>     case "INCREMENT":
+>       nextCount += action.payload ?? 1;
+>       break;
+>     case "DECREMENT":
+>       nextCount -= action.payload ?? 1;
+>       break;
+>     case "RESET":
+>       nextCount = 0;
+>       break;
+>     default:
+>       break;
+>   }
+>   return nextCount;
+> }
+> // Verification tests
+> console.assert(dispatchAction(5, { type: "INCREMENT", payload: 2 }) === 7, "Test 1 Failed");
+> console.assert(dispatchAction(5, { type: "RESET" }) === 0, "Test 2 Failed");
 > ```
->
-> **Explanation:** Adding a semicolon to an expression forms an expression statement executed for its side effect.
-> 
+> #### Technical Explanation
+> 1. **Switch Statement Mechanism**: Matches an expression against case clauses using strict equality (===).
+> 2. **Break Termination**: The break statement terminates the switch block, preventing execution fall-through into subsequent cases.
+> 3. **Default Fallback**: The default clause executes if no matching case label is found.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Labeled Matrix Search Break Statement
+
+**Scenario:** A 2D grid pathfinder searches a matrix for a target coordinate and exits nested loops immediately using a Labeled Statement (label: for (...)).
+
+**Requirements:**
+1. Define a labeled statement outerLoop: for (...).
+2. Iterate through 2D array matrix.
+3. Break out of BOTH loops using break outerLoop when target is found.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function findMatrixTarget(matrix, target) {
+>   let foundRow = -1;
+>   let foundCol = -1;
+> outerLoop: for (let r = 0; r < matrix.length; r++) {
+>     for (let c = 0; c < matrix[r].length; c++) {
+>       if (matrix[r][c] === target) {
+>         foundRow = r;
+>         foundCol = c;
+>         break outerLoop;
+>       }
+>     }
+>   }
+>   return { row: foundRow, col: foundCol };
+> }
+> // Verification tests
+> const grid = [[1, 2], [4, 99]];
+> const pos = findMatrixTarget(grid, 99);
+> console.assert(pos.row === 1 && pos.col === 1, "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Labeled Statements**: Attaching a prefix label identifier (e.g. outerLoop:) to a statement allows targeted control jumps.
+> 2. **Multi-Level Break**: Passing a label name to break labelName terminates the specified outer loop statement directly.
+> 3. **Syntax Constraints**: Labels can only prefix loop or block statements.
+---
+
+## 6. Related Terms
 - [Expression](expression.md) — Any valid unit of code that resolves to a single value.
 - [Automatic Semicolon Insertion (ASI)](asi.md) — Related concept: Automatic Semicolon Insertion (ASI).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A statement is an instruction to the engine to *do something*.
 - Declarations (`let x;`), assignments (`x = 5;`), and control flows (`if`, `for`) are all statements.
 - By convention, standard statements in JavaScript end with a semicolon (`;`).

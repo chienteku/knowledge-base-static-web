@@ -256,7 +256,7 @@ let len = boxed_str.len(); // Automatic method deref!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Deref traits.
 

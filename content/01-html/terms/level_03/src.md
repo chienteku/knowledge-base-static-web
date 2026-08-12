@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute** (Though strictly only valid on specific media and resource embedding elements).
+
+**Global Attribute (Though strictly only valid on specific media and resource embedding elements). (Universal Browser Support .)**: `src` Attribute is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers since the earliest media embedding elements).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTML documents are strictly text-only files. They cannot physically hold binary data like image pixels, audio waves, or video frames. 
@@ -85,7 +81,7 @@ Different elements using `src` to load resources:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `src` and `href`
 
@@ -139,7 +135,7 @@ Different elements using `src` to load resources:
 <script src="https://code.jquery.com/jquery.js"></script>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Attribute Selection
 
@@ -207,7 +203,7 @@ Different elements using `src` to load resources:
 >
 > **Explanation:** Leading slash `/` anchors path resolution to the domain root.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Attribute](../level_01/attribute.md) — The concept of tag configuration keys.
 - [`href` Attribute](../level_02/href.md) — The coordinate system attribute for links.
 - [`<img>`](img.md) — The most common media embedding tag using `src`.
@@ -217,7 +213,7 @@ Different elements using `src` to load resources:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `src` stands for "source".
 - It instructs the browser to download and embed an external resource directly into the page.
 - It is used on elements like `<img>`, `<audio>`, `<video>`, `<iframe>`, and `<script>`.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture / Module System**
+
+**Node.js Core Architecture / Module System (Node.js Only .)**: CommonJS (require, module.exports) is a fundamental concept in this technology stack. **Level 3 — Module Systems**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Browsers do not support CommonJS natively).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In 2009, when Node.js was created, standard JavaScript (in the browser) had no concept of "modules" or "importing files". If you wanted to load 5 scripts, you just added 5 `<script>` tags to your HTML file, and they all polluted the same global `window` object.
@@ -57,7 +53,7 @@ CommonJS uses **Synchronous (Blocking)** loading. When Node sees `require('./mat
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `require()` in the Browser
 
@@ -110,7 +106,7 @@ const require = createRequire(import.meta.url);
 const data = require('./data.json');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Default vs Named Exports
 
@@ -169,14 +165,14 @@ How does the `require` statement look different for Developer A vs Developer B?
 >
 > **Explanation:** `require()` caches loaded module exports in `require.cache`; subsequent imports return the cached object.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ES Modules (import, export)](es_modules.md) — The modern replacement for CommonJS.
 - [NPM (Node Package Manager)](../level_04/npm.md) — NPM packages are historically distributed as CommonJS modules.
 - [Module Resolution](module_resolution.md) — Node.js module resolution.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **CommonJS** is the original module system for Node.js.
 - It uses **`require()`** to import files, and **`module.exports`** to export data.
 - Every file in Node.js is automatically a private module.

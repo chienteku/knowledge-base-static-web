@@ -259,9 +259,9 @@ let opt_ref: Option<&str> = opt.as_deref();
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`Path` / `PathBuf`](../level_01/path_pathbuf.md)
+- [`Path` / `PathBuf`](../level_01/path_pathbuf.md) — 
 - [`AsRef` / `AsMut`](as_ref_as_mut.md) — AsRef/AsMut pair.
 
 ---

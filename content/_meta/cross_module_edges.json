@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-08-06",
-  "total_edges": 88,
+  "updated_at": "2026-08-12",
+  "total_edges": 85,
   "edges": [
     {
       "source_term": "whitespace_collapse",
@@ -198,22 +198,6 @@
     {
       "source_term": "client_side_routing",
       "source_module": "06-react",
-      "target_term": "dom",
-      "target_module": "01-html",
-      "type": "prerequisite",
-      "description": "What routing is actually doing under the hood."
-    },
-    {
-      "source_term": "client_side_routing",
-      "source_module": "06-react",
-      "target_term": "spa",
-      "target_module": "03-javascript",
-      "type": "prerequisite",
-      "description": "The architecture that requires Client-Side routing."
-    },
-    {
-      "source_term": "client_side_routing",
-      "source_module": "06-react",
       "target_term": "spa",
       "target_module": "03-javascript",
       "type": "related",
@@ -226,22 +210,6 @@
       "target_module": "09-nextjs",
       "type": "related",
       "description": "The Next.js framework has built-in Error Boundaries disguised as simple files."
-    },
-    {
-      "source_term": "hoc",
-      "source_module": "06-react",
-      "target_term": "higher_order_function",
-      "target_module": "03-javascript",
-      "type": "prerequisite",
-      "description": "The JavaScript concept this pattern is named after."
-    },
-    {
-      "source_term": "ssr",
-      "source_module": "06-react",
-      "target_term": "spa",
-      "target_module": "03-javascript",
-      "type": "prerequisite",
-      "description": "The opposite of SSR (Client-Side Rendering)."
     },
     {
       "source_term": "suspense",
@@ -257,7 +225,15 @@
       "target_term": "dom",
       "target_module": "01-html",
       "type": "prerequisite",
-      "description": "The imperative approach that declarative rendering replaces."
+      "description": "The imperative structure that declarative rendering replaces."
+    },
+    {
+      "source_term": "reactive_state",
+      "source_module": "07-vue",
+      "target_term": "dom",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The DOM structure updated by reactive state changes."
     },
     {
       "source_term": "teleport",
@@ -273,7 +249,7 @@
       "target_term": "html",
       "target_module": "01-html",
       "type": "prerequisite",
-      "description": "Vue templates are just extended HTML."
+      "description": "Vue templates are 100% valid HTML extended with dynamic directives."
     },
     {
       "source_term": "virtual_dom",
@@ -281,7 +257,7 @@
       "target_term": "dom",
       "target_module": "01-html",
       "type": "prerequisite",
-      "description": "The slow, expensive API the Virtual DOM is trying to avoid."
+      "description": "The browser's native, heavy layout node tree that the Virtual DOM abstracts and optimizes."
     },
     {
       "source_term": "vue_instance",
@@ -289,7 +265,7 @@
       "target_term": "dom",
       "target_module": "01-html",
       "type": "prerequisite",
-      "description": "What the Vue Instance is ultimately controlling."
+      "description": "The browser DOM tree that the Vue Instance attaches to and controls."
     },
     {
       "source_term": "access_modifiers",

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Web Standards  and legally enforced by regulations like Section 508 in the US and the European Accessibility Act).)**: Accessibility (a11y) Fundamentals is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Web Standards** (Governed by the W3C Web Content Accessibility Guidelines (WCAG) and legally enforced by regulations like Section 508 in the US and the European Accessibility Act).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The internet is a universal resource, but users access websites in vastly different ways depending on their physical abilities:
@@ -96,7 +92,7 @@ A visual card built entirely out of divs. Sighted users can click it, but screen
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing vague "Click Here" link texts
 
@@ -162,7 +158,7 @@ button:focus-visible {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Accessibility Audit
 
@@ -231,7 +227,7 @@ button:focus-visible {
 >
 > **Explanation:** 4.5:1 contrast guarantees text readability for low-vision users.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Semantic HTML](../level_06/semantic_html.md) — The foundation of structured layouts.
 - [`alt` Attribute](../level_03/alt.md) — Media text descriptors.
 - [`<label>`](../level_05/label.md) — Accessible form associations.
@@ -240,7 +236,7 @@ button:focus-visible {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Accessibility (a11y) means building web content usable by all people, including those with disabilities.
 - WCAG is the global standard list for accessibility compliance, organized around the POUR principles.
 - Use Semantic HTML landmarks to allow screen readers to skip navigation.

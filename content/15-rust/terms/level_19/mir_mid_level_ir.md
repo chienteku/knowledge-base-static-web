@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Hir High Level Ir](hir_high_level_ir.md) — HIR representation.
+- [HIR (High-level IR)](hir_high_level_ir.md) — HIR representation.
 
 ---
 
@@ -250,9 +250,9 @@ Proc macros transform AST TokenStream; MIR is generated internally by rustc!
 
 ## 6. Related Terms
 
-- [Hir High Level Ir](hir_high_level_ir.md) — High-level IR.
-- [Llvm Codegen Backend](llvm_codegen_backend.md) — LLVM backend.
-- [Miri (UB Detector)](../level_13/miri_ub_detector.md) — Miri execution engine.
+- [HIR (High-level IR)](hir_high_level_ir.md) — High-level IR.
+- [LLVM (Codegen Backend)](llvm_codegen_backend.md) — LLVM backend.
+- [Miri (Undefined Behavior Detector)](../level_13/miri_ub_detector.md) — Miri execution engine.
 
 ---
 

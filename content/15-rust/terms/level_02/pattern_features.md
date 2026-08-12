@@ -245,7 +245,7 @@ Use exactly one `..` rest pattern per slice match: [first, .., last]
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag / Landmark**
+
+**Semantic Tag / Landmark (Universal Browser Support)**: `<header>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Almost every webpage on the internet has a top section that contains the company logo, a search bar, and the main navigation menu. Before HTML5, developers had to wrap this in a generic `<div id="header">`.
@@ -74,7 +70,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `<header>` with `<head>`
 
@@ -153,7 +149,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 </footer>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Multiple Header Rule
 
@@ -208,7 +204,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 >
 > **Explanation:** Root-level `<header>` elements act as `banner` accessibility landmarks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The metadata container (do not confuse with `<header>`).
 - [`<footer>`](footer.md) — The semantic opposite of the `<header>`.
 - [`<nav>`](nav.md) — The navigation block commonly nested inside main headers.
@@ -216,7 +212,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<header>` element is a semantic container for introductory content.
 - It is visually rendered just like a `<div>` (meaning it does nothing by default), but carries deep meaning for screen readers.
 - You can have multiple `<header>` elements on a page (e.g., one for the whole site, and one for a specific article).

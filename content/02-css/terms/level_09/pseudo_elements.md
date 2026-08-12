@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Selector Hook**
+
+**CSS Selector Hook (Universal Modern Standard .)**: `::before` & `::after` (Pseudo-elements) is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Compiled natively into the document tree. Creates a virtual inline layout node that inherits parent cascade properties).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When designing user interfaces, you often need to add purely decorative visual elements:
@@ -137,7 +133,7 @@ Adding a decorative symbol prefix:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting dimensions on an inline pseudo-element
 
@@ -188,7 +184,7 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 .img-wrapper::after { content: "Caption"; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bullet Customization
 
@@ -248,14 +244,14 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 >
 > **Explanation:** Double colons (`::`) specify generated DOM sub-elements.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Interactive state selectors.
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Overriding default inline display constraints.
 - [Advanced Pseudo-classes](pseudo_classes_advanced.md) — Related concept: Advanced Pseudo-classes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Pseudo-elements generate virtual layout nodes inside parent elements.
 - Always declare the mandatory `content` property for pseudo-elements to render.
 - Use `::before` to insert decorations first, and `::after` to insert last.

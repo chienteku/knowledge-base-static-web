@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Computer Science Concept / Node.js Architecture**
+
+**Computer Science Concept / Node.js Architecture (Node.js Core)**: Streams (General Concept) is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you want to build a Netflix clone. A user requests a 4GB movie file.
@@ -41,7 +37,7 @@ Instead of loading the whole 4GB file, a Stream reads the first 64 Kilobytes (a 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `readFile` for user uploads
 
@@ -88,7 +84,7 @@ stream.on('error', (err) => res.status(404).send('File not found'));
 stream.pipe(res);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: YouTube vs Direct Download
 
@@ -149,7 +145,7 @@ Which scenario uses Streams?
 >
 > **Explanation:** Readable streams are Async Iterables, consumable with `for await...of` loops.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Readable & Writable Streams](readable_writable.md) — The specific implementations of Streams in Node.js.
 - [Piping (.pipe())](piping.md) — How you connect two streams together.
 - [The events Module](../level_02/events_module.md) — Related concept: The events Module.
@@ -163,7 +159,7 @@ Which scenario uses Streams?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Streams** allow you to process massive amounts of data without crashing your server's RAM.
 - They process data piece-by-piece (chunk-by-chunk) using Buffers.
 - They are essential for streaming video, handling large file uploads, and parsing massive datasets.

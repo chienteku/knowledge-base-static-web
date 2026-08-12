@@ -11,7 +11,6 @@
 - [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Register accesses perform volatile memory reads and writes.
 - [HAL (Hardware Abstraction Layer)](hal.md) — Higher-level driver crate built on top of a PAC.
 - [`svd2rust`](svd2rust.md) — Tool that generates PAC crates from vendor SVD files.
-- [`#![no_std]`](no_std.md) — #![no_std] bare-metal environment.
 
 ---
 

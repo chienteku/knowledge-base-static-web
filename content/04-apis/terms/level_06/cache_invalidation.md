@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Applies to browser caches, CDN distributions, and backend Redis microservice caches.)**: Cache Invalidation is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applies to browser caches, CDN distributions, and backend Redis microservice caches.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Phil Karlton famously wrote: *"There are only two hard things in Computer Science: cache invalidation and naming things."*
@@ -93,7 +89,7 @@ async function deleteUserAccount(userId) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting long TTLs on volatile, high-security data
 
@@ -149,68 +145,196 @@ await redis.del(`product:${productId}`); // Target specific key deletion
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Strategy Selector
+### Exercise 1: Tag-Based API Cache Invalidation Engine
 
-**Problem:** Choose the most appropriate cache invalidation strategy (**TTL** or **Active Eviction**) for the following data types:
+**Scenario:** A caching layer decorates cached responses with tags (e.g. `users`, `user:42`) and invalidates matching entries on resource mutation.
 
-1. A blog article post content (updated once a month).
-2. An online e-commerce shopping cart item list (updated frequently during a session).
-3. Weather forecast metrics displayed on a homepage widgets tab.
+**Requirements:**
+1. Write setCache(key, value, tags).
+2. Write invalidateTags(tagsToInvalidate).
+3. Purge matching items.
 
 > [!check]- Answer
-> - 1. **Active Eviction** (The content changes rarely. We can cache it indefinitely, but we must evict the key immediately when the author clicks "Update Post").
-> - 2. **Active Eviction** (Carts must be 100% accurate; checkout will fail if items are stale).
-> - 3. **TTL** (Weather forecasts are transient and update hourly; a 15-minute TTL is simple and acceptable).
+>
+> #### Implementation
+>
+> ```javascript
+> function createTaggedCache() {
+>   const store = new Map();
+>
+>   return {
+>     set(key, value, tags = []) {
+>       store.set(key, { value, tags: new Set(tags) });
+>     },
+>     get(key) {
+>       const item = store.get(key);
+>       return item ? item.value : null;
+>     },
+>     invalidateTags(tagsToInvalidate = []) {
+>       const purgeSet = new Set(tagsToInvalidate);
+>       let count = 0;
+>
+>       for (const [key, item] of store.entries()) {
+>         const hasMatchingTag = Array.from(item.tags).some(t => purgeSet.has(t));
+>         if (hasMatchingTag) {
+>           store.delete(key);
+>           count++;
+>         }
+>       }
+>       return count;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const cache = createTaggedCache();
+> cache.set("/users/42", { name: "Alice" }, ["users", "user:42"]);
+> cache.set("/users/43", { name: "Bob" }, ["users", "user:43"]);
+>
+> console.assert(cache.get("/users/42").name === "Alice", "Test 1 Failed");
+>
+> cache.invalidateTags(["user:42"]);
+> console.assert(cache.get("/users/42") === null, "Test 2 Failed: Item user:42 must be purged");
+> console.assert(cache.get("/users/43") !== null, "Test 3 Failed: Unrelated items preserved");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Cache Invalidation Problem**: Phil Karlton quote: 'There are only two hard things in Computer Science: cache invalidation and naming things.'
+> 2. **Tag-Based Invalidation**: Associates cached items with domain tags allowing targeted group purges.
+> 3. **Fine-Grained Purging**: Invalidates specific entity caches without purging the entire global cache store.
 > 
+---
+
+### Exercise 2: Stale-While-Revalidate (SWR) Invalidation Manager
+
+**Scenario:** An SWR cache serves stale data instantly while triggering an asynchronous background revalidation fetch.
+
+**Requirements:**
+1. Write swrFetch(key, fetchFn, cacheStore).
+2. Return cached value immediately.
+3. Fetch fresh data in background.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createSwrManager(cacheStore = new Map()) {
+>   return async function swrFetch(key, fetchFn) {
+>     const cached = cacheStore.get(key);
+>
+>     const revalidatePromise = (async () => {
+>       try {
+>         const freshData = await fetchFn();
+>         cacheStore.set(key, { data: freshData, timestamp: Date.now() });
+>         return freshData;
+>       } catch (e) {
+>         return cached ? cached.data : null;
+>       }
+>     })();
+>
+>     if (cached) {
+>       revalidatePromise.catch(() => {});
+>       return { data: cached.data, isStale: true };
+>     }
+>
+>     const fresh = await revalidatePromise;
+>     return { data: fresh, isStale: false };
+>   };
+> }
+>
+> // Verification tests
+> const store = new Map([["/data", { data: "stale_v1", timestamp: Date.now() - 10000 }]]);
+> const swr = createSwrManager(store);
+>
+> let fetchCalled = false;
+> const mockFetch = async () => {
+>   fetchCalled = true;
+>   return "fresh_v2";
+> };
+>
+> swr("/data", mockFetch).then(res => {
+>   console.assert(res.isStale === true && res.data === "stale_v1", "Test 1 Failed: Must return stale data immediately");
+>   console.assert(fetchCalled === true, "Test 2 Failed: Must trigger background revalidation");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Stale-While-Revalidate Pattern**: RFC 5861 HTTP cache control extension balancing zero-latency loads with freshness.
+> 2. **Zero Latency UI**: Users get instant cached content while new data loads asynchronously behind the scenes.
+> 3. **Background Revalidation**: Keeps cached data fresh without blocking main thread execution.
 > 
 ---
 
-### Exercise 2: Cache Invalidation Strategies Comparison
+### Exercise 3: Mutation-Triggered Cache Invalidation Interceptor
 
-**Problem:** Match the cache invalidation pattern to its definition:
-1. Cache-Aside (Lazy Loading)
-2. Write-Through
-3. Time-To-Live (TTL) Expiration
+**Scenario:** An API client middleware automatically invalidates cached GET endpoints whenever a POST/PUT/DELETE mutation occurs on the same resource path.
 
-**Expected output:**
+**Requirements:**
+1. Write handleApiCall(method, path, data, cacheStore, fetchFn).
+2. If GET, read/set cache.
+3. If mutation (POST/PUT/DELETE), invalidate path cache.
+
 > [!check]- Answer
-> ```text
-> 1. Application checks cache first; if miss, loads from DB and populates cache
-> 2. Application updates DB and cache simultaneously during writes
-> 3. Cache entry automatically expires after specified duration
+>
+> #### Implementation
+>
+> ```javascript
+> async function handleApiCall(method, path, data, cacheStore = new Map(), fetchFn) {
+>   const m = method.toUpperCase();
+>
+>   if (m === "GET") {
+>     if (cacheStore.has(path)) {
+>       return { source: "CACHE", data: cacheStore.get(path) };
+>     }
+>     const res = await fetchFn(method, path, data);
+>     cacheStore.set(path, res);
+>     return { source: "NETWORK", data: res };
+>   }
+>
+>   const parentPath = path.substring(0, path.lastIndexOf("/")) || path;
+>   cacheStore.delete(path);
+>   cacheStore.delete(parentPath);
+>
+>   const res = await fetchFn(method, path, data);
+>   return { source: "NETWORK", data: res };
+> }
+>
+> // Verification tests
+> const store = new Map();
+> const mockFetch = async (m, p, d) => ({ result: "ok" });
+>
+> handleApiCall("GET", "/users/1", null, store, mockFetch).then(r1 => {
+>   console.assert(r1.source === "NETWORK", "Test 1 Failed");
+>
+>   return handleApiCall("GET", "/users/1", null, store, mockFetch).then(r2 => {
+>     console.assert(r2.source === "CACHE", "Test 2 Failed");
+>
+>     return handleApiCall("PUT", "/users/1", { name: "Alice" }, store, mockFetch).then(r3 => {
+>       console.assert(store.has("/users/1") === false, "Test 3 Failed: Cache must be invalidated after PUT");
+>     });
+>   });
+> });
 > ```
-> ```text
-> 1. Cache-Aside -> Read misses load from DB and populate cache.
-> 2. Write-Through -> Writes update DB and cache synchronously.
-> 3. TTL Expiration -> Time-based automatic key deletion.
-> ```
-> - **Explanation:** Different invalidation patterns balance data freshness and database load.
+>
+> #### Technical Explanation
+>
+> 1. **Automatic Mutation Invalidation**: Ensures mutations immediately clear related read caches to prevent UI data inconsistency.
+> 2. **Parent Resource Invalidation**: Mutating a item (/users/1) invalidates both item cache and collection cache (/users).
+> 3. **Cache Coherency**: Guarantees clients see updated data on subsequent GET calls following a mutation.
 ---
 
-### Exercise 3: Cache Stampede Mitigation
-
-**Problem:** What is a Cache Stampede (Thundering Herd) and how can lock mechanisms prevent it?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> A Cache Stampede occurs when a high-traffic cache key expires, causing thousands of concurrent requests to hit the database simultaneously. Distributed locks ensure only 1 request queries the DB while others wait for cache repopulation.
-> ```
-> ```text
-> Distributed mutex locks ensure only 1 request queries the DB while others wait for cache repopulation.
-> ```
-> - **Explanation:** Locks prevent concurrent database queries during cache misses.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Caching (ETag, Cache-Control)](caching.md) — The HTTP protocols utilizing cache validations.
 - [Webhooks](webhooks.md) — The event push notifications that can trigger remote cache evictions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Cache invalidation is the process of marking or deleting stale cache records when database states update.
 - TTL (Time-To-Live) is a passive timer strategy; easy to write but permits temporary staleness.
 - Active Eviction (Purging) deletes keys from the cache immediately during write queries, ensuring instant consistency.

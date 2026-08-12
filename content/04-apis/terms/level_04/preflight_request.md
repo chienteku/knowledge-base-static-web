@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Browser-Specific: Initiated automatically by browser engines when making cross-origin requests.)**: Preflight Request (OPTIONS) is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Initiated automatically by browser engines when making cross-origin requests.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before the CORS standard was introduced, older legacy servers only had to handle requests from their own domains or simple HTML form submissions (which only used `GET` or `POST` verbs with flat text payloads). 
@@ -79,7 +75,7 @@ Imagine a delivery service dropping off a large cargo crate at a secure warehous
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Failing to handle the `OPTIONS` method on your backend server routes
 
@@ -128,62 +124,146 @@ Access-Control-Max-Age: 86400 ; Caches preflight approval for 24 hours
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Trigger Classifier
+### Exercise 1: Preflight OPTIONS Request Classifier & Header Inspector
 
-**Problem:** Determine if the following browser fetch requests will trigger an automatic preflight (`OPTIONS`) request:
+**Scenario:** An API gateway identifies CORS preflight `OPTIONS` requests and validates `Access-Control-Request-Method` and `Access-Control-Request-Headers`.
 
-1. `GET` request fetching an image payload using standard headers.
-2. `POST` request sending a JSON object payload (`Content-Type: application/json`).
-3. `POST` request sending raw HTML form data (`Content-Type: application/x-www-form-urlencoded`).
-4. `GET` request specifying a custom header `X-Requested-With: Fetch`.
+**Requirements:**
+1. Write handlePreflightRequest(method, headers, allowedMethods, allowedHeaders).
+2. Return 204 with CORS response headers.
 
 > [!check]- Answer
-> - 1. **No** (It is a simple GET request).
-> - 2. **Yes** (`application/json` is not a simple content type).
-> - 3. **No** (Standard HTML form format meets simple conditions).
-> - 4. **Yes** (Setting a custom header triggers preflight).
+>
+> #### Implementation
+>
+> ```javascript
+> function handlePreflightRequest(method, headers, allowedMethods = ["GET", "POST", "PUT", "DELETE"], allowedHeaders = ["Content-Type", "Authorization"]) {
+>   if (method.toUpperCase() !== "OPTIONS") {
+>     return { isPreflight: false };
+>   }
+>
+>   const reqMethod = headers?.["access-control-request-method"] || headers?.["Access-Control-Request-Method"];
+>   if (!reqMethod) {
+>     return { isPreflight: false };
+>   }
+>
+>   if (!allowedMethods.includes(reqMethod.toUpperCase())) {
+>     return { isPreflight: true, status: 403, error: "Method not allowed by CORS" };
+>   }
+>
+>   return {
+>     isPreflight: true,
+>     status: 204,
+>     headers: {
+>       "Access-Control-Allow-Origin": headers["origin"] || "*",
+>       "Access-Control-Allow-Methods": allowedMethods.join(", "),
+>       "Access-Control-Allow-Headers": allowedHeaders.join(", "),
+>       "Access-Control-Max-Age": "86400"
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const reqHeaders = {
+>   "origin": "https://app.com",
+>   "Access-Control-Request-Method": "PUT"
+> };
+>
+> const res = handlePreflightRequest("OPTIONS", reqHeaders);
+> console.assert(res.isPreflight === true && res.status === 204, "Test 1 Failed");
+> console.assert(res.headers["Access-Control-Allow-Methods"].includes("PUT"), "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Preflight Request Definition**: HTTP OPTIONS request automatically dispatched by browser before cross-origin non-simple requests.
+> 2. **204 No Content Status**: Preflight responses carry no response body; 204 No Content is standard status code.
+> 3. **CORS Preflight Headers**: Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers.
 > 
+---
+
+### Exercise 2: Preflight Cache Control via Access-Control-Max-Age
+
+**Scenario:** An API gateway configures `Access-Control-Max-Age` to cache preflight responses in browser memory and reduce network latency.
+
+**Requirements:**
+1. Write configurePreflightMaxAge(seconds).
+2. Return Access-Control-Max-Age header object.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function configurePreflightMaxAge(seconds = 86400) {
+>   const maxSeconds = Math.min(seconds, 86400);
+>
+>   return {
+>     "Access-Control-Max-Age": String(maxSeconds)
+>   };
+> }
+>
+> // Verification tests
+> console.assert(configurePreflightMaxAge(3600)["Access-Control-Max-Age"] === "3600", "Test 1 Failed");
+> console.assert(configurePreflightMaxAge(999999)["Access-Control-Max-Age"] === "86400", "Test 2 Failed: Must cap at 24 hours");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Access-Control-Max-Age**: Specifies time in seconds browser can cache preflight OPTIONS response.
+> 2. **Latency Reduction**: Caching preflight eliminates extra roundtrip latency on subsequent API calls.
+> 3. **Browser Caching Limits**: Chromium caps max-age at 2 hours (7200s); Firefox caps at 24 hours (86400s).
 > 
 ---
 
-### Exercise 2: Preflight Response Header Verification
+### Exercise 3: Non-Simple Request Preflight Trigger Detector
 
-**Problem:** Identify 3 mandatory CORS response headers returned in response to a preflight `OPTIONS` request.
+**Scenario:** An API developer helper checks HTTP request parameters and determines whether browser will trigger a preflight OPTIONS request.
 
-**Expected output:**
+**Requirements:**
+1. Write triggersPreflight(method, contentType, customHeaders).
+2. Check non-simple method, non-simple Content-Type, or custom headers.
+
 > [!check]- Answer
-> ```text
-> 1. Access-Control-Allow-Origin
-> 2. Access-Control-Allow-Methods
-> 3. Access-Control-Allow-Headers
+>
+> #### Implementation
+>
+> ```javascript
+> function triggersPreflight(method, contentType = "text/plain", customHeaders = {}) {
+>   const simpleMethods = ["GET", "HEAD", "POST"];
+>   const simpleContentTypes = ["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"];
+>
+>   if (!simpleMethods.includes(method.toUpperCase())) {
+>     return true;
+>   }
+>
+>   const cleanContentType = contentType.split(";")[0].trim().toLowerCase();
+>   if (!simpleContentTypes.includes(cleanContentType)) {
+>     return true;
+>   }
+>
+>   const headerKeys = Object.keys(customHeaders).map(k => k.toLowerCase());
+>   const forbiddenSimple = headerKeys.some(k => !["accept", "accept-language", "content-language", "content-type"].includes(k));
+>
+>   return forbiddenSimple;
+> }
+>
+> // Verification tests
+> console.assert(triggersPreflight("GET", "text/plain") === false, "Test 1 Failed: Simple GET does not trigger preflight");
+> console.assert(triggersPreflight("POST", "application/json") === true, "Test 2 Failed: JSON POST triggers preflight");
+> console.assert(triggersPreflight("DELETE", "text/plain") === true, "Test 3 Failed: DELETE triggers preflight");
 > ```
-> ```http
-> HTTP/1.1 204 No Content
-> Access-Control-Allow-Origin: https://app.example.com
-> Access-Control-Allow-Methods: POST, PUT, DELETE, OPTIONS
-> Access-Control-Allow-Headers: Content-Type, Authorization
-> ```
-> - **Explanation:** Preflight headers inform browser which origins, methods, and headers are permitted.
+>
+> #### Technical Explanation
+>
+> 1. **Simple vs Non-Simple Requests**: Simple requests (GET, HEAD, basic POST) bypass preflight; non-simple requests trigger preflight.
+> 2. **application/json Triggers Preflight**: Sending JSON payloads (`application/json`) ALWAYS triggers CORS preflight in browsers.
+> 3. **Custom Headers Trigger Preflight**: Attaching custom headers (Authorization, X-API-Key) triggers CORS preflight.
 ---
 
-### Exercise 3: Simple Request vs Preflight Request
-
-**Problem:** Does a `GET /data` request with `Accept: application/json` trigger a CORS preflight OPTIONS request?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No. GET with standard headers is a 'Simple Request' and bypasses preflight.
-> ```
-> ```text
-> No. GET with standard headers is a 'Simple Request' and bypasses preflight.
-> ```
-> - **Explanation:** Simple requests (GET/POST with standard headers) skip preflight checks.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Same-Origin Policy](same_origin_policy.md) — The browser security wall that necessitates CORS and preflight probes.
 - [HTTP Headers](../level_02/http_headers.md) — The metadata lines negotiating CORS parameters.
 - [CORS Errors in the Browser](../level_05/cors_errors.md) — Related concept: CORS Errors in the Browser.
@@ -191,7 +271,7 @@ Access-Control-Max-Age: 86400 ; Caches preflight approval for 24 hours
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A preflight request is an automatic `OPTIONS` query sent by browsers to verify CORS permissions.
 - It prevents complex, unexpected cross-origin requests from hitting server endpoints unprepared.
 - Triggered by custom headers, non-simple verbs (PUT/DELETE), or JSON payloads (`application/json`).

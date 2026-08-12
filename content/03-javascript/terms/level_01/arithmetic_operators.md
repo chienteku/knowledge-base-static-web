@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Arithmetic Operators is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers were originally created to calculate numbers. To make mathematical calculations readable and accessible, JavaScript implements standard algebraic symbols. Rather than calling functions like `add(5, 3)` or `multiply(x, y)`, JavaScript developers use standard infixed arithmetic operators: `+` (addition), `-` (subtraction), `*` (multiplication), and `/` (division). Over time, ES6 and ES2016 introduced additional operators like `**` (exponentiation) to align with other modern languages and eliminate dependency on standard library objects like `Math.pow()`.
@@ -69,7 +65,7 @@ console.log("Change Due:", changeDue); // Change Due: 1.4
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: String Concatenation Coercion with `+`
 
@@ -151,76 +147,101 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Modulus vs Division
+### Exercise 1: E-Commerce Shopping Cart Discount & Tax Calculator
 
-**Problem:** Complete the code so that it prints if a given number `num` is even or odd by checking its remainder when divided by 2.
+**Scenario:** An e-commerce checkout service needs to compute an order's subtotal, apply a percentage promotional discount, calculate regional sales tax, and add a flat shipping fee in strict financial sequence.
 
-```javascript
-const num = 17;
-const isEven = (num % 2) === 0;
+**Requirements:**
+1. Write a function calculateOrderTotal(subtotal, discountPercent, taxRate, shippingFee).
+2. Compute the discounted subtotal using multiplication * and subtraction -.
+3. Compute the tax amount on the discounted subtotal using multiplication *.
+4. Return the final total by adding + the discounted subtotal, tax amount, and shipping fee.
 
-if (isEven) {
-  console.log("Even");
-} else {
-  console.log("Odd");
-}
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Odd
-> ```
-> - The remainder (modulus) operator is `%`.
-> - If a number is perfectly divisible by 2, its remainder is `0`.
-> 
----
-
-### Exercise 2: Predicting Arithmetic Coercion Results
-
-**Problem:** Predict the output of `"10" - 5`, `"10" + 5`, `"10" * "2"`, and `"10" / "a"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 5
-> 105
-> 20
-> NaN
-> ```
+> #### Implementation
 > ```javascript
-> console.log("10" - 5);  // 5 (coerces "10" to number)
-> console.log("10" + 5);  // "105" (string concatenation)
-> console.log("10" * "2"); // 20 (both coerced to numbers)
-> console.log("10" / "a"); // NaN (cannot convert "a" to valid number)
+> function calculateOrderTotal(subtotal, discountPercent, taxRate, shippingFee) {
+>   const discountAmount = subtotal * (discountPercent / 100);
+>   const discountedSubtotal = subtotal - discountAmount;
+>   const taxAmount = discountedSubtotal * taxRate;
+>   const finalTotal = discountedSubtotal + taxAmount + shippingFee;
+>   return Number(finalTotal.toFixed(2));
+> }
+> // Verification tests
+> console.assert(calculateOrderTotal(100, 10, 0.08, 5) === 102.20, "Test 1 Failed");
+> console.assert(calculateOrderTotal(200, 20, 0.05, 10) === 178.00, "Test 2 Failed");
 > ```
->
-> **Explanation:** The `+` operator prefers string concatenation if any operand is a string, whereas `-`, `*`, and `/` always coerce operands to numbers.
+> #### Technical Explanation
+> 1. **Operator Precedence**: Division and multiplication operations evaluate before addition and subtraction. Parentheses () explicitly override default precedence.
+> 2. **Floating-Point Precision**: Binary floating-point arithmetic (IEEE 754) can introduce decimal imprecisions. Using .toFixed(2) rounds values to exact cent values.
+> 3. **Binary Arithmetic Operations**: Arithmetic operators (+, -, *, /) take two numeric operands and produce a new primitive number without mutating inputs.
 > 
 ---
 
-### Exercise 3: Remainder Operator Sign Behavior
+### Exercise 2: Game Engine Experience & Leveling Algorithm
 
-**Problem:** Calculate `-10 % 3` and `10 % -3` and explain why the sign matches the dividend.
+**Scenario:** A game engine backend determines a player's level based on accumulated experience points (XP). Higher levels require exponentially more XP, and leftover XP carries over to the progress bar.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateLevelAndRemainder(totalXp, levelCost).
+2. Compute full levels earned using division / and Math.floor().
+3. Compute remaining XP using the remainder operator %.
+4. Return an object containing { level, remainderXp }.
+
 > [!check]- Answer
-> ```text
-> -1
-> 1
-> ```
+> #### Implementation
 > ```javascript
-> console.log(-10 % 3);  // -1
-> console.log(10 % -3);  // 1
+> function calculateLevelAndRemainder(totalXp, levelCost) {
+>   const level = Math.floor(totalXp / levelCost);
+>   const remainderXp = totalXp % levelCost;
+>   return { level, remainderXp };
+> }
+> // Verification tests
+> const res1 = calculateLevelAndRemainder(250, 100);
+> console.assert(res1.level === 2 && res1.remainderXp === 50, "Test 1 Failed");
+> const res2 = calculateLevelAndRemainder(95, 100);
+> console.assert(res2.level === 0 && res2.remainderXp === 95, "Test 2 Failed");
 > ```
->
-> **Explanation:** In JavaScript, the sign of the `%` remainder result always matches the sign of the left-hand dividend operand.
+> #### Technical Explanation
+> 1. **Remainder Operator (%)**: The % operator calculates the integer remainder resulting from dividing the dividend by the divisor.
+> 2. **Integer Partitioning**: Combining division / with Math.floor() separates whole completed level units from fractional remainder progress.
+> 3. **Exponentiation Operator (**)**: The ** operator provides a concise infix syntax for power calculations, evaluating from right to left.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Financial Micro-Transaction Remainder Splitter
+
+**Scenario:** A payroll system splits a pool of money in integer cents evenly among N contractor accounts and computes the leftover undistributed cents so they can be assigned to a reserve buffer.
+
+**Requirements:**
+1. Write splitPayoutCents(totalCents, accountCount).
+2. Calculate the equal share per account using integer division.
+3. Calculate leftover undistributed cents using remainder %.
+4. Return an object { sharePerAccount, reserveCents }.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function splitPayoutCents(totalCents, accountCount) {
+>   if (accountCount <= 0) throw new Error("Account count must be positive");
+>   const sharePerAccount = Math.floor(totalCents / accountCount);
+>   const reserveCents = totalCents % accountCount;
+>   return { sharePerAccount, reserveCents };
+> }
+> // Verification tests
+> const result = splitPayoutCents(1005, 4);
+> console.assert(result.sharePerAccount === 251, "Test 1 Failed");
+> console.assert(result.reserveCents === 1, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Integer Cent Arithmetic**: Converting currency amounts to integer cents before running division or remainder avoids floating-point inaccuracies.
+> 2. **Exact Dividend Partitioning**: The invariant total = (share * count) + remainder holds true across all positive integer splits.
+> 3. **Immutability of Operands**: Arithmetic evaluation produces new primitive values without altering the original input argument bindings.
+---
+
+## 6. Related Terms
 - [Type Coercion](type_coercion.md) — Implicit conversion of values from one data type to another.
 - [Increment / Decrement (++ / --)](increment_decrement.md) — Operators to add or subtract exactly one.
 - [NaN](nan.md) — The special "Not-a-Number" value returned by invalid mathematical operations.
@@ -231,7 +252,7 @@ if (isEven) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JavaScript includes standard math operators: `+`, `-`, `*`, `/`, `%` (remainder), and `**` (exponentiation).
 - All numbers in JavaScript are represented as double-precision floating-point values (there is no separate integer type at the operator level).
 - The `+` operator will trigger string concatenation if either operand is a string.

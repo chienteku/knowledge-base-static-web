@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Offline Architecture**
+
+**Browser API / Offline Architecture (Client-Side)**: Service Workers is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser Background)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, web apps were vastly inferior to native iOS/Android apps. If an iOS app lost Wi-Fi, it would still open; you could still tap around the UI. If a Web App lost Wi-Fi, you got the Chrome Dinosaur error page. 
@@ -40,7 +36,7 @@ Because they run in the background (even if the user closes the website tab!), S
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Developing without HTTPS
 
@@ -92,61 +88,169 @@ Cache-Control: no-cache, no-store
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Zombie Website
+### Exercise 1: Service Worker Registration & Controller Helper
 
-**Problem:** You deploy an update to your website. You change the background color from Blue to Red. A user visits the site, but the background is still Blue! You tell them to refresh. Still Blue! You tell them to clear their browser cache. *Still Blue!* What is causing this?
+**Scenario:** A web application registers a Progressive Web App Service Worker script (`/sw.js`) and monitors registration lifecycle states.
 
-**Expected output:**
+**Requirements:**
+1. Write registerSwScript(swPath, mockNavigator).
+2. Verify ServiceWorker support.
+3. Register SW and return registration promise.
+
 > [!check]- Answer
-> ```text
-> A rogue Service Worker!
-> Even if the user clears the standard browser cache, the Service Worker might still be alive in the background, aggressively intercepting the request for `styles.css` and serving the old Blue version from its private Cache API vault. Service Workers have a complex "Lifecycle" and must be explicitly told to update and delete old caches.
+>
+> #### Implementation
+>
+> ```javascript
+> async function registerSwScript(swPath = "/sw.js", mockNavigator) {
+>   const nav = mockNavigator || globalThis.navigator;
+>
+>   if (!nav || !("serviceWorker" in nav)) {
+>     return { supported: false, registration: null, message: "Service Workers not supported" };
+>   }
+>
+>   try {
+>     const registration = await nav.serviceWorker.register(swPath, { scope: "/" });
+>     return { supported: true, registration };
+>   } catch (err) {
+>     return { supported: true, registration: null, error: err.message };
+>   }
+> }
+>
+> // Verification tests
+> const mockNav = {
+>   serviceWorker: {
+>     register: async (path, opts) => ({ scope: opts.scope, active: true })
+>   }
+> };
+>
+> registerSwScript("/sw.js", mockNav).then(res => {
+>   console.assert(res.supported === true && res.registration.active === true, "Test 1 Failed");
+> });
 > ```
-> - Who is standing at the door, intercepting the request before the internet?
+>
+> #### Technical Explanation
+>
+> 1. **Service Worker Concept**: Event-driven background worker running independently of web pages, acting as a programmable network proxy.
+> 2. **HTTPS Requirement**: Service Workers require secure HTTPS origins (or localhost for development) due to powerful proxy capabilities.
+> 3. **Scope Property**: Defines path directory hierarchy controlled by the Service Worker (e.g. scope: '/').
 > 
 ---
 
-### Exercise 2: Service Worker 3-Stage Life Cycle
+### Exercise 2: Network-First with Cache Fallback SW Fetch Interceptor
 
-**Problem:** Identify the 3 sequential lifecycle stages of a Service Worker script.
+**Scenario:** Implements a Network-First fetch interceptor strategy ideal for dynamic API data endpoints.
 
-**Expected output:**
+**Requirements:**
+1. Write networkFirstFetch(requestUrl, cacheName, mockCaches, mockFetch).
+2. Attempt network fetch first.
+3. Cache response on success.
+4. Fall back to cache on network failure.
+
 > [!check]- Answer
-> ```text
-> 1. Registration
-> 2. Installation (install event)
-> 3. Activation (activate event)
-> ```
-> ```text
-> 1. Registration -> Browser registers sw.js script URL.
-> 2. Installation -> self.addEventListener('install') fires (cache pre-fetching).
-> 3. Activation   -> self.addEventListener('activate') fires (old cache cleanup).
-> ```
-> - **Explanation:** Service Worker lifecycle events manage installation and cache updates.
----
-
-### Exercise 3: Service Worker Fetch Interception
-
-**Problem:** Write Service Worker event listener intercepting outbound HTTP requests (`fetch` event).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> self.addEventListener('fetch', (event) => { event.respondWith(caches.match(event.request)); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> self.addEventListener('fetch', (event) => {
-> event.respondWith(
-> caches.match(event.request).then(cached => cached || fetch(event.request))
-> );
+> async function networkFirstFetch(requestUrl, cacheName = "dynamic-api-v1", mockCaches, mockFetch) {
+>   const cacheStorage = mockCaches || globalThis.caches;
+>   const fetchFn = mockFetch || globalThis.fetch;
+>
+>   try {
+>     const networkResponse = await fetchFn(requestUrl);
+>     if (networkResponse.ok) {
+>       const cache = await cacheStorage.open(cacheName);
+>       await cache.put(requestUrl, networkResponse.clone());
+>     }
+>     return { source: "NETWORK", response: networkResponse };
+>   } catch (netErr) {
+>     const cache = await cacheStorage.open(cacheName);
+>     const cachedResponse = await cache.match(requestUrl);
+>
+>     if (cachedResponse) {
+>       return { source: "CACHE_FALLBACK", response: cachedResponse };
+>     }
+>     throw new Error(`Both network and cache failed for ${requestUrl}`);
+>   }
+> }
+>
+> // Verification tests
+> const mockCache = new Map();
+> const mockCaches = {
+>   open: async () => ({
+>     put: async (u, r) => mockCache.set(u, r),
+>     match: async (u) => mockCache.get(u) || null
+>   })
+> };
+>
+> const failingFetch = async () => { throw new Error("Offline"); };
+> mockCache.set("https://api.com/feed", { ok: true, status: 200 });
+>
+> networkFirstFetch("https://api.com/feed", "v1", mockCaches, failingFetch).then(res => {
+>   console.assert(res.source === "CACHE_FALLBACK", "Test 1 Failed: Must return fallback cache when offline");
 > });
 > ```
-> - **Explanation:** `event.respondWith()` intercepts network requests to serve cached assets.
+>
+> #### Technical Explanation
+>
+> 1. **Network-First Strategy**: Prefers fresh network data, falling back to cached responses when offline.
+> 2. **API Caching Pattern**: Optimal for dynamic content (news feeds, dashboards) where freshness is preferred over speed.
+> 3. **Graceful Degradation**: Ensures application displays cached data when user enters airplane mode.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Service Worker SkipWaiting & Clients Claim Automation
+
+**Scenario:** Accelerates Service Worker activation and immediate page control using `self.skipWaiting()` and `clients.claim()`.
+
+**Requirements:**
+1. Write handleSwActivation(mockSelf).
+2. Call skipWaiting().
+3. Call clients.claim().
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function handleSwActivation(mockSelf) {
+>   const actions = [];
+>
+>   if (mockSelf.skipWaiting) {
+>     await mockSelf.skipWaiting();
+>     actions.push("SKIP_WAITING");
+>   }
+>
+>   if (mockSelf.clients && mockSelf.clients.claim) {
+>     await mockSelf.clients.claim();
+>     actions.push("CLIENTS_CLAIM");
+>   }
+>
+>   return actions;
+> }
+>
+> // Verification tests
+> const mockSelf = {
+>   skipWaiting: async () => {},
+>   clients: { claim: async () => {} }
+> };
+>
+> handleSwActivation(mockSelf).then(actions => {
+>   console.assert(actions.length === 2, "Test 1 Failed");
+>   console.assert(actions.includes("SKIP_WAITING") && actions.includes("CLIENTS_CLAIM"), "Test 2 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **skipWaiting() Method**: Forces newly installed Service Worker to activate immediately without waiting for existing tabs to close.
+> 2. **clients.claim() Method**: Allows activated Service Worker to take immediate control of un-controlled open page clients.
+> 3. **Instant SW Updates**: Ensures user receives new SW features instantly without requiring full browser restart.
+---
+
+## 6. Related Terms
 - [Cache API](cache_api.md) — The database the Service Worker uses to store the offline files.
 - [IndexedDB](indexeddb.md) — The database the Service Worker uses to store the offline JSON data.
 - [Offline-First / PWA](offline_first.md) — Related concept: Offline-First / PWA.
@@ -154,7 +258,7 @@ Cache-Control: no-cache, no-store
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Service Worker** is a background script that acts as a middleman between your app and the internet.
 - It can intercept `fetch()` requests and serve files from the Cache API, allowing the app to work entirely **Offline**.
 - It is the engine behind Push Notifications and Background Syncing.

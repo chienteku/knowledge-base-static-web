@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Modern Browsers)**: `<video>` is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers (HTML5)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Exactly like the `<audio>` tag, early web video was completely dependent on third-party plugins like Adobe Flash. This caused massive security vulnerabilities, crashed browsers frequently, and drained laptop batteries because it was highly inefficient.
@@ -57,7 +53,7 @@ If the `<audio>` tag is a built-in record player, the `<video>` tag is a built-i
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to autoplay video *with* sound
 
@@ -114,7 +110,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 <video src="bg.mp4" autoplay muted playsinline></video>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Poster Attribute
 
@@ -166,7 +162,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 >
 > **Explanation:** `poster` specifies image preview displayed before video playback begins.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the video source.
 - [`<source>` Element](source.md) — The child element used for multi-format video sources.
 - [`<audio>`](audio.md) — The sound-only sibling to the video tag.
@@ -174,7 +170,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<video>` tag natively plays video files (like MP4 or WebM) without plugins.
 - Use the `controls` attribute to give the user play/pause and volume buttons.
 - Use the `poster` attribute to show a thumbnail image before playback starts.

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Modern Browsers  .)**: `<source>` Element is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers (HTML5)** (Introduced to handle media compatibility without plug-ins).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Not all web browsers support the same audio and video file formats. For example:
@@ -102,7 +98,7 @@ Nesting alternative sources inside a video container:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to write a closing tag for `<source>`
 
@@ -153,7 +149,7 @@ Nesting alternative sources inside a video container:
 <picture><source srcset="large.webp"></picture> <!-- Correct srcset attribute -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Multi-format Audio Markup
 
@@ -209,7 +205,7 @@ Nesting alternative sources inside a video container:
 >
 > **Explanation:** `2x` handles high-DPI retina screens; `800w` specifies source image pixel width.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<audio>`](audio.md) — The audio container element.
 - [`<video>`](video.md) — The video container element.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The general category of single-tag elements.
@@ -217,7 +213,7 @@ Nesting alternative sources inside a video container:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<source>` is a void element used inside `<audio>`, `<video>`, and `<picture>`.
 - It lets you specify multiple format fallbacks to solve browser compatibility issues.
 - Browsers read sources sequentially and play the first supported format.

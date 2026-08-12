@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Governs the organizational workflow between frontend, backend, mobile, and QA engineering teams.)**: API Contract / Schema-First Design is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Governs the organizational workflow between frontend, backend, mobile, and QA engineering teams.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional software development, the backend team writes code to build API endpoints first, and only documents them afterward (or neglects documentation entirely). This "code-first" approach creates bottlenecks:
@@ -88,7 +84,7 @@ paths:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Permitting code implementations to drift from the contract
 
@@ -138,57 +134,168 @@ res.json({ id: "123" }); // ❌ Breaks clients expecting integer id: 123!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Workflow Analysis
+### Exercise 1: JSON Schema API Contract Validator
 
-**Problem:** Which of the following is a primary benefit of Schema-First Design over Code-First Design?
+**Scenario:** An API gateway validates incoming request payloads against an agreed-upon JSON Schema API contract before routing to backend microservices.
 
-- **A.** It makes the database run queries faster.
-- **B.** It allows frontend and backend teams to develop code concurrently, reducing integration delays.
-- **C.** It eliminates the need for unit testing.
+**Requirements:**
+1. Write validateApiContract(payloadObj, contractSchema).
+2. Check field presence.
+3. Check primitive types (string, number, boolean).
+4. Return { valid, errors }.
 
 > [!check]- Answer
-> - **B** (By agreeing on the contract first, frontend developers use mock servers to build views while the backend implements the actual endpoint logic simultaneously).
+>
+> #### Implementation
+>
+> ```javascript
+> function validateApiContract(payloadObj, contractSchema = {}) {
+>   if (!payloadObj || typeof payloadObj !== "object") {
+>     return { valid: false, errors: ["Payload must be a non-null object"] };
+>   }
+>
+>   const errors = [];
+>   const requiredFields = contractSchema.required || [];
+>   const properties = contractSchema.properties || {};
+>
+>   for (const field of requiredFields) {
+>     if (!(field in payloadObj) || payloadObj[field] === undefined || payloadObj[field] === null) {
+>       errors.push(`Contract violation: missing required field '${field}'`);
+>     }
+>   }
+>
+>   for (const [key, rules] of Object.entries(properties)) {
+>     if (key in payloadObj && payloadObj[key] !== undefined) {
+>       const actualType = typeof payloadObj[key];
+>       if (rules.type && actualType !== rules.type) {
+>         errors.push(`Contract violation: field '${key}' expected type '${rules.type}', got '${actualType}'`);
+>       }
+>     }
+>   }
+>
+>   return { valid: errors.length === 0, errors };
+> }
+>
+> // Verification tests
+> const schema = {
+>   required: ["userId", "email"],
+>   properties: {
+>     userId: { type: "number" },
+>     email: { type: "string" }
+>   }
+> };
+>
+> const res1 = validateApiContract({ userId: 101, email: "a@a.com" }, schema);
+> console.assert(res1.valid === true, "Test 1 Failed");
+>
+> const res2 = validateApiContract({ userId: "invalid_string" }, schema);
+> console.assert(res2.valid === false && res2.errors.length === 2, "Test 2 Failed: Identifies missing email and bad userId type");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **API Contract Concept**: Formal specification (JSON Schema, OpenAPI) defining request/response structures between producer and consumer.
+> 2. **Gateway Validation Shift-Left**: Validating contract schema at the API gateway rejects invalid payloads before hitting internal backend services.
+> 3. **Consumer-Driven Contracts**: Ensures frontend and backend teams align on property names and data types.
 > 
+---
+
+### Exercise 2: Breaking Change Contract Detector
+
+**Scenario:** An API CI/CD pipeline tool compares new API response schemas against existing contracts to detect breaking changes.
+
+**Requirements:**
+1. Write detectContractBreakingChanges(oldSchema, newSchema).
+2. Flag removed fields or changed primitive types.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function detectContractBreakingChanges(oldSchema = {}, newSchema = {}) {
+>   const breakingChanges = [];
+>
+>   const oldProps = oldSchema.properties || {};
+>   const newProps = newSchema.properties || {};
+>
+>   for (const [key, oldRules] of Object.entries(oldProps)) {
+>     if (!(key in newProps)) {
+>       breakingChanges.push(`Breaking change: removed field '${key}'`);
+>     } else if (oldRules.type !== newProps[key].type) {
+>       breakingChanges.push(`Breaking change: type of '${key}' changed from '${oldRules.type}' to '${newProps[key].type}'`);
+>     }
+>   }
+>
+>   return { isBreaking: breakingChanges.length > 0, breakingChanges };
+> }
+>
+> // Verification tests
+> const v1 = { properties: { id: { type: "number" }, name: { type: "string" } } };
+> const v2 = { properties: { id: { type: "string" } } };
+>
+> const res = detectContractBreakingChanges(v1, v2);
+> console.assert(res.isBreaking === true && res.breakingChanges.length === 2, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Backward Compatibility**: Additive changes (adding optional fields) are non-breaking; removing fields or altering types breaks clients.
+> 2. **CI/CD Breaking Change Guards**: Automated contract testing prevents deploying updates that break frontend API integrations.
+> 3. **Major Version Triggers**: Breaking changes require bumping the major API version number (v1 -> v2).
 > 
 ---
 
-### Exercise 2: Consumer-Driven Contract Testing (Pact)
+### Exercise 3: Consumer-Pact Contract Testing Verifier
 
-**Problem:** What is the primary objective of Consumer-Driven Contract Testing tools like Pact?
+**Scenario:** Simulates Consumer-Driven Contract testing (Pact) by verifying server responses match consumer expected mock interactions.
 
-**Expected output:**
+**Requirements:**
+1. Write verifyConsumerPact(interaction, mockServerFn).
+2. Execute interaction.
+3. Assert response matches expected contract.
+
 > [!check]- Answer
-> ```text
-> Allows API consumers to define expected request/response contracts, validating backend services against those contracts during CI/CD builds before deployment.
+>
+> #### Implementation
+>
+> ```javascript
+> async function verifyConsumerPact(expectedInteraction, mockServerFn) {
+>   const { request, response: expectedResponse } = expectedInteraction;
+>
+>   const actualResponse = await mockServerFn(request.method, request.path, request.body);
+>
+>   const statusMatches = actualResponse.status === expectedResponse.status;
+>
+>   return {
+>     valid: statusMatches,
+>     statusMatches
+>   };
+> }
+>
+> // Verification tests
+> const pact = {
+>   request: { method: "GET", path: "/users/1" },
+>   response: { status: 200 }
+> };
+>
+> const mockServer = async (m, p) => ({ status: 200 });
+>
+> verifyConsumerPact(pact, mockServer).then(res => {
+>   console.assert(res.valid === true, "Test 1 Failed");
+> });
 > ```
-> ```text
-> Allows API consumers to define expected request/response contracts, validating backend services against those contracts during CI/CD builds before deployment.
-> ```
-> - **Explanation:** Contract testing prevents breaking API changes from entering production.
+>
+> #### Technical Explanation
+>
+> 1. **Consumer-Driven Contract (Pact)**: Testing strategy where API consumers write tests specifying expected API provider behavior.
+> 2. **Decoupled Integration Testing**: Verifies producer and consumer compatibility without needing active end-to-end environment deployment.
+> 3. **Contract Mismatch Alerts**: Flags discrepancies between frontend expectations and backend responses early in build cycles.
 ---
 
-### Exercise 3: Backward Compatible API Changes
-
-**Problem:** Which 2 modifications to an API response contract are considered backward compatible?
-1. Adding a new optional response field
-2. Removing an existing response field
-3. Renaming an existing field key
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Modification 1 (Adding new optional response fields is backward compatible).
-> ```
-> ```text
-> Modification 1 -> Adding new optional response fields is backward compatible.
-> Modifying/removing existing fields breaks contracts.
-> ```
-> - **Explanation:** Adding new optional fields preserves existing client compatibility.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Mocking APIs](mocking.md) — The process of serving mock data derived directly from the API contract.
 - [API Versioning (v1, v2)](versioning.md) — The process of releasing updates to a contract without breaking legacy systems.
 - [Deprecation & Sunsetting](deprecation_sunsetting.md) — Related concept: Deprecation & Sunsetting.
@@ -196,7 +303,7 @@ res.json({ id: "123" }); // ❌ Breaks clients expecting integer id: 123!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Schema-First Design establishes an API Contract before writing code.
 - The contract defines paths, request bodies, status codes, and data schemas.
 - It enables frontend and backend teams to develop concurrently using mock servers.

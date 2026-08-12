@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Universal Browser Support)**: `<strong>` & `<em>` is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early versions of HTML, if you wanted text to look bold, you used the `<b>` tag. If you wanted it to look italic, you used the `<i>` tag. 
@@ -56,7 +52,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<b>` and `<i>` for visual styling
 
@@ -181,7 +177,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 <strong><em>Urgent Emphasis</em></strong>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Screen Reader Test
 
@@ -229,7 +225,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 >
 > **Explanation:** CSS controls visual appearance while HTML tags dictate semantic meaning.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<span>` (Inline container)](span.md) — The non-semantic alternative for purely visual styling.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing text wrappers.
 - [`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`](b_i_u_vs_strong_em.md) — The presentational vs semantic formatting comparison.
@@ -239,7 +235,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<strong>` represents strong importance (renders bold by default).
 - `<em>` represents stress emphasis (renders italic by default).
 - Both are **semantic tags**, meaning they convey actual importance to screen readers and search engines.

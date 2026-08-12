@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Scope is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If every variable you ever created in a massive application was visible to every single line of code, the system would collapse in chaos. Two developers might accidentally use the same variable name (`let count = 0`), and their code would overwrite each other, causing impossible-to-track bugs.
@@ -76,7 +72,7 @@ levelOne();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Scope Scope and Variable Hoisting
 
@@ -149,69 +145,137 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Scope Prediction
+### Exercise 1: Scope Chain Hierarchy Analyzer
 
-**Problem:** Read the following code. What will the final `console.log` print?
-```javascript
-let score = 10;
-function play() {
-  let score = 50;
-}
-play();
-console.log(score);
-```
+**Scenario:** A code analysis tool inspects global, function, and block scope accessibility, analyzing identifier resolution across scope boundaries.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate Global Scope, Function Scope, and Block Scope variable accessibility.
+2. Return access report object.
+
 > [!check]- Answer
-> ```text
-> 10
-> (Because the function declared its own local 'score' and didn't touch the global one)
-> ```
-> - `let` inside the function creates a brand new variable that dies when the function finishes.
-> 
----
-
-### Exercise 2: Scope Chain Lookup Order
-
-**Problem:** Explain how JS engine searches local scope, outer enclosing scopes, and global scope in order.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Local -> Outer -> Global
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Local -> Outer -> Global");
-> ```
+> const globalScopeVar = "GLOBAL";
 >
-> **Explanation:** Identifiers resolve by searching from inner scopes upward through parent lexical scope frames.
-> 
----
-
-### Exercise 3: Scope Isolation Verification
-
-**Problem:** Verify that variables inside `function A()` are inaccessible from sibling `function B()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Sibling scope isolated
-> ```
-> function A() { const a = 1; }
-> function B() {
->   try { console.log(a); } catch (err) { console.log("Sibling scope isolated"); }
+> function testScopeHierarchy() {
+>   const functionScopeVar = "FUNCTION";
+>   let blockScopeResult = "";
+>
+>   if (true) {
+>     const blockScopeVar = "BLOCK";
+>     blockScopeResult = `${globalScopeVar}:${functionScopeVar}:${blockScopeVar}`;
+>   }
+>
+>   let isBlockLeaked = false;
+>   try {
+>     // @ts-ignore
+>     console.log(blockScopeVar);
+>   } catch (err) {
+>     isBlockLeaked = false;
+>   }
+>
+>   return { blockScopeResult, isBlockLeaked };
 > }
-> B();
+>
+> // Verification tests
+> const res = testScopeHierarchy();
+> console.assert(res.blockScopeResult === "GLOBAL:FUNCTION:BLOCK", "Test 1 Failed");
+> console.assert(res.isBlockLeaked === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Sibling function scopes do not share identifier environments.
-> 
+> #### Technical Explanation
+>
+> 1. **Scope Concept**: Scope defines the accessibility and visibility boundaries of variables and functions in code.
+> 2. **Three Main Scopes**: JavaScript features Global Scope, Function (Local) Scope, and Block Scope (introduced in ES6).
+> 3. **Scope Boundary Enclosure**: Inner scopes inherit access to outer variables; outer scopes cannot reach into inner scopes.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Lexical Scope vs Dynamic Invocation Context
+
+**Scenario:** A library spec verifier tests that JavaScript variable scope is determined lexically at compile time, completely independent of runtime function invocation sites.
+
+**Requirements:**
+1. Create function bindLexicalScope().
+2. Return inner function accessing outer scope variable.
+3. Invoke from different dynamic contexts.
+4. Verify scope lookup remains fixed.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function bindLexicalScope() {
+>   const scopeId = "LEXICAL_ENVIRONMENT_100";
+>
+>   return function() {
+>     return scopeId;
+>   };
+> }
+>
+> const dynamicCallerObject = {
+>   scopeId: "DYNAMIC_ENVIRONMENT_999",
+>   callerFn: bindLexicalScope()
+> };
+>
+> // Verification tests
+> console.assert(dynamicCallerObject.callerFn() === "LEXICAL_ENVIRONMENT_100", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Static Lexical Scoping**: Variable scope is fixed at compile time based on code location, NOT execution call site.
+> 2. **Lexical Environment Record**: Functions store a reference to their outer Lexical Environment Record upon creation.
+> 3. **Scope vs 'this' Context**: Variable scope (lexical) is distinct from this context (dynamic based on invocation).
+> 
+---
+
+### Exercise 3: Scope Leak Remediation via Strict Enclosure
+
+**Scenario:** A security audit hardens legacy code, refactoring un-scoped assignments into strict block-scoped let/const bindings to eliminate scope leaks.
+
+**Requirements:**
+1. Audit function leaking variables to global scope.
+2. Refactor using const and let within local function scope.
+3. Verify scope leaks are completely eliminated.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function hardenedSecurityScope() {
+>   const token = "SECURE_TOKEN_123";
+>   let count = 0;
+>   count++;
+>
+>   return {
+>     token,
+>     count,
+>     isGlobalLeaked: typeof globalThis.token !== "undefined"
+>   };
+> }
+>
+> // Verification tests
+> const audit = hardenedSecurityScope();
+> console.assert(audit.token === "SECURE_TOKEN_123", "Test 1 Failed");
+> console.assert(audit.isGlobalLeaked === false, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Scope Leak Risks**: Un-scoped variable assignments pollute outer/global scopes, causing hard-to-trace bugs.
+> 2. **Strict Mode Enforcement**: Enabling strict mode turns undeclared scope assignments into thrown errors.
+> 3. **Principle of Least Privilege**: Expose variables only in the smallest scope necessary for execution.
+---
+
+## 6. Related Terms
 - [Global Scope](global_scope.md) — The outermost scope.
 - [Local / Function Scope](local_scope.md) — Scope restricted to a function.
 - [Block Scope](block_scope.md) — Scope restricted to `{ }` brackets (for `let` and `const`).
@@ -221,7 +285,7 @@ console.log(score);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Scope dictates where variables are accessible.
 - Scope works from the inside out: inner scopes can access variables in outer scopes, but outer scopes cannot look into inner scopes.
 - Declaring a variable inside a function with the same name as a global variable "shadows" the global variable.

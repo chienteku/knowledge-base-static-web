@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Typography Property**
+
+**Typography Property (Universal Browser Support)**: `text-align` & `text-decoration` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Text formatting goes beyond just picking a font and a size. You need to control how text sits inside its container. Should the title be perfectly centered? Should the paragraph be aligned to the right edge of the screen? The W3C created **`text-align`** for this exact purpose (it works exactly like the Left/Center/Right align buttons in Microsoft Word).
@@ -62,7 +58,7 @@ a {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `text-align: center` to center a `<div>`
 
@@ -108,7 +104,7 @@ a {
 .col { text-align: left; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Invisible Center
 
@@ -161,13 +157,13 @@ a {
 >
 > **Explanation:** `text-decoration: none` removes default hyperlink underlines.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The display type that `text-align` affects.
 - [Margin](../level_02/margin.md) — The spacing property used to center boxes rather than inline text.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `text-align` accepts `left`, `right`, `center`, and `justify`.
 - `text-align` ONLY centers text/inline content inside a box; it does NOT center the box itself.
 - `text-decoration` accepts `none`, `underline`, `overline`, and `line-through`.

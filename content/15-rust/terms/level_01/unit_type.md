@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [`fn` (Functions)](fn.md) — Functions that don't specify a return type implicitly return `()`.
+- [fn](fn.md) — Functions that don't specify a return type implicitly return `()`.
 - [Statements](statements.md) — Statements in Rust evaluate to the Unit Type `()`.
 - [Expressions](expressions.md) — If you add a semicolon to an expression, it turns into a statement and returns `()` instead of its actual value.
 - [Scalar Types](scalar_types.md) — Primitive types.

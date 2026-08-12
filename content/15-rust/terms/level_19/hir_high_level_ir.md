@@ -246,7 +246,7 @@ HIR is lowered to MIR before borrow checking and lifetime validation!
 
 ## 6. Related Terms
 
-- [Mir Mid Level Ir](mir_mid_level_ir.md) — Mid-level IR.
+- [MIR (Mid-level IR)](mir_mid_level_ir.md) — Mid-level IR.
 
 ---
 

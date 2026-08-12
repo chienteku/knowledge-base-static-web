@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Developer Tooling**
+
+**Developer Tooling (Local Development / QA)**: Postman / Insomnia (API Clients) is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Local Development / QA**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are a backend developer building a new `POST /api/users` endpoint. To test if your code actually works, you have to build an HTML form, write a JavaScript `fetch()` request, stringify a JSON body, and handle the response. That takes 20 minutes just to test one line of backend code!
@@ -34,7 +30,7 @@ To solve this, developers use **API Clients** (like Postman or Insomnia). They p
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not saving tokens as variables
 
@@ -89,59 +85,179 @@ const res = await fetch(`${process.env.API_BASE_URL}/users`);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Why not the Browser?
+### Exercise 1: Standardized HTTP API Client Factory
 
-**Problem:** You build a `DELETE /api/users/5` endpoint. Why can't you just test this by typing `http://localhost:3000/api/users/5` into your Chrome address bar and hitting Enter?
+**Scenario:** An enterprise SDK wraps native fetch to create configured API client instances with default headers, base URLs, and timeout guards.
 
-**Expected output:**
+**Requirements:**
+1. Write createApiClient(baseUrl, defaultHeaders, timeoutMs).
+2. Expose get(path) and post(path, body) methods.
+3. Prepend baseUrl and attach headers.
+
 > [!check]- Answer
-> ```text
-> Because the browser address bar ALWAYS sends an HTTP `GET` request! 
-> You cannot use the browser's address bar to send `POST`, `PUT`, or `DELETE` requests, and you cannot attach a JSON body to it. This is exactly why tools like Postman exist!
+>
+> #### Implementation
+>
+> ```javascript
+> function createApiClient(baseUrl, defaultHeaders = {}, timeoutMs = 5000, mockFetch) {
+>   const fetchFn = mockFetch || globalThis.fetch;
+>   const cleanBase = baseUrl.replace(/\/$/, "");
+>
+>   async function request(path, options = {}) {
+>     const url = `${cleanBase}${path.startsWith("/") ? path : "/" + path}`;
+>     const controller = new AbortController();
+>     const timer = setTimeout(() => controller.abort(), timeoutMs);
+>
+>     try {
+>       const response = await fetchFn(url, {
+>         ...options,
+>         signal: controller.signal,
+>         headers: {
+>           "Accept": "application/json",
+>           ...defaultHeaders,
+>           ...options.headers
+>         }
+>       });
+>       clearTimeout(timer);
+>
+>       if (!response.ok) {
+>         throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+>       }
+>       return await response.json();
+>     } catch (err) {
+>       clearTimeout(timer);
+>       throw err;
+>     }
+>   }
+>
+>   return {
+>     get: (path, headers) => request(path, { method: "GET", headers }),
+>     post: (path, body, headers) => request(path, {
+>       method: "POST",
+>       headers: { "Content-Type": "application/json", ...headers },
+>       body: JSON.stringify(body)
+>     })
+>   };
+> }
+>
+> // Verification tests
+> const mockFetch = async (url, opts) => ({
+>   ok: true,
+>   status: 200,
+>   json: async () => ({ url, auth: opts.headers["Authorization"] })
+> });
+>
+> const client = createApiClient("https://api.com/v1", { "Authorization": "Bearer secret" }, 3000, mockFetch);
+> client.get("/users").then(res => {
+>   console.assert(res.url === "https://api.com/v1/users", "Test 1 Failed");
+>   console.assert(res.auth === "Bearer secret", "Test 2 Failed");
+> });
 > ```
-> - What HTTP Method does the browser use when you press Enter in the URL bar?
+>
+> #### Technical Explanation
+>
+> 1. **API Client Abstraction**: Encapsulates network connection setup, base URLs, and authentication headers in a reusable module.
+> 2. **Centralized Timeout Guards**: Applies AbortController timeouts to all outbound client requests automatically.
+> 3. **Decoupled Codebase Integration**: Prevents repeating raw fetch/Axios configuration across multiple UI components.
 > 
 ---
 
-### Exercise 2: Axios Interceptor Authentication Pattern
+### Exercise 2: Response Interceptor Pipeline & Auth Refresh
 
-**Problem:** Write Axios request interceptor injecting `Authorization: Bearer <token>` into all outbound requests.
+**Scenario:** An API client implements a response interceptor pipeline that automatically handles HTTP 401 Unauthorized errors by refreshing tokens.
 
-**Expected output:**
+**Requirements:**
+1. Write executeWithInterceptor(apiCallFn, refreshAuthTokenFn).
+2. Execute call.
+3. If 401, invoke refreshAuthTokenFn and retry once.
+
 > [!check]- Answer
-> ```text
-> apiClient.interceptors.request.use((config) => { config.headers.Authorization = `Bearer ${getToken()}`; return config; });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> apiClient.interceptors.request.use((config) => {
-> const token = getAuthToken();
-> if (token) config.headers.Authorization = `Bearer ${token}`;
-> return config;
+> async function executeWithInterceptor(apiCallFn, refreshAuthTokenFn) {
+>   try {
+>     return await apiCallFn();
+>   } catch (err) {
+>     if (err.status === 401) {
+>       const newAuthToken = await refreshAuthTokenFn();
+>       if (!newAuthToken) throw err;
+>       return await apiCallFn(newAuthToken);
+>     }
+>     throw err;
+>   }
+> }
+>
+> // Verification tests
+> let attempts = 0;
+> const mockApi = async (token) => {
+>   attempts++;
+>   if (!token || token !== "fresh_token") {
+>     const e = new Error("Unauthorized");
+>     e.status = 401;
+>     throw e;
+>   }
+>   return { data: "PROTECTED_DATA" };
+> };
+>
+> const refresh = async () => "fresh_token";
+>
+> executeWithInterceptor((tok) => mockApi(tok), refresh).then(res => {
+>   console.assert(res.data === "PROTECTED_DATA", "Test 1 Failed");
+>   console.assert(attempts === 2, "Test 2 Failed: Must retry once after refresh");
 > });
 > ```
-> - **Explanation:** Axios interceptors centralize cross-cutting request concerns like header injection.
+>
+> #### Technical Explanation
+>
+> 1. **Transparent Token Refresh**: Intercepts 401 responses and refreshes authentication tokens without forcing user logout.
+> 2. **Retry Mechanism**: Re-executes original API call with updated authorization credentials.
+> 3. **Concurrency Lock Consideration**: In production, multiple parallel 401s should be queued behind a single token refresh execution.
+> 
 ---
 
-### Exercise 3: API Client Singleton Benefits
+### Exercise 3: Multi-Environment Base URL Resolver
 
-**Problem:** Name 2 technical benefits of configuring a centralized API Client instance (Axios / Ky / custom fetch wrapper).
+**Scenario:** Configures API client base URLs dynamically based on environment variables (`development`, `staging`, `production`).
 
-**Expected output:**
+**Requirements:**
+1. Write resolveApiBaseUrl(envName, configMap).
+2. Return environment target URL.
+
 > [!check]- Answer
-> ```text
-> 1. Centralized base URL and timeout configuration
-> 2. Global request/response interceptors (error logging, token injection)
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveApiBaseUrl(envName, configMap = {}) {
+>   const env = (envName || "development").toLowerCase();
+>
+>   const defaultConfig = {
+>     development: "http://localhost:3000/api",
+>     staging: "https://staging-api.example.com",
+>     production: "https://api.example.com"
+>   };
+>
+>   const activeConfig = { ...defaultConfig, ...configMap };
+>   return activeConfig[env] || activeConfig.development;
+> }
+>
+> // Verification tests
+> console.assert(resolveApiBaseUrl("production") === "https://api.example.com", "Test 1 Failed");
+> console.assert(resolveApiBaseUrl("unknown") === "http://localhost:3000/api", "Test 2 Failed: Fallback to dev");
 > ```
-> ```text
-> 1. Centralized base URL, headers, and timeout configuration.
-> 2. Global request/response interceptors for auth and error handling.
-> ```
-> - **Explanation:** Centralized API clients simplify cross-cutting HTTP infrastructure.
+>
+> #### Technical Explanation
+>
+> 1. **Environment Config Separation**: Twelve-Factor App principle: store configuration in environment variables rather than hardcoded strings.
+> 2. **Local Development Mocking**: Points local environments to mock servers or localhost ports.
+> 3. **Production Isolation**: Ensures staging testing cannot accidentally contaminate production databases.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Swagger / OpenAPI Specification](openapi.md) — While Postman is for *testing* APIs, Swagger is for *documenting* them.
 - [The fetch() API](../level_05/fetch.md) — What Postman is essentially replacing during the testing phase.
 - [Mocking APIs](mocking.md) — Related concept: Mocking APIs.
@@ -150,7 +266,7 @@ const res = await fetch(`${process.env.API_BASE_URL}/users`);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Postman** and **Insomnia** are desktop apps used to test HTTP APIs.
 - They allow you to send `POST`/`PUT`/`DELETE` requests with custom headers and bodies without writing any frontend code.
 - They support Variables and Collections to automate testing workflows.

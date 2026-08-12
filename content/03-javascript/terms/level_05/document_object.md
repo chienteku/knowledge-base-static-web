@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers. If accessed in Node.js, it throws a `ReferenceError`.)**: document object is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers. If accessed in Node.js, it throws a `ReferenceError`.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While the Document Object Model (DOM) defines the theoretical tree structure of a webpage, JavaScript needs a concrete object reference to interact with that tree. To provide this, browser vendors created the global **`document`** object (specifically, `window.document`).
@@ -78,7 +74,7 @@ renderWelcomeBanner("Brendan");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `document.write()` in Modern Web Apps
 
@@ -158,70 +154,144 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read and Log Title
+### Exercise 1: Document Ready State & Meta Tag Injector
 
-**Problem:** Complete the code to check if the current page title is empty. If it is, update the title to `"Default Title"`.
+**Scenario:** A web analytics loader inspects document.readyState and injects custom meta elements into document.head.
 
-```javascript
-if (typeof document !== "undefined") {
-  // Read current title
-  // If empty, set default title
-  // Write check here
-}
-```
+**Requirements:**
+1. Write injectMetaTag(name, content).
+2. Check document.head.
+3. Create meta element and set attributes.
+4. Append meta to document.head.
 
 > [!check]- Answer
-> - Check if `document.title === ""` or `!document.title`.
-> - Assign a new string to `document.title`.
-> 
----
-
-### Exercise 2: Inspecting Document Metadata
-
-**Problem:** Read `document.title` and `document.URL` in browser environments.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Browser Document API verified
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Browser Document API verified");
+> function injectMetaTag(name, content) {
+>   if (!globalThis.document || !document.head) return false;
+>
+>   const meta = document.createElement("meta");
+>   meta.setAttribute("name", name);
+>   meta.setAttribute("content", content);
+>   document.head.appendChild(meta);
+>   return true;
+> }
+>
+> // Verification tests
+> const mockHead = {
+>   children: [],
+>   appendChild(child) { this.children.push(child); }
+> };
+> globalThis.document = {
+>   head: mockHead,
+>   createElement(tag) { return { tag, attrs: {}, setAttribute(k, v) { this.attrs[k] = v; } }; }
+> };
+>
+> console.assert(injectMetaTag("author", "Acme Corp") === true, "Test 1 Failed");
+> console.assert(mockHead.children[0].attrs.name === "author", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `document` represents the root web page loaded inside browser windows.
+> #### Technical Explanation
+>
+> 1. **document Object Purpose**: The document object represents the web page loaded in the browser window, serving as entry point for DOM interaction.
+> 2. **document.head & document.body**: Built-in properties pointing directly to the <head> and <body> DOM elements.
+> 3. **DOM Node Creation**: Methods like document.createElement() instantiate new DOM elements attached to the document owner.
 > 
 ---
 
-### Exercise 3: Creating Elements with `document.createElement`
+### Exercise 2: Document Cookie Inspection Guard
 
-**Problem:** Simulate creating a `<button>` element and setting text content `"Click Me"`.
+**Scenario:** An authentication middleware reads document.cookie strings and extracts target cookie values safely.
 
-**Expected output:**
+**Requirements:**
+1. Write getCookieValue(cookieName).
+2. Inspect document.cookie string.
+3. Parse key-value pairs.
+4. Return target cookie value or null.
+
 > [!check]- Answer
-> ```text
-> Button created with text: Click Me
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const button = { tagName: "BUTTON", textContent: "Click Me" };
-> console.log(`Button created with text: ${button.textContent}`);
+> function getCookieValue(cookieName) {
+>   if (!globalThis.document || typeof document.cookie !== "string") return null;
+>   const cookies = document.cookie.split(";");
+>   for (const item of cookies) {
+>     const [key, val] = item.trim().split("=");
+>     if (key === cookieName) return val;
+>   }
+>   return null;
+> }
+>
+> // Verification tests
+> globalThis.document = { cookie: "theme=dark; session=abc123xyz" };
+> console.assert(getCookieValue("theme") === "dark", "Test 1 Failed");
+> console.assert(getCookieValue("session") === "abc123xyz", "Test 2 Failed");
+> console.assert(getCookieValue("missing") === null, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `document.createElement(tagName)` instantiates new unattached DOM element nodes.
-> 
+> #### Technical Explanation
+>
+> 1. **document.cookie Access**: document.cookie exposes a semicolon-separated string of key=value pairs for the current domain.
+> 2. **String Parsing Necessity**: Accessing document.cookie requires string parsing to locate specific cookie keys.
+> 3. **Security Restrictions**: HttpOnly cookies cannot be read via document.cookie in client-side scripts.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Dynamic Page Title & Favicon Manipulator
+
+**Scenario:** A notification badge manager updates document.title dynamically to display unread notification counts.
+
+**Requirements:**
+1. Write updateNotificationTitle(baseTitle, unreadCount).
+2. If unreadCount > 0, set document.title to `(${unreadCount}) ${baseTitle}`.
+3. Else reset to baseTitle.
+4. Return current title.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function updateNotificationTitle(baseTitle, unreadCount) {
+>   if (!globalThis.document) return baseTitle;
+>
+>   if (unreadCount > 0) {
+>     document.title = `(${unreadCount}) ${baseTitle}`;
+>   } else {
+>     document.title = baseTitle;
+>   }
+>   return document.title;
+> }
+>
+> // Verification tests
+> globalThis.document = { title: "Dashboard" };
+> updateNotificationTitle("Dashboard", 5);
+> console.assert(globalThis.document.title === "(5) Dashboard", "Test 1 Failed");
+> updateNotificationTitle("Dashboard", 0);
+> console.assert(globalThis.document.title === "Dashboard", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **document.title Property**: document.title gets or sets the text title displayed in browser tab headers.
+> 2. **Real-Time Tab Feedback**: Updating document.title informs users of unread messages or status changes when tabs are inactive.
+> 3. **DOM Document Binding**: Property changes on document reflect instantly in host browser tab chrome.
+---
+
+## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The structured tree API of HTML nodes.
 - [document.querySelector()](document_queryselector.md) — The primary document selection method.
 - [DOMContentLoaded / load events](domcontentloaded_load.md) — Related concept: DOMContentLoaded / load events.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The global `document` object is the root entry point for traversing and manipulating the page's HTML structure.
 - It is a property of the global `window` object (`window.document`).
 - Key properties include `document.title`, `document.body`, and `document.head`.

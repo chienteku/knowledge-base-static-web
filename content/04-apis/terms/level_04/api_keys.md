@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Authentication**
+
+**Security / Authentication (Backend / Server-to-Server .)**: API Keys is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Backend / Server-to-Server** (It is extremely dangerous to use API Keys in frontend browser code!).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a Weather API, you might want to charge companies $100 a month to use it. But since your API is on the public internet, anyone can send an HTTP request to it. How do you track who is making the request so you can bill them? How do you block hackers who try to send 1,000,000 requests a second and crash your servers?
@@ -38,7 +34,7 @@ API Keys are usually passed in one of two ways:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hardcoding API Keys in the Frontend
 
@@ -86,60 +82,161 @@ const STRIPE_SECRET_KEY = 'sk_live_51Nx...'; // ❌ Leaked in public browser bun
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Stolen Key
+### Exercise 1: API Key Validation & Rate-Limit Tiering Middleware
 
-**Problem:** You accidentally pushed your Stripe API Key to a public GitHub repository. Within 5 minutes, hackers found it and started making fraudulent charges. What is the immediate technical solution?
+**Scenario:** An API gateway authenticates incoming requests using `X-API-Key` headers and enforces rate limits according to subscription tiers.
 
-**Expected output:**
+**Requirements:**
+1. Write authenticateApiKey(apiKeyHeader, keyRegistry).
+2. Validate API Key existence.
+3. Check subscription tier (BASIC vs ENTERPRISE).
+4. Return client metadata.
+
 > [!check]- Answer
-> ```text
-> You must log into your Stripe dashboard and "Revoke" or "Roll" the API key. 
-> This instantly invalidates the old string of characters, meaning any API requests using the stolen key will now receive a `401 Unauthorized` error. You will then be issued a brand new key to put in your backend code.
+>
+> #### Implementation
+>
+> ```javascript
+> function authenticateApiKey(apiKeyHeader, keyRegistry = new Map()) {
+>   if (!apiKeyHeader || typeof apiKeyHeader !== "string") {
+>     return { authenticated: false, status: 401, error: "Missing X-API-Key header" };
+>   }
+>
+>   const keyData = keyRegistry.get(apiKeyHeader.trim());
+>   if (!keyData || !keyData.active) {
+>     return { authenticated: false, status: 403, error: "Invalid or inactive API Key" };
+>   }
+>
+>   return {
+>     authenticated: true,
+>     status: 200,
+>     client: {
+>       clientId: keyData.clientId,
+>       tier: keyData.tier,
+>       rateLimitReqPerMin: keyData.tier === "ENTERPRISE" ? 1000 : 60
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const registry = new Map([
+>   ["key_basic_123", { clientId: "c1", tier: "BASIC", active: true }],
+>   ["key_ent_999", { clientId: "c2", tier: "ENTERPRISE", active: true }]
+> ]);
+>
+> const res1 = authenticateApiKey("key_basic_123", registry);
+> console.assert(res1.authenticated === true && res1.client.rateLimitReqPerMin === 60, "Test 1 Failed");
+>
+> const res2 = authenticateApiKey("key_ent_999", registry);
+> console.assert(res2.client.rateLimitReqPerMin === 1000, "Test 2 Failed");
+>
+> const res3 = authenticateApiKey("invalid_key", registry);
+> console.assert(res3.status === 403, "Test 3 Failed");
 > ```
-> - Just like a stolen credit card, what do you ask the bank to do?
+>
+> #### Technical Explanation
+>
+> 1. **API Key Purpose**: Identifies calling project/client rather than an individual logged-in human user.
+> 2. **Header Transport**: API keys should be sent in HTTP headers (X-API-Key) rather than query parameters to prevent log leaks.
+> 3. **Service Level Tiers**: Associates API keys with client quotas, rate limits, and access permissions.
 > 
 ---
 
-### Exercise 2: API Key Storage Location Matrix
+### Exercise 2: Constant-Time API Key Comparison Guard
 
-**Problem:** Determine if storing an API key is Safe (Yes/No):
-1. Frontend React `.env` file (`REACT_APP_API_KEY`)
-2. Backend Node.js `.env` file (`process.env.DB_PASS`)
-3. Public GitHub repository
+**Scenario:** A security library uses constant-time string comparison to prevent timing side-channel attacks during API key validation.
 
-**Expected output:**
+**Requirements:**
+1. Write timingSafeEqual(a, b).
+2. Compare character by character without early return.
+3. Return comparison boolean.
+
 > [!check]- Answer
-> ```text
-> 1. No (Bundled into public frontend code)
-> 2. Yes (Stays on private server)
-> 3. No (Publicly exposed)
+>
+> #### Implementation
+>
+> ```javascript
+> function timingSafeEqual(a, b) {
+>   if (typeof a !== "string" || typeof b !== "string") return false;
+>
+>   let mismatch = a.length ^ b.length;
+>   const len = Math.min(a.length, b.length);
+>
+>   for (let i = 0; i < len; i++) {
+>     mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+>   }
+>
+>   return mismatch === 0;
+> }
+>
+> // Verification tests
+> console.assert(timingSafeEqual("secret123", "secret123") === true, "Test 1 Failed");
+> console.assert(timingSafeEqual("secret123", "secret999") === false, "Test 2 Failed");
+> console.assert(timingSafeEqual("short", "longerstring") === false, "Test 3 Failed");
 > ```
-> ```text
-> 1. No -> Frontend build tools bundle environment variables directly into client JS.
-> 2. Yes -> Backend environment variables remain private on the server.
-> 3. No -> GitHub repositories index secrets publicly.
-> ```
-> - **Explanation:** Public code bundles and Git repositories leak API secrets.
+>
+> #### Technical Explanation
+>
+> 1. **Timing Attack Vulnerability**: Standard `===` returns early on first byte mismatch, allowing attackers to guess secret keys by measuring response times.
+> 2. **Constant-Time Comparison**: Processes all characters regardless of mismatches, ensuring constant execution time.
+> 3. **Cryptographic Safety**: Mandatory practice in authentication verification functions to prevent side-channel leaks.
+> 
 ---
 
-### Exercise 3: API Key Rotation Pattern
+### Exercise 3: Client vs Server API Key Exposure Auditor
 
-**Problem:** What architectural feature should an API key management system support to prevent downtime during key leaks?
+**Scenario:** An API linter checks codebase configurations to ensure secret API keys are never exposed in browser frontend code.
 
-**Expected output:**
+**Requirements:**
+1. Write auditApiKeyExposure(envVars).
+2. Identify keys prefixed with `PUBLIC_` (safe for browser) vs `SECRET_` (backend only).
+
 > [!check]- Answer
-> ```text
-> Dual-key rotation support (allowing an old key and a new key to remain active simultaneously during migration).
+>
+> #### Implementation
+>
+> ```javascript
+> function auditApiKeyExposure(envVarsObj) {
+>   const violations = [];
+>
+>   for (const [key, value] of Object.entries(envVarsObj || {})) {
+>     if (key.includes("SECRET") || key.includes("PRIVATE")) {
+>       if (key.startsWith("NEXT_PUBLIC_") || key.startsWith("REACT_APP_")) {
+>         violations.push({
+>           key,
+>           error: "CRITICAL: Secret key exposed in frontend bundle via public prefix!"
+>         });
+>       }
+>     }
+>   }
+>
+>   return {
+>     safe: violations.length === 0,
+>     violations
+>   };
+> }
+>
+> // Verification tests
+> const unsafeEnv = {
+>   "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_test_123",
+>   "NEXT_PUBLIC_STRIPE_SECRET_KEY": "sk_test_999"
+> };
+>
+> const audit = auditApiKeyExposure(unsafeEnv);
+> console.assert(audit.safe === false, "Test 1 Failed: Must flag secret key in public prefix");
+> console.assert(audit.violations.length === 1, "Test 2 Failed");
 > ```
-> ```text
-> Dual-key rotation support (allowing an old key and a new key to remain active simultaneously during migration).
-> ```
-> - **Explanation:** Dual-key rotation allows zero-downtime key rotation.
+>
+> #### Technical Explanation
+>
+> 1. **Browser Key Exposure**: Anything compiled into frontend bundles (React, Vue, Next.js) can be extracted by users in DevTools.
+> 2. **Publishable vs Secret Keys**: Publishable keys (e.g. Stripe PK) are safe for frontend; Secret keys (SK) must remain strictly on backend servers.
+> 3. **Proxy Architecture**: Frontend apps call backend API routes which attach secret API keys server-side before forwarding requests.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Basic & Bearer Authentication](basic_bearer_auth.md) — Other methods of sending secrets in HTTP Headers.
 - [JWT (JSON Web Tokens)](jwt.md) — While API Keys authenticate *Applications*, JWTs usually authenticate individual *Users*.
 - [SSL/TLS & the Handshake](../level_01/ssl_tls_handshake.md) — Related concept: SSL/TLS & the Handshake.
@@ -147,7 +244,7 @@ const STRIPE_SECRET_KEY = 'sk_live_51Nx...'; // ❌ Leaked in public browser bun
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An **API Key** is a secret string used to identify a program calling an API.
 - It is primarily used for tracking usage, rate limiting, and billing.
 - It must be sent on every request (usually via HTTP Headers).

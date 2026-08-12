@@ -8,9 +8,9 @@
 ## 1. Prerequisites
 
 
-- [Closure](closure.md) — The closely related, but fundamentally different, callable type this contrasts with.
+- [Closures (`|args| body`)](closure.md) — The closely related, but fundamentally different, callable type this contrasts with.
 - [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The trait family closures implement, which function pointers *also* implement.
-- [`fn` (Functions)](../level_01/fn.md) — The keyword that both declares functions and names this type.
+- [fn](../level_01/fn.md) — The keyword that both declares functions and names this type.
 
 ---
 
@@ -309,9 +309,9 @@ fn for_each_num<F: Fn(i32)>(nums: &[i32], callback: F) { ... } // Accepts functi
 ## 6. Related Terms
 
 
-- [Closure](closure.md) — The capturing, generally more flexible sibling that `fn` pointers contrast with.
+- [Closures (`|args| body`)](closure.md) — The capturing, generally more flexible sibling that `fn` pointers contrast with.
 - [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The trait family that `fn` pointers *also* implement (specifically `Fn`, since they never mutate captured state — they have none).
-- [FFI (Foreign Function Interface)](../level_13/ffi.md)
+- [FFI (Foreign Function Interface)](../level_13/ffi.md) — 
 - [`Fat Pointers` (Wide Pointers)](../level_11/fat_pointers.md) — A useful contrast: `fn` pointers are always **thin** (a single address), unlike `dyn Trait` references.
 
 ---

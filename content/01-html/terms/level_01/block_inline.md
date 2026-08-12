@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Block-level vs Inline Elements is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a web browser reads your HTML file, it translates the text elements into boxes on the screen. To lay them out logically, the browser needs rules. 
@@ -87,7 +83,7 @@ Observe how block-level and inline elements behave differently when rendered:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Nesting a block-level element inside an inline element
 
@@ -140,7 +136,7 @@ div > span -- Block container wrapping inline child
 <span style="display: inline-block; width: 200px;">Text</span>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Element Classification
 
@@ -213,7 +209,7 @@ div > span -- Block container wrapping inline child
 >
 > **Explanation:** `display: inline-block` combines inline flow with block-level box-model dimensions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<div>` (Block container)](../level_02/div.md) — The most common block-level generic container.
 - [`<span>` (Inline container)](../level_02/span.md) — The most common inline generic container.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Elements that have no closing tag, many of which are inline (like `<img>`).
@@ -232,7 +228,7 @@ div > span -- Block container wrapping inline child
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Block-level elements start on a new line and stretch to fill the available width (100%).
 - Inline elements flow with the text and only occupy the width of their content.
 - Block elements can contain other block or inline elements.

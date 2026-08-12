@@ -235,11 +235,11 @@ cargo run --release # Enables full LLVM optimizations!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [Release Profile](../level_15/release_profile.md)
-- [Rustup](../level_16/rustup.md)
-- [Miri (UB Detector)](../level_13/miri_ub_detector.md) — Related concept: Miri (UB Detector).
+- [Release Profile](../level_15/release_profile.md) — 
+- [Rustup](../level_16/rustup.md) — 
+- [Miri (Undefined Behavior Detector)](../level_13/miri_ub_detector.md) — Related concept: Miri (UB Detector).
 
 ---
 

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps**
+
+**Production / DevOps (Thread Concurrency Layer .)**: Worker Threads is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Thread Concurrency Layer** (Enables multi-threading inside a single Node.js V8 execution process).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `child_process.fork()` allows you to run parallel tasks in separate processes, spawning a new process is resource-heavy. The operating system must allocate a new memory heap, launch a new V8 engine instance, and load core modules from scratch. This consumes 10–30MB of RAM per process and introduces significant startup latency.
@@ -91,7 +87,7 @@ parentPort.postMessage(sum);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Worker Threads for I/O-bound operations
 
@@ -144,7 +140,7 @@ parentPort.postMessage({ callback: () => console.log('hi') }); // ❌ DataCloneE
 parentPort.postMessage({ type: 'SUCCESS', result: data }); // Pass serializable data
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Worker Communication Loop
 
@@ -208,13 +204,13 @@ parentPort.on('message', (text) => {
 >
 > **Explanation:** `SharedArrayBuffer` enables zero-copy parallel memory access across worker threads.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Child Processes (child_process)](child_processes.md) — Multi-process concurrency with isolated memories.
 - [The cluster Module](cluster_module.md) — Spawning multiple instances of a Node server process.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Worker threads enable multi-threaded execution within a single Node.js process.
 - Each worker thread runs inside its own V8 Isolate (stack/heap), preventing event loop blockages.
 - Threads share process memory, allowing direct binary sharing using `SharedArrayBuffer`.

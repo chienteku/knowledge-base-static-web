@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Database / Security Concept**
+
+**Database / Security Concept (Database Engine Layer .)**: Parameterized Queries / Prepared Statements is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Database Engine Layer** (The query planner compiles code templates separately from variable parameters).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 SQL Injection occurs when user input is concatenated directly into a raw SQL query string. The database parses the combined string, executing user inputs as active SQL commands.
@@ -75,7 +71,7 @@ db.query(query, parameters, (err, results) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on custom regex string sanitization instead of parameterization
 
@@ -127,7 +123,7 @@ await pgClient.query('SELECT * FROM users WHERE id = ?', [1]); // ❌ Syntax err
 await pgClient.query('SELECT * FROM users WHERE id = $1', [1]); // Correct Postgres placeholder
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Query Refactoring
 
@@ -182,13 +178,13 @@ db.query(query, [username, password], callback); // PostgreSQL syntax
 >
 > **Explanation:** Parameterized inputs cannot alter compiled SQL query structure.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [SQL Injection](sql_injection.md) — The database vulnerability resolved by parameterization.
 - [ORMs & ODMs](orms_odms.md) — Object mappers that automatically implement query parameterization.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Parameterized queries separate SQL query structure (code) from query parameters (data).
 - Placeholders (e.g. `?` or `$1`) are compiled by the database engine first.
 - Variables are sent separately and inserted directly into the pre-compiled template slots.

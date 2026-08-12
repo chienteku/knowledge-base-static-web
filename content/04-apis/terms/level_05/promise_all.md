@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Universal: Available in browser scripts and Node.js backend processes.)**: Promise.all / Parallel Requests is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Available in browser scripts and Node.js backend processes.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern dashboards often need to fetch multiple independent resources from an API—for example, loading a user's profile, fetching their recent orders, and downloading their notification count.
@@ -84,7 +80,7 @@ async function loadDashboard() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `Promise.all` for dependent requests
 
@@ -144,86 +140,169 @@ Promise.all([fetchUser(), fetchOrders()]); // Pass returned Promise instances
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Parallel Optimization
+### Exercise 1: Concurrent API Bulk Fetcher with Promise.all()
 
-**Problem:** Refactor the sequential queries below into parallel queries using `Promise.all`:
+**Scenario:** An API dashboard fetches user, order, and notification data concurrently to populate a dashboard view.
 
-```javascript
-async function getAccountData() {
-  const settings = await fetch('/api/settings').then(r => r.json());
-  const theme = await fetch('/api/theme').then(r => r.json());
-  return { settings, theme };
-}
-```
+**Requirements:**
+1. Write fetchDashboardData(fetchUser, fetchOrders, fetchNotifications).
+2. Run requests concurrently with Promise.all().
+3. Return aggregated object.
 
 > [!check]- Answer
-> - ```javascript
-> - async function getAccountData() {
-> - const [settings, theme] = await Promise.all([
-> - fetch('/api/settings').then(r => r.json()),
-> - fetch('/api/theme').then(r => r.json())
-> - ]);
-> - return { settings, theme };
-> - }
-> - ```
-> 
-> 
----
-
-### Exercise 2: Parallel API Request Wrapper Pattern
-
-**Problem:** Write `async` function fetching `/api/user` and `/api/posts` in parallel using `Promise.all()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const [userRes, postsRes] = await Promise.all([fetch('/api/user'), fetch('/api/posts')]); const user = await userRes.json(); const posts = await postsRes.json();
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const [userRes, postsRes] = await Promise.all([
-> fetch('/api/user'),
-> fetch('/api/posts')
-> ]);
-> const user = await userRes.json();
-> const posts = await postsRes.json();
+> async function fetchDashboardData(fetchUser, fetchOrders, fetchNotifications) {
+>   const [user, orders, notifications] = await Promise.all([
+>     fetchUser(),
+>     fetchOrders(),
+>     fetchNotifications()
+>   ]);
+>
+>   return { user, orders, notifications };
+> }
+>
+> // Verification tests
+> const fUser = async () => ({ name: "Alice" });
+> const fOrders = async () => [{ id: 1 }];
+> const fNotifs = async () => ["msg1"];
+>
+> fetchDashboardData(fUser, fOrders, fNotifs).then(data => {
+>   console.assert(data.user.name === "Alice" && data.orders.length === 1, "Test 1 Failed");
+> });
 > ```
-> - **Explanation:** `Promise.all()` executes concurrent requests simultaneously, reducing latency.
+>
+> #### Technical Explanation
+>
+> 1. **Promise.all Concurrency**: Executes multiple promises concurrently and resolves when ALL promises resolve successfully.
+> 2. **Latency Optimization**: Total latency equals duration of the slowest single request instead of sum of all requests.
+> 3. **Fail-Fast Behavior**: If any single promise rejects, Promise.all immediately rejects with that error.
+> 
 ---
 
-### Exercise 3: Promise Combinator Matrix
+### Exercise 2: Failure-Resilient Batch Fetcher with Promise.allSettled()
 
-**Problem:** Match the Promise combinator to its behavior:
-1. `Promise.all` 
-2. `Promise.allSettled` 
-3. `Promise.race` 
-4. `Promise.any` 
+**Scenario:** An API aggregator uses `Promise.allSettled()` to fetch batch items, preserving successful results even if some requests fail.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchBatchResilient(urlsArray, fetchFn).
+2. Execute with Promise.allSettled().
+3. Return object { succeeded, failed }.
+
 > [!check]- Answer
-> ```text
-> 1. Fails fast if any promise rejects; resolves when all succeed
-> 2. Resolves after all promises settle (success or failure)
-> 3. Settles as soon as FIRST promise settles (resolve or reject)
-> 4. Resolves as soon as FIRST promise fulfills (ignores rejections unless all fail)
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchBatchResilient(urlsArray = [], fetchFn) {
+>   const promiseArray = urlsArray.map(url => fetchFn(url));
+>   const results = await Promise.allSettled(promiseArray);
+>
+>   const succeeded = [];
+>   const failed = [];
+>
+>   results.forEach((res, i) => {
+>     if (res.status === "fulfilled") {
+>       succeeded.push({ url: urlsArray[i], data: res.value });
+>     } else {
+>       failed.push({ url: urlsArray[i], error: res.reason?.message || "Failed" });
+>     }
+>   });
+>
+>   return { succeeded, failed };
+> }
+>
+> // Verification tests
+> const mockFetch = async (url) => {
+>   if (url.includes("bad")) throw new Error("404 Not Found");
+>   return { url, status: "OK" };
+> };
+>
+> fetchBatchResilient(["/api/good", "/api/bad"], mockFetch).then(res => {
+>   console.assert(res.succeeded.length === 1 && res.failed.length === 1, "Test 1 Failed");
+>   console.assert(res.succeeded[0].url === "/api/good", "Test 2 Failed");
+> });
 > ```
-> ```text
-> 1. Promise.all -> Resolves when all fulfill; fails fast on first rejection.
-> 2. Promise.allSettled -> Resolves after all settle (returns status objects).
-> 3. Promise.race -> Settles on first settled promise (fulfilled or rejected).
-> 4. Promise.any -> Resolves on first fulfilled promise (ignores rejections).
-> ```
-> - **Explanation:** Different promise combinators handle concurrent execution outcomes.
+>
+> #### Technical Explanation
+>
+> 1. **Promise.allSettled Advantage**: Never rejects; waits for ALL promises to settle regardless of fulfillment or rejection.
+> 2. **Partial Success Recovery**: Allows UI to display successful items while rendering fallback UI for failed items.
+> 3. **Settled Result Structure**: Returns objects with status: 'fulfilled' (value) or status: 'rejected' (reason).
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Concurrency-Limited Batch Promise Executor
+
+**Scenario:** A rate-limited API batch runner limits maximum concurrent in-flight requests (e.g. max 2 at a time) to prevent server 429 throttling.
+
+**Requirements:**
+1. Write runWithConcurrencyLimit(tasksArray, limit).
+2. Execute tasks in batches of limit size.
+3. Return all results.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function runWithConcurrencyLimit(taskFunctions = [], limit = 2) {
+>   const results = [];
+>   const executing = new Set();
+>
+>   for (const task of taskFunctions) {
+>     const p = Promise.resolve().then(() => task());
+>     results.push(p);
+>     executing.add(p);
+>
+>     const clean = () => executing.delete(p);
+>     p.then(clean, clean);
+>
+>     if (executing.size >= limit) {
+>       await Promise.race(executing);
+>     }
+>   }
+>
+>   return Promise.all(results);
+> }
+>
+> // Verification tests
+> let active = 0;
+> let maxObserved = 0;
+>
+> const makeTask = (id) => async () => {
+>   active++;
+>   maxObserved = Math.max(maxObserved, active);
+>   await new Promise(r => setTimeout(r, 20));
+>   active--;
+>   return id;
+> };
+>
+> const tasks = [makeTask(1), makeTask(2), makeTask(3), makeTask(4)];
+> runWithConcurrencyLimit(tasks, 2).then(res => {
+>   console.assert(res.length === 4, "Test 1 Failed");
+>   console.assert(maxObserved <= 2, "Test 2 Failed: Concurrency must not exceed 2");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Throttling Prevention**: Limiting concurrency prevents overwhelming API endpoints and hitting 429 Rate Limit thresholds.
+> 2. **Promise.race Pool Management**: Promise.race waits for whichever in-flight promise completes first, freeing slot for next task.
+> 3. **Controlled Batch Throughput**: Balances execution speed with backend database connection limits.
+---
+
+## 6. Related Terms
 - [The fetch() API](fetch.md) — The network request builder.
 - [Latency & Bandwidth](../level_01/latency_bandwidth.md) — The physical network constraints optimized by parallel connections.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Sequential `await` statements block subsequent requests from starting, compounding network latency.
 - `Promise.all` triggers multiple network requests concurrently, running them in parallel.
 - The total wait time of `Promise.all` is limited to the duration of the slowest request.

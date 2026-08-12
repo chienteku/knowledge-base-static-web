@@ -679,7 +679,7 @@ Requirements:
 ## 6. Related Terms
 
 
-- [`assert!` Macros](assert_macros.md) — The macros you use *inside* the `#[test]` function to actually verify that the code behaves correctly.
+- [`assert!` / `assert_eq!` / `assert_ne!`](assert_macros.md) — The macros you use *inside* the `#[test]` function to actually verify that the code behaves correctly.
 - [`cfg` Attribute](../level_07/cfg_attribute.md) — Used in conjunction with tests to hide the test module from the compiler.
 
 ---

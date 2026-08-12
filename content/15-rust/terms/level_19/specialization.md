@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Nightly Compiler](nightly_compiler.md) — Nightly feature gate.
+- [Nightly Rust Compiler](nightly_compiler.md) — Nightly feature gate.
 - [Trait](../level_04/trait.md) — Traits.
 
 ---
@@ -257,7 +257,7 @@ Rust requires explicit default impl annotations for specialization!
 ## 6. Related Terms
 
 - [Blanket Implementation](../level_14/blanket_implementation.md) — Overriding blanket implementations.
-- [Nightly Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.
+- [Nightly Rust Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.
 
 ---
 

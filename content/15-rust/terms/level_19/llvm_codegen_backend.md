@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Mir Mid Level Ir](mir_mid_level_ir.md) — MIR lowering.
+- [MIR (Mid-level IR)](mir_mid_level_ir.md) — MIR lowering.
 
 ---
 
@@ -226,7 +226,7 @@ Rustc guarantees safety before LLVM lowering; invalid LLVM IR causes undefined b
 
 ## 6. Related Terms
 
-- [Mir Mid Level Ir](mir_mid_level_ir.md) — MIR intermediate representation.
+- [MIR (Mid-level IR)](mir_mid_level_ir.md) — MIR intermediate representation.
 - [Link-Time Optimization (LTO)](../level_15/link_time_optimization.md) — Link time optimization.
 
 ---

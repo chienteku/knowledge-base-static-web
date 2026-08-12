@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Only)**: Event Capturing is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When an event happens on a web page, the browser has to figure out exactly which element triggered it. Before the "Bubbling" phase even begins, the browser actually starts at the very top of the document (the `window`) and travels *downwards* through the DOM tree until it reaches the specific element that was clicked. This downward journey is called the **Capturing Phase** (or "Trickling").
@@ -78,7 +74,7 @@ grandparent.addEventListener("click", () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Capturing Scope and Variable Hoisting
 
@@ -151,64 +147,133 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Capturing vs Bubbling Syntax
+### Exercise 1: Global Security Audit Interceptor via Capture Phase
 
-**Problem:** How do you tell `addEventListener` that you want it to trigger during the Capturing phase instead of the default Bubbling phase?
+**Scenario:** A security monitoring script registers event listeners with { capture: true } to intercept user clicks at top of DOM tree during the capturing phase.
 
-**Expected output:**
+**Requirements:**
+1. Write registerCaptureInterceptor(targetEl, eventName, handlerFn).
+2. Use targetEl.addEventListener(eventName, handlerFn, { capture: true }).
+3. Return true.
+
 > [!check]- Answer
-> ```text
-> Pass `true` as the third argument to the addEventListener method:
-> element.addEventListener('click', callback, true);
-> ```
-> - The third argument is called `useCapture`.
-> 
----
-
-### Exercise 2: Registering Capture Phase Event Listeners
-
-**Problem:** Register an event listener in capture phase using `addEventListener('click', handler, true)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Capture phase listener executed first
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Capture phase listener executed first");
+> function registerCaptureInterceptor(targetEl, eventName, handlerFn) {
+>   if (!targetEl || typeof targetEl.addEventListener !== "function") return false;
+>   targetEl.addEventListener(eventName, handlerFn, { capture: true });
+>   return true;
+> }
+>
+> // Verification tests
+> let captureRegistered = false;
+> const mockEl = {
+>   addEventListener(evt, fn, opts) {
+>     if (opts && opts.capture === true) captureRegistered = true;
+>   }
+> };
+> registerCaptureInterceptor(mockEl, "click", () => {});
+> console.assert(captureRegistered === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Passing `true` or `{ capture: true }` attaches event listeners to the downward capture phase.
+> #### Technical Explanation
+>
+> 1. **Event Capturing Phase**: Top-down event propagation phase where events travel down from Window -> Document -> Target before bubbling.
+> 2. **Capture Option Syntax**: Passing { capture: true } or true as third parameter registers listener for capturing phase.
+> 3. **Execution Order**: Capturing listeners run BEFORE target phase and bubbling phase listeners.
 > 
 ---
 
-### Exercise 3: Capture vs Bubble Propagation Direction
+### Exercise 2: Top-Down Menu Overlay Dismissal Guard
 
-**Problem:** State direction of capture phase (Window -> Target) vs bubble phase (Target -> Window).
+**Scenario:** A UI component uses event capturing on the window object to intercept clicks during the capturing phase before inner menu elements handle click events.
 
-**Expected output:**
+**Requirements:**
+1. Write registerTopDownDismissal(windowObj, dismissCallback).
+2. Use windowObj.addEventListener("click", handler, { capture: true }).
+3. Invoke dismissCallback.
+4. Return detachment function.
+
 > [!check]- Answer
-> ```text
-> Capture: Downward, Bubble: Upward
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Capture: Downward, Bubble: Upward");
+> function registerTopDownDismissal(windowObj, dismissCallback) {
+>   if (!windowObj || typeof windowObj.addEventListener !== "function") return () => {};
+>
+>   function captureHandler(event) {
+>     dismissCallback(event);
+>   }
+>
+>   windowObj.addEventListener("click", captureHandler, { capture: true });
+>
+>   return function unbind() {
+>     windowObj.removeEventListener("click", captureHandler, { capture: true });
+>   };
+> }
+>
+> // Verification tests
+> let captureTriggered = false;
+> const mockWindow = {
+>   addEventListener(evt, fn, opts) { if (opts && opts.capture) captureTriggered = true; },
+>   removeEventListener(evt, fn, opts) {}
+> };
+> registerTopDownDismissal(mockWindow, () => {});
+> console.assert(captureTriggered === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Events flow down DOM trees in capture phase before bubbling back upward.
-> 
+> #### Technical Explanation
+>
+> 1. **Top-Down Capture Order**: Capturing listeners trigger as the event travels downwards from window to event target.
+> 2. **Early Interception**: Allows global overlay handlers to execute before target or bubbling handlers fire.
+> 3. **Matching Options for Unbinding**: removeEventListener must pass { capture: true } to remove capturing phase listeners.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Capturing Phase Event Status Verification
+
+**Scenario:** A DOM event auditor checks event.eventPhase to verify if an event is currently executing in the capturing phase (1).
+
+**Requirements:**
+1. Write isCapturingPhase(event).
+2. Check if event.eventPhase === 1.
+3. Return boolean indication.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function isCapturingPhase(event) {
+>   if (!event || typeof event.eventPhase !== "number") return false;
+>   return event.eventPhase === 1;
+> }
+>
+> // Verification tests
+> console.assert(isCapturingPhase({ eventPhase: 1 }) === true, "Test 1 Failed");
+> console.assert(isCapturingPhase({ eventPhase: 3 }) === false, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Capturing Phase Constant**: Event.CAPTURING_PHASE has numerical value 1 in standard DOM specs.
+> 2. **Event Flow Phase**: Phase 1 occurs prior to Phase 2 (AT_TARGET) and Phase 3 (BUBBLING_PHASE).
+> 3. **Diagnostic Utility**: Verifies exact event dispatch phase inside complex composite components.
+> 
+---
+
+## 6. Related Terms
 - [Event Bubbling](event_bubbling.md) — The upward phase of event propagation.
 - [event.stopPropagation()](event_stoppropagation.md) — Can be used during Capturing to stop the event from ever reaching the child target!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Every event travels down the DOM tree (Capturing), hits the target, and travels back up (Bubbling).
 - Capturing is rarely used in standard web development.
 - To listen for an event during the capturing phase, pass `true` as the third argument to `addEventListener`.

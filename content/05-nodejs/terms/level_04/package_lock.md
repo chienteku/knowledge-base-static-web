@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Configuration / Version Control**
+
+**Configuration / Version Control (Root Directory of Project)**: package-lock.json & Deterministic Installs is a fundamental concept in this technology stack. **Level 4 — Package Management**
 
 ---
 
-## 3. Environment Context
-- **Root Directory of Project**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you create a project. Your `package.json` says `"express": "^4.18.0"`. You test the app, and it works perfectly. You commit the code and go to sleep.
@@ -39,7 +35,7 @@ When your coworker runs `npm install`, NPM ignores the `package.json` and strict
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Adding the lock file to `.gitignore`
 
@@ -84,7 +80,7 @@ Use npm install --legacy-peer-deps or fix version constraints in package.json
 git checkout --ours package-lock.json && npm install # Regenerates clean lockfile
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Upgrading safely
 
@@ -135,13 +131,13 @@ git checkout --ours package-lock.json && npm install # Regenerates clean lockfil
 >
 > **Explanation:** Locking exact package versions ensures production matches development builds.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [package.json](package_json.md) — The human-readable blueprint. (The lock file is the machine-readable exact receipt).
 - [NPM (Node Package Manager)](npm.md) — Related concept: NPM (Node Package Manager).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`package-lock.json`** is an automatically generated file that records the exact, hardcoded versions of every package in your project.
 - It solves the "It works on my machine" problem by ensuring **Deterministic Installs** across all developers' computers and production servers.
 - **NEVER** edit it by hand.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Core Module / Computer Science Concept**
+
+**Core Module / Computer Science Concept (Node.js Core Architecture .)**: stdin / stdout / stderr (Standard Streams) is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Directly connected to the operating system's standard I/O communication descriptors).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern operating systems, every running process is allocated three communication channels by default. These channels handle character streams entering and leaving the process, and are known as the **Standard Streams**:
@@ -80,7 +76,7 @@ process.stdin.on('data', (text) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `console.log` for error reporting because it looks the same in the terminal
 
@@ -126,7 +122,7 @@ for (let i = 0; i < 1e6; i++) console.log(i); // ❌ Freezes CLI terminal output
 Use buffered logger streams or stream pipeline chunks
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Logger
 
@@ -200,13 +196,13 @@ logMessage('ERROR', 'Failed to connect to database');
 >
 > **Explanation:** POSIX standards designate 0 for standard input, 1 for standard output, and 2 for standard error.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The core concepts behind readable and writable data channels.
 - [The process Object](process_object.md) — The parent process object managing these streams.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Every Node.js process is allocated three standard streams: `stdin`, `stdout`, and `stderr`.
 - `process.stdin` is a Readable Stream that captures inputs (e.g. typing).
 - `process.stdout` is a Writable Stream for standard output; it powers `console.log`.

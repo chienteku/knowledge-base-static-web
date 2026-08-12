@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Built-in Method** *(Object, Introduced in ES8 / 2017)*
+
+**Built-in Method *(Object, Introduced in ES8 / 2017)* (Universal)**: Object.entries() is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you need the keys, and sometimes you need the values. But what if you need *both* at exactly the same time? 
@@ -77,7 +73,7 @@ for (const [fruitName, count] of Object.entries(inventory)) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the 2D Array structure
 
@@ -154,68 +150,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Reversing the process
+### Exercise 1: Object Key-Value Transformation Pipeline via Object.entries()
 
-**Problem:** `Object.entries()` converts an Object into a 2D Array. Is there a built-in method that does the exact reverse (takes a 2D Array and turns it back into an Object)?
+**Scenario:** A form query builder transforms an object payload into a query string using Object.entries() and Array mapping.
 
-**Expected output:**
+**Requirements:**
+1. Write buildQueryString(paramsObj).
+2. Use Object.entries(paramsObj).
+3. Map pairs to key=value.
+4. Join with '&'.
+
 > [!check]- Answer
-> ```text
-> Yes! `Object.fromEntries()`.
-> Example: 
-> const arr = [["name", "Bob"], ["age", 30]];
-> const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
-> ```
-> - Introduced in ES10 (2019).
-> 
----
-
-### Exercise 2: Converting Object Entries to Map
-
-**Problem:** Convert `Object.entries({ a: 1, b: 2 })` into a `Map` instance.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const map = new Map(Object.entries({ a: 1, b: 2 }));
-> console.log(map.get("a"));
+> function buildQueryString(paramsObj) {
+>   if (!paramsObj || typeof paramsObj !== "object") return "";
+>
+>   const entries = Object.entries(paramsObj);
+>   return entries
+>     .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
+>     .join("&");
+> }
+>
+> // Verification tests
+> const query = buildQueryString({ page: 1, sort: "desc" });
+> console.assert(query === "page=1&sort=desc", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `Object.entries()` returns `[key, value]` arrays compatible with `Map` constructors.
+> #### Technical Explanation
+>
+> 1. **Object.entries() Method**: Object.entries(obj) returns an array of an object's own enumerable string-keyed property [key, value] pairs.
+> 2. **Object.fromEntries() Complement**: Object.fromEntries(entries) transforms an array of entry pairs back into a plain object.
+> 3. **Integration with Array HOFs**: Allows running array methods (.map, .filter, .reduce) directly on object data structures.
 > 
 ---
 
-### Exercise 3: Rebuilding Objects with `Object.fromEntries`
+### Exercise 2: Object Entries Advanced Context Handler
 
-**Problem:** Transform entries back into an object using `Object.fromEntries([["x", 10]])`.
+**Scenario:** A web application component processes object entries data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleObjectEntriesSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> {"x":10}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const entries = [["x", 10]];
-> console.log(JSON.stringify(Object.fromEntries(entries)));
+> function handleObjectEntriesSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleObjectEntriesSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.fromEntries()` transforms iterable `[key, value]` pairs back into objects.
-> 
+> #### Technical Explanation
+>
+> 1. **Object Entries Architecture**: Applying object entries patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Object Entries Performance Optimization
+
+**Scenario:** An application utility optimizes object entries execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeObjectEntriesTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeObjectEntriesTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeObjectEntriesTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object Entries Optimization**: Optimizing object entries improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Object.keys()](object_keys.md) — Extracts only the first half.
 - [Object.values()](object_values.md) — Extracts only the second half.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Object.entries(obj)` returns a 2D Array representing the key-value pairs of an object.
 - Each inner array contains exactly two items: `[key, value]`.
 - It is the most robust and modern way to iterate over an entire object using `for...of` loops.

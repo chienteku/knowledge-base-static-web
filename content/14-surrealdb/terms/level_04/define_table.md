@@ -217,7 +217,7 @@ Drop an obsolete table `legacy_data` and all its stored records from the databas
 
 ## 6. Related Terms
 
-- [ Keyword](overwrite_keyword.md) — Overwriting table definitions.
+- [Keyword](overwrite_keyword.md) — Overwriting table definitions.
 
 - [Table](../level_01/table.md) — The basic collection container.
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The validation modes.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `backdrop-filter` is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Requires modern rendering engine support to capture backdrop pixel buffers, apply the shader, and compose the layers in real-time).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern UI design (popularized by Apple's iOS and macOS systems), one of the most premium design trends is **Glassmorphism**. This creates panel overlays that look like sheets of frosted glass: elements behind the panel are blurred, but the content and text on top of the panel remain sharp and readable.
@@ -139,7 +135,7 @@ Comparing `filter` vs `backdrop-filter`:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting a solid background-color
 
@@ -191,7 +187,7 @@ Comparing `filter` vs `backdrop-filter`:
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Glass Navigation Bar
 
@@ -253,14 +249,14 @@ Comparing `filter` vs `backdrop-filter`:
 >
 > **Explanation:** `backdrop-filter` targets backdrop layers behind semi-transparent containers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`filter`](filter.md) — Applying filters to the element itself.
 - [`opacity`](opacity.md) — Sizing transparency values.
 - [`box-shadow` (Card Shadows)](box_shadow.md) — Card elevation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `backdrop-filter` applies visual effects to pixels behind an element.
 - The element itself must be semi-transparent for the backdrop filter to be visible.
 - It is the foundation of glassmorphism (frosted glass UI).

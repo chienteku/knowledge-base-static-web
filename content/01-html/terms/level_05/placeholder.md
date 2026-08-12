@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support .)**: `placeholder` Attribute is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Natively supported by all browsers, rendering the hint in light gray text by default).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When filling out forms, users often need examples to help them input data in the correct format. For instance, if you ask for an email address, showing an example like `e.g. name@example.com` or showing `YYYY-MM-DD` for a date field prevents input errors.
@@ -96,7 +92,7 @@ Correct usage pairing a label with an example placeholder:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on placeholder for crucial details
 
@@ -155,7 +151,7 @@ Correct usage pairing a label with an example placeholder:
 <small id="pwd-help">Must include 1 number and 1 symbol</small>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Form correction
 
@@ -218,7 +214,7 @@ Correct usage pairing a label with an example placeholder:
 >
 > **Explanation:** `::placeholder` pseudo-element targets input hint text styles.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The tag hosting the placeholder.
 - [`<label>`](label.md) — The mandatory companion tag for accessibility.
 - [`<textarea>`](textarea.md) — Multi-line text inputs that also support placeholders.
@@ -226,7 +222,7 @@ Correct usage pairing a label with an example placeholder:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `placeholder` attribute provides temporary visual hints inside empty text boxes.
 - Placeholder text disappears instantly when a user starts typing.
 - Placeholders **must not** be used as a replacement for `<label>` elements.

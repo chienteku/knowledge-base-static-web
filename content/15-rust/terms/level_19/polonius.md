@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Borrow Checker](../level_03/borrow_checker.md) — Borrow checker rules.
-- [Mir Mid Level Ir](mir_mid_level_ir.md) — MIR IR.
+- [MIR (Mid-level IR)](mir_mid_level_ir.md) — MIR IR.
 
 ---
 

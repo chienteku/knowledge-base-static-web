@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Real-Time**
+
+**Real-Time (Client-Side: Managed primarily by front-end scripts or client-side SDK wrappers.)**: Reconnection & Backoff is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Client-Side**: Managed primarily by front-end scripts or client-side SDK wrappers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 WebSocket connections are persistent but fragile. If a user walks out of range of their home Wi-Fi network, or their cell signal drops momentarily, the WebSocket connection is broken.
@@ -115,7 +111,7 @@ const socket = new ReconnectingWebSocket("wss://api.example.com/stream");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to call `.open()` or reconnect on a closed WebSocket instance
 
@@ -265,129 +261,161 @@ ws.onopen = () => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Delay Estimator
+### Exercise 1: Automatic Reconnecting WebSocket Client
 
-**Problem:** A client script is attempting to reconnect to a dropped socket. The script is configured with a base delay of **`1000ms`** and a maximum delay cap of **`10,000ms`**. The reconnection attempts are 0-indexed (Attempt 0 = 1st retry, Attempt 1 = 2nd retry).
-Calculate the backoff delay (excluding jitter) for **Attempt 4** (the 5th retry overall).
+**Scenario:** A resilient WebSocket client automatically attempts reconnection with exponential backoff whenever the socket disconnects.
+
+**Requirements:**
+1. Write createReconnectingWs(url, options).
+2. Track attempts.
+3. Calculate backoff delay `min(maxDelay, baseDelay * 2^attempt)`.
 
 > [!check]- Answer
-> - The formula for exponential delay is $\text{Delay} = \text{base} \times 2^{\text{attempt}}$.
-> - The delay is capped by a maximum delay threshold parameter.
-> 
-> [!check]- Answer
-> - **`10,000ms`** (Calculation: $1000 \times 2^4 = 1000 \times 16 = 16,000\text{ms}$. Since this exceeds the `10,000ms` cap, the delay is capped at `10,000ms`).
-> 
-> 
----
-
-### Exercise 2: Reconnection Jitter Formula
-
-**Problem:** Write JavaScript expression calculating reconnect delay for attempt #4 with 1000ms base and 500ms max random jitter.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const attempts = 4;
-> const baseDelay = Math.pow(2, attempts) * 1000; // 16000ms
-> const jitter = Math.random() * 500;
-> const delay = baseDelay + jitter;
+> function createReconnectingWs(url, options = {}, mockWsFactory) {
+>   let attempt = 0;
+>   const baseDelay = options.baseDelayMs || 100;
+>   const maxDelay = options.maxDelayMs || 1000;
+>   let activeSocket = null;
+>
+>   function connect() {
+>     activeSocket = mockWsFactory ? mockWsFactory(url) : new WebSocket(url);
+>
+>     activeSocket.onclose = () => {
+>       attempt++;
+>       const delay = Math.min(maxDelay, baseDelay * Math.pow(2, attempt - 1));
+>       setTimeout(connect, delay);
+>     };
+>   }
+>
+>   connect();
+>   return { getAttempt: () => attempt, getSocket: () => activeSocket };
+> }
+>
+> // Verification tests
+> let socketsCreated = 0;
+> const mockWsFactory = () => {
+>   socketsCreated++;
+>   const s = { onclose: null };
+>   setTimeout(() => { if (s.onclose) s.onclose(); }, 10);
+>   return s;
+> };
+>
+> const rWs = createReconnectingWs("wss://api.com", { baseDelayMs: 20 }, mockWsFactory);
+>
+> setTimeout(() => {
+>   console.assert(socketsCreated > 1, "Test 1 Failed: Must automatically reconnect on close");
+> }, 100);
 > ```
-> - **Explanation:** Exponential backoff + random jitter prevents thundering herd reconnection storms.
+>
+> #### Technical Explanation
+>
+> 1. **Exponential Backoff Reconnection**: Prevents client reconnection storms by doubling reconnection delay on consecutive failures.
+> 2. **Socket State Management**: Cleans up closed socket handlers before creating a new WebSocket instance.
+> 3. **Automatic Resumption**: Restores real-time data flow transparently when connection drops briefly.
+> 
 ---
 
-### Exercise 3: Maximum Reconnect Cap
+### Exercise 2: Offline Message Queue Buffering Manager
 
-**Problem:** Why should exponential backoff reconnection delays be capped at a maximum ceiling (e.g. `Math.min(calculatedDelay, 30000)`)?
+**Scenario:** Buffers outgoing WebSocket messages in an offline queue while disconnected and flushes them upon reconnection.
 
-**Expected output:**
+**Requirements:**
+1. Write createBufferedWsClient(wsClient).
+2. Buffer messages if disconnected.
+3. Flush buffer when connection opens.
+
 > [!check]- Answer
-> ```text
-> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-> ```
-> ```text
-> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-> ```
-> - **Explanation:** Capping bounds maximum retry delay while preserving backoff protection.
----
-
-### Exercise 4: Reconnection Jitter Formula
-
-**Problem:** Write JavaScript expression calculating reconnect delay for attempt #4 with 1000ms base and 500ms max random jitter.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const attempts = 4;
-> const baseDelay = Math.pow(2, attempts) * 1000; // 16000ms
-> const jitter = Math.random() * 500;
-> const delay = baseDelay + jitter;
+> function createBufferedWsClient() {
+>   let isConnected = false;
+>   const buffer = [];
+>
+>   return {
+>     onOpen() {
+>       isConnected = true;
+>       const flushed = [...buffer];
+>       buffer.length = 0;
+>       return flushed;
+>     },
+>     onClose() {
+>       isConnected = false;
+>     },
+>     send(message) {
+>       if (isConnected) {
+>         return { status: "SENT", message };
+>       }
+>       buffer.push(message);
+>       return { status: "BUFFERED", queueLength: buffer.length };
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const client = createBufferedWsClient();
+> console.assert(client.send("msg1").status === "BUFFERED", "Test 1 Failed: Buffers when offline");
+> console.assert(client.send("msg2").status === "BUFFERED", "Test 2 Failed");
+>
+> const flushed = client.onOpen();
+> console.assert(flushed.length === 2 && flushed[0] === "msg1", "Test 3 Failed: Flushes queued messages on open");
 > ```
-> - **Explanation:** Exponential backoff + random jitter prevents thundering herd reconnection storms.
+>
+> #### Technical Explanation
+>
+> 1. **Offline Queue Pattern**: Holds client actions in an array buffer while network is unavailable.
+> 2. **Message Order Preservation**: Flushes buffered messages in FIFO (First-In, First-Out) order upon connection restore.
+> 3. **Zero Data Loss UX**: Allows users to continue interacting with UI without throwing network exception errors.
+> 
 ---
 
-### Exercise 5: Maximum Reconnect Cap
+### Exercise 3: Full Jitter Reconnection Delay Calculator
 
-**Problem:** Why should exponential backoff reconnection delays be capped at a maximum ceiling (e.g. `Math.min(calculatedDelay, 30000)`)?
+**Scenario:** Calculates randomized Full Jitter reconnection delay to prevent thundering herd reconnection bursts on server restart.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateJitterDelay(attempt, baseMs, maxMs).
+2. Return `random() * min(maxMs, baseMs * 2^attempt)`.
+
 > [!check]- Answer
-> ```text
-> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-> ```
-> ```text
-> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-> ```
-> - **Explanation:** Capping bounds maximum retry delay while preserving backoff protection.
----
-
-### Exercise 6: Reconnection Jitter Formula
-
-**Problem:** Write JavaScript expression calculating reconnect delay for attempt #4 with 1000ms base and 500ms max random jitter.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const attempts = 4;
-> const baseDelay = Math.pow(2, attempts) * 1000; // 16000ms
-> const jitter = Math.random() * 500;
-> const delay = baseDelay + jitter;
+> function calculateJitterDelay(attempt, baseMs = 100, maxMs = 5000) {
+>   const expDelay = Math.min(maxMs, baseMs * Math.pow(2, attempt));
+>   return Math.floor(Math.random() * expDelay);
+> }
+>
+> // Verification tests
+> const delay1 = calculateJitterDelay(1, 100, 1000);
+> const delay2 = calculateJitterDelay(1, 100, 1000);
+>
+> console.assert(delay1 >= 0 && delay1 <= 200, "Test 1 Failed: Range 0-200ms");
+> console.assert(typeof delay1 === "number", "Test 2 Failed");
 > ```
-> - **Explanation:** Exponential backoff + random jitter prevents thundering herd reconnection storms.
+>
+> #### Technical Explanation
+>
+> 1. **Full Jitter Reconnection**: Randomizing reconnection delay prevents thousands of clients from attempting reconnection at the exact same millisecond.
+> 2. **Server Protection**: Protects recovering servers from getting crushed by synchronized client reconnection floods.
+> 3. **AWS Recommended Pattern**: Standard architecture recommendation for all distributed real-time clients.
 ---
 
-### Exercise 7: Maximum Reconnect Cap
-
-**Problem:** Why should exponential backoff reconnection delays be capped at a maximum ceiling (e.g. `Math.min(calculatedDelay, 30000)`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-> ```
-> ```text
-> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-> ```
-> - **Explanation:** Capping bounds maximum retry delay while preserving backoff protection.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Heartbeat / Ping-Pong](heartbeat_ping_pong.md) — The diagnostic frame checks that alert the client of a silent disconnect.
 - [The WebSocket API (Client-side)](websocket_api.md) — The browser object interface.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Automatic reconnection allows real-time applications to restore dropped connections in the background.
 - Immediate, synchronized retries risk causing a Thundering Herd crash on the server.
 - Exponential backoff with random jitter desynchronizes client retry timings to protect server load.

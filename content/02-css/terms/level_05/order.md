@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard .)**: `order` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Rearranges visual rendering passes during layout steps without rebuilding DOM trees).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building responsive layouts, you often need to rearrange elements depending on the screen size. 
@@ -146,7 +142,7 @@ Pushing an item to the front or back:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on `order` to fix bad HTML structures
 
@@ -191,7 +187,7 @@ div { order: 1; } /* ❌ Ignored on normal document flow elements! */
 .parent > div { order: 1; } /* Works on flex items */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Visual Sort
 
@@ -249,14 +245,14 @@ In what visual order (from left to right) will they render on the screen?
 >
 > **Explanation:** All flex items default to `order: 0` and display in HTML source order.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent layout engine.
 - [`flex-direction`](flex_direction.md) — Dictates whether visual ordering flows vertically or horizontally.
 - [`align-self`](align_self.md) — Related concept: `align-self`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `order` property changes the visual sequence of flex items.
 - All flex items default to `order: 0`.
 - Items are rendered in ascending order (lowest numbers first, including negative integers).

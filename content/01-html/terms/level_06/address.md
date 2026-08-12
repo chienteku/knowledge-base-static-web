@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag**
+
+**Semantic Tag (Universal Browser Support .)**: `<address>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively. Renders text in italicized format by default).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Users visiting a corporate page or reading a journalism article need to know how to contact the author or company. This info might include physical addresses, email links, phone numbers, or social media handles.
@@ -100,7 +96,7 @@ Basic contact block in a footer:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<address>` for any arbitrary postal address
 
@@ -159,7 +155,7 @@ Basic contact block in a footer:
 </section>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Company Footer Attributions
 
@@ -219,14 +215,14 @@ Basic contact block in a footer:
 >
 > **Explanation:** User-agent stylesheets render `<address>` text in italics.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<footer>`](footer.md) — The parent container for site contact blocks.
 - [`<article>` and `<section>`](article_section.md) — Containers that house author-specific contact blocks.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Used inside address blocks for mail/phone triggers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<address>` tag declares contact info for the owner of the page or article.
 - Nest it inside `<article>` to represent the author's contact; nest it in `<body>`/`<footer>` to represent the site owner.
 - It renders in italics by default.

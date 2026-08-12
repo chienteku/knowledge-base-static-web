@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: break / continue is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Loops execute blocks of code repeatedly. However, there are scenarios where running a loop to completion is inefficient or incorrect. For example, if you are searching for a specific user in an array of one million items, once you find the user, running the remaining 999,999 iterations is a massive waste of computer resources. 
@@ -88,7 +84,7 @@ console.log("Search Result:", targetUser);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Infinite Loops with `continue` in `while` Loops
 
@@ -178,89 +174,160 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Finding the First Even Number
+### Exercise 1: Order Queue Processing with Error Guard & Halting
 
-**Problem:** Complete the code to find the first even number in the array. Once found, assign it to `firstEven` and exit the loop immediately.
+**Scenario:** An automated order fulfillment loop processes a queue of orders. It skips cancelled orders using continue and aborts processing entirely using break if a critical payment alert occurs.
 
-```javascript
-const numbers = [11, 23, 8, 14, 21, 32];
-let firstEven = null;
+**Requirements:**
+1. Write processOrderBatch(orders).
+2. Skip orders with status "CANCELLED" using continue.
+3. Halt processing immediately if order status is "CRITICAL_ERROR" using break.
+4. Return processed revenue and count.
 
-for (let i = 0; i < numbers.length; i++) {
-  // Check if number is even
-  // Assign to firstEven and break
-}
-
-console.log("First even number:", firstEven);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> First even number: 8
+>
+> #### Implementation
+>
+> ```javascript
+> function processOrderBatch(orders) {
+>   let processedRevenue = 0;
+>   let count = 0;
+>
+>   for (let i = 0; i < orders.length; i++) {
+>     const item = orders[i];
+>     if (item.status === "CANCELLED") {
+>       continue;
+>     }
+>     if (item.status === "CRITICAL_ERROR") {
+>       break;
+>     }
+>     processedRevenue += item.amount;
+>     count++;
+>   }
+>   return { processedRevenue, count };
+> }
+>
+> // Verification tests
+> const batch = [
+>   { amount: 100, status: "OK" },
+>   { amount: 50, status: "CANCELLED" },
+>   { amount: 200, status: "CRITICAL_ERROR" },
+>   { amount: 300, status: "OK" }
+> ];
+> const res = processOrderBatch(batch);
+> console.assert(res.processedRevenue === 100 && res.count === 1, "Test 1 Failed");
 > ```
-> - A number is even if `(num % 2) === 0`.
-> - Use `break` to exit the loop once the condition evaluates to true.
+>
+> #### Technical Explanation
+>
+> 1. **Continue Statement**: The continue statement terminates execution of the current loop iteration and proceeds to the next iteration.
+> 2. **Break Statement**: The break statement terminates execution of the enclosing loop block immediately.
+> 3. **Loop Control Scope**: break and continue apply to the nearest enclosing loop unless a label is specified.
 > 
 ---
 
-### Exercise 2: Labeled Break Statements in Nested Loops
+### Exercise 2: Spatial Coordinate Matrix Search with Labeled Break
 
-**Problem:** Use a labeled break `outerLoop:` to exit a double nested loop when `i === 1 && j === 1`.
+**Scenario:** A GIS mapping engine searches a 2D spatial coordinate grid for a target location identifier, breaking out of nested grid loops instantly using a labeled break statement (break searchGrid).
 
-**Expected output:**
+**Requirements:**
+1. Write locateGridTarget(gridMatrix, targetId).
+2. Label outer loop as searchGrid: for (...).
+3. When targetId matches, capture row/col coordinates and break searchGrid.
+4. Return coordinate position.
+
 > [!check]- Answer
-> ```text
-> Exited outer loop at i: 1, j: 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> outerLoop:
-> for (let i = 0; i < 3; i++) {
->   for (let j = 0; j < 3; j++) {
->     if (i === 1 && j === 1) {
->       console.log(`Exited outer loop at i: ${i}, j: ${j}`);
->       break outerLoop;
+> function locateGridTarget(gridMatrix, targetId) {
+>   let targetRow = -1;
+>   let targetCol = -1;
+>
+>   searchGrid: for (let r = 0; r < gridMatrix.length; r++) {
+>     for (let c = 0; c < gridMatrix[r].length; c++) {
+>       if (gridMatrix[r][c] === targetId) {
+>         targetRow = r;
+>         targetCol = c;
+>         break searchGrid;
+>       }
 >     }
 >   }
+>   return { row: targetRow, col: targetCol };
 > }
+>
+> // Verification tests
+> const grid = [
+>   ["A1", "A2"],
+>   ["B1", "TARGET"],
+>   ["C1", "C2"]
+> ];
+> const pos = locateGridTarget(grid, "TARGET");
+> console.assert(pos.row === 1 && pos.col === 1, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Labeled `break labelName;` terminates multi-level nested loops specified by the target label.
+> #### Technical Explanation
+>
+> 1. **Labeled Statements**: Prefixing a statement with an identifier label (labelName:) allows targeting outer execution contexts.
+> 2. **Multi-Nested Loop Exit**: Passing a label to break labelName exits multi-nested loops directly without extra flag variables.
+> 3. **Execution Jump Mechanics**: Labeled break jumps execution directly to the statement immediately following the labeled block.
 > 
 ---
 
-### Exercise 3: Skipping Odd Numbers with `continue`
+### Exercise 3: Data Stream Filter with Continue Guard
 
-**Problem:** Print even numbers between `1` and `6` using a loop with `continue`.
+**Scenario:** A real-time data stream pipeline filters out corrupt payload frames using continue before applying expensive mathematical calculations.
 
-**Expected output:**
+**Requirements:**
+1. Write processStreamFrames(frames).
+2. If frame.isCorrupt is true, skip processing via continue.
+3. Calculate total valid frame bytes.
+4. Return total valid bytes count.
+
 > [!check]- Answer
-> ```text
-> 2
-> 4
-> 6
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> for (let i = 1; i <= 6; i++) {
->   if (i % 2 !== 0) continue;
->   console.log(i);
+> function processStreamFrames(frames) {
+>   let totalBytes = 0;
+>
+>   for (const frame of frames) {
+>     if (!frame || frame.isCorrupt) {
+>       continue;
+>     }
+>     totalBytes += frame.byteLength;
+>   }
+>   return totalBytes;
 > }
+>
+> // Verification tests
+> const stream = [
+>   { byteLength: 512, isCorrupt: false },
+>   { byteLength: 1024, isCorrupt: true },
+>   { byteLength: 256, isCorrupt: false }
+> ];
+> console.assert(processStreamFrames(stream) === 768, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `continue` skips the remainder of the current iteration body and jumps to loop step updates.
-> 
+> #### Technical Explanation
+>
+> 1. **Guard Clause Pattern**: Using continue as a guard clause flattens nested conditional logic inside loops.
+> 2. **Loop Continuation**: In for loops, continue jumps to the loop update expression before checking condition.
+> 3. **Performance Optimization**: Skipping invalid iterations early avoids wasting CPU cycles on corrupt payloads.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [for Loop](for_loop.md) — Repetitive block executing a specific number of times.
 - [while Loop](while_loop.md) — Repetitive block executing as long as a condition holds true.
 - [switch](switch.md) — Conditional branch that also relies on the `break` statement.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `break` statement terminates the enclosing loop or switch statement immediately, resuming execution at the next statement after the loop.
 - The `continue` statement terminates the current loop iteration, skipping remaining code inside the loop and triggering the next loop check.
 - Be highly cautious using `continue` inside `while` loops to ensure the loop counter variable is updated before skipping, avoiding infinite loop crashes.

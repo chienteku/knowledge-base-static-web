@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture / Advanced Concept**
+
+**Node.js Core Architecture / Advanced Concept (Universal .)**: Microtasks vs Macrotasks is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal** (The concept applies to both Browsers and Node.js Event Loops).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a user clicks a button, a 1-second `setTimeout` finishes, and a network `Promise` resolves all at the exact same millisecond... which one does JavaScript execute first? 
@@ -44,7 +40,7 @@ When the main thread finishes executing the current script, the Event Loop looks
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Starving the Event Loop
 
@@ -97,7 +93,7 @@ function loop() {
 loop();
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Predict the Output Priority
 
@@ -190,14 +186,14 @@ console.log('4');
 >
 > **Explanation:** Sync logs (1, 4) execute first on Call Stack, followed by Microtask Promise (3), then Macrotask timer (2).
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The manager of these two queues.
 - [process.nextTick() vs setImmediate()](nexttick_setimmediate.md) — Related concept: process.nextTick() vs setImmediate().
 - [Unhandled Promise Rejections](unhandled_rejections.md) — Related concept: Unhandled Promise Rejections.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Macrotasks** (`setTimeout`, I/O) are normal priority.
 - **Microtasks** (Promises, `process.nextTick`) are VIP priority.
 - The Event Loop completely empties the Microtask queue before it allows a single Macrotask to run.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `filter` is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Runs directly on the GPU, allowing smooth real-time animation of filter changes during transitions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early web design, if you wanted an image to turn gray when hovered, or to blur out when a popup modal appeared, you had to save two separate versions of the image in Photoshop (`photo.jpg` and `photo-gray.jpg`) and swap the image source file using JavaScript. 
@@ -154,7 +150,7 @@ Hover state transition:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Chaining filters using commas
 
@@ -200,7 +196,7 @@ img.logo { box-shadow: 2px 2px 5px black; } /* ❌ Casts rectangular box shadow 
 img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG graphic outline */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: PNG Icon Glow
 
@@ -260,14 +256,14 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 >
 > **Explanation:** Multiple filter functions are chained space-separated in a single declaration.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`box-shadow` (Card Shadows)](box_shadow.md) — The rectangular alternative.
 - [`backdrop-filter`](backdrop_filter.md) — Applying filters behind an element.
 - [`opacity`](opacity.md) — Fading elements.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `filter` runs visual image processing on HTML elements in the browser.
 - Common filters include `blur()`, `grayscale()`, `brightness()`, and `sepia()`.
 - chain multiple filters together by separating functions with spaces, never commas.

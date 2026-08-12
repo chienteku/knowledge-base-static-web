@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: flat / flatMap is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When processing nested datasets (such as an array of user orders, where each order contains an array of items), developers often end up with nested arrays (e.g., `[[item1, item2], [item3]]`). Working with these nested loops is cumbersome. 
@@ -77,7 +73,7 @@ console.log("Words list:", words);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `flat()` to flatten nested arrays completely by default
 
@@ -154,83 +150,83 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Parse and Clean Comments
+### Exercise 1: Multi-Level Category Hierarchy Flattening
 
-**Problem:** Complete the code to extract a flat array of username strings from the nested `threads` structure using `flatMap`.
+**Scenario:** An e-commerce menu builder flattens deeply nested category arrays using flat(depth).
 
-```javascript
-const threads = [
-  {
-    topic: "JS",
-    comments: [{ user: "Alice" }, { user: "Bob" }]
-  },
-  {
-    topic: "CSS",
-    comments: [{ user: "Charlie" }]
-  }
-];
+**Requirements:**
+1. Write flattenCategories(nestedCategories, depth).
+2. Use nestedCategories.flat(depth).
+3. Return flattened categories array.
 
-const usernames = // Write flatMap code here
-
-console.log(usernames);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> [ 'Alice', 'Bob', 'Charlie' ]
-> ```
-> - Map each thread to its comments array, extracting the user string.
-> - Within `flatMap`, you can chain `.map(c => c.user)` on the `comments` array.
-> - e.g., `threads.flatMap(thread => thread.comments.map(c => c.user))`
-> 
----
-
-### Exercise 2: Deep Flattening with `flat(Infinity)`
-
-**Problem:** Flatten a deeply nested array `[1, [2, [3, [4]]]]` using `.flat(Infinity)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 1, 2, 3, 4 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nested = [1, [2, [3, [4]]]];
-> console.log(nested.flat(Infinity));
+> function flattenCategories(nestedCategories, depth = 1) {
+>   if (!Array.isArray(nestedCategories)) return [];
+>   return nestedCategories.flat(depth);
+> }
+>
+> // Verification tests
+> const nested = ["Tech", ["Laptops", ["MacBook", "ThinkPad"]]];
+> const flat1 = flattenCategories(nested, 1);
+> console.assert(flat1.length === 3 && Array.isArray(flat1[1]) === false, "Test 1 Failed");
+>
+> const flatInfinity = flattenCategories(nested, Infinity);
+> console.assert(flatInfinity.length === 4 && flatInfinity[3] === "ThinkPad", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `flat(Infinity)` recurses through all nested array levels to produce a 1D array.
+> #### Technical Explanation
+>
+> 1. **flat() Depth Parameter**: Array.prototype.flat(depth) recursively flattens sub-array elements up to specified depth (default 1).
+> 2. **Infinity Depth**: Passing Infinity flattens all nested sub-arrays regardless of depth.
+> 3. **Sparse Slot Removal**: flat() automatically removes empty sparse slots from arrays.
 > 
 ---
 
-### Exercise 3: Mapping and Flattening with `flatMap`
+### Exercise 2: Tokenization & Keyword Extraction via flatMap()
 
-**Problem:** Use `.flatMap(x => [x, x * 2])` on `[1, 2]`.
+**Scenario:** A search indexer splits text sentence strings into keywords and flattens results in a single step using flatMap().
 
-**Expected output:**
+**Requirements:**
+1. Write extractKeywords(sentences).
+2. Use sentences.flatMap(s => s.toLowerCase().split(" ")).
+3. Return flattened tokens array.
+
 > [!check]- Answer
-> ```text
-> [ 1, 2, 2, 4 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [1, 2];
-> console.log(nums.flatMap(x => [x, x * 2]));
+> function extractKeywords(sentences) {
+>   if (!Array.isArray(sentences)) return [];
+>   return sentences.flatMap(s => s.toLowerCase().split(" "));
+> }
+>
+> // Verification tests
+> const text = ["Hello World", "JavaScript Engines"];
+> const words = extractKeywords(text);
+> console.assert(words.join(",") === "hello,world,javascript,engines", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `flatMap` combines `.map()` and `.flat(1)` in a single efficient pass.
-> 
+> #### Technical Explanation
+>
+> 1. **flatMap() Dual Operation**: Array.prototype.flatMap(fn) maps each element using a transformation function and flattens result by depth 1.
+> 2. **Performance Advantage**: Slightly more efficient than calling .map().flat() separately.
+> 3. **Item Filtering / Expansion**: Returning an empty array [] in flatMap() filters out elements; returning multi-item arrays expands elements.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Map](../level_08/map.md) — The transformation iteration helper.
 - [reduce()](reduce.md) — General purpose accumulator method which can also be used to flatten lists.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `flat(depth)` merges nested sub-arrays into a new flat array down to the specified depth (default is `1`).
 - `flatMap(callback)` maps each element and flattens the resulting array by exactly one level.
 - `flatMap` is more performant than `.map().flat(1)` because it does not allocate a temporary intermediate array in memory.

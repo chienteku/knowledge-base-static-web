@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal .)**: Server-Sent Events (SSE) is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Browser & Server).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 [WebSockets](../level_08/websockets.md) are incredibly powerful, but they are completely Bi-directional (two-way). Setting up a WebSocket server is complex, and corporate firewalls often block them.
@@ -48,7 +44,7 @@ On the server, you set the header `Content-Type: text/event-stream`. Instead of 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using WebSockets when SSE is better
 
@@ -182,154 +178,162 @@ res.setHeader('Connection', 'keep-alive');
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Right Tool
+### Exercise 1: Server-Sent Events (SSE) Client Consumer
 
-**Problem:** ChatGPT streams its AI-generated answers back to your screen one word at a time. It feels like real-time. Which technology is OpenAI most likely using for this?
-A) WebSockets
-B) Server-Sent Events
+**Scenario:** A dashboard consumer uses `EventSource` to receive real-time server-sent events (`onmessage`, `addEventListener`).
 
-**Expected output:**
+**Requirements:**
+1. Write consumeSseStream(url, onMessageFn, mockEventSource).
+2. Listen for incoming message events.
+3. Parse JSON event data.
+
 > [!check]- Answer
-> ```text
-> B) Server-Sent Events (SSE).
-> You ask the question once (via a standard POST request). After that, the AI is simply dripping the answer down to you, one way, over an extended period of time. SSE is the absolute perfect tool for LLM text generation streaming!
+>
+> #### Implementation
+>
+> ```javascript
+> function consumeSseStream(url, onMessageFn, mockEventSourceInstance) {
+>   const eventSource = mockEventSourceInstance || new EventSource(url);
+>
+>   eventSource.onmessage = (event) => {
+>     try {
+>       const data = JSON.parse(event.data);
+>       onMessageFn(data);
+>     } catch (e) {
+>       onMessageFn(event.data);
+>     }
+>   };
+>
+>   return {
+>     close: () => eventSource.close()
+>   };
+> }
+>
+> // Verification tests
+> const messages = [];
+> const mockEs = {
+>   onmessage: null,
+>   close: () => {}
+> };
+>
+> consumeSseStream("https://api.com/stream", (data) => messages.push(data), mockEs);
+>
+> // Simulate server sending SSE message event
+> mockEs.onmessage({ data: '{"price": 100.5}' });
+> console.assert(messages[0].price === 100.5, "Test 1 Failed");
 > ```
-> - Is the client actively sending data *while* the AI is typing? No.
+>
+> #### Technical Explanation
+>
+> 1. **Server-Sent Events (SSE)**: W3C standard allowing servers to push text stream events to browsers over standard HTTP.
+> 2. **EventSource API**: Browser native API (`new EventSource(url)`) for consuming SSE streams.
+> 3. **Unidirectional Streaming**: Server-to-client streaming ONLY; client cannot send messages back over the same SSE stream.
 > 
 ---
 
-### Exercise 2: SSE Wire Format Message Structure
+### Exercise 2: Server-Side SSE Event Stream Formatting Engine
 
-**Problem:** Write valid text payload for an SSE event with event name `ping` and data `{"time":1700000000}`.
+**Scenario:** An API server formats outbound event data into RFC 8895 compliant SSE stream text buffers (`id: 1\nevent: update\ndata: {...}\n\n`).
 
-**Expected output:**
+**Requirements:**
+1. Write formatSsePayload(id, eventType, dataObj).
+2. Format lines `id:`, `event:`, `data:`.
+3. End block with double newline `\n\n`.
+
 > [!check]- Answer
-> ```http
-> event: ping
-> data: {"time":1700000000}
-> 
-> 
+>
+> #### Implementation
+>
+> ```javascript
+> function formatSsePayload(id, eventType, dataObj) {
+>   const lines = [];
+>
+>   if (id !== undefined && id !== null) {
+>     lines.push(`id: ${id}`);
+>   }
+>   if (eventType) {
+>     lines.push(`event: ${eventType}`);
+>   }
+>
+>   const jsonStr = typeof dataObj === "object" ? JSON.stringify(dataObj) : String(dataObj);
+>   lines.push(`data: ${jsonStr}`);
+>
+>   // SSE event blocks MUST end with two newlines
+>   return lines.join("
+> ") + "
+>
+> ";
+> }
+>
+> // Verification tests
+> const sseText = formatSsePayload(42, "stockUpdate", { ticker: "AAPL", price: 175 });
+>
+> console.assert(sseText.includes("id: 42
+> "), "Test 1 Failed");
+> console.assert(sseText.includes("event: stockUpdate
+> "), "Test 2 Failed");
+> console.assert(sseText.endsWith("
+>
+> "), "Test 3 Failed: Must end with double newline");
 > ```
-> ```http
-> event: ping
-> data: {"time":1700000000}
-> ```
-> - **Explanation:** SSE wire format requires `event:`, `data:`, and trailing double newline (`\n\n`).
+>
+> #### Technical Explanation
+>
+> 1. **SSE Text Protocol Specification**: Plain text stream formatted as key-value pairs (`id:`, `event:`, `data:`, `retry:`).
+> 2. **Double Newline Delimiter**: Two consecutive newlines (`\n\n`) mark the completion of an individual event block.
+> 3. **Content-Type: text/event-stream**: SSE HTTP responses MUST include `Content-Type: text/event-stream` header.
+> 
 ---
 
-### Exercise 3: SSE vs WebSocket Comparison
+### Exercise 3: Last-Event-ID Resumption Handler
 
-**Problem:** Compare Server-Sent Events (SSE) vs WebSockets across:
-1. Directionality
-2. Protocol basis
-3. Built-in reconnection support
+**Scenario:** An SSE stream manager inspects the `Last-Event-ID` request header upon client reconnection to replay missed events.
 
-**Expected output:**
+**Requirements:**
+1. Write getMissedSseEvents(lastEventId, eventsStore).
+2. Filter events newer than lastEventId.
+
 > [!check]- Answer
-> ```text
-> 1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
-> 2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
-> 3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
+>
+> #### Implementation
+>
+> ```javascript
+> function getMissedSseEvents(lastEventId, eventsStore = []) {
+>   if (!lastEventId) return eventsStore;
+>
+>   const lastIdNum = parseInt(lastEventId, 10);
+>   if (isNaN(lastIdNum)) return eventsStore;
+>
+>   return eventsStore.filter(evt => evt.id > lastIdNum);
+> }
+>
+> // Verification tests
+> const store = [
+>   { id: 1, data: "ev1" },
+>   { id: 2, data: "ev2" },
+>   { id: 3, data: "ev3" }
+> ];
+>
+> const missed = getMissedSseEvents("1", store);
+> console.assert(missed.length === 2 && missed[0].id === 2, "Test 1 Failed: Must replay events after ID 1");
 > ```
-> ```text
-> Directionality -> SSE: Unidirectional (Server -> Client), WS: Bidirectional
-> Protocol       -> SSE: HTTP/1.1 or HTTP/2, WS: Custom TCP (ws://)
-> Reconnection   -> SSE: Automatic natively in browser EventSource, WS: Custom code
-> ```
-> - **Explanation:** SSE provides simpler HTTP-native streaming for server-to-client notifications.
+>
+> #### Technical Explanation
+>
+> 1. **Built-in Auto-Reconnection**: Browsers automatically reconnect when SSE connections drop.
+> 2. **Last-Event-ID Header**: Browser sends last received `id:` value in `Last-Event-ID` HTTP header upon reconnecting.
+> 3. **Lossless Stream Resumption**: Allows server to replay missed events during network hiccups without data gaps.
 ---
 
-### Exercise 4: SSE Wire Format Message Structure
-
-**Problem:** Write valid text payload for an SSE event with event name `ping` and data `{"time":1700000000}`.
-
-**Expected output:**
-> [!check]- Answer
-> ```http
-> event: ping
-> data: {"time":1700000000}
-> 
-> 
-> ```
-> ```http
-> event: ping
-> data: {"time":1700000000}
-> ```
-> - **Explanation:** SSE wire format requires `event:`, `data:`, and trailing double newline (`\n\n`).
----
-
-### Exercise 5: SSE vs WebSocket Comparison
-
-**Problem:** Compare Server-Sent Events (SSE) vs WebSockets across:
-1. Directionality
-2. Protocol basis
-3. Built-in reconnection support
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
-> 2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
-> 3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
-> ```
-> ```text
-> Directionality -> SSE: Unidirectional (Server -> Client), WS: Bidirectional
-> Protocol       -> SSE: HTTP/1.1 or HTTP/2, WS: Custom TCP (ws://)
-> Reconnection   -> SSE: Automatic natively in browser EventSource, WS: Custom code
-> ```
-> - **Explanation:** SSE provides simpler HTTP-native streaming for server-to-client notifications.
----
-
-### Exercise 6: SSE Wire Format Message Structure
-
-**Problem:** Write valid text payload for an SSE event with event name `ping` and data `{"time":1700000000}`.
-
-**Expected output:**
-> [!check]- Answer
-> ```http
-> event: ping
-> data: {"time":1700000000}
-> 
-> 
-> ```
-> ```http
-> event: ping
-> data: {"time":1700000000}
-> ```
-> - **Explanation:** SSE wire format requires `event:`, `data:`, and trailing double newline (`\n\n`).
----
-
-### Exercise 7: SSE vs WebSocket Comparison
-
-**Problem:** Compare Server-Sent Events (SSE) vs WebSockets across:
-1. Directionality
-2. Protocol basis
-3. Built-in reconnection support
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
-> 2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
-> 3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
-> ```
-> ```text
-> Directionality -> SSE: Unidirectional (Server -> Client), WS: Bidirectional
-> Protocol       -> SSE: HTTP/1.1 or HTTP/2, WS: Custom TCP (ws://)
-> Reconnection   -> SSE: Automatic natively in browser EventSource, WS: Custom code
-> ```
-> - **Explanation:** SSE provides simpler HTTP-native streaming for server-to-client notifications.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [WebSockets](websockets.md) — The two-way alternative.
 - [HTTP Headers](../level_02/http_headers.md) — SSE relies on `Content-Type: text/event-stream`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Server-Sent Events (SSE)** is a unidirectional (one-way) real-time protocol.
 - Data flows from Server $\rightarrow$ Client over a long-lived HTTP connection.
 - It is significantly easier to implement than WebSockets.

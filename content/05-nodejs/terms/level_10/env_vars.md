@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Configuration / Security Best Practice**
+
+**Configuration / Security Best Practice (Deployment / System Architecture)**: Environment Variables (dotenv) is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Deployment / System Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you hardcode your database password into `server.js` (e.g., `const dbPass = "mySecretPassword"`), and then you push that code to GitHub, your password is now public. Hackers constantly scan GitHub for exposed passwords, and within 5 minutes, your database will be deleted and held for ransom.
@@ -50,7 +46,7 @@ When you deploy to a production server (like AWS or Heroku), you don't upload th
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Committing the `.env` file to GitHub
 
@@ -98,7 +94,7 @@ if (process.env.IS_ADMIN === 'true') {}
 const port = parseInt(process.env.PORT || '3000', 10);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Missing Variable
 
@@ -149,14 +145,14 @@ const port = parseInt(process.env.PORT || '3000', 10);
 >
 > **Explanation:** `--env-file` natively populates `process.env` at startup without npm dependencies.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — The JWT signature secret MUST be stored in an Environment Variable.
 - [Docker](docker.md) — Docker relies heavily on Environment Variables to configure containers dynamically.
 - [The process Object](../level_02/process_object.md) — Related concept: The process Object.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Environment Variables** are used to keep secrets (passwords, API keys) completely out of your source code.
 - Locally, you store them in a `.env` file and use the `dotenv` package to load them into `process.env`.
 - You MUST add `.env` to your `.gitignore` file before making your first commit.

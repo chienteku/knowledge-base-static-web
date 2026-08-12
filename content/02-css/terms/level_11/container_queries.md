@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS At-Rule**
+
+**CSS At-Rule (Universal Modern Standard .)**: Container Queries (`@container`) is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Enforces isolation boundaries on container layout nodes. Prevents layout loops by locking containment rules during style evaluation loops).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional responsive design relies on Media Queries (`@media`). Media queries check the width of the **browser viewport** (screen).
@@ -196,7 +192,7 @@ Container-relative unit values:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Querying elements without declaring `container-type` on any parent
 
@@ -248,7 +244,7 @@ Container-relative unit values:
 .container { container-type: inline-size; } /* Standard width-based container query */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Article Layout Toggle
 
@@ -317,13 +313,13 @@ Container-relative unit values:
 >
 > **Explanation:** Container queries enable true modular component responsiveness.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport-based responsive queries.
 - [`@supports` (Feature Queries)](supports.md) — Browser feature detection at-rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Container Queries style elements based on parent container sizes instead of screen viewports.
 - You must declare `container-type: inline-size` on a parent wrapper to create a query context.
 - Use `@container (min-width: [size])` to target child styles conditionally.

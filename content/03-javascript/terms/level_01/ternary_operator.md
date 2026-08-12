@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Ternary / Conditional Operator (? :) is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Conditional logic is the heart of programming. When a developer wants to choose between two values based on a condition, they would traditionally write an `if...else` block:
@@ -80,7 +76,7 @@ console.log(shippingMessage); // "You qualify for free shipping!"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Nesting Ternary Operators
 
@@ -165,80 +161,106 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format Login Button Label
+### Exercise 1: E-Commerce Dynamic Shipping Fee Calculator
 
-**Problem:** Complete the code to print the correct button text. If `isUserLoggedIn` is `true`, set `buttonLabel` to `"Logout"`. Otherwise, set it to `"Login"`.
+**Scenario:** A checkout system calculates shipping fees based on order total thresholds and customer VIP status using a concise ternary expression (? :).
 
-```javascript
-const isUserLoggedIn = false;
-const buttonLabel = // Write ternary here
+**Requirements:**
+1. Write calculateShippingFee(orderTotal, isVip).
+2. Free shipping (0) applies if isVip is true OR orderTotal >= 100.
+3. Otherwise shipping is 15.
+4. Return shipping fee via ternary expression.
 
-console.log("Button label:", buttonLabel);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Button label: Login
-> ```
-> - The condition is `isUserLoggedIn`.
-> - If true, the value is `"Logout"`.
-> - If false, the value is `"Login"`.
-> 
----
-
-### Exercise 2: Ternary Default Value Selection
-
-**Problem:** Write a ternary statement returning `name` if non-empty string, else `"Anonymous"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Alice
-> Anonymous
-> ```
+> #### Implementation
 > ```javascript
-> function getName(n) { return n ? n : "Anonymous"; }
-> console.log(getName("Alice"));
-> console.log(getName(""));
+> function calculateShippingFee(orderTotal, isVip) {
+>   return (isVip || orderTotal >= 100) ? 0 : 15;
+> }
+> // Verification tests
+> console.assert(calculateShippingFee(120, false) === 0, "Test 1 Failed");
+> console.assert(calculateShippingFee(50, true) === 0, "Test 2 Failed");
+> console.assert(calculateShippingFee(50, false) === 15, "Test 3 Failed");
 > ```
->
-> **Explanation:** Ternary expressions evaluate truthy/falsy condition arms concisely.
+> #### Technical Explanation
+> 1. **Ternary Arity**: The ternary operator is JavaScript's only operator that takes three operands: condition ? expr1 : expr2.
+> 2. **Expression Evaluation**: Unlike an if/else statement, the ternary operator is an expression that evaluates directly to a value.
+> 3. **Short-Circuit Operand Execution**: Only the selected branch expression is evaluated; the unselected branch is skipped.
 > 
 ---
 
-### Exercise 3: Multi-Condition Ternary Status Check
+### Exercise 2: Dynamic UI Theme CSS Class Selector
 
-**Problem:** Return `"High"` if score >= 80, `"Medium"` if score >= 50, else `"Low"` using ternary operators.
+**Scenario:** A frontend component computes CSS theme class names dynamically inside a template interpolation expression.
 
-**Expected output:**
+**Requirements:**
+1. Write getThemeClass(isDarkMode, isHighContrast).
+2. Use inline ternary expressions.
+3. Return theme string (e.g. "theme-dark-hc", "theme-dark", "theme-light").
+
 > [!check]- Answer
-> ```text
-> High
-> Medium
-> Low
-> ```
+> #### Implementation
 > ```javascript
-> function getStatus(s) { return s >= 80 ? "High" : s >= 50 ? "Medium" : "Low"; }
-> console.log(getStatus(85));
-> console.log(getStatus(60));
-> console.log(getStatus(30));
+> function getThemeClass(isDarkMode, isHighContrast) {
+>   const baseTheme = isDarkMode ? "theme-dark" : "theme-light";
+>   const contrastSuffix = isHighContrast ? "-hc" : "";
+>   return baseTheme + contrastSuffix;
+> }
+> // Verification tests
+> console.assert(getThemeClass(true, false) === "theme-dark", "Test 1 Failed");
+> console.assert(getThemeClass(true, true) === "theme-dark-hc", "Test 2 Failed");
+> console.assert(getThemeClass(false, false) === "theme-light", "Test 3 Failed");
 > ```
->
-> **Explanation:** Chained ternary expressions evaluate conditions sequentially.
+> #### Technical Explanation
+> 1. **Expression Embeddability**: Because ternary operators are expressions, they can be embedded directly inside template literals and JSX.
+> 2. **Truthy / Falsy Conditions**: The condition operand undergoes implicit boolean coercion.
+> 3. **Concise Syntax**: Replaces verbose 5-line if/else blocks with single-line conditional assignments.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Chained Ternary Status Resolver
+
+**Scenario:** A server monitoring dashboard maps HTTP status code ranges to human-readable status labels using chained ternary expressions.
+
+**Requirements:**
+1. Return "SUCCESS" for 2xx status.
+2. Return "CLIENT_ERROR" for 4xx status.
+3. Return "SERVER_ERROR" for 5xx status.
+4. Return "UNKNOWN" for other status codes.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function resolveStatusLabel(code) {
+>   return (code >= 200 && code < 300)
+>     ? "SUCCESS"
+>     : (code >= 400 && code < 500)
+>     ? "CLIENT_ERROR"
+>     : (code >= 500 && code < 600)
+>     ? "SERVER_ERROR"
+>     : "UNKNOWN";
+> }
+> // Verification tests
+> console.assert(resolveStatusLabel(200) === "SUCCESS", "Test 1 Failed");
+> console.assert(resolveStatusLabel(404) === "CLIENT_ERROR", "Test 2 Failed");
+> console.assert(resolveStatusLabel(500) === "SERVER_ERROR", "Test 3 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Right-Associativity**: The ternary operator is right-associative; chained ternaries parse as a ? b : (c ? d : e).
+> 2. **Readability Formatting**: Formatting chained ternaries on separate indented lines maintains visual readability.
+> 3. **Return Value Precision**: Evaluates strictly to the single selected outcome string.
+---
+
+## 6. Related Terms
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — Concept of truthy and falsy values.
 - [Logical Operators](../level_02/logical_operators.md) — Logic combinators (`&&`, `||`, `!`).
 - [if / else](../level_02/if_else.md) — General purpose control flow statements.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The conditional/ternary operator (`? :`) is the only JavaScript operator that takes three operands.
 - It is an expression, meaning it evaluates to a single value and can be assigned directly to variables.
 - Keep ternaries simple; do not nest them, and do not use them to execute side-effect logic.

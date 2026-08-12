@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Async Pattern**
+
+**Async Pattern (Node.js / V8 Engine .)**: async / await in Node is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Node.js / V8 Engine** (Parsed natively by the JavaScript engine runtime).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Promises solved the nesting issues of callback hell. However, writing long chains of `.then()` and `.catch()` blocks can still become verbose and difficult to follow, especially when dealing with conditional logic or error handling across multiple steps.
@@ -85,7 +81,7 @@ Imagine ordering food at a busy gourmet food court.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `await` keyword
 
@@ -170,7 +166,7 @@ async function getUser() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Parallel Optimization
 
@@ -232,14 +228,14 @@ async function getAssetsParallel(urls) {
 >
 > **Explanation:** Marking a function `async` automatically wraps the returned value in a resolving Promise.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The errors triggered if you fail to handle async await exceptions.
 - [Async Error Handling (try/catch + .catch)](async_error_handling.md) — The mechanisms used to capture errors during await.
 - [Promisification (util.promisify)](promisification.md) — Promisifying callbacks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `async` / `await` provides clean, linear syntax for asynchronous JavaScript.
 - Functions marked with `async` always return a Promise.
 - `await` pauses the enclosing function until a Promise resolves, returning the result directly.

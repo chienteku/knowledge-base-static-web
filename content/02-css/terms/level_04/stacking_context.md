@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Browser Support .)**: Stacking Context is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Managed during the browser's painting phase, which sorts layers before rendering them onto the screen).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Every CSS developer has faced this layout nightmare: you build a modal popup window or dropdown menu and give it `z-index: 99999` to ensure it sits on top of everything. 
@@ -97,7 +93,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The "Opacified Parent" Trap
 
@@ -223,7 +219,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 /* Aware that transform/opacity/filter create new stacking contexts */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Victor
 
@@ -309,7 +305,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 >
 > **Explanation:** `isolation: isolate` creates a clean stacking context boundary.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`z-index`](z_index.md) — The numbering sequence sorted within the context.
 - [`opacity`](../level_09/opacity.md) — One of the visual triggers that creates a context.
 - [`transform` (Scale, Translate, Rotate)](../level_10/transform.md) — Another visual trigger that creates a context.
@@ -317,7 +313,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Stacking Context is an isolated Z-axis layering environment.
 - Child elements are sorted within their parent's stacking context.
 - A high `z-index` child cannot overlap outside elements if its parent is in a lower context.

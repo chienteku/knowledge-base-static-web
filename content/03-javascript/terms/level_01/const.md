@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: const is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `let` fixed the scoping issues of `var`, developers still needed a way to signal intent: "This value should never change." In large applications, accidentally reassigning a configuration variable or a core object can cause catastrophic bugs. 
@@ -56,7 +52,7 @@ console.log(userProfile.name); // 'Alicia'
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Const Scope and Variable Hoisting
 
@@ -129,65 +125,113 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Reassignment vs Mutation
+### Exercise 1: Immutable Microservice Configuration Registry
 
-**Problem:** Declare a `const` array with three numbers. Try to reassign the array to a completely new array. Then, try to use `.push()` to add a number to the original array.
+**Scenario:** A backend microservice initializes configuration parameters (API base URLs, port numbers, timeout thresholds). These bindings must never be reassigned at runtime.
 
-**Expected output:**
+**Requirements:**
+1. Declare configuration settings using const.
+2. Attempting to reassign a const binding must throw a TypeError.
+3. Export an accessor function returning configuration values.
+
 > [!check]- Answer
-> ```text
-> TypeError (on reassignment)
-> [1, 2, 3, 4] (after pushing)
-> ```
-> - You cannot use `=` on a `const` variable after it's initialized.
-> - Array methods like `.push()` mutate the existing array in memory, which is allowed.
-> 
----
-
-### Exercise 2: Deep Freezing Const Objects
-
-**Problem:** Use `Object.freeze()` to prevent property mutation on a `const` user object `{ role: "admin" }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TypeError or property unchanged
-> ```
+> #### Implementation
 > ```javascript
-> const config = Object.freeze({ role: "admin" });
-> // config.role = "user"; // Silently ignored in non-strict, throws TypeError in strict mode
-> console.log(config.role); // "admin"
-> ```
->
-> **Explanation:** `Object.freeze()` prevents adding, removing, or modifying properties on target objects.
-> 
----
-
-### Exercise 3: Const Block Scope Temporal Dead Zone
-
-**Problem:** Demonstrate accessing `const x` before its declaration line triggers a `ReferenceError`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError: Cannot access x before initialization
-> ```
-> ```javascript
-> try {
->   console.log(x);
->   const x = 10;
-> } catch (err) {
->   console.log(err.name + ": " + err.message);
+> function getServiceConfig() {
+>   const PORT = 8080;
+>   const API_BASE = "https://api.example.com/v1";
+> let reassignmentFailed = false;
+>   try {
+>     // @ts-ignore
+>     PORT = 9090;
+>   } catch (err) {
+>     reassignmentFailed = err instanceof TypeError;
+>   }
+> return { PORT, API_BASE, reassignmentFailed };
 > }
+> // Verification tests
+> const cfg = getServiceConfig();
+> console.assert(cfg.PORT === 8080, "Test 1 Failed");
+> console.assert(cfg.reassignmentFailed === true, "Test 2 Failed: Reassignment must throw TypeError");
 > ```
->
-> **Explanation:** `const` bindings reside in Temporal Dead Zone (TDZ) from block entry until their declaration line executes.
+> #### Technical Explanation
+> 1. **Reassignment Restriction**: Variables declared with const create a read-only reference binding. Reassigning a const variable throws a runtime TypeError.
+> 2. **Mandatory Initializer**: const declarations must be initialized immediately upon declaration; const x; is a syntax error.
+> 3. **Block Scope**: const declarations are scoped to their enclosing block {}, preventing variable leaks.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Shallow Immutability vs Deep Object Freezing
+
+**Scenario:** A developer uses const to declare a configuration object, but discovers that const does NOT prevent mutating internal object properties. The object must be frozen using Object.freeze().
+
+**Requirements:**
+1. Declare an object using const.
+2. Demonstrate that const permits property mutation (obj.prop = val).
+3. Freeze the object using Object.freeze() to enforce property immutability.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function createImmutableConfig() {
+>   const config = Object.freeze({
+>     host: "localhost",
+>     port: 5432
+>   });
+> let mutationFailed = false;
+>   try {
+>     config.port = 3306;
+>   } catch (err) {
+>     mutationFailed = true;
+>   }
+> mutationFailed = mutationFailed || config.port === 5432;
+> return { config, mutationFailed };
+> }
+> // Verification tests
+> const res = createImmutableConfig();
+> console.assert(res.config.port === 5432, "Test 1 Failed: Port was mutated");
+> console.assert(res.mutationFailed === true, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Shallow Immutability**: const prevents reassigning the variable binding itself, but does not freeze the underlying object value stored in memory.
+> 2. **Object.freeze()**: To prevent property mutation on objects declared with const, use Object.freeze().
+> 3. **Reference Storage**: Objects are assigned by reference; const guarantees the reference pointer remains constant.
+> 
+---
+
+### Exercise 3: Block-Scoped Loop Binding Isolation
+
+**Scenario:** An asynchronous batch processor uses a for...of loop with const bindings to process queue elements. Each iteration creates an isolated lexical scope block.
+
+**Requirements:**
+1. Iterate over an array using for (const item of items).
+2. Demonstrate that each iteration receives its own distinct const binding.
+3. Process and return item transformations.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function processItems(items) {
+>   const results = [];
+> for (const item of items) {
+>     const processed = item.toUpperCase();
+>     results.push(processed);
+>   }
+> return results;
+> }
+> // Verification tests
+> const output = processItems(["alpha", "beta", "gamma"]);
+> console.assert(output.join(",") === "ALPHA,BETA,GAMMA", "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Per-Iteration Binding**: In for...of and for...in loops, a new const variable binding is created for each loop iteration block.
+> 2. **No Accumulator Mutation**: Because for...of does not reassign the loop variable, using const is fully valid.
+> 3. **Closure Safety**: Per-iteration block scoping prevents asynchronous closure bugs common with var.
+---
+
+## 6. Related Terms
 - [let](let.md) — Block-scoped variable declaration that allows reassignment.
 - [Variable](variable.md) — A named container for storing data values.
 - [Assignment Operators](assignment_operators.md) — Related concept: Assignment Operators.
@@ -195,7 +239,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `const` by default for all variable declarations. Only switch to `let` if you are absolutely sure the variable's reference needs to change.
 - `const` requires an initial value at the time of declaration.
 - `const` prevents reassignment of the variable identifier, but does **not** make the values inside arrays or objects immutable.

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support .)**: `position: sticky` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Requires parent container viewport calculation logic. Disables itself automatically if parent overflows are detected).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users read a long article or browse a huge data table, they often lose track of where they are if the main navigation bar or table headers scroll off the top of the screen.
@@ -123,7 +119,7 @@ A navigation bar that sticks to the top of the browser:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the coordinate threshold
 
@@ -263,7 +259,7 @@ A navigation bar that sticks to the top of the browser:
 /* Remove overflow: hidden from ancestor containers to restore sticky scrolling */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Table Headers
 
@@ -322,7 +318,7 @@ A navigation bar that sticks to the top of the browser:
 >
 > **Explanation:** Sticky elements stop scrolling when reaching the bottom boundary of their parent container.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — The parent relative settings.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Viewport locked layouts.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent parameters that disable sticky positioning.
@@ -330,7 +326,7 @@ A navigation bar that sticks to the top of the browser:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `position: sticky` is a hybrid of relative and fixed positioning.
 - Sticky elements scroll naturally until they reach a threshold, then lock in place.
 - **You must define an offset coordinate** (like `top: 0;`) to activate sticky behavior.

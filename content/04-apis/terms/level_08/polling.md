@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Pattern / Legacy Architecture**
+
+**Networking Pattern / Legacy Architecture (Legacy Systems / Restrictive Networks)**: Polling vs Long Polling is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Legacy Systems / Restrictive Networks**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the 2000s, before WebSockets and SSE were invented, HTTP was strictly a "Client asks, Server answers" protocol. If you were building a chat app, how could the Client know if a new message arrived? 
@@ -44,7 +40,7 @@ The Client sits there waiting (sometimes for 30 seconds). As soon as a message *
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accidentally building a Short Polling DDoS
 
@@ -196,126 +192,165 @@ useEffect(() => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Pattern
+### Exercise 1: Short Polling Client with Exponential Backoff Cap
 
-**Problem:** You are tracking a pizza delivery. The app makes a network request. The browser's network tab shows the request status as "Pending..." for 45 seconds. Suddenly, the status changes to "200 OK" and the pizza icon moves on the map. Which pattern is this?
+**Scenario:** An API status monitor polls a server endpoint repeatedly, increasing poll intervals when the resource state remains unchanged.
 
-**Expected output:**
+**Requirements:**
+1. Write startShortPolling(fetchStatusFn, initialIntervalMs, maxIntervalMs).
+2. Poll endpoint.
+3. Increase interval if state unchanged.
+
 > [!check]- Answer
-> ```text
-> Long Polling.
-> Because the request sat "Pending" for 45 seconds, the server was intentionally holding the connection open until it had new location data to report.
+>
+> #### Implementation
+>
+> ```javascript
+> function startShortPolling(fetchStatusFn, initialIntervalMs = 1000, maxIntervalMs = 8000) {
+>   let currentInterval = initialIntervalMs;
+>   let timerId = null;
+>
+>   async function poll() {
+>     try {
+>       const result = await fetchStatusFn();
+>       if (result.status === "COMPLETED") {
+>         currentInterval = initialIntervalMs;
+>       } else {
+>         currentInterval = Math.min(maxIntervalMs, currentInterval * 2);
+>       }
+>     } catch (e) {
+>       currentInterval = Math.min(maxIntervalMs, currentInterval * 2);
+>     } finally {
+>       timerId = setTimeout(poll, currentInterval);
+>     }
+>   }
+>
+>   timerId = setTimeout(poll, currentInterval);
+>   return { stop: () => clearTimeout(timerId), getInterval: () => currentInterval };
+> }
+>
+> // Verification tests
+> let calls = 0;
+> const mockFetch = async () => {
+>   calls++;
+>   return { status: "PROCESSING" };
+> };
+>
+> const pollObj = startShortPolling(mockFetch, 50, 400);
+>
+> setTimeout(() => {
+>   console.assert(pollObj.getInterval() > 50, "Test 1 Failed: Interval must back off");
+>   pollObj.stop();
+> }, 200);
 > ```
-> - Did the app make 15 fast requests, or 1 very slow request?
+>
+> #### Technical Explanation
+>
+> 1. **Short Polling Concept**: Client makes periodic HTTP requests to check if server data has changed.
+> 2. **Server Overhead**: Generates high server load and HTTP header overhead even when no data has changed.
+> 3. **Adaptive Polling Delay**: Backing off poll intervals reduces unnecessary request traffic.
 > 
 ---
 
-### Exercise 2: Short Polling vs Long Polling Comparison
+### Exercise 2: Long Polling Server Connection Manager
 
-**Problem:** Contrast Short Polling vs Long Polling.
+**Scenario:** An HTTP long-polling handler holds client requests open until new event data becomes available or a 30s timeout occurs.
 
-**Expected output:**
+**Requirements:**
+1. Write handleLongPollRequest(req, res, eventEmitter, timeoutMs).
+2. Hold request.
+3. Respond immediately when event fires.
+4. Respond 304 on timeout.
+
 > [!check]- Answer
-> ```text
-> Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
-> Long Polling: Server holds incoming request open until new data is available or timeout occurs.
+>
+> #### Implementation
+>
+> ```javascript
+> function handleLongPollRequest(req, res, eventEmitter, timeoutMs = 100) {
+>   let timerId = null;
+>
+>   const onDataEvent = (data) => {
+>     if (timerId) clearTimeout(timerId);
+>     eventEmitter.removeListener("data", onDataEvent);
+>     res.json({ status: 200, data });
+>   };
+>
+>   eventEmitter.once("data", onDataEvent);
+>
+>   timerId = setTimeout(() => {
+>     eventEmitter.removeListener("data", onDataEvent);
+>     res.json({ status: 304, data: null });
+>   }, timeoutMs);
+> }
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const emitter = new EventEmitter();
+>
+> let responseSent = null;
+> const mockRes = { json: (obj) => { responseSent = obj; } };
+>
+> handleLongPollRequest({}, mockRes, emitter, 500);
+> emitter.emit("data", "NEW_MESSAGE");
+>
+> console.assert(responseSent.status === 200 && responseSent.data === "NEW_MESSAGE", "Test 1 Failed");
 > ```
-> ```text
-> Short Polling -> Client requests data at fixed interval; server returns immediately.
-> Long Polling  -> Server holds request connection open until data arrives or timeout.
-> ```
-> - **Explanation:** Long polling reduces empty HTTP round-trips compared to short polling.
+>
+> #### Technical Explanation
+>
+> 1. **Long Polling Mechanics**: Server delays responding to HTTP request until new data arrives or timeout occurs.
+> 2. **Immediate Re-polling**: Upon receiving a response, the client immediately initiates a new long-poll request.
+> 3. **Lower Latency than Short Polling**: Delivers messages instantly when events fire, reducing latency.
+> 
 ---
 
-### Exercise 3: When is Polling Still Appropriate?
+### Exercise 3: Real-Time Protocol Architecture Selector
 
-**Problem:** Give 1 valid architectural use case where simple Polling is preferred over WebSockets.
+**Scenario:** An API architect evaluates polling vs SSE vs WebSockets based on traffic frequency and bi-directionality requirements.
 
-**Expected output:**
+**Requirements:**
+1. Write recommendRealtimeProtocol(isBiDirectional, frequencyPerSec, requiresBinary).
+2. Recommend 'WEBSOCKET', 'SSE', or 'POLLING'.
+
 > [!check]- Answer
-> ```text
-> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
+>
+> #### Implementation
+>
+> ```javascript
+> function recommendRealtimeProtocol(isBiDirectional, frequencyPerSec, requiresBinary = false) {
+>   if (isBiDirectional || requiresBinary) {
+>     return "WEBSOCKET";
+>   }
+>   if (frequencyPerSec >= 1) {
+>     return "SSE";
+>   }
+>   return "POLLING";
+> }
+>
+> // Verification tests
+> console.assert(recommendRealtimeProtocol(true, 10) === "WEBSOCKET", "Test 1 Failed");
+> console.assert(recommendRealtimeProtocol(false, 5) === "SSE", "Test 2 Failed");
+> console.assert(recommendRealtimeProtocol(false, 0.05) === "POLLING", "Test 3 Failed");
 > ```
-> ```text
-> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-> ```
-> - **Explanation:** Polling is simpler for low-frequency non-urgent background task checks.
+>
+> #### Technical Explanation
+>
+> 1. **WebSockets Strength**: Full-duplex low-overhead bi-directional communication over a single TCP connection.
+> 2. **SSE (Server-Sent Events) Strength**: Simpler HTTP-based server-to-client unidirectional streaming with auto-reconnect.
+> 3. **Polling Use Cases**: Ideal for low-frequency updates (e.g. checking job status every 5 minutes).
 ---
 
-### Exercise 4: Short Polling vs Long Polling Comparison
-
-**Problem:** Contrast Short Polling vs Long Polling.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
-> Long Polling: Server holds incoming request open until new data is available or timeout occurs.
-> ```
-> ```text
-> Short Polling -> Client requests data at fixed interval; server returns immediately.
-> Long Polling  -> Server holds request connection open until data arrives or timeout.
-> ```
-> - **Explanation:** Long polling reduces empty HTTP round-trips compared to short polling.
----
-
-### Exercise 5: When is Polling Still Appropriate?
-
-**Problem:** Give 1 valid architectural use case where simple Polling is preferred over WebSockets.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-> ```
-> ```text
-> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-> ```
-> - **Explanation:** Polling is simpler for low-frequency non-urgent background task checks.
----
-
-### Exercise 6: Short Polling vs Long Polling Comparison
-
-**Problem:** Contrast Short Polling vs Long Polling.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
-> Long Polling: Server holds incoming request open until new data is available or timeout occurs.
-> ```
-> ```text
-> Short Polling -> Client requests data at fixed interval; server returns immediately.
-> Long Polling  -> Server holds request connection open until data arrives or timeout.
-> ```
-> - **Explanation:** Long polling reduces empty HTTP round-trips compared to short polling.
----
-
-### Exercise 7: When is Polling Still Appropriate?
-
-**Problem:** Give 1 valid architectural use case where simple Polling is preferred over WebSockets.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-> ```
-> ```text
-> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-> ```
-> - **Explanation:** Polling is simpler for low-frequency non-urgent background task checks.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [WebSockets](websockets.md) — The technology that made Polling obsolete.
 - [Webhooks](../level_06/webhooks.md) — The Server-to-Server equivalent to eliminate polling.
 - [Socket.io (Ecosystem tool)](socket_io.md) — Related concept: Socket.io (Ecosystem tool).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Short Polling** is repeatedly sending HTTP requests on a timer to ask for new data (highly inefficient).
 - **Long Polling** is sending an HTTP request, and the server intentionally delays the response until new data is available.
 - Both are legacy hacks to simulate real-time behavior over standard HTTP.

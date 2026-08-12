@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: push / pop / shift / unshift is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In computer science, list structures often need to grow and shrink dynamically. Rather than manually recalculating array positions or modifying length properties (like `arr[arr.length] = val`), JavaScript provides four built-in, highly optimized mutating methods:
@@ -95,7 +91,7 @@ console.log("Remaining Queue:", printQueue); // [ "Photo.jpg" ]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `push()` or `unshift()` to return the Modified Array
 
@@ -174,83 +170,58 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Task Manager
+### Exercise 1: LIFO Stack & FIFO Queue Dual Buffer Engine
 
-**Problem:** Complete the code to manage a task list. Add `"Clean Room"` to the start of the list, add `"Buy Milk"` to the end, and then remove the last task from the list.
+**Scenario:** A buffer manager operates stack (push/pop) and queue (push/shift) operations to handle undo history and task processing.
 
-```javascript
-const tasks = ["Study JavaScript"];
+**Requirements:**
+1. Write executeBufferOperations().
+2. Use push() and pop() for undo stack.
+3. Use push() and shift() for task queue.
+4. Return buffer states.
 
-// Add Clean Room to start
-// Add Buy Milk to end
-// Remove last task
-
-console.log("Final tasks:", tasks);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Final tasks: [ 'Clean Room', 'Study JavaScript' ]
-> ```
-> - Add to the start using `.unshift()`.
-> - Add to the end using `.push()`.
-> - Remove from the end using `.pop()`.
-> 
----
-
-### Exercise 2: Stack Operations with `push` and `pop`
-
-**Problem:** Push `10` and `20` onto array stack, pop `20`, and print final stack.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Popped: 20, Stack: [ 10 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const stack = [];
-> stack.push(10);
-> stack.push(20);
-> const popped = stack.pop();
-> console.log(`Popped: ${popped}, Stack: [ ${stack} ]`);
+> function executeBufferOperations() {
+>   const undoStack = [];
+>   undoStack.push("ACTION_1");
+>   undoStack.push("ACTION_2");
+>   const lastAction = undoStack.pop();
+>
+>   const taskQueue = [];
+>   taskQueue.push("TASK_A");
+>   taskQueue.push("TASK_B");
+>   const firstTask = taskQueue.shift();
+>
+>   return { lastAction, firstTask, undoCount: undoStack.length, taskCount: taskQueue.length };
+> }
+>
+> // Verification tests
+> const res = executeBufferOperations();
+> console.assert(res.lastAction === "ACTION_2", "Test 1 Failed: LIFO pop failed");
+> console.assert(res.firstTask === "TASK_A", "Test 2 Failed: FIFO shift failed");
 > ```
 >
-> **Explanation:** `push` appends elements to end; `pop` removes and returns last element ($O(1)$).
-> 
----
-
-### Exercise 3: Return Values of Push vs Pop
-
-**Problem:** Print return value of `[1, 2].push(3)` (new length) vs `[1, 2].pop()` (removed value).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> push return: 3, pop return: 2
-> ```
-> ```javascript
-> const a = [1, 2];
-> console.log(`push return: ${a.push(3)}`);
-> const b = [1, 2];
-> console.log(`pop return: ${b.pop()}`);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `push()` returns the new array length; `pop()` returns the removed element.
-> 
-> 
+> 1. **push() & pop() Stack**: push adds elements to array end; pop removes and returns last element (LIFO stack).
+> 2. **shift() & unshift() Queue**: shift removes and returns first element; unshift prepends elements to array start.
+> 3. **Performance Disparity**: shift/unshift re-index all array elements ($O(n)$ time), whereas push/pop operate at array end ($O(1)$ time).
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Mutating vs Non-mutating Methods](mutating_vs_non_mutating.md) — The distinction between changing arrays in-place or returning new ones.
 - [slice / splice](slice_splice.md) — Index-based sub-array slicing and splicing.
 - [Array](../level_02/array.md) — Related concept: Array.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `push` (end) and `unshift` (start) add elements and return the new array `length`.
 - `pop` (end) and `shift` (start) remove elements and return the removed element value.
 - `push` and `pop` are high-performance $O(1)$ operations; `shift` and `unshift` are slower $O(N)$ operations because they force the engine to re-index all elements.

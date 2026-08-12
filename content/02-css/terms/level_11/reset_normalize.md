@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Architecture**
+
+**CSS Architecture (Universal Modern Standard .)**: CSS Reset vs. Normalize is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Loaded at the absolute top of the CSS parsing queue to override the browser engine's built-in User-Agent Stylesheet rules).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before the browser reads a single line of your custom CSS, it applies a built-in default style sheet called the **User-Agent Stylesheet**. This is why:
@@ -112,7 +108,7 @@ HTML structure index file loading order:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Loading the reset stylesheet AFTER your custom styles
 
@@ -164,7 +160,7 @@ HTML structure index file loading order:
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Reset Audit
 
@@ -231,14 +227,14 @@ HTML structure index file loading order:
 >
 > **Explanation:** Normalize.css fixes browser inconsistencies without stripping all typography.
 > 
-## 7. Related Terms
-- [`@import` Rule](import.md) — Loading modular sheets.
+## 6. Related Terms
+- [`@import`](import.md) — Loading modular sheets.
 - [`box-sizing: border-box`](../level_02/box_sizing.md) — Sizing layouts easily.
 - [CSS Methodologies (BEM, OOCSS, SMACSS)](methodologies.md) — Related concept: CSS Methodologies (BEM, OOCSS, SMACSS).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - User-Agent Stylesheets are built-in browser default styles.
 - CSS Resets aggressively wipe all default styles to `0` for a blank slate.
 - Normalize unifies browser styling variations while keeping standard element defaults.

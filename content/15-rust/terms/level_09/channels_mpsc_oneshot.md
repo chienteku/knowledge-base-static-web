@@ -278,7 +278,7 @@ if let Err(e) = tx.send(data) { println!("Receiver disconnected: {e}"); }
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Channel (`mpsc`)](channel_mpsc.md) — Standard MPSC channel.
 

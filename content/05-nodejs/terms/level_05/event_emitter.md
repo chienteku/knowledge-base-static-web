@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core API / Design Pattern (Observer Pattern)**
+
+**Node.js Core API / Design Pattern (Observer Pattern) (Node.js Only .)**: Event Emitter is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Though browsers have the `EventTarget` API for DOM events, `EventEmitter` is the pure JavaScript backend equivalent).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the browser, you are used to writing `button.addEventListener('click', callback)`. When the user clicks the button, the event fires, and your callback runs.
@@ -51,7 +47,7 @@ You might think you've never used `EventEmitter`, but almost **every single core
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Emitting an event before the listener is attached
 
@@ -105,7 +101,7 @@ emitter.on('data', (data) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Emitters
 
@@ -168,7 +164,7 @@ emitter.on('data', (data) => {
 >
 > **Explanation:** `setMaxListeners()` adjusts the threshold for `MaxListenersExceededWarning` alerts.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The most famous use-case of Event Emitters in Node.js.
 - [The http Module](../level_02/http_module.md) — Servers are Event Emitters under the hood.
 - [The events Module](../level_02/events_module.md) — Related concept: The events Module.
@@ -177,7 +173,7 @@ emitter.on('data', (data) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`EventEmitter`** is the Node.js implementation of the Observer design pattern.
 - It replaces browser DOM events (`addEventListener`) with backend data events.
 - You use **`.on('eventName')`** to listen, and **`.emit('eventName')`** to broadcast.

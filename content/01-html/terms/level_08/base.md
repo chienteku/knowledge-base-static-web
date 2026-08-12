@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata Tag**
+
+**Metadata Tag (Universal Browser Support .)**: `<base>` Element is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively. Intercepts all relative asset loading calls to resolve path structures).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a website, developers prefer using **relative paths** for links (`<a href="contact.html">`) and media images (`<img src="logo.png">`) instead of writing full absolute URLs (`https://example.com/logo.png`). 
@@ -97,7 +93,7 @@ Basic base URL definition:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Broken page anchor links (The Jump-Link Trap)
 
@@ -163,7 +159,7 @@ Basic base URL definition:
 <base href="/v1/" target="_blank"> <!-- Single base element -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Path Resolution
 
@@ -223,7 +219,7 @@ What is the absolute URL the browser will navigate to when the user clicks the "
 >
 > **Explanation:** `target="_blank"` on `<base>` sets global default link opening behavior.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The parent metadata container.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Elements impacted by base target modifications.
 - [`href` Attribute](../level_02/href.md) — The path target attribute.
@@ -231,7 +227,7 @@ What is the absolute URL the browser will navigate to when the user clicks the "
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<base>` element sets a default root path for all relative links and assets on a page.
 - Place it in the `<head>` before any asset links (`<link>`, `<img>`, etc.).
 - You can have a maximum of **one** `<base>` tag per document.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Concept**
+
+**API Architecture / Concept (Universal Standard)**: Endpoints & Resources is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When designing an API, you have to organize your data so developers can intuitively find what they need. You wouldn't throw every piece of data into a single, chaotic pile. You need categories.
@@ -45,7 +41,7 @@ In RESTful API design, resources are often related to one another. Endpoints can
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deeply Nested Endpoints
 
@@ -173,139 +169,150 @@ GET /api/orders ; Standardized plural resource nouns
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Design the Endpoints
+### Exercise 1: Nested RESTful Resource Endpoint Router
 
-**Problem:** You are building an API for a blog. You have two Resources: `Articles` and `Comments`. Write the standard REST endpoints to:
-1. Get all articles.
-2. Get a specific article (ID 42).
-3. Get all comments on that specific article.
+**Scenario:** A web API framework routes requests to nested sub-resource endpoints (e.g. `/users/:userId/orders/:orderId`).
 
-**Expected output:**
+**Requirements:**
+1. Write parseNestedResourceEndpoint(pathStr).
+2. Extract root resource, root ID, sub-resource, and sub-resource ID.
+
 > [!check]- Answer
-> ```text
-> 1. `GET /articles`
-> 2. `GET /articles/42`
-> 3. `GET /articles/42/comments`
+>
+> #### Implementation
+>
+> ```javascript
+> function parseNestedResourceEndpoint(pathStr) {
+>   if (!pathStr || typeof pathStr !== "string") return null;
+>
+>   const segments = pathStr.split("/").filter(Boolean);
+>   if (segments.length < 2) return null;
+>
+>   const result = {
+>     parentResource: segments[0],
+>     parentId: segments[1],
+>     subResource: segments[2] || null,
+>     subResourceId: segments[3] || null
+>   };
+>
+>   return result;
+> }
+>
+> // Verification tests
+> const parsed = parseNestedResourceEndpoint("/users/usr-42/orders/ord-99");
+> console.assert(parsed.parentResource === "users" && parsed.parentId === "usr-42", "Test 1 Failed");
+> console.assert(parsed.subResource === "orders" && parsed.subResourceId === "ord-99", "Test 2 Failed");
+>
+> const topLevel = parseNestedResourceEndpoint("/products/p-10");
+> console.assert(topLevel.parentResource === "products" && topLevel.subResource === null, "Test 3 Failed");
 > ```
-> - Remember to use Plural Nouns!
-> - To get a specific item, use a Path Variable.
+>
+> #### Technical Explanation
+>
+> 1. **Endpoint Definition**: An Endpoint is the URI path used to access a Resource (e.g. /api/v1/users).
+> 2. **Resource Definition**: A Resource is the underlying entity or object data represented by the endpoint.
+> 3. **Nested Resource Relationships**: Hierarchical paths (/users/42/orders) convey parent-child relationships between resources.
 > 
 ---
 
-### Exercise 2: REST Endpoint Design Refactoring
+### Exercise 2: Plural vs Singular Resource Naming Normalizer
 
-**Problem:** Refactor the following RPC-style endpoint URLs into clean RESTful noun URIs:
-1. `POST /api/getAllCustomers` 
-2. `POST /api/updateCustomer?id=10` 
-3. `POST /api/deleteCustomer/10` 
+**Scenario:** A REST linter checks API endpoint path strings to enforce plural noun conventions for resource collections.
 
-**Expected output:**
+**Requirements:**
+1. Write auditResourceEndpointNaming(endpointPath).
+2. Check if collection segment is plural noun.
+3. Flag singular nouns or RPC verb paths.
+
 > [!check]- Answer
-> ```text
-> 1. GET /api/customers
-> 2. PUT /api/customers/10 (or PATCH)
-> 3. DELETE /api/customers/10
+>
+> #### Implementation
+>
+> ```javascript
+> function auditResourceEndpointNaming(endpointPath) {
+>   if (!endpointPath || typeof endpointPath !== "string") return { valid: false };
+>
+>   const segments = endpointPath.split("/").filter(Boolean);
+>   if (segments.length === 0) return { valid: false };
+>
+>   const collectionName = segments[0].toLowerCase();
+>   const knownSingulars = ["user", "order", "product", "account", "customer"];
+>
+>   if (knownSingulars.includes(collectionName)) {
+>     return {
+>       valid: false,
+>       reason: `Resource collection should be plural '${collectionName}s' instead of singular '${collectionName}'`
+>     };
+>   }
+>
+>   if (["getusers", "deleteorder", "createproduct"].includes(collectionName)) {
+>     return {
+>       valid: false,
+>       reason: "Endpoint paths must use noun resources, not RPC verbs"
+>     };
+>   }
+>
+>   return { valid: true, collection: collectionName };
+> }
+>
+> // Verification tests
+> console.assert(auditResourceEndpointNaming("/user/123").valid === false, "Test 1 Failed: Singular resource name");
+> console.assert(auditResourceEndpointNaming("/getUsers").valid === false, "Test 2 Failed: RPC verb in path");
+> console.assert(auditResourceEndpointNaming("/users/123").valid === true, "Test 3 Failed");
 > ```
-> ```text
-> 1. GET /api/customers
-> 2. PUT /api/customers/10
-> 3. DELETE /api/customers/10
-> ```
-> - **Explanation:** REST endpoints use HTTP methods to express actions on noun resources.
+>
+> #### Technical Explanation
+>
+> 1. **Plural Nouns Convention**: REST endpoints should use plural nouns (/users, /orders) to represent resource collections.
+> 2. **Nouns vs Verbs**: Endpoints represent Nouns (resources); HTTP methods specify the Verbs (actions).
+> 3. **Predictable API Design**: Consistent resource naming rules reduce learning curve for client API consumers.
+> 
 ---
 
-### Exercise 3: Nested Sub-Resource Hierarchy Design
+### Exercise 3: Sub-Resource Collection Aggregator Endpoint
 
-**Problem:** Design a RESTful URI endpoint path for fetching all comments belonging to a specific post (`id: 42`).
+**Scenario:** An API endpoint handler aggregates sub-resources filtered by parent resource constraints.
 
-**Expected output:**
+**Requirements:**
+1. Write getParentSubResources(parentId, subResourceName, dbMap).
+2. Return sub-resources belonging to specified parentId.
+
 > [!check]- Answer
-> ```text
-> GET /api/posts/42/comments
+>
+> #### Implementation
+>
+> ```javascript
+> function getParentSubResources(parentId, subResourceName, dbMap) {
+>   if (!parentId || !dbMap.has(subResourceName)) return [];
+>
+>   const collection = dbMap.get(subResourceName);
+>   return collection.filter(item => item.parentId === parentId);
+> }
+>
+> // Verification tests
+> const db = new Map([
+>   ["orders", [
+>     { id: "o1", parentId: "u101", total: 50 },
+>     { id: "o2", parentId: "u102", total: 30 },
+>     { id: "o3", parentId: "u101", total: 90 }
+>   ]]
+> ]);
+>
+> const u101Orders = getParentSubResources("u101", "orders", db);
+> console.assert(u101Orders.length === 2, "Test 1 Failed");
+> console.assert(u101Orders[0].id === "o1" && u101Orders[1].id === "o3", "Test 2 Failed");
 > ```
-> ```http
-> GET /api/posts/42/comments HTTP/1.1
-> ```
-> - **Explanation:** Hierarchical nested paths express parent-child relationships between resources.
+>
+> #### Technical Explanation
+>
+> 1. **Resource Scoping**: Sub-resource endpoints automatically scope queries to the parent entity context.
+> 2. **Relational Integrity**: Guarantees clients cannot fetch sub-resources belonging to a different parent.
+> 3. **REST Resource Tree**: Models complex database foreign key relationships as intuitive URL paths.
 ---
 
-### Exercise 4: REST Endpoint Design Refactoring
-
-**Problem:** Refactor the following RPC-style endpoint URLs into clean RESTful noun URIs:
-1. `POST /api/getAllCustomers` 
-2. `POST /api/updateCustomer?id=10` 
-3. `POST /api/deleteCustomer/10` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. GET /api/customers
-> 2. PUT /api/customers/10 (or PATCH)
-> 3. DELETE /api/customers/10
-> ```
-> ```text
-> 1. GET /api/customers
-> 2. PUT /api/customers/10
-> 3. DELETE /api/customers/10
-> ```
-> - **Explanation:** REST endpoints use HTTP methods to express actions on noun resources.
----
-
-### Exercise 5: Nested Sub-Resource Hierarchy Design
-
-**Problem:** Design a RESTful URI endpoint path for fetching all comments belonging to a specific post (`id: 42`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> GET /api/posts/42/comments
-> ```
-> ```http
-> GET /api/posts/42/comments HTTP/1.1
-> ```
-> - **Explanation:** Hierarchical nested paths express parent-child relationships between resources.
----
-
-### Exercise 6: REST Endpoint Design Refactoring
-
-**Problem:** Refactor the following RPC-style endpoint URLs into clean RESTful noun URIs:
-1. `POST /api/getAllCustomers` 
-2. `POST /api/updateCustomer?id=10` 
-3. `POST /api/deleteCustomer/10` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. GET /api/customers
-> 2. PUT /api/customers/10 (or PATCH)
-> 3. DELETE /api/customers/10
-> ```
-> ```text
-> 1. GET /api/customers
-> 2. PUT /api/customers/10
-> 3. DELETE /api/customers/10
-> ```
-> - **Explanation:** REST endpoints use HTTP methods to express actions on noun resources.
----
-
-### Exercise 7: Nested Sub-Resource Hierarchy Design
-
-**Problem:** Design a RESTful URI endpoint path for fetching all comments belonging to a specific post (`id: 42`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> GET /api/posts/42/comments
-> ```
-> ```http
-> GET /api/posts/42/comments HTTP/1.1
-> ```
-> - **Explanation:** Hierarchical nested paths express parent-child relationships between resources.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Query Parameters & Path Variables](../level_02/query_params.md) — The dynamic IDs injected into endpoints to target specific resources.
 - [REST (Representational State Transfer)](rest.md) — The architecture that dictates endpoints must be nouns.
 - [HATEOAS](hateoas.md) — Related concept: HATEOAS.
@@ -314,7 +321,7 @@ GET /api/orders ; Standardized plural resource nouns
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Resource** is the abstract concept of the data (Users, Products).
 - An **Endpoint** is the specific URL (e.g., `/api/users`) exposed by the server to access that Resource.
 - **Nested Endpoints** (e.g., `/users/1/orders`) show relationships between resources.

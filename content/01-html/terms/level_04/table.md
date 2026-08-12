@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<table>` is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes data needs to be presented in a strict grid of rows and columns to make sense (like a spreadsheet, a calendar, or a financial report).
@@ -64,7 +60,7 @@ The `<table>` element is the Excel window itself. It is the box that holds the g
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using tables for page layout
 
@@ -140,7 +136,7 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 </table>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Tabular Data Identification
 
@@ -202,7 +198,7 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 >
 > **Explanation:** `border-collapse: collapse` eliminates double cell border spacing.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<tr>` (Table Row)](tr.md) — The tag that defines a horizontal row inside the table.
 - [`<td>` (Table Data)](td.md) — The tag that holds the actual data inside the row.
 - [`<caption>`](caption.md) — The semantic title container for the table.
@@ -211,7 +207,7 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<table>` element is the container for tabular data.
 - It relies on nested elements (`<tr>`, `<th>`, `<td>`) to build the grid.
 - NEVER use tables for website layout; use them exclusively for data.

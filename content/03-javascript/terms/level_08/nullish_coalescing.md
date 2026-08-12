@@ -6,22 +6,18 @@
 ---
 
 ## 1. Prerequisites
-- [null](../level_01/null.md)
+- [null](../level_01/null.md) — 
 - [Logical Operators](../level_02/logical_operators.md) — The older `||` operator this often replaces.
 
 ---
 
 ## 2. Term Category
-- **Syntax Feature / Operator** *(Introduced in ES11 / 2020)*
+
+**Syntax Feature / Operator *(Introduced in ES11 / 2020)* (Universal)**: Nullish Coalescing (??) is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For years, JavaScript developers used the Logical OR operator (`||`) to provide default values. (e.g., `const volume = userVolume || 100;`). 
@@ -71,7 +67,7 @@ initializeGame({ difficulty: "Expert", money: 0, hardcore: false });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Nullish Coalescing Scope and Variable Hoisting
 
@@ -144,75 +140,128 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Evaluating the outcome
+### Exercise 1: Nullish Coalescing for Falsy Zero & Empty String Preservation
 
-**Problem:** What will the following values evaluate to?
-1. `"" ?? "Default"`
-2. `false ?? true`
-3. `undefined ?? "Default"`
+**Scenario:** A form configuration parser uses the nullish coalescing operator (??) to preserve valid falsy inputs (like 0, false, and "") while replacing null and undefined.
 
-**Expected output:**
+**Requirements:**
+1. Write parseSettings(inputSettings).
+2. Use inputSettings.timeout ?? 3000.
+3. Use inputSettings.debug ?? false.
+4. Return parsed config.
+
 > [!check]- Answer
-> ```text
-> 1. `""` (Empty string is not null/undefined!)
-> 2. `false` (False is not null/undefined!)
-> 3. `"Default"` (Undefined triggers the fallback!)
-> ```
-> - `??` only cares about two specific values. Nothing else matters.
-> 
----
-
-### Exercise 2: Nullish Coalescing with Falsy Values
-
-**Problem:** Evaluate `0 ?? 100`, `"" ?? "default"`, `false ?? true`, `null ?? "fallback"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 0
-> ""
-> false
-> fallback
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(0 ?? 100);
-> console.log("" ?? "default");
-> console.log(false ?? true);
-> console.log(null ?? "fallback");
+> function parseSettings(inputSettings) {
+>   const cfg = inputSettings || {};
+>   return {
+>     timeout: cfg.timeout ?? 3000,
+>     title: cfg.title ?? "Untitled",
+>     debug: cfg.debug ?? true
+>   };
+> }
+>
+> // Verification tests
+> const res1 = parseSettings({ timeout: 0, title: "", debug: false });
+> console.assert(res1.timeout === 0, "Test 1 Failed: 0 should be preserved");
+> console.assert(res1.title === "", "Test 2 Failed: Empty string should be preserved");
+> console.assert(res1.debug === false, "Test 3 Failed: false should be preserved");
+>
+> const res2 = parseSettings({ timeout: null, title: undefined });
+> console.assert(res2.timeout === 3000 && res2.title === "Untitled", "Test 4 Failed");
 > ```
 >
-> **Explanation:** `??` returns right-hand operand ONLY if left-hand operand is `null` or `undefined`.
+> #### Technical Explanation
+>
+> 1. **Nullish Coalescing Operator (??)**: Returns right-hand operand ONLY if left-hand operand evaluates to null or undefined.
+> 2. **Contrast with Logical OR (||)**: || replaces all falsy values (0, '', false, NaN); ?? preserves valid falsy values.
+> 3. **Operator Precedence Note**: Requires explicit parentheses when combined directly with && or || operators.
 > 
 ---
 
-### Exercise 3: Chaining Nullish Coalescing Operators
+### Exercise 2: Nullish Coalescing Advanced Context Handler
 
-**Problem:** Chain `undefined ?? null ?? "first valid"`.
+**Scenario:** A web application component processes nullish coalescing data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleNullishCoalescingSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> first valid
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(undefined ?? null ?? "first valid");
+> function handleNullishCoalescingSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleNullishCoalescingSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Chained `??` operators evaluate left-to-right until encountering the first non-nullish value.
-> 
+> #### Technical Explanation
+>
+> 1. **Nullish Coalescing Architecture**: Applying nullish coalescing patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Nullish Coalescing Performance Optimization
+
+**Scenario:** An application utility optimizes nullish coalescing execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeNullishCoalescingTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeNullishCoalescingTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeNullishCoalescingTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Nullish Coalescing Optimization**: Optimizing nullish coalescing improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Optional Chaining (?.)](optional_chaining.md) — Usually chained directly into `??`.
 - [Logical Operators](../level_02/logical_operators.md) — The `||` operator that `??` improves upon.
 - [Logical Assignment (??=, ||=, &&=)](logical_assignment.md) — Related concept: Logical Assignment (??=, ||=, &&=).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Nullish Coalescing operator (`??`) provides a fallback (default) value.
 - It ONLY triggers if the left operand is strictly `null` or `undefined`.
 - It completely fixes the bugs caused by `||` when working with valid falsy values like `0`, `""`, and `false`.

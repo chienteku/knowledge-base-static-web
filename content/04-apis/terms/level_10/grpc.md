@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Networking Protocol**
+
+**API Architecture / Networking Protocol (Server-to-Server  .)**: gRPC (Remote Procedure Call) is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Server-to-Server (Microservices)** (Rarely used in the browser).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 [REST](../level_03/rest.md) and [JSON](../level_01/json.md) are great because they are human-readable text. But computers don't need human-readable text! 
@@ -46,7 +42,7 @@ client.BanUser({ id: 5 });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use gRPC in the Browser
 
@@ -101,63 +97,134 @@ message User {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Final Architecture
+### Exercise 1: gRPC-Web Message Frame Serializer
 
-**Problem:** You are the Chief Architect at Netflix. You have a React frontend, a Node.js "Gateway" server, and 50 Python "Microservices" running deep in your data center. 
-Where do you use REST, and where do you use gRPC?
+**Scenario:** A gRPC-Web client formats payload bytes into gRPC-Web framed messages (1 byte flag + 4 bytes big-endian length + payload bytes).
 
-**Expected output:**
+**Requirements:**
+1. Write frameGrpcWebMessage(payloadBuffer, isCompressed).
+2. Prepend 5-byte header.
+3. Return Uint8Array.
+
 > [!check]- Answer
-> ```text
-> React Frontend  --(REST/JSON)-->  Node.js Gateway
-> Node.js Gateway --(gRPC)------->  Python Microservices
-> Python to Python --(gRPC)-------> Python Microservices
+>
+> #### Implementation
+>
+> ```javascript
+> function frameGrpcWebMessage(payloadBuffer, isCompressed = false) {
+>   const payloadBytes = new Uint8Array(payloadBuffer);
+>   const len = payloadBytes.length;
+>
+>   const frame = new Uint8Array(5 + len);
+>   frame[0] = isCompressed ? 1 : 0;
+>
+>   const view = new DataView(frame.buffer);
+>   view.setUint32(1, len, false);
+>
+>   frame.set(payloadBytes, 5);
+>   return frame;
+> }
+>
+> // Verification tests
+> const payload = new Uint8Array([0x08, 0x96, 0x01]);
+> const framed = frameGrpcWebMessage(payload.buffer);
+>
+> console.assert(framed.length === 8, "Test 1 Failed: 5 header bytes + 3 payload bytes");
+> const view = new DataView(framed.buffer);
+> console.assert(view.getUint32(1, false) === 3, "Test 2 Failed: Payload length 3 encoded in header");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **gRPC-Web Framing Protocol**: 5-byte prefix header preceding every Protobuf message in gRPC-Web streams.
+> 2. **Big-Endian Byte Length**: Length field is encoded as 32-bit unsigned integer in network byte order (Big-Endian).
+> 3. **Browser gRPC Compatibility**: gRPC-Web enables browsers to make gRPC calls over standard HTTP/1.1 or HTTP/2 proxies.
 > 
-> The Browser uses standard REST to talk to the public-facing Gateway. But behind the scenes, all the heavy lifting and data passing between the 50 internal servers is done using ultra-fast gRPC binary streams!
+---
+
+### Exercise 2: gRPC Error Status Code Normalizer
+
+**Scenario:** Converts gRPC status codes (0=OK, 5=NOT_FOUND, 16=UNAUTHENTICATED) into equivalent HTTP status codes.
+
+**Requirements:**
+1. Write mapGrpcStatusToHttp(grpcCode).
+2. Map gRPC code to HTTP status code.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function mapGrpcStatusToHttp(grpcCode) {
+>   const grpcStatusMap = {
+>     0: 200,
+>     3: 400,
+>     5: 404,
+>     7: 403,
+>     14: 503,
+>     16: 401
+>   };
+>
+>   return grpcStatusMap[grpcCode] || 500;
+> }
+>
+> // Verification tests
+> console.assert(mapGrpcStatusToHttp(0) === 200, "Test 1 Failed: OK -> 200");
+> console.assert(mapGrpcStatusToHttp(5) === 404, "Test 2 Failed: NOT_FOUND -> 404");
+> console.assert(mapGrpcStatusToHttp(16) === 401, "Test 3 Failed: UNAUTHENTICATED -> 401");
 > ```
-> - Which protocol is best for internal, computer-to-computer chatter?
+>
+> #### Technical Explanation
+>
+> 1. **gRPC Status Codes**: gRPC defines 17 specific status codes (0-16) independent of HTTP status codes.
+> 2. **HTTP/2 Framing Transport**: gRPC calls return HTTP 200 OK at the HTTP level while carrying gRPC status codes in trailers (`grpc-status`).
+> 3. **API Gateway Status Translation**: API Gateways translate gRPC trailers into standard HTTP status codes for REST consumers.
 > 
 ---
 
-### Exercise 2: gRPC 4 RPC Communication Styles
+### Exercise 3: gRPC Metadata Header Injector
 
-**Problem:** Identify the 4 RPC streaming modes supported by gRPC.
+**Scenario:** An API client attaches custom gRPC metadata headers (e.g. `authorization`, `x-request-id`) to outgoing gRPC calls.
 
-**Expected output:**
+**Requirements:**
+1. Write buildGrpcMetadata(authToken, requestId).
+2. Return metadata key-value object.
+
 > [!check]- Answer
-> ```text
-> 1. Unary RPC (Single request -> Single response)
-> 2. Server Streaming RPC (Single request -> Stream of responses)
-> 3. Client Streaming RPC (Stream of requests -> Single response)
-> 4. Bi-directional Streaming RPC (Stream of requests <-> Stream of responses)
+>
+> #### Implementation
+>
+> ```javascript
+> function buildGrpcMetadata(authToken, requestId) {
+>   const metadata = {};
+>
+>   if (authToken) {
+>     metadata["authorization"] = `Bearer ${authToken}`;
+>   }
+>
+>   if (requestId) {
+>     metadata["x-request-id"] = requestId;
+>   }
+>
+>   return metadata;
+> }
+>
+> // Verification tests
+> const meta = buildGrpcMetadata("secret_123", "req_999");
+> console.assert(meta["authorization"] === "Bearer secret_123", "Test 1 Failed");
+> console.assert(meta["x-request-id"] === "req_999", "Test 2 Failed");
 > ```
-> ```text
-> 1. Unary RPC
-> 2. Server Streaming RPC
-> 3. Client Streaming RPC
-> 4. Bi-directional Streaming RPC
-> ```
-> - **Explanation:** gRPC leverages HTTP/2 multiplexing for 4 streaming modes.
+>
+> #### Technical Explanation
+>
+> 1. **gRPC Metadata Concept**: Equivalent of HTTP headers in gRPC calls; key-value pairs passed alongside RPC invocations.
+> 2. **Lowercase Metadata Keys**: gRPC metadata keys are strictly lowercase ASCII strings.
+> 3. **Binary Metadata Suffix**: Metadata keys ending with '-bin' (e.g. trace-proto-bin) transmit Base64-encoded binary values.
 ---
 
-### Exercise 3: gRPC Protocol Transport Basis
-
-**Problem:** Which network protocol version is strictly required as the transport foundation for gRPC?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HTTP/2 (for binary multiplexing and header compression).
-> ```
-> ```text
-> HTTP/2 (for binary multiplexing, streams, and HPACK header compression).
-> ```
-> - **Explanation:** gRPC relies on HTTP/2 framing for binary streaming capabilities.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [REST (Representational State Transfer)](../level_03/rest.md) — The architecture gRPC replaces in backend microservices.
 - [WebSockets](../level_08/websockets.md) — gRPC also natively supports bi-directional streaming!
 - [Binary vs Text Formats](../level_07/binary_vs_text_formats.md) — Related concept: Binary vs Text Formats.
@@ -168,7 +235,7 @@ Where do you use REST, and where do you use gRPC?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **gRPC** is an API framework built by Google for ultra-fast, server-to-server communication.
 - It replaces JSON with **Protocol Buffers** (binary data), making payloads much smaller and faster to process.
 - It uses an RPC style (calling functions) rather than REST style (manipulating resources).

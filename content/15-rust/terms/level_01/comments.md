@@ -835,7 +835,7 @@ Build a `DocTestExtractor` tool for an IDE documentation plugin or CI linter tha
 ## 6. Related Terms
 
 
-- [`fn` (Functions)](fn.md) — Functions are the most common items that receive `///` doc comments.
+- [fn](fn.md) — Functions are the most common items that receive `///` doc comments.
 - [`//!` (Inner Doc Comment)](../level_08/inner_doc_comment.md) — Related concept: `//!` (Inner Doc Comment).
 - [Documentation Comments (`///`, `//!`)](../level_07/documentation_comments.md) — Doc comments for rustdoc.
 

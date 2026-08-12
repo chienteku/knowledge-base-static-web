@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Nightly Compiler](nightly_compiler.md) — Nightly features.
+- [Nightly Rust Compiler](nightly_compiler.md) — Nightly features.
 - [`async fn`](../level_10/async_fn.md) — Async fn.
 
 ---
@@ -315,7 +315,7 @@ Iterate or invoke .resume() inside an executor loop!
 
 - [`async fn`](../level_10/async_fn.md) — Async/await runtime foundation.
 - [`Future` Trait](../level_10/future_trait.md) — Future trait.
-- [Nightly Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.
+- [Nightly Rust Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.
 
 ---
 

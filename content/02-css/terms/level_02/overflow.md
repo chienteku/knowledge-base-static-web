@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support .)**: `overflow` (hidden, scroll, auto, visible) is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively. Intercepts mouse scroll inputs and trackpad gesture hooks when scroll containers are generated).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, block-level elements expand in height to fit whatever content you put inside them. 
@@ -121,7 +117,7 @@ Creating a scrollable container:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `overflow: scroll` instead of `overflow: auto`
 
@@ -180,7 +176,7 @@ div { overflow: scroll; } /* ❌ Displays disabled scrollbars when content fits 
 div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Terms and Conditions Box
 
@@ -250,7 +246,7 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 >
 > **Explanation:** Text ellipsis truncation requires disabling line wrap, hiding overflow, and setting `text-overflow: ellipsis`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Width / Height](width_height.md) — The size triggers.
 - [`text-overflow` & `overflow-wrap`](../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.
 - [`z-index`](../level_04/z_index.md) — Layers which can be clipped by overflow settings.
@@ -263,7 +259,7 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `overflow` property manages content that exceeds its container's size.
 - `visible` (default) lets content spill out; `hidden` cuts it off invisibly.
 - `auto` adds scrollbars dynamically only when the content overflows.

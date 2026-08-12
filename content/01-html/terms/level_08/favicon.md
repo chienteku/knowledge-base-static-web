@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata**
+
+**Metadata (Universal Browser Support .)**: Favicon is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers. Modern desktop systems cache icons dynamically to display in bookmark bars and tab tabs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sighted users often browse the web with dozens of tabs open at the same time. As the tabs get smaller, the text titles collapse, making it impossible to read them. 
@@ -103,7 +99,7 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting the wrong MIME type
 
@@ -153,7 +149,7 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 <link rel="icon" href="icon.png" type="image/png">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Favicon Link Builder
 
@@ -204,14 +200,14 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 >
 > **Explanation:** `rel="apple-touch-icon"` specifies home screen bookmark icon for iOS Safari.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<link>`](link.md) — The resource connection element.
 - [`<head>`](../level_01/head.md) — The parent container.
 - [Open Graph Tags (`og:`)](open_graph.md) — Social media preview properties.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A favicon is the logo displaying next to titles in browser tabs and bookmarks.
 - Implement it using `<link rel="icon">` nested in the `<head>`.
 - Modern formats include PNG and vector SVG.

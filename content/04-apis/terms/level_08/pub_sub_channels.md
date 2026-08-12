@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Real-Time**
+
+**Real-Time (Universal: Governs message broker architectures  and real-time backend router servers.)**: Pub/Sub & Channels is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Governs message broker architectures (like Redis, RabbitMQ, Kafka) and real-time backend router servers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-time systems (such as a chat application with thousands of active chatrooms, or a multiplayer game, or a collaborative whiteboard), you cannot broadcast every message to *every connected user*. Broadcasting everything creates security issues and crashes client apps due to CPU and network overload.
@@ -87,7 +83,7 @@ io.on('connection', (socket) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing subscription lists in memory when scaling horizontally
 
@@ -219,119 +215,200 @@ publisher.publish('events', JSON.stringify({ event: 'file_ready', url: s3Url }))
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Architectural Audit
+### Exercise 1: In-Memory Multi-Channel Pub/Sub Event Broker
 
-**Problem:** You are building a notification system. Which design pattern represents a Pub/Sub Channel architecture?
+**Scenario:** A real-time message broker enables clients to subscribe to specific channels (e.g. `news`, `chat:room1`) and publish targeted events.
 
-- **A.** The client requests a user's notifications list every 10 seconds via `GET /api/notifications`.
-- **B.** The client establishes a WebSocket connection. The backend adds the client socket to a channel matching their user ID (`channel:user-42`). When an event occurs, the server publishes a message to that channel.
-- **C.** The client sends a `POST` request to `/api/notify` with a payload containing the target user's IP address.
+**Requirements:**
+1. Write createPubSubBroker().
+2. Implement subscribe(channel, callback).
+3. Implement publish(channel, message).
+4. Support unsubscribe.
 
 > [!check]- Answer
-> - **B** (This is a classic Pub/Sub Channel setup. Sockets subscribe to specific topics, and brokers route matching events to them).
+>
+> #### Implementation
+>
+> ```javascript
+> function createPubSubBroker() {
+>   const channels = new Map();
+>
+>   return {
+>     subscribe(channel, callback) {
+>       if (!channels.has(channel)) {
+>         channels.set(channel, new Set());
+>       }
+>       const subscribers = channels.get(channel);
+>       subscribers.add(callback);
+>
+>       return function unsubscribe() {
+>         subscribers.delete(callback);
+>         if (subscribers.size === 0) {
+>           channels.delete(channel);
+>         }
+>       };
+>     },
+>     publish(channel, message) {
+>       if (!channels.has(channel)) return 0;
+>       const subscribers = channels.get(channel);
+>       subscribers.forEach(cb => cb(message));
+>       return subscribers.size;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const broker = createPubSubBroker();
+> const received = [];
+>
+> const unsub = broker.subscribe("orders", (msg) => received.push(msg));
+> broker.publish("orders", { orderId: 42 });
+>
+> console.assert(received.length === 1 && received[0].orderId === 42, "Test 1 Failed");
+>
+> unsub();
+> broker.publish("orders", { orderId: 43 });
+> console.assert(received.length === 1, "Test 2 Failed: No events received after unsubscribe");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Publish-Subscribe Pattern**: Decouples message senders (publishers) from message receivers (subscribers).
+> 2. **Channel Isolation**: Subscribers only receive messages published to channels they explicitly subscribed to.
+> 3. **Dynamic Listener Cleanup**: Unsubscribe functions prevent memory leaks by removing callbacks when components unmount.
 > 
+---
+
+### Exercise 2: Wildcard Topic Pattern Pub/Sub Router
+
+**Scenario:** An API event broker allows subscribing to wildcard topic patterns (e.g. `orders.*` matches `orders.created` and `orders.cancelled`).
+
+**Requirements:**
+1. Write subscribePattern(pattern, callback, broker).
+2. Match wildcard pattern using regex.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createWildcardBroker() {
+>   const subscriptions = [];
+>
+>   return {
+>     subscribe(pattern, callback) {
+>       const regexStr = "^" + pattern.replace(/\./g, "\.").replace(/\*/g, "[^.]+") + "$";
+>       const regex = new RegExp(regexStr);
+>
+>       const sub = { pattern, regex, callback };
+>       subscriptions.push(sub);
+>
+>       return () => {
+>         const idx = subscriptions.indexOf(sub);
+>         if (idx !== -1) subscriptions.splice(idx, 1);
+>       };
+>     },
+>     publish(topic, message) {
+>       let matchCount = 0;
+>       for (const sub of subscriptions) {
+>         if (sub.regex.test(topic)) {
+>           sub.callback(topic, message);
+>           matchCount++;
+>         }
+>       }
+>       return matchCount;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const wBroker = createWildcardBroker();
+> const events = [];
+>
+> wBroker.subscribe("orders.*", (topic, msg) => events.push(topic));
+> wBroker.publish("orders.created", { id: 1 });
+> wBroker.publish("orders.updated", { id: 1 });
+> wBroker.publish("users.created", { id: 2 });
+>
+> console.assert(events.length === 2, "Test 1 Failed: Must match 2 orders topic events");
+> console.assert(!events.includes("users.created"), "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Wildcard Topic Subscriptions**: Allows clients to listen to families of events using wildcard operators (*, #).
+> 2. **Topic-Based Routing**: Commonly used in MQTT, AMQP, and RabbitMQ message brokers.
+> 3. **Event Decoupling**: Enables adding new event types without modifying subscriber pattern queries.
 > 
 ---
 
-### Exercise 2: Pub/Sub Architecture Decoupling
+### Exercise 3: Room Join & Broadcast WebSocket Handler
 
-**Problem:** Explain how Publish-Subscribe (Pub/Sub) pattern decouples message senders from receivers.
+**Scenario:** A WebSocket real-time chat server manages client room subscriptions (`socket.join('room42')`) and broadcasts messages to room members.
 
-**Expected output:**
+**Requirements:**
+1. Write createRoomManager().
+2. Implement joinRoom(socketId, roomName).
+3. Broadcast message to room.
+
 > [!check]- Answer
-> ```text
-> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
+>
+> #### Implementation
+>
+> ```javascript
+> function createRoomManager() {
+>   const rooms = new Map();
+>
+>   return {
+>     joinRoom(socketId, roomName) {
+>       if (!rooms.has(roomName)) {
+>         rooms.set(roomName, new Set());
+>       }
+>       rooms.get(roomName).add(socketId);
+>     },
+>     leaveRoom(socketId, roomName) {
+>       if (rooms.has(roomName)) {
+>         rooms.get(roomName).delete(socketId);
+>       }
+>     },
+>     broadcastToRoom(roomName, message, senderSocketId) {
+>       if (!rooms.has(roomName)) return [];
+>       const recipients = [];
+>       for (const sId of rooms.get(roomName)) {
+>         if (sId !== senderSocketId) {
+>           recipients.push(sId);
+>         }
+>       }
+>       return recipients;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const rm = createRoomManager();
+> rm.joinRoom("user1", "lobby");
+> rm.joinRoom("user2", "lobby");
+>
+> const recipients = rm.broadcastToRoom("lobby", "hello", "user1");
+> console.assert(recipients.length === 1 && recipients[0] === "user2", "Test 1 Failed: Broadcast excludes sender");
 > ```
-> ```text
-> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-> ```
-> - **Explanation:** Pub/Sub decouples producer and consumer identities and scaling.
+>
+> #### Technical Explanation
+>
+> 1. **Room Abstraction**: Groups sockets logically into channels without exposing underlying network IDs.
+> 2. **Sender Exclusion**: Broadcasting to a room typically excludes the socket that sent the message.
+> 3. **Multi-Room Membership**: Sockets can belong to multiple rooms simultaneously (e.g. global announcement + team chat).
 ---
 
-### Exercise 3: Pattern-Matching Subscriptions
-
-**Problem:** In Redis Pub/Sub, which command allows subscribing to channels matching a glob pattern (e.g. `orders.*`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> PSUBSCRIBE orders.*
-> ```
-> ```text
-> PSUBSCRIBE orders.*
-> ```
-> - **Explanation:** `PSUBSCRIBE` enables wildcards for pattern-matched channel subscriptions.
----
-
-### Exercise 4: Pub/Sub Architecture Decoupling
-
-**Problem:** Explain how Publish-Subscribe (Pub/Sub) pattern decouples message senders from receivers.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-> ```
-> ```text
-> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-> ```
-> - **Explanation:** Pub/Sub decouples producer and consumer identities and scaling.
----
-
-### Exercise 5: Pattern-Matching Subscriptions
-
-**Problem:** In Redis Pub/Sub, which command allows subscribing to channels matching a glob pattern (e.g. `orders.*`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> PSUBSCRIBE orders.*
-> ```
-> ```text
-> PSUBSCRIBE orders.*
-> ```
-> - **Explanation:** `PSUBSCRIBE` enables wildcards for pattern-matched channel subscriptions.
----
-
-### Exercise 6: Pub/Sub Architecture Decoupling
-
-**Problem:** Explain how Publish-Subscribe (Pub/Sub) pattern decouples message senders from receivers.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-> ```
-> ```text
-> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-> ```
-> - **Explanation:** Pub/Sub decouples producer and consumer identities and scaling.
----
-
-### Exercise 7: Pattern-Matching Subscriptions
-
-**Problem:** In Redis Pub/Sub, which command allows subscribing to channels matching a glob pattern (e.g. `orders.*`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> PSUBSCRIBE orders.*
-> ```
-> ```text
-> PSUBSCRIBE orders.*
-> ```
-> - **Explanation:** `PSUBSCRIBE` enables wildcards for pattern-matched channel subscriptions.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Socket.io (Ecosystem tool)](socket_io.md) — The Node.js real-time framework.
 - [Webhooks](../level_06/webhooks.md) — The HTTP callback request alternative for server-to-server notifications.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Pub/Sub pattern separates message senders (Publishers) from receivers (Subscribers).
 - Sockets join distinct Channels (rooms or topics) to receive relevant messages.
 - Message Brokers duplicate and forward incoming data only to whitelisted channel subscribers.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Measurement Unit**
+
+**CSS Measurement Unit (Universal Modern Standard)**: `vw` / `vh` (Viewport Units) is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in the previous lesson, using `height: 100%` on a `<div>` almost never works because it relies on the height of its parent container. 
@@ -53,7 +49,7 @@ This is how modern websites ensure the first image you see perfectly covers your
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `100vw` instead of `100%` for width
 
@@ -172,7 +168,7 @@ p { font-size: 2vw; } /* ❌ Becomes unreadably tiny on mobile phones! */
 p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Half-Screen
 
@@ -234,7 +230,7 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 >
 > **Explanation:** `100dvh` adapts dynamically to visible viewport space on mobile browsers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`%` (Percentages)](percentages.md) — The parent-relative sizing alternative.
 - [`rem` vs `em`](rem_em.md) — Sizing relative to fonts rather than the viewport.
 - [`max-width` & `min-height` (Fluidity)](max_width.md) — Fluid constraints to pair with viewport heights.
@@ -242,7 +238,7 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `vw` and `vh` are based on the **User's Screen Size**, not the parent container.
 - `100vh` is the definitive, modern way to make an element fill the height of the screen.
 - Avoid using `100vw`, as it causes horizontal scrollbar bugs; stick to `width: 100%` instead.

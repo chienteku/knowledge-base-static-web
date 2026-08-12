@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Runtime Environment / Backend Architecture**
+
+**Runtime Environment / Backend Architecture (Server-Side)**: Node.js (Runtime Environment) is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Server-Side (Backend)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For the first 15 years of its existence, JavaScript was physically trapped inside the web browser. You could only use it to animate buttons or validate forms on the Frontend. If you wanted to build the Backend Server (to talk to a database or handle HTTP requests), you had to switch to a completely different language like PHP, Java, or Ruby.
@@ -40,7 +36,7 @@ While they use the same grammar, they have completely different superpowers:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use DOM APIs in Node.js
 
@@ -96,7 +92,7 @@ app.get('/data', async (req, res, next) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Spot the Environment
 
@@ -157,7 +153,7 @@ app.get('/data', async (req, res, next) => {
 >
 > **Explanation:** `process.env` stores runtime environment configuration keys.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [V8 JavaScript Engine](v8_engine.md) — The actual engine beating inside the heart of Node.js.
 - [NPM (Node Package Manager)](../level_04/npm.md) — The package manager that made the Node.js ecosystem the largest in the world.
 - [Docker](../level_10/docker.md) — Related concept: Docker.
@@ -166,7 +162,7 @@ app.get('/data', async (req, res, next) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Node.js** is a C++ program that wraps the V8 engine, allowing JS to run on servers.
 - It popularized "Full-Stack JavaScript" (using JS for both frontend and backend).
 - It lacks Browser APIs (like `window`, `document`, and `alert`).

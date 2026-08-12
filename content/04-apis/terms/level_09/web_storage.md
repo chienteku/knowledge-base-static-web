@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Client-Side Storage**
+
+**Browser API / Client-Side Storage (Client-Side  .)**: localStorage & sessionStorage is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser Only)** (Does not exist in Node.js!).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before 2014, if you wanted to save a user's "Dark Mode" preference so it would survive a page refresh, you only had one tool: [Cookies](../level_09/cookies.md). But Cookies are messy, tiny, and sent to the server on every request.
@@ -57,7 +53,7 @@ localStorage.clear();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to save Arrays or Objects
 
@@ -117,61 +113,204 @@ function render() { useTheme(theme); requestAnimationFrame(render); }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Finding the Data
+### Exercise 1: Type-Safe LocalStorage & SessionStorage Manager
 
-**Problem:** You wrote `localStorage.setItem('highScore', '99')`. Where can you physically see this data without writing any `console.log` code?
+**Scenario:** A lightweight wrapper around `localStorage` / `sessionStorage` providing type-safe getters, setters, and TTL expiration support.
 
-**Expected output:**
+**Requirements:**
+1. Write createTypedStorage(storageBackend).
+2. Implement set(key, val, ttlMs).
+3. Implement get(key).
+4. Check TTL expiration.
+
 > [!check]- Answer
-> ```text
-> In Chrome DevTools!
-> Open DevTools (F12) -> Click the "Application" tab -> Look under the "Storage" sidebar. You will see a beautiful table displaying all the keys and values currently saved in localStorage for that specific website. You can even manually edit or delete them there!
+>
+> #### Implementation
+>
+> ```javascript
+> function createTypedStorage(storageBackend = globalThis.localStorage) {
+>   return {
+>     set(key, value, ttlMs) {
+>       const item = {
+>         value,
+>         expiry: ttlMs ? Date.now() + ttlMs : null
+>       };
+>       storageBackend.setItem(key, JSON.stringify(item));
+>     },
+>     get(key) {
+>       const raw = storageBackend.getItem(key);
+>       if (!raw) return null;
+>
+>       try {
+>         const item = JSON.parse(raw);
+>         if (item.expiry && Date.now() > item.expiry) {
+>           storageBackend.removeItem(key);
+>           return null; // Expired!
+>         }
+>         return item.value;
+>       } catch (e) {
+>         return null;
+>       }
+>     },
+>     remove(key) {
+>       storageBackend.removeItem(key);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const mockStore = new Map();
+> const mockBackend = {
+>   setItem: (k, v) => mockStore.set(k, v),
+>   getItem: (k) => mockStore.get(k) || null,
+>   removeItem: (k) => mockStore.delete(k)
+> };
+>
+> const storage = createTypedStorage(mockBackend);
+> storage.set("token", "secret123", 100);
+>
+> console.assert(storage.get("token") === "secret123", "Test 1 Failed");
 > ```
-> - Is there a specific tab in Chrome DevTools designed for this?
+>
+> #### Technical Explanation
+>
+> 1. **LocalStorage Scope**: Synchronous key-value storage per origin, persisting indefinitely until explicitly cleared.
+> 2. **SessionStorage Scope**: Synchronous key-value storage per origin tab; cleared when the browser tab closes.
+> 3. **TTL Expiration Pattern**: Attaching expiration timestamps allows implementing cache eviction in Web Storage.
 > 
 ---
 
-### Exercise 2: LocalStorage vs SessionStorage Lifespan Matrix
+### Exercise 2: Multi-Tab Synchronization via Storage Event Listener
 
-**Problem:** Compare `localStorage` vs `sessionStorage` across:
-1. Expiration lifespan
-2. Tab isolation scope
+**Scenario:** A frontend application listens to the `window.addEventListener('storage')` event to synchronize user authentication state across browser tabs.
 
-**Expected output:**
+**Requirements:**
+1. Write listenToStorageSync(onSyncCallback, mockWindow).
+2. Listen for 'storage' events.
+3. Trigger callback on key change.
+
 > [!check]- Answer
-> ```text
-> 1. localStorage persists permanently until cleared; sessionStorage expires when browser tab closes
-> 2. localStorage shared across all same-origin tabs; sessionStorage isolated to single tab
-> ```
-> ```text
-> 1. Lifespan -> LocalStorage: Permanent until explicitly deleted.
-> SessionStorage: Deleted when tab closes.
-> 2. Scope    -> LocalStorage: Shared across all same-origin tabs.
-> SessionStorage: Isolated per individual tab.
-> ```
-> - **Explanation:** `sessionStorage` restricts data scope to a single active browser tab.
----
-
-### Exercise 3: Storage Event Listener
-
-**Problem:** Which DOM event allows a browser tab to listen for changes made to `localStorage` in ANOTHER same-origin browser tab?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> window.addEventListener('storage', (event) => { console.log(event.key, event.newValue); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> window.addEventListener('storage', (event) => {
-> console.log(`Key ${event.key} changed to ${event.newValue}`);
-> });
+> function listenToStorageSync(onSyncCallback, mockWindow) {
+>   const win = mockWindow || globalThis;
+>
+>   const handleStorageEvent = (event) => {
+>     // Note: storage event does NOT fire on the tab that initiated the change!
+>     if (event.key) {
+>       let oldValue = event.oldValue;
+>       let newValue = event.newValue;
+>       try { oldValue = JSON.parse(oldValue); } catch (e) {}
+>       try { newValue = JSON.parse(newValue); } catch (e) {}
+>
+>       onSyncCallback({
+>         key: event.key,
+>         oldValue,
+>         newValue,
+>         url: event.url
+>       });
+>     }
+>   };
+>
+>   if (win.addEventListener) {
+>     win.addEventListener("storage", handleStorageEvent);
+>   }
+>
+>   return () => {
+>     if (win.removeEventListener) {
+>       win.removeEventListener("storage", handleStorageEvent);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const events = [];
+> const mockWin = {
+>   listeners: {},
+>   addEventListener(evt, fn) { this.listeners[evt] = fn; },
+>   removeEventListener(evt) { delete this.listeners[evt]; }
+> };
+>
+> listenToStorageSync((data) => events.push(data), mockWin);
+>
+> mockWin.listeners["storage"]({ key: "auth_token", oldValue: "old", newValue: "new", url: "http://app.com" });
+> console.assert(events.length === 1 && events[0].key === "auth_token", "Test 1 Failed");
 > ```
-> - **Explanation:** The `storage` event fires across same-origin tabs when `localStorage` updates.
+>
+> #### Technical Explanation
+>
+> 1. **Storage Event Mechanics**: Fires on OTHER same-origin tabs when localStorage is updated or cleared.
+> 2. **Multi-Tab Auth Sync**: Logs out all open tabs immediately when a user logs out in any single tab.
+> 3. **No Same-Tab Notification**: The storage event is intentionally NOT dispatched to the window that initiated the mutation.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: SessionStorage Form Draft Saver & Restorer
+
+**Scenario:** An un-saved form draft helper saves input text to `sessionStorage` on keystrokes and restores draft text on page refresh.
+
+**Requirements:**
+1. Write createFormDraftSaver(formId, mockStorage).
+2. Save draft on input.
+3. Restore draft on load.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createFormDraftSaver(formId, mockStorage = globalThis.sessionStorage) {
+>   const storageKey = `draft_${formId}`;
+>
+>   return {
+>     saveDraft(formDataObj) {
+>       mockStorage.setItem(storageKey, JSON.stringify(formDataObj));
+>     },
+>     restoreDraft() {
+>       const raw = mockStorage.getItem(storageKey);
+>       if (!raw) return null;
+>       try {
+>         return JSON.parse(raw);
+>       } catch (e) {
+>         return null;
+>       }
+>     },
+>     clearDraft() {
+>       mockStorage.removeItem(storageKey);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const mockStore = new Map();
+> const mockSession = {
+>   setItem: (k, v) => mockStore.set(k, v),
+>   getItem: (k) => mockStore.get(k) || null,
+>   removeItem: (k) => mockStore.delete(k)
+> };
+>
+> const saver = createFormDraftSaver("checkout", mockSession);
+> saver.saveDraft({ email: "user@test.com" });
+>
+> const draft = saver.restoreDraft();
+> console.assert(draft.email === "user@test.com", "Test 1 Failed");
+>
+> saver.clearDraft();
+> console.assert(saver.restoreDraft() === null, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SessionStorage Lifecycle**: Ideal for temporary session data (form drafts, multi-step wizards) that should not outlive tab close.
+> 2. **Preventing Data Loss**: Saves draft inputs on keystrokes so accidental page refreshes do not erase user input.
+> 3. **Form Cleanup**: Clearing draft storage after successful form submission prevents restoring stale drafts.
+---
+
+## 6. Related Terms
 - [Cookies](cookies.md) — The older, server-facing alternative to localStorage.
 - [IndexedDB](indexeddb.md) — A massive, complex alternative for storing Gigabytes of data, instead of localStorage's tiny 5MB limit.
 - [Statelessness](../level_03/statelessness.md) — Related concept: Statelessness.
@@ -183,7 +322,7 @@ function render() { useTheme(theme); requestAnimationFrame(render); }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`localStorage`** saves strings permanently in the browser.
 - **`sessionStorage`** saves strings temporarily (deleted when the tab closes).
 - Neither are sent to the server automatically.

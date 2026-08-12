@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Universal: Governs the authentication architecture design of modern web applications.)**: Session vs Token Authentication is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Governs the authentication architecture design of modern web applications.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTTP is a stateless protocol; every request is treated as a completely new connection. However, web applications must remember who you are after you log in. There are two primary architectural designs for managing logged-in user state across requests: **Stateful Session Authentication** and **Stateless Token Authentication**.
@@ -78,7 +74,7 @@ Client                                           Server
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing sensitive user data inside a stateless JWT
 
@@ -126,69 +122,138 @@ if (await redis.sismember('blacklisted_tokens', jti)) return res.status(401).sen
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Architectural Analyst
+### Exercise 1: Stateful Session vs Stateless Token Authenticator
 
-**Problem:** Determine whether the application scenario is best suited for **Session-Based** or **Token-Based** authentication:
+**Scenario:** An API architecture benchmark evaluates stateful session lookup vs stateless JWT token validation.
 
-1. A high-security banking API where administrators must have the ability to instantly lock accounts and terminate active user sessions.
-2. A microservices-based video platform where dozens of independent background servers must authorize user playback requests without hitting a main database.
-3. A simple static website where users log in to read a blog dashboard.
+**Requirements:**
+1. Write authenticateStatefulSession(sessionId, sessionStore).
+2. Write authenticateStatelessToken(jwtToken, secret).
 
 > [!check]- Answer
-> - 1. **Session-Based** (Stateless tokens cannot be revoked instantly without adding database checks).
-> - 2. **Token-Based** (Saves massive database query overhead across independent service nodes).
-> - 3. **Session-Based** (Simple, cookie-based, standard security).
+>
+> #### Implementation
+>
+> ```javascript
+> function authenticateStatefulSession(sessionId, sessionStore) {
+>   if (!sessionId || !sessionStore.has(sessionId)) {
+>     return { authenticated: false, type: "SESSION" };
+>   }
+>   return { authenticated: true, type: "SESSION", user: sessionStore.get(sessionId) };
+> }
+>
+> function authenticateStatelessToken(jwtPayload) {
+>   if (!jwtPayload || !jwtPayload.sub) {
+>     return { authenticated: false, type: "TOKEN" };
+>   }
+>   return { authenticated: true, type: "TOKEN", userId: jwtPayload.sub };
+> }
+>
+> // Verification tests
+> const store = new Map([["sess_123", { userId: "usr-1" }]]);
+> console.assert(authenticateStatefulSession("sess_123", store).authenticated === true, "Test 1 Failed");
+> console.assert(authenticateStatelessToken({ sub: "usr-1" }).authenticated === true, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Stateful Session Auth**: Server stores session state in DB/Redis; client holds session ID cookie.
+> 2. **Stateless Token Auth**: Server stores no state; client holds signed token (JWT) containing user claims.
+> 3. **Revocation Comparison**: Sessions allow instant server-side revocation; JWT tokens require revocation blacklists until expiration.
 > 
+---
+
+### Exercise 2: Session Invalidation Manager
+
+**Scenario:** A backend session store implements instant session revocation across single or all user devices.
+
+**Requirements:**
+1. Write revokeUserSessions(userId, sessionStore).
+2. Delete all sessions associated with userId.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function revokeUserSessions(userId, sessionStore = new Map()) {
+>   let count = 0;
+>   for (const [sessId, session] of sessionStore.entries()) {
+>     if (session.userId === userId) {
+>       sessionStore.delete(sessId);
+>       count++;
+>     }
+>   }
+>   return { revokedCount: count };
+> }
+>
+> // Verification tests
+> const store = new Map([
+>   ["s1", { userId: "u1" }],
+>   ["s2", { userId: "u1" }],
+>   ["s3", { userId: "u2" }]
+> ]);
+>
+> const res = revokeUserSessions("u1", store);
+> console.assert(res.revokedCount === 2, "Test 1 Failed");
+> console.assert(store.has("s3") === true, "Test 2 Failed: Other user sessions preserved");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Instant Revocation Advantage**: Stateful session stores allow instant revocation of compromised user sessions.
+> 2. **Logout Functionality**: Deleting session record server-side immediately invalidates future client requests.
+> 3. **Centralized Session Store**: Redis or Memcached centralize session storage across microservices.
 > 
 ---
 
-### Exercise 2: Session vs Token Architectural Trade-Off Matrix
+### Exercise 3: Memory & Scalability Trade-off Evaluator
 
-**Problem:** Compare Stateful Sessions vs Stateless Tokens across:
-1. Server Memory Overhead
-2. Instant Revocation Support
-3. Cross-Domain Mobile API Support
+**Scenario:** An API architect tool computes memory footprint overhead for 1 Million active sessions vs 1 Million JWT tokens.
 
-**Expected output:**
+**Requirements:**
+1. Write estimateAuthOverhead(activeUserCount, sessionByteSize).
+2. Calculate server RAM required for session store.
+
 > [!check]- Answer
-> ```text
-> 1. Sessions require DB/RAM storage; Tokens require zero server memory
-> 2. Sessions support instant revocation; Tokens require expiration or blacklist
-> 3. Tokens easily support mobile/cross-domain APIs; Sessions require cookie domain alignment
+>
+> #### Implementation
+>
+> ```javascript
+> function estimateAuthOverhead(activeUserCount, sessionByteSize = 1024) {
+>   const totalSessionBytes = activeUserCount * sessionByteSize;
+>   const totalSessionMb = totalSessionBytes / (1024 * 1024);
+>
+>   return {
+>     activeUsers: activeUserCount,
+>     serverRamRequiredMb: Number(totalSessionMb.toFixed(2)),
+>     jwtServerRamRequiredMb: 0
+>   };
+> }
+>
+> // Verification tests
+> const res = estimateAuthOverhead(1_000_000);
+> console.assert(res.serverRamRequiredMb > 950, "Test 1 Failed: ~976 MB RAM required for sessions");
+> console.assert(res.jwtServerRamRequiredMb === 0, "Test 2 Failed: JWT server RAM is 0");
 > ```
-> ```text
-> 1. Server Memory -> Sessions: High (DB/Redis), Tokens: Zero (Stateless)
-> 2. Revocation      -> Sessions: Instant (Delete row), Tokens: Difficult (Wait for exp)
-> 3. API Flexibility  -> Sessions: Cookie bound, Tokens: Authorization header friendly
-> ```
-> - **Explanation:** Sessions trade scalability for revocation control; Tokens trade revocation for stateless scaling.
+>
+> #### Technical Explanation
+>
+> 1. **Scalability Trade-off**: Stateful sessions require server RAM (e.g. 1GB for 1M users); JWT requires 0 server RAM.
+> 2. **Bandwidth Trade-off**: JWT tokens are larger (sent in every request header); Session cookies are small (32 bytes).
+> 3. **Architecture Selection**: Use sessions for traditional web monoliths; use tokens for distributed microservices and mobile APIs.
 ---
 
-### Exercise 3: Cookie-Based Session Security
-
-**Problem:** Which 3 cookie security flags should be applied to session cookies in production?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HttpOnly, Secure, SameSite=Strict (or Lax)
-> ```
-> ```http
-> Set-Cookie: sid=abc123; HttpOnly; Secure; SameSite=Strict
-> ```
-> - **Explanation:** These 3 flags mitigate XSS token theft and CSRF attacks.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — The standard format for stateless tokens.
 - [Cookies](../level_09/cookies.md) — The browser storage mechanism typically used to store session IDs.
 - [Load Balancing](../level_10/load_balancing.md) — Related concept: Load Balancing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Session authentication is stateful; the server stores sessions and references them via a random cookie ID.
 - Token authentication is stateless; the server signs user data into a token stored on the client.
 - Sessions are easy to revoke immediately but hard to scale horizontally.

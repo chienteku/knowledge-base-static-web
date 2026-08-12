@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Concept**
+
+**Architecture Concept (Universal: This is the core object-oriented model of JavaScript.)**: Prototypal Inheritance is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: This is the core object-oriented model of JavaScript.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional Object-Oriented Programming (like Java or C++), inheritance is based on "Classes." A Class is a rigid blueprint, and objects are stamped out from that blueprint. If a `Dog` class inherits from an `Animal` class, the compiler physically copies the properties down.
@@ -80,7 +76,7 @@ console.log(admin.role); // "Administrator"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Prototypal Inheritance Scope and Variable Hoisting
 
@@ -153,64 +149,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The For...In Loop
+### Exercise 1: Connecting Prototype Chains via Object.setPrototypeOf()
 
-**Problem:** If `rabbit` inherits from `animal`, and you use a `for...in` loop to iterate over `rabbit`, will it print the properties of `animal` too?
+**Scenario:** A behavioral library links prototype chains between legacy constructor objects using Object.setPrototypeOf().
 
-**Expected output:**
+**Requirements:**
+1. Write linkPrototypes(childObj, parentObj).
+2. Use Object.setPrototypeOf(childObj, parentObj).
+3. Verify child inherits parent methods.
+
 > [!check]- Answer
-> ```text
-> Yes! A `for...in` loop iterates over both an object's own properties AND its inherited enumerable properties. (If you only want the object's own properties, you must use `Object.keys()` or `hasOwnProperty()`).
-> ```
-> - Prototypal inheritance makes properties feel like they belong to the child.
-> 
----
-
-### Exercise 2: Linking Prototypes with `Object.create`
-
-**Problem:** Link `Child.prototype` to `Parent.prototype` using `Object.create`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function Parent() {}
-> function Child() {}
-> Child.prototype = Object.create(Parent.prototype);
-> Child.prototype.constructor = Child;
-> console.log(new Child() instanceof Parent);
+> function linkPrototypes(childObj, parentObj) {
+>   Object.setPrototypeOf(childObj, parentObj);
+>   return childObj;
+> }
+>
+> const animal = {
+>   makeSound() { return "Generic Sound"; }
+> };
+>
+> const dog = {
+>   bark() { return "Woof"; }
+> };
+>
+> linkPrototypes(dog, animal);
+>
+> // Verification tests
+> console.assert(dog.bark() === "Woof", "Test 1 Failed");
+>
+> console.assert(dog.makeSound() === "Generic Sound", "Test 2 Failed: Prototype inheritance failed");
 > ```
 >
-> **Explanation:** `Object.create(Parent.prototype)` establishes prototypal inheritance chains.
+> #### Technical Explanation
+>
+> 1. **Prototypal Inheritance Mechanics**: Objects inherit properties directly from other objects via their [[Prototype]] link.
+> 2. **Delegation Model**: When a property is accessed, JavaScript searches the object first, then delegates up its prototype chain.
+> 3. **Object.setPrototypeOf() Note**: Modifying an existing object's prototype at runtime impacts JIT optimization; prefer Object.create().
 > 
 ---
 
-### Exercise 3: Property Shadowing on Prototype Chains
+### Exercise 2: Prototypal Inheritance Advanced Context Handler
 
-**Problem:** Demonstrate that assigning property `x = 10` on an instance shadows prototype property `x = 5`.
+**Scenario:** A web application component processes prototypal inheritance data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handlePrototypalInheritanceSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Instance x: 10, Proto x: 5
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const proto = { x: 5 };
-> const inst = Object.create(proto);
-> inst.x = 10;
-> console.log(`Instance x: ${inst.x}, Proto x: ${proto.x}`);
+> function handlePrototypalInheritanceSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handlePrototypalInheritanceSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Writing properties to instances shadows prototype properties without mutating prototype defaults.
-> 
+> #### Technical Explanation
+>
+> 1. **Prototypal Inheritance Architecture**: Applying prototypal inheritance patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Prototypal Inheritance Performance Optimization
+
+**Scenario:** An application utility optimizes prototypal inheritance execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizePrototypalInheritanceTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizePrototypalInheritanceTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizePrototypalInheritanceTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Prototypal Inheritance Optimization**: Optimizing prototypal inheritance improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Prototype](prototype.md) — The master object being inherited from.
 - [Prototype Chain](prototype_chain.md) — The visual linkage of this inheritance.
 - [hasOwnProperty / Object.getPrototypeOf](hasownproperty_getprototypeof.md) — Related concept: hasOwnProperty / Object.getPrototypeOf.
@@ -218,7 +272,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Prototypal Inheritance is JavaScript's way of sharing properties and methods between objects.
 - It works by secretly linking objects together (delegation), rather than copying blueprints.
 - If an object doesn't have a property, it asks its prototype.

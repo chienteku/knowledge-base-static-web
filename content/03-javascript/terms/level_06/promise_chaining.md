@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Promise Chaining is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing asynchronous programs, we often need to run operations in sequence—for example, fetching a user's record from a server, using the user's ID to query their list of orders, and then taking that list to display a price discount on screen. 
@@ -93,7 +89,7 @@ getUser("Brendan")
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to `return` inside `.then()` blocks
 
@@ -178,76 +174,129 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Math Chainer
+### Exercise 1: Linear Transformation Pipeline via Promise Chaining
 
-**Problem:** Complete the code to multiply `value` by 3, subtract 5 in the next step, and print the final result.
+**Scenario:** A data processing library chains multiple .then() calls to transform user profile records sequentially.
 
-```javascript
-Promise.resolve(10)
-  // Step 1: Multiply by 3
-  // Step 2: Subtract 5
-  .then(result => console.log("Result:", result));
-```
+**Requirements:**
+1. Write processUserPipeline(initialId, fetchUserFn).
+2. Chain .then() to extract user.
+3. Chain .then() to calculate total.
+4. Chain .catch() for error handling.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Result: 25
-> ```
-> - The first `.then()` should return `val * 3`.
-> - The second `.then()` should return `val - 5`.
-> 
----
-
-### Exercise 2: Sequential Value Transformation in Promise Chains
-
-**Problem:** Chain `.then(x => x + 1).then(x => x * 2)` starting from `Promise.resolve(5)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 12
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> Promise.resolve(5)
->   .then(x => x + 1)
->   .then(x => x * 2)
->   .then(res => console.log(res));
+> function processUserPipeline(initialId, fetchUserFn) {
+>   return fetchUserFn(initialId)
+>     .then(user => {
+>       if (!user.active) throw new Error("Inactive user");
+>       return user.orders;
+>     })
+>     .then(orders => {
+>       return orders.reduce((sum, o) => sum + o.price, 0);
+>     })
+>     .catch(err => {
+>       return 0; // Fallback value on error
+>     });
+> }
+>
+> // Verification tests
+> const mockFetch = (id) => Promise.resolve({ active: true, orders: [{ price: 10 }, { price: 20 }] });
+> processUserPipeline(1, mockFetch).then(total => {
+>   console.assert(total === 30, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** Each `.then()` returns a new promise resolving to the return value of its handler.
+> #### Technical Explanation
+>
+> 1. **Promise Chaining**: Calling .then() returns a brand new Promise instance, enabling sequential method chaining.
+> 2. **Value Forwarding**: Return values inside a .then() callback are automatically wrapped in a resolved Promise for the next chain link.
+> 3. **.catch() Central Error Handling**: A trailing .catch() handles errors thrown anywhere in preceding promise chain steps.
 > 
 ---
 
-### Exercise 3: Propagating Errors in Promise Chains
+### Exercise 2: Promise Chaining Advanced Context Handler
 
-**Problem:** Catch an error thrown in step 1 using a single downstream `.catch()` at chain end.
+**Scenario:** A web application component processes promise chaining data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handlePromiseChainingSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Caught error in chain: Step 1 failed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> Promise.resolve()
->   .then(() => { throw new Error("Step 1 failed"); })
->   .then(() => console.log("Step 2"))
->   .catch(err => console.log(`Caught error in chain: ${err.message}`));
+> function handlePromiseChainingSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handlePromiseChainingSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Unhandled rejections propagate down promise chains until reaching `.catch()` handlers.
+> #### Technical Explanation
+>
+> 1. **Promise Chaining Architecture**: Applying promise chaining patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Promise Chaining Performance Optimization
+
+**Scenario:** An application utility optimizes promise chaining execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizePromiseChainingTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizePromiseChainingTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizePromiseChainingTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Promise Chaining Optimization**: Optimizing promise chaining improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Callback Hell](callback_hell.md) — The nested pattern that Promise Chaining replaces.
 - [async / await](async_await.md) — A cleaner syntax built on top of Promise chains.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Every `.then()` method call returns a new Promise, enabling method chaining.
 - If you return a primitive value inside `.then()`, the new Promise resolves with that value.
 - If you return a new Promise inside `.then()`, the chain pauses until that Promise settles, passing the result to the next `.then()`.

@@ -9,7 +9,7 @@
 
 
 - [Lifetime (`'a`)](lifetime.md) — The fundamental concept being automatically inferred.
-- [`fn` (Functions)](../level_01/fn.md) — The declarations where elision rules apply.
+- [fn](../level_01/fn.md) — The declarations where elision rules apply.
 - [Method](../level_02/method.md) — Methods with `&self` or `&mut self` have dedicated elision rules.
 
 ---

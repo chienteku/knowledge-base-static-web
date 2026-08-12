@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Ecosystem / Tooling**
+
+**Ecosystem / Tooling (Universal: Applicable to server environments, edge runtimes, and local scripts.)**: Alternative Runtimes (Deno / Bun) is a fundamental concept in this technology stack. **Level 10 — Ecosystem & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applicable to server environments, edge runtimes, and local scripts.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For over a decade, Node.js was the only runtime environment for executing JavaScript on servers. However, because Node.js was created in 2009, it has structural legacy constraints. It was designed before Promises, TypeScript, ES Modules, or standard browser Web APIs (like `fetch`) existed. 
@@ -80,7 +76,7 @@ $ deno run --allow-net app.ts
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Alternative Runtimes Scope and Variable Hoisting
 
@@ -153,72 +149,145 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Runtime Feature Matrix
+### Exercise 1: Cross-Runtime Environment Classifier (Node vs Deno vs Bun)
 
-**Problem:** Match the feature to the correct runtime environment (Node.js, Deno, Bun). Some features match multiple runtimes.
+**Scenario:** A cross-platform library detects the active JavaScript runtime environment (Node.js, Deno, or Bun) using runtime-specific global identifiers.
 
-1. Swaps the V8 engine for the JavaScriptCore (JSC) engine.
-2. Sandboxed security model requiring `--allow-write` flags to edit local files.
-3. Native TypeScript compilation out-of-the-box without config files.
-4. Uses `node_modules` and `package.json` by default.
+**Requirements:**
+1. Write detectRuntime().
+2. Inspect globalThis.process, globalThis.Deno, and globalThis.Bun.
+3. Return runtime name string ("NODE", "DENO", "BUN", or "UNKNOWN").
 
 > [!check]- Answer
-> - Deno focuses heavily on sandboxed security.
-> - Bun swaps Chrome's engine for Safari's.
-> 
-> [!check]- Answer
-> - 1. **Bun**
-> - 2. **Deno**
-> - 3. **Deno & Bun**
-> - 4. **Node.js & Bun**
-> 
-> 
----
-
-### Exercise 2: Runtimes Overview (Node vs Deno vs Bun)
-
-**Problem:** State primary features of Deno (built-in TypeScript, security sandboxing) and Bun (high performance Zig engine, native bundler).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Deno: Security & TS native, Bun: Ultra fast & bundler
-> ```
-> ```javascript
-> console.log("Deno: Security & TS native, Bun: Ultra fast & bundler");
+>
+> #### Implementation
+>
+> > ```javascript
+> function detectRuntime() {
+>   if (typeof globalThis.Deno !== "undefined") {
+>     return "DENO";
+>   }
+>   if (typeof globalThis.Bun !== "undefined") {
+>     return "BUN";
+>   }
+>   if (typeof globalThis.process !== "undefined" && globalThis.process.versions && globalThis.process.versions.node) {
+>     return "NODE";
+>   }
+>   return "UNKNOWN";
+> }
+>
+> // Verification tests
+> const currentRuntime = detectRuntime();
+> console.assert(["NODE", "DENO", "BUN", "UNKNOWN"].includes(currentRuntime), "Test 1 Failed");
 > ```
 >
-> **Explanation:** Deno emphasizes security sandboxing; Bun optimizes performance with Zig/JavaScriptCore.
-> 
+> #### Technical Explanation
+>
+> 1. **Runtime Global Inspection**: Deno defines globalThis.Deno, Bun defines globalThis.Bun, and Node defines process.versions.node.
+> 2. **Cross-Runtime Standardization**: Modern runtimes adopt web standard APIs (Fetch, Streams, Crypto) for cross-compatibility.
+> 3. **Engine Architecture Differences**: Node and Deno run on V8; Bun runs on JavaScriptCore (JSC) for faster startup times.
+
 ---
 
-### Exercise 3: Standardized Web API Support in Modern Runtimes
+### Exercise 2: Unified Web Standard Fetch Client across Runtimes
 
-**Problem:** Verify that `fetch`, `WebSocket`, and `WebStreams` exist natively across Deno, Bun, and Node.js 18+.
+**Scenario:** An API SDK uses native Web Standard Fetch (`fetch()`) supported uniformly across Node 18+, Deno, and Bun runtimes.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchApiData(url, mockFetchFn).
+2. Execute fetch request.
+3. Parse JSON payload.
+4. Return result data.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
-> ```javascript
-> console.log(typeof globalThis.fetch === "function");
+>
+> #### Implementation
+>
+> > ```javascript
+> async function fetchApiData(url, fetchFn = globalThis.fetch) {
+>   if (typeof fetchFn !== "function") {
+>     throw new Error("Native fetch is not supported in this runtime environment.");
+>   }
+>   const response = await fetchFn(url);
+>   if (!response.ok) {
+>     throw new Error(`HTTP Error: ${response.status}`);
+>   }
+>   return await response.json();
+> }
+>
+> // Verification tests
+> const mockFetch = async (url) => ({
+>   ok: true,
+>   status: 200,
+>   json: async () => ({ status: "OK", url })
+> });
+>
+> fetchApiData("https://api.example.com/status", mockFetch).then(data => {
+>   console.assert(data.status === "OK", "Test 1 Failed");
+>   console.assert(data.url === "https://api.example.com/status", "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** Modern JavaScript runtimes standardize Web API implementations across browser and server contexts.
-> 
-> 
+> #### Technical Explanation
+>
+> 1. **Web Standards Convergence**: Modern alternative runtimes standardize on Web APIs (Fetch, Request, Response, Headers).
+> 2. **Elimination of Polyfills**: Node 18+, Deno, and Bun eliminate third-party fetch libraries in favor of built-ins.
+> 3. **Asynchronous Stream Parsing**: response.json() returns a promise parsing the streaming HTTP response body asynchronously.
+
 ---
 
-## 7. Related Terms
+### Exercise 3: High-Performance Runtime File System Abstraction
+
+**Scenario:** A CLI tool provides an abstracted file reading utility that routes file read operations to the fastest runtime-specific file system API available.
+
+**Requirements:**
+1. Write readFileAbstract(filePath, fsMock).
+2. Check for Bun.file(), Deno.readTextFile(), or fs.promises.readFile().
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> > ```javascript
+> async function readFileAbstract(filePath, fsMock) {
+>   if (fsMock && typeof fsMock.bunFile === "function") {
+>     return await fsMock.bunFile(filePath).text();
+>   }
+>   if (fsMock && typeof fsMock.denoReadTextFile === "function") {
+>     return await fsMock.denoReadTextFile(filePath);
+>   }
+>   if (fsMock && typeof fsMock.nodeReadFile === "function") {
+>     return await fsMock.nodeReadFile(filePath, "utf-8");
+>   }
+>   throw new Error("No compatible file system API found");
+> }
+>
+> // Verification tests
+> const mockFS = {
+>   nodeReadFile: async (path, enc) => `content of ${path}`
+> };
+>
+> readFileAbstract("/etc/config.json", mockFS).then(content => {
+>   console.assert(content === "content of /etc/config.json", "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Runtime File System APIs**: Bun uses Bun.file(path).text(), Deno uses Deno.readTextFile(path), Node uses fs.promises.readFile().
+> 2. **Performance Trade-offs**: Bun's file I/O leverages zero-copy system calls for higher throughput than legacy Node callbacks.
+> 3. **Abstract Adapter Pattern**: Wraps runtime-specific APIs inside a single unified asynchronous interface.
+---
+
+## 6. Related Terms
 - [TypeScript](typescript.md) — The typed language natively executed by Deno and Bun.
 - [globalThis](../level_08/globalthis.md) — The universal global scope wrapper shared across all three runtimes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Deno and Bun are modern JavaScript/TypeScript runtimes designed to address Node.js's legacy limitations.
 - Deno focuses on secure-by-default execution, native TypeScript support, and web standards.
 - Bun focuses on extreme execution speed, package installation performance, and an all-in-one toolbelt.

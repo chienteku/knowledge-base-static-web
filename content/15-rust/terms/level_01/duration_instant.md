@@ -258,7 +258,7 @@ let d = Duration::from_millis(5); // Clean explicit constructor!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — Thread sleep and timing operations.
 

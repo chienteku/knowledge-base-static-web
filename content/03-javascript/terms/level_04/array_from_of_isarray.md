@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Array.from / Array.of / Array.isArray is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, constructing, converting, and identifying arrays has historical quirks. The TC39 committee introduced three static utility methods on the global `Array` constructor to fix these pain points:
@@ -82,7 +78,7 @@ console.log("Sum with object:", sumScores({ score1: 85 })); // Error logs, retur
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `typeof` to Check for Arrays
 
@@ -161,74 +157,121 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Set Converter
+### Exercise 1: Array-Like NodeList / Arguments Conversion & Mapping
 
-**Problem:** Complete the code to convert a list of unique names (a Set) into a sorted array using `Array.from`.
+**Scenario:** A frontend UI library receives array-like collections (such as DOM NodeLists or function arguments) and converts them into true Array instances using Array.from() with a mapping function.
 
-```javascript
-const uniqueNames = new Set(["David", "Alice", "Bob"]);
+**Requirements:**
+1. Write normalizeArrayLike(arrayLike, mapFn).
+2. Use Array.from(arrayLike, mapFn) to convert and transform.
+3. Return true Array instance.
 
-const sortedNames = // Write conversion and sort here
-
-console.log(sortedNames);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> [ 'Alice', 'Bob', 'David' ]
-> ```
-> - Pass `uniqueNames` into `Array.from()`.
-> - Call `.sort()` on the resulting array to order the names alphabetically.
-> 
----
-
-### Exercise 2: Creating Number Ranges with `Array.from`
-
-**Problem:** Create an array `[1, 2, 3, 4, 5]` using `Array.from({ length: 5 }, (_, i) => i + 1)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 1, 2, 3, 4, 5 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const range = Array.from({ length: 5 }, (_, i) => i + 1);
-> console.log(range);
+> function normalizeArrayLike(arrayLike, mapFn) {
+>   if (!arrayLike || typeof arrayLike.length !== "number") {
+>     return [];
+>   }
+>   const result = Array.from(arrayLike, mapFn || (x => x));
+>   return result;
+> }
+>
+> // Verification tests
+> const arrayLikeObj = { 0: "10", 1: "20", length: 2 };
+> const nums = normalizeArrayLike(arrayLikeObj, val => Number(val) * 2);
+> console.assert(Array.isArray(nums) === true, "Test 1 Failed: Must return true Array");
+> console.assert(nums.join(",") === "20,40", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Array.from` accepts length objects and mapping callbacks to generate collections dynamically.
+> #### Technical Explanation
+>
+> 1. **Array.from() Mechanism**: Array.from(arrayLike, mapFn) converts array-like or iterable objects into true Array instances while applying a mapping function.
+> 2. **Map Function Parameter**: The second parameter of Array.from() acts as a built-in map transformation step without allocating intermediate arrays.
+> 3. **Array-Like Objects**: Array-like objects possess an integer .length property and indexed keys (0, 1, 2...).
 > 
 ---
 
-### Exercise 3: Converting NodeList to Array
+### Exercise 2: API Gateway Payload Array Type Guard
 
-**Problem:** Use `Array.from()` to convert an array-like object `{ 0: 'a', 1: 'b', length: 2 }` into a real array.
+**Scenario:** An API payload parser inspects incoming JSON structures, using Array.isArray() to distinguish true arrays from plain objects, numbers, or null values.
 
-**Expected output:**
+**Requirements:**
+1. Write parseArrayPayload(payload).
+2. Check if payload is a true array using Array.isArray().
+3. If true, return payload items count; else return 0.
+
 > [!check]- Answer
-> ```text
-> [ "a", "b" ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const arrayLike = { 0: "a", 1: "b", length: 2 };
-> const arr = Array.from(arrayLike);
-> console.log(JSON.stringify(arr));
+> function parseArrayPayload(payload) {
+>   if (!Array.isArray(payload)) {
+>     return 0;
+>   }
+>   return payload.length;
+> }
+>
+> // Verification tests
+> console.assert(parseArrayPayload([1, 2, 3]) === 3, "Test 1 Failed");
+> console.assert(parseArrayPayload({ 0: "a", length: 1 }) === 0, "Test 2 Failed: Array-like object must fail Array.isArray()");
+> console.assert(parseArrayPayload(null) === 0, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `Array.from` converts any array-like or iterable object into a true `Array` instance.
+> #### Technical Explanation
+>
+> 1. **Array.isArray() Guard**: Array.isArray(val) is the standard method for accurately identifying true Array instances across iframe/window contexts.
+> 2. **typeof Anomaly Prevention**: Because typeof [] evaluates to "object", typeof alone cannot differentiate arrays from objects or null.
+> 3. **Cross-Realm Reliability**: Array.isArray() works reliably across different window/realm iframe execution contexts.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Single-Element Array Construction with Array.of()
+
+**Scenario:** A factory component constructs array instances from variable arguments, using Array.of() to avoid the single-integer constructor trap of new Array(5).
+
+**Requirements:**
+1. Write createNumericList(...elements).
+2. Construct array using Array.of(...elements).
+3. Verify single numeric argument creates element, not sparse array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createNumericList(...elements) {
+>   const result = Array.of(...elements);
+>   return result;
+> }
+>
+> // Verification tests
+> const singleVal = createNumericList(5);
+> console.assert(singleVal.length === 1 && singleVal[0] === 5, "Test 1 Failed: Array.of(5) must create [5], not 5 sparse slots");
+>
+> const multiVal = createNumericList(10, 20);
+> console.assert(multiVal.length === 2 && multiVal[0] === 10, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Array.of() Purpose**: Array.of(...items) creates a new Array instance with a variable number of arguments, regardless of argument count or type.
+> 2. **Constructor Pitfall Avoidance**: Avoids the legacy new Array(number) pitfall where a single numeric argument creates a sparse array with empty slots.
+> 3. **Consistency across Arities**: Array.of(5) produces [5], whereas Array(5) produces 5 empty array slots.
+---
+
+## 6. Related Terms
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Shorthand to convert certain iterables: `[...mySet]`.
 - [Set](../level_08/set.md) — Unique value collection structure.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `Array.isArray(value)` to check if a value is an array (avoid `typeof` which returns `"object"`).
 - `Array.from(iterable)` converts array-like objects or iterables (like Strings, Sets, or NodeLists) into standard arrays.
 - `Array.from(iterable, mapFn)` accepts an optional map function to transform values during conversion.

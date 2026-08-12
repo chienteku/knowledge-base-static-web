@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Performance / Database Architecture**
+
+**Performance / Database Architecture (Node.js Server Infrastructure)**: Connection Pooling is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Node.js Server Infrastructure**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When your Node.js app needs to fetch a user from PostgreSQL, it has to do a "Handshake." It knocks on the database's door, provides a username and password, establishes a secure TCP socket, and creates a connection. 
@@ -55,7 +51,7 @@ const result = await pool.query('SELECT * FROM users');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Opening a new connection inside the route
 
@@ -121,7 +117,7 @@ try {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Sizing the Pool
 
@@ -172,13 +168,13 @@ try {
 >
 > **Explanation:** Direct pool queries handle connection lifecycle management automatically.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — ORMs manage the Connection Pool for you automatically.
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Connection Pool** is a cache of active database connections maintained by Node.js.
 - It eliminates the massive performance penalty of repeatedly authenticating with the database.
 - You grab a connection from the pool, run the query, and return the connection to the pool.

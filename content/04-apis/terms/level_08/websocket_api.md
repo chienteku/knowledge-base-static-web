@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API**
+
+**Browser API (Client-Side)**: The WebSocket API (Client-side) is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If the server supports [WebSockets](../level_08/websockets.md), the browser needs a way to actually connect to it. You cannot use `fetch()` because `fetch` is specifically built for the HTTP Request/Response lifecycle. 
@@ -58,7 +54,7 @@ socket.onmessage = (event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not handling disconnections
 
@@ -204,143 +200,144 @@ ws.onopen = () => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Why stringify?
+### Exercise 1: Native Browser WebSocket API Connection Wrapper
 
-**Problem:** Why did we have to run `JSON.stringify()` on `myMessage` before passing it into `socket.send()`?
+**Scenario:** Wraps native W3C `WebSocket` instance management with event handlers for `onopen`, `onmessage`, `onerror`, and `onclose`.
 
-**Expected output:**
+**Requirements:**
+1. Write initWebSocketClient(url, mockWs).
+2. Handle connection lifecycle.
+3. Expose sendJson method.
+
 > [!check]- Answer
-> ```text
-> Because WebSockets only transmit raw Text strings or raw Binary blobs! 
-> A WebSocket has no concept of a "JavaScript Object." If you try to run `socket.send({ text: "Hi" })`, the browser will forcefully convert it to `"[object Object]"` and the server won't be able to read it.
+>
+> #### Implementation
+>
+> ```javascript
+> function initWebSocketClient(url, mockWsInstance) {
+>   const ws = mockWsInstance || new WebSocket(url);
+>   let isConnected = false;
+>
+>   ws.onopen = () => { isConnected = true; };
+>   ws.onclose = () => { isConnected = false; };
+>
+>   return {
+>     sendJson(dataObj) {
+>       if (!isConnected) {
+>         throw new Error("WebSocket is not connected");
+>       }
+>       ws.send(JSON.stringify(dataObj));
+>     },
+>     isConnected: () => isConnected
+>   };
+> }
+>
+> // Verification tests
+> const mockWs = { send() {}, onopen: null, onclose: null };
+> const client = initWebSocketClient("wss://api.com", mockWs);
+>
+> mockWs.onopen(); // Simulate connection open
+> console.assert(client.isConnected() === true, "Test 1 Failed");
 > ```
-> - Think back to the rules of Serialization.
+>
+> #### Technical Explanation
+>
+> 1. **W3C WebSocket API**: Standard browser API for creating persistent TCP WebSocket connections.
+> 2. **wss:// Secure Scheme**: WebSocket connections over TLS/SSL use the `wss://` URI scheme.
+> 3. **Event-Driven Callbacks**: Relies on asynchronous event handlers (onopen, onmessage, onerror, onclose).
 > 
 ---
 
-### Exercise 2: WebSocket readyState Constants
+### Exercise 2: WebSocket Binary ArrayBuffer Transceiver
 
-**Problem:** Identify the 4 numeric integer values for `ws.readyState`:
-1. CONNECTING
-2. OPEN
-3. CLOSING
-4. CLOSED
+**Scenario:** Configures a WebSocket instance to send and receive binary data buffers using `binaryType = 'arraybuffer'`.
 
-**Expected output:**
+**Requirements:**
+1. Write configureBinaryWebSocket(wsInstance, onBinaryMessage).
+2. Set ws.binaryType = 'arraybuffer'.
+3. Parse ArrayBuffer messages.
+
 > [!check]- Answer
-> ```text
-> 0: CONNECTING
-> 1: OPEN
-> 2: CLOSING
-> 3: CLOSED
-> ```
-> ```text
-> 0 -> CONNECTING
-> 1 -> OPEN
-> 2 -> CLOSING
-> 3 -> CLOSED
-> ```
-> - **Explanation:** `ws.readyState` exposes numeric socket connection states.
----
-
-### Exercise 3: Sending Binary Data over WebSocket
-
-**Problem:** Which property on a browser `WebSocket` instance specifies whether binary messages are received as `Blob` or `ArrayBuffer`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ws.binaryType = 'arraybuffer'; (or 'blob')
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> ws.binaryType = 'arraybuffer';
+> function configureBinaryWebSocket(wsInstance, onBinaryMessage) {
+>   wsInstance.binaryType = "arraybuffer";
+>
+>   wsInstance.onmessage = (event) => {
+>     if (event.data instanceof ArrayBuffer) {
+>       onBinaryMessage(event.data);
+>     }
+>   };
+>
+>   return {
+>     sendBinary(arrayBuffer) {
+>       wsInstance.send(arrayBuffer);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const receivedBuffers = [];
+> const mockWs = { binaryType: "blob", send() {}, onmessage: null };
+>
+> const bWs = configureBinaryWebSocket(mockWs, (buf) => receivedBuffers.push(buf));
+> console.assert(mockWs.binaryType === "arraybuffer", "Test 1 Failed: Must set binaryType to arraybuffer");
+>
+> const testBuf = new ArrayBuffer(4);
+> mockWs.onmessage({ data: testBuf });
+> console.assert(receivedBuffers.length === 1, "Test 2 Failed");
 > ```
-> - **Explanation:** `ws.binaryType` configures binary message stream decoding.
+>
+> #### Technical Explanation
+>
+> 1. **binaryType Configuration**: Property on WebSocket instance; can be set to 'arraybuffer' or 'blob'.
+> 2. **Binary Transfer Efficiency**: Sending raw ArrayBuffers bypasses text encoding overhead, ideal for audio/video streaming.
+> 3. **High-Performance Web APIs**: Integrates directly with WebGL, Web Audio API, and WebAssembly binary modules.
+> 
 ---
 
-### Exercise 4: WebSocket readyState Constants
+### Exercise 3: WebSocket ReadyState Enum Inspector
 
-**Problem:** Identify the 4 numeric integer values for `ws.readyState`:
-1. CONNECTING
-2. OPEN
-3. CLOSING
-4. CLOSED
+**Scenario:** An API diagnostic utility inspects `ws.readyState` values (`CONNECTING=0`, `OPEN=1`, `CLOSING=2`, `CLOSED=3`).
 
-**Expected output:**
+**Requirements:**
+1. Write getWebSocketStateName(readyStateNum).
+2. Map 0 -> CONNECTING, 1 -> OPEN, 2 -> CLOSING, 3 -> CLOSED.
+
 > [!check]- Answer
-> ```text
-> 0: CONNECTING
-> 1: OPEN
-> 2: CLOSING
-> 3: CLOSED
-> ```
-> ```text
-> 0 -> CONNECTING
-> 1 -> OPEN
-> 2 -> CLOSING
-> 3 -> CLOSED
-> ```
-> - **Explanation:** `ws.readyState` exposes numeric socket connection states.
----
-
-### Exercise 5: Sending Binary Data over WebSocket
-
-**Problem:** Which property on a browser `WebSocket` instance specifies whether binary messages are received as `Blob` or `ArrayBuffer`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ws.binaryType = 'arraybuffer'; (or 'blob')
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> ws.binaryType = 'arraybuffer';
+> function getWebSocketStateName(readyStateNum) {
+>   const states = {
+>     0: "CONNECTING",
+>     1: "OPEN",
+>     2: "CLOSING",
+>     3: "CLOSED"
+>   };
+>
+>   return states[readyStateNum] || "UNKNOWN";
+> }
+>
+> // Verification tests
+> console.assert(getWebSocketStateName(0) === "CONNECTING", "Test 1 Failed");
+> console.assert(getWebSocketStateName(1) === "OPEN", "Test 2 Failed");
+> console.assert(getWebSocketStateName(3) === "CLOSED", "Test 3 Failed");
 > ```
-> - **Explanation:** `ws.binaryType` configures binary message stream decoding.
+>
+> #### Technical Explanation
+>
+> 1. **WebSocket.readyState Property**: Read-only integer property representing current state of connection.
+> 2. **State 1 (OPEN) Guard**: Messages can ONLY be sent via ws.send() when readyState === 1 (OPEN).
+> 3. **Defensive State Checking**: Check readyState before calling ws.send() to avoid InvalidStateError DOMExceptions.
 ---
 
-### Exercise 6: WebSocket readyState Constants
-
-**Problem:** Identify the 4 numeric integer values for `ws.readyState`:
-1. CONNECTING
-2. OPEN
-3. CLOSING
-4. CLOSED
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 0: CONNECTING
-> 1: OPEN
-> 2: CLOSING
-> 3: CLOSED
-> ```
-> ```text
-> 0 -> CONNECTING
-> 1 -> OPEN
-> 2 -> CLOSING
-> 3 -> CLOSED
-> ```
-> - **Explanation:** `ws.readyState` exposes numeric socket connection states.
----
-
-### Exercise 7: Sending Binary Data over WebSocket
-
-**Problem:** Which property on a browser `WebSocket` instance specifies whether binary messages are received as `Blob` or `ArrayBuffer`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ws.binaryType = 'arraybuffer'; (or 'blob')
-> ```
-> ```javascript
-> ws.binaryType = 'arraybuffer';
-> ```
-> - **Explanation:** `ws.binaryType` configures binary message stream decoding.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [The fetch() API](../level_05/fetch.md) — The HTTP alternative to `WebSocket`.
 - [Socket.io (Ecosystem tool)](socket_io.md) — A massive third-party library that wraps the native WebSocket API to make it easier to use.
 - [Heartbeat / Ping-Pong](heartbeat_ping_pong.md) — Related concept: Heartbeat / Ping-Pong.
@@ -349,7 +346,7 @@ ws.onopen = () => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`WebSocket`** object is built directly into all modern web browsers.
 - You connect to it using `ws://` or `wss://` URLs.
 - It is purely event-driven (`onopen`, `onmessage`, `onclose`).

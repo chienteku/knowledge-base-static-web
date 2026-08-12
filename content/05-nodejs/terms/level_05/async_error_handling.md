@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Async Pattern**
+
+**Async Pattern (Node.js / V8 Engine .)**: Async Error Handling (try/catch + .catch) is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Node.js / V8 Engine** (Governed by the Promise rejection handling behaviors in the runtime thread).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In synchronous code, catching errors is simple: you wrap the code in a `try/catch` block. If an error is thrown, the stack pauses, and control jumps directly to the `catch` block.
@@ -74,7 +70,7 @@ Imagine sending a shipping package.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Wrapping a callback-based async call in a `try/catch` block
 
@@ -155,7 +151,7 @@ try {
 } catch (err) {}
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bug Hunting
 
@@ -224,7 +220,7 @@ app.get('/user/:id', async (req, res, next) => {
 >
 > **Explanation:** Calling `next(err)` hands error handling over to Express error middleware.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The process crashes caused by missing catch blocks.
 - [Callbacks & Callback Hell](callbacks.md) — The error-first callback style of handling errors.
 - [async / await in Node](async_await.md) — Related concept: async / await in Node.
@@ -232,7 +228,7 @@ app.get('/user/:id', async (req, res, next) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Asynchronous errors execute on a separate call stack frame from their initiation code.
 - Synchronous `try/catch` wrappers cannot catch errors from asynchronous callback functions.
 - Use `try/catch` combined with `await` to safely handle errors in async functions.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Modern Standard .)**: `grid-template-columns` / `grid-template-rows` is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively by all modern browsers. Calculates layout tracks before positioning child cells).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Declaring `display: grid;` on a parent container turns on the CSS Grid layout engine, but it doesn't automatically arrange your cards. By default, you just get a single-column stack.
@@ -129,7 +125,7 @@ A standard 3-column card grid:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using commas to separate track sizes
 
@@ -262,7 +258,7 @@ A standard 3-column card grid:
 .grid { grid-template: 100px 1fr / 200px 1fr; } /* rows / columns */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Standard Dashboard Blueprint
 
@@ -322,7 +318,7 @@ A standard 3-column card grid:
 >
 > **Explanation:** `grid-template` shorthand combines `rows / columns`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent trigger.
 - [`fr` Unit (Fractional Unit)](fr_unit.md) — The flexible track sizing unit.
 - [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Positioning children on the grid lines.
@@ -333,7 +329,7 @@ A standard 3-column card grid:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `grid-template-columns` and `grid-template-rows` draw the grid's lines.
 - Each space-separated value defines the size of one track (column or row).
 - Track sizes can mix absolute units (`px`), relative units (`%`), `auto`, and `fr`.

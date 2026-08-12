@@ -228,7 +228,7 @@ Update an existing field definition `age` on table `user` to change its type to 
 
 ## 6. Related Terms
 
-- [ Clause](assert_clause.md) — Field assertion clause.
+- [Clause](assert_clause.md) — Field assertion clause.
 
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [`option<T>` (Optional Fields)](option_type.md) — Optional fields wrapper.

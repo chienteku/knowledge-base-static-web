@@ -9,7 +9,7 @@
 
 
 - [Trait](../level_04/trait.md) — Standard trait definitions and implementations.
-- [`Send` Trait](../level_09/send_trait.md)
+- [`Send` Trait](../level_09/send_trait.md) — 
 - [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Type-level markers that cost zero memory at runtime.
 - [`Sized` Trait](../level_11/sized_trait.md) — Built-in marker trait indicating known compile-time size.
 
@@ -572,7 +572,7 @@ Design a custom `unsafe` marker trait `Pod` (Plain Old Data) to enforce zero-cop
 ## 6. Related Terms
 
 
-- [`Send` Trait](../level_09/send_trait.md)
+- [`Send` Trait](../level_09/send_trait.md) — 
 - [`Sized` Trait](../level_11/sized_trait.md) — Compile-time size marker trait.
 - [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Types that occupy 0 bytes of memory.
 - [Sealed Trait Pattern](sealed_trait_pattern.md) — Design pattern using private supertraits to lock trait implementations.

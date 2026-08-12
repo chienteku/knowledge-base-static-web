@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser Security / API Configuration**
+
+**Browser Security / API Configuration (Browser-to-Server Communication)**: CORS is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Browser-to-Server Communication**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are logged into your bank at `bank.com`. Your browser stores a secret authentication cookie for the bank.
@@ -50,7 +46,7 @@ app.get('/data', (req, res) => res.json({ secret: 123 }));
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The Wildcard CORS (`*`)
 
@@ -163,7 +159,7 @@ app.use(cors({ origin: 'https://myapp.com', credentials: true })); // Explicit c
 app.use(cors()); // Use official cors middleware handling OPTIONS preflight automatically
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Who throws the error?
 
@@ -217,14 +213,14 @@ Your friend gets a CORS error. You do not. Why?
 >
 > **Explanation:** Non-simple content types or custom headers trigger browser `OPTIONS` preflight checks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Middleware](../level_07/middleware.md) — `cors()` is just a standard Express middleware.
 - [REST API Design](rest_api.md) — What the browser is trying to protect.
 - [Express.js](../level_07/express_js.md) — Express CORS setup.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **CORS** is a browser security mechanism that blocks scripts on one domain from calling an API on a different domain.
 - It exists to prevent malicious websites from making requests on your behalf.
 - To bypass it for legitimate frontends, your Node.js API must explicitly whitelist the frontend domain using the `cors` npm package.

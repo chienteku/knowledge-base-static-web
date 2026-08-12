@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Token Format**
+
+**Security / Token Format (Universal Standard .)**: JWT (JSON Web Tokens) is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Pronounced "Jot").
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a [Stateless](../level_03/statelessness.md) architecture, the server has amnesia. If User Bob logs in, the Server doesn't save a session in its memory. Instead, the Server needs to hand Bob a "Movie Ticket" that Bob can show to the Server on all future requests.
@@ -47,7 +43,7 @@ However, when Bob sends the forged token to the Server, the Server will recalcul
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting sensitive data in the Payload
 
@@ -99,67 +95,156 @@ jwt.verify(token, key, { algorithms: ['HS256'] });
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Stolen JWT
+### Exercise 1: JSON Web Token (JWT) Encoder & Base64URL Sanitizer
 
-**Problem:** A hacker steals a user's valid JWT from an unencrypted Wi-Fi network. Can the hacker use the JWT to access the user's account?
+**Scenario:** A lightweight JWT utility encodes JSON headers and payloads into base64url-encoded string pairs.
 
-**Expected output:**
+**Requirements:**
+1. Write encodeJwtParts(headerObj, payloadObj).
+2. Convert objects to base64url strings.
+3. Return `header.payload` string.
+
 > [!check]- Answer
-> ```text
-> Yes! 
-> A JWT is a "Bearer Token." Whoever bears (holds) the token gets access. The server has no way of knowing the hacker isn't the real user. This is exactly why APIs MUST use HTTPS to encrypt the network so hackers can't steal the token in transit!
+>
+> #### Implementation
+>
+> ```javascript
+> function base64UrlEncode(obj) {
+>   const jsonStr = JSON.stringify(obj);
+>   const base64 = Buffer.from(jsonStr).toString("base64");
+>   return base64
+>     .replace(/=/g, "")
+>     .replace(/\+/g, "-")
+>     .replace(/\//g, "_");
+> }
+>
+> function encodeJwtParts(headerObj, payloadObj) {
+>   const encHeader = base64UrlEncode(headerObj || { alg: "HS256", typ: "JWT" });
+>   const encPayload = base64UrlEncode(payloadObj || {});
+>   return `${encHeader}.${encPayload}`;
+> }
+>
+> // Verification tests
+> const header = { alg: "HS256", typ: "JWT" };
+> const payload = { sub: "usr-42", name: "Alice" };
+>
+> const jwtStr = encodeJwtParts(header, payload);
+> console.assert(jwtStr.split(".").length === 2, "Test 1 Failed");
+> console.assert(!jwtStr.includes("+") && !jwtStr.includes("/"), "Test 2 Failed: Base64URL must sanitize + and /");
 > ```
-> - Does the server check IP addresses, or just the math of the signature?
+>
+> #### Technical Explanation
+>
+> 1. **JWT Structure**: JSON Web Tokens consist of 3 dot-separated parts: Header.Payload.Signature.
+> 2. **Base64URL Encoding**: Variant of Base64 that replaces + with -, / with _, and omits = padding for URL safety.
+> 3. **Payload Visibility**: JWT payloads are encoded, NOT encrypted; anyone can decode and read claims without secret key.
 > 
 ---
 
-### Exercise 2: JWT 3-Part Structural Component Deconstruction
+### Exercise 2: JWT Signature Verification & Expiry Inspector
 
-**Problem:** Identify the 3 dot-separated components of a JSON Web Token (`header.payload.signature`).
+**Scenario:** A JWT parser verifies token expiration claims (`exp`) and signature match before granting API access.
 
-**Expected output:**
+**Requirements:**
+1. Write verifyJwtClaims(jwtToken, mockSecret, mockCrypto).
+2. Check exp claim.
+3. Verify signature match.
+
 > [!check]- Answer
-> ```text
-> 1. Header (Algorithm & Token Type)
-> 2. Payload (Claims & Expiration)
-> 3. Signature (HMAC or RSA signature verification string)
+>
+> #### Implementation
+>
+> ```javascript
+> function verifyJwtClaims(jwtToken, secret, mockCrypto) {
+>   if (!jwtToken || typeof jwtToken !== "string") {
+>     return { valid: false, error: "Malformed JWT" };
+>   }
+>
+>   const parts = jwtToken.split(".");
+>   if (parts.length !== 3) {
+>     return { valid: false, error: "JWT must have 3 parts" };
+>   }
+>
+>   const [encHeader, encPayload, signature] = parts;
+>
+>   const expectedSig = mockCrypto 
+>     ? mockCrypto.sign(`${encHeader}.${encPayload}`, secret)
+>     : `sig_${secret}`;
+>
+>   if (signature !== expectedSig) {
+>     return { valid: false, error: "Invalid JWT Signature" };
+>   }
+>
+>   const jsonStr = Buffer.from(encPayload.replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf-8");
+>   const payload = JSON.parse(jsonStr);
+>
+>   const nowSeconds = Math.floor(Date.now() / 1000);
+>   if (payload.exp && nowSeconds > payload.exp) {
+>     return { valid: false, error: "JWT Expired" };
+>   }
+>
+>   return { valid: true, payload };
+> }
+>
+> // Verification tests
+> const mockPayload = { sub: "u1", exp: Math.floor(Date.now() / 1000) + 3600 };
+> const encPayload = Buffer.from(JSON.stringify(mockPayload)).toString("base64").replace(/=/g, "");
+> const jwt = `header.${encPayload}.sig_mysecret`;
+>
+> const res = verifyJwtClaims(jwt, "mysecret");
+> console.assert(res.valid === true && res.payload.sub === "u1", "Test 1 Failed");
 > ```
-> ```text
-> Part 1 -> Header: {"alg": "HS256", "typ": "JWT"}
-> Part 2 -> Payload: {"sub": "123", "exp": 1700000000}
-> Part 3 -> Signature: HMACSHA256(base64Url(header) + "." + base64Url(payload), secret)
-> ```
-> - **Explanation:** JWT tokens consist of header, payload, and cryptographic signature.
+>
+> #### Technical Explanation
+>
+> 1. **Signature Verification**: Signature prevents tampering; modifying payload invalidates signature check.
+> 2. **exp Claim**: Expiration time in Unix epoch seconds dictates token validity window.
+> 3. **Algorithm Choice**: HMAC (HS256) uses shared symmetric key; RSA (RS256) uses public/private key pairs.
+> 
 ---
 
-### Exercise 3: Standard Reserved Claims
+### Exercise 3: JWT Permission Claim Extractor & RBAC Guard
 
-**Problem:** Match the JWT claim abbreviation to its name:
-1. `sub` 
-2. `exp` 
-3. `iat` 
-4. `iss` 
+**Scenario:** An API authorization guard inspects decoded JWT claims (`roles`, `permissions`) to control endpoint access.
 
-**Expected output:**
+**Requirements:**
+1. Write authorizeJwtRoles(jwtPayload, requiredRole).
+2. Check payload.roles array for requiredRole.
+
 > [!check]- Answer
-> ```text
-> 1. Subject (User ID)
-> 2. Expiration Time
-> 3. Issued At
-> 4. Issuer
+>
+> #### Implementation
+>
+> ```javascript
+> function authorizeJwtRoles(jwtPayload, requiredRole) {
+>   if (!jwtPayload || !Array.isArray(jwtPayload.roles)) {
+>     return { authorized: false, status: 403, error: "Missing roles in JWT" };
+>   }
+>
+>   if (!jwtPayload.roles.includes(requiredRole)) {
+>     return { authorized: false, status: 403, error: `Requires role: ${requiredRole}` };
+>   }
+>
+>   return { authorized: true, status: 200 };
+> }
+>
+> // Verification tests
+> const payload = { sub: "u1", roles: ["USER", "ADMIN"] };
+>
+> console.assert(authorizeJwtRoles(payload, "ADMIN").authorized === true, "Test 1 Failed");
+> console.assert(authorizeJwtRoles(payload, "SUPERADMIN").authorized === false, "Test 2 Failed");
 > ```
-> ```text
-> 1. sub -> Subject (User ID)
-> 2. exp -> Expiration Time
-> 3. iat -> Issued At timestamp
-> 4. iss -> Token Issuer
-> ```
-> - **Explanation:** Reserved claims provide standard token metadata assertions.
+>
+> #### Technical Explanation
+>
+> 1. **Stateless Authorization**: JWT contains user roles directly, eliminating database queries per request.
+> 2. **Role-Based Access Control (RBAC)**: Mapping claims (roles/permissions) to endpoint permissions.
+> 3. **Claim Standard Names**: RFC 7519 defines standard claims: sub (subject), iss (issuer), exp (expiry), iat (issued at).
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Basic & Bearer Authentication](basic_bearer_auth.md) — JWTs are sent in the `Authorization: Bearer <token>` header.
 - [localStorage & sessionStorage](../level_09/web_storage.md) — The common (though sometimes risky) place to store JWTs on the client.
 - [HTTP Headers](../level_02/http_headers.md) — Related concept: HTTP Headers.
@@ -173,7 +258,7 @@ jwt.verify(token, key, { algorithms: ['HS256'] });
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **JWT** is a string of characters containing a JSON payload and a cryptographic signature.
 - It allows Stateless servers to verify a user's identity without looking up a session in a database.
 - The payload is **readable by anyone**. Do not put secrets in it!

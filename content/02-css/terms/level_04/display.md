@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Flow Property**
+
+**Layout Flow Property (Universal Browser Support)**: `display: block` vs `inline` vs `inline-block` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In HTML, every element has a default `display` behavior. A `<div>` naturally takes up the whole screen horizontally, pushing everything else to a new line. But a `<span>` or an `<a>` link sits peacefully side-by-side with text. 
@@ -51,7 +47,7 @@ CSS needed a way for developers to override these default HTML behaviors. The **
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to set width/height on an inline element
 
@@ -173,7 +169,7 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 .col { width: 50%; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Side-by-Side Navigation
 
@@ -236,9 +232,9 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 >
 > **Explanation:** Multi-keyword `display` specifies outer layout flow and inner container context.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`display: none` vs `visibility: hidden`](display_none_vs_visibility.md) — Hiding elements.
-- [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.
+- [`display: flex` — Flexbox Container](../level_05/display_flex.md) — The modern Flexbox layout container.
 - [Margin](../level_02/margin.md) — Visual box margins.
 - [`text-align` & `text-decoration`](../level_03/text_align_decoration.md) — Related concept: `text-align` & `text-decoration`.
 - [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
@@ -247,7 +243,7 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `display` overrides the default layout flow of an HTML element.
 - **Block**: Stacks vertically, respects width/height.
 - **Inline**: Flows horizontally like text, completely ignores width/height.

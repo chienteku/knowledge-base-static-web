@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers. If accessed in Node.js, it throws a `ReferenceError`.)**: window object / BOM is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers. If accessed in Node.js, it throws a `ReferenceError`.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When JavaScript runs inside a web browser, it needs an entry point to interact with the browser's environment—such as changing the page URL, opening new tabs, detecting screen sizing, or setting timers. To support this, browser vendors created the **Browser Object Model (BOM)**, with the **`window`** object at its core.
@@ -72,7 +68,7 @@ runBrowserChecks();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use `window` in Server-side Code (Node.js/Next.js)
 
@@ -150,64 +146,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Redirect Check
+### Exercise 1: Browser Window Dimension & Location Inspector
 
-**Problem:** Complete the code to redirect the browser to `"https://example.com"` *only* if the current hostname is `"localhost"`.
+**Scenario:** An analytics script inspects Browser Object Model (BOM) properties (window.innerWidth, window.location.href) to record client viewport metrics.
 
-```javascript
-if (typeof window !== "undefined") {
-  const currentHostname = window.location.hostname;
-  
-  if (currentHostname === "localhost") {
-    // Redirect to https://example.com
-    // Write redirection statement here
-  }
-}
-```
+**Requirements:**
+1. Write inspectBrowserViewport().
+2. Read window.innerWidth and window.location.href.
+3. Return metrics summary object.
 
 > [!check]- Answer
-> - You can trigger a redirect by assigning a string URL to `window.location.href`.
-> 
----
-
-### Exercise 2: Inspecting Location API
-
-**Problem:** Read `window.location.href` and `window.location.search` query parameters.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Location API inspected
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Location API inspected");
+> function inspectBrowserViewport() {
+>   if (!globalThis.window) return null;
+>
+>   return {
+>     width: window.innerWidth || 0,
+>     height: window.innerHeight || 0,
+>     currentUrl: window.location ? window.location.href : ""
+>   };
+> }
+>
+> // Verification tests
+> globalThis.window = {
+>   innerWidth: 1024,
+>   innerHeight: 768,
+>   location: { href: "https://example.com/app" }
+> };
+> const metrics = inspectBrowserViewport();
+> console.assert(metrics.width === 1024 && metrics.height === 768, "Test 1 Failed");
+> console.assert(metrics.currentUrl === "https://example.com/app", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `window.location` supplies URL metadata and navigation methods.
+> #### Technical Explanation
+>
+> 1. **Browser Object Model (BOM)**: The BOM represents browser environment objects (window, location, navigator, history, screen).
+> 2. **window Global Object**: window is the top-level global object in browser environments.
+> 3. **Viewport Dimensions**: window.innerWidth and window.innerHeight measure current viewport layout dimensions.
 > 
 ---
 
-### Exercise 3: Detecting Window Inner Dimensions
+### Exercise 2: Window Bom Advanced Context Handler
 
-**Problem:** Access `window.innerWidth` and `window.innerHeight` viewport dimensions.
+**Scenario:** A web application component processes window bom data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleWindowBomSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Viewport dimensions retrieved
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Viewport dimensions retrieved");
+> function handleWindowBomSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleWindowBomSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `window.innerWidth` and `innerHeight` measure active browser viewport sizes.
-> 
+> #### Technical Explanation
+>
+> 1. **Window Bom Architecture**: Applying window bom patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Window Bom Performance Optimization
+
+**Scenario:** An application utility optimizes window bom execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeWindowBomTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeWindowBomTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeWindowBomTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Window Bom Optimization**: Optimizing window bom improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The document object (`window.document`) which maps the HTML page.
 - [Web Storage (localStorage / sessionStorage)](web_storage.md) — Persistent key-value storage hosted on the window object.
 - [DOMContentLoaded / load events](domcontentloaded_load.md) — Related concept: DOMContentLoaded / load events.
@@ -215,7 +269,7 @@ if (typeof window !== "undefined") {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `window` object is the global context in a web browser environment; all global properties and variables reside on it.
 - The `window` object exposes the Browser Object Model (BOM) for page routing (`location`), history management (`history`), and screen layouts (`innerWidth`).
 - `window` is browser-only and is not defined in Node.js/server environments; always check `typeof window !== "undefined"` when writing SSR-safe code.

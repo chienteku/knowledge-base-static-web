@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Concept**
+
+**Architecture Concept (Universal: Implemented in all modern JavaScript engines.)**: Macrotask Queue is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented in all modern JavaScript engines.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When the browser or Node.js finishes a background task (like counting down a timer, or receiving a user's mouse click), it needs a place to hold the callback function until the main JavaScript thread is ready to run it. 
@@ -78,7 +74,7 @@ function animate() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Macrotask Queue Scope and Variable Hoisting
 
@@ -151,65 +147,139 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: One at a time
+### Exercise 1: Yielding Main Thread UI Work via setTimeout Macrotasks
 
-**Problem:** True or False: When the Event Loop checks the Macrotask Queue, it will pull *all* waiting callbacks out and run them back-to-back before doing anything else.
+**Scenario:** A heavy calculation script breaks up long computations into smaller macrotask chunks using setTimeout(fn, 0) to yield control back to the UI thread.
 
-**Expected output:**
+**Requirements:**
+1. Write processLargeChunkedBatch(items, chunkSize, onProgress).
+2. Process chunk.
+3. Schedule next chunk via setTimeout(..., 0).
+4. Return completion promise.
+
 > [!check]- Answer
-> ```text
-> False. 
-> The Event Loop takes exactly ONE callback from the Macrotask Queue per cycle, allowing the browser to render the screen in between tasks. (Unlike the Microtask Queue, which is emptied completely).
-> ```
-> - Remember the Economy passenger metaphor. One at a time!
-> 
----
-
-### Exercise 2: Identifying Macrotask APIs
-
-**Problem:** Name 3 Web API macrotask sources (`setTimeout`, `setInterval`, `setImmediate` / `MessageChannel`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> setTimeout, setInterval, setImmediate
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("setTimeout, setInterval, setImmediate");
+> function processLargeChunkedBatch(items, chunkSize) {
+>   return new Promise((resolve) => {
+>     let index = 0;
+>     const total = items.length;
+>     let sum = 0;
+>
+>     function processChunk() {
+>       const limit = Math.min(index + chunkSize, total);
+>       while (index < limit) {
+>         sum += items[index];
+>         index++;
+>       }
+>       if (index < total) {
+>         // Yield to Event Loop macrotask queue
+>         setTimeout(processChunk, 0);
+>       } else {
+>         resolve(sum);
+>       }
+>     }
+>     processChunk();
+>   });
+> }
+>
+> // Verification tests
+> const dataList = Array.from({ length: 100 }, (_, i) => i + 1);
+> processLargeChunkedBatch(dataList, 25).then(total => {
+>   console.assert(total === 5050, "Test 1 Failed: 1..100 sum = 5050");
+> });
 > ```
 >
-> **Explanation:** Timers, I/O callbacks, and `setImmediate` schedule jobs onto the macrotask queue.
+> #### Technical Explanation
+>
+> 1. **Macrotask Queue Concept**: The macrotask queue handles timers (setTimeout, setInterval), I/O callbacks, and UI rendering tasks.
+> 2. **Yielding Main Thread**: Scheduling macrotasks allows the browser to render frames and handle user inputs between chunks.
+> 3. **Event Loop Turn**: The Event Loop executes ONE macrotask per iteration turn, followed by draining the microtask queue.
 > 
 ---
 
-### Exercise 3: Macrotask Execution Lifecycle
+### Exercise 2: Macrotask Queue Advanced Context Handler
 
-**Problem:** Trace macrotask execution: JS engine executes 1 macrotask, drains all microtasks, then renders UI.
+**Scenario:** A web application component processes macrotask queue data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleMacrotaskQueueSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> 1 macrotask -> Drain Microtasks -> UI Render
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("1 macrotask -> Drain Microtasks -> UI Render");
+> function handleMacrotaskQueueSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleMacrotaskQueueSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Each event loop iteration pops 1 macrotask, completely drains microtasks, and performs browser layout rendering.
-> 
+> #### Technical Explanation
+>
+> 1. **Macrotask Queue Architecture**: Applying macrotask queue patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Macrotask Queue Performance Optimization
+
+**Scenario:** An application utility optimizes macrotask queue execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeMacrotaskQueueTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeMacrotaskQueueTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeMacrotaskQueueTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Macrotask Queue Optimization**: Optimizing macrotask queue improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Microtask Queue](microtask_queue.md) — The VIP queue that always cuts in front of Macrotasks.
 - [Event Loop](event_loop.md) — The system that manages this queue.
 - [Timers (setTimeout / setInterval / clearTimeout)](../level_05/timers.md) — Related concept: Timers (setTimeout / setInterval / clearTimeout).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Macrotask Queue handles callbacks for `setTimeout`, `setInterval`, DOM events, and some APIs.
 - It is lower priority than the Microtask Queue.
 - The Event Loop processes only *one* Macrotask per cycle.

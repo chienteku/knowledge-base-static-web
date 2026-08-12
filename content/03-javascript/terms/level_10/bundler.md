@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Tooling / Build Step**
+
+**Tooling / Build Step (Node.js Environment)**: Bundler is a fundamental concept in this technology stack. **Level 10 — Ecosystem & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Environment** (But the output is meant for the Browser)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern JavaScript development relies heavily on **Modules** (breaking code into hundreds of tiny files like `Header.js`, `Footer.js`, `math.js`) and **npm** libraries (like React or Lodash). 
@@ -69,7 +65,7 @@ console.log("The bundler will figure out how to process all of this!");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Bundler Scope and Variable Hoisting
 
@@ -142,58 +138,158 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Minification
+### Exercise 1: Module Dependency Graph Builder Simulator
 
-**Problem:** When you look at the `bundle.js` file output by a Bundler, it is usually completely unreadable. All the variable names have been changed to `a`, `b`, `c`, and all the spaces and newlines have been deleted. Why do Bundlers do this?
+**Scenario:** A bundler core parses entry modules and constructs a complete dependency graph map of imports.
 
-**Expected output:**
+**Requirements:**
+1. Write buildDependencyGraph(entryFile, moduleMap).
+2. Traverse import statements recursively.
+3. Return dependency graph object.
+
 > [!check]- Answer
-> ```text
-> This is called **Minification**. 
-> By stripping out all spaces, comments, and renaming long variables (`const calculateTotalPrice` becomes `const a`), the Bundler shrinks the file size of your code by up to 80%. A smaller file means it downloads faster on the user's phone!
-> ```
-> - Think about network speed and file sizes.
-> 
----
-
-### Exercise 2: Understanding Bundler Entry & Output Configurations
-
-**Problem:** State role of Entry point (e.g. `src/index.js`) and Output bundle (e.g. `dist/bundle.js`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Entry: Dependency graph root, Output: Consolidated bundle
-> ```
-> ```javascript
-> console.log("Entry: Dependency graph root, Output: Consolidated bundle");
+>
+> #### Implementation
+>
+> > ```javascript
+> function buildDependencyGraph(entryFile, moduleMap) {
+>   const graph = {};
+>
+>   function traverse(file) {
+>     if (graph[file]) return;
+>     const mod = moduleMap[file];
+>     if (!mod) return;
+>
+>     graph[file] = {
+>       code: mod.code,
+>       deps: mod.deps || []
+>     };
+>
+>     for (const dep of mod.deps || []) {
+>       traverse(dep);
+>     }
+>   }
+>
+>   traverse(entryFile);
+>   return graph;
+> }
+>
+> // Verification tests
+> const modules = {
+>   "index.js": { code: "import './utils.js'", deps: ["utils.js"] },
+>   "utils.js": { code: "export const add = (a, b) => a + b", deps: [] }
+> };
+>
+> const graph = buildDependencyGraph("index.js", modules);
+> console.assert(graph["index.js"] !== undefined, "Test 1 Failed");
+> console.assert(graph["utils.js"] !== undefined, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Bundlers trace import dependency graphs starting from entry points to produce optimized production assets.
-> 
+> #### Technical Explanation
+>
+> 1. **Dependency Graph Construction**: Bundlers recursively trace import/require statements starting from entry files.
+> 2. **Module Resolution**: Resolves relative file paths into canonical module keys in the dependency graph.
+> 3. **Static Analysis**: Performs AST static analysis to discover dependencies prior to bundle concatenation.
+
 ---
 
-### Exercise 3: Asset Loader Modules Concept
+### Exercise 2: Asset Loader Pipeline Simulator (CSS & Asset Transformers)
 
-**Problem:** Explain how bundlers process non-JS assets like CSS or images into module graphs.
+**Scenario:** A module bundler loader pipeline transforms non-JavaScript assets (like CSS strings) into JS module exports.
 
-**Expected output:**
+**Requirements:**
+1. Write cssLoader(cssContent).
+2. Wrap CSS string inside JS DOM injection code.
+3. Return transformed JS module code string.
+
 > [!check]- Answer
-> ```text
-> Loaders convert non-JS assets into valid JS modules
-> ```
-> ```javascript
-> console.log("Loaders convert non-JS assets into valid JS modules");
+>
+> #### Implementation
+>
+> > ```javascript
+> function cssLoader(cssContent) {
+>   const escapedCss = JSON.stringify(cssContent);
+>   return `const style = document.createElement("style");
+> style.textContent = ${escapedCss};
+> document.head.appendChild(style);
+> export default ${escapedCss};`;
+> }
+>
+> // Verification tests
+> const jsModule = cssLoader("body { background: red; }");
+> console.assert(jsModule.includes("document.createElement("style")"), "Test 1 Failed");
+> console.assert(jsModule.includes("body { background: red; }"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** Loaders transform stylesheets and media assets into module exports for bundle inclusion.
-> 
-> 
+> #### Technical Explanation
+>
+> 1. **Bundler Loader Purpose**: Loaders transform non-JavaScript files (CSS, Images, SASS, TypeScript) into valid JavaScript modules.
+> 2. **DOM Style Injection**: CSS loaders generate code that dynamically creates <style> tags and appends them to document.head at runtime.
+> 3. **Chainable Transformations**: Loaders operate sequentially in a pipeline (e.g. sass-loader -> css-loader -> style-loader).
+
 ---
 
-## 7. Related Terms
+### Exercise 3: Circular Dependency Detection Audit
+
+**Scenario:** A bundler dependency analyzer checks for circular module dependencies during graph traversal to prevent infinite loop evaluation.
+
+**Requirements:**
+1. Write detectCircularDeps(entryFile, moduleMap).
+2. Maintain visited stack during depth-first search.
+3. Return array of detected circular dependency cycles.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> > ```javascript
+> function detectCircularDeps(entryFile, moduleMap) {
+>   const cycles = [];
+>   const visiting = new Set();
+>   const visited = new Set();
+>
+>   function dfs(file, path) {
+>     if (visiting.has(file)) {
+>       const cyclePath = [...path.slice(path.indexOf(file)), file];
+>       cycles.push(cyclePath.join(" -> "));
+>       return;
+>     }
+>     if (visited.has(file)) return;
+>
+>     visiting.add(file);
+>     const deps = moduleMap[file]?.deps || [];
+>     for (const dep of deps) {
+>       dfs(dep, [...path, file]);
+>     }
+>     visiting.delete(file);
+>     visited.add(file);
+>   }
+>
+>   dfs(entryFile, []);
+>   return cycles;
+> }
+>
+> // Verification tests
+> const circularModules = {
+>   "a.js": { deps: ["b.js"] },
+>   "b.js": { deps: ["a.js"] }
+> };
+>
+> const cycles = detectCircularDeps("a.js", circularModules);
+> console.assert(cycles.length === 1, "Test 1 Failed: Must detect circular cycle");
+> console.assert(cycles[0] === "a.js -> b.js -> a.js", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Circular Dependency Risk**: Module A importing Module B while Module B imports Module A can lead to undefined exports if not handled.
+> 2. **Depth-First Search (DFS) Traversal**: Uses DFS stack tracking (visiting set) to detect cycle loops during graph analysis.
+> 3. **CommonJS vs ESM Handling**: ESM handles circular references via live bindings; CommonJS returns partial uninitialized exports objects.
+---
+
+## 6. Related Terms
 - [Modules (import/export)](../level_08/modules.md) — The modern file system that makes Bundlers necessary.
 - [npm](npm.md) — The ecosystem where you download Bundlers.
 - [Dynamic import()](../level_08/dynamic_import.md) — Related concept: Dynamic import().
@@ -203,7 +299,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Bundler (Webpack, Vite, Rollup) combines hundreds of code files and assets into a single optimized file.
 - It prevents the browser from having to make thousands of slow network requests.
 - It allows you to write non-standard code (like importing CSS/Images into JS).

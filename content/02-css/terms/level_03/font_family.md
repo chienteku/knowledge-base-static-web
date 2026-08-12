@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography Property**
+
+**Typography Property (Universal Browser Support)**: `font-family` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, browsers render text using a boring, default serif font (usually Times New Roman). To give a website a specific brand identity, developers need to change the typeface.
@@ -58,7 +54,7 @@ body {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the generic fallback family
 
@@ -108,7 +104,7 @@ body { font-family: 'Inter'; } /* ❌ Missing generic fallback! */
 body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Fallback Order
 
@@ -167,13 +163,13 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 >
 > **Explanation:** Generic font keywords direct browser font engines to default system font categories.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — Properties used to adjust the size and thickness of the chosen font family.
 - [`@font-face` & Web Fonts (Google Fonts)](web_fonts.md) — Loading custom external typefaces.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `font-family` changes the typeface of the text.
 - It relies on a "fallback stack" (a comma-separated list of fonts).
 - If a font has spaces in its name, wrap it in quotes (e.g., `"Times New Roman"`).

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Modern Standard .)**: Mobile-First Design is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Best practice for performance. Minimizes rule overrides and rendering passes on resource-constrained mobile hardware).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of mobile web design, developers used a "Desktop-First" workflow. They wrote all the complex CSS for a desktop site first, and then added `@media (max-width: 768px)` queries to strip away sidebars, float columns, absolute positions, and large images to squeeze the site onto a phone screen.
@@ -154,7 +150,7 @@ Alternative layouts:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mixing `min-width` and `max-width` indiscriminately
 
@@ -290,7 +286,7 @@ Alternative layouts:
 /* Deliver responsive asset sources via <picture> tags */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Desktop-First Refactor
 
@@ -376,14 +372,14 @@ Alternative layouts:
 >
 > **Explanation:** Mobile-first prioritizes mobile performance and progressive enhancement.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The query container.
 - [Responsive Design (Concept)](responsive_design.md) — The core philosophy.
 - [Breakpoints](breakpoints.md) — The layout shift markers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Mobile-first design writes default layout styles for mobile devices first.
 - Layout complexity is added progressively using `min-width` media queries.
 - This approach yields clean, lightweight default styles and improves performance on mobile processors.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `object-fit` & `object-position` is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Governs the aspect ratio calculation and crop coordinates calculated by the browser rendering pipeline before rasterization).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users upload photos to a website (like profile pictures), they come in all shapes and sizes (portraits, landscapes, squares). 
@@ -139,7 +135,7 @@ Avatar layout ruleset:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Applying `object-fit` without setting both dimensions
 
@@ -198,7 +194,7 @@ img { background-size: cover; } /* ❌ Incorrect property for <img> tags! */
 img { object-fit: cover; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Video Banner
 
@@ -261,14 +257,14 @@ img { object-fit: cover; }
 >
 > **Explanation:** `object-position` shifts the alignment origin for cropped image content.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — The background equivalent.
 - [`border-radius` (Rounded Corners)](border_radius.md) — Cropping visual profiles.
 - [`aspect-ratio`](../level_11/aspect_ratio.md) — Related concept: `aspect-ratio`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `object-fit` scales content inside `<img>` or `<video>` tags without distorting them.
 - `cover` fills the container box (cropping edges as needed).
 - `contain` fits the entire media file inside the container box (leaving letterboxes).

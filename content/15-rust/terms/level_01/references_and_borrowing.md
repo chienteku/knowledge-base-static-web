@@ -219,10 +219,10 @@ Collect indices or mutate after iteration finishes!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md)
-- [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md)
+- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — 
+- [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md) — 
 - [Borrowing (`&`)](../level_03/borrowing.md) — Immutable borrowing (&T).
 - [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — Mutable borrowing (&mut T).
 - [Mutability (`mut`)](mutability_mut.md) — Related concept: Mutability (`mut`).

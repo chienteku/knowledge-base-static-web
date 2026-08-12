@@ -484,7 +484,7 @@ thread::spawn(move || {
 - [Iterator](../level_02/iterator.md) — The main reason `-> impl Trait` exists (so you can return massive, unnamable iterator chains without tearing your hair out).
 - [Trait](trait.md) — Related concept: Trait.
 - [`where` Clause](where_clause.md) — Related concept: `where` Clause.
-- [Tait Type Alias Impl Trait](../level_19/tait_type_alias_impl_trait.md) — Related concept: Tait Type Alias Impl Trait.
+- [TAIT (Type Alias Impl Trait)](../level_19/tait_type_alias_impl_trait.md) — Related concept: Tait Type Alias Impl Trait.
 
 ---
 

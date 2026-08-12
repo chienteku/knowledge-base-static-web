@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Optimization**
+
+**Design Pattern / Optimization (Universal)**: Debounce is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Especially critical in Browser UI development)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you have a search bar on a website that fetches results from an API every time the user types a letter. If the user types "apple" very fast, they trigger 5 API requests (`a`, `ap`, `app`, `appl`, `apple`) in less than a second. This overloads the server, wastes bandwidth, and causes the UI to lag.
@@ -78,7 +74,7 @@ smartSearch("Java");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Re-creating the Debounce on every event
 
@@ -159,71 +155,178 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Debounce vs Window Resize
+### Exercise 1: Real-Time Auto-Save Input Debouncer
 
-**Problem:** A common use case for Debounce is attaching it to the `window.onresize` event. If a user grabs the corner of their browser and drags it to make it larger, the browser fires the `resize` event hundreds of times a second. Why is Debounce perfect for recalculating complex UI layouts here?
+**Scenario:** A rich text editor debounces auto-save operations to prevent firing network requests on every keystroke, waiting for a pause in typing.
 
-**Expected output:**
+**Requirements:**
+1. Write debounce(fn, delayMs).
+2. Maintain internal timer variable.
+3. Clear existing timer on new calls.
+4. Invoke fn after delayMs has elapsed.
+
 > [!check]- Answer
-> ```text
-> Because recalculating a complex layout 100 times per second will freeze the browser. By debouncing it (e.g., 200ms), the layout only recalculates ONCE, exactly when the user finally lets go of the mouse button and stops dragging the window.
-> ```
-> - Think about the "Elevator" metaphor. We wait for the chaos to stop.
-> 
----
-
-### Exercise 2: Implementing Basic Debounce
-
-**Problem:** Implement a `debounce(fn, delay)` helper that resets a timer on rapid calls.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Debounced call executed once
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function debounce(fn, delay) {
->   let timer;
+> function debounce(fn, delayMs) {
+>   let timerId = null;
 >   return function(...args) {
->     clearTimeout(timer);
->     timer = setTimeout(() => fn.apply(this, args), delay);
+>     const context = this;
+>     if (timerId !== null) {
+>       clearTimeout(timerId);
+>     }
+>     timerId = setTimeout(() => {
+>       fn.apply(context, args);
+>       timerId = null;
+>     }, delayMs);
 >   };
 > }
-> const debounced = debounce(() => console.log("Debounced call executed once"), 10);
-> debounced(); debounced(); debounced();
+>
+> // Verification tests
+> let callCount = 0;
+> const saveFn = debounce(() => { callCount++; }, 100);
+>
+> saveFn();
+> saveFn();
+> saveFn();
+> console.assert(callCount === 0, "Test 1 Failed: Debounced function should not run synchronously");
+>
+> setTimeout(() => {
+>   console.assert(callCount === 1, "Test 2 Failed: Debounced function should run exactly once after delay");
+> }, 150);
 > ```
 >
-> **Explanation:** Debouncing delays execution until a burst of rapid events pauses for specified duration.
+> #### Technical Explanation
+>
+> 1. **Debounce Mechanics**: Debouncing delays function execution until a specified quiet period passes without new invocations.
+> 2. **Timer Reset via clearTimeout()**: Each call resets pending timeout timers, delaying execution to the latest call.
+> 3. **Closure State Management**: The timerId reference is preserved across calls using a persistent closure variable.
 > 
 ---
 
-### Exercise 3: Immediate Leading Edge Debouncing
+### Exercise 2: Window Resize Debouncer with Immediate Execution Option
 
-**Problem:** Explain how leading-edge debouncing executes immediately on the first call then suppresses subsequent calls during delay.
+**Scenario:** A responsive dashboard layout manager debounces window resize events, supporting an immediate execution option for fast initial rendering.
 
-**Expected output:**
+**Requirements:**
+1. Write debounceImmediate(fn, delayMs, immediate).
+2. If immediate is true and timer is null, call fn instantly.
+3. Reset timer after delayMs passes.
+
 > [!check]- Answer
-> ```text
-> Leading edge execution mode
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Leading edge execution mode");
+> function debounceImmediate(fn, delayMs, immediate = false) {
+>   let timerId = null;
+>   return function(...args) {
+>     const context = this;
+>     const callNow = immediate && timerId === null;
+>
+>     if (timerId !== null) {
+>       clearTimeout(timerId);
+>     }
+>
+>     timerId = setTimeout(() => {
+>       timerId = null;
+>       if (!immediate) {
+>         fn.apply(context, args);
+>       }
+>     }, delayMs);
+>
+>     if (callNow) {
+>       fn.apply(context, args);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> let leadingCount = 0;
+> const leadingDebounced = debounceImmediate(() => { leadingCount++; }, 100, true);
+>
+> leadingDebounced(); // Should run immediately
+> console.assert(leadingCount === 1, "Test 1 Failed: Immediate execution should run on leading edge");
+> leadingDebounced(); // Should be suppressed
+> console.assert(leadingCount === 1, "Test 2 Failed: Subsequent calls within delay should be debounced");
 > ```
 >
-> **Explanation:** Leading edge options execute immediately upon event start before initiating quiet timer delays.
-> 
+> #### Technical Explanation
+>
+> 1. **Leading Edge Execution**: Immediate debouncing executes the target function on the FIRST call, suppressing subsequent calls until quiet period ends.
+> 2. **Trailing Edge Execution**: Standard debouncing waits for the quiet period to end before executing on the LAST call.
+> 3. **Context & Argument Passing**: Preserves target function `this` binding and parameters via fn.apply(context, args).
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Cancellable Search Query Debouncer
+
+**Scenario:** A search auto-complete widget debounces API requests and provides a .cancel() method to abort pending queries when users close the search modal.
+
+**Requirements:**
+1. Write createCancellableDebounce(fn, delayMs).
+2. Return debounced function with attached .cancel() method.
+3. cancel() must clear pending timeout and reset timerId.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createCancellableDebounce(fn, delayMs) {
+>   let timerId = null;
+>
+>   function debounced(...args) {
+>     const context = this;
+>     if (timerId !== null) {
+>       clearTimeout(timerId);
+>     }
+>     timerId = setTimeout(() => {
+>       fn.apply(context, args);
+>       timerId = null;
+>     }, delayMs);
+>   }
+>
+>   debounced.cancel = function() {
+>     if (timerId !== null) {
+>       clearTimeout(timerId);
+>       timerId = null;
+>     }
+>   };
+>
+>   return debounced;
+> }
+>
+> // Verification tests
+> let searchFired = false;
+> const search = createCancellableDebounce(() => { searchFired = true; }, 100);
+>
+> search("javascript");
+> search.cancel();
+>
+> setTimeout(() => {
+>   console.assert(searchFired === false, "Test 1 Failed: Cancelled debounced function should not fire");
+> }, 150);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Cancellable Debounce Pattern**: Attaching a .cancel() method to debounced functions enables manual cancellation of pending execution.
+> 2. **Memory & Resource Safeguard**: Cancelling pending timers prevents unwanted API requests when UI components unmount.
+> 3. **Function Object Properties**: In JavaScript, functions are first-class objects and can have custom properties/methods attached.
+---
+
+## 6. Related Terms
 - [Throttle](throttle.md) — The sister technique to Debounce.
 - [Closure](../level_03/closure.md) — The mechanic keeping the timer ID alive.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Debounce groups a rapid burst of events into a single execution.
 - It executes the function ONLY after a period of total silence (inactivity).
 - Every new event resets the countdown timer.

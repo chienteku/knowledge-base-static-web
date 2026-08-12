@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Regular Expressions (RegExp) is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Validating strings using custom loops, `indexOf` checks, or split methods is tedious and error-prone when handling complex requirements—such as verifying email structures, parsing log files, or formatting phone numbers.
@@ -82,7 +78,7 @@ while ((match = pricePattern.exec(text)) !== null) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Global `g` Flag on String Replacements
 
@@ -158,74 +154,141 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Extract Zip Codes
+### Exercise 1: Strict Email & Username Validator Engine
 
-**Problem:** Complete the code to parse a string and return an array of all 5-digit zip codes using regular expressions.
+**Scenario:** An authentication module validates user input against robust regular expression patterns using RegExp.prototype.test().
 
-```javascript
-function extractZipCodes(text) {
-  const zipRegex = // Write regex here
-  return text.match(zipRegex) || [];
-}
+**Requirements:**
+1. Write validateUsername(username).
+2. Must be 3-16 alphanumeric characters or underscores.
+3. Write validateEmail(email).
+4. Return boolean validation results.
 
-const input = "Deliver to 90210, then pick up at 02138 or 10001.";
-console.log("Zip Codes:", extractZipCodes(input));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Zip Codes: [ '90210', '02138', '10001' ]
-> ```
-> - Match digit sequences of length 5: `/\b\d{5}\b/g`.
-> 
----
-
-### Exercise 2: Matching Digits with Regular Expressions
-
-**Problem:** Test string `"User123"` for digits using `\d+` regex.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const regex = /\d+/;
-> console.log(regex.test("User123"));
+> function validateUsername(username) {
+>   const userRegex = /^[a-zA-0-9_]{3,16}$/;
+>   return userRegex.test(username);
+> }
+>
+> function validateEmail(email) {
+>   const emailRegex = /^[a-zA-0-9._%+-]+@[a-zA-0-9.-]+\.[a-zA-0-9]{2,}$/i;
+>   return emailRegex.test(email);
+> }
+>
+> // Verification tests
+> console.assert(validateUsername("alice_99") === true, "Test 1 Failed");
+> console.assert(validateUsername("a") === false, "Test 2 Failed: Too short");
+> console.assert(validateEmail("user@example.com") === true, "Test 3 Failed");
+> console.assert(validateEmail("invalid-email") === false, "Test 4 Failed");
 > ```
 >
-> **Explanation:** RegExp `.test(str)` tests whether regex patterns match target strings.
+> #### Technical Explanation
+>
+> 1. **RegExp Anchors (^ and $)**: ^ asserts start of string; $ asserts end of string, enforcing exact pattern matches.
+> 2. **Character Classes ([a-z0-9])**: Matches any single character within specified ranges.
+> 3. **Case-Insensitive Flag (/i)**: The i flag enables case-insensitive matching across uppercase and lowercase letters.
 > 
 ---
 
-### Exercise 3: Extracting Named Capture Groups
+### Exercise 2: Extracting Named Capture Groups from Log Lines
 
-**Problem:** Extract year, month, day from `"2026-01-15"` using named capture groups `/(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/`.
+**Scenario:** A server log parser uses ES2018 RegExp named capture groups (`(?<name>...)`) to parse structured log metrics.
 
-**Expected output:**
+**Requirements:**
+1. Write parseLogLine(logLine).
+2. Use regex with named groups (?<timestamp>\S+), (?<level>\w+), (?<message>.+).
+3. Return match.groups object.
+
 > [!check]- Answer
-> ```text
-> 2026
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const match = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/.exec("2026-01-15");
-> console.log(match.groups.year);
+> function parseLogLine(logLine) {
+>   const logRegex = /^\[(?<timestamp>[^\]]+)\] \[(?<level>\w+)\] (?<message>.+)$/;
+>   const match = logRegex.exec(logLine);
+>
+>   if (!match || !match.groups) {
+>     return null;
+>   }
+>
+>   return {
+>     timestamp: match.groups.timestamp,
+>     level: match.groups.level,
+>     message: match.groups.message
+>   };
+> }
+>
+> // Verification tests
+> const line = "[2026-08-12T10:00:00Z] [ERROR] Database connection lost";
+> const parsed = parseLogLine(line);
+>
+> console.assert(parsed.timestamp === "2026-08-12T10:00:00Z", "Test 1 Failed");
+> console.assert(parsed.level === "ERROR", "Test 2 Failed");
+> console.assert(parsed.message === "Database connection lost", "Test 3 Failed");
 > ```
 >
-> **Explanation:** `(?<name>pattern)` captures regex match subgroups into `match.groups` objects.
+> #### Technical Explanation
+>
+> 1. **Named Capture Groups Syntax**: (?<name>pattern) assigns a string key to match groups, accessible via match.groups.
+> 2. **RegExp.prototype.exec()**: Executes search for a match in string, returning detailed match array with groups property.
+> 3. **Self-Documenting Regular Expressions**: Named capture groups improve code readability compared to numbered index groups ($1, $2).
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Safe Dynamic Regex Escaper Utility
+
+**Scenario:** A text search highlighter sanitizes raw user search strings by escaping special RegExp characters (`.*+?^${}()|[]\`) before building dynamic patterns.
+
+**Requirements:**
+1. Write escapeRegExp(string).
+2. Replace special characters with backslash escapes.
+3. Create dynamic RegExp for highlight matching.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function escapeRegExp(string) {
+>   return string.replace(/[.*+?^${}()|[\]\]/g, "\$&");
+> }
+>
+> function searchHighlight(text, query) {
+>   if (!query) return text;
+>   const escapedQuery = escapeRegExp(query);
+>   const regex = new RegExp(escapedQuery, "gi");
+>   return text.replace(regex, match => `<mark>${match}</mark>`);
+> }
+>
+> // Verification tests
+> const text = "Price is $5.00 (discounted)";
+> const query = "$5.00"; // Contains regex special chars $ and .
+>
+> const highlighted = searchHighlight(text, query);
+> console.assert(highlighted === "Price is <mark>$5.00</mark> (discounted)", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **RegExp Injection Vulnerabilities**: Unescaped user input passed to new RegExp() can cause syntax errors or ReDoS performance attacks.
+> 2. **Escaping Special Characters**: Characters like ., *, +, ?, ^, $, (, ), [, ], {, }, |, \ carry special regex meaning and must be escaped.
+> 3. **Replacement Pattern $&**: In String.prototype.replace(), $& represents the exact matched substring.
+---
+
+## 6. Related Terms
 - [String Methods](../level_02/string_methods.md) — RegExp string methods.
 - [Tagged Template Literals](../level_08/tagged_template_literals.md) — String manipulation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - RegExp compiles string matching patterns inside literal slashes `/pattern/flags` or constructor functions.
 - `regex.test(str)` is the fastest method to verify format validity.
 - String methods like `.match()` and `.replace()` process patterns natively.

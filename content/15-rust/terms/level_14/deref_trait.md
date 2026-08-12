@@ -306,9 +306,9 @@ Return reference to underlying field: fn deref(&self) -> &Inner { &self.inner }
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [Newtype Pattern](../level_11/newtype_pattern.md)
+- [Newtype Pattern](../level_11/newtype_pattern.md) — 
 - [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Deref/DerefMut traits.
 
 ---

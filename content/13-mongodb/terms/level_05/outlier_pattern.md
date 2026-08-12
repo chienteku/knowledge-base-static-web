@@ -256,7 +256,7 @@ Identify documents in `users` whose `followers` array length exceeds 1,000 items
 ## 6. Related Terms
 
 
-- [MongoDB](../level_01/mongodb.md)
+- [MongoDB](../level_01/mongodb.md) — 
 - [Time-Series Collections](../level_10/time_series.md) — Related concept: Time-Series Collections.
 - [Document Size Limit (16 MB)](document_size_limit.md) — Related concept: Document Size Limit (16 MB).
 

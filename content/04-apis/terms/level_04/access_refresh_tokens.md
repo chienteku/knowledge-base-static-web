@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Universal: Implemented across secure web portals, mobile apps, and single-page apps.)**: Access Token vs Refresh Token is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented across secure web portals, mobile apps, and single-page apps.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Stateless JWT tokens present a security dilemma:
@@ -78,7 +74,7 @@ To prevent stolen refresh tokens from being used indefinitely, servers use **tok
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing the Refresh Token in `localStorage`
 
@@ -133,96 +129,198 @@ res.cookie('refreshToken', token, {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Interceptor Builder
+### Exercise 1: Dual Token Generation & Rotation Handler
 
-**Problem:** Complete the logic for a client-side HTTP request interceptor to handle token refresh when receiving a `401` response:
+**Scenario:** An authentication server issues short-lived access tokens and long-lived refresh tokens, rotating refresh tokens on each refresh cycle.
 
-```javascript
-// Axios response interceptor pseudocode
-api.interceptors.response.use(
-  (response) => response, 
-  async (error) => {
-    const originalRequest = error.config;
-    
-    // Check if error is 401 and we haven't retried yet
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      
-      try {
-        // 1. Request a new access token from the refresh route
-        const { accessToken } = await api.post('/api/refresh');
-        
-        // 2. Update default authorization headers for future requests
-        api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        
-        // 3. Update current request header with new token
-        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-        
-        // 4. Retry original request
-        return api(originalRequest);
-      } catch (refreshError) {
-        // Refresh token expired or invalid -> log user out
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-```
-
----
+**Requirements:**
+1. Write refreshTokens(providedRefreshToken, tokenStore).
+2. Verify refresh token validity.
+3. Issue new access token and new refresh token.
+4. Invalidate old refresh token.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function refreshTokens(providedRefreshToken, tokenStore = new Map()) {
+>   if (!providedRefreshToken || !tokenStore.has(providedRefreshToken)) {
+>     return { success: false, status: 401, error: "Invalid or revoked refresh token" };
+>   }
+>
+>   const session = tokenStore.get(providedRefreshToken);
+>   const now = Date.now();
+>
+>   if (now > session.expiresAt) {
+>     tokenStore.delete(providedRefreshToken);
+>     return { success: false, status: 401, error: "Refresh token expired" };
+>   }
+>
+>   tokenStore.delete(providedRefreshToken);
+>
+>   const newAccessToken = `access_${session.userId}_${Date.now()}`;
+>   const newRefreshToken = `refresh_${session.userId}_${Date.now()}`;
+>
+>   tokenStore.set(newRefreshToken, {
+>     userId: session.userId,
+>     expiresAt: now + 7 * 24 * 60 * 60 * 1000
+>   });
+>
+>   return {
+>     success: true,
+>     status: 200,
+>     accessToken: newAccessToken,
+>     refreshToken: newRefreshToken,
+>     expiresInSeconds: 900
+>   };
+> }
+>
+> // Verification tests
+> const store = new Map([
+>   ["valid_ref_123", { userId: "usr-42", expiresAt: Date.now() + 10000 }]
+> ]);
+>
+> const res1 = refreshTokens("valid_ref_123", store);
+> console.assert(res1.success === true && res1.accessToken.includes("usr-42"), "Test 1 Failed");
+> console.assert(store.has("valid_ref_123") === false, "Test 2 Failed: Old refresh token must be revoked");
+> console.assert(store.has(res1.refreshToken) === true, "Test 3 Failed: New refresh token must be stored");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Access Token Lifespan**: Short-lived access tokens (15 mins) minimize damage if intercepted.
+> 2. **Refresh Token Lifespan**: Long-lived refresh tokens (7-30 days) allow seamless re-authentication without password re-entry.
+> 3. **Refresh Token Rotation**: Issuing a new refresh token on every exchange invalidates stolen tokens if reused.
 > 
 ---
 
-### Exercise 2: Dual Token Rotation Flow
+### Exercise 2: Automatic Token Refresh Client Interceptor
 
-**Problem:** Explain the step-by-step token rotation flow when an access token expires.
+**Scenario:** An API client automatically intercepts 401 Unauthorized responses, uses the refresh token to acquire a new access token, and retries original request.
 
-**Expected output:**
+**Requirements:**
+1. Write makeAuthenticatedRequest(fetchFn, getAccessToken, refreshTokensFn).
+2. Execute request.
+3. If 401, refresh token and retry request once.
+
 > [!check]- Answer
-> ```text
-> 1. Client makes API call with access token -> Server returns 401 Unauthorized
-> 2. Client sends refresh token to `/api/refresh`
-> 3. Server verifies refresh token in DB/Redis -> Issues new short-lived access token + new refresh token
-> 4. Client retries original request with new access token
+>
+> #### Implementation
+>
+> ```javascript
+> async function makeAuthenticatedRequest(url, fetchFn, authState, refreshFn) {
+>   let response = await fetchFn(url, authState.accessToken);
+>
+>   if (response.status === 401 && authState.refreshToken) {
+>     const refreshRes = await refreshFn(authState.refreshToken);
+>     if (refreshRes.success) {
+>       authState.accessToken = refreshRes.accessToken;
+>       authState.refreshToken = refreshRes.refreshToken;
+>       response = await fetchFn(url, authState.accessToken);
+>     }
+>   }
+>
+>   return response;
+> }
+>
+> // Verification tests
+> const authState = { accessToken: "exp_token", refreshToken: "valid_ref" };
+> let fetchCalls = 0;
+>
+> const mockFetch = async (url, token) => {
+>   fetchCalls++;
+>   if (token === "exp_token") return { status: 401 };
+>   return { status: 200, data: "success" };
+> };
+>
+> const mockRefresh = async (ref) => ({
+>   success: true,
+>   accessToken: "new_token",
+>   refreshToken: "new_ref"
+> });
+>
+> makeAuthenticatedRequest("/api/user", mockFetch, authState, mockRefresh).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed");
+>   console.assert(fetchCalls === 2, "Test 2 Failed: Request should retry once");
+>   console.assert(authState.accessToken === "new_token", "Test 3 Failed");
+> });
 > ```
-> ```text
-> 1. Client calls API -> Server returns 401 Unauthorized (token expired)
-> 2. Client posts refresh token to /api/refresh
-> 3. Server validates refresh token -> Returns new access token (+ rotated refresh token)
-> 4. Client retries original request
-> ```
-> - **Explanation:** Refresh token rotation revokes stolen refresh tokens upon reuse.
+>
+> #### Technical Explanation
+>
+> 1. **Silent Auth Interception**: Interceptors handle token expiration transparently without interrupting user workflow.
+> 2. **Single Retry Guard**: Retrying once prevents infinite loop request storms when refresh token is invalid.
+> 3. **Token Synchronization**: Updates central client state with newly rotated tokens.
+> 
 ---
 
-### Exercise 3: HttpOnly Cookie Benefit
+### Exercise 3: Refresh Token Reuse Detection & Nuclear Revocation Guard
 
-**Problem:** Why are `HttpOnly` cookies immune to XSS token theft?
+**Scenario:** A security monitor detects when a previously rotated refresh token is presented again, indicating potential theft, and revokes all user sessions.
 
-**Expected output:**
+**Requirements:**
+1. Write handleRefreshTokenUsage(token, tokenStore, revokedSet).
+2. If token is in revokedSet, revoke ALL active sessions for that user.
+
 > [!check]- Answer
-> ```text
-> HttpOnly cookies are inaccessible to browser JavaScript (document.cookie), preventing malicious scripts from reading the token string.
+>
+> #### Implementation
+>
+> ```javascript
+> function handleRefreshTokenUsage(token, tokenStore, revokedTokensSet) {
+>   if (revokedTokensSet.has(token)) {
+>     const userId = revokedTokensSet.get(token);
+>     for (const [k, session] of tokenStore.entries()) {
+>       if (session.userId === userId) {
+>         tokenStore.delete(k);
+>       }
+>     }
+>     return { success: false, status: 403, error: "Security Alert: Refresh token reuse detected. All sessions revoked." };
+>   }
+>
+>   if (!tokenStore.has(token)) {
+>     return { success: false, status: 401, error: "Invalid token" };
+>   }
+>
+>   const session = tokenStore.get(token);
+>   tokenStore.delete(token);
+>   revokedTokensSet.set(token, session.userId);
+>
+>   const newRef = `new_ref_${session.userId}_${Date.now()}`;
+>   tokenStore.set(newRef, { userId: session.userId });
+>
+>   return { success: true, refreshToken: newRef };
+> }
+>
+> // Verification tests
+> const activeStore = new Map([["ref_1", { userId: "usr-99" }]]);
+> const revokedMap = new Map();
+>
+> const step1 = handleRefreshTokenUsage("ref_1", activeStore, revokedMap);
+> console.assert(step1.success === true, "Test 1 Failed");
+>
+> const step2 = handleRefreshTokenUsage("ref_1", activeStore, revokedMap);
+> console.assert(step2.status === 403, "Test 2 Failed: Reuse must trigger security alert");
+> console.assert(activeStore.size === 0, "Test 3 Failed: All sessions for user must be nuked");
 > ```
-> ```text
-> HttpOnly cookies are inaccessible to browser JavaScript (document.cookie), preventing malicious scripts from reading the token string.
-> ```
-> - **Explanation:** `HttpOnly` blocks JavaScript reading access to cookie tokens.
+>
+> #### Technical Explanation
+>
+> 1. **Token Reuse Detection**: Tracking spent refresh tokens enables detecting theft when both legitimate user and attacker present tokens.
+> 2. **Session Termination**: Revoking all user sessions forces re-authentication, protecting account integrity.
+> 3. **OAuth 2.0 Security Best Practice**: Mandatory requirement in RFC 6819 for OAuth 2.0 refresh token rotation implementations.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Basic & Bearer Authentication](basic_bearer_auth.md) — The HTTP headers formatting access tokens.
 - [OAuth 2.0](oauth.md) — The authorization framework standardizing access and refresh flows.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The access/refresh pattern balances API performance with account security.
 - Access tokens are short-lived, stateless JWTs used for every API call.
 - Refresh tokens are long-lived, stateful strings stored in secure cookies to obtain new access tokens.

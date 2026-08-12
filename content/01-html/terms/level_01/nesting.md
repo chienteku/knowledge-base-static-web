@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Nesting is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A web page is rarely a flat list of text. It has structure: a navigation bar containing links, a side card containing an image and a heading, or a list containing bullet points. 
@@ -79,7 +75,7 @@ Nesting layout elements to create a profile card:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overlapping tag boundaries
 
@@ -135,7 +131,7 @@ Nesting layout elements to create a profile card:
 </div>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Fix the Nesting
 
@@ -200,7 +196,7 @@ Nesting layout elements to create a profile card:
 >
 > **Explanation:** HTML5 expanded `<a>` element flow content model to wrap block elements.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The building blocks that are nested.
 - [Block-level vs Inline Elements](block_inline.md) — Nesting rules differ based on display properties (e.g., inline elements cannot contain block elements).
 - [Comments (<!-- -->)](comments.md) — Related concept: Comments (<!-- -->).
@@ -209,7 +205,7 @@ Nesting layout elements to create a profile card:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nesting means placing HTML elements entirely inside other HTML elements.
 - It creates a parent-child relationship between outer and inner tags.
 - Child tags must be closed before their parent tags are closed ("First Opened, Last Closed").

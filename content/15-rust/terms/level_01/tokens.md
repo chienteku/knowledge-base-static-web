@@ -216,7 +216,7 @@ let r#type = "admin"; // Raw identifier token syntax!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Token Stream](../level_12/token_stream.md) — Stream of compiler tokens.
 

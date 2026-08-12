@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal: The foundational communication standard of the global internet.)**: TCP/IP (high-level) is a fundamental concept in this technology stack. **Level 1 — Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal**: The foundational communication standard of the global internet.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data traveling across the internet is broken down into tiny digital chunks called **packets**. These packets travel through multiple physical routers and cables. Because of network congestion or hardware issues, some packets can get lost, arrive out of order, or get corrupted. 
@@ -65,7 +61,7 @@ While HTTP, HTTPS, and WebSockets run on top of TCP because they require 100% da
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming TCP/IP handles application logic
 
@@ -112,80 +108,166 @@ While HTTP, HTTPS, and WebSockets run on top of TCP because they require 100% da
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection Chooser
+### Exercise 1: TCP Three-Way Handshake State Machine Simulator
 
-**Problem:** Determine whether the scenario requires **TCP** or **UDP**:
+**Scenario:** A network protocol parser simulates the TCP 3-Way Handshake sequence (SYN -> SYN-ACK -> ACK) that establishes connection sockets.
 
-1. A multiplayer game client sending coordinate movement updates (60 times per second).
-2. Downloading a banking transaction history PDF file.
-3. Fetching a user profile JSON configuration from an API endpoint.
-4. Broadcasting a live video stream of a sports match where latency is critical.
+**Requirements:**
+1. Write simulateTcpConnection().
+2. State 1: CLOSED -> Send SYN.
+3. State 2: Listen for SYN-ACK.
+4. State 3: Send ACK -> ESTABLISHED.
 
 > [!check]- Answer
-> - If losing a single packet corrupts the file or breaks the program, you must use TCP.
-> - If speed is critical and dropping a few frames/pixels is acceptable, use UDP.
-> 
-> [!check]- Answer
-> - 1. **UDP** (If a movement packet is dropped, the next packet immediately overrides it. Waiting for retries causes game lag).
-> - 2. **TCP** (A single missing byte corrupts the PDF file).
-> - 3. **TCP** (API payloads must be fully intact to parse JSON successfully).
-> - 4. **UDP** (If a packet drops, a brief pixel glitch is preferred over pausing the live video stream to wait for retries).
-> 
+>
+> #### Implementation
+>
+> ```javascript
+> function simulateTcpConnection() {
+>   const log = [];
+>   let state = "CLOSED";
+>
+>   // Step 1: Client sends SYN
+>   state = "SYN_SENT";
+>   log.push("Client -> SYN");
+>
+>   // Step 2: Server responds SYN-ACK
+>   state = "SYN_RECEIVED";
+>   log.push("Server -> SYN-ACK");
+>
+>   // Step 3: Client sends ACK
+>   state = "ESTABLISHED";
+>   log.push("Client -> ACK");
+>
+>   return {
+>     connected: state === "ESTABLISHED",
+>     history: log
+>   };
+> }
+>
+> // Verification tests
+> const conn = simulateTcpConnection();
+> console.assert(conn.connected === true, "Test 1 Failed");
+> console.assert(conn.history[0] === "Client -> SYN", "Test 2 Failed");
+> console.assert(conn.history[2] === "Client -> ACK", "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **TCP 3-Way Handshake**: SYN (Synchronize), SYN-ACK (Synchronize-Acknowledge), ACK (Acknowledge) establish reliable TCP connection sockets.
+> 2. **Connection-Oriented Protocol**: TCP requires establishing connection before transmitting data, unlike UDP (connectionless).
+> 3. **Sequence Number Synchronization**: Exchanges initial sequence numbers (ISN) between client and server for ordered packet delivery.
 > 
 ---
 
-### Exercise 2: TCP 3-Way Handshake Step Ordering
+### Exercise 2: TCP Segment Reordering & Missing Segment Detector
 
-**Problem:** Order the 3 packet flags exchanged during establishing a TCP connection:
-ACK, SYN, SYN-ACK
+**Scenario:** A packet receiver buffers incoming out-of-order TCP segments and reassembles them in sequence order using sequence numbers.
 
-**Expected output:**
+**Requirements:**
+1. Write reassembleTcpSegments(segments).
+2. Sort segments by seqNum.
+3. Check for missing sequence gaps.
+4. Return reassembled data string.
+
 > [!check]- Answer
-> ```text
-> 1. Client -> Server: SYN
-> 2. Server -> Client: SYN-ACK
-> 3. Client -> Server: ACK
+>
+> #### Implementation
+>
+> ```javascript
+> function reassembleTcpSegments(segments) {
+>   if (!Array.isArray(segments)) return null;
+>
+>   const sorted = [...segments].sort((a, b) => a.seqNum - b.seqNum);
+>   let expectedSeq = sorted[0]?.seqNum || 0;
+>   let payload = "";
+>
+>   for (const seg of sorted) {
+>     if (seg.seqNum !== expectedSeq) {
+>       return { error: `Missing segment at sequence ${expectedSeq}`, data: null };
+>     }
+>     payload += seg.data;
+>     expectedSeq += seg.data.length;
+>   }
+>
+>   return { error: null, data: payload };
+> }
+>
+> // Verification tests
+> const outOfOrder = [
+>   { seqNum: 5, data: "World" },
+>   { seqNum: 0, data: "Hello " }
+> ];
+>
+> const res = reassembleTcpSegments(outOfOrder);
+> console.assert(res.data === "Hello World", "Test 1 Failed: Out of order segments must be reassembled");
 > ```
-> ```text
-> 1. Client sends SYN (Synchronize)
-> 2. Server responds SYN-ACK (Synchronize-Acknowledge)
-> 3. Client sends ACK (Acknowledge)
-> ```
-> - **Explanation:** The TCP 3-way handshake establishes sequence numbers before payload transmission.
+>
+> #### Technical Explanation
+>
+> 1. **Guaranteed Ordered Delivery**: TCP guarantees packets are delivered to application layer in exact sequence order.
+> 2. **Packet Reassembly**: Uses sequence numbers to reorder packets received out of order across packet-switched IP networks.
+> 3. **Automatic Retransmission (ARQ)**: If a sequence number gap is detected, TCP requests retransmission of missing segments.
+> 
 ---
 
-### Exercise 3: TCP vs UDP Comparison Matrix
+### Exercise 3: IP Packet Routing & Header Inspector
 
-**Problem:** Match the protocol characteristic to TCP or UDP:
-1. Connectionless and low overhead
-2. Guaranteed in-order packet delivery
-3. Built-in flow control and congestion management
+**Scenario:** A network packet analyzer inspects IP header fields (Source IP, Destination IP, TTL) to determine routing status.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectIpPacket(packet).
+2. Decrement TTL by 1.
+3. If TTL <= 0 return "TIME_EXCEEDED"; else return "ROUTED".
+
 > [!check]- Answer
-> ```text
-> 1. UDP
-> 2. TCP
-> 3. TCP
+>
+> #### Implementation
+>
+> ```javascript
+> function inspectIpPacket(packet) {
+>   if (!packet || !packet.srcIp || !packet.destIp || typeof packet.ttl !== "number") {
+>     return { status: "DROP_INVALID" };
+>   }
+>
+>   const nextTtl = packet.ttl - 1;
+>   if (nextTtl <= 0) {
+>     return { status: "TIME_EXCEEDED", ttl: 0 };
+>   }
+>
+>   return {
+>     status: "ROUTED",
+>     srcIp: packet.srcIp,
+>     destIp: packet.destIp,
+>     ttl: nextTtl
+>   };
+> }
+>
+> // Verification tests
+> const p1 = inspectIpPacket({ srcIp: "1.1.1.1", destIp: "8.8.8.8", ttl: 64 });
+> console.assert(p1.status === "ROUTED" && p1.ttl === 63, "Test 1 Failed");
+>
+> const p2 = inspectIpPacket({ srcIp: "1.1.1.1", destIp: "8.8.8.8", ttl: 1 });
+> console.assert(p2.status === "TIME_EXCEEDED", "Test 2 Failed");
 > ```
-> ```text
-> 1. UDP -> Connectionless, fast, no delivery guarantee
-> 2. TCP -> Guaranteed ordered delivery with retransmission
-> 3. TCP -> Flow control and windowing management
-> ```
-> - **Explanation:** TCP guarantees reliable stream delivery at the cost of handshake overhead.
+>
+> #### Technical Explanation
+>
+> 1. **IP Protocol Layer**: IP (Internet Protocol) routes packets across networks using IP addresses.
+> 2. **Time-To-Live (TTL) Field**: Every router decrements packet TTL by 1; when TTL reach 0, packet is dropped to prevent infinite routing loops.
+> 3. **TCP vs IP Hierarchy**: IP handles packet routing across nodes; TCP sits on top of IP ensuring reliable stream delivery.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP / HTTPS](http_https.md) — The application protocols that utilize TCP connections to load web pages.
 - [WebSockets](../level_08/websockets.md) — The real-time connection protocol that rides directly on top of persistent TCP connections.
 - [WebSocket Handshake (Upgrade)](../level_08/websocket_handshake.md) — Related concept: WebSocket Handshake (Upgrade).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - IP is responsible for routing packet chunks between physical device addresses.
 - TCP runs on top of IP to guarantee that all packets arrive fully intact and in the correct order.
 - TCP connection requires a Three-Way Handshake (SYN → SYN-ACK → ACK) before sending data.

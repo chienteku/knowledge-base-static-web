@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support .)**: `<figure>` & `<figcaption>` is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all modern web browsers since the release of HTML5).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In textbooks or news articles, you often see images, diagrams, or charts accompanied by a short caption (e.g., *"Figure 1: The solar system"*). 
@@ -87,7 +83,7 @@ A basic image wrapped in a figure with a caption:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving off the `alt` attribute because a `<figcaption>` exists
 
@@ -158,7 +154,7 @@ A basic image wrapped in a figure with a caption:
 </figure>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Marking up an Illustration
 
@@ -215,14 +211,14 @@ A basic image wrapped in a figure with a caption:
 >
 > **Explanation:** `<figcaption>` must be placed at the top or bottom boundary of `<figure>`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<img>`](img.md) — The image element wrapped inside the figure.
 - [`alt` Attribute](alt.md) — The visual description metadata.
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic block container.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<figure>` groups self-contained media blocks (images, charts, code blocks).
 - `<figcaption>` defines the visible caption text for a `<figure>`.
 - The `<figcaption>` must be placed inside `<figure>` as either the first or last child.

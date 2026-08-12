@@ -476,10 +476,10 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 ## 6. Related Terms
 
 
-- [Unit Type (`()`)](../level_01/unit_type.md)
+- [Unit Type (`()`)](../level_01/unit_type.md) — 
 - [`PhantomData<T>`](phantomdata_t.md) — The purpose-built ZST for carrying type/lifetime information with zero runtime cost.
 - [Type-State Pattern](../level_14/type_state_pattern.md) — A design pattern that leans heavily on ZSTs to encode state transitions the compiler can verify for free.
-- [Monomorphization](../level_04/monomorphization.md)
+- [Monomorphization](../level_04/monomorphization.md) — 
 - [Marker Traits](../level_14/marker_traits.md) — Related concept: Marker Traits.
 - [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Related concept: Zero-Cost Abstractions.
 

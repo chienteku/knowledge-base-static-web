@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Only)**: document.querySelector() is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of JavaScript, developers had to use clunky, specific methods to find elements on the page: `getElementById()`, `getElementsByClassName()`, or `getElementsByTagName()`. If you wanted to find "the first paragraph inside a div with the class 'container'", it required writing complex, nested JavaScript logic.
@@ -63,7 +59,7 @@ if (activeBtn) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting it to return multiple elements
 
@@ -144,60 +140,121 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: CSS to JS
+### Exercise 1: Form Element Selector & State Guard
 
-**Problem:** You have the following HTML: `<div id="app"><span class="highlight">Hello</span></div>`. Write the `querySelector` command needed to select the span.
+**Scenario:** A form engine queries input elements using document.querySelector() and validates element existence before reading values.
 
-**Expected output:**
+**Requirements:**
+1. Write getInputValue(selectorStr).
+2. Use document.querySelector(selectorStr).
+3. Return element value or null if element not found.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> document.querySelector("#app .highlight");
-> // or just
-> document.querySelector(".highlight");
-> ```
-> - Pass the exact CSS selector as a string inside the parentheses.
-> 
----
-
-### Exercise 2: Selecting Elements by Attribute CSS Selectors
-
-**Problem:** Select input with `[type="password"]` using `querySelector` syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> input[type="password"]
-> ```
-> ```javascript
-> console.log('input[type="password"]');
+> function getInputValue(selectorStr) {
+>   if (!globalThis.document || typeof document.querySelector !== "function") return null;
+>   const el = document.querySelector(selectorStr);
+>   if (!el) return null;
+>   return el.value !== undefined ? el.value : null;
+> }
+>
+> // Verification tests
+> globalThis.document = {
+>   querySelector(s) {
+>     if (s === "#email") return { value: "test@example.com" };
+>     return null;
+>   }
+> };
+> console.assert(getInputValue("#email") === "test@example.com", "Test 1 Failed");
+> console.assert(getInputValue("#missing") === null, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `querySelector` accepts full CSS3 selector queries.
+> #### Technical Explanation
+>
+> 1. **querySelector() Behavior**: document.querySelector(CSS) returns the FIRST matching Element inside document tree, or null if no match exists.
+> 2. **CSS Selector Flexibility**: Supports ID (#id), class (.class), attribute ([data-x]), and complex compound CSS selectors.
+> 3. **Null Guard Pattern**: Always check for null before accessing properties on querySelector return values.
 > 
 ---
 
-### Exercise 3: Handling Null Query Selector Matches
+### Exercise 2: Scoped Dialog Container Element Search
 
-**Problem:** Safely chain property access on `document.querySelector('.missing')?.textContent`.
+**Scenario:** A UI modal manager queries elements relative to a container scope using element.querySelector() rather than global document searches.
 
-**Expected output:**
+**Requirements:**
+1. Write findScopedButton(containerEl, actionType).
+2. Use containerEl.querySelector(`button[data-action="${actionType}"]`).
+3. Return button element or null.
+
 > [!check]- Answer
-> ```text
-> undefined
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const elem = null; // Simulated missing query result
-> console.log(elem?.textContent);
+> function findScopedButton(containerEl, actionType) {
+>   if (!containerEl || typeof containerEl.querySelector !== "function") return null;
+>   return containerEl.querySelector(`button[data-action="${actionType}"]`);
+> }
+>
+> // Verification tests
+> const mockBtn = { id: "btn-save" };
+> const mockContainer = {
+>   querySelector(sel) {
+>     return sel.includes("save") ? mockBtn : null;
+>   }
+> };
+> console.assert(findScopedButton(mockContainer, "save") === mockBtn, "Test 1 Failed");
+> console.assert(findScopedButton(mockContainer, "delete") === null, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `querySelector` returns `null` if no matching element exists in DOM trees.
-> 
+> #### Technical Explanation
+>
+> 1. **Scoped Querying**: Element.prototype.querySelector(CSS) restricts searches to descendant nodes of the target element.
+> 2. **Attribute Selectors**: CSS attribute selectors ([data-action="save"]) target elements cleanly based on semantic data attributes.
+> 3. **Sub-Tree Isolation**: Prevents matching unrelated elements outside the specified container scope.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Active Navigation Link Selector
+
+**Scenario:** A navigation bar controller queries the active navigation link using CSS pseudo-classes and class selectors.
+
+**Requirements:**
+1. Write getActiveNavLink(navContainer).
+2. Use navContainer.querySelector("a.active, a[aria-current="page"]").
+3. Return active anchor element.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function getActiveNavLink(navContainer) {
+>   if (!navContainer || typeof navContainer.querySelector !== "function") return null;
+>   return navContainer.querySelector("a.active, a[aria-current='page']");
+> }
+>
+> // Verification tests
+> const mockLink = { href: "/home" };
+> const mockNav = {
+>   querySelector(sel) { return mockLink; }
+> };
+> console.assert(getActiveNavLink(mockNav) === mockLink, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Compound Selector Groups**: Comma-separated CSS selector groups (a.active, a[aria-current='page']) match any of the listed selectors.
+> 2. **First Match Priority**: querySelector returns the first element matching any of the grouped selectors in document tree order.
+> 3. **Accessibility Integration**: Supports ARIA state selectors like [aria-current='page'] for accessible navigation inspection.
+---
+
+## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The structure you are querying.
 - [document object](document_object.md) — Related concept: document object.
 - [getElementById / getElementsByClassName](getelementbyid_legacy.md) — Related concept: getElementById / getElementsByClassName.
@@ -205,7 +262,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `querySelector()` is the most modern, versatile way to select elements from the DOM.
 - It accepts a string containing any valid CSS selector (`.class`, `#id`, `tag`, `[attribute]`).
 - It always returns the **first** matching element. If no match is found, it returns `null`.

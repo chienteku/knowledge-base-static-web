@@ -274,10 +274,10 @@ Scope borrows tightly or use .try_borrow() / .try_borrow_mut()!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md)
-- [Stack vs Heap](../level_15/stack_vs_heap.md)
+- [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md) — 
+- [Stack vs Heap](../level_15/stack_vs_heap.md) — 
 - [`Box<T>`](../level_03/box_t.md) — Box pointer.
 - [`Rc<T>`](../level_03/rc_t.md) — Reference counted pointer.
 - [`Arc<T>`](../level_03/arc_t.md) — Atomic reference counted pointer.

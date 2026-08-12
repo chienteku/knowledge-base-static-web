@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: if / else is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Without conditional branching, a program is just a rigid script that executes from top to bottom, doing the exact same thing every single time it runs. To make software truly useful, it needs to be able to make decisions based on dynamic input (e.g., "If the user is an admin, show the dashboard; else, show the login screen"). 
@@ -67,7 +63,7 @@ console.log(getDiscountMessage(120, false)); // "You get a 10% discount!"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing assignment (`=`) with equality (`===`)
 
@@ -148,68 +144,137 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Even or Odd?
+### Exercise 1: E-Commerce Customer Discount Tier Evaluator
 
-**Problem:** Write an `if / else` statement that checks if a variable `const num = 7;` is even or odd. Log "Even" if it's even, and "Odd" if it's odd.
+**Scenario:** A checkout engine calculates customer discount percentages based on membership tier and total spending using nested if / else if / else conditional branches.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateDiscount(userTier, cartTotal).
+2. If userTier === "VIP", return 0.20.
+3. Else if userTier === "GOLD" or cartTotal >= 200, return 0.15.
+4. Else if cartTotal >= 100, return 0.10.
+5. Else return 0.0.
+
 > [!check]- Answer
-> ```text
-> Odd
-> ```
-> - Use the modulo operator `%` to find the remainder of division.
-> - If `num % 2 === 0`, the number is even.
-> 
----
-
-### Exercise 2: Chained Conditional Guarding
-
-**Problem:** Write an `if...else if...else` structure classifying grade numbers into `"A"` (>=90), `"B"` (>=80), `"C"` (>=70), or `"F"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> B
-> ```
-> ```javascript
-> const score = 85;
-> let grade;
-> if (score >= 90) grade = "A";
-> else if (score >= 80) grade = "B";
-> else if (score >= 70) grade = "C";
-> else grade = "F";
-> console.log(grade);
-> ```
 >
-> **Explanation:** `else if` chains evaluate conditions top-to-bottom, executing the first matching condition block.
-> 
----
-
-### Exercise 3: Early Return Pattern Refactoring
-
-**Problem:** Refactor nested `if` statements using early `return` guards.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Invalid user
-> ```
+> #### Implementation
+>
 > ```javascript
-> function processUser(user) {
->   if (!user) return "Invalid user";
->   if (!user.active) return "Inactive user";
->   return "User processed";
+> function calculateDiscount(userTier, cartTotal) {
+>   if (userTier === "VIP") {
+>     return 0.20;
+>   } else if (userTier === "GOLD" || cartTotal >= 200) {
+>     return 0.15;
+>   } else if (cartTotal >= 100) {
+>     return 0.10;
+>   } else {
+>     return 0.0;
+>   }
 > }
-> console.log(processUser(null));
+>
+> // Verification tests
+> console.assert(calculateDiscount("VIP", 50) === 0.20, "Test 1 Failed");
+> console.assert(calculateDiscount("STANDARD", 250) === 0.15, "Test 2 Failed");
+> console.assert(calculateDiscount("STANDARD", 150) === 0.10, "Test 3 Failed");
+> console.assert(calculateDiscount("STANDARD", 50) === 0.0, "Test 4 Failed");
 > ```
 >
-> **Explanation:** Early returns eliminate deeply nested `if...else` blocks, improving code readability.
+> #### Technical Explanation
+>
+> 1. **Conditional Branching**: if...else if...else statements execute different code blocks depending on truthy or falsy evaluations.
+> 2. **First Match Short-Circuiting**: JavaScript evaluates branch conditions top-down and executes only the first matching truthy branch.
+> 3. **Default Else Fallback**: The final else block provides a fallback execution path when all preceding conditions evaluate to falsy.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Resource Access Authorizer Guard
+
+**Scenario:** An API security gateway evaluates user access permissions, returning access decisions based on role ownership and account status.
+
+**Requirements:**
+1. Write authorizeAccess(user, resource).
+2. If user is null or suspended, return false.
+3. If user.role === "ADMIN" or resource.ownerId === user.id, return true.
+4. Else return false.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function authorizeAccess(user, resource) {
+>   if (!user || user.isSuspended) {
+>     return false;
+>   } else if (user.role === "ADMIN" || (resource && resource.ownerId === user.id)) {
+>     return true;
+>   } else {
+>     return false;
+>   }
+> }
+>
+> // Verification tests
+> console.assert(authorizeAccess({ id: 1, role: "ADMIN", isSuspended: false }, {}) === true, "Test 1 Failed");
+> console.assert(authorizeAccess({ id: 2, role: "USER", isSuspended: false }, { ownerId: 2 }) === true, "Test 2 Failed");
+> console.assert(authorizeAccess({ id: 3, role: "USER", isSuspended: true }, { ownerId: 3 }) === false, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Guard Condition Branching**: Placing rejection checks in initial if blocks prevents invalid property access in subsequent branches.
+> 2. **Boolean Truthy Evaluation**: Conditions inside if (...) are implicitly coerced to boolean primitives.
+> 3. **Explicit Return Scoping**: Returning values directly from conditional blocks eliminates unnecessary mutable variables.
+> 
+---
+
+### Exercise 3: System Server Load Alert Resolver
+
+**Scenario:** A cloud monitoring dashboard maps CPU load percentages to operational alert levels ("CRITICAL", "WARNING", "HEALTHY").
+
+**Requirements:**
+1. Write resolveLoadAlert(cpuPercent).
+2. If cpuPercent >= 90, return "CRITICAL".
+3. Else if cpuPercent >= 70, return "WARNING".
+4. Else if cpuPercent >= 0, return "HEALTHY".
+5. Else return "UNKNOWN".
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveLoadAlert(cpuPercent) {
+>   if (typeof cpuPercent !== "number" || Number.isNaN(cpuPercent)) {
+>     return "UNKNOWN";
+>   }
+>
+>   if (cpuPercent >= 90) {
+>     return "CRITICAL";
+>   } else if (cpuPercent >= 70) {
+>     return "WARNING";
+>   } else if (cpuPercent >= 0) {
+>     return "HEALTHY";
+>   } else {
+>     return "UNKNOWN";
+>   }
+> }
+>
+> // Verification tests
+> console.assert(resolveLoadAlert(95) === "CRITICAL", "Test 1 Failed");
+> console.assert(resolveLoadAlert(75) === "WARNING", "Test 2 Failed");
+> console.assert(resolveLoadAlert(30) === "HEALTHY", "Test 3 Failed");
+> console.assert(resolveLoadAlert("invalid") === "UNKNOWN", "Test 4 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Sequential Threshold Testing**: Arranging thresholds in descending order ensures correct classification without complex logical AND chains.
+> 2. **Input Validation Defensive Path**: Initial type checks guard against NaN or non-numeric arguments.
+> 3. **Block Scope Isolation**: Variables declared inside an if block are scoped strictly to that block.
+---
+
+## 6. Related Terms
 - [switch](switch.md) — Evaluates an expression against multiple cases.
 - [Truthy / Falsy](truthy_falsy.md) — Values that evaluate to `true` or `false`.
 - [Comparison Operators](../level_01/comparison_operators.md) — Related concept: Comparison Operators.
@@ -218,7 +283,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `if` block executes if the condition evaluates to a truthy value.
 - The `else` block executes if the condition evaluates to a falsy value.
 - You can chain multiple conditions together using `else if`.

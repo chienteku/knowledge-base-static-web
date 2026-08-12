@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Internet Protocol / Standard**
+
+**Internet Protocol / Standard (Universal .)**: HTTP Status Codes is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Every single web request on the internet uses these).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a React frontend sends a login request to an API, and the API returns `{ message: "Bad password" }`, the React app has to manually read the string, parse the English language, and figure out if that means success or failure. What if the backend changes the message to `"Incorrect password"`? The frontend breaks.
@@ -59,7 +55,7 @@ app.post('/users', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Sending a 200 OK for an Error
 
@@ -178,7 +174,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 // User logged in as 'member' accessing /admin -> Return 403 Forbidden
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Detective
 
@@ -240,7 +236,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 >
 > **Explanation:** Status 204 indicates successful processing without sending response body bytes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [REST API Design](rest_api.md) — The architecture that relies on these codes.
 - [Unhandled Promise Rejections](../level_05/unhandled_rejections.md) — When this happens, the server usually fails to even send a 500 error!
 - [The req & res Objects](../level_07/req_res.md) — Related concept: The req & res Objects.
@@ -248,7 +244,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Status Codes** are universal 3-digit numbers that indicate the result of an HTTP request.
 - **2xx** = Success. **3xx** = Redirects. **4xx** = Client errors (bad data, unauthorized). **5xx** = Server errors (crashes).
 - Always explicitly set `res.status()` when returning an error, or the frontend will mistakenly assume the request succeeded.

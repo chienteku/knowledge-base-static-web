@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: slice / splice is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While basic stack/queue methods (like `push` and `pop`) operate on array boundaries, developers need ways to manipulate elements inside the middle of an array. To solve this, JavaScript provides two similarly named but fundamentally different methods: `slice` and `splice`.
@@ -77,7 +73,7 @@ console.log("Bonus added:", gradeBook); // [ 'A', 'A+', 'B', 'A', 'B' ]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `slice` and `splice` spelling and behavior
 
@@ -159,77 +155,55 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Replace Elements
+### Exercise 1: Pagination Slicing vs In-Place Splice Mutation
 
-**Problem:** Complete the code to replace the element `"Iron"` with `"Copper"` inside the `metals` array in-place using `splice`.
+**Scenario:** A data grid pager uses slice() for non-mutating page window extraction and splice() for in-place row deletion.
 
-```javascript
-const metals = ["Gold", "Silver", "Iron", "Bronze"];
+**Requirements:**
+1. Write getPageSlice(items, page, pageSize).
+2. Write deleteRowInPlace(items, index).
+3. Verify slice does not mutate and splice mutates items array.
 
-// Replace Iron (index 2) with Copper
-// Write splice here
-
-console.log(metals);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> [ 'Gold', 'Silver', 'Copper', 'Bronze' ]
-> ```
-> - The start index is `2`.
-> - The delete count is `1`.
-> - The replacement item is `"Copper"`.
-> 
----
-
-### Exercise 2: Removing Array Items with `splice`
-
-**Problem:** Remove 2 items starting at index `1` from `[10, 20, 30, 40]` using `.splice(1, 2)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Removed: [ 20, 30 ], Remaining: [ 10, 40 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const arr = [10, 20, 30, 40];
-> const removed = arr.splice(1, 2);
-> console.log(`Removed: [ ${removed} ], Remaining: [ ${arr} ]`);
+> function getPageSlice(items, page, pageSize) {
+>   const start = (page - 1) * pageSize;
+>   return items.slice(start, start + pageSize);
+> }
+>
+> function deleteRowInPlace(items, index) {
+>   return items.splice(index, 1);
+> }
+>
+> // Verification tests
+> const list = ["A", "B", "C", "D"];
+> const page1 = getPageSlice(list, 1, 2);
+> console.assert(page1.join(",") === "A,B", "Test 1 Failed");
+> console.assert(list.length === 4, "Test 2 Failed: slice mutated source");
+>
+> deleteRowInPlace(list, 1); // Removes "B"
+> console.assert(list.join(",") === "A,C,D", "Test 3 Failed: splice in-place mutation failed");
 > ```
 >
-> **Explanation:** `splice(start, deleteCount)` mutates original array in-place and returns removed items.
-> 
----
-
-### Exercise 3: Shallow Copying Arrays with `slice()`
-
-**Problem:** Make a shallow copy of `[1, 2, 3]` using `.slice()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
-> ```javascript
-> const orig = [1, 2, 3];
-> const copy = orig.slice();
-> console.log(orig !== copy && orig.length === copy.length);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `slice()` called without arguments returns a shallow copy of the source array.
-> 
+> 1. **slice() Non-Mutating Window**: Array.prototype.slice(start, end) returns shallow copy of array segment without mutating original.
+> 2. **splice() In-Place Mutation**: Array.prototype.splice(start, deleteCount, ...items) deletes/replaces elements in place.
+> 3. **Return Value Differences**: slice() returns extracted window array; splice() returns array of deleted elements.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [push / pop / shift / unshift](push_pop_shift_unshift.md) — Adding/removing elements at boundaries.
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Alternative syntax to copy sections of arrays.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `slice(start, end)` is non-mutating: it extracts a sub-section of an array and returns it in a new array, leaving the original unchanged.
 - `splice(start, deleteCount, items...)` is mutating: it modifies the original array in-place by deleting, replacing, or inserting items.
 - `slice` takes a range of indices up to, but not including, the `end` index; `splice` takes a starting index and a count of elements to delete.

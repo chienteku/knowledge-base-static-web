@@ -754,7 +754,7 @@ Design an `ArenaSlotPool<T>` and a reference-counted handle guard `SlotLease<T>`
 - [`Copy` Trait](copy_trait.md) — As a rule, types that implement `Copy` are not allowed to implement `Drop` (you can't trivially duplicate something that requires complex cleanup!).
 - [`Drop Check` (dropck)](drop_check.md) — Related concept: `Drop Check` (dropck).
 - [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](std_mem_utilities.md) — Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`).
-- [`panic!` Macro](../level_04/panic.md) — Related concept: `panic!`.
+- [`panic!`](../level_04/panic.md) — Related concept: `panic!`.
 - [Memory Leaks & Reference Cycles](../level_11/memory_leaks.md) — Related concept: Memory Leaks & Reference Cycles.
 - [RAII (Resource Acquisition Is Initialization)](../level_18/raii.md) — Related concept: RAII (Resource Acquisition Is Initialization).
 

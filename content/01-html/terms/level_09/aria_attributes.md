@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute / Concept**
+
+**Global Attribute / Concept (Universal Browser Support .)**: ARIA Attributes is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all assistive technologies. Screen readers read ARIA roles, states, and labels to construct an accessibility tree in memory).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Native HTML has a rich vocabulary of semantic elements like `<button>`, `<nav>`, `<input>`, and `<header>`. Each of these has built-in accessibility rules. 
@@ -127,7 +123,7 @@ A custom modal popup block using ARIA roles and labels:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Adding `role="button"` without keyboard listeners
 
@@ -180,7 +176,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 <button type="button">Title</button>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Accordion Accessibility
 
@@ -230,7 +226,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 >
 > **Explanation:** `aria-hidden="true"` removes decorative elements from the accessibility tree.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Accessibility (a11y) Fundamentals](accessibility_fundamentals.md) — The parent accessibility theory.
 - [Semantic HTML](../level_06/semantic_html.md) — The native layout element list.
 - [`tabindex` Attribute](../level_07/tabindex.md) — Managing keyboard focus.
@@ -238,7 +234,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - ARIA attributes extend HTML to describe complex interactive elements to screen readers.
 - Never use ARIA if a native semantic element (like `<button>` or `<details>`) can do the job.
 - Use `role="..."` to define what a custom component represents.

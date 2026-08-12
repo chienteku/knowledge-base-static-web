@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **UI/UX / Aesthetic Property**
+
+**UI/UX / Aesthetic Property (Universal Modern Standard .)**: `cursor` is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Essential for signaling interactivity to desktop users).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 On a touchscreen phone, you can tap anywhere, so mice don't matter. But on a desktop computer, the mouse pointer is the user's only connection to the website. 
@@ -64,7 +60,7 @@ If the door is a flat piece of wood with a "Do Not Enter" sign (`not-allowed`), 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting it on clickable `<div>` elements
 
@@ -112,7 +108,7 @@ button:disabled {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Text Cursor
 
@@ -173,13 +169,13 @@ button:disabled {
 >
 > **Explanation:** Custom cursor images require fallback generic keywords (e.g. `auto`).
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Changing the cursor is almost always paired with changing the styling properties on `:hover`.
 - [`outline`](outline.md) — Visual ring for keyboard selection focuses.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `cursor` changes the mouse icon.
 - It is absolutely essential for UX (User Experience).
 - ALWAYS add `cursor: pointer;` to custom buttons and clickable cards!

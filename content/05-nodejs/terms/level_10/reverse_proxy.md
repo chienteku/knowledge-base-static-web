@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps / Systems Architecture**
+
+**Production / DevOps / Systems Architecture (Network Infrastructure Layer .)**: Reverse Proxy (Nginx) is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Network Infrastructure Layer** (Sits as an edge gateway between the public internet and your private backend network).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While the Node.js `http` module can listen directly to the internet (on port 80 or 443) and serve requests, doing so in production is a **bad security and performance practice**:
@@ -76,7 +72,7 @@ server {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving the Node.js port exposed to the public internet
 
@@ -133,7 +129,7 @@ location / {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Reverse Proxy Data Flow Mapping
 
@@ -197,13 +193,13 @@ Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ]
 >
 > **Explanation:** Reverse proxies offload non-application tasks from Node.js event loops.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Load Balancing](load_balancing.md) — The routing system often combined with reverse proxies.
 - [Docker](docker.md) — The container architecture used to isolate proxies from application servers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A reverse proxy sits between the public internet and backend application servers.
 - It shields Node.js from public ports and prevents the need to run Node as root.
 - The proxy handles SSL/TLS termination, freeing Node's CPU resources.

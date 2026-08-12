@@ -10,7 +10,7 @@
 
 - [Token Stream](token_stream.md) — Understanding `proc_macro::TokenStream` and `proc_macro2::TokenStream` as raw lexical token input sequences.
 - [Procedural Macros](procedural_macros.md) — Proc macro architecture and execution during compilation.
-- [Struct](../level_02/struct.md)
+- [Struct](../level_02/struct.md) — 
 
 ---
 

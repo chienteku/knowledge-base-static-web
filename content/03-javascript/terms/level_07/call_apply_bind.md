@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: call / apply / bind is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, the value of the **`this`** keyword inside a function is bound dynamically when the function is invoked (e.g. calling `user.greet()` binds `this` to `user`, but extract the method to a variable: `const f = user.greet; f()` binds `this` to the global object or `undefined` in strict mode). This dynamic behavior can trigger bugs—especially when passing methods as callback arguments to timers or event listeners.
@@ -86,7 +82,7 @@ counter.startTimer(); // Logs "Count: 1" after 1 second
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `bind` to invoke the function immediately
 
@@ -162,78 +158,129 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Context Binder
+### Exercise 1: Method Borrowing across Data Objects via .call()
 
-**Problem:** Complete the code to bind the function `printTitle` to the `book` object, and execute the bound function.
+**Scenario:** A utility package borrows formatting methods from a base object and executes them in the context of different data objects using .call().
 
-```javascript
-const book = { title: "JavaScript Guide" };
+**Requirements:**
+1. Write formatRecord(label).
+2. Use .call() to execute formatRecord with target object context.
+3. Return formatted string.
 
-function printTitle() {
-  return this.title;
-}
-
-// Bind function to book
-const getTitle = // Write bind code
-
-console.log("Book Title:", getTitle());
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Book Title: JavaScript Guide
-> ```
-> - Assign `printTitle.bind(book)` to `getTitle`.
-> 
----
-
-### Exercise 2: Explicit `this` Binding with `.call()`
-
-**Problem:** Invoke `greet.call({ name: "Alice" })` for `function greet() { return this.name; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Alice
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function greet() { return this.name; }
-> console.log(greet.call({ name: "Alice" }));
+> function formatRecord(label) {
+>   return `[${label}]: ${this.name} (ID: ${this.id})`;
+> }
+>
+> const userA = { id: 101, name: "Alice" };
+> const userB = { id: 102, name: "Bob" };
+>
+> // Verification tests
+> const res1 = formatRecord.call(userA, "USER");
+> console.assert(res1 === "[USER]: Alice (ID: 101)", "Test 1 Failed");
+>
+> const res2 = formatRecord.call(userB, "ADMIN");
+> console.assert(res2 === "[ADMIN]: Bob (ID: 102)", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `.call(ctx, ...args)` invokes target functions with explicitly assigned `this` contexts.
+> #### Technical Explanation
+>
+> 1. **.call() Method Purpose**: Function.prototype.call(thisArg, arg1, arg2...) invokes a function immediately, explicitly setting its 'this' context.
+> 2. **Method Borrowing**: Allows objects to reuse methods from other objects or standalone functions without copying code.
+> 3. **Argument Passing Syntax**: Arguments are passed individually as comma-separated values after thisArg.
 > 
 ---
 
-### Exercise 3: Partial Function Application with `.bind()`
+### Exercise 2: Preserving Class Instance 'this' Context with .bind()
 
-**Problem:** Use `.bind(null, 2)` to create a `double` function from `function mult(a, b) { return a * b; }`.
+**Scenario:** An event listener manager binds class instance methods to the class instance using .bind() to prevent losing 'this' context when passed as callbacks.
 
-**Expected output:**
+**Requirements:**
+1. Create EventComponent class with button click handler.
+2. Use .bind(this) to bind method.
+3. Verify 'this' context remains bound during detached execution.
+
 > [!check]- Answer
-> ```text
-> 20
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function mult(a, b) { return a * b; }
-> const double = mult.bind(null, 2);
-> console.log(double(10));
+> class EventComponent {
+>   constructor(name) {
+>     this.name = name;
+>     // Bind 'this' explicitly to instance
+>     this.handleClick = this.handleClick.bind(this);
+>   }
+>
+>   handleClick() {
+>     return `Clicked by ${this.name}`;
+>   }
+> }
+>
+> // Verification tests
+> const comp = new EventComponent("Toolbar");
+> const detachedHandler = comp.handleClick; // Detached function reference
+>
+> console.assert(detachedHandler() === "Clicked by Toolbar", "Test 1 Failed: 'this' binding lost");
 > ```
 >
-> **Explanation:** `.bind()` pre-binds leading argument parameters for partial application.
+> #### Technical Explanation
+>
+> 1. **.bind() Method Purpose**: Function.prototype.bind(thisArg) returns a NEW bound function with its 'this' context permanently bound.
+> 2. **Detached Callbacks**: Prevents 'this' context loss when passing object methods as event listeners or timers.
+> 3. **Immutability of Bound Function**: Once a function is bound via .bind(), its 'this' context cannot be changed by subsequent .call() or .apply() calls.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Partial Parameter Pre-binding via .bind()
+
+**Scenario:** A log formatting factory uses .bind() to pre-bind fixed prefix parameters, returning partially applied logging functions.
+
+**Requirements:**
+1. Write createPrefixedLogger(prefix, baseLogFn).
+2. Use baseLogFn.bind(null, prefix).
+3. Return partially applied logger function.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createPrefixedLogger(prefix, baseLogFn) {
+>   if (typeof baseLogFn !== "function") return () => {};
+>   return baseLogFn.bind(null, prefix);
+> }
+>
+> // Verification tests
+> let loggedMessage = "";
+> const rawLog = (prefix, msg) => { loggedMessage = `[${prefix}]: ${msg}`; };
+> const infoLog = createPrefixedLogger("INFO", rawLog);
+>
+> infoLog("User signed in");
+> console.assert(loggedMessage === "[INFO]: User signed in", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Partial Application with .bind()**: Passing arguments after thisArg in .bind(thisArg, arg1, arg2...) prepends fixed initial arguments.
+> 2. **Functional Pre-configuration**: Creates specialized single-purpose functions from generalized multi-parameter functions.
+> 3. **this Context Detachment**: Passing null/undefined as thisArg ignores object context when binding standalone functions.
+> 
+---
+
+## 6. Related Terms
 - [Default this Binding Rules](default_this_binding.md) — The core precedence rules governing how JavaScript binds the execution context.
 - [this Keyword](this_keyword.md) — Related concept: this Keyword.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `call`, `apply`, or `bind` to explicitly control the value of `this` inside function scopes.
 - `call` and `apply` invoke functions immediately; `call` accepts arguments individually, whereas `apply` accepts arguments as an array.
 - `bind` returns a new copy of the function with `this` permanently bound, which is ideal for deferred execution callbacks.

@@ -269,12 +269,12 @@ let SmallVal = u8::try_from(big_int)?; // Checked bounds conversion!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`as` Casting (Primitive Numeric Coercion)](../level_01/as_casting.md)
-- [`Any` Trait / Downcasting](../level_04/any_trait_downcasting.md)
-- [`From` / `Into` Traits](../level_04/from_into_traits.md)
-- [`FromStr` Trait & `.parse()`](../level_04/fromstr_parse.md)
+- [`as` Casting (Primitive Numeric Coercion)](../level_01/as_casting.md) — 
+- [`Any` Trait / Downcasting](../level_04/any_trait_downcasting.md) — 
+- [`From` / `Into` Traits](../level_04/from_into_traits.md) — 
+- [`FromStr` Trait & `.parse()`](../level_04/fromstr_parse.md) — 
 - [`TryFrom` / `TryInto`](try_from_try_into.md) — TryFrom/TryInto family.
 
 ---

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Pseudo-class**
+
+**CSS Pseudo-class (Universal Modern Standard .)**: `:root` Pseudo-class is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Evaluated at the top of the browser's style cascade tree, distributing inherited variables down to all child elements).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern CSS, variables (`--variable-name`) allow you to store theme colors, spacing units, and font sizes in one place. But for a variable to be usable by *any* element on your website, it must be declared at the highest possible parent element so it can inherit down to all children.
@@ -132,7 +128,7 @@ Theme overrides on specific components:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `:root` and `body` for variable declaration
 
@@ -185,7 +181,7 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 :root { --color: red; } /* (0-1-0) Specificity matching */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: CSS Theme Switch
 
@@ -249,13 +245,13 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 >
 > **Explanation:** `:root` is a pseudo-class selector with (0,0,1,0) specificity rank.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`var()` (CSS Custom Properties)](var.md) — The variables stored inside `:root`.
 - [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Overwriting `:root` values.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `:root` targets the highest-level element in the document (the `<html>` tag).
 - It is the standard global storage area for CSS custom properties (variables).
 - `:root` has a higher specificity weight than the standard `html` tag selector.

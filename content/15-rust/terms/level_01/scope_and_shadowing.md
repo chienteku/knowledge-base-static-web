@@ -232,9 +232,9 @@ let mut total = 0; for x in vec { total += x; }
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [Hygiene](../level_12/hygiene.md)
+- [Hygiene](../level_12/hygiene.md) — 
 - [Shadowing](shadowing.md) — Re-declaring variables in scope.
 
 ---

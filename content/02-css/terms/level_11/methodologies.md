@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Architecture**
+
+**CSS Architecture (Universal Developer Standard .)**: CSS Methodologies (BEM, OOCSS, SMACSS) is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Developer Standard** (A convention governing how class strings are named and structured in HTML templates and stylesheets to avoid global namespace collisions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you write CSS for a simple 1-page website, you can name classes whatever you want. 
@@ -106,7 +102,7 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deep nesting BEM names (Grandchildren elements)
 
@@ -159,7 +155,7 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 .card__title { } /* Flat element name relative to Block */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: BEM Refactor
 
@@ -232,13 +228,13 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 >
 > **Explanation:** CSS methodologies establish naming and architectural conventions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Tools that help organize BEM naming modules.
 - [CSS Reset vs. Normalize](reset_normalize.md) — Base architecture configs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSS Methodologies provide standard naming conventions to keep codebases scalable.
 - BEM splits components into Blocks, Elements (`__`), and Modifiers (`--`).
 - BEM keeps specificity low and constant, avoiding selector overrides.

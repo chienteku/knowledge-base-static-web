@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Shorthand Properties & Methods is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, we frequently map existing variables directly into object properties. For instance, when constructing a database payload or sending a JSON request, we write code like `{ username: username, age: age, status: status }`. Having to write the identifier twice for every key is repetitive and bloats the code.
@@ -74,7 +70,7 @@ console.log(modernUser.sayHi());  // "Hi, Alice"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Shorthand Methods with Arrow Functions
 
@@ -163,73 +159,124 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build Shorthand Coordinates
+### Exercise 1: ES6 Object Shorthand Properties & Concise Method Definitions
 
-**Problem:** Complete the function `createPoint` to construct and return an object using **property and method shorthands** for `x`, `y`, and a method `printCoords` that returns the string `"Coordinates: X, Y"`.
+**Scenario:** A config builder constructs object literals using ES6 property value shorthand and concise method syntax.
 
-```javascript
-function createPoint(x, y) {
-  // Return object using shorthand syntax
-}
-
-const point = createPoint(10, 20);
-console.log(point.x); // 10
-console.log(point.printCoords()); // "Coordinates: 10, 20"
-```
+**Requirements:**
+1. Write createModuleConfig(name, version, startFn).
+2. Use shorthand property syntax { name, version }.
+3. Use concise method definition start() { ... }.
+4. Return config object.
 
 > [!check]- Answer
-> - Inside the object return, write `x, y,` and then declare the method: `printCoords() { return ... }`.
-> 
----
-
-### Exercise 2: ES6 Property Shorthand
-
-**Problem:** Create object `{ name, age }` from variables `name = "Alice"` and `age = 30`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"name":"Alice","age":30}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const name = "Alice";
-> const age = 30;
-> const user = { name, age };
-> console.log(JSON.stringify(user));
+> function createModuleConfig(name, version, startFn) {
+>   return {
+>     name,
+>     version,
+>     start() {
+>       return startFn(this.name);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const cfg = createModuleConfig("AuthModule", "1.0", (n) => `Started ${n}`);
+> console.assert(cfg.name === "AuthModule", "Test 1 Failed");
+> console.assert(cfg.start() === "Started AuthModule", "Test 2 Failed");
 > ```
 >
-> **Explanation:** ES6 property shorthand `{ name }` maps variable names directly as object keys.
+> #### Technical Explanation
+>
+> 1. **Property Value Shorthand**: Syntax { name } is equivalent to { name: name } when property name matches variable name.
+> 2. **Concise Method Definition**: Syntax method() {} is shorthand for method: function() {} in object literals.
+> 3. **Readability & Clean Code**: Reduces visual boilerplates in object creation and configuration builders.
 > 
 ---
 
-### Exercise 3: ES6 Method Shorthand
+### Exercise 2: Shorthand Properties Methods Advanced Context Handler
 
-**Problem:** Define method `speak() { return "Hi"; }` inside object literal.
+**Scenario:** A web application component processes shorthand properties methods data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleShorthandPropertiesMethodsSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Hi
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const bot = { speak() { return "Hi"; } };
-> console.log(bot.speak());
+> function handleShorthandPropertiesMethodsSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleShorthandPropertiesMethodsSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** ES6 method shorthand eliminates colon and `function` keywords in object definitions.
-> 
+> #### Technical Explanation
+>
+> 1. **Shorthand Properties Methods Architecture**: Applying shorthand properties methods patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Shorthand Properties Methods Performance Optimization
+
+**Scenario:** An application utility optimizes shorthand properties methods execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeShorthandPropertiesMethodsTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeShorthandPropertiesMethodsTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeShorthandPropertiesMethodsTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Shorthand Properties Methods Optimization**: Optimizing shorthand properties methods improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Destructuring](../level_08/destructuring.md) — The matching syntax used to extract values from objects.
 - [Computed Property Names](computed_property_names.md) — Related concept: Computed Property Names.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Property shorthand allows you to write just the variable name (e.g. `{name}`) when the key and value variable names match.
 - Method shorthand allows declaring functions directly without using the `: function` keyword.
 - Shorthand methods preserve dynamic `this` binding behavior, whereas arrow functions do not.

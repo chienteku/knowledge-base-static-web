@@ -12,11 +12,15 @@
 ---
 
 ## 2. Term Category
-Language Core, Operators
+
+**Language Core, Operators (core concept)**: Logical Operators is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Core Definition
+## 3. Explanation
+
+### (1) Design Motivation — "Why did we design this?"
+
 **Logical Operators** are symbols used to connect two or more expressions such that the value of the compound expression depends on the original expressions and on the meaning of the operator.
 
 JavaScript has three main logical operators:
@@ -24,17 +28,14 @@ JavaScript has three main logical operators:
 2. **`||` (Logical OR):** Returns true if *at least one* operand is true.
 3. **`!` (Logical NOT):** Reverses the boolean value of its operand.
 
----
+### (2) Key Characteristics
 
-## 4. Key Characteristics / Rules
 - **Short-Circuit Evaluation:** `&&` and `||` evaluate from left to right and will "short-circuit" (stop evaluating) as soon as the outcome is certain.
   - For `A && B`: If `A` is false, it returns `A` immediately without checking `B`.
   - For `A || B`: If `A` is true, it returns `A` immediately without checking `B`.
 - **Returning Values:** Unlike in some other languages, JS logical operators don't strictly return `true` or `false`. They return the *actual value* of one of the specified operands.
 
----
-
-## 5. Typical Usage / Common Patterns
+### (3) Code Examples & Typical Usage
 
 ```javascript
 const isAdult = true;
@@ -58,9 +59,15 @@ const isHidden = true;
 console.log(!isHidden); // false
 ```
 
+
+
 ---
 
-## 5. Common Mistakes & Pitfalls
+
+
+---
+
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Logical Operators Scope and Variable Hoisting
 
@@ -133,75 +140,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
----
+### Exercise 1: Short-Circuit Feature Flag & Permission Guard
 
-### Exercise 1: Short-Circuit Operator Evaluation
+**Scenario:** A feature flag evaluator checks if a feature is enabled and verifies user permissions using logical AND (&&) short-circuiting to avoid calling expensive permission checks when disabled.
 
-**Problem:** Predict outputs of `0 || "default"`, `"value" && "fallback"`, `null ?? "valid"`, and `false || 0`.
+**Requirements:**
+1. Write checkFeatureAccess(isFeatureEnabled, userPermissionCheckFn).
+2. Use logical AND (&&) to evaluate permissions only if isFeatureEnabled is truthy.
+3. Return boolean result.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> default
-> fallback
-> valid
-> 0
-> ```
-> ```javascript
-> console.log(0 || "default");       // "default"
-> console.log("value" && "fallback");// "fallback"
-> console.log(null ?? "valid");      // "valid"
-> console.log(false || 0);           // 0
-> ```
 >
-> **Explanation:** `||` evaluates to the first truthy operand; `&&` evaluates to the first falsy operand (or last operand); `??` evaluates to the first non-nullish operand.
-> 
----
-
-### Exercise 2: Guarding Function Execution with Short-Circuit `&&`
-
-**Problem:** Execute `fn()` only if `callback` is defined using `callback && callback()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Callback executed
-> ```
+> #### Implementation
+>
 > ```javascript
-> function run(cb) {
->   cb && cb();
+> function checkFeatureAccess(isFeatureEnabled, userPermissionCheckFn) {
+>   // Logical AND (&&) short-circuits: userPermissionCheckFn is skipped if isFeatureEnabled is falsy
+>   return Boolean(isFeatureEnabled && userPermissionCheckFn());
 > }
-> run(() => console.log("Callback executed"));
+>
+> // Verification tests
+> let fnCalled = false;
+> const mockFn = () => { fnCalled = true; return true; };
+>
+> const disabledRes = checkFeatureAccess(false, mockFn);
+> console.assert(disabledRes === false && fnCalled === false, "Test 1 Failed: Short-circuit failed");
+>
+> const enabledRes = checkFeatureAccess(true, mockFn);
+> console.assert(enabledRes === true && fnCalled === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `A && B()` evaluates `B()` only if `A` is truthy.
+> #### Technical Explanation
+>
+> 1. **Logical AND Short-Circuiting**: In expr1 && expr2, if expr1 is falsy, JavaScript returns expr1 immediately without evaluating expr2.
+> 2. **Operand Return Value**: Logical operators return the value of the deciding operand, not necessarily a boolean primitive.
+> 3. **Execution Guard Pattern**: Using && guards against invoking functions or accessing nested properties when prerequisites are missing.
 > 
 ---
 
-### Exercise 3: Nullish Coalescing vs Logical OR Defaults
+### Exercise 2: Default Configuration Fallback Evaluator
 
-**Problem:** Compare `0 || 100` vs `0 ?? 100`.
+**Scenario:** An application options resolver combines user settings, environment defaults, and global fallbacks using logical OR (||) and nullish coalescing (??).
 
-**Expected output:**
+**Requirements:**
+1. Write resolveConfig(userOpts).
+2. Set timeout using userOpts.timeout ?? 5000.
+3. Set appTitle using userOpts.appTitle || "Default App".
+4. Return resolved configuration object.
+
 > [!check]- Answer
-> ```text
-> 100
-> 0
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(0 || 100);
-> console.log(0 ?? 100);
+> function resolveConfig(userOpts = {}) {
+>   const timeout = userOpts.timeout ?? 5000;
+>   const appTitle = userOpts.appTitle || "Default App";
+>   return { timeout, appTitle };
+> }
+>
+> // Verification tests
+> const cfg1 = resolveConfig({ timeout: 0, appTitle: "" });
+> console.assert(cfg1.timeout === 0, "Test 1 Failed: 0 should not trigger ?? fallback");
+> console.assert(cfg1.appTitle === "Default App", "Test 2 Failed: empty string should trigger || fallback");
 > ```
 >
-> **Explanation:** `||` evaluates `0` as falsy; `??` treats `0` as a valid non-nullish value.
+> #### Technical Explanation
+>
+> 1. **Logical OR Short-Circuiting**: In expr1 || expr2, if expr1 is truthy, expr1 is returned immediately without evaluating expr2.
+> 2. **Falsy vs Nullish Fallback**: Logical OR (||) treats all 8 falsy values as fallback triggers; Nullish Coalescing (??) triggers only on null or undefined.
+> 3. **Short-Circuit Optimization**: Prevents unnecessary right-hand side evaluation when default criteria are satisfied.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Multi-Condition Security Firewall Validator
+
+**Scenario:** A security firewall evaluates incoming network request metadata using logical NOT (!), AND (&&), and OR (||) operators with parenthetical grouping.
+
+**Requirements:**
+1. Write validateFirewallRules(request).
+2. Request is allowed if !request.isBlacklisted AND (request.isInternal OR request.hasValidToken).
+3. Return boolean access decision.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function validateFirewallRules(request) {
+>   if (!request || typeof request !== "object") return false;
+>
+>   const isNotBlacklisted = !request.isBlacklisted;
+>   const isAuthorizedSource = Boolean(request.isInternal || request.hasValidToken);
+>
+>   return isNotBlacklisted && isAuthorizedSource;
+> }
+>
+> // Verification tests
+> console.assert(validateFirewallRules({ isBlacklisted: false, isInternal: true }) === true, "Test 1 Failed");
+> console.assert(validateFirewallRules({ isBlacklisted: false, isInternal: false, hasValidToken: true }) === true, "Test 2 Failed");
+> console.assert(validateFirewallRules({ isBlacklisted: true, isInternal: true }) === false, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Logical NOT Inversion**: The unary ! operator converts its operand to an inverted boolean primitive.
+> 2. **Operator Precedence Hierarchy**: Logical NOT (!) evaluates before logical AND (&&), which evaluates before logical OR (||).
+> 3. **Explicit Parentheses**: Using parentheses () overrides default precedence and guarantees intended evaluation sequence.
+---
+
+## 6. Related Terms
 - [Nullish Coalescing (??)](../level_08/nullish_coalescing.md) — A newer operator designed to safely handle default values better than `||`.
 - [if / else](if_else.md) — The primary control structures that rely on logical operators.
 
 ---
+
+## 7. Key Takeaways
+- Logical operators (`&&`, `||`, `!`) evaluate expressions and control conditional execution flow.
+- Logical `&&` and `||` perform short-circuit evaluation, returning operand values directly rather than booleans.
+- Logical NOT `!` coerces values to booleans and inverts their truthiness (`!!` coerces to boolean).
+- Prefer nullish coalescing `??` over `||` when zero `0` or empty string `""` are valid non-default values.
+
 

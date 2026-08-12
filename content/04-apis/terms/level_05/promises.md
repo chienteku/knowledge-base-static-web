@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **JavaScript Core Concept / Asynchronous Programming**
+
+**JavaScript Core Concept / Asynchronous Programming (Universal JavaScript .)**: Promises (in the context of networks) is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal JavaScript** (Used heavily in both Browsers and Node.js).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript is **single-threaded**. It can only do one thing at a time. 
@@ -65,7 +61,7 @@ console.log("2. Sitting down to talk to friends.");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to return data from inside a `.then()`
 
@@ -135,62 +131,145 @@ fetch('/api/user')
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Execution Order
+### Exercise 1: Promise Chaining & Data Transformation Pipeline
 
-**Problem:** What is the exact order of `console.log`s in this code?
-```javascript
-console.log("A");
-fetch('/api').then(() => console.log("B"));
-console.log("C");
-```
+**Scenario:** A REST client chains `.then()` handlers to parse HTTP responses, transform payloads, and attach metadata timestamps.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchAndTransformUser(userId, fetchFn).
+2. Chain .then() handlers.
+3. Return transformed user object.
+
 > [!check]- Answer
-> ```text
-> A, C, B.
-> JavaScript logs A. It fires the fetch and gets a pending Promise. It does NOT wait. It moves to the next line and logs C. Finally, milliseconds later, the network returns and it logs B.
+>
+> #### Implementation
+>
+> ```javascript
+> function fetchAndTransformUser(userId, fetchFn) {
+>   return fetchFn(userId)
+>     .then(response => {
+>       if (!response.ok) throw new Error(`User ${userId} not found`);
+>       return response.json();
+>     })
+>     .then(rawUser => {
+>       return {
+>         id: rawUser.id,
+>         displayName: `${rawUser.firstName} ${rawUser.lastName}`,
+>         email: rawUser.email.toLowerCase(),
+>         fetchedAt: Date.now()
+>       };
+>     })
+>     .catch(err => {
+>       return { error: err.message, userId };
+>     });
+> }
+>
+> // Verification tests
+> const mockFetch = async (id) => ({
+>   ok: true,
+>   json: async () => ({ id, firstName: "Alice", lastName: "Smith", email: "ALICE@EXAMPLE.COM" })
+> });
+>
+> fetchAndTransformUser("u100", mockFetch).then(res => {
+>   console.assert(res.displayName === "Alice Smith", "Test 1 Failed");
+>   console.assert(res.email === "alice@example.com", "Test 2 Failed");
+> });
 > ```
-> - JavaScript never waits for the network unless you explicitly tell it to with `await`!
+>
+> #### Technical Explanation
+>
+> 1. **Promise States**: Pending -> Fulfilled (resolved) or Rejected.
+> 2. **Chain Values**: Returning a value inside .then() resolves the next promise in the chain with that value.
+> 3. **Centralized .catch()**: A single .catch() at the end of the chain handles errors thrown at any step.
 > 
 ---
 
-### Exercise 2: Promise 3-State Life Cycle Matrix
+### Exercise 2: Legacy Callback to Promise Conversion Utility (Promisify)
 
-**Problem:** Identify the 3 mutually exclusive states of a JavaScript Promise.
+**Scenario:** Converts a legacy node-style callback function `(arg, callback)` into a modern Promise-returning function.
 
-**Expected output:**
+**Requirements:**
+1. Write promisifyCallback(fn).
+2. Return new Promise((resolve, reject) => ...).
+
 > [!check]- Answer
-> ```text
-> 1. Pending (Initial state)
-> 2. Fulfilled (Operation succeeded - resolved)
-> 3. Rejected (Operation failed)
-> ```
-> ```text
-> 1. Pending -> Initial state (neither fulfilled nor rejected)
-> 2. Fulfilled -> Completed successfully with value
-> 3. Rejected -> Failed with error reason
-> ```
-> - **Explanation:** Promises transition from Pending to either Fulfilled or Rejected permanently.
----
-
-### Exercise 3: Promise.resolve / Promise.reject Utility
-
-**Problem:** Write single line creating a Promise that immediately fulfills with value `42`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const p = Promise.resolve(42);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const p = Promise.resolve(42);
+> function promisifyCallback(legacyFn) {
+>   return function (...args) {
+>     return new Promise((resolve, reject) => {
+>       legacyFn(...args, (err, result) => {
+>         if (err) return reject(err);
+>         resolve(result);
+>       });
+>     });
+>   };
+> }
+>
+> // Verification tests
+> const legacyAsync = (name, cb) => {
+>   if (!name) return cb(new Error("Name required"));
+>   cb(null, `Hello ${name}`);
+> };
+>
+> const promisedFn = promisifyCallback(legacyAsync);
+>
+> promisedFn("World").then(msg => {
+>   console.assert(msg === "Hello World", "Test 1 Failed");
+> });
+>
+> promisedFn(null).catch(err => {
+>   console.assert(err.message === "Name required", "Test 2 Failed");
+> });
 > ```
-> - **Explanation:** `Promise.resolve(val)` wraps non-promise values into resolved Promises.
+>
+> #### Technical Explanation
+>
+> 1. **Promise Constructor**: new Promise((resolve, reject) => {}) wraps asynchronous callback operations.
+> 2. **Node Callback Convention**: Node callbacks expect (err, result) parameters.
+> 3. **Async Modernization**: Promisifying legacy libraries allows consuming them with modern async/await syntax.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Unhandled Rejection Safeguard & Fallback Resolver
+
+**Scenario:** Ensures promise execution chains always handle potential rejections, preventing unhandledRejection crashes.
+
+**Requirements:**
+1. Write safePromiseResolve(promiseInstance, fallbackValue).
+2. Attach .catch() handler returning fallbackValue.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function safePromiseResolve(promiseInstance, fallbackValue = null) {
+>   return promiseInstance.catch(err => {
+>     return fallbackValue;
+>   });
+> }
+>
+> // Verification tests
+> const failingPromise = Promise.reject(new Error("Boom!"));
+>
+> safePromiseResolve(failingPromise, "SAFE_DEFAULT").then(res => {
+>   console.assert(res === "SAFE_DEFAULT", "Test 1 Failed: Must return fallback value on rejection");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Unhandled Rejection Risk**: Uncaught promise rejections terminate Node.js processes in modern runtimes.
+> 2. **.catch() Recovery**: Catching rejections converts error states back into fulfilled promise states with fallback values.
+> 3. **Resilient API Pipelines**: Guarantees async operations complete without bubbling uncaught exceptions.
+---
+
+## 6. Related Terms
 - [async / await](async_await.md) — The modern, much cleaner syntax for handling Promises without using `.then()`.
 - [Error Handling (try / catch)](error_handling.md) — How we handle "Rejected" promises.
 - [The fetch() API](fetch.md) — Related concept: The fetch() API.
@@ -198,7 +277,7 @@ console.log("C");
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Promise** is a placeholder for data that hasn't arrived yet.
 - Because network requests are slow, `fetch` returns a Promise so it doesn't freeze the browser.
 - Use `.then()` to schedule code to run *after* the Promise successfully fulfills.

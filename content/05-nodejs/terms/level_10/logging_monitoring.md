@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps**
+
+**Production / DevOps (Observability Layer .)**: Logging & Monitoring is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Observability Layer** (Tracks application health, diagnostics, and performance metrics in production).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In local development, using `console.log()` to debug variables is quick and easy. 
@@ -90,7 +86,7 @@ app.listen(3000);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving raw verbose debug logs active in production
 
@@ -136,7 +132,7 @@ logger.info({ body: req.body }); // ❌ Logs passwords and credit cards to disk!
 const logger = pino({ redact: ['req.body.password', 'req.body.creditCard'] });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Health Check Route
 
@@ -210,13 +206,13 @@ app.get('/health/ready', (req, res) => {
 >
 > **Explanation:** RED metrics provide visibility into server throughput, error rates, and response latency.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Captures stdout/stderr outputs and manages application logs.
 - [Graceful Shutdown & Process Signals](graceful_shutdown.md) — Works with health probes to drain traffic before container termination.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use structured JSON logging (via Pino or Winston) in production to enable query filters.
 - Plain text `console.log` statements are synchronous in some contexts and can block the event loop.
 - Logging aggregators index JSON log parameters for fast analysis.

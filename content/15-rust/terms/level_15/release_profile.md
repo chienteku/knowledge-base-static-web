@@ -111,9 +111,7 @@ fn main() {
 }
 ```
 
----
-
-## 5. Debug vs Release Profile Comparison
+### (5) Debug vs Release Profile Comparison
 
 | Feature | Debug Profile (`cargo build`) | Release Profile (`cargo build --release`) |
 | :--- | :--- | :--- |
@@ -127,7 +125,7 @@ fn main() {
 
 ---
 
-## 6. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deploying Debug Binaries (`target/debug/`) to Production
 
@@ -182,7 +180,7 @@ debug = true # Keep debug symbols for flamegraph/perf profiling without hurting 
 
 ---
 
-## 7. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: High-Frequency Trading Volume Tracker — Profile Safety & Overflow Verification
 

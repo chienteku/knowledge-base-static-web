@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Property Access (dot vs bracket notation) is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Objects store data as collections of key-value pairs. To read, write, or update this data, developers need a syntax to target specific keys. The TC39 committee implemented two separate syntaxes for property access to balance readability and flexibility:
@@ -78,7 +74,7 @@ console.log(localization.errorMsg); // "An error occurred."
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Quoting Variable Names inside Brackets
 
@@ -165,80 +161,117 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Config Lookup
+### Exercise 1: Dynamic Database Record Field Extractor
 
-**Problem:** Complete the code to retrieve the configuration setting dynamically based on the `userSelection` variable.
+**Scenario:** A database ORM extracts record fields dynamically using bracket notation obj[fieldName] when property names are stored in runtime variables.
 
-```javascript
-const settings = {
-  notifications: true,
-  theme: "light",
-  volume: 80
-};
+**Requirements:**
+1. Write extractFieldValue(record, fieldName).
+2. Access property using bracket notation record[fieldName].
+3. Return extracted value.
 
-const userSelection = "theme";
-const currentValue = // Write code here
-
-console.log(currentValue);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> light
-> ```
-> - The key name is stored in a variable, so you must use bracket notation.
-> - Pass the variable `userSelection` into the brackets without quotes.
-> 
----
-
-### Exercise 2: Optional Chaining Property Access (`?.`)
-
-**Problem:** Safely read `user?.address?.city` when `user` is `{ address: null }` without throwing a `TypeError`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> undefined
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = { address: null };
-> console.log(user?.address?.city);
+> function extractFieldValue(record, fieldName) {
+>   if (!record || typeof record !== "object") return undefined;
+>   return record[fieldName];
+> }
+>
+> // Verification tests
+> const user = { id: 42, username: "alice", role: "ADMIN" };
+> console.assert(extractFieldValue(user, "username") === "alice", "Test 1 Failed");
+> console.assert(extractFieldValue(user, "role") === "ADMIN", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `?.` short-circuits and evaluates to `undefined` if target reference operands are nullish (`null` or `undefined`).
+> #### Technical Explanation
+>
+> 1. **Dot vs Bracket Notation**: Dot notation obj.prop requires valid identifier names; bracket notation obj[expr] evaluates dynamic expressions.
+> 2. **Expression Evaluation**: Bracket notation converts the inner expression to a string key before accessing property.
+> 3. **Dynamic Property Lookups**: Essential for runtime property access when key names are stored in variables.
 > 
 ---
 
-### Exercise 3: Dynamic Bracket Property Lookup
+### Exercise 2: Safe Nested Payload Access with Optional Chaining
 
-**Problem:** Use variable `const prop = "age"` to dynamically access `user[prop]` on `{ age: 30 }`.
+**Scenario:** An API response parser extracts deeply nested user address properties using optional chaining (?.) to prevent TypeError crashes.
 
-**Expected output:**
+**Requirements:**
+1. Write extractCity(apiPayload).
+2. Safely access payload?.data?.user?.address?.city.
+3. Return city string or fallback default "Unknown City".
+
 > [!check]- Answer
-> ```text
-> 30
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = { age: 30 };
-> const prop = "age";
-> console.log(user[prop]);
+> function extractCity(apiPayload) {
+>   const city = apiPayload?.data?.user?.address?.city ?? "Unknown City";
+>   return city;
+> }
+>
+> // Verification tests
+> console.assert(extractCity({ data: { user: { address: { city: "Seattle" } } } }) === "Seattle", "Test 1 Failed");
+> console.assert(extractCity({ data: {} }) === "Unknown City", "Test 2 Failed");
+> console.assert(extractCity(null) === "Unknown City", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Bracket notation `obj[expr]` evaluates `expr` as a string identifier key lookup.
+> #### Technical Explanation
+>
+> 1. **Optional Chaining (?.)**: Short-circuits and evaluates to undefined if the left-hand operand is null or undefined.
+> 2. **TypeError Prevention**: Prevents Cannot read properties of undefined crashes when accessing missing nested keys.
+> 3. **Nullish Coalescing Combination**: Combining ?. with ?? provides concise default fallbacks for missing nested properties.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Special Character HTTP Header Access
+
+**Scenario:** An HTTP header parser extracts header values containing hyphens (content-type, x-api-key) requiring bracket notation access.
+
+**Requirements:**
+1. Write getHeaderValue(headersObj, headerName).
+2. Access property using bracket notation headersObj[headerName].
+3. Return header value string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function getHeaderValue(headersObj, headerName) {
+>   if (!headersObj || typeof headersObj !== "object") return undefined;
+>   return headersObj[headerName];
+> }
+>
+> // Verification tests
+> const headers = {
+>   "content-type": "application/json",
+>   "x-api-key": "secret-123"
+> };
+> console.assert(getHeaderValue(headers, "content-type") === "application/json", "Test 1 Failed");
+> console.assert(getHeaderValue(headers, "x-api-key") === "secret-123", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Non-Identifier Keys**: Property keys containing hyphens, spaces, or special characters cannot use dot notation.
+> 2. **Bracket Notation Requirement**: Keys with hyphens must be accessed as string keys inside bracket notation (obj["content-type"]).
+> 3. **Property Key Coercion**: Property keys inside brackets are automatically coerced to strings or symbols.
+---
+
+## 6. Related Terms
 - [Method](method.md) — Functions stored inside objects.
 - [Computed Property Names](../level_07/computed_property_names.md) — Declaring dynamic keys inside object literals.
 - [Object](object.md) — Related concept: Object.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use dot notation (`obj.prop`) by default for clean, readable code when the key name is static and standard.
 - Use bracket notation (`obj["prop"]` or `obj[variable]`) when the key contains spaces, special characters, starts with a number, or is stored in a variable.
 - Do not wrap variable names in quotes inside the brackets, or the engine will treat them as string literals instead of variables.

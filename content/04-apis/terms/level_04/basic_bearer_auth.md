@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Security / HTTP Standard**
+
+**Security / HTTP Standard (Universal Standard)**: Basic & Bearer Authentication is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a secure API, you need a way for the Client to say "Here is my password/token."
@@ -47,7 +43,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the space after the Scheme word
 
@@ -98,54 +94,153 @@ Authorization: Bearer eyJhbGciOi... ; Standard OAuth2 Bearer token header
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Which Scheme?
+### Exercise 1: HTTP Basic Authorization Header Parser
 
-**Problem:** You are building a frontend app. The user types their email and password into a login form and clicks submit. You need to send these credentials to `/api/login`. Which scheme should you use in the `Authorization` header?
+**Scenario:** A backend service parses HTTP `Authorization: Basic <base64>` headers, decoding credentials into username and password.
 
-**Expected output:**
+**Requirements:**
+1. Write parseBasicAuthHeader(headerStr).
+2. Extract Base64 string.
+3. Decode ASCII string `username:password`.
+4. Return credentials object.
+
 > [!check]- Answer
-> ```text
-> Basic Authentication.
-> You are sending the raw username and password. Once the server verifies it, it will return a Token, which you will then use for *Bearer* Authentication on all future requests!
+>
+> #### Implementation
+>
+> ```javascript
+> function parseBasicAuthHeader(headerStr) {
+>   if (!headerStr || typeof headerStr !== "string" || !headerStr.startsWith("Basic ")) {
+>     return { valid: false, error: "Invalid Basic Auth header format" };
+>   }
+>
+>   const base64Str = headerStr.substring(6).trim();
+>   try {
+>     const decoded = Buffer.from(base64Str, "base64").toString("utf-8");
+>     const separatorIdx = decoded.indexOf(":");
+>     if (separatorIdx === -1) {
+>       return { valid: false, error: "Malformed credentials string" };
+>     }
+>
+>     const username = decoded.substring(0, separatorIdx);
+>     const password = decoded.substring(separatorIdx + 1);
+>
+>     return { valid: true, username, password };
+>   } catch (err) {
+>     return { valid: false, error: "Failed to decode base64" };
+>   }
+> }
+>
+> // Verification tests
+> const header = "Basic YWRtaW46c2VjcmV0MTIz";
+> const parsed = parseBasicAuthHeader(header);
+>
+> console.assert(parsed.valid === true, "Test 1 Failed");
+> console.assert(parsed.username === "admin" && parsed.password === "secret123", "Test 2 Failed");
 > ```
-> - Are you sending a raw password, or a generated token?
+>
+> #### Technical Explanation
+>
+> 1. **HTTP Basic Auth Scheme**: Transmits credentials as Base64 encoded string (`username:password`).
+> 2. **Base64 is NOT Encryption**: Base64 is simple encoding, easily decoded by anyone; MUST be used over HTTPS.
+> 3. **RFC 7617 Specification**: Standard format for legacy server-to-server and web tool authentication.
 > 
 ---
 
-### Exercise 2: Basic Auth String Encoding
+### Exercise 2: HTTP Bearer Token Authorization Extractor
 
-**Problem:** Encode username `admin` and password `secret` into an HTTP Basic Auth header string format.
+**Scenario:** An API middleware extracts and validates `Authorization: Bearer <token>` headers.
 
-**Expected output:**
+**Requirements:**
+1. Write extractBearerToken(headerStr).
+2. Verify header begins with 'Bearer '.
+3. Return raw opaque or JWT token string.
+
 > [!check]- Answer
-> ```text
-> Authorization: Basic YWRtaW46c2VjcmV0
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const credentials = btoa('admin:secret'); // 'YWRtaW46c2VjcmV0'
-> const header = `Authorization: Basic ${credentials}`;
+> function extractBearerToken(headerStr) {
+>   if (!headerStr || typeof headerStr !== "string") {
+>     return { valid: false, error: "Missing Authorization header" };
+>   }
+>
+>   const parts = headerStr.trim().split(" ");
+>   if (parts.length !== 2 || parts[0] !== "Bearer") {
+>     return { valid: false, error: "Header must be in format 'Bearer <token>'" };
+>   }
+>
+>   const token = parts[1].trim();
+>   if (!token) {
+>     return { valid: false, error: "Token string is empty" };
+>   }
+>
+>   return { valid: true, token };
+> }
+>
+> // Verification tests
+> const res1 = extractBearerToken("Bearer token_abc123");
+> console.assert(res1.valid === true && res1.token === "token_abc123", "Test 1 Failed");
+>
+> const res2 = extractBearerToken("Basic YWRtaW4=");
+> console.assert(res2.valid === false, "Test 2 Failed: Basic header rejected");
 > ```
-> - **Explanation:** Basic Auth formats `btoa('username:password')` appended after `Basic `.
+>
+> #### Technical Explanation
+>
+> 1. **Bearer Auth Scheme**: Client presents opaque or JWT token string as proof of authorization.
+> 2. **Bearer Meaning**: 'Bearer' means whoever holds the token is granted access.
+> 3. **Token Confidentiality**: Bearer tokens must be stored securely (HttpOnly cookies or encrypted storage) and sent over HTTPS.
+> 
 ---
 
-### Exercise 3: Bearer Token RFC Specification
+### Exercise 3: Authentication Scheme Router & Auditor
 
-**Problem:** Which RFC specification defines the HTTP Bearer Token authentication scheme?
+**Scenario:** An API gateway routes incoming requests to Basic or Bearer authenticators based on Authorization header scheme.
 
-**Expected output:**
+**Requirements:**
+1. Write routeAuthScheme(headerStr, basicHandler, bearerHandler).
+2. Dispatch to appropriate handler.
+
 > [!check]- Answer
-> ```text
-> RFC 6750 (The OAuth 2.0 Authorization Framework: Bearer Token Usage).
+>
+> #### Implementation
+>
+> ```javascript
+> function routeAuthScheme(headerStr, basicHandler, bearerHandler) {
+>   if (!headerStr || typeof headerStr !== "string") {
+>     return { status: 401, error: "Missing Authorization header" };
+>   }
+>
+>   if (headerStr.startsWith("Basic ")) {
+>     return basicHandler(headerStr);
+>   }
+>   if (headerStr.startsWith("Bearer ")) {
+>     return bearerHandler(headerStr);
+>   }
+>
+>   return { status: 401, error: "Unsupported authentication scheme" };
+> }
+>
+> // Verification tests
+> const mockBasic = () => ({ status: 200, scheme: "BASIC" });
+> const mockBearer = () => ({ status: 200, scheme: "BEARER" });
+>
+> console.assert(routeAuthScheme("Basic xyz", mockBasic, mockBearer).scheme === "BASIC", "Test 1 Failed");
+> console.assert(routeAuthScheme("Bearer xyz", mockBasic, mockBearer).scheme === "BEARER", "Test 2 Failed");
 > ```
-> ```text
-> RFC 6750 (OAuth 2.0 Bearer Token Usage).
-> ```
-> - **Explanation:** RFC 6750 standardizes Bearer token transport in HTTP Authorization headers.
+>
+> #### Technical Explanation
+>
+> 1. **Multi-Scheme Support**: API gateways support legacy Basic Auth for machine clients and Bearer Auth for user web clients.
+> 2. **WWW-Authenticate Challenge**: Server returns `WWW-Authenticate: Bearer` on 401 to signal expected auth scheme.
+> 3. **Extensible Auth Pipeline**: Allows adding OAuth or Digest authentication schemes easily.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — The most common type of token placed inside a Bearer header.
 - [Statelessness](../level_03/statelessness.md) — The reason we have to send the Bearer token on every single request.
 - [Access Token vs Refresh Token](access_refresh_tokens.md) — Related concept: Access Token vs Refresh Token.
@@ -156,7 +251,7 @@ Authorization: Bearer eyJhbGciOi... ; Standard OAuth2 Bearer token header
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`Authorization`** header is the standard place to send credentials.
 - **Basic Auth**: Used for sending a Base64 encoded `username:password`.
 - **Bearer Auth**: Used for sending an encrypted Token (like a JWT or OAuth token).

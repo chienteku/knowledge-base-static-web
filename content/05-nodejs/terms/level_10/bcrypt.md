@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Cryptography**
+
+**Security / Cryptography (Node.js Server Code)**: Bcrypt (Password Hashing) is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Node.js Server Code**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a website and save user passwords as "Plain Text" in your database (e.g., `password: "ilovedogs123"`), you are committing developer malpractice. If a hacker steals your database, they instantly have the passwords of every user on your site. Worse, because people reuse passwords, the hacker can now log into those users' bank accounts!
@@ -55,7 +51,7 @@ if (isMatch) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to "Decrypt" a password
 
@@ -104,7 +100,7 @@ const hash = await bcrypt.hash(password, 4); // ❌ Insecure low salt rounds!
 const hash = await bcrypt.hash(password, 12); // Recommended production salt rounds
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Double Hash
 
@@ -158,13 +154,13 @@ Will their Bcrypt hashes in the database look identical?
 >
 > **Explanation:** Salting guarantees unique hashes for identical user password strings.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — You use Bcrypt to verify the password, and if it matches, you generate a JWT!
 - [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Bcrypt** is the industry standard for securely storing passwords.
 - It uses a "Cost Factor" to intentionally slow down the hashing process, defending against hackers who try to guess millions of passwords per second.
 - Hashing is a one-way function. Passwords cannot be "decrypted" or recovered.

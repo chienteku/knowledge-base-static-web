@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Module / Networking**
+
+**Node.js Core Module / Networking (Backend Infrastructure)**: The http Module is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Backend Infrastructure**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before Node.js, if you wanted to build a web server in PHP or Python, the language itself didn't handle the incoming network traffic. You had to install massive, complex third-party software like **Apache** or **Nginx** to act as the web server, and that software would pass the traffic to your PHP script.
@@ -55,7 +51,7 @@ Because of this, modern developers almost never use the `http` module directly. 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `response.end()`
 
@@ -107,7 +103,7 @@ res.write(JSON.stringify({ status: 'ok' }));
 res.end();
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Port
 
@@ -165,7 +161,7 @@ res.end();
 >
 > **Explanation:** `req.method` and `req.url` inspect incoming HTTP request route properties.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Express.js](../level_07/express_js.md) — The famous third-party framework that abstracts the native `http` module to make web development significantly easier.
 - [Event Emitter](../level_05/event_emitter.md) — Related concept: Event Emitter.
 - [Serving Static Files (express.static)](../level_07/static_files.md) — Related concept: Serving Static Files (express.static).
@@ -174,7 +170,7 @@ res.end();
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`http`** module allows Node.js to act as its own Web Server without needing Apache or Nginx.
 - It provides `request` and `response` objects to handle traffic.
 - Every request must be finalized with `response.end()` or the client will hang indefinitely.

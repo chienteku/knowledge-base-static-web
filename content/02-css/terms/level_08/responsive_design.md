@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Modern Standard .)**: Responsive Design (Concept) is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Non-negotiable practice. Governs how CSS engines re-calculate box sizes during window reflow loops).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, developers designed websites for a single screen size: desktop monitors (usually locking layouts to a fixed width of `960px`). 
@@ -129,7 +125,7 @@ This tag forces the phone to use its actual, physical screen width, which trigge
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Viewport Meta Tag
 
@@ -250,7 +246,7 @@ img {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding Fixed Bottlenecks
 
@@ -313,7 +309,7 @@ How do you modify it to make the images responsive?
 >
 > **Explanation:** `max-width: 100%; height: auto` prevents media elements from overflowing container boundaries.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The conditional layout tool.
 - [Mobile-First Design](mobile_first.md) — The styling workflow.
 - [Breakpoints](breakpoints.md) — The layout shift coordinates.
@@ -323,7 +319,7 @@ How do you modify it to make the images responsive?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Responsive Design builds one website that adapts dynamically to all viewports.
 - The three pillars are relative widths, flexible images, and media queries.
 - The HTML viewport meta tag is mandatory to trigger responsive mobile styling.

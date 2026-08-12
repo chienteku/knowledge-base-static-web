@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Engine Feature** *(Introduced in ES6)*
+
+**Design Pattern / Engine Feature *(Introduced in ES6)* (Universal)**: Proxy is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Usually, when you read a property from an object (`obj.name`) or write to it (`obj.age = 30`), the JavaScript engine just does exactly what you ask. But what if you wanted to run a security check *before* allowing someone to change the age? Or what if you wanted to trigger an automatic UI update on the screen the exact millisecond the data changed? 
@@ -90,7 +86,7 @@ secureUser.age = 30; // Works perfectly
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Proxy Scope and Variable Hoisting
 
@@ -163,78 +159,163 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Default Behavior
+### Exercise 1: Defensive Object Access Validation Proxy
 
-**Problem:** What happens if you create a Proxy with an empty handler object `{}`? Does it break the object?
+**Scenario:** A schema validation library wraps configuration objects inside an ES6 Proxy trap to throw errors on missing or non-existent property access.
 
-**Expected output:**
+**Requirements:**
+1. Write createStrictProxy(targetObj).
+2. Implement get(target, prop, receiver) handler trap.
+3. Throw Error if property does not exist in target.
+
 > [!check]- Answer
-> ```text
-> No! If you don't provide a specific Trap (like `get` or `set`), the Proxy acts as a perfectly transparent window. It just forwards the request directly to the target object without doing anything.
-> ```
-> - The Proxy only intercepts what you explicitly tell it to intercept.
-> 
----
-
-### Exercise 2: Property Access Validation Proxy Trap
-
-**Problem:** Use `Proxy` `get` trap to return default `"N/A"` for missing property keys.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> N/A
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const target = { name: "Alice" };
-> const proxy = new Proxy(target, {
->   get(target, prop) {
->     return prop in target ? target[prop] : "N/A";
->   }
-> });
-> console.log(proxy.missing);
+> function createStrictProxy(targetObj) {
+>   if (typeof targetObj !== "object" || targetObj === null) return targetObj;
+>
+>   return new Proxy(targetObj, {
+>     get(target, prop, receiver) {
+>       if (!(prop in target)) {
+>         throw new Error(`Property "${String(prop)}" does not exist on target object.`);
+>       }
+>       return Reflect.get(target, prop, receiver);
+>     }
+>   });
+> }
+>
+> // Verification tests
+> const config = createStrictProxy({ env: "production", port: 8080 });
+>
+> console.assert(config.env === "production", "Test 1 Failed");
+> console.assert(config.port === 8080, "Test 2 Failed");
+>
+> try {
+>   const missing = config.databaseUrl; // Should throw
+>   console.assert(false, "Test 3 Failed: Must throw error on missing property");
+> } catch (err) {
+>   console.assert(err.message.includes("databaseUrl"), "Test 4 Failed");
+> }
 > ```
 >
-> **Explanation:** Proxy `get(target, prop)` intercepts property access calls.
+> #### Technical Explanation
+>
+> 1. **Proxy Traps Concept**: An ES6 Proxy wraps a target object and intercepts fundamental object operations (get, set, has, deleteProperty).
+> 2. **get Trap Interception**: The get(target, prop, receiver) handler intercepts all property access operations.
+> 3. **Reflect Interoperability**: Using Reflect.get inside proxy traps ensures proper default behavior and receiver context forwarding.
 > 
 ---
 
-### Exercise 3: Property Mutation Validation with `set` Trap
+### Exercise 2: Reactive State Observer Proxy
 
-**Problem:** Use Proxy `set` trap to enforce numeric `age` assignment.
+**Scenario:** A reactive UI framework wraps application state in a Proxy to trigger change notifications whenever properties are mutated.
 
-**Expected output:**
+**Requirements:**
+1. Write createObservableStore(initialState, onChange).
+2. Implement set(target, prop, value, receiver) handler trap.
+3. Invoke onChange(prop, value) on change.
+
 > [!check]- Answer
-> ```text
-> TypeError caught
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const person = {};
-> const proxy = new Proxy(person, {
->   set(target, prop, val) {
->     if (prop === "age" && typeof val !== "number") throw new TypeError("Age must be a number");
->     target[prop] = val;
->     return true;
->   }
+> function createObservableStore(initialState, onChange) {
+>   return new Proxy(initialState, {
+>     set(target, prop, value, receiver) {
+>       const oldValue = target[prop];
+>       if (oldValue !== value) {
+>         const success = Reflect.set(target, prop, value, receiver);
+>         if (success) {
+>           onChange(prop, value, oldValue);
+>         }
+>         return success;
+>       }
+>       return true;
+>     }
+>   });
+> }
+>
+> // Verification tests
+> let changedProp = null;
+> let newValue = null;
+>
+> const store = createObservableStore({ count: 0 }, (prop, val) => {
+>   changedProp = prop;
+>   newValue = val;
 > });
-> try { proxy.age = "thirty"; } catch (err) { console.log("TypeError caught"); }
+>
+> store.count = 5;
+> console.assert(changedProp === "count" && newValue === 5, "Test 1 Failed");
+> console.assert(store.count === 5, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Proxy `set` traps validate property assignment values before mutating targets.
-> 
+> #### Technical Explanation
+>
+> 1. **set Trap Interception**: The set(target, prop, value, receiver) trap intercepts property mutation assignments.
+> 2. **Strict Mode Trap Return**: Proxy set traps MUST return true to indicate successful assignment; returning false throws TypeError in strict mode.
+> 3. **Reactivity Foundation**: Used by modern web frameworks (e.g. Vue 3) to build fine-grained reactive state systems.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Negative Index Array Access Proxy Trap
+
+**Scenario:** A utility library wraps standard JavaScript arrays in a Proxy to enable Python-style negative index element access (e.g. `arr[-1]`).
+
+**Requirements:**
+1. Write createNegativeArrayProxy(array).
+2. Implement get trap.
+3. If prop is numeric string < 0, calculate index from array.length.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createNegativeArrayProxy(array) {
+>   if (!Array.isArray(array)) return array;
+>
+>   return new Proxy(array, {
+>     get(target, prop, receiver) {
+>       if (typeof prop === "string") {
+>         const index = Number(prop);
+>         if (Number.isInteger(index) && index < 0) {
+>           const positiveIndex = target.length + index;
+>           return Reflect.get(target, positiveIndex, receiver);
+>         }
+>       }
+>       return Reflect.get(target, prop, receiver);
+>     }
+>   });
+> }
+>
+> // Verification tests
+> const items = createNegativeArrayProxy(["apple", "banana", "cherry"]);
+>
+> console.assert(items[-1] === "cherry", "Test 1 Failed: -1 should return last element");
+> console.assert(items[-2] === "banana", "Test 2 Failed: -2 should return second to last element");
+> console.assert(items[0] === "apple", "Test 3 Failed: Positive index must work normally");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Custom Property Normalization**: Proxy traps can intercept string property keys and normalize negative numbers into valid array indices.
+> 2. **Transparent Array Interoperability**: The returned proxy preserves all standard Array methods (.push, .map, .length).
+> 3. **Non-Destructive Augmentation**: Extends array access syntax without modifying Array.prototype globally.
+---
+
+## 6. Related Terms
 - [Object](../level_02/object.md) — The entity being proxied.
 - [Reflect](reflect.md) — Related concept: Reflect.
 - [Garbage Collection](garbage_collection.md) — WeakMap & GC.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Proxy wraps around an Object to intercept and customize fundamental operations.
 - Intercepted operations (like reading, writing, or deleting properties) are called **Traps**.
 - They are incredibly powerful for Data Validation, Logging, and Reactive Programming (like Vue 3).

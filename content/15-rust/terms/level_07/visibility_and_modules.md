@@ -235,9 +235,9 @@ pub struct User { pub name: String } // Correct!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [Sealed Trait Pattern](../level_14/sealed_trait_pattern.md)
+- [Sealed Trait Pattern](../level_14/sealed_trait_pattern.md) — 
 - [Module](../level_01/module.md) — Related concept: Module.
 
 ---

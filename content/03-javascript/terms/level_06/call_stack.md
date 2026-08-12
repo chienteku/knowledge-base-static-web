@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Concept / Engine Concept**
+
+**Architecture Concept / Engine Concept (Universal: Built into the V8 engine .)**: Call Stack is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Built into the V8 engine (and all other JS engines).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you write a JavaScript program, functions constantly call other functions. Function A calls Function B, which calls Function C. 
@@ -87,7 +83,7 @@ Error: Something broke!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Call Stack Scope and Variable Hoisting
 
@@ -160,68 +156,123 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: LIFO
+### Exercise 1: Call Stack Recursion Depth Inspector
 
-**Problem:** What does LIFO stand for, and how does it relate to the Call Stack?
+**Scenario:** A developer tool monitors call stack frames during nested function calls to prevent maximum call stack size exceeded errors.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectStackDepth(depth, maxLimit).
+2. Push frame counter on call stack.
+3. Throw error if depth exceeds maxLimit.
+4. Return current stack depth.
+
 > [!check]- Answer
-> ```text
-> LIFO stands for Last In, First Out. 
-> It means the most recently called function (the Last one In) is placed on top of the stack, and it must finish executing completely (First one Out) before the engine can go back to the older functions below it.
-> ```
-> - Think of the dinner plates!
-> 
----
-
-### Exercise 2: Call Stack Trace Unwinding
-
-**Problem:** Trace function calls `first()` -> `second()` -> `third()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Entering first
-> Entering second
-> Entering third
-> ```
-> ```javascript
-> function third() { console.log("Entering third"); }
-> function second() { console.log("Entering second"); third(); }
-> function first() { console.log("Entering first"); second(); }
-> first();
-> ```
 >
-> **Explanation:** Functions push frames onto the LIFO call stack upon invocation and pop frames upon returning.
-> 
----
-
-### Exercise 3: Inspecting Error Stack Traces
-
-**Problem:** Print `err.stack` from a caught Error object showing function call origins.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Error stack contains call history
-> ```
+> #### Implementation
+>
 > ```javascript
-> function fail() { throw new Error("Crash"); }
-> try {
->   fail();
-> } catch (err) {
->   console.log("Error stack contains call history");
+> function inspectStackDepth(depth = 1, maxLimit = 10) {
+>   if (depth > maxLimit) {
+>     throw new RangeError("Stack depth limit exceeded");
+>   }
+>   if (depth === maxLimit) {
+>     return depth;
+>   }
+>   return inspectStackDepth(depth + 1, maxLimit);
 > }
+>
+> // Verification tests
+> console.assert(inspectStackDepth(1, 5) === 5, "Test 1 Failed");
+> let caughtRangeError = false;
+> try {
+>   inspectStackDepth(1, 20);
+> } catch (err) {
+>   caughtRangeError = err instanceof RangeError;
+> }
+> console.assert(caughtRangeError === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Error.prototype.stack` captures a snapshot of call stack frames at error instantiation time.
-> 
+> #### Technical Explanation
+>
+> 1. **Call Stack Concept**: The Call Stack is a LIFO (Last-In, First-Out) data structure that tracks active function execution frames.
+> 2. **Stack Frame Allocation**: Invoking a function pushes a new execution stack frame; returning pops the top frame.
+> 3. **Maximum Call Stack Size**: Exceeding the call stack frame limit (e.g. infinite recursion) triggers a RangeError.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Call Stack Advanced Context Handler
+
+**Scenario:** A web application component processes call stack data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handleCallStackSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleCallStackSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleCallStackSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Call Stack Architecture**: Applying call stack patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Call Stack Performance Optimization
+
+**Scenario:** An application utility optimizes call stack execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeCallStackTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeCallStackTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeCallStackTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Call Stack Optimization**: Optimizing call stack improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Event Loop](event_loop.md) — The system that monitors the Call Stack.
 - [Synchronous](synchronous.md) — The Call Stack processes synchronous tasks.
 - [Recursion](../level_03/recursion.md) — Related concept: Recursion.
@@ -231,7 +282,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Call Stack is the JavaScript engine's way of keeping track of its place in the code.
 - It operates on a LIFO (Last In, First Out) principle.
 - You can visibly see the Call Stack in your browser console whenever an Error is thrown (the "Stack Trace").

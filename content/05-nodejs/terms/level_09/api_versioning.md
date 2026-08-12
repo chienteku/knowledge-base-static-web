@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design Pattern**
+
+**Architecture / Design Pattern (Web App Server Layer .)**: API Versioning is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Governs route path compilation and HTTP header request negotiations).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web APIs are living systems. Over time, you need to add features, restructure schemas, or rename fields. However, making breaking updates (such as renaming `user_id` to `userId`, changing an object data type into an array, or removing a key) will instantly crash existing mobile apps, frontend applications, and partner integrations that rely on the old format.
@@ -76,7 +72,7 @@ app.listen(3000);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Incrementing version numbers for non-breaking, backward-compatible additions
 
@@ -188,7 +184,7 @@ Keep /api/v1/users payload intact; create /api/v2/users with new payload schema
 Standardize on URL Path versioning (/api/v1/...) across all service endpoints
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Version Fallback Router
 
@@ -255,12 +251,12 @@ app.get('/api/v1/user', (req, res) => {
 >
 > **Explanation:** URI path is most explicit; headers keep URLs clean; query params are easy to test.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [REST API Design](rest_api.md) — The structuring rules governing endpoints.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - API versioning allows you to evolve endpoints without breaking active clients.
 - URI path versioning (`/api/v1/`) is the most common and readable method.
 - Other versioning methods include custom HTTP headers and query parameters.

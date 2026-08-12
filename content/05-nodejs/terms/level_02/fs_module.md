@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Module**
+
+**Node.js Core Module (Node.js Only)**: The fs Module (File System) is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you are building a Web Server, you eventually need to save data. Sometimes you don't need a massive Postgres database; you just want to save a user's uploaded profile picture, write a log file, or read a configuration JSON file.
@@ -54,7 +50,7 @@ The `fs` module has evolved over the years, and now offers three different ways 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Character Encoding (`utf8`)
 
@@ -107,7 +103,7 @@ try {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Logger
 
@@ -158,7 +154,7 @@ try {
 >
 > **Explanation:** `fs.promises.stat` returns metadata objects containing `size`, `mtime`, `isFile()`, etc.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Buffers](../level_06/buffers.md) — What the `fs` module returns if you forget to specify `utf8`.
 - [Streams (General Concept)](../level_06/streams.md) — If a file is 10 Gigabytes, `fs.readFile` will crash your RAM. You must use `fs.createReadStream` instead.
 - [The path Module](path_module.md) — Related concept: The path Module.
@@ -166,7 +162,7 @@ try {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`fs`** module allows Node.js to interact with the hard drive.
 - It is explicitly banned in the browser for security reasons.
 - You should always use the modern **`fs/promises`** version combined with `async/await`.

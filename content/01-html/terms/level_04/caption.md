@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support .)**: `<caption>` is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers since the early days of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users look at a table full of numbers or text, they need to know what the data represents before diving into individual cells. 
@@ -105,7 +101,7 @@ A simple table with a caption:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the `<caption>` outside the table
 
@@ -163,7 +159,7 @@ A simple table with a caption:
 <figure><figcaption>Figure 1</figcaption></figure>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Setting a Caption
 
@@ -243,14 +239,14 @@ A simple table with a caption:
 >
 > **Explanation:** `caption-side: bottom` positions table caption below table data while preserving HTML structure.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<table>`](table.md) — The parent container that holds the caption.
 - [`<th>` (Table Header)](th.md) — The header cell tag inside rows.
 - [`scope` Attribute (in `<th>`)](scope.md) — Related concept: `scope` Attribute (in `<th>`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<caption>` tag provides a visible and accessible title for a table.
 - It must be nested inside `<table>` as its very first child.
 - By default, it displays centered at the top of the table.

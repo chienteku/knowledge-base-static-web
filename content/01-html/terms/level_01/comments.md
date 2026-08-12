@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Comments (<!-- -->) is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Ignored natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing code, you often need to leave notes for yourself or other developers explaining *why* something was structured in a certain way. As HTML files grow to hundreds of lines, finding where sections start and end (like the header, sidebar, or footer) can become very difficult.
@@ -98,7 +94,7 @@ Leaving documentation notes and hiding code:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Javascript or CSS comment styles in HTML
 
@@ -152,7 +148,7 @@ Leaving documentation notes and hiding code:
 <!-- Outer comment containing text without nested comment tags -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Write a Comment
 
@@ -218,14 +214,14 @@ Leaving documentation notes and hiding code:
 >
 > **Explanation:** Wrapping HTML tags in `<!-- -->` disables rendering while preserving code in source.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — Standard nodes that comments can wrap.
 - [Nesting](nesting.md) — Comments must be nested correctly and not overlap with other active tags.
 - [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - HTML comments are written using the `<!-- comment here -->` syntax.
 - The browser completely ignores comments when rendering the webpage.
 - Comments are useful for organizing code sections and temporarily disabling markup during tests.

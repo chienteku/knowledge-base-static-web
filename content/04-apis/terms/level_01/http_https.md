@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal Web Standard .)**: HTTP / HTTPS is a fundamental concept in this technology stack. **Level 1 — The Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal Web Standard** (Layer 7 of the OSI model).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a Japanese person, a French person, and a Brazilian person all need to communicate, they must agree on a shared language (like English), or else their words are meaningless to each other. 
@@ -48,7 +44,7 @@ Accept-Language: en-US
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Developing local APIs over HTTP and deploying them
 
@@ -100,55 +96,170 @@ fetch('https://api.example.com/data');
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Coffee Shop Hacker
+### Exercise 1: HTTPS Enforcer & Security Protocol Upgrade Guard
 
-**Problem:** You are sitting in a Starbucks using their free public Wi-Fi. You log into your bank account. Why can't the malicious hacker sitting in the corner with a packet-sniffer read your banking password as it travels through the Wi-Fi airwaves?
+**Scenario:** A web gateway middleware verifies incoming request URLs and enforces automatic HTTP to HTTPS protocol upgrades.
 
-**Expected output:**
+**Requirements:**
+1. Write enforceHttpsUrl(requestUrl).
+2. If protocol is "http:", replace with "https:".
+3. Set secure port to 443 if standard port.
+
 > [!check]- Answer
-> ```text
-> Because your bank uses HTTPS! 
-> The password is mathematically encrypted before it ever leaves your laptop's Wi-Fi antenna. The hacker captures the packet, but they only see scrambled nonsense.
+>
+> #### Implementation
+>
+> ```javascript
+> function enforceHttpsUrl(requestUrl) {
+>   if (!requestUrl || typeof requestUrl !== "string") return null;
+>
+>   try {
+>     const parsed = new URL(requestUrl);
+>     if (parsed.protocol === "http:") {
+>       parsed.protocol = "https:";
+>       if (parsed.port === "80") {
+>         parsed.port = "";
+>       }
+>       return {
+>         redirectNeeded: true,
+>         secureUrl: parsed.toString()
+>       };
+>     }
+>     return {
+>       redirectNeeded: false,
+>       secureUrl: parsed.toString()
+>     };
+>   } catch (e) {
+>     return null;
+>   }
+> }
+>
+> // Verification tests
+> const res1 = enforceHttpsUrl("http://api.example.com:80/data");
+> console.assert(res1.redirectNeeded === true, "Test 1 Failed");
+> console.assert(res1.secureUrl === "https://api.example.com/data", "Test 2 Failed");
+>
+> const res2 = enforceHttpsUrl("https://secure.example.com/login");
+> console.assert(res2.redirectNeeded === false, "Test 3 Failed");
 > ```
-> - What does the 'S' stand for?
+>
+> #### Technical Explanation
+>
+> 1. **HTTP vs HTTPS Difference**: HTTP transmits plain text over TCP; HTTPS encrypts all traffic using TLS (Transport Layer Security).
+> 2. **Standard Port Numbers**: HTTP defaults to port 80; HTTPS defaults to port 443.
+> 3. **Encryption Security**: HTTPS protects request headers, query parameters, cookies, and payloads from eavesdropping and tampering.
 > 
 ---
 
-### Exercise 2: HTTPS Upgrade Enforcement Header
+### Exercise 2: HTTP Method Safety & Idempotency Auditor
 
-**Problem:** Which HTTP response header forces browsers to automatically upgrade all future requests to HTTPS for a given domain?
+**Scenario:** An API framework auditor classifies HTTP request methods into Safe (read-only) and Idempotent categories according to RFC specs.
 
-**Expected output:**
+**Requirements:**
+1. Write auditHttpMethod(method).
+2. Identify safe methods (GET, HEAD, OPTIONS).
+3. Identify idempotent methods (GET, HEAD, OPTIONS, PUT, DELETE).
+
 > [!check]- Answer
-> ```text
-> Strict-Transport-Security: max-age=31536000; includeSubDomains
+>
+> #### Implementation
+>
+> ```javascript
+> function auditHttpMethod(method) {
+>   if (typeof method !== "string") return null;
+>   const m = method.toUpperCase();
+>
+>   const safeMethods = ["GET", "HEAD", "OPTIONS"];
+>   const idempotentMethods = ["GET", "HEAD", "OPTIONS", "PUT", "DELETE"];
+>
+>   return {
+>     method: m,
+>     isSafe: safeMethods.includes(m),
+>     isIdempotent: idempotentMethods.includes(m)
+>   };
+> }
+>
+> // Verification tests
+> const getAudit = auditHttpMethod("GET");
+> console.assert(getAudit.isSafe === true && getAudit.isIdempotent === true, "Test 1 Failed");
+>
+> const postAudit = auditHttpMethod("POST");
+> console.assert(postAudit.isSafe === false && postAudit.isIdempotent === false, "Test 2 Failed");
+>
+> const putAudit = auditHttpMethod("PUT");
+> console.assert(putAudit.isSafe === false && putAudit.isIdempotent === true, "Test 3 Failed");
 > ```
-> ```http
-> Strict-Transport-Security: max-age=31536000; includeSubDomains
-> ```
-> - **Explanation:** HSTS prevents SSL stripping attacks by enforcing HTTPS browser-side.
+>
+> #### Technical Explanation
+>
+> 1. **Safe HTTP Methods**: Safe methods (GET, HEAD) do not modify server state and are read-only.
+> 2. **Idempotent HTTP Methods**: Executing idempotent methods (PUT, DELETE) multiple times produces identical server state as a single invocation.
+> 3. **POST Non-Idempotency**: POST requests create new resources and are neither safe nor idempotent; multiple invocations create duplicate records.
+> 
 ---
 
-### Exercise 3: Port Standard Mapping
+### Exercise 3: HSTS (Strict-Transport-Security) Header Evaluator
 
-**Problem:** What are the standard default TCP port numbers for HTTP and HTTPS traffic?
+**Scenario:** A security audit tool parses Strict-Transport-Security headers to enforce browser HTTPS connections and preload security directives.
 
-**Expected output:**
+**Requirements:**
+1. Write parseHstsHeader(headerVal).
+2. Extract max-age in seconds.
+3. Check includeSubDomains and preload flags.
+
 > [!check]- Answer
-> ```text
-> HTTP: Port 80
-> HTTPS: Port 443
+>
+> #### Implementation
+>
+> ```javascript
+> function parseHstsHeader(headerVal) {
+>   if (!headerVal || typeof headerVal !== "string") {
+>     return { enabled: false };
+>   }
+>
+>   const result = {
+>     enabled: true,
+>     maxAge: 0,
+>     includeSubDomains: false,
+>     preload: false
+>   };
+>
+>   const parts = headerVal.split(";").map(p => p.trim());
+>   for (const part of parts) {
+>     const lower = part.toLowerCase();
+>     if (lower.startsWith("max-age=")) {
+>       const val = parseInt(part.split("=")[1], 10);
+>       result.maxAge = isNaN(val) ? 0 : val;
+>     } else if (lower === "includesubdomains") {
+>       result.includeSubDomains = true;
+>     } else if (lower === "preload") {
+>       result.preload = true;
+>     }
+>   }
+>
+>   return result;
+> }
+>
+> // Verification tests
+> const header = "max-age=31536000; includeSubDomains; preload";
+> const parsed = parseHstsHeader(header);
+>
+> console.assert(parsed.enabled === true, "Test 1 Failed");
+> console.assert(parsed.maxAge === 31536000, "Test 2 Failed: 1 year in seconds");
+> console.assert(parsed.includeSubDomains === true, "Test 3 Failed");
+> console.assert(parsed.preload === true, "Test 4 Failed");
 > ```
-> ```text
-> HTTP: Port 80
-> HTTPS: Port 443
-> ```
-> - **Explanation:** Standard network protocols use well-known assigned port numbers.
+>
+> #### Technical Explanation
+>
+> 1. **HSTS Purpose**: Strict-Transport-Security forces compliant web browsers to interact with the server ONLY via HTTPS.
+> 2. **Downgrade Attack Protection**: Prevents Man-in-the-Middle (MITM) SSL stripping attacks that attempt to downgrade connections to HTTP.
+> 3. **max-age Directive**: Specifies the duration in seconds that the browser must remember to enforce HTTPS for the domain.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Request & Response Lifecycle](request_response.md) — How HTTP is used in practice.
 - [REST (Representational State Transfer)](../level_03/rest.md) — An architectural style built entirely on top of HTTP.
 - [Client-Server Model](client_server_model.md) — Related concept: Client-Server Model.
@@ -160,7 +271,7 @@ fetch('https://api.example.com/data');
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **HTTP** is the agreed-upon text format that allows computers to communicate.
 - **HTTPS** is the encrypted, secure version of HTTP.
 - Modern web development strictly requires **HTTPS** for production environments to protect user data and access browser features.

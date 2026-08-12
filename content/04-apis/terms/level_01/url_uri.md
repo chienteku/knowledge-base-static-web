@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Web Standard / Locator**
+
+**Web Standard / Locator (Universal Standard)**: URL / URI (Uniform Resource Identifier) is a fundamental concept in this technology stack. **Level 1 — The Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If there are billions of files and data points spread across millions of servers worldwide, how do you find the exact one you want? 
@@ -42,7 +38,7 @@ Let's break down `https://api.github.com/users/chienteku?sort=desc`:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hardcoding `localhost` URLs in production frontend code
 
@@ -90,75 +86,150 @@ fetch('https://api.example.com/data'); // Absolute URL with scheme
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Break it down
+### Exercise 1: URL Query Parameter Extractor & Builder
 
-**Problem:** Identify the Protocol, the Domain, and the Path in this URL: `http://localhost:8080/images/cat.jpg`
+**Scenario:** A web frontend router parses and manipulates URL query strings using the standard `URL` and `URLSearchParams` web APIs.
 
-**Expected output:**
+**Requirements:**
+1. Write updateQueryParam(urlStr, paramKey, paramVal).
+2. Parse urlStr with URL API.
+3. Set query parameter.
+4. Return updated URL string.
+
 > [!check]- Answer
-> ```text
-> Protocol: http://
-> Domain: localhost:8080 (the host and the port!)
-> Path: /images/cat.jpg
+>
+> #### Implementation
+>
+> ```javascript
+> function updateQueryParam(urlStr, paramKey, paramVal) {
+>   try {
+>     const url = new URL(urlStr);
+>     if (paramVal === null || paramVal === undefined) {
+>       url.searchParams.delete(paramKey);
+>     } else {
+>       url.searchParams.set(paramKey, String(paramVal));
+>     }
+>     return url.toString();
+>   } catch (err) {
+>     return urlStr;
+>   }
+> }
+>
+> // Verification tests
+> const initial = "https://example.com/search?q=js&page=1";
+>
+> const updated = updateQueryParam(initial, "page", 2);
+> console.assert(updated === "https://example.com/search?q=js&page=2", "Test 1 Failed");
+>
+> const deleted = updateQueryParam(updated, "q", null);
+> console.assert(deleted === "https://example.com/search?page=2", "Test 2 Failed");
 > ```
-> - The protocol comes before the `://`.
-> - The domain is everything up to the first single slash `/`.
+>
+> #### Technical Explanation
+>
+> 1. **URL API Purpose**: Standard browser & Node API for parsing, constructing, and manipulating URL strings.
+> 2. **URLSearchParams API**: Provides methods (.get, .set, .append, .delete) to manage URL query parameters safely.
+> 3. **Automatic Encoding**: URLSearchParams automatically percent-encodes special characters in keys and values.
 > 
 ---
 
-### Exercise 2: URL Structure Breakdown
+### Exercise 2: URI Path Normalizer & Percent-Encoding Sanitizer
 
-**Problem:** Deconstruct URL components for `https://user:pass@api.example.com:8080/v1/items?page=2#section`:
-1. Scheme/Protocol
-2. Hostname
-3. Port
-4. Path
-5. Query Parameters
+**Scenario:** An API gateway sanitizes user search inputs by encoding special characters using `encodeURIComponent()` to prevent URI syntax errors.
 
-**Expected output:**
+**Requirements:**
+1. Write buildSearchUri(baseEndpoint, rawQuery).
+2. Encode rawQuery with encodeURIComponent().
+3. Return complete search URI.
+
 > [!check]- Answer
-> ```text
-> 1. Scheme: https
-> 2. Hostname: api.example.com
-> 3. Port: 8080
-> 4. Path: /v1/items
-> 5. Query Params: page=2
+>
+> #### Implementation
+>
+> ```javascript
+> function buildSearchUri(baseEndpoint, rawQuery) {
+>   if (!baseEndpoint || typeof rawQuery !== "string") return baseEndpoint;
+>
+>   const encodedQuery = encodeURIComponent(rawQuery);
+>   const separator = baseEndpoint.includes("?") ? "&" : "?";
+>
+>   return `${baseEndpoint}${separator}query=${encodedQuery}`;
+> }
+>
+> // Verification tests
+> const uri1 = buildSearchUri("https://api.com/items", "react & vue");
+> console.assert(uri1 === "https://api.com/items?query=react%20%26%20vue", "Test 1 Failed");
+>
+> const uri2 = buildSearchUri("https://api.com/items?cat=tech", "100%");
+> console.assert(uri2 === "https://api.com/items?cat=tech&query=100%25", "Test 2 Failed");
 > ```
-> ```text
-> Scheme: https
-> Hostname: api.example.com
-> Port: 8080
-> Path: /v1/items
-> Query: page=2
-> Fragment: #section
-> ```
-> - **Explanation:** URLs consist of protocol, authorization, host, port, path, query, and fragment.
+>
+> #### Technical Explanation
+>
+> 1. **Percent-Encoding**: Replaces non-ASCII or reserved URI characters with % followed by 2 hex digits (e.g. space = %20, & = %26).
+> 2. **encodeURI vs encodeURIComponent**: encodeURI leaves URI structure chars (?, &, /, #) intact; encodeURIComponent encodes ALL special characters.
+> 3. **URI Injection Prevention**: Encoding parameters prevents malicious users from injecting arbitrary query parameters.
+> 
 ---
 
-### Exercise 3: URI vs URL Relationship
+### Exercise 3: Relative URI to Absolute URL Resolver
 
-**Problem:** True or False: All URLs are URIs, but not all URIs are URLs.
+**Scenario:** A web crawler resolves relative links found on a page into absolute URLs relative to the page's base URL.
 
-**Expected output:**
+**Requirements:**
+1. Write resolveAbsoluteUrl(relativeLink, baseUrl).
+2. Use new URL(relativeLink, baseUrl).
+3. Return absolute URL string.
+
 > [!check]- Answer
-> ```text
-> True. URI is the umbrella category containing both URLs and URNs.
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveAbsoluteUrl(relativeLink, baseUrl) {
+>   try {
+>     const resolved = new URL(relativeLink, baseUrl);
+>     return resolved.toString();
+>   } catch (err) {
+>     return null;
+>   }
+> }
+>
+> // Verification tests
+> const base = "https://example.com/blog/posts/article-1";
+>
+> console.assert(
+>   resolveAbsoluteUrl("image.png", base) === "https://example.com/blog/posts/image.png",
+>   "Test 1 Failed: Relative path"
+> );
+>
+> console.assert(
+>   resolveAbsoluteUrl("/about", base) === "https://example.com/about",
+>   "Test 2 Failed: Absolute path relative to host"
+> );
+>
+> console.assert(
+>   resolveAbsoluteUrl("../authors", base) === "https://example.com/blog/authors",
+>   "Test 3 Failed: Parent directory traversal"
+> );
 > ```
-> ```text
-> True. URI is the umbrella category containing both URLs and URNs.
-> ```
-> - **Explanation:** URL and URN are both specific subsets of URIs.
+>
+> #### Technical Explanation
+>
+> 1. **URL Resolution Algorithm**: The URL constructor resolves relative paths, root paths (/), and parent paths (../) against base URLs.
+> 2. **URI vs URL vs URN**: URI (Identifier) is the superclass; URL (Locator) specifies HOW to reach resource; URN (Name) specifies name.
+> 3. **Robust Crawler Resolution**: Prevents broken links when fetching assets from different relative directory levels.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Query Parameters & Path Variables](../level_02/query_params.md) — How we pass dynamic data directly inside the URL.
 - [DNS (Domain Name System)](dns.md) — Related concept: DNS (Domain Name System).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **URL (Uniform Resource Locator)** is the digital address of a file or data point.
 - It consists of a Protocol, a Domain, a Path, and optional Query Parameters.
 - Never hardcode `localhost` URLs in frontend code that you plan to deploy to the public internet!

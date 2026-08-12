@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Computer Science Concept / Architecture**
+
+**Computer Science Concept / Architecture (Node.js Core Architecture)**: Single-Threaded Architecture is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional backend languages (like Java or PHP), servers use **Multi-Threaded Architecture**. When 1,000 users visit a Java website, the server creates 1,000 separate "Threads" (mini-processes) in the CPU. Each thread requires about 2MB of RAM. 1,000 users = 2 Gigabytes of RAM wasted just on managing threads! If 10,000 users visit, the server crashes from memory exhaustion.
@@ -37,7 +33,7 @@ This is why Node.js is terrible at heavy CPU tasks (like video encoding or compl
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Blocking the Main Thread
 
@@ -90,7 +86,7 @@ app.get('/crash', (req, res, next) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Right Tool for the Job
 
@@ -143,7 +139,7 @@ Which product should use Node.js, and which should use a multi-threaded language
 >
 > **Explanation:** PM2 monitors Node.js processes and instantly restarts them if uncaught errors occur.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Non-Blocking I/O](non_blocking_io.md) — How the single thread manages to avoid waiting for the kitchen.
 - [The Event Loop & Libuv](event_loop.md) — The mechanism that tells the single thread when the kitchen is done cooking.
 - [Blocking the Event Loop](blocking_event_loop.md) — Related concept: Blocking the Event Loop.
@@ -152,7 +148,7 @@ Which product should use Node.js, and which should use a multi-threaded language
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Single-Threaded** means Node.js uses exactly one CPU core to run your JavaScript.
 - It is highly memory efficient because it doesn't spin up thousands of threads for users.
 - It is perfect for handling high-concurrency, data-heavy applications (Chat apps, REST APIs).

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **JavaScript / Node.js Design Pattern**
+
+**JavaScript / Node.js Design Pattern (Universal .)**: Callbacks & Callback Hell is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Heavily utilized in early Node.js).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Because Node.js does not wait for a file to read (Non-Blocking), how does your code know when the file is actually ready?
@@ -62,7 +58,7 @@ fs.readFile('user.json', (err, user) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to `return` after handling an error
 
@@ -117,7 +113,7 @@ fs.readFile('file.txt', (err, data) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Spot the Pattern
 
@@ -180,7 +176,7 @@ function fetchUser(callback) {
 >
 > **Explanation:** Checking `if (err)` first enforces Node.js error-first safety checks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Promisification (util.promisify)](promisification.md) — How you convert old callback code into modern Promise code.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — Related concept: The Event Loop & Libuv.
 - [Non-Blocking I/O](../level_01/non_blocking_io.md) — Related concept: Non-Blocking I/O.
@@ -189,7 +185,7 @@ function fetchUser(callback) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Callbacks** are functions executed after an asynchronous task completes.
 - Node.js established the **Error-First** convention (`err, data`).
 - Nested callbacks create **Callback Hell**, making code impossible to read and maintain.

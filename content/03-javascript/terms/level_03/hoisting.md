@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Hoisting is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript execution actually happens in two distinct phases: the **Creation Phase** (parsing the code and setting up memory) and the **Execution Phase** (running the code line by line). 
@@ -64,7 +60,7 @@ Behind the scenes, the engine interprets the above code like this:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `let` and `const` aren't hoisted
 
@@ -139,78 +135,130 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Hoisting Chaos
+### Exercise 1: Function Declaration Hoisting vs 'var' Hoisting Analysis
 
-**Problem:** Predict the output of this code snippet.
-```javascript
-greet();
-console.log(age);
+**Scenario:** A legacy codebase refactoring audit analyzes the difference between function declaration hoisting (hoists implementation body) and var hoisting (hoists undefined).
 
-var age = 30;
-function greet() {
-  console.log("Welcome!");
-}
-```
+**Requirements:**
+1. Demonstrate calling function declaration before declaration line.
+2. Demonstrate accessing var variable before declaration line (evaluates to undefined).
+3. Return analysis summary.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Welcome!
-> undefined
-> ```
-> - The function declaration is hoisted completely, so `greet()` works perfectly.
-> - Only the `var` *declaration* is hoisted, not the assignment (`= 30`). So `age` exists, but it is `undefined`.
-> 
----
-
-### Exercise 2: Function vs Variable Hoisting Priority
-
-**Problem:** Trace output of `console.log(typeof foo); function foo() {} var foo = 10;`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> function
-> ```
-> ```javascript
-> console.log(typeof foo);
-> function foo() {}
-> var foo = 10;
-> ```
 >
-> **Explanation:** Function declarations hoist before variable declarations (`var`), giving functions precedence during initial allocation.
-> 
----
-
-### Exercise 3: Temporal Dead Zone Block Hoisting
-
-**Problem:** Demonstrate that an outer `let x = 1` is shadowed by inner `let x = 2` TDZ inside an `if` block.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
+> #### Implementation
+>
 > ```javascript
-> let x = 1;
-> if (true) {
->   try {
->     console.log(x); // Hits inner x in TDZ!
->     let x = 2;
->   } catch (err) {
->     console.log("ReferenceError caught");
+> function analyzeLegacyHoisting() {
+>   const fnResult = hoistedFunction();
+>   const varBeforeDecl = hoistedVar;
+>   var hoistedVar = "ASSIGNED";
+>
+>   function hoistedFunction() {
+>     return "FUN_OK";
 >   }
+>
+>   return { fnResult, varBeforeDecl, varAfterDecl: hoistedVar };
 > }
+>
+> // Verification tests
+> const res = analyzeLegacyHoisting();
+> console.assert(res.fnResult === "FUN_OK", "Test 1 Failed");
+> console.assert(res.varBeforeDecl === undefined, "Test 2 Failed: var hoisting should yield undefined");
+> console.assert(res.varAfterDecl === "ASSIGNED", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Inner block `let` declarations hoist to top of block scope, masking outer scope variables in TDZ.
-> 
+> #### Technical Explanation
+>
+> 1. **Hoisting Mechanism**: During context creation, JS hoists declarations to top of scope before execution begins.
+> 2. **Function Declaration Hoisting**: Function declarations hoist both identifier name AND function body implementation.
+> 3. **var Hoisting**: var declarations hoist identifier names initialized with undefined; assignment remains at original line.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Temporal Dead Zone (TDZ) Hoisting Guard
+
+**Scenario:** A modern JavaScript linter verifies that let and const variables are hoisted but remain uninitialized in the Temporal Dead Zone (TDZ).
+
+**Requirements:**
+1. Access let variable before declaration line inside try...catch.
+2. Verify accessing let in TDZ throws a ReferenceError.
+3. Return boolean TDZ validation status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function testTdzHoistingGuard() {
+>   let tdzCaught = false;
+>   try {
+>     // @ts-ignore
+>     console.log(tdzVar);
+>     let tdzVar = "SAFE";
+>   } catch (err) {
+>     tdzCaught = err instanceof ReferenceError;
+>   }
+>   return tdzCaught;
+> }
+>
+> // Verification tests
+> console.assert(testTdzHoistingGuard() === true, "Test 1 Failed: TDZ access must throw ReferenceError");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **TDZ Definition**: The Temporal Dead Zone is the duration between scope entry and actual let/const declaration execution.
+> 2. **Uninitialized Hoisting**: let and const are hoisted to top of block scope, but accessing them before initialization throws ReferenceError.
+> 3. **Scope Safety**: TDZ eliminates bugs caused by accessing uninitialized undefined variables.
+> 
+---
+
+### Exercise 3: Function Expression Hoisting Pitfall Remediation
+
+**Scenario:** A code auditor refactors invalid code that attempted to invoke a Function Expression variable prior to its assignment line.
+
+**Requirements:**
+1. Demonstrate that invoking a Function Expression var before assignment line throws TypeError.
+2. Refactor to declare before invocation.
+3. Verify execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function testFunctionExpressionHoisting() {
+>   let typeErrorCaught = false;
+>
+>   try {
+>     // @ts-ignore
+>     varFnExpr();
+>   } catch (err) {
+>     typeErrorCaught = err instanceof TypeError;
+>   }
+>
+>   var varFnExpr = function() { return "EXPR_OK"; };
+>
+>   return { typeErrorCaught, validCall: varFnExpr() };
+> }
+>
+> // Verification tests
+> const res = testFunctionExpressionHoisting();
+> console.assert(res.typeErrorCaught === true, "Test 1 Failed");
+> console.assert(res.validCall === "EXPR_OK", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Function Expression Hoisting Trap**: Variables assigned to Function Expressions hoist variable declarations, NOT function body definitions.
+> 2. **TypeError on Invocation**: Calling an unassigned var expression invokes undefined(), resulting in a TypeError.
+> 3. **Best Practice Ordering**: Define function expressions and let/const bindings at top of scope prior to invocation.
+---
+
+## 6. Related Terms
 - [Function Declaration](function_declaration.md) — Fully hoisted.
 - [Function Expression](function_expression.md) — Not hoisted (only the variable declaration is).
 - [var](../level_01/var.md) — Hoisted and initialized with `undefined`.
@@ -219,7 +267,7 @@ function greet() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Hoisting is the engine moving declarations to the top of memory during the parsing phase.
 - **Function Declarations** are fully hoisted (you can call them before they appear in code).
 - **`var` Declarations** are hoisted, but their values are not. They evaluate to `undefined` if accessed early.

@@ -9,7 +9,7 @@
 
 
 - [`mod` Declaration](mod_declaration.md) — The boundaries that `pub` actually allows you to cross.
-- [`fn` (Functions)](../level_01/fn.md) — The most common items you will make public.
+- [fn](../level_01/fn.md) — The most common items you will make public.
 - [Struct](../level_02/struct.md) — The data structures with tricky field-level privacy rules.
 
 ---

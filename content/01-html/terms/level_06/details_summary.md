@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support .)**: `<details>` & `<summary>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all modern web browsers. Handles keyboard accessibility and focus states natively).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 On modern websites, you often see interactive components that let you expand or collapse content, such as:
@@ -110,7 +106,7 @@ An FAQ section for a service:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the `<summary>` tag outside the `<details>` container
 
@@ -166,7 +162,7 @@ An FAQ section for a service:
 <details><summary>Expand FAQ</summary><p>Ans</p></details>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Building a Spoiler Alert
 
@@ -225,14 +221,14 @@ An FAQ section for a service:
 >
 > **Explanation:** `::marker` targets default disclosure triangle icons.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [`<div>` (Block container)](../level_02/div.md) — The non-interactive equivalent.
 - [`<dialog>` Element](../level_10/dialog.md) — Related concept: `<dialog>` Element.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<details>` and `<summary>` create native, toggleable disclosure panels without JavaScript.
 - `<summary>` is the clickable heading; everything else inside `<details>` is hidden.
 - The browser automatically adds a disclosure triangle icon to the summary.

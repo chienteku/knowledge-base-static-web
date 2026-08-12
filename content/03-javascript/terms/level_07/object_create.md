@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Object.create is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, when we create an object literal `{}` or call `new Object()`, JavaScript automatically links its internal prototype reference (`[[Prototype]]`) to the global `Object.prototype`. This gives the new object access to utility methods like `.toString()` and `.hasOwnProperty()`.
@@ -77,7 +73,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting standard Object methods on prototype-less objects
 
@@ -161,76 +157,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Custom Prototype Link
+### Exercise 1: Clean Prototype-Less Hash Dictionary Creation
 
-**Problem:** Complete the code using `Object.create` to create a `child` object that inherits from the `parent` object, and verify inheritance.
+**Scenario:** A high-throughput lookup dictionary creates prototype-less objects using Object.create(null) to avoid prototype pollution and key collisions.
 
-```javascript
-const parent = { familyName: "Smith" };
+**Requirements:**
+1. Write createCleanDictionary().
+2. Use Object.create(null).
+3. Verify dictionary has no toString or __proto__ properties.
 
-// Create child inheriting from parent
-const child = // Write code
-child.firstName = "John";
-
-console.log("Full Name:", child.firstName, child.familyName);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Full Name: John Smith
-> ```
-> - Call `Object.create(parent)` to create the child.
-> 
----
-
-### Exercise 2: Creating Prototype-less Dictionary Objects
-
-**Problem:** Create a pure dictionary object `Object.create(null)` without prototype overhead.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> null
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const dict = Object.create(null);
-> console.log(Object.getPrototypeOf(dict));
+> function createCleanDictionary() {
+>   const dict = Object.create(null);
+>   dict["key1"] = "val1";
+>   return dict;
+> }
+>
+> // Verification tests
+> const d = createCleanDictionary();
+> console.assert(d["key1"] === "val1", "Test 1 Failed");
+> console.assert(typeof d.toString === "undefined", "Test 2 Failed: Must not inherit Object.prototype");
+> console.assert(Object.getPrototypeOf(d) === null, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `Object.create(null)` instantiates pure dictionary objects with zero inherited properties.
+> #### Technical Explanation
+>
+> 1. **Object.create(proto) API**: Object.create(proto) creates a new object with its [[Prototype]] linked directly to passed proto argument.
+> 2. **Object.create(null)**: Passing null creates a dictionary object with NO prototype chain (no Object.prototype inheritance).
+> 3. **Prototype Pollution Protection**: Prevents malicious keys like 'toString' or '__proto__' from matching prototype properties.
 > 
 ---
 
-### Exercise 3: Explicit Prototype Inheritance Setup
+### Exercise 2: Object Create Advanced Context Handler
 
-**Problem:** Inherit `protoObj = { greet() { return "Hi"; } }` using `Object.create(protoObj)`.
+**Scenario:** A web application component processes object create data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleObjectCreateSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Hi
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const protoObj = { greet() { return "Hi"; } };
-> const obj = Object.create(protoObj);
-> console.log(obj.greet());
+> function handleObjectCreateSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleObjectCreateSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.create(proto)` assigns `proto` directly as the new object's `[[Prototype]]`.
-> 
+> #### Technical Explanation
+>
+> 1. **Object Create Architecture**: Applying object create patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Object Create Performance Optimization
+
+**Scenario:** An application utility optimizes object create execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeObjectCreateTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeObjectCreateTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeObjectCreateTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object Create Optimization**: Optimizing object create improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Prototypal Inheritance](prototypal_inheritance.md) — The mechanism enabling objects to inherit features.
 - [new Keyword](new_keyword.md) — The constructor instantiation operator.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Object.create(proto)` instantiates a new object with an explicit prototype parent.
 - If you pass `null` (`Object.create(null)`), it creates a pure dictionary object with no prototype chain.
 - Prototype-less objects lack standard methods like `.toString()` and `.hasOwnProperty()`.

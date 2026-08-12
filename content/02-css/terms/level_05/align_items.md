@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard)**: `align-items` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If `justify-content` aligns items horizontally (Main Axis), we need a way to align items vertically (Cross Axis). For example, if you have a tall 100px navigation bar, but your text links are only 20px tall, should the text sit at the top of the bar, the bottom of the bar, or perfectly in the middle?
@@ -57,7 +53,7 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use it without a container height
 
@@ -101,7 +97,7 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 .item { height: auto; } /* Allows flex stretch alignment */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Stretched Buttons
 
@@ -158,17 +154,17 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 >
 > **Explanation:** `align-items: baseline` aligns text baselines regardless of differing font sizes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`justify-content`](justify_content.md) — The Main Axis sibling.
 - [`flex-direction`](flex_direction.md) — Rotating the main layout axis.
 - [`align-self`](align_self.md) — Overrides align-items for a single child item.
 - [`align-content`](align_content.md) — Distributes multiple rows of flex items.
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
-- [`display: flex`](display_flex.md) — Related concept: `display: flex`.
+- [`display: flex` — Flexbox Container](display_flex.md) — Related concept: `display: flex`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `align-items` aligns elements along the **Cross Axis** (usually vertical).
 - The default is `stretch`, which forces children to fill the height of the container.
 - Using `justify-content: center;` combined with `align-items: center;` is the modern, definitive way to perfectly center an element on a screen.

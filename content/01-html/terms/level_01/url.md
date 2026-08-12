@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: URL (Uniform Resource Locator) is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A modern webpage is composed of many separate files. You have the main HTML page, a CSS stylesheet, an image file, a JavaScript file, and links pointing to other websites. 
@@ -103,7 +99,7 @@ Absolute vs relative path attributes inside HTML:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the protocol in absolute URLs
 
@@ -154,7 +150,7 @@ Absolute vs relative path attributes inside HTML:
 <a href="/contact">Contact</a> <!-- Environment-independent relative path -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Absolute vs Relative Sorting
 
@@ -233,7 +229,7 @@ Absolute vs relative path attributes inside HTML:
 >
 > **Explanation:** Absolute URLs specify full protocol/domain; relative URLs resolve relative to current host/path.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Attribute](attribute.md) — The HTML tag parameters that receive URLs as values.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The standard HTML link element utilizing `href`.
 - [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
@@ -241,7 +237,7 @@ Absolute vs relative path attributes inside HTML:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A URL is a standardized web address used to locate and load files on the internet.
 - Absolute URLs contain the full address with protocol and domain (used for external links).
 - Relative paths point to files within the same project directory (used for internal links).

@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "03-javascript",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-12",
   "terms": {
     "arithmetic_operators": {
       "level": 1,
@@ -337,14 +337,14 @@
           "description": "The mechanism enabling weak typing."
         },
         {
+          "term": "ecmascript",
+          "module": "03-javascript",
+          "description": "Related concept: ECMAScript."
+        },
+        {
           "term": "typescript",
           "module": "08-typescript",
           "description": "Statically typed superset of JavaScript."
-        },
-        {
-          "module": "03-javascript",
-          "term": "ecmascript",
-          "description": "Related concept: ECMAScript."
         }
       ]
     },
@@ -516,8 +516,8 @@
           "description": "Related concept: var."
         },
         {
-          "module": "03-javascript",
           "term": "block_scope",
+          "module": "03-javascript",
           "description": "Block scoping."
         }
       ]
@@ -775,13 +775,13 @@
           "description": "Related concept: TypeScript."
         },
         {
-          "module": "03-javascript",
           "term": "reference_vs_value",
+          "module": "03-javascript",
           "description": "Value vs reference semantics."
         },
         {
-          "module": "03-javascript",
           "term": "ecmascript",
+          "module": "03-javascript",
           "description": "Related concept: ECMAScript."
         }
       ]
@@ -1114,8 +1114,8 @@
           "description": "Related concept: console.log()."
         },
         {
-          "module": "03-javascript",
           "term": "ecmascript",
+          "module": "03-javascript",
           "description": "Related concept: ECMAScript."
         }
       ]
@@ -1158,8 +1158,8 @@
           "description": "Related concept: Set."
         },
         {
-          "module": "03-javascript",
           "term": "push_pop_shift_unshift",
+          "module": "03-javascript",
           "description": "Mutating methods."
         }
       ]
@@ -1582,13 +1582,13 @@
           "description": "Related concept: Proxy."
         },
         {
-          "module": "03-javascript",
           "term": "property_access",
+          "module": "03-javascript",
           "description": "Dot vs bracket notation."
         },
         {
-          "module": "03-javascript",
           "term": "prototype",
+          "module": "03-javascript",
           "description": "Prototype chain."
         }
       ]
@@ -1645,8 +1645,8 @@
           "description": "Declaring dynamic keys inside object literals."
         },
         {
-          "module": "03-javascript",
           "term": "object",
+          "module": "03-javascript",
           "description": "Related concept: Object."
         }
       ]
@@ -1684,8 +1684,8 @@
           "description": "Related concept: Tagged Template Literals."
         },
         {
-          "module": "03-javascript",
           "term": "regexp",
+          "module": "03-javascript",
           "description": "Related concept: Regular Expressions (RegExp)."
         }
       ]
@@ -1876,8 +1876,8 @@
           "description": "A function assigned to a variable."
         },
         {
-          "module": "03-javascript",
           "term": "function",
+          "module": "03-javascript",
           "description": "Function expressions and arrow syntax."
         }
       ],
@@ -1962,8 +1962,8 @@
           "description": "Related concept: Scope."
         },
         {
-          "module": "03-javascript",
           "term": "let",
+          "module": "03-javascript",
           "description": "Related concept: let."
         }
       ]
@@ -2148,13 +2148,13 @@
           "description": "Related concept: Generator (function*)."
         },
         {
-          "module": "03-javascript",
           "term": "function_declaration",
+          "module": "03-javascript",
           "description": "Function declaration."
         },
         {
-          "module": "03-javascript",
           "term": "function_expression",
+          "module": "03-javascript",
           "description": "Function expression."
         }
       ]
@@ -2182,8 +2182,8 @@
           "description": "The behavior of moving declarations to the top of the scope."
         },
         {
-          "module": "03-javascript",
           "term": "function",
+          "module": "03-javascript",
           "description": "Related concept: Function."
         }
       ]
@@ -2221,8 +2221,8 @@
           "description": "Related concept: Hoisting."
         },
         {
-          "module": "03-javascript",
           "term": "function",
+          "module": "03-javascript",
           "description": "Related concept: Function."
         }
       ]
@@ -3102,8 +3102,8 @@
           "description": "Index-based sub-array slicing and splicing."
         },
         {
-          "module": "03-javascript",
           "term": "array",
+          "module": "03-javascript",
           "description": "Related concept: Array."
         }
       ]
@@ -3374,13 +3374,13 @@
           "description": "Related concept: Web APIs vs the Language."
         },
         {
-          "module": "03-javascript",
           "term": "dom_manipulation",
+          "module": "03-javascript",
           "description": "DOM manipulation."
         },
         {
-          "module": "03-javascript",
           "term": "event_listener",
+          "module": "03-javascript",
           "description": "Event listeners."
         }
       ]
@@ -3418,8 +3418,8 @@
           "description": "Modifying node styling classes and attributes."
         },
         {
-          "module": "03-javascript",
           "term": "dom",
+          "module": "03-javascript",
           "description": "Related concept: DOM (Document Object Model)."
         }
       ]
@@ -3559,8 +3559,8 @@
           "description": "Related concept: event.target vs event.currentTarget."
         },
         {
-          "module": "03-javascript",
           "term": "event_listener",
+          "module": "03-javascript",
           "description": "Related concept: Event Listener."
         }
       ]
@@ -3637,8 +3637,8 @@
           "description": "Related concept: event.target vs event.currentTarget."
         },
         {
-          "module": "03-javascript",
           "term": "event_listener",
+          "module": "03-javascript",
           "description": "Related concept: Event Listener."
         }
       ]
@@ -3671,18 +3671,18 @@
           "description": "`addEventListener` is a perfect example of an HOF."
         },
         {
-          "module": "03-javascript",
           "term": "event_bubbling",
+          "module": "03-javascript",
           "description": "Event bubbling."
         },
         {
-          "module": "03-javascript",
           "term": "event_delegation",
+          "module": "03-javascript",
           "description": "Event delegation."
         },
         {
-          "module": "03-javascript",
           "term": "dom",
+          "module": "03-javascript",
           "description": "Related concept: DOM (Document Object Model)."
         }
       ]
@@ -3829,8 +3829,8 @@
           "description": "Closely related to the execution context."
         },
         {
-          "module": "03-javascript",
           "term": "call_stack",
+          "module": "03-javascript",
           "description": "Managing JavaScript function execution contexts."
         }
       ],
@@ -4410,8 +4410,8 @@
           "description": "Related concept: Web Workers."
         },
         {
-          "module": "03-javascript",
           "term": "promise",
+          "module": "03-javascript",
           "description": "Related concept: Promise."
         }
       ]
@@ -4610,8 +4610,8 @@
           "description": "Related concept: Fetch API."
         },
         {
-          "module": "03-javascript",
           "term": "event_loop",
+          "module": "03-javascript",
           "description": "Microtask queue."
         },
         {
@@ -4896,8 +4896,8 @@
           "description": "The core precedence rules governing how JavaScript binds the execution context."
         },
         {
-          "module": "03-javascript",
           "term": "this_keyword",
+          "module": "03-javascript",
           "description": "Related concept: this Keyword."
         }
       ]
@@ -4955,8 +4955,8 @@
           "description": "Related concept: Design Patterns (Module, Singleton, Observer, Factory)."
         },
         {
-          "module": "03-javascript",
           "term": "prototype",
+          "module": "03-javascript",
           "description": "Related concept: Prototype."
         }
       ]
@@ -5067,8 +5067,8 @@
           "description": "Explicit override methods."
         },
         {
-          "module": "03-javascript",
           "term": "this_keyword",
+          "module": "03-javascript",
           "description": "Related concept: this Keyword."
         }
       ]
@@ -5562,13 +5562,13 @@
           "description": "The series of links connecting objects to multiple prototypes."
         },
         {
-          "module": "03-javascript",
           "term": "class",
+          "module": "03-javascript",
           "description": "ES6 Classes."
         },
         {
-          "module": "03-javascript",
           "term": "object",
+          "module": "03-javascript",
           "description": "Related concept: Object."
         }
       ]
@@ -5635,8 +5635,8 @@
           "description": "Preserving variable access scopes."
         },
         {
-          "module": "03-javascript",
           "term": "primitive_types",
+          "module": "03-javascript",
           "description": "Related concept: Primitive Types."
         }
       ]
@@ -5795,13 +5795,13 @@
           "description": "Related concept: Strict Mode (\"use strict\")."
         },
         {
-          "module": "03-javascript",
           "term": "call_apply_bind",
+          "module": "03-javascript",
           "description": "call, apply, bind."
         },
         {
-          "module": "03-javascript",
           "term": "default_this_binding",
+          "module": "03-javascript",
           "description": "This binding rules."
         }
       ]
@@ -5912,8 +5912,8 @@
           "description": "Related concept: Tree Shaking & Code Splitting."
         },
         {
-          "module": "03-javascript",
           "term": "modules",
+          "module": "03-javascript",
           "description": "Related concept: Modules (import/export)."
         }
       ]
@@ -6043,13 +6043,13 @@
           "description": "Related concept: Bundler."
         },
         {
-          "module": "03-javascript",
           "term": "named_vs_default_exports",
+          "module": "03-javascript",
           "description": "Exports syntax."
         },
         {
-          "module": "03-javascript",
           "term": "dynamic_import",
+          "module": "03-javascript",
           "description": "Dynamic import()"
         }
       ]
@@ -6072,8 +6072,8 @@
           "description": "Promise-based module loader."
         },
         {
-          "module": "03-javascript",
           "term": "modules",
+          "module": "03-javascript",
           "description": "Related concept: Modules (import/export)."
         }
       ]
@@ -6320,8 +6320,8 @@
           "description": "Text manipulation helpers often applied inside tag functions."
         },
         {
-          "module": "03-javascript",
           "term": "regexp",
+          "module": "03-javascript",
           "description": "Related concept: Regular Expressions (RegExp)."
         }
       ]
@@ -6568,8 +6568,8 @@
           "description": "Related concept: WeakMap / WeakSet."
         },
         {
-          "module": "03-javascript",
           "term": "proxy",
+          "module": "03-javascript",
           "description": "Related concept: Proxy."
         }
       ]
@@ -6772,8 +6772,8 @@
           "description": "Related concept: Reflect."
         },
         {
-          "module": "03-javascript",
           "term": "garbage_collection",
+          "module": "03-javascript",
           "description": "WeakMap & GC."
         }
       ]
@@ -6825,13 +6825,13 @@
       ],
       "related": [
         {
-          "module": "03-javascript",
           "term": "string_methods",
+          "module": "03-javascript",
           "description": "RegExp string methods."
         },
         {
-          "module": "03-javascript",
           "term": "tagged_template_literals",
+          "module": "03-javascript",
           "description": "String manipulation."
         }
       ]
@@ -7587,8 +7587,8 @@
           "description": "Related concept: Runtime vs Compile Time."
         },
         {
-          "module": "03-javascript",
           "term": "ecmascript",
+          "module": "03-javascript",
           "description": "ECMAScript static typing."
         }
       ]

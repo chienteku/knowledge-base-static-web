@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Syntax**
+
+**CSS Syntax (Universal Browser Support .)**: CSS Comments (`/* */`) is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Parsed and ignored during tokenization. Does not impact visual paint steps).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a real web project, stylesheets can grow to contain thousands of lines of styling code. Without notes, stylesheets quickly become a messy, unreadable wall of text. 
@@ -97,7 +93,7 @@ body {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using single-line `//` comments
 
@@ -173,7 +169,7 @@ button { color: red; } /* Valid CSS comment */
 /* Outer comment containing text without nested comment blocks */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Comment Cleanup
 
@@ -242,13 +238,13 @@ button { color: red; } /* Valid CSS comment */
 >
 > **Explanation:** Wrapping CSS properties in `/* */` disables them without deleting code.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [CSS (Cascading Style Sheets)](css.md) — The parent language.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The container syntax holding comments.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSS comments are wrapped exclusively in `/*` and `*/`.
 - CSS does not support single-line `//` comments; using them causes silent parsing bugs.
 - Comments can span multiple lines.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support)**: Element vs. Tag is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When learning HTML, you will constantly hear developers use the words "tag" and "element" interchangeably. While they are closely related, they mean two different things in web standards. 
@@ -65,7 +61,7 @@ The **Element** is the *entire sandwich*—the top slice of bread, the meat and 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the closing tag
 
@@ -141,7 +137,7 @@ The **Element** is the *entire sandwich*—the top slice of bread, the meat and 
 <div><h1>Title</h1><p>Content</p></div>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Identify the parts
 
@@ -200,7 +196,7 @@ Identify the opening tag, the closing tag, the content, and the element.
 >
 > **Explanation:** Void elements cannot enclose child content and do not have closing tags.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Attribute](attribute.md) — Extra information that is placed *inside* the opening tag.
 - [Block-level vs Inline Elements](block_inline.md) — The display behaviors of HTML elements.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Elements that do not have a separate closing tag.
@@ -211,7 +207,7 @@ Identify the opening tag, the closing tag, the content, and the element.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Tag** is the raw code wrapped in angle brackets (`<p>` or `</p>`).
 - An **Element** is the complete conceptual object (Opening Tag + Content + Closing Tag).
 - Closing tags look exactly like opening tags but have a forward slash (`/`).

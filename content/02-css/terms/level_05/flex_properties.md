@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard .)**: `flex-grow` / `flex-shrink` / `flex-basis` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Browsers dynamically solve system equations to divide container pixels among items based on these values).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web design, layouts must be fluid. If a user views your website on a wide desktop screen, you want your panels to expand and fill the screen. If they view it on a mobile phone, elements must shrink to fit.
@@ -139,7 +135,7 @@ Fixed sidebar and fluid main content:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `flex-basis` with a fixed `width` constraint
 
@@ -198,7 +194,7 @@ Fixed sidebar and fluid main content:
 .col { flex: 1; } /* All columns forced to equal 1:1 width ratio */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Space Division
 
@@ -261,13 +257,13 @@ How many pixels wide will Box A be on the screen?
 >
 > **Explanation:** `flex-shrink: 0` locks flex item dimensions from shrinking.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent container.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The combined syntax layout.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `flex-basis` defines the initial target size of a flex item.
 - `flex-grow` controls how much an item expands to absorb empty container space.
 - `flex-shrink` controls how much an item compresses when space is constrained.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design Pattern**
+
+**Architecture / Design Pattern (Web App Server Layer .)**: MVC Pattern (Model–View–Controller) is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Governs folder structure, modularity, and separation of concerns).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When learning Node.js, it is common to write an entire application inside a single `server.js` file. This file often handles database connections, schema validations, route path matches, business logic calculations, and response rendering.
@@ -117,7 +113,7 @@ exports.getUserProfile = async (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing heavy business logic directly inside the router file
 
@@ -258,7 +254,7 @@ class UserModel {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: MVC File Routing
 
@@ -326,14 +322,14 @@ module.exports = router;
 >
 > **Explanation:** `res.render` compiles template files with data objects and returns HTML to client.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Controllers & Services](controllers_services.md) — A deeper separation refining the controller layer.
 - [ORMs & ODMs](../level_08/orms_odms.md) — The database mapping technologies representing Models.
 - [REST API Design](rest_api.md) — Related concept: REST API Design.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The MVC pattern separates application concerns into Models, Views, and Controllers.
 - **Models** represent schemas, data layouts, and database interaction logic.
 - **Views** format and present output to clients (JSON structures or HTML templates).

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Standardized globally. Supported in Node.js , modern browsers, and Deno.)**: structuredClone is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Standardized globally. Supported in Node.js (v17+), modern browsers, and Deno.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Deep copying nested objects in JavaScript historically required compromises. Developers had to import heavy utility libraries (like Lodash's `_.cloneDeep`), write custom recursive copy functions, or use the legacy JSON trick: `JSON.parse(JSON.stringify(obj))`. 
@@ -89,7 +85,7 @@ console.log(clonedNode.sibling.sibling === clonedNode); // true (Circular loop p
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Cloning objects containing Functions
 
@@ -166,82 +162,141 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Config Cloner
+### Exercise 1: Deep Cloning Complex & Circular Data via structuredClone()
 
-**Problem:** Complete the function `cloneConfig` to return a deep copy of `systemConfig`. If cloning fails due to a `DOMException` (e.g. due to functions), catch the error and fallback to a shallow spread copy.
+**Scenario:** A state snapshot tool uses native `structuredClone()` to deep clone complex object graphs containing circular references, Maps, Sets, and Dates.
 
-```javascript
-function cloneConfig(config) {
-  try {
-    // Write deep clone code
-  } catch (error) {
-    console.warn("Fallback to shallow copy.");
-    return { ...config };
-  }
-}
+**Requirements:**
+1. Write cloneStateSnapshot(stateObj).
+2. Use native structuredClone().
+3. Verify deep equality and reference independence.
 
-const conf = { port: 8080, log: () => "Logs" };
-const result = cloneConfig(conf);
-
-console.log("Port:", result.port);
-console.log("Log method exists?", typeof result.log === "function");
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Fallback to shallow copy.
-> Port: 8080
-> Log method exists? true
-> ```
-> - Inside `try`, return `structuredClone(config)`.
-> 
----
-
-### Exercise 2: Deep Cloning Complex Objects with `structuredClone`
-
-**Problem:** Deep clone object `{ date: new Date(), set: new Set([1, 2]) }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> True deep copy with Date and Set intact
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const orig = { date: new Date(), set: new Set([1, 2]) };
-> const copy = structuredClone(orig);
-> console.log("True deep copy with Date and Set intact");
+> function cloneStateSnapshot(stateObj) {
+>   if (typeof globalThis.structuredClone !== "function") {
+>     throw new Error("structuredClone API not supported in this runtime");
+>   }
+>   return globalThis.structuredClone(stateObj);
+> }
+>
+> // Verification tests
+> const original = {
+>   date: new Date("2026-08-12"),
+>   tags: new Set(["js", "es6"]),
+>   map: new Map([["key", "val"]]),
+>   nested: { count: 1 }
+> };
+> original.self = original; // Circular reference!
+>
+> const cloned = cloneStateSnapshot(original);
+>
+> console.assert(cloned !== original, "Test 1 Failed");
+> console.assert(cloned.nested !== original.nested, "Test 2 Failed");
+> console.assert(cloned.tags instanceof Set && cloned.tags.has("js"), "Test 3 Failed");
+> console.assert(cloned.self === cloned, "Test 4 Failed: Circular reference must point to cloned object graph");
 > ```
 >
-> **Explanation:** `structuredClone` natively handles complex built-in types like `Date`, `Set`, `Map`, `RegExp`, `ArrayBuffer`.
+> #### Technical Explanation
+>
+> 1. **structuredClone API**: Native browser & Node.js global API for performing deep copies of JavaScript values.
+> 2. **Support for Built-in Types**: Clones Maps, Sets, Dates, RegExps, TypedArrays, and ArrayBuffers natively.
+> 3. **Circular Reference Handling**: Properly preserves circular references without entering infinite recursion stack overflows.
 > 
 ---
 
-### Exercise 3: Transferring ArrayBuffer Ownership with `structuredClone`
+### Exercise 2: Cloning & Transferring ArrayBuffer Memory
 
-**Problem:** Transfer ownership of an `ArrayBuffer` using `structuredClone(buffer, { transfer: [buffer] })`.
+**Scenario:** A Web Workers messaging utility transfers binary memory buffers using the transfer option in `structuredClone()`.
 
-**Expected output:**
+**Requirements:**
+1. Write transferMemoryBuffer(buffer).
+2. Use structuredClone(buffer, { transfer: [buffer] }).
+3. Verify original buffer is detached.
+
 > [!check]- Answer
-> ```text
-> Original buffer detached
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Original buffer detached");
+> function transferMemoryBuffer(buffer) {
+>   if (typeof globalThis.structuredClone !== "function") return null;
+>
+>   const cloned = globalThis.structuredClone(buffer, { transfer: [buffer] });
+>   return {
+>     cloned,
+>     isOriginalDetached: buffer.byteLength === 0
+>   };
+> }
+>
+> // Verification tests
+> if (typeof globalThis.structuredClone === "function" && typeof ArrayBuffer !== "undefined") {
+>   const buffer = new ArrayBuffer(16);
+>   const result = transferMemoryBuffer(buffer);
+>
+>   console.assert(result.cloned.byteLength === 16, "Test 1 Failed");
+>   console.assert(result.isOriginalDetached === true, "Test 2 Failed: Transferred buffer must be detached");
+> }
 > ```
 >
-> **Explanation:** The `{ transfer: [...] }` option transfers memory ownership without copying bytes.
+> #### Technical Explanation
+>
+> 1. **Transferable Objects Option**: Passing { transfer: [buffer] } moves underlying memory rather than copying, zeroing out original buffer.
+> 2. **Zero-Copy Memory Transfers**: Provides high-performance data transfer for large WebAssembly or WebGL memory buffers.
+> 3. **Detached State Invariant**: Transferred ArrayBuffers become detached and have byteLength set to 0.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: structuredClone vs JSON Serialization Edge Cases
+
+**Scenario:** A data sanitizer tests `structuredClone()` limitations, verifying that functions, DOM nodes, and symbols throw DataCloneError.
+
+**Requirements:**
+1. Write safeCloneOrFallback(data).
+2. Try structuredClone(data).
+3. Catch DataCloneError and handle un-cloneable values.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function safeCloneOrFallback(data) {
+>   try {
+>     return { success: true, data: globalThis.structuredClone(data) };
+>   } catch (err) {
+>     return { success: false, error: err.name || "DataCloneError" };
+>   }
+> }
+>
+> // Verification tests
+> const validData = { nums: [1, 2, 3] };
+> const res1 = safeCloneOrFallback(validData);
+> console.assert(res1.success === true, "Test 1 Failed");
+>
+> const invalidData = { fn: () => {} }; // Functions cannot be cloned by structuredClone
+> const res2 = safeCloneOrFallback(invalidData);
+> console.assert(res2.success === false, "Test 2 Failed: Functions must fail structuredClone");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **DataCloneError Exceptions**: Attempting to clone functions, DOM nodes, Proxy objects, or Symbols throws a DataCloneError.
+> 2. **Limitations vs JSON.stringify**: JSON.stringify silently omits functions/undefined; structuredClone throws explicit errors.
+> 3. **Prototype Dropping**: Class instances cloned via structuredClone lose custom prototype methods and become plain objects.
+---
+
+## 6. Related Terms
 - [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — The legacy string serialization copy alternative.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `structuredClone()` is the native, built-in global standard API for deep cloning.
 - It preserves `Map`, `Set`, `Date`, `RegExp`, `Error`, and typed arrays.
 - It safely duplicates circular reference structures without crashing.

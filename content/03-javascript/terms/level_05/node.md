@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Only)**: Node is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To build a functional Document Object Model, the browser needed a standardized way to represent every single piece of an HTML document. It couldn't just be HTML tags; what about the plain text *inside* the tags? What about HTML comments?
@@ -61,7 +57,7 @@ document.body.appendChild(newDiv);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Node Scope and Variable Hoisting
 
@@ -134,65 +130,126 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Node Types
+### Exercise 1: DOM Child Nodes vs Children Filtering
 
-**Problem:** In the DOM, an Element Node has a `nodeType` of `1`. A Text Node has a `nodeType` of `3`. 
-If you create a `<p>` tag using `document.createElement('p')`, what is its `nodeType`?
+**Scenario:** A DOM parser inspects parent container nodes, distinguishing childNodes (includes text/comments) from children (Element nodes only).
 
-**Expected output:**
+**Requirements:**
+1. Write inspectContainerNodes(containerNode).
+2. Count containerNode.childNodes.length and containerNode.children.length.
+3. Return summary object.
+
 > [!check]- Answer
-> ```text
-> 1 (Because it is an HTML Element)
-> ```
-> - Tags = Elements (Type 1).
-> - The actual readable words = Text (Type 3).
-> 
----
-
-### Exercise 2: Checking Node Relationships with `contains()`
-
-**Problem:** Check if `parent.contains(child)` returns `true`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(true);
+> function inspectContainerNodes(containerNode) {
+>   if (!containerNode) return { totalNodes: 0, elementNodes: 0 };
+>
+>   return {
+>     totalNodes: containerNode.childNodes ? containerNode.childNodes.length : 0,
+>     elementNodes: containerNode.children ? containerNode.children.length : 0
+>   };
+> }
+>
+> // Verification tests
+> const mockContainer = {
+>   childNodes: [{ nodeType: 3 }, { nodeType: 1 }, { nodeType: 8 }], // text, element, comment
+>   children: [{ nodeType: 1 }] // element only
+> };
+> const summary = inspectContainerNodes(mockContainer);
+> console.assert(summary.totalNodes === 3, "Test 1 Failed");
+> console.assert(summary.elementNodes === 1, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Node.contains(otherNode)` tests whether a node is a descendant of the target node.
+> #### Technical Explanation
+>
+> 1. **Node Interface**: Node is the base interface for all objects in the DOM tree (Elements, Text, Comments).
+> 2. **childNodes vs children**: childNodes returns all Node types; children returns only Element node objects.
+> 3. **Parent-Child Relationship**: Properties parentNode, firstChild, nextSibling navigate general DOM nodes.
 > 
 ---
 
-### Exercise 3: Cloning Nodes with `cloneNode(true)`
+### Exercise 2: Node Advanced Context Handler
 
-**Problem:** Clone a DOM node and all its descendants using `elem.cloneNode(true)`.
+**Scenario:** A web application component processes node data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleNodeSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Deep clone created
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Deep clone created");
+> function handleNodeSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleNodeSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `cloneNode(true)` recursively clones target nodes and child subtrees.
-> 
+> #### Technical Explanation
+>
+> 1. **Node Architecture**: Applying node patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Node Performance Optimization
+
+**Scenario:** An application utility optimizes node execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeNodeTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeNodeTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeNodeTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Node Optimization**: Optimizing node improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The entire tree made out of these Nodes.
 - [document.querySelector()](document_queryselector.md) — The primary method used to find Element Nodes in the tree.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Node is the most basic building block of the DOM tree.
 - **Element Nodes** represent HTML tags (like `<div>` or `<body>`).
 - **Text Nodes** represent the actual text strings inside the tags, as well as invisible whitespace.

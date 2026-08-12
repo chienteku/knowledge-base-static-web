@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern**
+
+**Design Pattern (Universal)**: IIFE is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In older versions of JavaScript (before `let`, `const`, and ES6 Modules), the only way to create a private scope was to create a function. If you declared a `var` inside a function, the outside world couldn't see it.
@@ -78,7 +74,7 @@ console.log(bankAccount.balance); // undefined
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the leading semicolon
 
@@ -160,77 +156,138 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Arrow IIFEs
+### Exercise 1: Encapsulated Private Module via IIFE
 
-**Problem:** Can you write an IIFE using the modern Arrow Function syntax? Write a simple one that logs "Arrow IIFE!".
+**Scenario:** A legacy JavaScript module wraps state inside an Immediately Invoked Function Expression (IIFE) to create private scope variables and expose a public API.
 
-**Expected output:**
+**Requirements:**
+1. Write IIFE returning counter module API.
+2. Private variable #count.
+3. Expose increment(), decrement(), getCount().
+
 > [!check]- Answer
-> ```javascript
-> (() => {
->   console.log("Arrow IIFE!");
-> })();
-> ```
-> - Just replace `function()` with `() =>`.
-> 
----
-
-### Exercise 2: Private Scope Isolation with IIFE
-
-**Problem:** Use an IIFE `(function() { var privateVal = 42; })()` to isolate temporary variables.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
-> ```javascript
-> (function() {
->   var privateVal = 42;
-> })();
-> try {
->   console.log(privateVal);
-> } catch (err) {
->   console.log("ReferenceError caught");
-> }
-> ```
 >
-> **Explanation:** IIFEs (Immediately Invoked Function Expressions) create private scope closures immediately.
-> 
----
-
-### Exercise 3: IIFE Module Pattern
-
-**Problem:** Return a public API `{ getCount() }` from an IIFE closing over private state.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 10
-> ```
+> #### Implementation
+>
 > ```javascript
 > const CounterModule = (function() {
->   let count = 10;
->   return { getCount() { return count; } };
+>   let count = 0; // Private variable hidden inside IIFE closure
+>
+>   return {
+>     increment() {
+>       count++;
+>       return count;
+>     },
+>     decrement() {
+>       count--;
+>       return count;
+>     },
+>     getCount() {
+>       return count;
+>     }
+>   };
 > })();
-> console.log(CounterModule.getCount());
+>
+> // Verification tests
+> console.assert(CounterModule.getCount() === 0, "Test 1 Failed");
+> console.assert(CounterModule.increment() === 1, "Test 2 Failed");
+> console.assert(CounterModule.increment() === 2, "Test 3 Failed");
+> console.assert(typeof count === "undefined", "Test 4 Failed: Private variable must not pollute global scope");
 > ```
 >
-> **Explanation:** IIFEs form the foundation of classic JavaScript module patterns.
-> 
+> #### Technical Explanation
+>
+> 1. **IIFE Definition**: Immediately Invoked Function Expression: a function defined and executed immediately upon creation: (function() { ... })().
+> 2. **Module Pattern Encapsulation**: Creates a private scope using function closures, exposing only returned public properties.
+> 3. **Global Namespace Protection**: Prevents temporary variables from polluting global window or globalThis namespaces.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Avoiding Loop Var Closure Scope Bugs via IIFE
+
+**Scenario:** A widget renderer uses an IIFE inside a loop to capture distinct index scope copies when using var declarations.
+
+**Requirements:**
+1. Write createButtonHandlersVar(count).
+2. Use var inside for loop.
+3. Wrap callback creation in IIFE to capture current index value.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createButtonHandlersVar(count) {
+>   const handlers = [];
+>   for (var i = 0; i < count; i++) {
+>     // IIFE creates a distinct scope per loop iteration
+>     (function(capturedIndex) {
+>       handlers.push(() => capturedIndex);
+>     })(i);
+>   }
+>   return handlers;
+> }
+>
+> // Verification tests
+> const handlers = createButtonHandlersVar(3);
+> console.assert(handlers[0]() === 0, "Test 1 Failed");
+> console.assert(handlers[1]() === 1, "Test 2 Failed");
+> console.assert(handlers[2]() === 2, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Scope Capture via IIFE**: Passing loop variables as IIFE parameters creates isolated scope bindings for each iteration.
+> 2. **Historical ES5 Significance**: Standard ES5 solution for fixing var function-scoping closure bugs before block-scoped `let` existed.
+> 3. **Parameter Shadowing**: The parameter capturedIndex shadows outer variables within the IIFE execution context.
+> 
+---
+
+### Exercise 3: Self-Executing Initialization Singleton
+
+**Scenario:** A web application configuration loader runs an IIFE to detect the active runtime environment (Node.js vs Browser) and set up global defaults.
+
+**Requirements:**
+1. Write IIFE detecting environment.
+2. Return configuration object with env type ("BROWSER" vs "NODE").
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const AppConfig = (function(globalScope) {
+>   const isBrowser = typeof globalScope.window !== "undefined";
+>   const isNode = typeof globalScope.process !== "undefined";
+>
+>   return Object.freeze({
+>     environment: isBrowser ? "BROWSER" : (isNode ? "NODE" : "UNKNOWN"),
+>     version: "1.0.0"
+>   });
+> })(typeof globalThis !== "undefined" ? globalThis : this);
+>
+> // Verification tests
+> console.assert(AppConfig.version === "1.0.0", "Test 1 Failed");
+> console.assert(["BROWSER", "NODE", "UNKNOWN"].includes(AppConfig.environment), "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Environment Auto-Detection**: IIFEs run immediately during script parse time, ideal for environment detection.
+> 2. **Dependency Injection via IIFE Arguments**: Passing globalThis into IIFE parameters allows explicit dependency injection.
+> 3. **Immutable Configuration Output**: Combining IIFE return values with Object.freeze() yields tamper-proof singleton configurations.
+---
+
+## 6. Related Terms
 - [Scope](../level_03/scope.md) — What an IIFE creates to protect variables.
 - [Modules (import/export)](../level_08/modules.md) — The modern ES6 feature that largely replaced the need for IIFEs.
 - [Anonymous Function](../level_03/anonymous_function.md) — Related concept: Anonymous Function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An IIFE (Immediately Invoked Function Expression) is a function that runs the moment it is defined.
 - It is created by wrapping a function in `()` and adding `()` at the end.
 - It was historically used to keep variables out of the global scope.

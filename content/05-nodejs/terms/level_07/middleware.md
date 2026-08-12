@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Framework Feature**
+
+**Design Pattern / Framework Feature (Node.js)**: Middleware is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Node.js (Server Infrastructure)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you have 50 different API routes in your app. For 40 of them, you need to check if the user is logged in. 
@@ -55,7 +51,7 @@ Middleware acts like a Bouncer at a nightclub.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to call `next()`
 
@@ -201,7 +197,7 @@ app.use((req, res, next) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Bouncer
 
@@ -265,7 +261,7 @@ app.use((req, res, next) => {
 >
 > **Explanation:** Express inspects function `length` property to identify 4-parameter error handlers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Routing](routing.md) — Where the request goes after it survives the Middleware.
 - [Body Parsing (express.json())](body_parsing.md) — Related concept: Body Parsing (express.json()).
 - [Express.js](express_js.md) — Related concept: Express.js.
@@ -275,7 +271,7 @@ app.use((req, res, next) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Middleware** are functions that execute between the incoming request and the final route handler.
 - They are used for shared logic like Authentication, Logging, and JSON parsing.
 - They take three arguments: `req, res, next`.

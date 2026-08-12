@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Module**
+
+**Core Module (Node.js Core Architecture .)**: The events Module is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Provides the asynchronous event-driven interface template used across Node's modules).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Node.js is built around an **Event-Driven Architecture**. Many core features (such as HTTP servers, file streams, and child processes) need a standardized way to signal when operations change states (e.g. *"a client connected,"* *"a file finished loading,"* or *"an error occurred"*).
@@ -76,7 +72,7 @@ db.connect();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating memory leaks by forgetting to remove event listeners
 
@@ -147,7 +143,7 @@ emitter.on('error', (err) => console.error('Caught:', err.message));
 emitter.emit('error', new Error('Handled!'));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Event Subscription Configuration
 
@@ -210,14 +206,14 @@ emitter.emit('error', new Error('Timeout error'));            // Ignored
 >
 > **Explanation:** `once()` executes the event listener function at most one time, automatically unsubscribing.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Event Emitter](../level_05/event_emitter.md) — The conceptual implementation of this architecture.
 - [Streams (General Concept)](../level_06/streams.md) — Data-flow streams that inherit directly from `EventEmitter`.
 - [The http Module](http_module.md) — HTTP server events.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The built-in `events` module provides the `EventEmitter` class.
 - Objects extending `EventEmitter` can publish events (`.emit`) and listen to events (`.on`).
 - `.once()` registers a listener that triggers once and then automatically deregisters.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support)**: Margin is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you place two `<p>` paragraphs next to each other, you don't want the text to be completely squished together. You need a way to create breathing room between elements.
@@ -78,7 +74,7 @@ The **Margin** is the physical property line (the front yard and back yard) that
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Margin Collapse (The notorious CSS gotcha)
 
@@ -129,7 +125,7 @@ span { display: block; margin: 0 auto; width: 200px; }
 /* Use CSS Grid/Flexbox or relative positioning for controlled overlaps */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Margin vs Padding
 
@@ -184,7 +180,7 @@ span { display: block; margin: 0 auto; width: 200px; }
 >
 > **Explanation:** `margin: auto` inside Flexbox absorbs available free space along main/cross axes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Padding](padding.md) — The inner spacing (inside the border).
 - [Border](border.md) — The wall separating margin from padding.
 - [Margin Collapse](margin_collapse.md) — The vertical merging behavior of adjacent margins.
@@ -196,7 +192,7 @@ span { display: block; margin: 0 auto; width: 200px; }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Margin creates invisible space *outside* an element's border.
 - Background colors do not apply to the margin.
 - `margin: 0 auto;` is the classic way to horizontally center a block element with a fixed width.

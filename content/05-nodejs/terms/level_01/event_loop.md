@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture**
+
+**Node.js Core Architecture (Node.js)**: The Event Loop & Libuv is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js (via the Libuv library)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We know Node.js is Single-Threaded, and we know it hands off slow database queries to background C++ workers so it doesn't block. 
@@ -43,7 +39,7 @@ The Event Loop isn't just a random circle. It is a highly structured infinite `w
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Loop Priority
 
@@ -99,7 +95,7 @@ function safe() {
 safe();
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Infinite Loop
 
@@ -174,7 +170,7 @@ Promise.resolve().then(() => console.log('D'));
 >
 > **Explanation:** `nextTick` (C) executes first, followed by microtask Promise (D), then macrotasks Timers/Check (A / B).
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Non-Blocking I/O](non_blocking_io.md) — The tasks that get sent to the background.
 - [Callbacks & Callback Hell](../level_05/callbacks.md) — The actual functions that the Event Loop pushes onto the main thread.
 - [Blocking the Event Loop](blocking_event_loop.md) — Related concept: Blocking the Event Loop.
@@ -188,7 +184,7 @@ Promise.resolve().then(() => console.log('D'));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Libuv** is the C++ library that gives Node.js its background worker threads.
 - The **Event Loop** is an infinite loop that constantly checks if those background workers are finished.
 - When a worker finishes, the Event Loop pushes its Callback function onto the Main Thread to be executed.

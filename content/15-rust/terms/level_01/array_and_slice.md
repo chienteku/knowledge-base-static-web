@@ -238,9 +238,9 @@ fn process(s: &[i32]) {} process(&[1, 2, 3, 4, 5]); // Accept &[T] slice!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [SIMD (`std::simd`)](../level_15/simd.md)
+- [SIMD (`std::simd`)](../level_15/simd.md) — 
 - [`Vec<T>`](../level_02/vec_t.md) — The heap-allocated dynamic array version.
 - [Compound Types](compound_types.md) — Related concept: Compound Types.
 - [`Index` and `IndexMut` Traits](../level_14/index_indexmut_traits.md) — Related concept: `Index` and `IndexMut` Traits.

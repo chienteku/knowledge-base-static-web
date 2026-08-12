@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Database / Computer Science Concept**
+
+**Database / Computer Science Concept (Database Engine Layer .)**: Database Transactions is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Database Engine Layer** (Operations managed natively by the database server's transaction logs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, many workflows consist of multiple related database updates that must either succeed together or fail completely.
@@ -88,7 +84,7 @@ async function transferFunds(senderId, receiverId, amount) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Executing slow, non-database operations inside a transaction block
 
@@ -173,7 +169,7 @@ await db.transaction(async (tx) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Rollback Verification
 
@@ -259,13 +255,13 @@ async function placeOrder(userId, productId, price) {
 >
 > **Explanation:** ACID properties guarantee reliable execution of database transactions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Connection Pooling](connection_pools.md) — The network channels used to manage transaction streams.
 - [Migrations](migrations.md) — Schema updates executed within transactions to prevent partial updates.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Database transactions group multiple queries into a single atomic unit of work.
 - Transactions adhere to ACID: Atomicity, Consistency, Isolation, and Durability.
 - **Atomicity** ensures all queries succeed (Commit) or all changes are undone (Rollback).

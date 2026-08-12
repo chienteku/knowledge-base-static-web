@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: Event object is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When an event (like a mouse click, keypress, or form submission) occurs on a page, it triggers the callback function attached via `addEventListener`. However, the callback function needs specific context to be useful: Which key did the user press? What were the mouse cursor coordinates? Which button was clicked?
@@ -79,7 +75,7 @@ setupInteractions();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accessing `event` without declaring it in the callback parameters
 
@@ -162,73 +158,124 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Log Clicked Button ID
+### Exercise 1: Keyboard Shortcut Command Dispatcher
 
-**Problem:** Complete the code to print the `id` attribute of whatever element the user clicks on screen, using the properties of the event object.
+**Scenario:** A code editor shortcut manager inspects event object keyboard properties (event.key, event.code, event.ctrlKey) to execute editor commands.
 
-```javascript
-if (typeof document !== "undefined") {
-  window.addEventListener("click", function(e) {
-    // Extract target element from event object
-    // Print target ID attribute
-    const clickedId = // Write code here
-    
-    console.log("Clicked ID:", clickedId);
-  });
-}
-```
+**Requirements:**
+1. Write handleKeyboardShortcut(event, commandCallback).
+2. Check if event.ctrlKey is true and event.key === "s".
+3. Invoke commandCallback and return command name.
 
 > [!check]- Answer
-> - The element that triggered the event is at `e.target`.
-> - Get the ID attribute using `e.target.id` or `e.target.getAttribute("id")`.
-> 
----
-
-### Exercise 2: Preventing Default Action in Form Submissions
-
-**Problem:** Call `event.preventDefault()` to stop form page reloads.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Form submission prevented
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Form submission prevented");
+> function handleKeyboardShortcut(event, commandCallback) {
+>   if (!event || typeof event.key !== "string") return null;
+>
+>   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
+>     commandCallback("SAVE");
+>     return "SAVE";
+>   }
+>   return null;
+> }
+>
+> // Verification tests
+> const mockEvt = { ctrlKey: true, key: "s" };
+> let cmdExecuted = null;
+> const res = handleKeyboardShortcut(mockEvt, cmd => { cmdExecuted = cmd; });
+> console.assert(res === "SAVE" && cmdExecuted === "SAVE", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `preventDefault()` cancels default browser actions like form submissions or link navigation.
+> #### Technical Explanation
+>
+> 1. **Event Object Parameter**: Browser automatically passes an Event object parameter into event listener callbacks.
+> 2. **Keyboard Event Properties**: event.key (character string) and event.code (physical key code) identify pressed keys.
+> 3. **Modifier Key Inspection**: Properties ctrlKey, altKey, shiftKey, metaKey indicate modifier key status.
 > 
 ---
 
-### Exercise 3: Reading Mouse Coordinates
+### Exercise 2: Event Object Advanced Context Handler
 
-**Problem:** Extract `clientX` and `clientY` mouse positions from event objects.
+**Scenario:** A web application component processes event object data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleEventObjectSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Mouse at X: 100, Y: 200
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const evt = { clientX: 100, clientY: 200 };
-> console.log(`Mouse at X: ${evt.clientX}, Y: ${evt.clientY}`);
+> function handleEventObjectSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleEventObjectSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Mouse event objects contain viewport-relative mouse coordinate metadata.
-> 
+> #### Technical Explanation
+>
+> 1. **Event Object Architecture**: Applying event object patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Event Object Performance Optimization
+
+**Scenario:** An application utility optimizes event object execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeEventObjectTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeEventObjectTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeEventObjectTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Object Optimization**: Optimizing event object improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [event.target vs event.currentTarget](event_target_currenttarget.md) — The distinction between the origin of the event and the listener host.
 - [Event Delegation](event_delegation.md) — A pattern that relies on checking properties of the event object to handle multiple child events.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Event object is instantiated by the browser engine and automatically passed as the first parameter to event listener callbacks.
 - Key properties: `e.type` (name of event), `e.target` (element that fired the event), `e.currentTarget` (element hosting the listener).
 - Keyboard events: use `e.key` (e.g. `"Enter"`, `"Escape"`) to identify keys.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Programming Concept / Database Pattern**
+
+**Programming Concept / Database Pattern (Universal .)**: CRUD Operations is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Applies to databases, APIs, and UIs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you boil down 99% of all software applications in the world—from Twitter, to Amazon, to a simple To-Do app—they all do exactly the same four things. You create data, you view the data, you change the data, and you destroy the data.
@@ -43,7 +39,7 @@ Imagine a physical notebook where you keep a list of your friends' phone numbers
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that Update has two variants
 
@@ -182,161 +178,178 @@ app.delete('/orders/:id', async (req, res) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the CRUD
+### Exercise 1: Memory-Backed CRUD Data Store Module
 
-**Problem:** You are using Twitter/X. Identify the CRUD operation for each action:
-1. You scroll through your timeline.
-2. You write a tweet and hit "Post".
-3. You realize you made a typo, so you click "Edit Tweet" and fix it.
-4. The tweet is embarrassing, so you remove it from your profile.
+**Scenario:** A state management store implements complete Create, Read, Update, Delete (CRUD) operations for a collection of user entities.
 
-**Expected output:**
+**Requirements:**
+1. Write createCrudStore().
+2. Implement Create(item), Read(id), ReadAll(), Update(id, patch), Delete(id).
+3. Return operation results.
+
 > [!check]- Answer
-> ```text
-> 1. Read (GET)
-> 2. Create (POST)
-> 3. Update (PATCH/PUT)
-> 4. Delete (DELETE)
+>
+> #### Implementation
+>
+> ```javascript
+> function createCrudStore() {
+>   const items = new Map();
+>
+>   return {
+>     create(data) {
+>       const id = `id_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+>       const record = { id, ...data };
+>       items.set(id, record);
+>       return record;
+>     },
+>     read(id) {
+>       return items.get(id) || null;
+>     },
+>     readAll() {
+>       return Array.from(items.values());
+>     },
+>     update(id, patch) {
+>       if (!items.has(id)) return null;
+>       const existing = items.get(id);
+>       const updated = { ...existing, ...patch, id };
+>       items.set(id, updated);
+>       return updated;
+>     },
+>     delete(id) {
+>       return items.delete(id);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const store = createCrudStore();
+> const created = store.create({ name: "Alice", role: "Admin" });
+> console.assert(store.read(created.id).name === "Alice", "Test 1 Failed: Read after Create");
+>
+> const updated = store.update(created.id, { role: "SuperAdmin" });
+> console.assert(updated.role === "SuperAdmin" && updated.name === "Alice", "Test 2 Failed: Update");
+>
+> const deleted = store.delete(created.id);
+> console.assert(deleted === true && store.read(created.id) === null, "Test 3 Failed: Delete");
 > ```
-> - Think about what is happening to the permanent data in the Twitter database.
+>
+> #### Technical Explanation
+>
+> 1. **CRUD Acronym**: Create, Read, Update, Delete represent the four basic persistent storage functions.
+> 2. **HTTP Mapping to CRUD**: Create -> POST, Read -> GET, Update -> PUT/PATCH, Delete -> DELETE.
+> 3. **Immutable Update Pattern**: Updates preserve entity identity while replacing state attributes safely.
 > 
 ---
 
-### Exercise 2: CRUD to HTTP Method Mapping Table
+### Exercise 2: Transactional Batch CRUD Processor with Rollback
 
-**Problem:** Map the 4 CRUD operations to their standard HTTP verbs and SQL commands:
-1. Create
-2. Read
-3. Update
-4. Delete
+**Scenario:** A database service executes batch CRUD operations transactionally, rolling back all changes if any single item mutation fails.
 
-**Expected output:**
+**Requirements:**
+1. Write executeBatchCrud(operations, initialStore).
+2. Execute operations array.
+3. Rollback if operation throws or fails.
+
 > [!check]- Answer
-> ```text
-> 1. Create: POST -> INSERT
-> 2. Read: GET -> SELECT
-> 3. Update: PUT/PATCH -> UPDATE
-> 4. Delete: DELETE -> DELETE
+>
+> #### Implementation
+>
+> ```javascript
+> function executeBatchCrud(operations, initialStoreMap) {
+>   const backup = new Map(initialStoreMap);
+>
+>   try {
+>     for (const op of operations) {
+>       if (op.type === "CREATE") {
+>         if (!op.id || initialStoreMap.has(op.id)) throw new Error(`Create failed for ID ${op.id}`);
+>         initialStoreMap.set(op.id, op.data);
+>       } else if (op.type === "UPDATE") {
+>         if (!initialStoreMap.has(op.id)) throw new Error(`Update failed: missing ID ${op.id}`);
+>         const curr = initialStoreMap.get(op.id);
+>         initialStoreMap.set(op.id, { ...curr, ...op.data });
+>       } else if (op.type === "DELETE") {
+>         if (!initialStoreMap.has(op.id)) throw new Error(`Delete failed: missing ID ${op.id}`);
+>         initialStoreMap.delete(op.id);
+>       }
+>     }
+>     return { success: true };
+>   } catch (err) {
+>     initialStoreMap.clear();
+>     for (const [k, v] of backup.entries()) {
+>       initialStoreMap.set(k, v);
+>     }
+>     return { success: false, error: err.message };
+>   }
+> }
+>
+> // Verification tests
+> const db = new Map([["1", { name: "Item 1" }]]);
+> const ops = [
+>   { type: "UPDATE", id: "1", data: { name: "Updated 1" } },
+>   { type: "DELETE", id: "missing-id" }
+> ];
+>
+> const res = executeBatchCrud(ops, db);
+> console.assert(res.success === false, "Test 1 Failed: Batch must fail on error");
+> console.assert(db.get("1").name === "Item 1", "Test 2 Failed: Transaction must rollback to initial state");
 > ```
-> ```text
-> 1. Create -> HTTP POST   -> SQL INSERT
-> 2. Read   -> HTTP GET    -> SQL SELECT
-> 3. Update -> HTTP PUT/PATCH -> SQL UPDATE
-> 4. Delete -> HTTP DELETE -> SQL DELETE (or soft update)
-> ```
-> - **Explanation:** REST architecture aligns HTTP verbs with database CRUD operations.
+>
+> #### Technical Explanation
+>
+> 1. **ACID Transactions in CRUD**: Atomicity ensures batch operations either ALL succeed or ALL roll back completely.
+> 2. **State Snapshot Backup**: Saving pre-transaction state enables instant in-memory rollback on failure.
+> 3. **Batch Endpoint Optimization**: Processes multi-entity mutations in a single API roundtrip.
+> 
 ---
 
-### Exercise 3: CRUD Response Status Codes
+### Exercise 3: Audit Logging Middleware for CRUD Mutations
 
-**Problem:** Identify the conventional success status codes for:
-1. Successful Create (POST)
-2. Successful Delete with empty body (DELETE)
+**Scenario:** An API audit logger tracks every CRUD data mutation, creating structured audit trail records.
 
-**Expected output:**
+**Requirements:**
+1. Write auditCrudMutation(actionType, entityName, entityId, actorId).
+2. Generate structured audit log object.
+
 > [!check]- Answer
-> ```text
-> 1. 201 Created
-> 2. 204 No Content
+>
+> #### Implementation
+>
+> ```javascript
+> function auditCrudMutation(actionType, entityName, entityId, actorId) {
+>   const validActions = ["CREATE", "READ", "UPDATE", "DELETE"];
+>   const action = String(actionType).toUpperCase();
+>
+>   if (!validActions.includes(action)) {
+>     throw new Error(`Invalid CRUD action type: ${actionType}`);
+>   }
+>
+>   return {
+>     auditId: `audit_${Date.now()}`,
+>     timestamp: new Date().toISOString(),
+>     action,
+>     entity: entityName,
+>     entityId,
+>     performedBy: actorId || "SYSTEM"
+>   };
+> }
+>
+> // Verification tests
+> const log = auditCrudMutation("DELETE", "Order", "ord_99", "usr_admin");
+> console.assert(log.action === "DELETE", "Test 1 Failed");
+> console.assert(log.entity === "Order" && log.entityId === "ord_99", "Test 2 Failed");
+> console.assert(log.performedBy === "usr_admin", "Test 3 Failed");
 > ```
-> ```text
-> 1. 201 Created
-> 2. 204 No Content
-> ```
-> - **Explanation:** Explicit 2xx status codes communicate specific CRUD operational success.
+>
+> #### Technical Explanation
+>
+> 1. **Compliance Audit Trails**: Logging CRUD mutations (especially UPDATE and DELETE) is mandatory for SOC2 and GDPR compliance.
+> 2. **Actor Attribution**: Records WHICH user or system service triggered each CRUD mutation.
+> 3. **Immutable Audit Logs**: Audit records must be stored in append-only storage systems for tamper-proof security.
 ---
 
-### Exercise 4: CRUD to HTTP Method Mapping Table
-
-**Problem:** Map the 4 CRUD operations to their standard HTTP verbs and SQL commands:
-1. Create
-2. Read
-3. Update
-4. Delete
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Create: POST -> INSERT
-> 2. Read: GET -> SELECT
-> 3. Update: PUT/PATCH -> UPDATE
-> 4. Delete: DELETE -> DELETE
-> ```
-> ```text
-> 1. Create -> HTTP POST   -> SQL INSERT
-> 2. Read   -> HTTP GET    -> SQL SELECT
-> 3. Update -> HTTP PUT/PATCH -> SQL UPDATE
-> 4. Delete -> HTTP DELETE -> SQL DELETE (or soft update)
-> ```
-> - **Explanation:** REST architecture aligns HTTP verbs with database CRUD operations.
----
-
-### Exercise 5: CRUD Response Status Codes
-
-**Problem:** Identify the conventional success status codes for:
-1. Successful Create (POST)
-2. Successful Delete with empty body (DELETE)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 201 Created
-> 2. 204 No Content
-> ```
-> ```text
-> 1. 201 Created
-> 2. 204 No Content
-> ```
-> - **Explanation:** Explicit 2xx status codes communicate specific CRUD operational success.
----
-
-### Exercise 6: CRUD to HTTP Method Mapping Table
-
-**Problem:** Map the 4 CRUD operations to their standard HTTP verbs and SQL commands:
-1. Create
-2. Read
-3. Update
-4. Delete
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Create: POST -> INSERT
-> 2. Read: GET -> SELECT
-> 3. Update: PUT/PATCH -> UPDATE
-> 4. Delete: DELETE -> DELETE
-> ```
-> ```text
-> 1. Create -> HTTP POST   -> SQL INSERT
-> 2. Read   -> HTTP GET    -> SQL SELECT
-> 3. Update -> HTTP PUT/PATCH -> SQL UPDATE
-> 4. Delete -> HTTP DELETE -> SQL DELETE (or soft update)
-> ```
-> - **Explanation:** REST architecture aligns HTTP verbs with database CRUD operations.
----
-
-### Exercise 7: CRUD Response Status Codes
-
-**Problem:** Identify the conventional success status codes for:
-1. Successful Create (POST)
-2. Successful Delete with empty body (DELETE)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 201 Created
-> 2. 204 No Content
-> ```
-> ```text
-> 1. 201 Created
-> 2. 204 No Content
-> ```
-> - **Explanation:** Explicit 2xx status codes communicate specific CRUD operational success.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — The tools we use to execute CRUD over the network.
 - [REST (Representational State Transfer)](rest.md) — The architecture that enforces this mapping.
 - [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — Related concept: Idempotent vs Safe Methods.
@@ -345,7 +358,7 @@ app.delete('/orders/:id', async (req, res) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **CRUD** stands for Create, Read, Update, Delete.
 - It represents the four fundamental operations of any persistent storage system.
 - In a REST API, these map to `POST`, `GET`, `PUT/PATCH`, and `DELETE`.

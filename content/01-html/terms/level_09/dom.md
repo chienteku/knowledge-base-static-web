@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser Architecture / Concept**
+
+**Browser Architecture / Concept (Universal Browser Architecture)**: DOM (Document Object Model) is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you write an `.html` file, it is just a dead, static text document sitting on your hard drive. But a modern webpage isn't static—it's a living application where buttons click, menus open, and new tweets load without refreshing the page. 
@@ -50,7 +46,7 @@ If you want to open a window to let fresh air in (JavaScript), you don't take an
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the HTML Source Code with the DOM
 
@@ -102,7 +98,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 // Understand DOM mutations alter live browser memory representation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Translator
 
@@ -158,7 +154,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 >
 > **Explanation:** `getElementById` performs optimized direct ID hash lookups.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Tree Structure](tree_structure.md) — How the DOM organizes all of these objects in memory.
 - [Critical Rendering Path](critical_rendering_path.md) — The browser pipeline that compiles DOM into pixels.
 - [`<dialog>` Element](../level_10/dialog.md) — Related concept: `<dialog>` Element.
@@ -167,7 +163,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - DOM stands for Document Object Model.
 - It is the live, in-memory representation of your HTML document created by the browser.
 - It turns static HTML tags into living JavaScript Objects.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox/Grid Property**
+
+**Flexbox/Grid Property (Universal Modern Standard .)**: `gap` (Grid Gap) is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (One of the most loved additions to modern CSS).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before the `gap` property existed, if you wanted 20px of space between three buttons, you had to apply `margin-right: 20px;` to the buttons. 
@@ -60,7 +56,7 @@ If you are using `flex-wrap` and have multiple rows of items, you can define dif
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `gap` without Flexbox or Grid
 
@@ -187,7 +183,7 @@ If you are using `flex-wrap` and have multiple rows of items, you can define dif
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Margin vs Gap
 
@@ -241,7 +237,7 @@ Why is Option B better?
 >
 > **Explanation:** `gap` adds space between flex items without requiring margin resets.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent Grid layout container.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Defining track layout structures.
 - [Flexbox (Concept) & `display: flex`](../level_05/flex_parent.md) — The parent Flex layout container.
@@ -250,7 +246,7 @@ Why is Option B better?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `gap` is applied to the **Parent Container**.
 - It creates space ONLY *between* the children, ignoring the outer edges.
 - It completely replaces the need to use `margin` to space out flex items.

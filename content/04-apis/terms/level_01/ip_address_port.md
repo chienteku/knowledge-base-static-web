@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal: Works everywhere across all internet-connected devices.)**: IP Address & Port is a fundamental concept in this technology stack. **Level 1 — Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere across all internet-connected devices.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To send a letter or order a delivery, you must specify a street address. Similarly, when a client device (like your phone) wants to download data from a server on the internet, it needs a clear way to identify and locate that specific computer among billions of others on the web. 
@@ -73,7 +69,7 @@ server.listen(3000, '127.0.0.1', () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Port conflict crashes (`EADDRINUSE`)
 
@@ -128,72 +124,165 @@ app.listen(8080);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Door Locator
+### Exercise 1: Socket Identifier Parser (IP Address & Port Disambiguator)
 
-**Problem:** Match the client request URL to the default port number the request will target:
+**Scenario:** A backend network proxy parses client socket connection strings (`IP:Port`) into distinct host IP address and port components.
 
-1. `https://api.github.com/users`
-2. `http://example.com/index.html`
-3. `ssh://developer@192.168.1.100`
+**Requirements:**
+1. Write parseSocketAddress(addressStr).
+2. Support IPv4 (192.168.1.1:8080) and IPv6 ([::1]:8080) notation.
+3. Return object { ip, port, version }.
 
 > [!check]- Answer
-> - Secure HTTPS uses the standard encryption port `443`.
-> - Unencrypted HTTP web pages default to port `80`.
-> 
-> [!check]- Answer
-> - 1. Port **`443`** (HTTPS)
-> - 2. Port **`80`** (HTTP)
-> - 3. Port **`22`** (SSH)
-> 
+>
+> #### Implementation
+>
+> ```javascript
+> function parseSocketAddress(addressStr) {
+>   if (typeof addressStr !== "string") return null;
+>
+>   // Check IPv6 [::1]:8080 format
+>   if (addressStr.startsWith("[")) {
+>     const closingBracket = addressStr.indexOf("]");
+>     if (closingBracket === -1) return null;
+>     const ip = addressStr.substring(1, closingBracket);
+>     const portStr = addressStr.substring(closingBracket + 2);
+>     const port = parseInt(portStr, 10);
+>     return { ip, port: isNaN(port) ? null : port, version: "IPv6" };
+>   }
+>
+>   // IPv4 format 192.168.1.1:8080
+>   const parts = addressStr.split(":");
+>   if (parts.length === 2) {
+>     const port = parseInt(parts[1], 10);
+>     return { ip: parts[0], port: isNaN(port) ? null : port, version: "IPv4" };
+>   }
+>
+>   return null;
+> }
+>
+> // Verification tests
+> const res1 = parseSocketAddress("192.168.1.100:3000");
+> console.assert(res1.ip === "192.168.1.100" && res1.port === 3000 && res1.version === "IPv4", "Test 1 Failed");
+>
+> const res2 = parseSocketAddress("[2001:db8::1]:8443");
+> console.assert(res2.ip === "2001:db8::1" && res2.port === 8443 && res2.version === "IPv6", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **IP Address Purpose**: Identifies a specific device or host on an IP network (IPv4 32-bit vs IPv6 128-bit).
+> 2. **Port Number Purpose**: Identifies a specific process or service running on that host (0–65535 range).
+> 3. **Socket Tuple**: Combining IP address and Port number defines a complete network communication socket endpoint.
 > 
 ---
 
-### Exercise 2: Private vs Public IP Address Identification
+### Exercise 2: Privileged & Well-Known Port Range Guard
 
-**Problem:** Identify whether each IP address is Public or Private (RFC 1918):
-1. `192.168.1.1` 
-2. `8.8.8.8` 
-3. `10.0.4.15` 
+**Scenario:** A server deployment script checks target service ports to verify if they fall within the privileged system port range (0–1023).
 
-**Expected output:**
+**Requirements:**
+1. Write auditServerPort(portNumber).
+2. Validate port range (1–65535).
+3. Check if port is privileged (<= 1023).
+4. Return audit object.
+
 > [!check]- Answer
-> ```text
-> 1. Private (LAN)
-> 2. Public (Google DNS)
-> 3. Private (VPC/LAN)
+>
+> #### Implementation
+>
+> ```javascript
+> function auditServerPort(port) {
+>   const p = Number(port);
+>   if (!Number.isInteger(p) || p < 1 || p > 65535) {
+>     return { valid: false, reason: "Port must be integer between 1 and 65535" };
+>   }
+>
+>   const isPrivileged = p <= 1023;
+>   const isWellKnown = p === 80 || p === 443 || p === 22 || p === 21;
+>
+>   return {
+>     valid: true,
+>     port: p,
+>     isPrivileged,
+>     isWellKnown,
+>     requiresRootPermission: isPrivileged
+>   };
+> }
+>
+> // Verification tests
+> const httpAudit = auditServerPort(80);
+> console.assert(httpAudit.valid === true && httpAudit.isPrivileged === true, "Test 1 Failed");
+>
+> const appAudit = auditServerPort(8080);
+> console.assert(appAudit.valid === true && appAudit.isPrivileged === false, "Test 2 Failed");
 > ```
-> ```text
-> 1. Private (192.168.0.0/16 RFC 1918 range)
-> 2. Public (Routable WAN address)
-> 3. Private (10.0.0.0/8 RFC 1918 range)
-> ```
-> - **Explanation:** Private IP ranges are reserved for internal local area networks.
+>
+> #### Technical Explanation
+>
+> 1. **Port Range Classification**: Well-Known/System Ports (0–1023), Registered Ports (1024–49151), Dynamic/Private Ports (49152–65535).
+> 2. **Privileged Port Access**: Ports below 1024 require elevated root/superuser privileges to bind to on Unix/Linux OS.
+> 3. **Standard Well-Known Ports**: HTTP (80), HTTPS (443), SSH (22), FTP (21), DNS (53).
+> 
 ---
 
-### Exercise 3: IPv6 Address Compression
+### Exercise 3: IPv4 Subnet Mask Match Inspector
 
-**Problem:** Compress the IPv6 address `2001:0db8:0000:0000:0000:0000:0000:0001` using standard zero compression rules.
+**Scenario:** A firewall rule evaluator checks if a client IP address falls within a designated internal private IP subnet (e.g. 10.0.0.0/8, 192.168.0.0/16).
 
-**Expected output:**
+**Requirements:**
+1. Write isPrivateIpv4(ipStr).
+2. Check 10.x.x.x, 172.16-31.x.x, and 192.168.x.x private ranges.
+
 > [!check]- Answer
-> ```text
-> 2001:db8::1
+>
+> #### Implementation
+>
+> ```javascript
+> function isPrivateIpv4(ipStr) {
+>   if (typeof ipStr !== "string") return false;
+>   const parts = ipStr.split(".").map(p => parseInt(p, 10));
+>   if (parts.length !== 4 || parts.some(p => isNaN(p) || p < 0 || p > 255)) {
+>     return false;
+>   }
+>
+>   // 10.0.0.0/8
+>   if (parts[0] === 10) return true;
+>
+>   // 172.16.0.0/12 (172.16.0.0 to 172.31.255.255)
+>   if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true;
+>
+>   // 192.168.0.0/16
+>   if (parts[0] === 192 && parts[1] === 168) return true;
+>
+>   // 127.0.0.1 Loopback
+>   if (parts[0] === 127) return true;
+>
+>   return false;
+> }
+>
+> // Verification tests
+> console.assert(isPrivateIpv4("192.168.1.50") === true, "Test 1 Failed");
+> console.assert(isPrivateIpv4("10.5.0.1") === true, "Test 2 Failed");
+> console.assert(isPrivateIpv4("8.8.8.8") === false, "Test 3 Failed: Public Google DNS IP is not private");
 > ```
-> ```text
-> 2001:db8::1
-> ```
-> - **Explanation:** Leading zeros in each group are omitted and contiguous zero fields are replaced with `::`.
+>
+> #### Technical Explanation
+>
+> 1. **Private IP Ranges (RFC 1918)**: Reserved for internal non-routable networks: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.
+> 2. **Loopback Address (127.0.0.1)**: Refers to local host runtime device itself (localhost).
+> 3. **Public vs Private Routing**: Private IPs cannot be routed across public internet routers without Network Address Translation (NAT).
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [DNS (Domain Name System)](dns.md) — The phonebook system mapping user domains to IP addresses.
 - [HTTP / HTTPS](http_https.md) — The application layer protocols routing through ports `80` and `443`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An IP address identifies a physical device on a network (IPv4 dots vs IPv6 colons).
 - A Port is a logical channel number (0–65535) routing traffic to a specific software program.
 - Special IP `127.0.0.1` and hostname `localhost` represent your local loopback machine.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Accessibility / Aesthetic Property**
+
+**Accessibility / Aesthetic Property (Universal Modern Standard)**: `outline` is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We already have `border` to draw lines around elements. Why do we need `outline`?
@@ -49,7 +45,7 @@ button:focus {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: `outline: none;` (The Cardinal Sin of CSS)
 
@@ -97,7 +93,7 @@ input:focus-visible {
 /* Use border if layout space allocation is required; use outline for non-shifting focus rings */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Border vs Outline
 
@@ -153,14 +149,14 @@ You remove the border, and add a `10px solid black` Outline instead. How wide is
 >
 > **Explanation:** Outlines are non-layout-shifting visual overlays.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Border](../level_02/border.md) — The physical layout equivalent.
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — The state where outlines are most commonly applied.
 - [`cursor`](cursor.md) — Sizing hover states.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `outline` is a visual ring drawn around an element.
 - Unlike `border`, `outline` **does not take up space** in the Box Model.
 - It is primarily used for **Accessibility** to show keyboard users which element is focused.

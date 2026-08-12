@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Positioning Property**
+
+**Positioning Property (Universal Browser Support)**: `position: absolute` vs `fixed` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `position: relative` is great for small nudges, what if you need to build a "Chat Support" bubble that permanently hovers in the bottom-right corner of the screen? What if you need a dropdown menu that appears directly over the rest of the website?
@@ -79,7 +75,7 @@ To place an absolute element exactly where you want it inside a container, you M
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to make the Parent `relative`
 
@@ -230,7 +226,7 @@ To place an absolute element exactly where you want it inside a container, you M
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Chat Widget
 
@@ -287,7 +283,7 @@ To place an absolute element exactly where you want it inside a container, you M
 >
 > **Explanation:** Fixed elements remain pinned to the screen viewport during page scrolling.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — The required partner for `absolute`.
 - [`position: sticky`](position_sticky.md) — The hybrid offset scrolling behavior.
 - [`z-index`](z_index.md) — Overlapping z-axis stacking values.
@@ -297,7 +293,7 @@ To place an absolute element exactly where you want it inside a container, you M
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `absolute` and `fixed` remove the element completely from the document flow.
 - `fixed` locks the element to the browser window (survives scrolling).
 - `absolute` locks the element to its closest positioned ancestor (scrolls with the page).

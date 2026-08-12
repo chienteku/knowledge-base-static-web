@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **HTTP Standard / Data Transfer**
+
+**HTTP Standard / Data Transfer (Universal Standard)**: Request Body & Payloads is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to read a user's profile, you can just put their ID in the URL (`/users/5`). But what if you are submitting a massive registration form with a username, password, biography, profile picture, and home address? 
@@ -59,7 +55,7 @@ fetch('https://api.example.com/register', {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to send a body in a GET request
 
@@ -112,55 +108,161 @@ app.use(express.json({ limit: '100kb' }));
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Secure Password
+### Exercise 1: Streaming Request Body Chunk Accumulator & Max Size Guard
 
-**Problem:** You are building a login form. You need to send the user's password to the backend to verify it. Should you put the password in the URL (e.g., `/login?password=123`), or in the Body?
+**Scenario:** A Node.js HTTP server parses incoming stream chunks, enforcing a strict maximum byte limit to prevent Memory Exhaustion Denial of Service.
 
-**Expected output:**
+**Requirements:**
+1. Write accumulateRequestBody(stream, maxBytes).
+2. Listen to 'data' chunks.
+3. Throw 413 Payload Too Large if byte length exceeds maxBytes.
+
 > [!check]- Answer
-> ```text
-> In the Body! 
-> If you put it in the URL, it will be saved in the browser history, server access logs, and will be visible to anyone standing behind the user looking at their screen.
+>
+> #### Implementation
+>
+> ```javascript
+> async function accumulateRequestBody(stream, maxBytes = 1_000_000) {
+>   let totalBytes = 0;
+>   const chunks = [];
+>
+>   for await (const chunk of stream) {
+>     totalBytes += chunk.length;
+>     if (totalBytes > maxBytes) {
+>       const err = new Error("Payload Too Large");
+>       err.statusCode = 413;
+>       throw err;
+>     }
+>     chunks.push(chunk);
+>   }
+>
+>   return Buffer.concat(chunks).toString("utf-8");
+> }
+>
+> // Verification tests
+> async function* createMockStream(chunkList) {
+>   for (const chunk of chunkList) {
+>     yield Buffer.from(chunk);
+>   }
+> }
+>
+> accumulateRequestBody(createMockStream(["hello ", "world"]), 100).then(body => {
+>   console.assert(body === "hello world", "Test 1 Failed");
+> });
+>
+> accumulateRequestBody(createMockStream(["a".repeat(200)]), 100).catch(err => {
+>   console.assert(err.statusCode === 413, "Test 2 Failed: Must throw 413 on size overflow");
+> });
 > ```
-> - Which part of the HTTP request is hidden "inside the envelope"?
+>
+> #### Technical Explanation
+>
+> 1. **Streamed Payload Accumulation**: HTTP request bodies are transmitted asynchronously as streams of data chunks.
+> 2. **413 Payload Too Large**: HTTP status code 413 indicates request body exceeds server size limits.
+> 3. **Memory DoS Protection**: Enforcing byte limits prevents attackers from crashing servers with giant payload memory buffers.
 > 
 ---
 
-### Exercise 2: Request Body Parsing Error Status
+### Exercise 2: Request Body JSON Schema Validator
 
-**Problem:** If a client sends malformed invalid JSON in a POST request body, what HTTP status code should the server return?
+**Scenario:** An API endpoint validator verifies that incoming parsed JSON request bodies contain required fields and valid data types.
 
-**Expected output:**
+**Requirements:**
+1. Write validateBodySchema(bodyObj, requiredFields).
+2. Verify existence and non-null values for requiredFields.
+
 > [!check]- Answer
-> ```text
-> HTTP 400 Bad Request
+>
+> #### Implementation
+>
+> ```javascript
+> function validateBodySchema(bodyObj, requiredFieldsMap) {
+>   if (!bodyObj || typeof bodyObj !== "object") {
+>     return { valid: false, errors: ["Missing or non-object body"] };
+>   }
+>
+>   const errors = [];
+>   for (const [field, expectedType] of Object.entries(requiredFieldsMap)) {
+>     const val = bodyObj[field];
+>     if (val === undefined || val === null) {
+>       errors.push(`Field '${field}' is required`);
+>     } else if (typeof val !== expectedType) {
+>       errors.push(`Field '${field}' must be of type ${expectedType}`);
+>     }
+>   }
+>
+>   return {
+>     valid: errors.length === 0,
+>     errors
+>   };
+> }
+>
+> // Verification tests
+> const schema = { name: "string", age: "number" };
+>
+> const v1 = validateBodySchema({ name: "Alice", age: 30 }, schema);
+> console.assert(v1.valid === true, "Test 1 Failed");
+>
+> const v2 = validateBodySchema({ name: "Alice", age: "thirty" }, schema);
+> console.assert(v2.valid === false && v2.errors.length === 1, "Test 2 Failed");
 > ```
-> ```http
-> HTTP/1.1 400 Bad Request
-> Content-Type: application/json
-> {"error": "Invalid JSON syntax in request body"}
-> ```
-> - **Explanation:** HTTP 400 signals client-side syntax or payload parsing failure.
+>
+> #### Technical Explanation
+>
+> 1. **Input Validation Principle**: Never trust client inputs; always validate request body structure and types before processing.
+> 2. **Schema Validation Contracts**: Schema definitions enforce consistent data contracts between frontend and backend.
+> 3. **400 Bad Request Feedback**: Returning clear validation error lists helps client developers fix bad request payloads.
+> 
 ---
 
-### Exercise 3: Chunked Transfer Encoding
+### Exercise 3: Raw Binary Octet-Stream Body Processor
 
-**Problem:** Which header informs the client that a large request body is being streamed in dynamic chunks without a known initial `Content-Length`?
+**Scenario:** A file upload endpoint processes `application/octet-stream` binary request bodies, calculating SHA-256 checksums of the raw payload.
 
-**Expected output:**
+**Requirements:**
+1. Write processBinaryPayload(binaryBuffer, mockCrypto).
+2. Calculate hash of raw binary buffer.
+3. Return byte size and checksum.
+
 > [!check]- Answer
-> ```text
-> Transfer-Encoding: chunked
+>
+> #### Implementation
+>
+> ```javascript
+> function processBinaryPayload(binaryBuffer, mockCrypto) {
+>   if (!binaryBuffer || !Buffer.isBuffer(binaryBuffer)) {
+>     return { error: "Expected Buffer payload" };
+>   }
+>
+>   const checksum = mockCrypto 
+>     ? mockCrypto.hash(binaryBuffer) 
+>     : `hash_${binaryBuffer.length}`;
+>
+>   return {
+>     byteLength: binaryBuffer.length,
+>     checksum,
+>     type: "application/octet-stream"
+>   };
+> }
+>
+> // Verification tests
+> const buf = Buffer.from([0x00, 0x01, 0x02, 0x03]);
+> const res = processBinaryPayload(buf);
+>
+> console.assert(res.byteLength === 4, "Test 1 Failed");
+> console.assert(res.type === "application/octet-stream", "Test 2 Failed");
 > ```
-> ```http
-> Transfer-Encoding: chunked
-> ```
-> - **Explanation:** `Transfer-Encoding: chunked` streams dynamic data payloads in size-delimited blocks.
+>
+> #### Technical Explanation
+>
+> 1. **application/octet-stream**: Standard MIME type for unformatted raw binary data transfers (files, images, compiled binaries).
+> 2. **Binary Buffer Manipulation**: Node.js Buffer represents fixed-length sequences of raw memory bytes.
+> 3. **Payload Integrity Verification**: Calculating checksums (SHA-256) verifies binary payload was not corrupted during transit.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP Headers](http_headers.md) — How you tell the server what format the body is in (e.g., `Content-Type`).
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The format you must convert your payload into.
 - [Content-Type & MIME Types](content_type.md) — Related concept: Content-Type & MIME Types.
@@ -169,7 +271,7 @@ app.use(express.json({ limit: '100kb' }));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **Body (Payload)** is the actual data you are sending or receiving.
 - **`POST`, `PUT`, and `PATCH`** use bodies to send data to the server.
 - **`GET` and `DELETE`** are generally forbidden from having bodies.

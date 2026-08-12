@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [Cargo CLI](../level_07/cargo_cli.md) — Cargo command line interface.
-- [`#![no_std]`](no_std.md) — Bare-metal Rust environment.
 
 ---
 
@@ -314,7 +313,7 @@ Call Peripherals::take() once at startup in main() and pass peripherals to tasks
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [PAC (Peripheral Access Crate)](pac.md) — PAC generation.
 - [`embedded-hal`](embedded_hal.md) — Embedded HAL traits.

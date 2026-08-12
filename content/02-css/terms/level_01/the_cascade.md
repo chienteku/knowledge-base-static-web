@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept / Browser Architecture**
+
+**Core Concept / Browser Architecture (Universal Browser Support)**: The Cascade is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Because CSS allows you to target elements in many different ways (by tag name, by class, by ID), it is incredibly common to accidentally write multiple rules that target the *exact same element*. 
@@ -53,7 +49,7 @@ p {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not understanding file linking order
 
@@ -114,7 +110,7 @@ p.text { color: red; } /* Equal/higher specificity rule placed later wins */
 * { margin: 0; padding: 0; } /* Reset User-Agent defaults */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Winner
 
@@ -174,17 +170,17 @@ h1 { color: pink; }
 >
 > **Explanation:** `@layer` grants explicit architecture control over cascade precedence.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Specificity](specificity.md) — The only thing that can override the Rule of Source Order. If a rule is more "specific", it wins even if it comes first in the file!
 - [`!important` Declaration](important.md) — The global cascading priority flag.
 - [Inheritance](inheritance.md) — The cascade's baseline target resolution mechanism.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — Related concept: Ruleset (Declaration, Property, Value).
-- [`@import` Rule](../level_11/import.md) — Related concept: `@import`.
+- [`@import`](../level_11/import.md) — Related concept: `@import`.
 - [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The "Cascade" is the algorithm that resolves CSS conflicts.
 - **Source Order**: If two conflicting rules have the same weight, the rule that appears furthest down in the file wins.
 - This applies to `<link>` tags in HTML as well; link your custom CSS last!

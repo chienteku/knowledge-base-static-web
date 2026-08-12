@@ -10,7 +10,7 @@
 
 - [`impl` Block](impl_block.md) — The location where all methods must be defined.
 - [Struct](struct.md)
-- [`fn` (Functions)](../level_01/fn.md) — A method is just a function with a special first parameter.
+- [fn](../level_01/fn.md) — A method is just a function with a special first parameter.
 
 ---
 

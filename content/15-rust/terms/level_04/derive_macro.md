@@ -9,7 +9,7 @@
 
 
 - [Macros](../level_01/macros.md) — The meta-programming tools that write code for you.
-- [Struct](../level_02/struct.md)
+- [Struct](../level_02/struct.md) — 
 - [Trait](trait.md) — The contracts being implemented.
 
 ---

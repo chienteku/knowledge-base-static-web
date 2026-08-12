@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Object-Oriented Programming**
+
+**Object-Oriented Programming (Universal: Works everywhere)**: Method is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Objects are great for storing passive data (like `name` and `age`). But in Object-Oriented Programming, entities usually have behaviors, too. A `Dog` object shouldn't just have a `breed` property; it should also be able to `bark()`. 
@@ -66,7 +62,7 @@ player.takeDamage(20); // Hero took 20 damage! Health is now 80.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Losing `this` in Arrow Functions
 
@@ -151,69 +147,150 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Greeter
+### Exercise 1: Bank Account Object with Mutation Methods
 
-**Problem:** Create an object called `robot` with a property `name` set to `"R2D2"`. Add a method called `greet` that logs `"Beep boop, I am R2D2"` using the `this` keyword to access the robot's name. Call the method.
+**Scenario:** A financial library implements a BankAccount object containing methods that mutate internal balance state using this binding.
 
-**Expected output:**
+**Requirements:**
+1. Write createBankAccount(initialBalance).
+2. Return object with methods deposit(amount), withdraw(amount), and getBalance().
+3. Use this.balance inside methods.
+
 > [!check]- Answer
-> ```text
-> Beep boop, I am R2D2
-> ```
-> - `const robot = { name: "R2D2", greet() { console.log(`Beep boop, I am ${this.name}`); } }`
-> - Don't forget to call it: `robot.greet();`
-> 
----
-
-### Exercise 2: Method Shorthand Syntax in Objects
-
-**Problem:** Define an object `calculator` with method shorthand `add(a, b) { return a + b; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 15
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const calculator = {
->   add(a, b) {
->     return a + b;
->   }
-> };
-> console.log(calculator.add(10, 5));
+> function createBankAccount(initialBalance) {
+>   return {
+>     balance: initialBalance,
+>     deposit(amount) {
+>       if (amount <= 0) return false;
+>       this.balance += amount;
+>       return true;
+>     },
+>     withdraw(amount) {
+>       if (amount <= 0 || amount > this.balance) return false;
+>       this.balance -= amount;
+>       return true;
+>     },
+>     getBalance() {
+>       return this.balance;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const account = createBankAccount(100);
+> console.assert(account.deposit(50) === true, "Test 1 Failed");
+> console.assert(account.getBalance() === 150, "Test 2 Failed");
+> console.assert(account.withdraw(200) === false, "Test 3 Failed");
 > ```
 >
-> **Explanation:** ES6 method shorthand syntax `methodName() {}` defines clean object methods.
+> #### Technical Explanation
+>
+> 1. **Method Definition**: A method is a function stored as a property of an object.
+> 2. **Implicit 'this' Binding**: When a method is called via obj.method(), this implicitly binds to the invoking object obj.
+> 3. **State Encapsulation**: Methods operate directly on an object's internal property states.
 > 
 ---
 
-### Exercise 3: Binding Method `this` Context
+### Exercise 2: Shopping Cart Aggregator & Formatter Methods
 
-**Problem:** Bind detached method `user.getName` to `user` using `.bind(user)`.
+**Scenario:** A cart object manages an internal array of items, providing addItem(), getTotal(), and formatSummary() methods.
 
-**Expected output:**
+**Requirements:**
+1. Write createShoppingCart().
+2. Include items array and methods addItem(name, price), getTotal(), formatSummary().
+3. Use shorthand method syntax.
+
 > [!check]- Answer
-> ```text
-> Alice
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = {
->   name: "Alice",
->   getName() { return this.name; }
-> };
-> const unbound = user.getName;
-> const bound = user.getName.bind(user);
-> console.log(bound());
+> function createShoppingCart() {
+>   return {
+>     items: [],
+>     addItem(name, price) {
+>       this.items.push({ name, price });
+>     },
+>     getTotal() {
+>       return this.items.reduce((sum, item) => sum + item.price, 0);
+>     },
+>     formatSummary() {
+>       return `Items: ${this.items.length}, Total: $${this.getTotal().toFixed(2)}`;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const cart = createShoppingCart();
+> cart.addItem("Book", 15);
+> cart.addItem("Pen", 5);
+> console.assert(cart.getTotal() === 20, "Test 1 Failed");
+> console.assert(cart.formatSummary() === "Items: 2, Total: $20.00", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Function.prototype.bind()` locks the explicit `this` target of functions regardless of how they are invoked.
-> 
+> #### Technical Explanation
+>
+> 1. **ES6 Method Shorthand**: Syntax method() {} provides clean shorthand for method: function() {}.
+> 2. **Inter-Method Invocation**: Methods can invoke sibling methods on the same object instance using this.otherMethod().
+> 3. **Dynamic Invocation Context**: If a method is detached from its object (e.g. const fn = cart.getTotal), its this binding is lost.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Fluent Calculator with Method Chaining
+
+**Scenario:** A calculator utility implements methods (add, subtract, multiply) that return this to enable method chaining.
+
+**Requirements:**
+1. Write createFluentCalculator(initialVal).
+2. Implement add(val), subtract(val), multiply(val), and getValue().
+3. Return this from mutation methods.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createFluentCalculator(initialVal = 0) {
+>   return {
+>     value: initialVal,
+>     add(val) {
+>       this.value += val;
+>       return this;
+>     },
+>     subtract(val) {
+>       this.value -= val;
+>       return this;
+>     },
+>     multiply(val) {
+>       this.value *= val;
+>       return this;
+>     },
+>     getValue() {
+>       return this.value;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const calc = createFluentCalculator(10);
+> const res = calc.add(5).subtract(2).multiply(3).getValue();
+> console.assert(res === 39, "Test 1 Failed: Method chaining (10+5-2)*3 failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Method Chaining Pattern**: Returning this from mutation methods allows stringing sequential method calls together.
+> 2. **Reference Preservation**: Each chained call operates on and returns the exact same object reference.
+> 3. **Fluent Interface Design**: Improves code readability for stateful builder objects.
+---
+
+## 6. Related Terms
 - [Object](object.md) — The container that holds the method.
 - [Property](property.md) — A key-value pair (a method is just a property where the value is a function).
 - [Property Access (dot vs bracket notation)](property_access.md) — Related concept: Property Access (dot vs bracket notation).
@@ -221,7 +298,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Method is simply a function that belongs to an object.
 - You execute a method using dot notation followed by parentheses (e.g., `console.log()`).
 - Inside a method, the `this` keyword refers to the object the method belongs to.

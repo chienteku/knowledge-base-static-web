@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Best Practices**
+
+**API Architecture / Best Practices (Backend Architecture)**: API Versioning (v1, v2) is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Backend Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you build an endpoint `GET /api/users`. It returns an array of strings: `["Bob", "Alice"]`. Thousands of mobile apps download your API and write code expecting an array of strings.
@@ -42,7 +38,7 @@ A change is only "Breaking" if you rename/delete a field, or change its data typ
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Versioning because of a new feature
 
@@ -90,67 +86,156 @@ GET /api/v2/users HTTP/1.1 ; Explicit URI path versioning
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Breaking or Non-Breaking?
+### Exercise 1: Multi-Strategy API Version Extractor
 
-**Problem:** Look at the original JSON response for `/users/5`:
-`{ "id": 5, "name": "Bob" }`
+**Scenario:** An API gateway extracts the requested API version from URI path (`/v1/`), custom header (`X-API-Version`), or `Accept` header.
 
-Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
-1. Adding an email: `{ "id": 5, "name": "Bob", "email": "bob@mail.com" }`
-2. Splitting the name: `{ "id": 5, "firstName": "Bob", "lastName": "Smith" }`
+**Requirements:**
+1. Write extractApiVersion(req).
+2. Check URI path first (`/v1/`, `/v2/`).
+3. Check `X-API-Version` header.
+4. Check `Accept` header vendor media type.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Non-Breaking! Old apps will just ignore the `email` field. Keep v1.
-> 2. Breaking! Old apps are looking for `response.name`. Since `name` is gone, the old apps will crash trying to read `undefined`. You MUST create a v2 for this.
+>
+> #### Implementation
+>
+> ```javascript
+> function extractApiVersion(req = {}) {
+>   const path = req.path || "";
+>   const headers = req.headers || {};
+>
+>   // 1. URI Path Strategy: /v1/users or /v2/orders
+>   const pathMatch = path.match(/\/v(\d+)(\/|$)/i);
+>   if (pathMatch) {
+>     return { version: `v${pathMatch[1]}`, source: "URI_PATH" };
+>   }
+>
+>   // 2. Custom Header Strategy: X-API-Version: 2
+>   const headerVer = headers["x-api-version"] || headers["X-API-Version"];
+>   if (headerVer) {
+>     return { version: headerVer.startsWith("v") ? headerVer : `v${headerVer}`, source: "HEADER" };
+>   }
+>
+>   // 3. Accept Header Content Negotiation: Accept: application/vnd.company.v2+json
+>   const accept = headers["accept"] || headers["Accept"] || "";
+>   const acceptMatch = accept.match(/vnd\.[^.]+\.v(\d+)\+json/i);
+>   if (acceptMatch) {
+>     return { version: `v${acceptMatch[1]}`, source: "ACCEPT_HEADER" };
+>   }
+>
+>   return { version: "v1", source: "DEFAULT_FALLBACK" }; // Default fallback
+> }
+>
+> // Verification tests
+> console.assert(extractApiVersion({ path: "/v2/users" }).version === "v2", "Test 1 Failed: Path strategy");
+> console.assert(extractApiVersion({ headers: { "X-API-Version": "3" } }).version === "v3", "Test 2 Failed: Header strategy");
+> console.assert(extractApiVersion({ headers: { "Accept": "application/vnd.myco.v4+json" } }).version === "v4", "Test 3 Failed: Accept header strategy");
 > ```
-> - If you delete something that existed before, it's breaking.
+>
+> #### Technical Explanation
+>
+> 1. **API Versioning Strategies**: Three main approaches: URI Path (/v1/), Custom Header (X-API-Version), and Content Negotiation (Accept header).
+> 2. **URI Path Versioning**: Most common and developer-friendly pattern; explicitly visible in URLs.
+> 3. **Content Negotiation Versioning**: Strict REST approach keeping URLs clean while requesting specific media type versions.
 > 
 ---
 
-### Exercise 2: API Versioning Strategies Matrix
+### Exercise 2: Express-Style API Version Routing Middleware
 
-**Problem:** Match the API versioning strategy to its example:
-1. URI Path Versioning
-2. Header Versioning
-3. Media Type (Accept) Versioning
+**Scenario:** A server middleware routes HTTP requests to different controller version modules (`v1Controller` vs `v2Controller`) based on requested version.
 
-**Expected output:**
+**Requirements:**
+1. Write createVersionRouter(versionMap).
+2. Extract version.
+3. Route request to matching version controller.
+
 > [!check]- Answer
-> ```text
-> 1. GET /v1/users
-> 2. X-API-Version: 2.0
-> 3. Accept: application/vnd.example.v2+json
+>
+> #### Implementation
+>
+> ```javascript
+> function createVersionRouter(versionMap = {}) {
+>   return function routeVersion(req) {
+>     const versionObj = req.version || { version: "v1" };
+>     const verKey = versionObj.version;
+>
+>     const controller = versionMap[verKey] || versionMap["v1"];
+>     if (!controller) {
+>       return { status: 400, error: `API Version '${verKey}' not supported` };
+>     }
+>
+>     return { status: 200, activeVersion: verKey, controller };
+>   };
+> }
+>
+> // Verification tests
+> const v1Ctrl = () => "v1_data";
+> const v2Ctrl = () => "v2_data";
+> const router = createVersionRouter({ v1: v1Ctrl, v2: v2Ctrl });
+>
+> const res = router({ version: { version: "v2" } });
+> console.assert(res.activeVersion === "v2" && res.controller() === "v2_data", "Test 1 Failed");
 > ```
-> ```text
-> 1. URI Path -> GET /v1/users
-> 2. Header   -> X-API-Version: 2.0
-> 3. Media Type -> Accept: application/vnd.example.v2+json
-> ```
-> - **Explanation:** Different versioning strategies communicate contract versions to clients.
+>
+> #### Technical Explanation
+>
+> 1. **Version Routing Isolation**: Separates controller code for v1 and v2 to keep codebase clean during migration.
+> 2. **Graceful Fallback**: Falls back to default major version (v1) if un-versioned request arrives.
+> 3. **Major Version Branching**: Major version changes indicate incompatible API contract updates.
+> 
 ---
 
-### Exercise 3: Semantic Versioning (SemVer) Breakdown
+### Exercise 3: Semantic Versioning (SemVer) Compatibility Validator
 
-**Problem:** Given SemVer version `2.4.1`, identify Major, Minor, and Patch numbers and explain when Major increments.
+**Scenario:** Evaluates whether client SDK SemVer versions (MAJOR.MINOR.PATCH) are compatible with server API versions.
 
-**Expected output:**
+**Requirements:**
+1. Write checkSemverCompatibility(clientVersionStr, serverVersionStr).
+2. Allow MINOR and PATCH updates; reject MAJOR mismatches.
+
 > [!check]- Answer
-> ```text
-> Major: 2, Minor: 4, Patch: 1. Major increments when incompatible breaking API changes are introduced.
+>
+> #### Implementation
+>
+> ```javascript
+> function checkSemverCompatibility(clientVersionStr, serverVersionStr) {
+>   const parse = (v) => v.replace(/^v/, "").split(".").map(n => parseInt(n, 10));
+>
+>   const [cMajor, cMinor] = parse(clientVersionStr);
+>   const [sMajor, sMinor] = parse(serverVersionStr);
+>
+>   if (cMajor !== sMajor) {
+>     return {
+>       compatible: false,
+>       reason: `Breaking change: Major version mismatch (Client v${cMajor} vs Server v${sMajor})`
+>     };
+>   }
+>
+>   return {
+>     compatible: true,
+>     isClientOutdated: sMinor > cMinor
+>   };
+> }
+>
+> // Verification tests
+> const c1 = checkSemverCompatibility("1.2.0", "1.4.0");
+> console.assert(c1.compatible === true && c1.isClientOutdated === true, "Test 1 Failed: Same MAJOR is compatible");
+>
+> const c2 = checkSemverCompatibility("1.2.0", "2.0.0");
+> console.assert(c2.compatible === false, "Test 2 Failed: MAJOR mismatch is incompatible");
 > ```
-> ```text
-> Major: 2 (Increments on breaking API changes)
-> Minor: 4 (Increments on backward-compatible new features)
-> Patch: 1 (Increments on backward-compatible bug fixes)
-> ```
-> - **Explanation:** SemVer standardizes version number increments.
+>
+> #### Technical Explanation
+>
+> 1. **Semantic Versioning (SemVer)**: MAJOR.MINOR.PATCH versioning format (e.g. 2.1.4).
+> 2. **MAJOR Version Bump**: Increments for incompatible, breaking API contract changes.
+> 3. **MINOR & PATCH Bumps**: Increments for backward-compatible feature additions (MINOR) and bug fixes (PATCH).
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Endpoints & Resources](../level_03/endpoints_resources.md) — Where the `/v1/` is injected.
 - [GraphQL (The REST Alternative)](../level_07/graphql.md) — GraphQL famously avoids versioning because clients specifically ask for the exact fields they want. If a field is deprecated, GraphQL just throws a warning.
 - [Content Negotiation (Accept)](../level_02/content_negotiation.md) — Related concept: Content Negotiation (Accept).
@@ -161,7 +246,7 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **API Versioning** allows old, outdated clients to continue working while new clients get updated data structures.
 - It is most commonly implemented in the URL path (e.g., `/api/v1/resource`).
 - You should only create a new version for **Breaking Changes** (renaming, deleting, or changing data types).

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support .)**: `scope` Attribute (in `<th>`) is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Read natively by all screen readers and layout engines to construct accessibility trees).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a sighted person reads a grid table, they can scan horizontally and vertically to figure out what a number represents. For example, they look up to find the column label ("Sales") and left to find the row label ("Monday"). 
@@ -103,7 +99,7 @@ Using row and column header scopes in the same table:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the `scope` attribute on `<td>` elements
 
@@ -156,7 +152,7 @@ Using row and column header scopes in the same table:
 <th scope="row">Data</th> <!-- Scope applied to th cell -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Scoping headers
 
@@ -232,14 +228,14 @@ Using row and column header scopes in the same table:
 >
 > **Explanation:** `scope="colgroup"` associates a header spanning multiple columns with the entire group.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<th>` (Table Header)](th.md) — The tag that hosts the `scope` attribute.
 - [`<caption>`](caption.md) — The table title helper.
 - [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `scope` attribute explicitly connects a header cell to its corresponding row or column.
 - It is placed only on `<th>` elements.
 - Use `scope="col"` for top headers and `scope="row"` for side/row headers.

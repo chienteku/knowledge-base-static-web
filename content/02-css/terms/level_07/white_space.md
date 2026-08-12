@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography / Formatting Property**
+
+**Typography / Formatting Property (Universal Browser Support)**: `white-space` is a fundamental concept in this technology stack. **Level 7 — Text & List Formatting**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in HTML Level 1, the browser aggressively collapses all empty spaces, tabs, and Enter-key line breaks in your HTML code into a single, solitary space. It also automatically wraps text to the next line when it hits the edge of a container.
@@ -58,7 +54,7 @@ The W3C created the **`white-space`** property to allow developers to override t
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<br>` tags to format poems or code
 
@@ -107,7 +103,7 @@ The W3C created the **`white-space`** property to allow developers to override t
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Infinite Line
 
@@ -168,12 +164,12 @@ The W3C created the **`white-space`** property to allow developers to override t
 >
 > **Explanation:** `white-space` dictates whitespace collapsing and line wrapping rules.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`text-overflow` & `overflow-wrap`](text_overflow.md) — When you use `nowrap` and the text blows out of the box, `text-overflow` allows you to cut it off with a "..." (ellipsis).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - HTML collapses whitespace by default. `white-space` allows CSS to override that.
 - `nowrap` forces text to stay on a single line, even if it breaks the layout.
 - `pre-wrap` is the best way to safely render user-submitted text (like comments) that contain deliberate line breaks and spacing.

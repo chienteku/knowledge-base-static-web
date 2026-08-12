@@ -298,7 +298,7 @@ fetch_remote_data().await;
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`async fn`](../level_10/async_fn.md) — Async fn declarations.
 - [`.await`](../level_10/await.md) — Await syntax.

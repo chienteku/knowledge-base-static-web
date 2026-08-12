@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Unit**
+
+**CSS Unit (Universal Modern Standard .)**: `fr` Unit (Fractional Unit) is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Evaluated dynamically during browser paint loop computations. Calculates layout fractions in real-time on screen resizes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before CSS Grid was introduced, building fluid column layouts required developers to use percentages (like `width: 33.33%;` for three columns).
@@ -119,7 +115,7 @@ A clean 2-column sidebar layout:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `1fr` with `auto` sizing
 
@@ -242,7 +238,7 @@ grid-template-columns: 50% 1fr 1fr;
 .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Space Math
 
@@ -304,14 +300,14 @@ What is the final width in pixels of the second column (the `1fr` column)?
 >
 > **Explanation:** `fr` units handle layout gap math automatically.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`minmax()` Function](grid_minmax.md) — A function commonly used with `fr` units to set sizing caps.
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Related concept: CSS Grid (Concept) & `display: grid`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `fr` unit is a smart, fluid unit designed specifically for CSS Grid.
 - It represents a fraction of the available free space inside the container.
 - It automatically subtracts pixels used by fixed columns and layout gaps before dividing space.

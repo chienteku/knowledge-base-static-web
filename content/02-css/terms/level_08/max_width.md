@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Modern Standard .)**: `max-width` & `min-height` (Fluidity) is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Supported natively. Triggers browser block layout calculations to cap dynamic resize variables).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Percentages make layouts fluid. If you style a central column with `width: 90%;`, it resizes smoothly when you shrink the window. 
@@ -128,7 +124,7 @@ Fluid image scaling constraint:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting a fixed height instead of `min-height` for content boxes
 
@@ -267,7 +263,7 @@ Fluid image scaling constraint:
 .card { min-width: 300px; } /* Prevents shrinking smaller than 300px */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Fluid Layout Center
 
@@ -330,7 +326,7 @@ Fluid image scaling constraint:
 >
 > **Explanation:** `max-width: 65ch` clamps line length for optimal reading ergonomics.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Width / Height](../level_02/width_height.md) — The baseline box sizes.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The property that handles clips if fixed sizing bounds are breached.
 - [`%` (Percentages)](percentages.md) — Related concept: `%` (Percentages).
@@ -338,7 +334,7 @@ Fluid image scaling constraint:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `max-width` caps how wide an element can grow, preventing desktop design stretch.
 - `min-height` sets a minimum height baseline, but lets elements grow vertically to fit overflow content.
 - Always use `min-height` instead of fixed `height` for containers that hold text or dynamic content.

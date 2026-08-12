@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support)**: `href` Attribute is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If the `<a>` (Anchor) tag creates the physical, clickable "doorway" on a webpage, the browser still needs to know exactly where that doorway leads. The W3C designed the `href` (Hypertext Reference) attribute to act as the coordinate system for the web. 
@@ -61,7 +57,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the protocol (`https://`) on absolute links
 
@@ -185,7 +181,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 <a href="/target-page">Click Me</a>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Identifying Link Types
 
@@ -239,7 +235,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 >
 > **Explanation:** `download` attribute instructs browsers to save linked resources to disk.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<a>` (Anchor / Link)](a.md) — The tag that utilizes the `href` attribute.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.
 - [`<link>`](../level_08/link.md) — A different HTML tag that ALSO uses the `href` attribute, but for stylesheets instead of navigation.
@@ -250,7 +246,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `href` stands for Hypertext Reference.
 - It specifies the destination address for a link.
 - **Absolute links** (to other websites) must start with `http://` or `https://`.

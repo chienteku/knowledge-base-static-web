@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support)**: `class` Attribute is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The `id` attribute is great for finding *one* specific element, but what if you have 20 different error messages on a page and you want to make all of them red? You don't want to write 20 different IDs (`error-1`, `error-2`, etc.) and write 20 different CSS rules.
@@ -59,7 +55,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Separating multiple classes with commas
 
@@ -115,7 +111,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 <button class="btn btn-primary">Save</button> <!-- Space-separated class list -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: ID vs Class
 
@@ -164,7 +160,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 >
 > **Explanation:** `.classList.add()` safely appends classes to the element class token list.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`id` Attribute](id.md) — The strictly unique identifier.
 - [`style` Attribute](style.md) — Another global attribute used to apply CSS directly to an element.
 - [`data-*` Attributes](data_attributes.md) — Custom metadata values often styled alongside classes.
@@ -172,7 +168,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `class` attribute is used to group multiple elements together.
 - You can apply the exact same class to as many elements as you want.
 - A single element can have multiple classes (separated by a space).

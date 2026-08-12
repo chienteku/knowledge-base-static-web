@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **HTML5 API / Concept**
+
+**HTML5 API / Concept (Universal Browser Support .)**: Drag & Drop API is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Natively supported by all desktop browsers. Mobile touch screen devices do not support the native mouse drag-drop API natively, requiring touch-event libraries for fallbacks).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sighted users expect web applications to behave like desktop software:
@@ -144,7 +140,7 @@ Moving a text box between two containers:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `event.preventDefault()` inside the `dragover` listener
 
@@ -268,7 +264,7 @@ function allowDrop(ev) {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Draggable Box Config
 
@@ -332,13 +328,13 @@ function allowDrop(ev) {
 >
 > **Explanation:** Drag events track source pickup, target hover, and drop release.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`data-*` Attributes](../level_07/data_attributes.md) — Used to store custom metadata identifiers on dragged items.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Drag & Drop API enables native mouse dragging and dropping.
 - Make any element draggable by setting `draggable="true"`.
 - You must call `event.preventDefault()` in the target's `dragover` listener to allow drops.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support .)**: `name` Attribute (in Form Fields) is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers. Used to compile query strings and request payloads).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a registration form with three input fields: a box for "First Name", a box for "Age", and a box for "Email Address". 
@@ -112,7 +108,7 @@ Form payload fields declaring names:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `name` attribute on input elements
 
@@ -168,7 +164,7 @@ Form payload fields declaring names:
 <input type="radio" name="consent" value="no"> <!-- Shared name creates radio group -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Radio Button Grouping Error
 
@@ -228,7 +224,7 @@ Form payload fields declaring names:
 >
 > **Explanation:** Trailing brackets `name[]` signal backend server body parsers to aggregate values into an array.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The input controls mapped by name tags.
 - [`<form>`](form.md) — The form collector.
 - [`value` Attribute (in Form Fields)](value.md) — The value half of the key-value submission pair.
@@ -239,7 +235,7 @@ Form payload fields declaring names:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `name` attribute maps a data key to a form control's value.
 - Without a `name` attribute, form data is not submitted to the server.
 - The browser packages data as `name=value` pairs.

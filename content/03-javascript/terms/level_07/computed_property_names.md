@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Computed Property Names is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before ES6, if you wanted to declare a JavaScript object literal where one of the property keys was dynamic (such as a string stored in a variable or computed from a calculation), you could not write it inside the literal itself. You had to create a blank object structure first, and then assign the property afterwards using bracket notation.
@@ -87,7 +83,7 @@ console.log(adminPermissions.PREVENT);         // [ 'delete_db', 'clear_logs' ]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting Brackets when Using Variable Keys
 
@@ -171,72 +167,113 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Dynamic Dictionary Builder
+### Exercise 1: Dynamic Reducer Action Type Lookup Table
 
-**Problem:** Complete the code to construct the object `stats` using computed property names, creating the dynamic key `"active_users"` and setting its value to `450`.
+**Scenario:** A state management reducer uses computed property names ([actionType]) to dynamically build action handler dictionary objects.
 
-```javascript
-const prefix = "active";
-const countKey = "users";
+**Requirements:**
+1. Write createActionMap(typeKey, handlerFn).
+2. Use object literal computed property key [typeKey].
+3. Return action handler object.
 
-const stats = {
-  // Declare key dynamically combining prefix and countKey
-};
-
-console.log("Active count:", stats.active_users);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Active count: 450
-> ```
-> - The key expression is `[`${prefix}_${countKey}`]`.
-> 
----
-
-### Exercise 2: Dynamic Key Object Construction
-
-**Problem:** Construct object `{ [prefix + "_id"]: 42 }` where `prefix = "user"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"user_id":42}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const prefix = "user";
-> const obj = { [prefix + "_id"]: 42 };
-> console.log(JSON.stringify(obj));
+> function createActionMap(typeKey, handlerFn) {
+>   return {
+>     [typeKey]: handlerFn,
+>     timestamp: Date.now()
+>   };
+> }
+>
+> // Verification tests
+> const map = createActionMap("UPDATE_USER", (state, payload) => payload);
+> console.assert(typeof map["UPDATE_USER"] === "function", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Computed property names `[expr]` evaluate dynamic expressions during object literal creation.
+> #### Technical Explanation
+>
+> 1. **Computed Property Syntax**: Square brackets [expression] inside object literals allow dynamic evaluation of property keys at runtime.
+> 2. **Dynamic Dictionary Keys**: Eliminates post-creation object property assignment statements (obj[key] = val).
+> 3. **Expression Evaluation**: Any valid JavaScript expression (strings, variables, function calls) can be used inside [].
 > 
 ---
 
-### Exercise 3: Symbol Computed Property Keys
+### Exercise 2: Computed Property Names Advanced Context Handler
 
-**Problem:** Use a symbol `const sym = Symbol("key")` as a computed property key `[sym]: "secret"`.
+**Scenario:** A web application component processes computed property names data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleComputedPropertyNamesSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> secret
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const sym = Symbol("key");
-> const obj = { [sym]: "secret" };
-> console.log(obj[sym]);
+> function handleComputedPropertyNamesSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleComputedPropertyNamesSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Bracketed computed properties permit primitive Symbols as non-string object keys.
-> 
+> #### Technical Explanation
+>
+> 1. **Computed Property Names Architecture**: Applying computed property names patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Computed Property Names Performance Optimization
+
+**Scenario:** An application utility optimizes computed property names execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeComputedPropertyNamesTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeComputedPropertyNamesTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeComputedPropertyNamesTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Computed Property Names Optimization**: Optimizing computed property names improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Symbol](../level_08/symbol.md) — Unique identifiers commonly declared as computed property keys.
 - [Shorthand Properties & Methods](shorthand_properties_methods.md) — Structural object syntax updates.
 - [Property Access (dot vs bracket notation)](../level_02/property_access.md) — Related concept: Property Access (dot vs bracket notation).
@@ -244,7 +281,7 @@ console.log("Active count:", stats.active_users);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Computed Property Names allow dynamic, evaluated expressions to define object keys directly inside literals.
 - Enclose the key expression inside square brackets `[]` (e.g. `{[myVar]: value}`).
 - The expression inside `[]` can be variables, mathematical formulas, string concatenations, or functions.

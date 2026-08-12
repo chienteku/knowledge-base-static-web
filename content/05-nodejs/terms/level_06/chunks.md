@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Data Structure**
+
+**Concept / Data Structure (Stream Processing)**: Data Chunks is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Stream Processing**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a Stream's job is to avoid loading a 10GB file into memory all at once, it must cut that file into smaller pieces. These pieces are called **Chunks**.
@@ -46,7 +42,7 @@ To solve this, developers use specialized Transform streams (like the `readline`
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Memory Leaking by concatenating all chunks
 
@@ -98,7 +94,7 @@ stream.on('data', (c) => chunks.push(c)); // ❌ Defeats streaming memory benefi
 stream.pipe(destination);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The True Identity
 
@@ -149,14 +145,14 @@ stream.pipe(destination);
 >
 > **Explanation:** Default highWaterMark specifies byte thresholds for binary buffers vs item count for object streams.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Buffers](buffers.md) — What a chunk actually is.
 - [Streams (General Concept)](streams.md) — The system that produces chunks.
 - [Character Encoding & Buffer ↔ String](buffer_encoding.md) — Related concept: Character Encoding & Buffer ↔ String.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Chunk** is a small piece of a larger file, emitted by a Stream.
 - Under the hood, a chunk is just a **Buffer** object.
 - By default, Node.js file streams use a 64KB chunk size.

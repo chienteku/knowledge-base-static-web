@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Object-Oriented Programming**
+
+**Object-Oriented Programming (Universal: Works everywhere)**: Property is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If an Object is a container, we needed a vocabulary to describe the individual items inside that container. A "Property" is simply the pairing of the label (the key) and the actual data (the value). This terminology allows developers to discuss data structures clearly: "Check the `length` property of the array" or "Update the `email` property of the user object."
@@ -64,7 +60,7 @@ console.log(user); // { firstName: "John" }
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accessing a non-existent property
 
@@ -141,69 +137,123 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Property Deletion
+### Exercise 1: E-Commerce Product Metadata Manager
 
-**Problem:** Create an object `settings` with properties `theme: "dark"` and `notifications: true`. Use the `delete` operator to remove the `notifications` property. Then log the `settings` object.
+**Scenario:** A catalog management service reads, adds, and updates key-value metadata properties on product objects.
 
-**Expected output:**
+**Requirements:**
+1. Write updateProductMetadata(product, key, value).
+2. Set property on product object.
+3. Check if property exists.
+4. Return updated product.
+
 > [!check]- Answer
-> ```text
-> { theme: 'dark' }
-> ```
-> - `delete settings.notifications;`
-> 
----
-
-### Exercise 2: Checking Own Properties with `Object.hasOwn`
-
-**Problem:** Check if `"toString"` is an own property of `{ a: 1 }` vs `"a"` using `Object.hasOwn()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> a: true, toString: false
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const obj = { a: 1 };
-> console.log(`a: ${Object.hasOwn(obj, "a")}, toString: ${Object.hasOwn(obj, "toString")}`);
+> function updateProductMetadata(product, key, value) {
+>   const copy = { ...product };
+>   copy[key] = value;
+>   return copy;
+> }
+>
+> // Verification tests
+> const prod = { id: 1, name: "Laptop" };
+> const updated = updateProductMetadata(prod, "inStock", true);
+> console.assert(updated.inStock === true, "Test 1 Failed");
+> console.assert(prod.inStock === undefined, "Test 2 Failed: Original should not be mutated");
 > ```
 >
-> **Explanation:** `Object.hasOwn(obj, prop)` checks if `prop` exists as a direct non-inherited property on `obj`.
+> #### Technical Explanation
+>
+> 1. **Property Mapping**: Properties are named key-value associations bound to object instances.
+> 2. **Dynamic Assignment**: Bracket notation obj[key] = val assigns values to dynamic string property keys.
+> 3. **Property Access**: Accessing undefined properties evaluates to undefined without throwing.
 > 
 ---
 
-### Exercise 3: Configuring Property Descriptors
+### Exercise 2: Feature Flag Sanitizer with Delete Operator
 
-**Problem:** Use `Object.defineProperty` to create a non-writable property `id: 100`.
+**Scenario:** A feature flag service inspects feature flags and deletes temporary debugging flags using the delete operator.
 
-**Expected output:**
+**Requirements:**
+1. Write sanitizeFlags(flagsObject, tempFlagKey).
+2. Remove tempFlagKey property using delete operator.
+3. Return updated object.
+
 > [!check]- Answer
-> ```text
-> 100
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const item = {};
-> Object.defineProperty(item, "id", {
->   value: 100,
->   writable: false
-> });
-> console.log(item.id);
+> function sanitizeFlags(flagsObject, tempFlagKey) {
+>   const flags = { ...flagsObject };
+>   if (tempFlagKey in flags) {
+>     delete flags[tempFlagKey];
+>   }
+>   return flags;
+> }
+>
+> // Verification tests
+> const initial = { featureA: true, debugFlag: true };
+> const cleaned = sanitizeFlags(initial, "debugFlag");
+> console.assert("debugFlag" in initial === true, "Test 1 Failed");
+> console.assert("debugFlag" in cleaned === false, "Test 2 Failed: Property not deleted");
 > ```
 >
-> **Explanation:** Property descriptors configure `writable`, `enumerable`, and `configurable` object property flags.
-> 
+> #### Technical Explanation
+>
+> 1. **Delete Operator**: The delete operator removes a property binding from an object instance entirely.
+> 2. **Difference from undefined**: Setting obj.prop = undefined retains the key; delete removes the key key completely.
+> 3. **In Operator Check**: Expression key in obj checks if the key exists on the object or its prototype chain.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Own Property Checker Utility
+
+**Scenario:** An object mapping library verifies whether a property is an 'own' property using Object.hasOwn() rather than inherited from prototype chain.
+
+**Requirements:**
+1. Write verifyOwnProperty(obj, propKey).
+2. Check if propKey is an own property using Object.hasOwn(obj, propKey).
+3. Return boolean result.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function verifyOwnProperty(obj, propKey) {
+>   if (obj === null || typeof obj !== "object") return false;
+>   return Object.hasOwn(obj, propKey);
+> }
+>
+> // Verification tests
+> const parent = { inheritedProp: "parent" };
+> const child = Object.create(parent);
+> child.ownProp = "child";
+>
+> console.assert(verifyOwnProperty(child, "ownProp") === true, "Test 1 Failed");
+> console.assert(verifyOwnProperty(child, "inheritedProp") === false, "Test 2 Failed: Inherited property detected as own");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object.hasOwn() Standard**: Modern ES2022 method replacing legacy Object.prototype.hasOwnProperty.call().
+> 2. **Own vs Inherited**: Own properties exist directly on the object instance; inherited properties exist on prototype chain.
+> 3. **Type Safety**: Object.hasOwn() safely checks properties on objects created via Object.create(null).
+---
+
+## 6. Related Terms
 - [Object](object.md) — The container that holds properties.
 - [Method](method.md) — A specific type of property where the value is a function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A property is just a key-value pair inside an object.
 - The "key" is usually a string, and the "value" can be absolutely any JavaScript data type (Primitive, Array, another Object, etc.).
 - Accessing a property that doesn't exist returns `undefined`.

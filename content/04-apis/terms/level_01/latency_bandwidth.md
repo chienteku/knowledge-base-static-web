@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal: Affects web browsers, server API architectures, and mobile users.)**: Latency & Bandwidth is a fundamental concept in this technology stack. **Level 1 — Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Affects web browsers, server API architectures, and mobile users.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When developers or users complain that an API or website is "slow," they are experiencing network limitations. To build fast web applications, you must understand that network speed is governed by two distinct metrics:
@@ -78,7 +74,7 @@ const [user, post1, post2, post3] = await Promise.all([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Upgrading internet bandwidth expecting it to solve gaming lag or small API latency
 
@@ -132,66 +128,133 @@ const usersWithDetails = await getUsersWithBatchDetails();
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bottleneck Inspector
+### Exercise 1: API Request Latency Profiler
 
-**Problem:** Identify whether the performance issue is caused by **Latency** or **Bandwidth**:
+**Scenario:** A network monitoring library measures the round-trip latency of API endpoints in milliseconds.
 
-1. A mobile user in a rural area takes 10 seconds to download a 50MB PDF invoice.
-2. A developer in Europe queries a US database server; fetching a single user row takes `200ms`, and fetching 10 rows sequentially takes `2 seconds`.
-3. A fiber-optic connection is upgraded, but ping response times to a local server remain at `12ms`.
+**Requirements:**
+1. Write measureLatency(fetchFn, url).
+2. Record start timestamp.
+3. Execute fetchFn(url).
+4. Calculate and return duration in ms.
 
 > [!check]- Answer
-> - 1. **Bandwidth** bottleneck (The hardware pipeline throughput is too slow for the large file payload).
-> - 2. **Latency** bottleneck (Each lookup suffers a `200ms` round-trip. The data size is tiny, but the sequential travel time adds up).
-> - 3. **Latency** limit (The local connection latency has hit its physical routing minimum).
+>
+> #### Implementation
+>
+> ```javascript
+> async function measureLatency(fetchFn, url) {
+>   if (typeof fetchFn !== "function") throw new Error("fetchFn required");
+>
+>   const startTime = Date.now();
+>   await fetchFn(url);
+>   const endTime = Date.now();
+>
+>   return endTime - startTime;
+> }
+>
+> // Verification tests
+> const mockFetch = (url) => new Promise(res => setTimeout(res, 50));
+>
+> measureLatency(mockFetch, "https://api.example.com/ping").then(latency => {
+>   console.assert(latency >= 45, "Test 1 Failed: Latency should be ~50ms");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Latency Definition**: Latency measures time delay (in ms) for data to travel from client to server and back (Round Trip Time / RTT).
+> 2. **Factors Affecting Latency**: Geographic distance, network hops, server processing time, and TLS handshake overhead.
+> 3. **User Experience Impact**: High latency causes slow page loads even if connection bandwidth is high.
 > 
+---
+
+### Exercise 2: Bandwidth Throughput Calculator
+
+**Scenario:** A video streaming client measures data download rate (bandwidth throughput) in Megabits per second (Mbps).
+
+**Requirements:**
+1. Write calculateBandwidthMbps(byteCount, durationMs).
+2. Convert bytes to bits.
+3. Convert duration to seconds.
+4. Return Mbps rounded to 2 decimals.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function calculateBandwidthMbps(byteCount, durationMs) {
+>   if (durationMs <= 0 || byteCount <= 0) return 0;
+>
+>   const bits = byteCount * 8;
+>   const seconds = durationMs / 1000;
+>   const mbps = (bits / seconds) / 1_000_000;
+>
+>   return Number(mbps.toFixed(2));
+> }
+>
+> // Verification tests
+> // 5 MB (5,000,000 bytes) downloaded in 2 seconds (2000 ms)
+> // 5,000,000 * 8 = 40,000,000 bits / 2s = 20,000,000 bps = 20 Mbps
+> const speed = calculateBandwidthMbps(5_000_000, 2000);
+> console.assert(speed === 20.00, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Bandwidth Definition**: Bandwidth measures data transfer capacity (bits per second) over a network connection.
+> 2. **Bytes vs Bits**: Storage is measured in Bytes (B); Network bandwidth is measured in Bits (b) (1 Byte = 8 Bits).
+> 3. **Bandwidth vs Latency Analogy**: Bandwidth is the width of a highway (capacity); Latency is the speed limit (delay).
 > 
 ---
 
-### Exercise 2: Bandwidth vs Latency Analogy
+### Exercise 3: Network Connection Quality Classifier
 
-**Problem:** Match term to highway analogy:
-1. Latency
-2. Bandwidth
+**Scenario:** A progressive web application tiers UI media quality based on combined latency (RTT) and bandwidth (Mbps) metrics.
 
-**Expected output:**
+**Requirements:**
+1. Write classifyNetworkTier(rttMs, mbps).
+2. Return "HIGH", "MEDIUM", or "LOW" connection tier.
+
 > [!check]- Answer
-> ```text
-> 1. Speed limit of the cars (how fast one car completes the trip)
-> 2. Number of lanes on the highway (how many cars can travel simultaneously)
+>
+> #### Implementation
+>
+> ```javascript
+> function classifyNetworkTier(rttMs, mbps) {
+>   if (rttMs <= 100 && mbps >= 10) {
+>     return "HIGH";
+>   }
+>   if (rttMs <= 300 && mbps >= 2) {
+>     return "MEDIUM";
+>   }
+>   return "LOW";
+> }
+>
+> // Verification tests
+> console.assert(classifyNetworkTier(50, 25) === "HIGH", "Test 1 Failed");
+> console.assert(classifyNetworkTier(200, 5) === "MEDIUM", "Test 2 Failed");
+> console.assert(classifyNetworkTier(500, 1) === "LOW", "Test 3 Failed");
 > ```
-> ```text
-> 1. Latency -> Speed limit / travel time of a single payload.
-> 2. Bandwidth -> Width of the highway / total capacity volume.
-> ```
-> - **Explanation:** Latency measures speed of delivery; bandwidth measures total volume capacity.
+>
+> #### Technical Explanation
+>
+> 1. **Adaptive Media Quality**: Serving lower resolution assets on slow connections improves load speed and reduces data cost.
+> 2. **Combined Metric Evaluation**: High latency can degrade video streaming even if total bandwidth is high.
+> 3. **Network Information API**: Browsers expose effectiveType (4g, 3g, 2g) via navigator.connection.
 ---
 
-### Exercise 3: Calculating Total Sequential API Delay
-
-**Problem:** If network latency between Client and Server is 40ms, calculate total time spent waiting on network traffic for 5 sequential synchronous HTTP calls.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 200ms (5 * 40ms RTT).
-> ```
-> ```text
-> 200ms (5 calls * 40ms RTT per call).
-> ```
-> - **Explanation:** Sequential network requests sum individual latency delays.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Caching (ETag, Cache-Control)](../level_06/caching.md) — Storing data locally to bypass network latency entirely.
 - [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — Limiting API response payload sizes to reduce bandwidth usage.
 - [Promise.all / Parallel Requests](../level_05/promise_all.md) — Related concept: Promise.all / Parallel Requests.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Latency is the travel time of a single packet round-trip (measured in RTT milliseconds).
 - Bandwidth is the volume capacity of the network pipe (measured in Mbps/Gbps).
 - For small API payloads, latency (distance) is the dominant performance bottleneck.

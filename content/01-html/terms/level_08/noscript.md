@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support .)**: `<noscript>` is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers since early HTML specs. Actively parsed only when the browser's JavaScript execution engine is turned off or blocked).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern websites rely heavily on JavaScript for core features, page navigation, and animations. In some cases, web applications are built entirely using JavaScript frameworks (like React, Vue, or Angular) that generate the entire page layout dynamically on the client side.
@@ -107,7 +103,7 @@ A simple warning banner in the body:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing interactive elements requiring scripts inside `<noscript>`
 
@@ -175,7 +171,7 @@ A simple warning banner in the body:
 <!-- Render server HTML content, enhanced progressively with JS -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Fallback warning
 
@@ -236,14 +232,14 @@ A simple warning banner in the body:
 >
 > **Explanation:** `<noscript>` inside `<head>` can load fallback CSS stylesheets.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<script>`](script.md) — The parent scripting element.
 - [`<body>`](../level_01/body.md) — The visual wrapper hosting the warning tags.
 - [Content Security Policy (CSP) & HTML Security](../level_10/security.md) — Related concept: Content Security Policy (CSP) & HTML Security.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<noscript>` element defines fallback content when JavaScript is disabled or unsupported.
 - Its contents are completely hidden and ignored if the browser's JavaScript engine is active.
 - It is commonly used to show warning banners instructing users to turn on JavaScript.

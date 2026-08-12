@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Measurement Unit**
+
+**CSS Measurement Unit (Universal Browser Support)**: `%` (Percentages) is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, monitors were all roughly the same size, so developers built websites using absolute `px` (pixels). If a sidebar was `300px` wide, it was always exactly 300px wide.
@@ -55,7 +51,7 @@ Percentages (`%`) are like saying "Fill the glass half-way (`50%`)." It doesn't 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `%` to work on `height`
 
@@ -175,7 +171,7 @@ html, body { height: 100%; }
 .parent { height: 100%; } /* Parent explicitly defined */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Russian Nesting Dolls
 
@@ -232,14 +228,14 @@ How many pixels wide is the Child on the screen?
 >
 > **Explanation:** `flex-basis` defines initial main-axis item dimensions within Flexbox layout engines.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport instead of the parent container.
 - [`rem` vs `em`](rem_em.md) — Relative typography units.
 - [`max-width` & `min-height` (Fluidity)](max_width.md) — Bounding limits for fluid elements.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `%` is a **relative** unit. It calculates its size based on its **Parent Container**.
 - It is incredible for fluid, responsive `width` (like 2-column layouts using `50%` each).
 - It is notoriously terrible and frustrating for `height` due to how the browser calculates vertical space.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Client-Side  and modern Node.js.)**: The fetch() API is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser)** and modern **Node.js**.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of JavaScript, if you wanted to get data from a server *without* refreshing the entire web page, you had to use an incredibly clunky and difficult API called `XMLHttpRequest` (XHR). It required 10 lines of confusing boilerplate code just to make a simple GET request.
@@ -62,7 +58,7 @@ fetch('https://api.example.com/posts', {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting the data instantly
 
@@ -120,63 +116,162 @@ fetch('https://api.example.com/me', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read the Docs
+### Exercise 1: Standardized JSON Fetch Wrapper
 
-**Problem:** You want to delete a user. The API documentation says: `DELETE /api/users/:id`. Write the `fetch` call to delete User 42.
+**Scenario:** A lightweight HTTP client wraps native `fetch()` to handle headers, body serialization, and JSON response parsing automatically.
 
-**Expected output:**
+**Requirements:**
+1. Write httpGet(url, headers).
+2. Write httpPost(url, payload, headers).
+3. Return parsed JSON response.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> fetch('/api/users/42', {
->   method: 'DELETE'
+> async function httpPost(url, payload, customHeaders = {}, mockFetch) {
+>   const fetchFn = mockFetch || globalThis.fetch;
+>
+>   const response = await fetchFn(url, {
+>     method: "POST",
+>     headers: {
+>       "Content-Type": "application/json",
+>       "Accept": "application/json",
+>       ...customHeaders
+>     },
+>     body: JSON.stringify(payload)
+>   });
+>
+>   if (!response.ok) {
+>     throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+>   }
+>
+>   return await response.json();
+> }
+>
+> // Verification tests
+> const mockFetch = async (url, opts) => {
+>   const body = JSON.parse(opts.body);
+>   return {
+>     ok: true,
+>     status: 200,
+>     json: async () => ({ id: 101, name: body.name })
+>   };
+> };
+>
+> httpPost("https://api.com/users", { name: "Alice" }, {}, mockFetch).then(res => {
+>   console.assert(res.id === 101 && res.name === "Alice", "Test 1 Failed");
 > });
 > ```
-> - You need to pass the options object to change the method.
-> - Do DELETE requests usually have bodies? (No).
+>
+> #### Technical Explanation
+>
+> 1. **Fetch API Standardization**: Native browser & Node.js API replacing legacy XMLHttpRequest for making asynchronous HTTP requests.
+> 2. **Manual JSON Serialization**: fetch body accepts string or Buffer; objects MUST be serialized using JSON.stringify().
+> 3. **Asynchronous Body Parsing**: response.json() returns a promise parsing the streaming response body asynchronously.
 > 
 ---
 
-### Exercise 2: Standard Fetch Wrapper Template
+### Exercise 2: Fetch Middleware & Interceptor Pipeline
 
-**Problem:** Write reusable `postJSON(url, data)` async function executing HTTP POST request with JSON headers and status validation.
+**Scenario:** An API SDK implements request/response interceptor pipelines around native `fetch()` to inject authorization tokens dynamically.
 
-**Expected output:**
+**Requirements:**
+1. Write createFetchClient(requestInterceptor).
+2. Execute requestInterceptor before calling fetch.
+3. Return fetch response.
+
 > [!check]- Answer
-> ```text
-> async function postJSON(url, data) { const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (!res.ok) throw new Error(`HTTP ${res.status}`); return await res.json(); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> async function postJSON(url, data) {
-> const res = await fetch(url, {
-> method: 'POST',
-> headers: { 'Content-Type': 'application/json' },
-> body: JSON.stringify(data)
-> });
-> if (!res.ok) throw new Error(`HTTP ${res.status}`);
-> return await res.json();
+> function createFetchClient(requestInterceptor, mockFetch) {
+>   const fetchFn = mockFetch || globalThis.fetch;
+>
+>   return async function customFetch(url, options = {}) {
+>     const interceptedOpts = requestInterceptor ? requestInterceptor(options) : options;
+>     return await fetchFn(url, interceptedOpts);
+>   };
 > }
+>
+> // Verification tests
+> const authInterceptor = (opts) => ({
+>   ...opts,
+>   headers: { ...opts.headers, "Authorization": "Bearer secret_token" }
+> });
+>
+> const mockFetch = async (url, opts) => ({
+>   ok: true,
+>   authHeader: opts.headers["Authorization"]
+> });
+>
+> const client = createFetchClient(authInterceptor, mockFetch);
+> client("https://api.com/profile").then(res => {
+>   console.assert(res.authHeader === "Bearer secret_token", "Test 1 Failed: Token injected");
+> });
 > ```
-> - **Explanation:** Robust `fetch` wrappers handle headers, JSON stringification, status checks, and promise resolution.
+>
+> #### Technical Explanation
+>
+> 1. **Interceptor Pattern**: Wraps fetch calls to apply global concerns (Auth headers, logging, base URLs) transparently.
+> 2. **Configurability**: Allows modifying request options before network dispatch.
+> 3. **Decoupled Auth Logic**: Removes auth token fetching logic from individual UI component API calls.
+> 
 ---
 
-### Exercise 3: Fetch Request Cache Options
+### Exercise 3: 204 No Content & Empty Response Body Handler
 
-**Problem:** Which `cache` option instructs `fetch()` to bypass browser HTTP cache and force fresh network fetches?
+**Scenario:** A fetch helper safely handles `204 No Content` responses without throwing JSON parse errors.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchWith204Handler(url, mockFetch).
+2. Check response.status === 204.
+3. Skip res.json() call and return null for 204 status.
+
 > [!check]- Answer
-> ```text
-> fetch(url, { cache: 'no-store' }) (or 'no-cache')
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> fetch(url, { cache: 'no-store' });
+> async function fetchWith204Handler(url, mockFetch) {
+>   const fetchFn = mockFetch || globalThis.fetch;
+>   const response = await fetchFn(url);
+>
+>   if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+>
+>   if (response.status === 204 || response.headers.get("content-length") === "0") {
+>     return { status: 204, data: null };
+>   }
+>
+>   const data = await response.json();
+>   return { status: response.status, data };
+> }
+>
+> // Verification tests
+> const mock204 = async () => ({
+>   ok: true,
+>   status: 204,
+>   headers: new Map([["content-length", "0"]]),
+>   json: async () => { throw new SyntaxError("Unexpected end of JSON input"); }
+> });
+>
+> fetchWith204Handler("https://api.com/delete", mock204).then(res => {
+>   console.assert(res.status === 204 && res.data === null, "Test 1 Failed: Must handle 204 without JSON error");
+> });
 > ```
-> - **Explanation:** `cache: 'no-store'` disables browser HTTP caching mechanisms.
+>
+> #### Technical Explanation
+>
+> 1. **204 No Content Specification**: RFC 7231 states 204 response MUST NOT include a message-body.
+> 2. **SyntaxError on Empty JSON**: Calling response.json() on an empty body throws SyntaxError: Unexpected end of JSON input.
+> 3. **Defensive Body Guard**: Checking status === 204 avoids parsing crashes on successful deletion operations.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Promises (in the context of networks)](promises.md) — What `fetch` actually returns.
 - [The Response Object (res.json(), res.ok)](response_object.md) — The first thing `fetch` hands back to you when the network trip finishes.
 - [Request & Response Lifecycle](../level_01/request_response.md) — Related concept: Request & Response Lifecycle.
@@ -189,7 +284,7 @@ fetch('https://api.example.com/me', {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`fetch()`** is the modern standard for making HTTP requests in JavaScript.
 - It takes a URL as its first argument.
 - By default, it performs a `GET` request.

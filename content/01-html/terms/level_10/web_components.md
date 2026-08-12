@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Web Components is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Natively supported by all modern browsers. Does not require compiler tooling or external libraries like React or Vue).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern web pages are built out of reusable user interface widgets:
@@ -143,7 +139,7 @@ Building a fully functional custom `<user-profile>` element with slots and encap
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Naming a custom element without a hyphen
 
@@ -262,7 +258,7 @@ document.querySelector('.shadow-btn'); // ❌ Cannot select encapsulated Shadow 
 customElementInstance.shadowRoot.querySelector('.shadow-btn');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Element Scaffold
 
@@ -322,14 +318,14 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 >
 > **Explanation:** `attachShadow({ mode: 'open' })` creates an encapsulated Shadow DOM tree.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent document object model.
 - [`<canvas>`](canvas.md) — Programmatic visual boards.
 - [`<svg>` (Scalable Vector Graphics)](svg.md) — XML-based scalable vector assets.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Web Components allow you to create custom HTML elements natively.
 - All custom tag names must contain a hyphen (`-`) to prevent naming collisions.
 - The Shadow DOM provides isolated styling scopes, preventing CSS overrides.

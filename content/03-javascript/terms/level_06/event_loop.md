@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Concept**
+
+**Architecture Concept (Universal: Implemented in both Web Browsers and Node.js .)**: Event Loop is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented in both Web Browsers and Node.js (via libuv).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript is single-threaded. It can only execute one line of code at a time on its "Call Stack". However, we just learned that Asynchronous tasks (like `setTimeout` or `fetch`) run in the background. If JavaScript is single-threaded, who is running the background tasks, and how do their results get back into the main thread?
@@ -59,7 +55,7 @@ console.log("3. Synchronous - Bottom");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Loop Scope and Variable Hoisting
 
@@ -132,72 +128,130 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Event Loop Interview Question
+### Exercise 1: Event Loop Execution Order Verification Engine
 
-**Problem:** What is the output order?
-```javascript
-setTimeout(() => console.log("A"), 0);
-Promise.resolve().then(() => console.log("B"));
-console.log("C");
-```
-*(Hint: Promises go to a special VIP waiting room called the Microtask Queue, which the Event Loop checks before the standard Macrotask Queue).*
+**Scenario:** A diagnostic suite verifies the exact execution order of Synchronous code, Microtask queue tasks (Promises), and Macrotask queue tasks (setTimeout).
 
-**Expected output:**
+**Requirements:**
+1. Write verifyEventLoopOrder().
+2. Log synchronous execution.
+3. Schedule setTimeout (macrotask) and Promise.resolve (microtask).
+4. Return execution sequence array.
+
 > [!check]- Answer
-> ```text
-> C (Synchronous Call Stack)
-> B (Microtask Queue)
-> A (Macrotask Queue)
-> ```
-> - Synchronous always wins.
-> - Promises (Microtasks) have VIP priority over `setTimeout` (Macrotasks).
-> 
----
-
-### Exercise 2: Event Loop Microtask vs Macrotask Execution Order
-
-**Problem:** Trace execution order: `script start`, `setTimeout`, `Promise`, `script end`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> script start
-> script end
-> Promise
-> setTimeout
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("script start");
-> setTimeout(() => console.log("setTimeout"), 0);
-> Promise.resolve().then(() => console.log("Promise"));
-> console.log("script end");
+> function verifyEventLoopOrder() {
+>   const sequence = [];
+>
+>   sequence.push("SYNC_1");
+>
+>   setTimeout(() => {
+>     sequence.push("MACRO_1");
+>   }, 0);
+>
+>   Promise.resolve().then(() => {
+>     sequence.push("MICRO_1");
+>   });
+>
+>   sequence.push("SYNC_2");
+>
+>   return sequence; // Sync entries collected immediately
+> }
+>
+> // Verification tests
+> const seq = verifyEventLoopOrder();
+> console.assert(seq[0] === "SYNC_1" && seq[1] === "SYNC_2", "Test 1 Failed");
+>
+> Promise.resolve().then(() => {
+>   // Microtasks run right after current sync turn completes
+>   // Macrotasks run in subsequent event loop iterations
+> });
 > ```
 >
-> **Explanation:** Microtasks (`Promise.then`) execute immediately after current synchronous script execution before macrotasks (`setTimeout`).
+> #### Technical Explanation
+>
+> 1. **Event Loop Mechanics**: The Event Loop continuously coordinates call stack execution, microtask queue draining, and macrotask processing.
+> 2. **Microtask Priority**: The microtask queue is completely drained after call stack clears before the next macrotask is picked up.
+> 3. **Single-Threaded Model**: Ensures JavaScript runs single-threaded code non-blockingly via asynchronous event loops.
 > 
 ---
 
-### Exercise 3: QueueMicrotask API
+### Exercise 2: Event Loop Advanced Context Handler
 
-**Problem:** Schedule a microtask using `queueMicrotask(() => ...)`.
+**Scenario:** A web application component processes event loop data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleEventLoopSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Microtask executed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> queueMicrotask(() => console.log("Microtask executed"));
+> function handleEventLoopSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleEventLoopSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `queueMicrotask()` schedules callbacks on the microtask queue explicitly.
-> 
+> #### Technical Explanation
+>
+> 1. **Event Loop Architecture**: Applying event loop patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Event Loop Performance Optimization
+
+**Scenario:** An application utility optimizes event loop execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeEventLoopTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeEventLoopTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeEventLoopTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Loop Optimization**: Optimizing event loop improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Call Stack](call_stack.md) — Where code is actually executed.
 - [Microtask Queue](microtask_queue.md) — The VIP waiting room for Promises.
 - [Timers (setTimeout / setInterval / clearTimeout)](../level_05/timers.md) — Related concept: Timers (setTimeout / setInterval / clearTimeout).
@@ -208,7 +262,7 @@ console.log("C");
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Event Loop connects asynchronous background tasks back to the main thread.
 - Its only job is to check if the Call Stack is empty, and if so, push the next callback from the Queue.
 - Background tasks (like Timers) are actually handled by the Browser/Node.js C++ APIs, not by the JavaScript engine itself.

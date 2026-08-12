@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Universal Browser Support)**: `<iframe>` is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you want to display complex content on your website that you didn't build yourself. For example, you want to show an interactive Google Map with your store's location, or you want to embed a playable YouTube video. 
@@ -61,7 +57,7 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `title` attribute for accessibility
 
@@ -121,7 +117,7 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 <iframe src="/widget" title="Interactive Stock Ticker Widget"></iframe>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Porthole
 
@@ -175,13 +171,13 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 >
 > **Explanation:** Bare `sandbox` locks down embedded iframe capabilities completely.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the iframe source URL.
 - [`<img>`](img.md) — Another tag that embeds external content (images) by fetching a source URL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An `<iframe>` embeds an entirely separate webpage inside a rectangular box on your page.
 - It is commonly used for YouTube videos, Google Maps, and third-party widgets.
 - The embedded page is completely isolated; your CSS and JavaScript cannot easily interact with it.

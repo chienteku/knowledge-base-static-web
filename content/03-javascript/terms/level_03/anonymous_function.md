@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Anonymous Function is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, we write functions for reusability. Standard named function declarations, like `function calculateSum(a, b) {}`, are saved permanently in the scope namespace. However, in modern web development, we frequently need a function to perform a single, immediate, one-off task. Examples include attaching a click listener to a button, transforming items in an array using `.map()`, or scheduling a timer with `setTimeout()`. 
@@ -83,7 +79,7 @@ downloadBtn.click();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Anonymous Functions to be Hoisted
 
@@ -162,72 +158,140 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Anonymous Callback
+### Exercise 1: Inline Array Transformation Handler
 
-**Problem:** Complete the code to print `"Welcome back!"` after a 500ms delay using `setTimeout` with an anonymous function callback.
+**Scenario:** An analytics pipeline transforms user activity streams on the fly by passing inline anonymous functions into array iteration methods without declaring throwaway named functions.
 
-```javascript
-// Write setTimeout here
-```
+**Requirements:**
+1. Write transformUserEvents(events).
+2. Use .map() with an inline anonymous function to add a timestamp property.
+3. Use .filter() with an inline anonymous function to select active events.
+4. Return transformed events array.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> (500ms passes...)
-> Welcome back!
-> ```
-> - The syntax for setTimeout is `setTimeout(callbackFunction, delayMs)`.
-> - Write an anonymous arrow function `() => { ... }` as the first argument.
-> 
----
-
-### Exercise 2: Named Function Expression Recursion
-
-**Problem:** Use a named function expression `const factorial = function fact(n) { ... }` to calculate `fact(4)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 24
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const factorial = function fact(n) {
->   return n <= 1 ? 1 : n * fact(n - 1);
-> };
-> console.log(factorial(4));
+> function transformUserEvents(events) {
+>   return events
+>     .filter(function(event) {
+>       return event.status === "ACTIVE";
+>     })
+>     .map(function(event) {
+>       return {
+>         id: event.id,
+>         status: event.status,
+>         processedAt: Date.now()
+>       };
+>     });
+> }
+>
+> // Verification tests
+> const raw = [{ id: 1, status: "ACTIVE" }, { id: 2, status: "INACTIVE" }];
+> const res = transformUserEvents(raw);
+> console.assert(res.length === 1 && res[0].id === 1, "Test 1 Failed");
+> console.assert(typeof res[0].processedAt === "number", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Named function expressions bind function names (`fact`) inside their own local scope for recursive self-invocations.
+> #### Technical Explanation
+>
+> 1. **Anonymous Function Semantics**: An anonymous function is a function expression created without a specified name identifier.
+> 2. **Inline Evaluation**: Passing anonymous functions directly into higher-order methods keeps transient logic local to invocation sites.
+> 3. **Function Expression Binding**: Anonymous functions are evaluated at runtime when execution reaches their expression statement.
 > 
 ---
 
-### Exercise 3: Anonymous Callback Event Listener Removal
+### Exercise 2: Self-Executing Component Initializer (IIFE)
 
-**Problem:** Explain why `elem.removeEventListener('click', function() {})` fails to remove an inline anonymous click handler.
+**Scenario:** A frontend UI module uses an Immediately Invoked Function Expression (IIFE) to encapsulate setup variables, returning a clean public interface without leaking internal state.
 
-**Expected output:**
+**Requirements:**
+1. Create an IIFE (function() { ... })().
+2. Initialize private counter and token variables.
+3. Return public API object with accessor methods.
+
 > [!check]- Answer
-> ```text
-> Anonymous listeners cannot be un-bound
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Anonymous listeners cannot be un-bound");
+> const counterModule = (function() {
+>   let privateCount = 0;
+>
+>   return {
+>     increment() {
+>       privateCount++;
+>       return privateCount;
+>     },
+>     getCount() {
+>       return privateCount;
+>     }
+>   };
+> })();
+>
+> // Verification tests
+> console.assert(counterModule.getCount() === 0, "Test 1 Failed");
+> console.assert(counterModule.increment() === 1, "Test 2 Failed");
+> console.assert(typeof privateCount === "undefined", "Test 3 Failed: Private state leaked");
 > ```
 >
-> **Explanation:** `removeEventListener` requires the exact same function memory reference passed to `addEventListener`.
+> #### Technical Explanation
+>
+> 1. **IIFE Pattern**: Parenthesizing an anonymous function expression allows immediate invocation via trailing () parentheses.
+> 2. **Lexical Scope Encapsulation**: Variables declared inside the IIFE body are completely hidden from the outer global scope.
+> 3. **Module Pattern Foundation**: Provides private state management prior to native ES module support.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Asynchronous Task Completion Callback
+
+**Scenario:** An asynchronous job dispatcher accepts an anonymous callback function to handle task completion notifications and errors.
+
+**Requirements:**
+1. Write executeAsyncTask(payload, callback).
+2. Simulate processing task.
+3. Invoke anonymous callback with error or result.
+4. Verify callback execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function executeAsyncTask(payload, callback) {
+>   if (!payload || !payload.id) {
+>     return callback(new Error("Invalid payload"), null);
+>   }
+>   const result = { id: payload.id, status: "COMPLETED" };
+>   return callback(null, result);
+> }
+>
+> // Verification tests
+> let output = null;
+> executeAsyncTask({ id: 99 }, function(err, res) {
+>   if (!err) output = res;
+> });
+> console.assert(output !== null && output.status === "COMPLETED", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Callback Passing**: Anonymous functions can be passed as reference values into asynchronous handlers.
+> 2. **Closure Variable Access**: Anonymous callbacks capture references to their outer scope variables.
+> 3. **Anonymous Stack Trace Note**: Un-named functions display as (anonymous) in debugging call stacks.
+---
+
+## 6. Related Terms
 - [Arrow Function](arrow_function.md) — Syntactic sugar for creating short anonymous functions.
 - [IIFE](../level_09/iife.md) — Immediately Invoked Function Expressions, which are usually anonymous.
 - [Method Chaining](../level_04/method_chaining.md) — Related concept: Method Chaining.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An anonymous function is a function declared without a name identifier.
 - They are typically used as one-off callbacks passed directly as arguments to other functions (e.g. event listeners, array methods).
 - Anonymous functions are not hoisted; they cannot be invoked before the line of their declaration.

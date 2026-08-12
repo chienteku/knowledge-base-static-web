@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [`panic!` Macro](panic.md) — The panic! macro for unrecoverable errors.
+- [`panic!`](panic.md) — The panic! macro for unrecoverable errors.
 - [`Result<T, E>`](../level_02/result_t_e.md) — Recoverable Result errors vs unrecoverable panics.
 
 ---
@@ -254,7 +254,7 @@ Design critical invariants defensively without depending strictly on panic unwin
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

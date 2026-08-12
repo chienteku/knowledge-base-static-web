@@ -649,7 +649,7 @@ Implement:
 ## 6. Related Terms
 
 
-- [`panic!` Macro](panic.md) — The macro that is secretly executed when `unwrap` or `expect` encounters an error.
+- [`panic!`](panic.md) — The macro that is secretly executed when `unwrap` or `expect` encounters an error.
 - [`?` Operator](question_mark_operator.md) — The safe, preferred alternative to `unwrap`.
 - [`Option<T>`](../level_02/option_t.md) — Related concept: `Option<T>`.
 - [`Result<T, E>`](../level_02/result_t_e.md) — Related concept: `Result<T, E>`.

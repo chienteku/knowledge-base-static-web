@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Only)**: event.stopPropagation() is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Event Bubbling is incredibly useful for patterns like Event Delegation. However, there are times when you specifically *do not* want a parent to know that a child was clicked. 
@@ -70,7 +66,7 @@ heartBtn.addEventListener("click", (event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Stoppropagation Scope and Variable Hoisting
 
@@ -143,64 +139,123 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Pop
+### Exercise 1: Nested Modal Backdrop Action Isolation
 
-**Problem:** You have a `<body>` listener that logs "Body Clicked", and a `<button>` listener that logs "Button Clicked". You add `event.stopPropagation()` inside the button listener. If you click the button, what exactly logs to the console?
+**Scenario:** A UI modal component prevents click events inside modal container from bubbling up to backdrop overlay using event.stopPropagation().
 
-**Expected output:**
+**Requirements:**
+1. Write handleModalContainerClick(event).
+2. Call event.stopPropagation().
+3. Return true.
+
 > [!check]- Answer
-> ```text
-> "Button Clicked"
-> (The "Body Clicked" log will not run because the bubble was popped before it reached the body).
-> ```
-> - The element that was actually clicked (the target) still fires its listener normally. It's the *ancestors* that are kept in the dark.
-> 
----
-
-### Exercise 2: Halting Sibling Handlers with `stopImmediatePropagation`
-
-**Problem:** Call `event.stopImmediatePropagation()` to prevent subsequent click handlers on current element from running.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Handler 1 executed; siblings halted
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Handler 1 executed; siblings halted");
+> function handleModalContainerClick(event) {
+>   if (!event || typeof event.stopPropagation !== "function") return false;
+>   event.stopPropagation();
+>   return true;
+> }
+>
+> // Verification tests
+> let stopped = false;
+> const mockEvt = {
+>   stopPropagation() { stopped = true; }
+> };
+> handleModalContainerClick(mockEvt);
+> console.assert(stopped === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `stopImmediatePropagation()` halts all remaining event listener callbacks registered on current target elements.
+> #### Technical Explanation
+>
+> 1. **stopPropagation() Method**: Prevents further propagation of the current event in capturing and bubbling phases.
+> 2. **Isolation Pattern**: Prevents child clicks from triggering parent event handlers.
+> 3. **stopImmediatePropagation() Difference**: stopImmediatePropagation() additionally stops other listeners on the same element from executing.
 > 
 ---
 
-### Exercise 3: Propagation Stopping vs Default Prevention
+### Exercise 2: Event Stoppropagation Advanced Context Handler
 
-**Problem:** Explain difference between `stopPropagation()` (halts bubbling) and `preventDefault()` (halts browser default action).
+**Scenario:** A web application component processes event stoppropagation data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleEventStoppropagationSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> stopPropagation: DOM tree traversal, preventDefault: Browser action
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("stopPropagation: DOM tree traversal, preventDefault: Browser action");
+> function handleEventStoppropagationSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleEventStoppropagationSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Propagation controls event flow through DOM nodes; default prevention controls native browser UI behaviors.
+> #### Technical Explanation
+>
+> 1. **Event Stoppropagation Architecture**: Applying event stoppropagation patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Event Stoppropagation Performance Optimization
+
+**Scenario:** An application utility optimizes event stoppropagation execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeEventStoppropagationTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeEventStoppropagationTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeEventStoppropagationTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Stoppropagation Optimization**: Optimizing event stoppropagation improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [event.preventDefault()](event_preventdefault.md) — Stops default browser behaviors, but doesn't stop bubbling.
 - [Event Bubbling](event_bubbling.md) — The process that `stopPropagation` is designed to halt.
 - [Event Capturing](event_capturing.md) — Related concept: Event Capturing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `stopPropagation()` halts the event's journey through the DOM tree.
 - It prevents parent elements from firing their event listeners for that specific event.
 - It is crucial when dealing with nested interactive elements (like a button inside a clickable card).

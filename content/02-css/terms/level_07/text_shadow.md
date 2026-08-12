@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Typography / Visual Effect Property**
+
+**Typography / Visual Effect Property (Universal Browser Support)**: `text-shadow` is a fundamental concept in this technology stack. **Level 7 — Text & List Formatting**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you place white text over a photograph of a bright, sunny beach, the text becomes invisible where it hits the white clouds or bright sand. 
@@ -62,7 +58,7 @@ By setting the blur to `0`, you get a solid, sharp copy of the text.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Making the shadow too dark and sharp
 
@@ -106,7 +102,7 @@ h1 { box-shadow: 2px 2px 5px black; } /* ❌ Casts shadow around rectangular box
 h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text glyphs */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Glow Effect
 
@@ -160,12 +156,12 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 >
 > **Explanation:** Comma-separated `text-shadow` layers multiple glow shadows.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`box-shadow` (Card Shadows)](../level_09/box_shadow.md) — The exact same concept, but applied to the entire Box Model container instead of just the text inside it!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `text-shadow` takes 4 values: X-Offset, Y-Offset, Blur, Color.
 - Positive X/Y values move the shadow Right and Down.
 - It is crucial for making white text readable over varied background images.

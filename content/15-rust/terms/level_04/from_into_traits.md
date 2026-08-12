@@ -630,7 +630,7 @@ thread::spawn(move || {
 - [Custom Error Types](custom_error_types.md) — Related concept: Custom Error Types.
 - [`FromStr` Trait & `.parse()`](fromstr_parse.md) — Related concept: `FromStr` Trait & `.parse()`.
 - [`TryFrom` / `TryInto`](../level_14/try_from_try_into.md) — Related concept: `TryFrom` / `TryInto`.
-- [From For Constructor Overloading](../level_18/from_for_constructor_overloading.md) — Related concept: From For Constructor Overloading.
+- [`From` for Constructor Overloading](../level_18/from_for_constructor_overloading.md) — Related concept: From For Constructor Overloading.
 
 ---
 

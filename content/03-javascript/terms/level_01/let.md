@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: let is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before ES6 (ECMAScript 2015), JavaScript only had `var` for declaring variables. `var` had confusing scoping rules (it was function-scoped, not block-scoped) and allowed developers to accidentally redeclare the same variable multiple times without throwing an error. This led to unpredictable bugs, especially in loops and complex logic blocks. 
@@ -59,7 +55,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Redeclaring in the same scope
 
@@ -134,69 +130,104 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Block Scope Behavior
+### Exercise 1: Shopping Cart Reassignable Discount Accumulator
 
-**Problem:** Declare a variable `x` outside an `if` block and a different variable `y` inside the `if` block using `let`. Try to log both outside the block and observe what happens.
+**Scenario:** An e-commerce checkout calculation applies step-by-step promo codes, updating a running total variable that requires reassignment across conditional blocks using let.
 
-**Expected output:**
+**Requirements:**
+1. Declare a running total using let.
+2. Reassign the total as discounts and taxes are applied.
+3. Return the final calculated total.
+
 > [!check]- Answer
-> ```text
-> (An error should occur when accessing y)
-> ```
-> - Variables declared with `let` inside `{ }` cannot be seen outside.
-> - Use a `try...catch` block if you want to cleanly catch the error, or just let it crash the script to see the `ReferenceError`.
-> 
----
-
-### Exercise 2: Let Block Scoping in Loops
-
-**Problem:** Demonstrate that `let` inside a `for (let i = 0; ...)` loop creates a fresh binding per iteration.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 0
-> 1
-> 2
-> ```
+> #### Implementation
 > ```javascript
-> const funcs = [];
-> for (let i = 0; i < 3; i++) {
->   funcs.push(() => i);
+> function calculateCartTotal(initialSubtotal, couponCode) {
+>   let total = initialSubtotal;
+> if (couponCode === "SAVE10") {
+>     total -= 10;
+>   } else if (couponCode === "HALF") {
+>     total /= 2;
+>   }
+> total *= 1.08;
+> return Number(total.toFixed(2));
 > }
-> funcs.forEach(f => console.log(f()));
+> // Verification tests
+> console.assert(calculateCartTotal(100, "SAVE10") === 97.20, "Test 1 Failed");
+> console.assert(calculateCartTotal(100, "HALF") === 54.00, "Test 2 Failed");
 > ```
->
-> **Explanation:** `for (let ...)` creates a new lexical scope binding for `i` in each loop iteration.
+> #### Technical Explanation
+> 1. **Variable Reassignment**: Variables declared with let permit value reassignment (total = ...), unlike const.
+> 2. **Block Scoping**: let bindings are scoped to the nearest enclosing block {}, avoiding variable leaks to outer scopes.
+> 3. **Explicit Intent**: Using let explicitly communicates to developers that a variable's value will change over its lifecycle.
 > 
 ---
 
-### Exercise 3: Temporal Dead Zone with `let`
+### Exercise 2: Async Loop Index Scope Isolation
 
-**Problem:** Catch the `ReferenceError` when accessing `let age` before its declaration line inside a function.
+**Scenario:** A batch notification processor dispatches asynchronous tasks inside a loop. Using let creates an isolated lexical scope for each iteration, avoiding closure bugs.
 
-**Expected output:**
+**Requirements:**
+1. Iterate over a list of items using a for loop with let i = 0.
+2. Schedule asynchronous tasks referencing i.
+3. Verify that each callback captures its corresponding iteration index.
+
 > [!check]- Answer
-> ```text
-> ReferenceError: Cannot access 'age' before initialization
-> ```
+> #### Implementation
 > ```javascript
+> function processBatchIndices(count) {
+>   const capturedIndices = [];
+> for (let i = 0; i < count; i++) {
+>     capturedIndices.push(() => i);
+>   }
+> return capturedIndices.map(fn => fn());
+> }
+> // Verification tests
+> const indices = processBatchIndices(3);
+> console.assert(indices.join(",") === "0,1,2", "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Per-Iteration Scope**: In for (let i = 0; ...) loops, JavaScript creates a new i variable binding for every loop iteration.
+> 2. **Closure Capture**: Functions created inside the loop capture the unique per-iteration let binding rather than a single shared variable.
+> 3. **Contrast with var**: Unlike var (which shares one function-scoped variable across all iterations), let prevents async loop index bugs automatically.
+> 
+---
+
+### Exercise 3: Temporal Dead Zone (TDZ) Inspection
+
+**Scenario:** A developer refactors code to ensure let variables are not accessed before their declaration line, avoiding Temporal Dead Zone errors.
+
+**Requirements:**
+1. Demonstrate that accessing a let variable before declaration throws a ReferenceError.
+2. Catch the TDZ exception safely.
+3. Declare and initialize the variable properly.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function testTdzBehavior() {
+>   let tdzTriggered = false;
 > try {
->   console.log(age);
->   let age = 25;
-> } catch (err) {
->   console.log(err.name + ": " + err.message);
+>     // @ts-ignore
+>     console.log(value);
+>     let value = 100;
+>   } catch (err) {
+>     tdzTriggered = err instanceof ReferenceError;
+>   }
+> return tdzTriggered;
 > }
+> // Verification tests
+> console.assert(testTdzBehavior() === true, "Test 1 Failed: Accessing let in TDZ must throw ReferenceError");
 > ```
->
-> **Explanation:** `let` variables are hoisted but uninitialized, remaining inaccessible in the Temporal Dead Zone (TDZ) prior to declaration.
-> 
-> 
+> #### Technical Explanation
+> 1. **Temporal Dead Zone (TDZ)**: The period between scope entry and a let variable's actual declaration line is the TDZ.
+> 2. **Reference Error**: Accessing a let variable while in the TDZ throws a runtime ReferenceError.
+> 3. **Hoisting Behavior**: let variables are hoisted to top of block scope, but remain uninitialized until execution reaches the declaration statement.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Variable](variable.md) — A named container for storing data values.
 - [const](const.md) — A block-scoped variable that cannot be reassigned.
 - [Assignment Operators](assignment_operators.md) — Related concept: Assignment Operators.
@@ -205,7 +236,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `let` when you know a variable's value will change (e.g., counters in loops, state updates).
 - `let` is block-scoped, meaning it only exists within the nearest set of curly braces `{}`.
 - You can reassign a `let` variable, but you cannot redeclare it in the same scope.

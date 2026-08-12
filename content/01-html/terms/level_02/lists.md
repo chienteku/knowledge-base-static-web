@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<ul>`, `<ol>`, and `<li>` (Lists) is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Presenting items in a structured list is one of the most common ways to format information. Instead of relying on developers to manually type `1.`, `2.`, `3.` or insert bullet characters (`•`) inside paragraph tags, HTML provides dedicated list elements.
@@ -77,7 +73,7 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting content directly inside `<ul>` or `<ol>`
 
@@ -243,7 +239,7 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 </ul>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Nested Lists Syntax
 
@@ -304,13 +300,13 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 >
 > **Explanation:** `reversed` attribute counts ordered lists backwards.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing lists.
 - [`<nav>`](../level_06/nav.md) — Unordered lists are very commonly used inside `<nav>` elements to build website navigation menus.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `<ul>` for bulleted lists (order doesn't matter).
 - Use `<ol>` for numbered lists (order matters).
 - The *only* elements allowed directly inside `<ul>` or `<ol>` are `<li>` (List Item) elements.

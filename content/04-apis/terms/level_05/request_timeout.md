@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Universal: Applicable to browser scripting and Node.js backend request architectures.)**: Request Timeout is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applicable to browser scripting and Node.js backend request architectures.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, the browser `fetch()` API does not have a built-in timeout limit. If a server experiences extreme load, or a network router silently drops packets, your request can hang indefinitely. 
@@ -85,7 +81,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to clear the `setTimeout` timer on success
 
@@ -136,71 +132,159 @@ const data = await fetch('https://unstable-api.com/data', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Timeout Racer
+### Exercise 1: Promise.race Request Timeout Guard
 
-**Problem:** Complete the logic for a custom Promise wrapper that rejects if the target network promise takes longer than `2000ms` using `Promise.race()`:
+**Scenario:** An API client wraps fetch requests with a timeout race timer to abort requests that hang longer than expected.
 
-```javascript
-function timeoutRace(networkPromise, timeoutMs = 2000) {
-  const timeoutPromise = new Promise((_, reject) => {
-    setTimeout(() => reject(new Error("Timeout reached")), timeoutMs);
-  });
-  
-  return Promise.race([networkPromise, timeoutPromise]);
-}
-```
-
----
+**Requirements:**
+1. Write fetchWithRaceTimeout(url, timeoutMs, mockFetch).
+2. Race fetch against setTimeout rejection promise.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function fetchWithRaceTimeout(url, timeoutMs = 2000, mockFetch) {
+>   const fetchFn = mockFetch || globalThis.fetch;
+>
+>   let timeoutId;
+>   const timeoutPromise = new Promise((_, reject) => {
+>     timeoutId = setTimeout(() => {
+>       const err = new Error(`Request timed out after ${timeoutMs}ms`);
+>       err.name = "TimeoutError";
+>       reject(err);
+>     }, timeoutMs);
+>   });
+>
+>   return Promise.race([
+>     fetchFn(url).then(res => {
+>       clearTimeout(timeoutId);
+>       return res;
+>     }),
+>     timeoutPromise
+>   ]);
+> }
+>
+> // Verification tests
+> const slowFetch = (url) => new Promise(res => setTimeout(() => res({ ok: true }), 100));
+>
+> fetchWithRaceTimeout("https://api.com/slow", 20, slowFetch).catch(err => {
+>   console.assert(err.name === "TimeoutError", "Test 1 Failed: Must reject with TimeoutError");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Promise.race Mechanics**: Promise.race resolves or rejects as soon as ANY of the input promises settles.
+> 2. **Hanging Request Defense**: Prevents network requests from blocking client execution indefinitely.
+> 3. **Timer Cleanup Mandatory**: Always clear setTimeout timers when request finishes to avoid memory leaks.
 > 
 ---
 
-### Exercise 2: Promise.race Timeout Pattern
+### Exercise 2: Adaptive Network Timeout Estimator
 
-**Problem:** Write a `fetchWithTimeout(url, ms)` helper using `Promise.race()` and `setTimeout()`.
+**Scenario:** Calculates optimal HTTP request timeout duration dynamically based on rolling average RTT (Round Trip Time).
 
-**Expected output:**
+**Requirements:**
+1. Write calculateAdaptiveTimeout(rttHistoryMs, safetyMultiplier).
+2. Compute average RTT.
+3. Apply safety multiplier (e.g. 2x) with min/max caps.
+
 > [!check]- Answer
-> ```text
-> function fetchWithTimeout(url, ms) { const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), ms)); return Promise.race([fetch(url), timeout]); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function fetchWithTimeout(url, ms) {
-> const timeout = new Promise((_, reject) =>
-> setTimeout(() => reject(new Error('Request timed out')), ms)
-> );
-> return Promise.race([fetch(url), timeout]);
+> function calculateAdaptiveTimeout(rttHistoryMs = [], safetyMultiplier = 2.5, minMs = 1000, maxMs = 10000) {
+>   if (!Array.isArray(rttHistoryMs) || rttHistoryMs.length === 0) {
+>     return 3000; // Default fallback timeout
+>   }
+>
+>   const sum = rttHistoryMs.reduce((a, b) => a + b, 0);
+>   const avgRtt = sum / rttHistoryMs.length;
+>   const estimatedMs = Math.round(avgRtt * safetyMultiplier);
+>
+>   if (estimatedMs < minMs) return minMs;
+>   if (estimatedMs > maxMs) return maxMs;
+>
+>   return estimatedMs;
 > }
+>
+> // Verification tests
+> console.assert(calculateAdaptiveTimeout([100, 200, 150], 2) === 600, "Test 1 Failed: (150 avg * 2 = 300 -> min 1000 cap applied)");
+> console.assert(calculateAdaptiveTimeout([1000, 2000], 2) === 3000, "Test 2 Failed: 1500 avg * 2 = 3000ms");
 > ```
-> - **Explanation:** `Promise.race` settles as soon as either the fetch or timeout promise completes.
+>
+> #### Technical Explanation
+>
+> 1. **Adaptive Timeout Strategy**: Adjusts timeout thresholds dynamically based on current network conditions (mobile vs fiber).
+> 2. **RTT Moving Average**: Uses recent latency measurements to estimate realistic response times.
+> 3. **Min/Max Timeout Bounds**: Prevents timeouts from becoming too aggressive (causing false timeouts) or too loose.
+> 
 ---
 
-### Exercise 3: 504 Gateway Timeout Cause
+### Exercise 3: Socket Cleanup on Timeout Abort
 
-**Problem:** What causes an HTTP `504 Gateway Timeout` status code?
+**Scenario:** Integrates AbortController with request timeout to ensure underlying TCP socket connection is closed when timeout fires.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchWithAbortTimeout(url, timeoutMs, mockFetch).
+2. Trigger controller.abort() inside timeout callback.
+
 > [!check]- Answer
-> ```text
-> An upstream server (like an API gateway, load balancer, or proxy) did not receive a timely response from an internal microservice.
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchWithAbortTimeout(url, timeoutMs = 2000, mockFetch) {
+>   const controller = new AbortController();
+>   const timer = setTimeout(() => controller.abort(), timeoutMs);
+>   const fetchFn = mockFetch || globalThis.fetch;
+>
+>   try {
+>     const res = await fetchFn(url, { signal: controller.signal });
+>     clearTimeout(timer);
+>     return res;
+>   } catch (err) {
+>     clearTimeout(timer);
+>     if (err.name === "AbortError") {
+>       throw new Error(`HTTP Request aborted due to ${timeoutMs}ms timeout`);
+>     }
+>     throw err;
+>   }
+> }
+>
+> // Verification tests
+> const hangingFetch = (url, opts) => new Promise((_, rej) => {
+>   opts.signal.addEventListener("abort", () => {
+>     const e = new Error("Aborted");
+>     e.name = "AbortError";
+>     rej(e);
+>   });
+> });
+>
+> fetchWithAbortTimeout("https://api.com/hang", 30, hangingFetch).catch(err => {
+>   console.assert(err.message.includes("aborted due to 30ms timeout"), "Test 1 Failed");
+> });
 > ```
-> ```text
-> An upstream server (like an API gateway, load balancer, or proxy) did not receive a timely response from an internal microservice.
-> ```
-> - **Explanation:** 504 signals gateway or proxy timeout waiting on backend processing.
+>
+> #### Technical Explanation
+>
+> 1. **Socket Connection Closure**: Aborting signal closes active TCP/TLS connection sockets server-to-server.
+> 2. **Resource Reclamation**: Frees client browser memory and socket pool slots immediately.
+> 3. **Native Fetch Standard**: Standard modern pattern for implementing timeout guards in JavaScript.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [AbortController / Cancellation](abortcontroller.md) — The browser API used to terminate active requests.
 - [Retry & Exponential Backoff](retry_backoff.md) — The recovery patterns triggered after a request timeout occurs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Browser `fetch` requests can hang indefinitely if not configured with a timeout.
 - Request Timeout enforces a maximum wait limit to keep the user interface responsive.
 - Implement fetch timeouts using the `AbortController` API and a `setTimeout` handler.

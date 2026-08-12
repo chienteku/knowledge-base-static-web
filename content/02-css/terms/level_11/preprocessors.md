@@ -7,21 +7,17 @@
 
 ## 1. Prerequisites
 - [`var()` (CSS Custom Properties)](var.md) — Dynamic browser variables.
-- [`@import` Rule](import.md) — Bundling modular styles.
+- [`@import`](import.md) — Bundling modular styles.
 
 ---
 
 ## 2. Term Category
-- **CSS Architecture / Build Tool**
+
+**CSS Architecture / Build Tool (Universal Developer Standard .)**: CSS Preprocessors (Sass & SCSS) is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Developer Standard** (Pre-compiled. Browser engines cannot parse preprocessor syntaxes directly; SCSS code must run through a compiler like Dart Sass before production deployment).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Plain CSS is not a programming language; it is a stylesheet sheet. This means it lacks basic programming tools:
@@ -115,7 +111,7 @@ $primary-color: #ff007f;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deep nesting selectors ("The Inception Rule")
 
@@ -177,7 +173,7 @@ $primary-color: #ff007f;
 :root { --brand-color: #005fcc; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: SCSS BEM Nesting
 
@@ -252,13 +248,13 @@ $primary-color: #ff007f;
 >
 > **Explanation:** Modern CSS specifications natively adopt core preprocessor capabilities.
 > 
-## 7. Related Terms
-- [`@import` Rule](import.md) — Bundling modular styles.
+## 6. Related Terms
+- [`@import`](import.md) — Bundling modular styles.
 - [CSS Methodologies (BEM, OOCSS, SMACSS)](methodologies.md) — Component naming schemes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSS preprocessors extend CSS with nesting, variables, and mixins.
 - SCSS is a strict superset of CSS (standard CSS is valid SCSS).
 - Preprocessor code must compile into standard CSS before loading in browsers.

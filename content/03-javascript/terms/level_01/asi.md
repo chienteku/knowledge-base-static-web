@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Automatic Semicolon Insertion (ASI) is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In programming, computer languages need a delimiter to know where one statement ends and the next begins. In JavaScript, the standard statement delimiter is the semicolon (`;`). 
@@ -73,7 +69,7 @@ console.log(getCorrectUser()); // { userName: 'Brendan' }
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Starting lines with Brackets `[` or Parentheses `(`
 
@@ -154,80 +150,103 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Locate the Semicolons
+### Exercise 1: Safe Multi-Line Return Statement Refactoring
 
-**Problem:** For the following code block, determine where the parser will automatically insert semicolons (ASI).
+**Scenario:** An HTTP API authentication middleware contains a multi-line return statement. A developer accidentally placed the returned object literal on a new line below the return keyword, causing Automatic Semicolon Insertion (ASI) to return undefined silently.
 
-```javascript
-let x = 5
-let y = x
-(x + y).toString()
-```
+**Requirements:**
+1. Identify the ASI hazard in a multi-line return statement.
+2. Refactor the code using parenthetical wrapping return (...) to prevent ASI from inserting a semicolon immediately after return.
+3. Verify that the function correctly returns the structured authentication token object.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The parser does NOT insert a semicolon after 'let y = x'. 
-> It attempts to evaluate the code as: let y = x(x + y).toString(); 
-> resulting in a TypeError because x is not a function.
-> ```
-> - The parser will see `let x = 5` and insert a semicolon because the next line `let` starts a new declaration statement.
-> - The parser will look at `let y = x` and the next line starting with `(`. Since parentheses denote function invocation, it attempts to execute `x(...)` rather than inserting a semicolon.
-> 
----
-
-### Exercise 2: Fixing Broken Return ASI Bug
-
-**Problem:** Fix the function `createConfig` so it correctly returns an object `{ status: 200 }` instead of returning `undefined` due to ASI.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { status: 200 }
-> ```
+> #### Implementation
 > ```javascript
-> function createConfig() {
->   return {
->     status: 200
->   };
+> function createAuthResponse(user, token) {
+>   return (
+>     {
+>       status: 200,
+>       user: user,
+>       token: token
+>     }
+>   );
 > }
-> console.log(createConfig());
+> // Verification tests
+> const response = createAuthResponse("alice", "jwt-xyz-123");
+> console.assert(response !== undefined, "Test 1 Failed: Returned undefined due to ASI");
+> console.assert(response.status === 200 && response.user === "alice", "Test 2 Failed");
 > ```
->
-> **Explanation:** Placing the opening brace `{` on the same line as `return` prevents ASI from inserting a semicolon after `return`.
+> #### Technical Explanation
+> 1. **Restricted Productions**: In ECMAScript, return, throw, break, and continue are restricted statements. If a line break occurs immediately after the keyword, ASI forcibly inserts a semicolon.
+> 2. **Line Continuation Recognition**: Opening parentheses ( on the same line as return signal an un-terminated expression, blocking ASI until the closing parenthesis is encountered.
+> 3. **Defensive Formatting**: Placing opening tokens on the same line as control flow keywords is the primary defense against unexpected ASI insertion bugs.
 > 
 ---
 
-### Exercise 3: IIFE Paren Syntax ASI Pitfall
+### Exercise 2: IIFE Invocation Defensive Semicolon Guard
 
-**Problem:** Explain why `const a = 1\n(function() {})()` causes a TypeError without semicolons.
+**Scenario:** A legacy build pipeline concatenates multiple JavaScript files into a single bundle. If a preceding file ends without a trailing semicolon, the next file starting with an Immediately Invoked Function Expression (IIFE) (function() {})() throws a runtime TypeError.
 
-**Expected output:**
+**Requirements:**
+1. Create a defensive IIFE pattern starting with a prefix semicolon ;(function() { ... })().
+2. Demonstrate that the prefix semicolon prevents the parser from interpreting the IIFE as a function call on the preceding expression.
+3. Return an initialized module registry object.
+
 > [!check]- Answer
-> ```text
-> TypeError: 1 is not a function
-> ```
+> #### Implementation
 > ```javascript
-> // Without semicolon, JS parses this as const a = 1(function() {})()
-> const a = 1;
-> (function() {
->   console.log("Safe IIFE");
-> })();
+> const previousModule = { name: "analytics" }
+> ;(function(global) {
+>   global.myLibrary = { version: "1.0.0" };
+> })(typeof globalThis !== "undefined" ? globalThis : this);
+> // Verification tests
+> console.assert(globalThis.myLibrary.version === "1.0.0", "Test 1 Failed");
 > ```
->
-> **Explanation:** Statements beginning with parentheses `(` try to call the preceding expression as a function unless separated by semicolons.
+> #### Technical Explanation
+> 1. **Call Expression Ambiguity**: Without a preceding semicolon, a line starting with ( is parsed as arguments calling the preceding expression (e.g. previousModule(...)), causing runtime errors.
+> 2. **Defensive Semicolon Pattern**: A leading semicolon ; explicitly terminates any un-terminated prior statement before the opening parenthesis of an IIFE.
+> 3. **Bundler & Minifier Safety**: Prefixing IIFEs with a defensive semicolon guarantees concatenation safety across third-party scripts.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Array Destructuring Line Break Disambiguation
+
+**Scenario:** A state reducer function attempts to destructure an array on a new line immediately following a variable assignment statement without a terminating semicolon.
+
+**Requirements:**
+1. Identify how ASI fails when a new line starts with an opening bracket [.
+2. Insert explicit semicolons to disambiguate statement boundaries before array destructuring.
+3. Successfully swap or extract state values.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function updateState(initialA, initialB) {
+>   let a = initialA;
+>   let b = initialB;
+> a = a + 1;
+>   [a, b] = [b, a];
+> return { a, b };
+> }
+> // Verification tests
+> const updated = updateState(1, 10);
+> console.assert(updated.a === 10 && updated.b === 2, "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Bracket Access Ambiguity**: Lines beginning with [ are interpreted by JS as member bracket access (e.g. target[index]) on the preceding expression if no semicolon intervenes.
+> 2. **ASI Off-Limit Tokens**: ASI will not insert an automatic semicolon if the next line begins with (, [, +, -, or /.
+> 3. **Explicit Statement Boundaries**: Relying on explicit semicolons before bracketed or parenthesized statements eliminates parser ambiguity.
+---
+
+## 6. Related Terms
 - [Statement](statement.md) — The individual actions separated by delimiters.
 - [Comments](comments.md) — Text ignored by the engine, which does not affect ASI.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Automatic Semicolon Insertion (ASI) is a parser feature that automatically inserts missing semicolons to separate statements.
 - ASI can insert semicolons in unwanted places, most notably immediately following the `return`, `throw`, `break`, or `continue` keywords if a line break is present.
 - Semicolons are not inserted if the next line begins with symbols that can continue a statement (such as `+`, `[`, `(`, `.`).

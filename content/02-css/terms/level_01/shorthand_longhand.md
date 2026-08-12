@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Syntax / Concept**
+
+**CSS Syntax / Concept (Universal Browser Support .)**: Shorthand vs Longhand Properties is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively. Browsers automatically compile shorthands by breaking them down into their individual longhand components before rendering).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To style elements on a webpage, you often need to define multiple related styles. For instance, setting margins around a container box:
@@ -134,7 +130,7 @@ Comparing layout styles:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The Shorthand Reset Trap
 
@@ -206,7 +202,7 @@ padding: 10px 20px 30px 40px;
 padding: 10px 20px 30px 40px;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Shorthand Conversion
 
@@ -264,7 +260,7 @@ padding: 10px 20px 30px 40px;
 >
 > **Explanation:** `border` shorthand combines width, style, and color.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The wrapper syntax.
 - [Margin](../level_02/margin.md) — The outer spacing box utilizing shorthand properties.
 - [Padding](../level_02/padding.md) — The inner spacing box utilizing shorthand properties.
@@ -274,7 +270,7 @@ padding: 10px 20px 30px 40px;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Shorthand properties combine multiple related properties into a single declaration.
 - Longhand properties target a single style value.
 - Box properties (margin, padding, border) map values clockwise (TRBL: Top, Right, Bottom, Left).

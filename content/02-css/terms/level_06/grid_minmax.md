@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Function**
+
+**CSS Function (Universal Modern Standard .)**: `minmax()` Function is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Evaluates upper and lower sizing boundaries during container scale phases).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When designing web layouts, columns must adapt to various screens. 
@@ -116,7 +112,7 @@ Setting a constraint on a sidebar:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing `1fr` as the minimum size parameter
 
@@ -240,7 +236,7 @@ grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Min: 200px, Max: 1fr */
 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Flexible Constraints
 
@@ -299,7 +295,7 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 >
 > **Explanation:** `min-content` clamps column width to minimum content requirements.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — The responsive counts keywords often paired with `minmax()`.
 - [`fr` Unit (Fractional Unit)](fr_unit.md) — Related concept: `fr` Unit (Fractional Unit).
@@ -307,7 +303,7 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `minmax()` defines a bounding scale range (min-size and max-size) for grid tracks.
 - The browser guarantees the track never shrinks below the minimum and never exceeds the maximum.
 - Pair `repeat(auto-fit, minmax(size, 1fr))` to create fluid, media-query-free responsive column wraps.

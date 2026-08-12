@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Principle**
+
+**API Architecture / Principle (Universal Standard .)**: Statelessness is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Essential for backend scalability).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the 1990s, servers were "Stateful". If you logged in, the server created a session in its memory: "User Bob is logged in." When you clicked the next page, the server checked its memory, remembered Bob, and loaded the page.
@@ -41,7 +37,7 @@ Because the API backend is stateless, the burden of "remembering" falls entirely
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use Server-Side Sessions in a distributed API
 
@@ -178,120 +174,149 @@ POST /api/checkout/step2 HTTP/1.1
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Stateful or Stateless?
+### Exercise 1: Stateless Bearer Token Authorization Handler
 
-**Problem:** The user clicks "Add to Cart". The server saves the cart item to a database table called `ShoppingCarts` linked to the user's ID. Is this a violation of statelessness?
+**Scenario:** A stateless microservice authenticates incoming HTTP requests using self-contained Bearer tokens without server session lookups.
 
-**Expected output:**
+**Requirements:**
+1. Write processStatelessAuth(req, tokenVerifier).
+2. Extract Bearer token.
+3. Verify token self-contained claims.
+4. Return user context.
+
 > [!check]- Answer
-> ```text
-> No! 
-> Statelessness means the server doesn't remember the *connection context* or *session state* in its RAM. Saving business data (like a shopping cart) to a permanent Database is perfectly fine and required. The "State" in stateless refers to the session, not the database.
+>
+> #### Implementation
+>
+> ```javascript
+> function processStatelessAuth(request, tokenVerifier) {
+>   const authHeader = request?.headers?.["authorization"] || request?.headers?.["Authorization"];
+>   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+>     return { authenticated: false, status: 401, error: "Missing Bearer Token" };
+>   }
+>
+>   const token = authHeader.substring(7);
+>   try {
+>     const claims = tokenVerifier(token);
+>     return {
+>       authenticated: true,
+>       status: 200,
+>       user: { id: claims.sub, role: claims.role }
+>     };
+>   } catch (err) {
+>     return { authenticated: false, status: 401, error: "Invalid Token" };
+>   }
+> }
+>
+> // Verification tests
+> const mockVerifier = (t) => {
+>   if (t === "valid-token") return { sub: "usr-1", role: "admin" };
+>   throw new Error("Bad token");
+> };
+>
+> const req1 = { headers: { "Authorization": "Bearer valid-token" } };
+> const res1 = processStatelessAuth(req1, mockVerifier);
+> console.assert(res1.authenticated === true && res1.user.id === "usr-1", "Test 1 Failed");
+>
+> const req2 = { headers: { "Authorization": "Bearer bad-token" } };
+> console.assert(processStatelessAuth(req2, mockVerifier).status === 401, "Test 2 Failed");
 > ```
-> - Does the server know who the user is without a token? No.
-> - Is it okay for databases to store data? Yes!
+>
+> #### Technical Explanation
+>
+> 1. **Statelessness Core Rule**: The server stores no client context between requests; every request carries all credentials needed.
+> 2. **Self-Contained Tokens (JWT)**: JWTs encode user identity and claims directly in the token, eliminating database session lookups.
+> 3. **Horizontal Scalability**: Any server instance in a cluster can process any request independently.
 > 
 ---
 
-### Exercise 2: Statelessness Definition & Benefits
+### Exercise 2: Stateless Server Horizontal Load Balancer Router
 
-**Problem:** State the primary requirement of REST Statelessness and its core architectural benefit.
+**Scenario:** Simulates a stateless API cluster behind a Round-Robin load balancer where requests are dispatched to any server node randomly.
 
-**Expected output:**
+**Requirements:**
+1. Write dispatchStatelessCluster(request, serverNodes).
+2. Select server node.
+3. Verify node processes request without prior session state.
+
 > [!check]- Answer
-> ```text
-> Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
-> Benefit: Horizontal scalability (any server instance can handle any incoming request).
+>
+> #### Implementation
+>
+> ```javascript
+> function dispatchStatelessCluster(request, serverNodes) {
+>   if (!Array.isArray(serverNodes) || serverNodes.length === 0) {
+>     throw new Error("No server nodes available");
+>   }
+>
+>   // Random node selection demonstrates session-independent stateless execution
+>   const nodeIndex = Math.floor(Math.random() * serverNodes.length);
+>   const targetNode = serverNodes[nodeIndex];
+>
+>   return targetNode.handleRequest(request);
+> }
+>
+> // Verification tests
+> const nodes = [
+>   { id: "node-1", handleRequest: (req) => ({ node: "node-1", status: 200 }) },
+>   { id: "node-2", handleRequest: (req) => ({ node: "node-2", status: 200 }) }
+> ];
+>
+> const res = dispatchStatelessCluster({ path: "/data" }, nodes);
+> console.assert(res.status === 200, "Test 1 Failed");
+> console.assert(["node-1", "node-2"].includes(res.node), "Test 2 Failed");
 > ```
-> ```text
-> Requirement: Every HTTP request must be self-contained.
-> Benefit: Horizontal scalability and simplified server recovery.
-> ```
-> - **Explanation:** Stateless servers can scale horizontally behind load balancers with zero session sync overhead.
+>
+> #### Technical Explanation
+>
+> 1. **No Sticky Sessions Needed**: Stateless servers eliminate the need for load balancer sticky session routing.
+> 2. **Fault Tolerance**: If a server node crashes, requests seamlessly route to healthy nodes without session loss.
+> 3. **Cost Efficiency**: Simplifies infrastructure and lowers memory overhead on application servers.
+> 
 ---
 
-### Exercise 3: Where Does Session State Live?
+### Exercise 3: Session State Migration to Client-Side State Payload
 
-**Problem:** In a stateless REST architecture, where should session state (e.g. current user ID, permissions) reside?
+**Scenario:** Refactors a legacy stateful server session counter into a client-sent request payload parameter.
 
-**Expected output:**
+**Requirements:**
+1. Write processClientState(payload).
+2. Client sends current state in request.
+3. Server increments state and returns new state.
+
 > [!check]- Answer
-> ```text
-> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
+>
+> #### Implementation
+>
+> ```javascript
+> function processClientState(clientPayload) {
+>   const currentCount = Number(clientPayload?.stepCount || 0);
+>   const nextCount = currentCount + 1;
+>
+>   return {
+>     stepCount: nextCount,
+>     message: `Processed step ${nextCount}`
+>   };
+> }
+>
+> // Verification tests
+> const step1 = processClientState({ stepCount: 0 });
+> console.assert(step1.stepCount === 1, "Test 1 Failed");
+>
+> const step2 = processClientState({ stepCount: step1.stepCount });
+> console.assert(step2.stepCount === 2, "Test 2 Failed");
 > ```
-> ```text
-> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-> ```
-> - **Explanation:** The client maintains state and transmits it with every API call.
+>
+> #### Technical Explanation
+>
+> 1. **Client-Side State Storage**: Clients maintain workflow progress and send state in request payloads.
+> 2. **Server Memory Relief**: Frees server RAM from storing millions of active user session objects.
+> 3. **Stateless REST Alignment**: Fulfills Fielding's REST constraint: Application State resides on the client.
 ---
 
-### Exercise 4: Statelessness Definition & Benefits
-
-**Problem:** State the primary requirement of REST Statelessness and its core architectural benefit.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
-> Benefit: Horizontal scalability (any server instance can handle any incoming request).
-> ```
-> ```text
-> Requirement: Every HTTP request must be self-contained.
-> Benefit: Horizontal scalability and simplified server recovery.
-> ```
-> - **Explanation:** Stateless servers can scale horizontally behind load balancers with zero session sync overhead.
----
-
-### Exercise 5: Where Does Session State Live?
-
-**Problem:** In a stateless REST architecture, where should session state (e.g. current user ID, permissions) reside?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-> ```
-> ```text
-> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-> ```
-> - **Explanation:** The client maintains state and transmits it with every API call.
----
-
-### Exercise 6: Statelessness Definition & Benefits
-
-**Problem:** State the primary requirement of REST Statelessness and its core architectural benefit.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
-> Benefit: Horizontal scalability (any server instance can handle any incoming request).
-> ```
-> ```text
-> Requirement: Every HTTP request must be self-contained.
-> Benefit: Horizontal scalability and simplified server recovery.
-> ```
-> - **Explanation:** Stateless servers can scale horizontally behind load balancers with zero session sync overhead.
----
-
-### Exercise 7: Where Does Session State Live?
-
-**Problem:** In a stateless REST architecture, where should session state (e.g. current user ID, permissions) reside?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-> ```
-> ```text
-> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-> ```
-> - **Explanation:** The client maintains state and transmits it with every API call.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [JWT (JSON Web Tokens)](../level_04/jwt.md) — The "movie ticket" used to make Stateless APIs possible.
 - [localStorage & sessionStorage](../level_09/web_storage.md) — The mechanism commonly used to store session tokens in the browser.
 - [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — Related concept: Idempotent vs Safe Methods.
@@ -300,7 +325,7 @@ POST /api/checkout/step2 HTTP/1.1
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Statelessness** means the Server does not store any information about the Client's session in memory.
 - Every single HTTP request must be completely self-contained (including authentication tokens and all necessary data).
 - Statelessness allows companies to infinitely scale their backends across thousands of servers without worrying about syncing session memory between them.

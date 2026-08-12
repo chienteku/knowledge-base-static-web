@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Architecture .)**: Critical Rendering Path is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Architecture** (The core pipeline executed by rendering engines like Blink/Chromium, WebKit/Safari, and Gecko/Firefox).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you open a website, your browser downloads a text file containing HTML code, some CSS files, and some JavaScript. 
@@ -99,7 +95,7 @@ When building the trees:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Layout Thrashing (JavaScript performance bug)
 
@@ -161,7 +157,7 @@ for (let i = 0; i < 100; i++) {
 // Batch DOM reads first, then batch DOM style writes
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Render Tree Diagnosis
 
@@ -222,14 +218,14 @@ Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 >
 > **Explanation:** Geometry changes trigger Reflow + Repaint; visual-only changes trigger Repaint.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The foundational node representation.
 - [The Tree Structure](tree_structure.md) — The parent-child layout hierarchy.
 - [Render-Blocking Resources](render_blocking.md) — Files that pause this pipeline.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Critical Rendering Path is the process browsers use to compile HTML, CSS, and JS into pixels.
 - The DOM (content) and CSSOM (styles) trees are built in parallel.
 - The Render Tree combines them, omitting elements styled with `display: none`.

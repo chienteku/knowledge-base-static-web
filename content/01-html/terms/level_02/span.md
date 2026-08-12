@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Universal Browser Support)**: `<span>` (Inline container) is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to group a bunch of paragraphs and images together into a generic box, you use a `<div>`. But what if you want to target a single specific word *inside* a paragraph? You can't wrap that word in a `<div>` because a `<div>` is a "block" element—it would force that single word onto its own line, breaking the paragraph!
@@ -55,7 +51,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using span when a semantic tag exists
 
@@ -189,7 +185,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 <strong>Warning!</strong>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Block vs Inline
 
@@ -237,7 +233,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 >
 > **Explanation:** `<span>` allows targeting specific inline text substrings for CSS styling.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<div>` (Block container)](div.md) — The block-level equivalent of `<span>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic inline tags.
 - [`<strong>` & `<em>`](strong_em.md) — Semantic inline tags that should be used instead of `<span>` when text needs structural emphasis.
@@ -248,7 +244,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<span>` is a generic container for inline content.
 - It has zero semantic meaning.
 - It is primarily used to hook into CSS to style specific words or phrases inside a larger block of text.

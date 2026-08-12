@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support)**: HTML (HyperText Markup Language) is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the late 1980s, physicist Tim Berners-Lee needed a way for scientists across the world to easily share and link scientific documents together over the internet. At the time, sharing information meant sending raw, unformatted text files.
@@ -65,7 +61,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating HTML like a design tool
 
@@ -122,7 +118,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 <html lang="en"> <!-- Primary language declared -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Understanding the Acronym
 
@@ -181,7 +177,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 >
 > **Explanation:** Minimal valid HTML5 document structure requires DOCTYPE, html, head with title, and body.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The fundamental building blocks used to write HTML.
 - [Block-level vs Inline Elements](block_inline.md) — The two display behaviors of elements.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Tags that do not wrap content.
@@ -192,7 +188,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - HTML is the structural foundation of every website on the internet.
 - It is a markup language, not a programming language.
 - It provides semantic meaning (headings, paragraphs, links) to raw text.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Real-Time**
+
+**Real-Time (Universal: Implemented inside WebSocket client libraries and backend server runtimes.)**: Heartbeat / Ping-Pong is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented inside WebSocket client libraries and backend server runtimes.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 TCP network connections can terminate silently. If a user drives into a tunnel or turns off their mobile data, the physical connection drops. However, the server does not receive a close packet and continues to believe the connection is active, wasting system resources.
@@ -100,7 +96,7 @@ wss.on('close', () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting ping intervals to be too frequent
 
@@ -239,122 +235,181 @@ if (!ws.isAlive) return ws.terminate();
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Heartbeat Diagnostic
+### Exercise 1: WebSocket Ping/Pong Heartbeat Monitor
 
-**Problem:** A client application is using a WebSocket connection on a mobile phone. The server sends pings every **30 seconds** with a **5-second** response timeout. The phone enters a subway tunnel at `12:00:00`, losing connection. The last successful ping exchange completed at `12:00:15`. 
-At what time will the server detect the drop and terminate the socket resource?
+**Scenario:** A real-time financial trading client implements a ping/pong heartbeat timer to detect stale or half-open TCP connections.
+
+**Requirements:**
+1. Write startHeartbeat(wsSocket, pingIntervalMs, timeoutMs).
+2. Send ping frame periodically.
+3. Expect pong response before timeoutMs.
 
 > [!check]- Answer
-> - **`12:00:50`** (The next ping is scheduled for 12:00:45. Since the phone is disconnected, it will not reply. The server waits for the 5-second timeout, detects the missing pong at 12:00:50, and terminates the socket).
+>
+> #### Implementation
+>
+> ```javascript
+> function startHeartbeat(wsSocket, pingIntervalMs = 5000, timeoutMs = 3000) {
+>   let pingTimer = null;
+>   let timeoutTimer = null;
+>   let isAlive = true;
+>
+>   function handlePong() {
+>     isAlive = true;
+>     if (timeoutTimer) clearTimeout(timeoutTimer);
+>   }
+>
+>   pingTimer = setInterval(() => {
+>     if (!isAlive) {
+>       clearInterval(pingTimer);
+>       if (timeoutTimer) clearTimeout(timeoutTimer);
+>       wsSocket.terminate();
+>       return;
+>     }
+>
+>     isAlive = false;
+>     wsSocket.ping();
+>
+>     timeoutTimer = setTimeout(() => {
+>       if (!isAlive) {
+>         clearInterval(pingTimer);
+>         wsSocket.terminate();
+>       }
+>     }, timeoutMs);
+>   }, pingIntervalMs);
+>
+>   return { handlePong, stop: () => { clearInterval(pingTimer); clearTimeout(timeoutTimer); } };
+> }
+>
+> // Verification tests
+> let terminated = false;
+> let pingSent = false;
+>
+> const mockWs = {
+>   ping: () => { pingSent = true; },
+>   terminate: () => { terminated = true; }
+> };
+>
+> const hb = startHeartbeat(mockWs, 50, 30);
+> setTimeout(() => hb.handlePong(), 20);
+>
+> setTimeout(() => {
+>   console.assert(pingSent === true, "Test 1 Failed: Ping must be dispatched");
+>   console.assert(terminated === false, "Test 2 Failed: Should not terminate when pong received");
+>   hb.stop();
+> }, 100);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Half-Open TCP State**: A connection where one side disconnects without sending FIN/RST packets; silently drops packets.
+> 2. **Ping/Pong Frame Spec**: WebSocket RFC 6455 defines opcode 0x9 for Ping and opcode 0xA for Pong frames.
+> 3. **Proactive Disconnection**: Closing dead sockets frees server memory and prompts the client to reconnect.
 > 
+---
+
+### Exercise 2: Dead Connection Recovery Engine
+
+**Scenario:** An API gateway tracks missed ping responses across connected clients and purges inactive socket sessions.
+
+**Requirements:**
+1. Write auditInactiveSockets(activeSocketsMap, maxMissedPings).
+2. Increment missedPing count.
+3. Close sockets exceeding limit.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditInactiveSockets(activeSocketsMap = new Map(), maxMissedPings = 2) {
+>   const terminatedKeys = [];
+>
+>   for (const [socketId, state] of activeSocketsMap.entries()) {
+>     if (!state.receivedPong) {
+>       state.missedPings = (state.missedPings || 0) + 1;
+>       if (state.missedPings >= maxMissedPings) {
+>         state.socket.close();
+>         terminatedKeys.push(socketId);
+>         activeSocketsMap.delete(socketId);
+>       }
+>     } else {
+>       state.missedPings = 0;
+>       state.receivedPong = false;
+>     }
+>   }
+>
+>   return terminatedKeys;
+> }
+>
+> // Verification tests
+> const sockets = new Map([
+>   ["s1", { socket: { close() {} }, receivedPong: true, missedPings: 0 }],
+>   ["s2", { socket: { close() {} }, receivedPong: false, missedPings: 1 }]
+> ]);
+>
+> const killed = auditInactiveSockets(sockets, 2);
+> console.assert(killed.includes("s2"), "Test 1 Failed: s2 must be terminated");
+> console.assert(sockets.has("s1") === true, "Test 2 Failed: Active s1 preserved");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Resource Exhaustion Defense**: Prevents thousands of dead ghost connections from consuming server RAM and file descriptors.
+> 2. **Server-Initiated Audit**: Periodically audits socket health independently of client heartbeat signals.
+> 3. **Graceful Cleanup**: Explicitly calls socket.close() to release system resources cleanly.
 > 
 ---
 
-### Exercise 2: Ping-Pong Protocol Frame Types
+### Exercise 3: Browser Heartbeat Emulation Engine
 
-**Problem:** Identify the 2 control frame opcodes used for heartbeats in WebSocket protocol (RFC 6455).
+**Scenario:** Simulates WebSocket ping/pong using custom JSON control messages (`{ type: 'ping' }`) for browser environments without raw ping frame control.
 
-**Expected output:**
+**Requirements:**
+1. Write processHeartbeatMessage(msgObj, sendFn).
+2. If msgObj.type === 'ping', send `{ type: 'pong' }`.
+
 > [!check]- Answer
-> ```text
-> 1. 0x9 (Ping frame)
-> 2. 0xA (Pong frame)
+>
+> #### Implementation
+>
+> ```javascript
+> function processHeartbeatMessage(msgObj, sendFn) {
+>   if (!msgObj || typeof msgObj !== "object") return false;
+>
+>   if (msgObj.type === "ping") {
+>     sendFn(JSON.stringify({ type: "pong", timestamp: Date.now() }));
+>     return true;
+>   }
+>
+>   return false;
+> }
+>
+> // Verification tests
+> let sentMsg = null;
+> const mockSend = (data) => { sentMsg = JSON.parse(data); };
+>
+> const isHb = processHeartbeatMessage({ type: "ping" }, mockSend);
+> console.assert(isHb === true, "Test 1 Failed");
+> console.assert(sentMsg.type === "pong", "Test 2 Failed: Must reply with pong");
 > ```
-> ```text
-> 0x9 -> Ping frame
-> 0xA -> Pong frame
-> ```
-> - **Explanation:** WebSocket RFC 6455 defines specific control frame opcodes for heartbeats.
+>
+> #### Technical Explanation
+>
+> 1. **Browser API Limitation**: Browser W3C WebSocket API does NOT expose raw Ping/Pong frame send/receive functions.
+> 2. **Application-Level Heartbeats**: Developers implement heartbeat logic using text JSON messages in browser environments.
+> 3. **Bi-directional Liveness**: Ensures both client and server confirm active data flow.
 ---
 
-### Exercise 3: Automatic Pong Response Behavior
-
-**Problem:** How should a WebSocket receiver respond upon receiving a Ping control frame?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-> ```
-> ```text
-> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-> ```
-> - **Explanation:** RFC 6455 mandates automatic echo of Ping payloads in Pong frames.
----
-
-### Exercise 4: Ping-Pong Protocol Frame Types
-
-**Problem:** Identify the 2 control frame opcodes used for heartbeats in WebSocket protocol (RFC 6455).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 0x9 (Ping frame)
-> 2. 0xA (Pong frame)
-> ```
-> ```text
-> 0x9 -> Ping frame
-> 0xA -> Pong frame
-> ```
-> - **Explanation:** WebSocket RFC 6455 defines specific control frame opcodes for heartbeats.
----
-
-### Exercise 5: Automatic Pong Response Behavior
-
-**Problem:** How should a WebSocket receiver respond upon receiving a Ping control frame?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-> ```
-> ```text
-> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-> ```
-> - **Explanation:** RFC 6455 mandates automatic echo of Ping payloads in Pong frames.
----
-
-### Exercise 6: Ping-Pong Protocol Frame Types
-
-**Problem:** Identify the 2 control frame opcodes used for heartbeats in WebSocket protocol (RFC 6455).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 0x9 (Ping frame)
-> 2. 0xA (Pong frame)
-> ```
-> ```text
-> 0x9 -> Ping frame
-> 0xA -> Pong frame
-> ```
-> - **Explanation:** WebSocket RFC 6455 defines specific control frame opcodes for heartbeats.
----
-
-### Exercise 7: Automatic Pong Response Behavior
-
-**Problem:** How should a WebSocket receiver respond upon receiving a Ping control frame?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-> ```
-> ```text
-> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-> ```
-> - **Explanation:** RFC 6455 mandates automatic echo of Ping payloads in Pong frames.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Reconnection & Backoff](reconnection_backoff.md) — The client-side logic triggered after a heartbeat check failure closes a socket.
 - [The WebSocket API (Client-side)](websocket_api.md) — The browser interface which handles incoming pings and returns pongs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Heartbeats detect silent disconnections and prevent intermediate routers from terminating idle connections.
 - The WebSocket protocol uses built-in Ping and Pong control frames to manage heartbeats.
 - The server initiates pings; the browser client automatically responds with pongs.

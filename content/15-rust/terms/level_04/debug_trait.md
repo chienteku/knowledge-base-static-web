@@ -617,7 +617,7 @@ An extensible microservices backend processes telemetry events through dynamical
 - [Derive Macro](derive_macro.md) — The mechanism used to generate `Debug` automatically.
 - [`dbg!` Macro](../level_01/dbg_macro.md) — Related concept: `dbg!` Macro.
 - [`std::error::Error` Trait & `Box<dyn Error>`](error_trait_box_dyn_error.md) — Related concept: `std::error::Error` Trait & `Box<dyn Error>`.
-- [`assert!` Macros](../level_08/assert_macros.md) — Related concept: `assert!` / `assert_eq!` / `assert_ne!`.
+- [`assert!` / `assert_eq!` / `assert_ne!`](../level_08/assert_macros.md) — Related concept: `assert!` / `assert_eq!` / `assert_ne!`.
 
 ---
 

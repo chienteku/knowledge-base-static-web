@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Ecosystem Tool / Library**
+
+**Ecosystem Tool / Library (Full-Stack .)**: Socket.io (Ecosystem tool) is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Full-Stack** (Requires a Socket.io library on the Browser *and* on the Server).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Using the native [WebSocket API](../level_08/websocket_api.md) is painful. 
@@ -57,7 +53,7 @@ socket.on("user_joined", (data) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use Socket.io with a native WebSocket Server
 
@@ -185,131 +181,137 @@ io.adapter(createAdapter(pubClient, subClient)); // Redis adapter syncs rooms ac
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Why the abstraction?
+### Exercise 1: Socket.io Custom Event Emitter & Listener Simulator
 
-**Problem:** Your manager tells you to build a live dashboard. They say, "Don't install any third-party NPM packages, just use the native browser `WebSocket` object." You know the users will be driving through tunnels and losing cell service frequently. What is your argument for installing `socket.io-client` instead?
+**Scenario:** Simulates Socket.io's event-driven real-time messaging model (`socket.on('chatMessage', cb)`, `socket.emit('chatMessage', payload)`).
 
-**Expected output:**
+**Requirements:**
+1. Write createMockSocketIo().
+2. Implement socket.on(eventName, fn).
+3. Implement socket.emit(eventName, payload).
+
 > [!check]- Answer
-> ```text
-> Auto-reconnection! 
-> If we use the native WebSocket object, the second the user loses cell service, the connection drops permanently. I would have to write hundreds of lines of complex logic to detect the drop, set a timer, try to reconnect, and sync missing data. Socket.io handles all of this automatically out-of-the-box.
+>
+> #### Implementation
+>
+> ```javascript
+> function createMockSocketIo() {
+>   const listeners = new Map();
+>
+>   return {
+>     on(eventName, callback) {
+>       if (!listeners.has(eventName)) {
+>         listeners.set(eventName, []);
+>       }
+>       listeners.get(eventName).push(callback);
+>     },
+>     emit(eventName, payload) {
+>       const cbs = listeners.get(eventName) || [];
+>       cbs.forEach(cb => cb(payload));
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const socket = createMockSocketIo();
+> let received = null;
+>
+> socket.on("userJoined", (data) => { received = data; });
+> socket.emit("userJoined", { username: "Alice" });
+>
+> console.assert(received.username === "Alice", "Test 1 Failed");
 > ```
-> - Does the native WebSocket API automatically try to reconnect if it fails?
+>
+> #### Technical Explanation
+>
+> 1. **Socket.io Architecture**: Abstraction layer built on top of WebSockets offering custom named events, automatic fallback, and rooms.
+> 2. **Named Events**: Unlike raw WebSockets (text/binary only), Socket.io natively supports arbitrary event name strings.
+> 3. **Automatic JSON Encoding**: Automatically serializes objects to/from JSON over the wire.
 > 
 ---
 
-### Exercise 2: Socket.IO Feature Additions over Native WebSockets
+### Exercise 2: Socket.io Acknowledgment Callback Processor
 
-**Problem:** List 3 features provided out-of-the-box by Socket.IO that raw WebSockets lack.
+**Scenario:** Simulates Socket.io's request-response acknowledgment callback feature (`socket.emit('order', payload, (ack) => ...)`).
 
-**Expected output:**
+**Requirements:**
+1. Write emitWithAck(socket, eventName, payload, ackFn).
+2. Execute ackFn when server responds with acknowledgment.
+
 > [!check]- Answer
-> ```text
-> 1. HTTP Long-Polling fallback (Engine.IO)
-> 2. Automatic reconnection with backoff
-> 3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
-> ```
-> ```text
-> 1. HTTP Long-Polling fallback transport
-> 2. Automatic reconnection management
-> 3. Rooms and Namespaces abstractions
-> ```
-> - **Explanation:** Socket.IO adds high-level real-time abstractions over transport layers.
----
-
-### Exercise 3: Socket.IO Acknowledgment Callback Pattern
-
-**Problem:** Write Socket.IO event emission with server-side acknowledgment callback.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> socket.emit('createOrder', { item: 'book' }, (res) => {
-> console.log('Server acknowledged creation status:', res.status);
+> function emitWithAck(socket, eventName, payload, mockServerHandler) {
+>   return new Promise((resolve) => {
+>     const ackCallback = (response) => {
+>       resolve(response);
+>     };
+>
+>     mockServerHandler(eventName, payload, ackCallback);
+>   });
+> }
+>
+> // Verification tests
+> const mockServer = (evt, data, ack) => {
+>   if (evt === "createOrder") {
+>     ack({ status: "SUCCESS", orderId: "ord_99" });
+>   }
+> };
+>
+> emitWithAck(null, "createOrder", { item: "book" }, mockServer).then(ack => {
+>   console.assert(ack.status === "SUCCESS" && ack.orderId === "ord_99", "Test 1 Failed");
 > });
 > ```
-> - **Explanation:** Socket.IO supports request-response acknowledgment callbacks over real-time streams.
+>
+> #### Technical Explanation
+>
+> 1. **Acknowledgment Callbacks**: Socket.io feature allowing RPC-style request-response cycles over persistent socket connections.
+> 2. **Asynchronous Confirmation**: Receives explicit confirmation from server that a specific event was processed successfully.
+> 3. **Promise Wrapping**: Wrapping Socket.io acknowledgments in Promises enables using async/await syntax.
+> 
 ---
 
-### Exercise 4: Socket.IO Feature Additions over Native WebSockets
+### Exercise 3: HTTP Long-Polling to WebSocket Transport Upgrade Inspector
 
-**Problem:** List 3 features provided out-of-the-box by Socket.IO that raw WebSockets lack.
+**Scenario:** Simulates Socket.io's transport upgrade mechanism (starting with HTTP Long-Polling for maximum compatibility, then upgrading to WebSocket).
 
-**Expected output:**
+**Requirements:**
+1. Write upgradeTransport(currentTransport).
+2. Transition 'polling' -> 'websocket'.
+
 > [!check]- Answer
-> ```text
-> 1. HTTP Long-Polling fallback (Engine.IO)
-> 2. Automatic reconnection with backoff
-> 3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
-> ```
-> ```text
-> 1. HTTP Long-Polling fallback transport
-> 2. Automatic reconnection management
-> 3. Rooms and Namespaces abstractions
-> ```
-> - **Explanation:** Socket.IO adds high-level real-time abstractions over transport layers.
----
-
-### Exercise 5: Socket.IO Acknowledgment Callback Pattern
-
-**Problem:** Write Socket.IO event emission with server-side acknowledgment callback.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> socket.emit('createOrder', { item: 'book' }, (res) => {
-> console.log('Server acknowledged creation status:', res.status);
-> });
+> function upgradeTransport(currentTransport) {
+>   if (currentTransport === "polling") {
+>     return {
+>       upgraded: true,
+>       newTransport: "websocket",
+>       reason: "WebSocket connection established successfully"
+>     };
+>   }
+>   return { upgraded: false, newTransport: currentTransport };
+> }
+>
+> // Verification tests
+> const res = upgradeTransport("polling");
+> console.assert(res.upgraded === true && res.newTransport === "websocket", "Test 1 Failed");
 > ```
-> - **Explanation:** Socket.IO supports request-response acknowledgment callbacks over real-time streams.
+>
+> #### Technical Explanation
+>
+> 1. **Socket.io Fallback Strategy**: Connects via HTTP long-polling first to ensure firewalls/proxies do not block initial connection.
+> 2. **Transport Upgrading**: Pings server via WebSocket; if successful, seamlessly upgrades active transport to WebSocket.
+> 3. **Cross-Browser Compatibility**: Guarantees connectivity across restrictive corporate networks.
 ---
 
-### Exercise 6: Socket.IO Feature Additions over Native WebSockets
-
-**Problem:** List 3 features provided out-of-the-box by Socket.IO that raw WebSockets lack.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. HTTP Long-Polling fallback (Engine.IO)
-> 2. Automatic reconnection with backoff
-> 3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
-> ```
-> ```text
-> 1. HTTP Long-Polling fallback transport
-> 2. Automatic reconnection management
-> 3. Rooms and Namespaces abstractions
-> ```
-> - **Explanation:** Socket.IO adds high-level real-time abstractions over transport layers.
----
-
-### Exercise 7: Socket.IO Acknowledgment Callback Pattern
-
-**Problem:** Write Socket.IO event emission with server-side acknowledgment callback.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
-> ```
-> ```javascript
-> socket.emit('createOrder', { item: 'book' }, (res) => {
-> console.log('Server acknowledged creation status:', res.status);
-> });
-> ```
-> - **Explanation:** Socket.IO supports request-response acknowledgment callbacks over real-time streams.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [The WebSocket API (Client-side)](websocket_api.md) — The native, low-level browser API that Socket.io abstracts.
 - [Polling vs Long Polling](polling.md) — The HTTP fallback that Socket.io uses if WebSockets are blocked.
 - [Pub/Sub & Channels](pub_sub_channels.md) — Related concept: Pub/Sub & Channels.
@@ -317,7 +319,7 @@ io.adapter(createAdapter(pubClient, subClient)); // Redis adapter syncs rooms ac
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Socket.io** is a powerful third-party library that makes real-time programming incredibly easy.
 - It provides **auto-reconnection** if the network drops.
 - It provides **Rooms and Broadcasting** to easily route messages to specific groups of users.

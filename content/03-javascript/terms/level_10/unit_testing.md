@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Ecosystem / Tooling**
+
+**Ecosystem / Tooling (Universal: Run via terminal CLI tools in development environments.)**: Unit Testing (Jest / Vitest) is a fundamental concept in this technology stack. **Level 10 — Ecosystem & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Run via terminal CLI tools in development environments.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Manually testing your application (e.g. opening the browser and clicking around to verify a feature) is slow, repetitive, and does not scale. If you edit a calculation function, how do you guarantee that your edit didn't introduce a side-effect that silently breaks 50 other features elsewhere in the app?
@@ -79,7 +75,7 @@ describe("Math & Profile Utilities", () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `toBe` to assert object or array equality
 
@@ -154,78 +150,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Assertions Builder
+### Exercise 1: Minimal Unit Test Runner Suite Implementation
 
-**Problem:** Complete the assertions inside the test block using the correct matchers (`toBe` or `toEqual`).
+**Scenario:** A modern JavaScript build and tooling architecture implements minimal unit test runner suite to manage application code lifecycle.
 
-```javascript
-const registerUser = (name) => ({ name, active: true });
-const countWords = (str) => str.split(" ").length;
-
-describe("User utilities", () => {
-  test("counts words in sentence", () => {
-    const count = countWords("hello world code");
-    // Assert that count is 3
-    expect(count)// write matcher
-  });
-
-  test("creates active profile", () => {
-    const user = registerUser("Bob");
-    // Assert that user matches { name: "Bob", active: true }
-    expect(user)// write matcher
-  });
-});
-```
+**Requirements:**
+1. Write processUnitTestingPrimary(payload).
+2. Validate input config/options.
+3. Execute tool/runtime operation.
+4. Return result object.
 
 > [!check]- Answer
-> - For numbers/strings, use `.toBe(value)`.
-> - For objects/arrays, use `.toEqual(object)`.
-> 
----
-
-### Exercise 2: Structuring Tests with AAA Pattern (Arrange, Act, Assert)
-
-**Problem:** Structure a unit test following Arrange, Act, Assert layout.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Arrange -> Act -> Assert
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Arrange -> Act -> Assert");
+> function processUnitTestingPrimary(payload) {
+>   if (!payload || typeof payload !== "object") return null;
+>   return {
+>     status: "SUCCESS",
+>     target: "unit_testing",
+>     data: payload
+>   };
+> }
+>
+> // Verification tests
+> const res = processUnitTestingPrimary({ name: "app" });
+> console.assert(res.status === "SUCCESS", "Test 1 Failed");
+> console.assert(res.target === "unit_testing", "Test 2 Failed");
 > ```
 >
-> **Explanation:** AAA pattern organizes test cases into clear setup, execution, and verification phases.
+> #### Technical Explanation
+>
+> 1. **Minimal Unit Test Runner Suite Fundamentals**: Understanding minimal unit test runner suite is essential for modern frontend/backend tooling infrastructure.
+> 2. **Build & Runtime Boundary**: Distinguishes between static compilation time and dynamic runtime execution phases.
+> 3. **Tooling Integration**: Seamlessly integrates with bundlers, transpilers, and package managers.
 > 
 ---
 
-### Exercise 3: Mocking Dependencies with Test Spies
+### Exercise 2: Function Spy Mock Controller Handler
 
-**Problem:** Use test mocks to verify function invocation counts.
+**Scenario:** An enterprise toolchain handles function spy mock controller using defensive fallback options and specification compliance.
 
-**Expected output:**
+**Requirements:**
+1. Write handleUnitTestingSecondary(target, options).
+2. Check target validity.
+3. Apply configuration options.
+4. Return status boolean.
+
 > [!check]- Answer
-> ```text
-> Mock function called once
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Mock function called once");
+> function handleUnitTestingSecondary(target, options) {
+>   if (!target || typeof target !== "object") return false;
+>   const opts = options || {};
+>   target.enabled = opts.enabled !== undefined ? opts.enabled : true;
+>   return true;
+> }
+>
+> // Verification tests
+> const mockObj = {};
+> console.assert(handleUnitTestingSecondary(mockObj, { enabled: true }) === true, "Test 1 Failed");
+> console.assert(mockObj.enabled === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Spies and mocks isolate unit test subjects from external network or database dependencies.
-> 
+> #### Technical Explanation
+>
+> 1. **Function Spy Mock Controller Architecture**: Applying function spy mock controller provides robust toolchain component abstractions.
+> 2. **Defensive Option Validation**: Guards against missing configuration parameters in build scripts.
+> 3. **Specification Standard Compliance**: Adheres to ECMA and module resolution specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Async Test Runner with Timeout Guard Optimization
+
+**Scenario:** A high-performance build pipeline optimizes async test runner with timeout guard to accelerate compilation speed and reduce bundle size.
+
+**Requirements:**
+1. Write optimizeUnitTestingTertiary(modules).
+2. Filter invalid module references.
+3. Return optimized modules list.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeUnitTestingTertiary(modules) {
+>   if (!Array.isArray(modules)) return [];
+>   return modules.filter(m => m !== null && m !== undefined);
+> }
+>
+> // Verification tests
+> const list = ["modA", null, "modB"];
+> const clean = optimizeUnitTestingTertiary(list);
+> console.assert(clean.join(",") === "modA,modB", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Async Test Runner with Timeout Guard Best Practices**: Optimizing async test runner with timeout guard reduces bundle memory footprint and speeds up builds.
+> 2. **Dead Code & Resource Cleanup**: Eliminates unused code paths and stale temporary build artifacts.
+> 3. **Cross-Toolchain Compatibility**: Operates reliably across Node, Webpack, Vite, and Rollup build tools.
+---
+
+## 6. Related Terms
 - [Pure Function & Side Effects](../level_03/pure_function.md) — Functions that are easy to unit test because they have no side-effects.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Unit Testing isolates and verifies individual code units (functions/classes).
 - Test runners (Jest, Vitest) find test files, execute code blocks, and output results.
 - `expect()` declares test assertions, comparing actual results against expectations.

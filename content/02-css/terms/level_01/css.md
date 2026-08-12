@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Core Language**
+
+**Core Language (Universal Browser Support)**: CSS (Cascading Style Sheets) is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the internet, HTML was used for both structure *and* design. If you wanted red text, you literally wrapped the word in a `<font color="red">` tag. This was a nightmare for maintainability. If a company rebranded from red to blue, a developer had to manually open thousands of HTML files and change every single `<font>` tag.
@@ -76,7 +72,7 @@ h1 {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using HTML to control visual layout
 
@@ -146,7 +142,7 @@ h1 {
 /* CSS: .text-blue { color: blue; } */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Separation
 
@@ -195,7 +191,7 @@ h1 {
 >
 > **Explanation:** Centralized stylesheets decouple visual design from HTML content markup.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Selectors (Element, Class, ID)](selectors.md) — How CSS finds the specific HTML elements to style.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The declaration format mapping selectors.
 - [CSS Comments (`/* */`)](comments.md) — Notes ignored by the browser parser.
@@ -203,7 +199,7 @@ h1 {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSS stands for Cascading Style Sheets.
 - It was created to separate design (CSS) from structure (HTML).
 - A single CSS file can control the look of thousands of HTML pages simultaneously.

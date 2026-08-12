@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Modern Browsers  .)**: `<time>` & `datetime` Attribute is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers (HTML5)** (Introduced to help search engines, translation engines, and calendar software parse timestamps).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Humans represent dates and times in countless formatting variations:
@@ -102,7 +98,7 @@ Basic date wrapping:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing human text inside the `datetime` attribute
 
@@ -151,7 +147,7 @@ Basic date wrapping:
 <time datetime="2026-12-25">Christmas</time>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Timestamp Formatting
 
@@ -202,13 +198,13 @@ Basic date wrapping:
 >
 > **Explanation:** ISO 8601 standard combines YYYY-MM-DD and T hh:mm.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [Attribute](../level_01/attribute.md) — The parameter concept.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<time>` tag adds machine-readable semantics to visual dates and times.
 - The `datetime` attribute hosts the standardized ISO 8601 date string.
 - Search engines use `<time>` stamps to index events and display dates in search snippets.

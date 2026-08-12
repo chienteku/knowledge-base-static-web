@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 
-- [`#[repr(C)]`](repr_c.md) — Understanding C-compatible struct and union memory layout alignment.
 - [`unsafe` Block](unsafe_block.md) — Understanding `unsafe` superpowers and memory access contracts.
 - [`extern "C"`](extern_c.md) — Foreign Function Interface binding mechanics.
 

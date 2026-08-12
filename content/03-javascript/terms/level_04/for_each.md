@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: forEach() is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before ES5 (2009), the only way to loop through an array was using a traditional `for` loop (`for(let i = 0; i < arr.length; i++)`). This required managing an index counter, checking the array length, and manually accessing `arr[i]`. It was a lot of boilerplate code for a very simple, repetitive task.
@@ -63,7 +59,7 @@ console.log(`Class Average: ${total / scores.length}`);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to return a new array from `forEach`
 
@@ -143,64 +139,46 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Logging inventory
+### Exercise 1: Side-Effect Metrics Aggregator & Logger
 
-**Problem:** Create an array of strings: `["Apple", "Banana", "Cherry"]`. Use `forEach` to log a string in the format `"Item X: [Fruit]"` where X is the 1-based index (e.g., "Item 1: Apple").
+**Scenario:** A telemetry logging service iterates through request metric objects using forEach(), sending log data to an external logger sink.
 
-**Expected output:**
+**Requirements:**
+1. Write logMetrics(metricsList, loggerFn).
+2. Iterate using metricsList.forEach(m => loggerFn(m)).
+3. Return processed item count.
+
 > [!check]- Answer
-> ```text
-> Item 1: Apple
-> Item 2: Banana
-> Item 3: Cherry
-> ```
-> - `fruits.forEach((fruit, index) => { console.log(`Item ${index + 1}: ${fruit}`); });`
-> 
----
-
-### Exercise 2: Side Effect Logging with `forEach`
-
-**Problem:** Log elements of `["a", "b"]` with their 0-indexed positions using `forEach`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 0: a
-> 1: b
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> ["a", "b"].forEach((item, index) => {
->   console.log(`${index}: ${item}`);
-> });
+> function logMetrics(metricsList, loggerFn) {
+>   if (!Array.isArray(metricsList) || typeof loggerFn !== "function") return 0;
+>   let count = 0;
+>   metricsList.forEach(metric => {
+>     loggerFn(metric);
+>     count++;
+>   });
+>   return count;
+> }
+>
+> // Verification tests
+> let loggedCount = 0;
+> logMetrics([{ req: 1 }, { req: 2 }], () => { loggedCount++; });
+> console.assert(loggedCount === 2, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `forEach` passes `(element, index, array)` parameters to callback iterators.
-> 
----
-
-### Exercise 3: Array Index Mutation in `forEach`
-
-**Problem:** Mutate array elements in-place using `forEach((val, idx, arr) => arr[idx] = val * 2)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 2, 4, 6 ]
-> ```
-> ```javascript
-> const nums = [1, 2, 3];
-> nums.forEach((val, i, arr) => arr[i] = val * 2);
-> console.log(nums);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** The 3rd parameter `arr` allows targeted in-place index mutation during iteration.
-> 
-> 
+> 1. **forEach() Purpose**: Array.prototype.forEach(callback) executes a provided callback for each array element for side-effects.
+> 2. **Return Value is undefined**: forEach() always returns undefined and cannot be chained.
+> 3. **Non-Breakable Loop**: forEach() cannot be stopped early using break or return statements.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Map](../level_08/map.md) — Iterates and *returns a new array* of transformed data.
 - [for Loop](../level_02/for_loop.md) — The traditional, imperative way to loop.
 - [for...of](for_of.md) — Related concept: for...of.
@@ -208,7 +186,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `forEach()` executes a callback function once for every item in an array.
 - It abstracts away the index management of a traditional `for` loop.
 - It always returns `undefined`.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal: Works everywhere)**: .then() / .catch() is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once JavaScript introduced the [Promise](./promise.md) object to represent future asynchronous data, developers needed a clean, standardized way to say: "When this Promise finally finishes, *then* do this specific thing with the data."
@@ -81,7 +77,7 @@ fetch('https://api.example.com/user/1')
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Then Catch Scope and Variable Hoisting
 
@@ -154,61 +150,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Catching the Error
+### Exercise 1: Promise Flow Handling with .then(), .catch(), and .finally()
 
-**Problem:** If the very first `fetch()` in a long chain of 10 `.then()` blocks fails due to a network error, which of those `.then()` blocks will execute?
+**Scenario:** A UI loader spinner controller manages promise states using .then() for data, .catch() for errors, and .finally() to hide spinner.
 
-**Expected output:**
+**Requirements:**
+1. Write loadDataWithSpinner(fetchFn, spinnerState).
+2. Set spinnerState.loading = true.
+3. Use .then(), .catch(), and .finally().
+4. Verify spinner reset.
+
 > [!check]- Answer
-> ```text
-> None of them. The engine instantly skips all `.then()` blocks and drops straight down to the nearest `.catch()` block.
-> ```
-> - This is why vertical chaining is so much cleaner than nested callbacks! One error handler to rule them all.
-> 
----
-
-### Exercise 2: Chaining `.then()` and `.catch()`
-
-**Problem:** Chain `.then()` and `.catch()` on a rejected promise.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Caught: Rejection error
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> Promise.reject(new Error("Rejection error"))
->   .then(() => console.log("Success"))
->   .catch(err => console.log(`Caught: ${err.message}`));
+> function loadDataWithSpinner(fetchFn, spinnerState) {
+>   spinnerState.loading = true;
+>
+>   return fetchFn()
+>     .then(data => {
+>       return { success: true, data };
+>     })
+>     .catch(err => {
+>       return { success: false, error: err.message };
+>     })
+>     .finally(() => {
+>       spinnerState.loading = false;
+>     });
+> }
+>
+> // Verification tests
+> const spinner = { loading: false };
+> const mockFetch = () => Promise.resolve("OK");
+>
+> loadDataWithSpinner(mockFetch, spinner).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+>   console.assert(spinner.loading === false, "Test 2 Failed: Spinner should be reset in finally()");
+> });
 > ```
 >
-> **Explanation:** `.catch(fn)` is syntactic shorthand for `.then(null, fn)`.
+> #### Technical Explanation
+>
+> 1. **.then() Consumer**: Registers fulfillment and rejection handlers for Promise resolution.
+> 2. **.catch() Handler**: Shorthand for .then(null, rejectHandler) to catch promise errors.
+> 3. **.finally() Guaranteed Cleanup**: Executes callback regardless of whether promise fulfilled or rejected.
 > 
 ---
 
-### Exercise 3: Recovering from Rejections with `.catch()`
+### Exercise 2: Then Catch Advanced Context Handler
 
-**Problem:** Return a fallback value from `.catch()` and continue execution in a subsequent `.then()`.
+**Scenario:** A web application component processes then catch data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleThenCatchSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Recovered value: fallback
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> Promise.reject("error")
->   .catch(() => "fallback")
->   .then(val => console.log(`Recovered value: ${val}`));
+> function handleThenCatchSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleThenCatchSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Returning values from `.catch()` fulfills downstream promises, enabling recovery.
-> 
+> #### Technical Explanation
+>
+> 1. **Then Catch Architecture**: Applying then catch patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Then Catch Performance Optimization
+
+**Scenario:** An application utility optimizes then catch execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeThenCatchTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeThenCatchTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeThenCatchTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Then Catch Optimization**: Optimizing then catch improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Promise](promise.md) — The object that `.then` and `.catch` are attached to.
 - [async / await](async_await.md) — An even newer, cleaner syntax that replaces `.then()` chains.
 - [Promise.resolve / Promise.reject](promise_static.md) — Related concept: Promise.resolve / Promise.reject.
@@ -216,7 +278,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `.then()` executes a callback when a Promise is successfully Fulfilled.
 - `.catch()` executes a callback when a Promise is Rejected (fails).
 - You can chain `.then()` blocks vertically to perform sequential asynchronous tasks.

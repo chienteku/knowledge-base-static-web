@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Compiled into multiple programming languages .)**: Protocol Buffers (protobuf) is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Compiled into multiple programming languages (JavaScript, Python, C++, Go, Java, Swift).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard web APIs serialize data using JSON text. While JSON is human-readable, it has performance limitations:
@@ -82,7 +78,7 @@ console.log("Protobuf size:", binaryBuffer.length, "bytes"); // Output: ~20 byte
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Changing existing numeric tag index numbers in a `.proto` file
 
@@ -150,77 +146,160 @@ message User {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Schema Design
+### Exercise 1: Protocol Buffers Varint Integer Encoder & Decoder
 
-**Problem:** Complete the `.proto` file segment defining a `Product` message containing:
-- An integer `sku` at tag index 1.
-- A string `title` at tag index 2.
-- A float/double `price` at tag index 3.
+**Scenario:** Implements Protobuf's variable-width integer (Varint) encoding algorithm for 64-bit integer compression.
 
-```protobuf
-message Product {
-  int32 sku = 1;
-  string title = 2;
-  double price = 3;
-}
-```
-
----
+**Requirements:**
+1. Write encodeVarint(uintVal).
+2. Write decodeVarint(uint8Array).
+3. Verify byte-exact roundtrip.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function encodeVarint(uintVal) {
+>   const bytes = [];
+>   let val = uintVal;
+>
+>   while (val > 127) {
+>     // Set MSB to 1 to indicate more bytes follow
+>     bytes.push((val & 0x7f) | 0x80);
+>     val >>>= 7;
+>   }
+>   bytes.push(val & 0x7f);
+>
+>   return new Uint8Array(bytes);
+> }
+>
+> function decodeVarint(uint8Array) {
+>   let result = 0;
+>   let shift = 0;
+>
+>   for (let i = 0; i < uint8Array.length; i++) {
+>     const byte = uint8Array[i];
+>     result |= (byte & 0x7f) << shift;
+>     if ((byte & 0x80) === 0) {
+>       return { result, bytesRead: i + 1 };
+>     }
+>     shift += 7;
+>   }
+>
+>   throw new Error("Invalid Varint encoding");
+> }
+>
+> // Verification tests
+> const encoded300 = encodeVarint(300); // 300 encoded as 2 bytes: 0xAC 0x02
+> console.assert(encoded300.length === 2, "Test 1 Failed: 300 fits in 2 bytes");
+>
+> const decoded = decodeVarint(encoded300);
+> console.assert(decoded.result === 300 && decoded.bytesRead === 2, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Varint Encoding Mechanism**: Uses 1 to 10 bytes for integers based on magnitude; small numbers (0-127) consume just 1 byte.
+> 2. **MSB Continuation Bit**: Most Significant Bit (0x80) indicates whether additional bytes follow in the stream.
+> 3. **Protobuf Space Compression**: Dramatically reduces message size compared to fixed 32-bit (4B) or 64-bit (8B) integer storage.
 > 
 ---
 
-### Exercise 2: Protobuf Definition File Syntax
+### Exercise 2: Protobuf Wire Format Tag & Type Packer
 
-**Problem:** Write Protobuf 3 syntax for `User` message containing string `name` (tag 1) and int32 `age` (tag 2).
+**Scenario:** Packs Protobuf field tag numbers and wire types into a combined 32-bit field header key (`(field_number << 3) | wire_type`).
 
-**Expected output:**
+**Requirements:**
+1. Write packProtobufTag(fieldNumber, wireType).
+2. Write unpackProtobufTag(tagVal).
+3. Ensure lossless roundtrip.
+
 > [!check]- Answer
-> ```text
-> syntax = "proto3";
+>
+> #### Implementation
+>
+> ```javascript
+> function packProtobufTag(fieldNumber, wireType) {
+>   // Wire types: 0=Varint, 1=64-bit, 2=Length-delimited, 5=32-bit
+>   return (fieldNumber << 3) | (wireType & 0x07);
+> }
+>
+> function unpackProtobufTag(tagVal) {
+>   return {
+>     fieldNumber: tagVal >>> 3,
+>     wireType: tagVal & 0x07
+>   };
+> }
+>
+> // Verification tests
+> const tag = packProtobufTag(2, 2); // Field 2, WireType 2 (Length-delimited string/message)
+> console.assert(tag === 18, "Test 1 Failed: (2 << 3) | 2 = 18");
+>
+> const unpacked = unpackProtobufTag(18);
+> console.assert(unpacked.fieldNumber === 2 && unpacked.wireType === 2, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Protobuf Wire Format**: Every message field is serialized as tag header key followed by payload bytes.
+> 2. **Field Tag Index vs String Key**: Uses 1-byte integer tag index numbers (e.g. tag 1, tag 2) instead of string property names.
+> 3. **Wire Types**: 0=Varint, 1=64-bit, 2=Length-delimited (string/bytes/sub-message), 5=32-bit.
 > 
-> message User {
->   string name = 1;
->   int32 age = 2;
-> }
-> ```
-> ```text
-> syntax = "proto3";
-> message User {
-> string name = 1;
-> int32 age = 2;
-> }
-> ```
-> - **Explanation:** Protobuf message definitions bind field types and unique tag numbers.
 ---
 
-### Exercise 3: Protobuf Compiling Tool
+### Exercise 3: Protobuf Schema Backward Compatibility Validator
 
-**Problem:** What is the name of the official Google compiler CLI used to generate code from `.proto` files?
+**Scenario:** Verifies that changes to `.proto` schema files preserve existing field tag index numbers to prevent breaking legacy binary decoders.
 
-**Expected output:**
+**Requirements:**
+1. Write validateProtoSchemaCompatibility(oldTagsMap, newTagsMap).
+2. Ensure existing field tag IDs are NEVER re-assigned or altered.
+
 > [!check]- Answer
-> ```text
-> protoc (Protocol Buffer Compiler)
+>
+> #### Implementation
+>
+> ```javascript
+> function validateProtoSchemaCompatibility(oldTagsMap = {}, newTagsMap = {}) {
+>   const breakingErrors = [];
+>
+>   for (const [tagId, oldName] of Object.entries(oldTagsMap)) {
+>     if (!(tagId in newTagsMap)) {
+>       breakingErrors.push(`Protobuf breaking change: Field tag #${tagId} ('${oldName}') was removed`);
+>     } else if (newTagsMap[tagId] !== oldName) {
+>       breakingErrors.push(`Protobuf breaking change: Field tag #${tagId} changed name from '${oldName}' to '${newTagsMap[tagId]}'`);
+>     }
+>   }
+>
+>   return { compatible: breakingErrors.length === 0, breakingErrors };
+> }
+>
+> // Verification tests
+> const oldProto = { "1": "id", "2": "name" };
+> const newProto = { "1": "id", "2": "username" }; // Tag #2 changed name!
+>
+> const res = validateProtoSchemaCompatibility(oldProto, newProto);
+> console.assert(res.compatible === false && res.breakingErrors.length === 1, "Test 1 Failed");
 > ```
-> ```bash
-> protoc --js_out=import_style=commonjs,binary:. user.proto
-> ```
-> - **Explanation:** `protoc` compiles `.proto` schemas into language-specific code bindings.
+>
+> #### Technical Explanation
+>
+> 1. **Field Tag Permanence**: Protobuf field tag numbers MUST NEVER be changed or re-assigned once published.
+> 2. **Renaming Fields Safety**: Renaming a field in `.proto` is non-breaking as long as tag number remains identical.
+> 3. **Reserved Tags**: Deleted tags should be marked as `reserved` to prevent future developers from re-using the tag number.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Binary vs Text Formats](../level_07/binary_vs_text_formats.md) — The serialization format comparisons.
 - [Base64 Encoding](../level_07/base64.md) — The text translation method used if binary bytes must travel over text channels.
 - [gRPC (Remote Procedure Call)](grpc.md) — Related concept: gRPC (Remote Procedure Call).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Protocol Buffers is a binary serialization format developed by Google.
 - Data structures are defined in `.proto` files using strict type schemas.
 - The `protoc` compiler converts schemas into language-specific helper modules.

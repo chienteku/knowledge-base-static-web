@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Database Tooling / Abstraction Layer**
+
+**Database Tooling / Abstraction Layer (Node.js App Layer)**: ORMs & ODMs is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Node.js App Layer**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you use a raw database driver, you have to write your queries as massive strings. 
@@ -55,7 +51,7 @@ Because this is pure JavaScript, your code editor can provide autocomplete, tell
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The N+1 Query Problem
 
@@ -109,7 +105,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 // Add database-level unique constraint index in SQL / MongoDB schema
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: ORM vs ODM
 
@@ -163,7 +159,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 >
 > **Explanation:** `include` performs eager relation loading in a single optimized query.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [SQL Injection](sql_injection.md) — ORMs automatically protect you against this devastating attack!
 - [Migrations](migrations.md) — ORMs also manage the history of your database schema.
 - [Connection Pooling](connection_pools.md) — Related concept: Connection Pooling.
@@ -176,7 +172,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **ORMs (SQL)** and **ODMs (NoSQL)** allow you to query the database using JavaScript objects instead of raw strings.
 - They provide autocomplete, type safety, and automatic connection pooling.
 - **Prisma** is the modern standard for SQL in Node.js.

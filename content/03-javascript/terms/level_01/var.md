@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: var is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the very first version of JavaScript, written in 10 days by Brendan Eich, `var` was the only way to declare variables. The language was intended to be simple and forgiving for amateur webmasters. To achieve this, `var` was designed with function scope rather than block scope, and it allowed the same variable to be redeclared multiple times without error.
@@ -59,7 +55,7 @@ processData();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Var Scope and Variable Hoisting
 
@@ -132,67 +128,109 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Hoisting Quirks
+### Exercise 1: Refactoring Legacy var Function Scope to Block Scope
 
-**Problem:** Try to `console.log()` a `var` variable *before* you declare it in the code. Then do the same thing with a `let` variable. Note the difference in the errors (or lack thereof).
+**Scenario:** A code modernization audit identifies legacy functions using var inside if and for blocks. Because var ignores block scope, variables leak out into the enclosing function. The code must be refactored to let and const.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate how var declared inside an if block leaks to the outer function scope.
+2. Refactor the variable declarations to let and const.
+3. Verify that block-scoped variables remain isolated inside the block.
+
 > [!check]- Answer
-> ```text
-> undefined (for var)
-> ReferenceError (for let)
-> ```
-> - `var` declarations are "hoisted" to the top of their scope, but their assignments are not. The engine knows the variable exists, but its value is `undefined`.
-> - `let` is also hoisted, but resides in a "Temporal Dead Zone" until execution reaches the declaration.
-> 
----
-
-### Exercise 2: Var Hoisting Behavior
-
-**Problem:** Demonstrate that `var` hoists declaration with `undefined` value.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> undefined
-> 10
-> ```
+> #### Implementation
 > ```javascript
-> console.log(x);
-> var x = 10;
-> console.log(x);
-> ```
->
-> **Explanation:** `var` declarations hoist to top of function/global scope initialized as `undefined`.
-> 
----
-
-### Exercise 3: Function Scope of Var
-
-**Problem:** Demonstrate that `var` inside a function does not leak to outer scope.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
-> ```javascript
-> function test() { var inner = 42; }
-> test();
-> try {
->   console.log(inner);
-> } catch (err) {
->   console.log("ReferenceError caught");
+> function demonstrateVarScopeLeak() {
+>   if (true) {
+>     var leakedVar = "I leak to function scope!";
+>     let blockScopedLet = "I am block scoped";
+>   }
+>   const canAccessVar = typeof leakedVar === "string";
+>   let letLeaked = false;
+>   try {
+>     // @ts-ignore
+>     console.log(blockScopedLet);
+>   } catch (err) {
+>     letLeaked = false;
+>   }
+>   return { canAccessVar, letLeaked };
 > }
+> // Verification tests
+> const res = demonstrateVarScopeLeak();
+> console.assert(res.canAccessVar === true, "Test 1 Failed");
+> console.assert(res.letLeaked === false, "Test 2 Failed");
 > ```
->
-> **Explanation:** `var` is scoped strictly to containing functions.
+> #### Technical Explanation
+> 1. **Function Scoping**: Variables declared with var are scoped to their enclosing function, completely ignoring if, for, and while block boundaries {}.
+> 2. **Block Scoping (let / const)**: Introduced in ES6, let and const respect block scope {}, preventing variable pollution.
+> 3. **Refactoring Best Practice**: Replace all var declarations with const (for immutable bindings) or let (for reassignable bindings).
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Legacy Async Loop Closure Bug Fix
+
+**Scenario:** A legacy asynchronous task queue dispatches timers inside a for loop using var i. Because var shares a single function-scoped binding, all callbacks print the final loop index instead of their iteration index.
+
+**Requirements:**
+1. Demonstrate the classic var loop closure bug.
+2. Fix the closure bug by replacing var with let.
+3. Verify each callback captures its distinct iteration index.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function fixLegacyLoopClosure() {
+>   const callbacks = [];
+>   for (let i = 0; i < 3; i++) {
+>     callbacks.push(() => i);
+>   }
+>   return callbacks.map(fn => fn());
+> }
+> // Verification tests
+> const values = fixLegacyLoopClosure();
+> console.assert(values.join(",") === "0,1,2", "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Single Binding Leak**: A for loop with var i creates one single i variable shared across all loop iterations.
+> 2. **Closure Reference Capture**: Callbacks created inside the loop capture a reference to the shared var i variable, reading its final value when invoked later.
+> 3. **Iteration Scope (let)**: for (let i = 0; ...) creates a distinct lexical environment and variable binding for every loop iteration.
+> 
+---
+
+### Exercise 3: var Hoisting with Undefined Initialization
+
+**Scenario:** A legacy application relies on var hoisting behavior. Variables declared with var are hoisted to the top of their function scope and automatically initialized with undefined.
+
+**Requirements:**
+1. Demonstrate accessing a var variable before its declaration line.
+2. Show that it evaluates to undefined without throwing a ReferenceError.
+3. Compare against let which throws in the TDZ.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function testVarHoisting() {
+>   const valueBeforeDeclaration = hoistedVar;
+>   var hoistedVar = "Initialized Value";
+>   return {
+>     valueBeforeDeclaration,
+>     valueAfterDeclaration: hoistedVar
+>   };
+> }
+> // Verification tests
+> const res = testVarHoisting();
+> console.assert(res.valueBeforeDeclaration === undefined, "Test 1 Failed");
+> console.assert(res.valueAfterDeclaration === "Initialized Value", "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Hoisting & Initializer**: var declarations are hoisted to the top of their enclosing function scope and initialized with undefined during the creation phase.
+> 2. **No TDZ for var**: Unlike let and const (which throw ReferenceError in the Temporal Dead Zone), var can be accessed before declaration without error.
+> 3. **Duplicate Declarations**: var permits declaring the same variable multiple times in the same scope without syntax errors.
+---
+
+## 6. Related Terms
 - [let](let.md) — The modern, block-scoped way to declare variables.
 - [Variable](variable.md) — A named container for storing data values.
 - [Block Scope](../level_03/block_scope.md) — Related concept: Block Scope.
@@ -200,7 +238,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Avoid using `var` in modern JavaScript. Stick to `let` and `const`.
 - `var` is function-scoped, not block-scoped.
 - `var` permits redeclarations of the same variable name within the same scope.

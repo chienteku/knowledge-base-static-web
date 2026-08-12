@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support .)**: `data-*` Attributes is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers. JavaScript engines offer a dedicated `.dataset` interface to read/write these values).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building modern, interactive websites, developers often need to store extra information (metadata) directly on elements. For example, if you display a list of store products, you might need to track:
@@ -122,7 +118,7 @@ Custom key bindings in HTML:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing capital letters in the HTML attribute name
 
@@ -183,7 +179,7 @@ Custom key bindings in HTML:
 // Keep secrets securely in server-side session memory
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Dataset extraction
 
@@ -239,7 +235,7 @@ What are the corresponding JavaScript keys to read these values from the element
 >
 > **Explanation:** CSS attribute selectors target custom `data-*` state attributes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`class` Attribute](class.md) — The global attribute for styling categories.
 - [`id` Attribute](id.md) — The unique identifier.
 - [`<script>`](../level_08/script.md) — Used to execute the JavaScript that extracts dataset properties.
@@ -248,7 +244,7 @@ What are the corresponding JavaScript keys to read these values from the element
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `data-*` attributes allow you to attach custom data variables to HTML tags.
 - Attribute names must start with `data-` and contain only lowercase letters and hyphens.
 - Access these attributes in JavaScript using the `.dataset` property in camelCase format.

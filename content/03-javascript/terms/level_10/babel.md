@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Tooling / Transpiler**
+
+**Tooling / Transpiler (Node.js Environment)**: Babel is a fundamental concept in this technology stack. **Level 10 — Ecosystem & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Environment** (Runs during the Build step)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In 2015, the TC39 committee released **ES6**, which introduced massive improvements to JavaScript (Arrow Functions, Classes, Let/Const, Promises). Developers loved writing this modern code.
@@ -60,7 +56,7 @@ var greetUsers = function greetUsers(users) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Babel Scope and Variable Hoisting
 
@@ -133,57 +129,144 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: New Syntax vs New Features
+### Exercise 1: Custom AST Transformation Plugin (babel-plugin)
 
-**Problem:** Babel is great at translating new syntax (like `=>` to `function`). But what if you try to use a brand new feature like a [Promise](../level_06/promise.md)? Old browsers don't just lack the syntax for Promises; they literally don't have the Promise object in their memory! Can Babel translate a Promise?
+**Scenario:** A build pipeline implements a simple Babel AST transformation plugin that replaces console.log calls with empty void expressions in production builds.
 
-**Expected output:**
+**Requirements:**
+1. Write transformConsolePlugin(ast).
+2. Traverse AST nodes.
+3. If node is CallExpression matching console.log, replace with void 0.
+
 > [!check]- Answer
-> ```text
-> No! Babel only translates **Syntax**. To add missing **Features** (like Promises, Maps, or Sets) to old browsers, you need a different tool called a **Polyfill**. (Babel is often paired with a polyfill library like `core-js` to solve both problems at once).
-> ```
-> - Syntax is grammar. Features are vocabulary.
-> 
----
-
-### Exercise 2: Inspecting Babel AST Transformation Concept
-
-**Problem:** State 3 phases of Babel compilation (1. Parse AST, 2. Transform AST, 3. Generate Code).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Parse -> Transform -> Generate
-> ```
-> ```javascript
-> console.log("Parse -> Transform -> Generate");
+>
+> #### Implementation
+>
+> > ```javascript
+> function transformConsolePlugin(ast) {
+>   if (!ast || !Array.isArray(ast.body)) return ast;
+>
+>   const transformedBody = ast.body.map(node => {
+>     if (
+>       node.type === "ExpressionStatement" &&
+>       node.expression.type === "CallExpression" &&
+>       node.expression.callee.object?.name === "console" &&
+>       node.expression.callee.property?.name === "log"
+>     ) {
+>       return {
+>         type: "ExpressionStatement",
+>         expression: { type: "Identifier", name: "void 0" }
+>       };
+>     }
+>     return node;
+>   });
+>
+>   return { ...ast, body: transformedBody };
+> }
+>
+> // Verification tests
+> const sampleAst = {
+>   type: "Program",
+>   body: [
+>     {
+>       type: "ExpressionStatement",
+>       expression: {
+>         type: "CallExpression",
+>         callee: { object: { name: "console" }, property: { name: "log" } }
+>       }
+>     }
+>   ]
+> };
+>
+> const resultAst = transformConsolePlugin(sampleAst);
+> console.assert(resultAst.body[0].expression.name === "void 0", "Test 1 Failed: console.log must be replaced");
 > ```
 >
-> **Explanation:** Babel parses JavaScript source into Abstract Syntax Trees (AST), applies AST plugin transforms, and generates target JS output.
-> 
+> #### Technical Explanation
+>
+> 1. **Abstract Syntax Tree (AST)**: Babel parses source code into an AST tree representation of nodes (Program, ExpressionStatement, CallExpression).
+> 2. **Babel Plugin Architecture**: Babel plugins visit AST nodes and modify, replace, or remove nodes during code transformation.
+> 3. **Production Dead Code Stripping**: Replacing debugging calls during AST compilation removes console statements before bundling.
+
 ---
 
-### Exercise 3: Configuring Target Environment Presets
+### Exercise 2: Babel Target Browser Matrix Configurator
 
-**Problem:** Describe how `@babel/preset-env` targets specific browser market shares using Browserslist configs.
+**Scenario:** A frontend build tool generates `@babel/preset-env` configuration objects based on target browser versions.
 
-**Expected output:**
+**Requirements:**
+1. Write generateBabelConfig(targets).
+2. Configure @babel/preset-env options.
+3. Set useBuiltIns to "usage" and corejs to 3.
+
 > [!check]- Answer
-> ```text
-> preset-env targets specified browser matrix
-> ```
-> ```javascript
-> console.log("preset-env targets specified browser matrix");
+>
+> #### Implementation
+>
+> > ```javascript
+> function generateBabelConfig(targets) {
+>   return {
+>     presets: [
+>       [
+>         "@babel/preset-env",
+>         {
+>           targets: targets || { ie: "11" },
+>           useBuiltIns: "usage",
+>           corejs: 3,
+>           modules: false
+>         }
+>       ]
+>     ]
+>   };
+> }
+>
+> // Verification tests
+> const config = generateBabelConfig({ chrome: "90" });
+> console.assert(config.presets[0][1].targets.chrome === "90", "Test 1 Failed");
+> console.assert(config.presets[0][1].useBuiltIns === "usage", "Test 2 Failed");
+> console.assert(config.presets[0][1].modules === false, "Test 3 Failed: modules must be false for tree-shaking");
 > ```
 >
-> **Explanation:** `@babel/preset-env` automatically determines syntax transforms based on target browser versions.
-> 
-> 
+> #### Technical Explanation
+>
+> 1. **@babel/preset-env Purpose**: Automatically determines syntax transforms and polyfills needed based on target browser list.
+> 2. **useBuiltIns: 'usage'**: Injects polyfill imports dynamically based ONLY on modern APIs actually used in source files.
+> 3. **Preserving ES Modules**: Setting modules: false leaves import/export intact for bundlers to perform tree-shaking.
+
 ---
 
-## 7. Related Terms
+### Exercise 3: Transpiling Nullish Coalescing (??) to ES5 Conditionals
+
+**Scenario:** A JavaScript compiler utility transpiles ES2020 nullish coalescing expressions (`a ?? b`) into ES5 ternary checks (`a !== null && a !== void 0 ? a : b`).
+
+**Requirements:**
+1. Write transpileNullishCoalescing(varName, fallbackVal).
+2. Return ES5 ternary expression string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> > ```javascript
+> function transpileNullishCoalescing(varName, fallbackVal) {
+>   return `(${varName} !== null && ${varName} !== void 0 ? ${varName} : ${fallbackVal})`;
+> }
+>
+> // Verification tests
+> const es5Code = transpileNullishCoalescing("foo", "bar");
+> console.assert(es5Code === "(foo !== null && foo !== void 0 ? foo : bar)", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Syntax Transpilation**: Babel converts modern syntax constructs into backwards-compatible ES5 equivalence.
+> 2. **Preserving Falsy Values**: Nullish coalescing preserves falsy values like 0, false, and ""; ternary checks for null and void 0 (undefined).
+> 3. **Source-to-Source Compilation**: Transpilation maps high-level modern JS to high-level ES5 JS without bytecode generation.
+---
+
+## 6. Related Terms
 - [ECMAScript](../level_01/ecmascript.md) — Babel allows you to use the newest ECMAScript versions immediately.
 - [Polyfill](polyfill.md) — The tool that adds missing features, while Babel translates missing syntax.
 - [JSX](jsx.md) — Related concept: JSX.
@@ -193,7 +276,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Babel is a transpiler that converts modern JS (ES6+) into old JS (ES5).
 - It allows developers to use the newest language features without breaking their website for users on older browsers.
 - It operates strictly as a Build Step on the developer's machine, not in the browser.

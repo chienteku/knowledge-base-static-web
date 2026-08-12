@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: String Methods is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, strings are primitive values, meaning they are immutable (they cannot be changed once created). However, developers frequently need to manipulate text—cleaning up trailing whitespace from a user signup form, converting an email to lowercase for consistent database storage, or searching for keywords inside a paragraph. 
@@ -70,7 +66,7 @@ console.log("Abbreviation:", usernameAbbreviation); // "bre"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting String Methods to Mutate the Original String
 
@@ -149,67 +145,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Extract and Format URL
+### Exercise 1: Email Sanitizer & Domain Extractor
 
-**Problem:** Complete the code to extract the domain name from the string `"https://google.com"` by slicing off the `"https://"` part (first 8 characters) and printing it.
+**Scenario:** A registration service sanitizes email input using .toLowerCase(), .trim(), and extracts domain names using .indexOf() and .slice().
 
-```javascript
-const url = "https://google.com";
-const domainOnly = // Write slice here
+**Requirements:**
+1. Write sanitizeAndExtractDomain(rawEmail).
+2. Trim and lowercase input.
+3. Find @ separator using .indexOf("@").
+4. Extract domain using .slice().
+5. Return object { cleanEmail, domain }.
 
-console.log(domainOnly);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> google.com
-> ```
-> - The `"https://"` substring is 8 characters long (indices 0 through 7).
-> - Use `.slice(startIndex)` to extract text from a starting index to the end of the string.
-> 
----
-
-### Exercise 2: Replacing All Occurrences with `replaceAll`
-
-**Problem:** Replace all spaces with dashes in `"a b c"` using `replaceAll`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> a-b-c
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const str = "a b c";
-> console.log(str.replaceAll(" ", "-"));
+> function sanitizeAndExtractDomain(rawEmail) {
+>   if (typeof rawEmail !== "string") return null;
+>   const cleanEmail = rawEmail.trim().toLowerCase();
+>   const atIndex = cleanEmail.indexOf("@");
+>   if (atIndex === -1) return null;
+>
+>   const domain = cleanEmail.slice(atIndex + 1);
+>   return { cleanEmail, domain };
+> }
+>
+> // Verification tests
+> const res = sanitizeAndExtractDomain("  Alice@Example.COM  ");
+> console.assert(res.cleanEmail === "alice@example.com", "Test 1 Failed");
+> console.assert(res.domain === "example.com", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `replaceAll(target, replacement)` replaces all non-overlapping substring occurrences.
+> #### Technical Explanation
+>
+> 1. **String Immutability**: Methods on primitive strings return brand new strings without mutating original values.
+> 2. **indexOf() Searching**: Returns index of first matching substring, or -1 if match is not found.
+> 3. **slice() Extraction**: Extracts text between start and end index positions.
 > 
 ---
 
-### Exercise 3: Extracting Substrings with `slice`
+### Exercise 2: Search Index Substring & Prefix Checker
 
-**Problem:** Extract the last 4 characters of string `"JavaScript"` using `slice(-4)`.
+**Scenario:** A search indexing service checks if query terms exist in article titles using .includes(), .startsWith(), and .endsWith().
 
-**Expected output:**
+**Requirements:**
+1. Write matchTitle(title, query).
+2. Check if title includes query.
+3. Check if title starts with query.
+4. Return object { includesMatch, startsWithMatch }.
+
 > [!check]- Answer
-> ```text
-> ript
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const str = "JavaScript";
-> console.log(str.slice(-4));
+> function matchTitle(title, query) {
+>   const normTitle = title.toLowerCase();
+>   const normQuery = query.toLowerCase();
+>
+>   return {
+>     includesMatch: normTitle.includes(normQuery),
+>     startsWithMatch: normTitle.startsWith(normQuery)
+>   };
+> }
+>
+> // Verification tests
+> const res = matchTitle("JavaScript Engine Design", "JavaScript");
+> console.assert(res.includesMatch === true && res.startsWithMatch === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Passing negative start offsets to `.slice()` extracts characters relative to string end.
-> 
+> #### Technical Explanation
+>
+> 1. **Boolean Searching**: Methods .includes(), .startsWith(), and .endsWith() return primitive booleans.
+> 2. **Case Sensitivity**: String search methods are case-sensitive by default.
+> 3. **Auto-Boxing Primitives**: String primitives implicitly auto-box into String wrapper objects to invoke methods.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: URL Template Path Parameter Interpolator
+
+**Scenario:** A client API router formats endpoint URLs by replacing path parameter placeholders (e.g. /users/{id}) using .replace() or .replaceAll().
+
+**Requirements:**
+1. Write formatEndpoint(template, params).
+2. Replace {key} placeholders with params[key] values using .replaceAll().
+3. Return formatted URL.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function formatEndpoint(template, params) {
+>   let url = template;
+>   for (const key of Object.keys(params)) {
+>     const placeholder = `{${key}}`;
+>     url = url.replaceAll(placeholder, String(params[key]));
+>   }
+>   return url;
+> }
+>
+> // Verification tests
+> const endpoint = formatEndpoint("/api/v1/users/{userId}/posts/{postId}", { userId: 42, postId: 99 });
+> console.assert(endpoint === "/api/v1/users/42/posts/99", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **replaceAll() Method**: ES2021 method replacing all occurrences of a substring across target string.
+> 2. **Method Chaining**: Multiple string transformations can be chained together (.trim().toLowerCase().slice()).
+> 3. **Immutable Return Values**: Every method call produces a new string in memory.
+---
+
+## 6. Related Terms
 - [Template Literals](../level_08/template_literals.md) — Dynamic strings embedding expressions.
 - [Array Index & .length](array_index_length.md) — Index access, which also applies to string characters (e.g. `str[0]`).
 - [concat / join / split](../level_04/concat_join_split.md) — Related concept: concat / join / split.
@@ -218,7 +269,7 @@ console.log(domainOnly);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - String methods perform operations on text, returning new values while leaving the original string unchanged due to immutability.
 - Common utility methods include: `.trim()` (removes outer spaces), `.toLowerCase()` / `.toUpperCase()` (case conversion), `.includes()` (substring check).
 - Use `.slice(start, end)` to extract a substring, and `.split(separator)` to break a string into an array of strings.

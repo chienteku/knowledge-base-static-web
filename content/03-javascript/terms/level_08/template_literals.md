@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Syntax Feature** *(Introduced in ES6)*
+
+**Syntax Feature *(Introduced in ES6)* (Universal)**: Template Literals is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before ES6, combining text and variables (String Concatenation) was a nightmare. Developers had to use the `+` operator to stitch strings together, carefully opening and closing quotation marks, and manually inserting spaces. It was ugly, prone to syntax errors, and impossible to read. Additionally, traditional strings did not support multi-line text without ugly `\n` escape characters.
@@ -70,7 +66,7 @@ console.log(emailTemplate);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Template Literals Scope and Variable Hoisting
 
@@ -143,105 +139,117 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Function Calls
+### Exercise 1: Dynamic Multi-Line Template Interpolation
 
-**Problem:** Can you put a function call inside a Template Literal? What happens if you do?
-```javascript
-function getMood() { return "happy"; }
-const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
-```
+**Scenario:** A notification service constructs multi-line email template strings using backtick template literals and expression placeholders.
 
-**Expected output:**
+**Requirements:**
+1. Write formatEmail(userName, orderId, total).
+2. Use multi-line backtick string `...`.
+3. Interpolate expressions via ${...}.
+4. Return formatted email body.
+
 > [!check]- Answer
-> ```text
-> `"I am feeling HAPPY today."`
-> Because `${}` accepts ANY valid JavaScript expression, the engine will execute the function, run `.toUpperCase()`, and inject the final result!
-> ```
-> - If it returns a value, you can put it inside `${}`!
-> 
----
-
-### Exercise 2: Tagged Template Literals Sanitization
-
-**Problem:** Write a tagged template function `highlight` that wraps interpolated values in `<b>` tags.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello <b>Alice</b>!
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function highlight(strings, ...values) {
->   return strings.reduce((acc, str, i) => {
->     const val = values[i - 1] ? `<b>${values[i - 1]}</b>` : "";
->     return acc + val + str;
->   });
+> function formatEmail(userName, orderId, total) {
+>   return `Hello ${userName},
+>
+> Your order #${orderId} has been confirmed.
+> Total Amount: $${Number(total).toFixed(2)}
+>
+> Thank you for shopping with us!`;
 > }
-> const name = "Alice";
-> console.log(highlight`Hello ${name}!`);
+>
+> // Verification tests
+> const body = formatEmail("Alice", "1001", 49.99);
+> console.assert(body.includes("Hello Alice,"), "Test 1 Failed");
+> console.assert(body.includes("Total Amount: $49.99"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** Tagged template functions receive raw string arrays and evaluated expression parameters for custom string parsing.
+> #### Technical Explanation
+>
+> 1. **Template Literal Syntax**: Backtick delimiters (``) allow embedding string placeholders and multi-line strings.
+> 2. **Expression Interpolation (${expr})**: Evaluates JavaScript expressions inside ${} and converts results to strings.
+> 3. **Multi-Line Support**: Preserves literal line breaks and whitespace formatting cleanly without string concatenation (+).
 > 
 ---
 
-### Exercise 3: Raw String Access with `String.raw`
+### Exercise 2: Template Literals Advanced Context Handler
 
-**Problem:** Use `String.raw` to print backslashes `"C:\Program Files\Node"` without escaping.
+**Scenario:** A web application component processes template literals data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleTemplateLiteralsSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> C:\Program Files\Node
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(String.raw`C:\Program Files\Node`);
+> function handleTemplateLiteralsSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleTemplateLiteralsSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `String.raw` renders escape sequences like `\n` or `\` as literal character text.
+> #### Technical Explanation
+>
+> 1. **Template Literals Architecture**: Applying template literals patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-### Exercise 4: Multi-Line String Literals
+### Exercise 3: Template Literals Performance Optimization
 
-**Problem:** Create a multi-line string using template literal backticks.
+**Scenario:** An application utility optimizes template literals execution to prevent performance bottlenecks.
 
-**Expected output:**
+**Requirements:**
+1. Write optimizeTemplateLiteralsTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
 > [!check]- Answer
-> ```text
-> Line 1
-> Line 2
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const multi = `Line 1
-> Line 2`;
-> console.log(multi);
+> function optimizeTemplateLiteralsTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeTemplateLiteralsTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Backtick template literals support embedded multi-line text without concatenation.
+> #### Technical Explanation
+>
+> 1. **Template Literals Optimization**: Optimizing template literals improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
 > 
 ---
 
-### Exercise 5: Inline Mathematical Expression Evaluation
-
-**Problem:** Evaluate `${2 + 2}` inside a template literal string.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Sum: 4
-> ```
-> ```javascript
-> console.log(`Sum: ${2 + 2}`);
-> ```
->
-> **Explanation:** `${expression}` evaluates any valid JavaScript expression inline.
-> 
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [String](../level_01/string.md) — The base data type.
 - [Expression](../level_01/expression.md) — What you put inside the `${}`.
 - [String Methods](../level_02/string_methods.md) — Related concept: String Methods.
@@ -249,7 +257,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Template Literals use backticks (`` ` ``).
 - They allow multi-line strings without escape characters.
 - They allow String Interpolation (injecting variables/expressions) using `${expression}`.

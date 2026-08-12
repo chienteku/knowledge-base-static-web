@@ -290,9 +290,9 @@ use std::borrow::BorrowMut; let b: &mut str = item.borrow_mut();
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`Hash` Trait](../level_02/hash_trait.md)
+- [`Hash` Trait](../level_02/hash_trait.md) — 
 - [`Borrow` / `BorrowMut`](borrow_borrow_mut.md) — Borrow trait family.
 
 ---

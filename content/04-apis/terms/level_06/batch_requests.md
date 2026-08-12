@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Applies to backend endpoint route design and frontend data synchronization.)**: Bulk / Batch Requests is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applies to backend endpoint route design and frontend data synchronization.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In client applications, you often need to perform multiple operations at once—for example, synchronizing a local list of 50 offline changes, updating the prices of 100 products, or deleting 20 emails.
@@ -95,7 +91,7 @@ The server returns individual status codes and payloads matching the order of th
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Permitting unbounded batch request payload sizes
 
@@ -160,59 +156,199 @@ Content-Type: application/json
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Transaction Assessor
+### Exercise 1: REST / JSON-RPC Batch Requests Processor
 
-**Problem:** You are building an e-commerce checkout batch endpoint that handles:
-- **Action A:** Charging a user's credit card.
-- **Action B:** Generating a shipping label database entry.
+**Scenario:** An API gateway processes array batch requests in a single HTTP POST call, executing sub-requests and returning an array of response objects.
 
-Should this batch endpoint be configured as **Transactional** (all or nothing) or **Non-Transactional** (independent)?
+**Requirements:**
+1. Write processBatchRequests(batchArray, endpointHandlers).
+2. Process sub-requests.
+3. Collect individual status codes and payloads.
+4. Return array response.
 
 > [!check]- Answer
-> - **Transactional.** If the credit card charge succeeds but generating the shipping label fails, you must roll back the transaction so the user is not charged for an item that cannot be shipped.
+>
+> #### Implementation
+>
+> ```javascript
+> async function processBatchRequests(batchArray = [], endpointHandlers = {}) {
+>   if (!Array.isArray(batchArray) || batchArray.length === 0) {
+>     return { status: 400, body: { error: "Batch payload must be a non-empty array" } };
+>   }
+>
+>   const responses = await Promise.all(
+>     batchArray.map(async (req) => {
+>       const { id, method, path, body } = req;
+>       const handler = endpointHandlers[path];
+>
+>       if (!handler) {
+>         return { id, status: 404, error: "Endpoint not found" };
+>       }
+>
+>       try {
+>         const result = await handler(method, body);
+>         return { id, status: result.status || 200, data: result.data };
+>       } catch (err) {
+>         return { id, status: 500, error: err.message };
+>       }
+>     })
+>   );
+>
+>   return { status: 200, body: responses };
+> }
+>
+> // Verification tests
+> const handlers = {
+>   "/users": async (method, body) => ({ status: 200, data: { name: "Alice" } }),
+>   "/orders": async (method, body) => ({ status: 201, data: { orderId: 99 } })
+> };
+>
+> const batch = [
+>   { id: "r1", method: "GET", path: "/users" },
+>   { id: "r2", method: "POST", path: "/orders", body: { item: "book" } }
+> ];
+>
+> processBatchRequests(batch, handlers).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed");
+>   console.assert(res.body.length === 2, "Test 2 Failed");
+>   console.assert(res.body[0].data.name === "Alice", "Test 3 Failed");
+>   console.assert(res.body[1].data.orderId === 99, "Test 4 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Batch Request Concept**: Combines multiple API operations into a single HTTP request payload to reduce network latency.
+> 2. **HTTP Multi-Status Processing**: Sub-requests carry independent HTTP status codes (200, 201, 404) inside response envelopes.
+> 3. **Correlation Identifiers**: Sub-requests use client-supplied id fields to correlate async responses to requests.
 > 
+---
+
+### Exercise 2: Client-Side Request Buffer & Auto-Flush Queue
+
+**Scenario:** A frontend data SDK buffers individual API requests over a 50ms window and dispatches them in a single batched HTTP request.
+
+**Requirements:**
+1. Write createBatchQueue(flushApiFn, delayMs).
+2. Buffer requests.
+3. Flush batch automatically on timer.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createBatchQueue(flushApiFn, delayMs = 50) {
+>   let queue = [];
+>   let timerId = null;
+>
+>   return function enqueue(requestItem) {
+>     return new Promise((resolve, reject) => {
+>       queue.push({ item: requestItem, resolve, reject });
+>
+>       if (!timerId) {
+>         timerId = setTimeout(async () => {
+>           const currentBatch = [...queue];
+>           queue = [];
+>           timerId = null;
+>
+>           try {
+>             const items = currentBatch.map(b => b.item);
+>             const results = await flushApiFn(items);
+>             results.forEach((res, i) => currentBatch[i].resolve(res));
+>           } catch (err) {
+>             currentBatch.forEach(b => b.reject(err));
+>           }
+>         }, delayMs);
+>       }
+>     });
+>   };
+> }
+>
+> // Verification tests
+> const mockFlush = async (items) => items.map(it => `Processed_${it}`);
+> const queue = createBatchQueue(mockFlush, 20);
+>
+> const p1 = queue("req1");
+> const p2 = queue("req2");
+>
+> Promise.all([p1, p2]).then(([r1, r2]) => {
+>   console.assert(r1 === "Processed_req1", "Test 1 Failed");
+>   console.assert(r2 === "Processed_req2", "Test 2 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Request Coalescing**: Groups discrete UI component data requests dispatched within a short time window.
+> 2. **Network Roundtrip Reduction**: Reduces N HTTP connection setups to 1 connection setup.
+> 3. **Promise Deferred Pattern**: Returns individual promises to callers that settle when the batch response arrives.
 > 
 ---
 
-### Exercise 2: Batch API Status Code
+### Exercise 3: Partial Batch Failure Error Aggregator
 
-**Problem:** Which WebDAV-extended HTTP status code specifically represents partial success across multiple batch sub-requests?
+**Scenario:** Processes batch mutations and separates successful items from failed operations for granular UI feedback.
 
-**Expected output:**
+**Requirements:**
+1. Write summarizeBatchResults(batchResponseArray).
+2. Separate succeeded and failed items.
+3. Return summary report.
+
 > [!check]- Answer
-> ```text
-> HTTP 207 Multi-Status
+>
+> #### Implementation
+>
+> ```javascript
+> function summarizeBatchResults(batchResponseArray = []) {
+>   const succeeded = [];
+>   const failed = [];
+>
+>   for (const item of batchResponseArray) {
+>     if (item.status >= 200 && item.status < 300) {
+>       succeeded.push(item);
+>     } else {
+>       failed.push(item);
+>     }
+>   }
+>
+>   return {
+>     total: batchResponseArray.length,
+>     successCount: succeeded.length,
+>     failureCount: failed.length,
+>     succeeded,
+>     failed
+>   };
+> }
+>
+> // Verification tests
+> const responses = [
+>   { id: "1", status: 200, data: "ok" },
+>   { id: "2", status: 404, error: "Not Found" },
+>   { id: "3", status: 201, data: "created" }
+> ];
+>
+> const summary = summarizeBatchResults(responses);
+> console.assert(summary.successCount === 2 && summary.failureCount === 1, "Test 1 Failed");
+> console.assert(summary.failed[0].id === "2", "Test 2 Failed");
 > ```
-> ```http
-> HTTP/1.1 207 Multi-Status
-> ```
-> - **Explanation:** 207 Multi-Status conveys separate status codes for individual items in batch operations.
+>
+> #### Technical Explanation
+>
+> 1. **Partial Batch Success**: Batch endpoints should allow valid operations to succeed even if individual items fail.
+> 2. **Granular UI Error Reporting**: Enables UI to highlight specific failing rows in bulk data tables.
+> 3. **Atomicity Options**: Transactional batching rolls back everything; non-transactional batching allows partial completion.
 ---
 
-### Exercise 3: Batching vs Parallel Individual Requests
-
-**Problem:** When is creating a dedicated Batch API endpoint preferred over executing parallel HTTP requests?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> When HTTP connection setup overhead, network RTT latency, or mobile bandwidth constraints make sending multiple separate HTTP requests too costly.
-> ```
-> ```text
-> When HTTP connection setup overhead, network RTT latency, or mobile bandwidth constraints make sending multiple separate HTTP requests too costly.
-> ```
-> - **Explanation:** Batching combines multiple operations into a single HTTP RTT payload.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — The protection policies that batch requests help avoid triggering.
 - [JSON Methods (parse / stringify)](../level_07/json_methods.md) — The utility methods used to construct and parse batch payloads.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Bulk / Batch requests consolidate multiple network operations into a single HTTP round-trip.
 - They optimize latency, conserve database connections, and avoid rate-limiting blocks.
 - Bulk requests execute the same method on a collection; Batch requests route different methods to different sub-paths.

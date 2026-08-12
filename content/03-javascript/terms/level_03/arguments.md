@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Arguments is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If parameters are the blank spaces on a form, arguments are the actual ink written into those spaces. When a developer invokes a function, they need to supply the concrete data that the function will operate on. This data is referred to as "arguments".
@@ -63,7 +59,7 @@ registerUser("Charlie", 35, "Admin");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on order instead of clarity
 
@@ -149,69 +145,131 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Argument counting
+### Exercise 1: Legacy Dynamic Variadic Sum & Min/Max Calculator
 
-**Problem:** Call a function `multiply(a, b)` and pass it three arguments: `5`, `10`, and `15`. What happens?
+**Scenario:** A legacy math helper calculates metrics across an arbitrary number of numeric arguments using the implicit arguments object inside a standard function declaration.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateVariadicStats().
+2. Use implicit arguments object.
+3. Iterate over arguments.length.
+4. Return object { sum, count }.
+
 > [!check]- Answer
-> ```text
-> 50
-> ```
-> - The function will map `5` to `a`, `10` to `b`, and completely ignore the `15`.
-> 
----
-
-### Exercise 2: Converting `arguments` to Array
-
-**Problem:** Convert `arguments` to a real array using `Array.from(arguments)` and call `.reduce()` to sum inputs `add(10, 20, 30)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 60
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function sumAll() {
->   const args = Array.from(arguments);
->   return args.reduce((acc, n) => acc + n, 0);
+> function calculateVariadicStats() {
+>   let sum = 0;
+>   const count = arguments.length;
+>
+>   for (let i = 0; i < count; i++) {
+>     const num = Number(arguments[i]);
+>     if (!Number.isNaN(num)) {
+>       sum += num;
+>     }
+>   }
+>   return { sum, count };
 > }
-> console.log(sumAll(10, 20, 30));
+>
+> // Verification tests
+> const res = calculateVariadicStats(10, 20, 30, 40);
+> console.assert(res.sum === 100, "Test 1 Failed");
+> console.assert(res.count === 4, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Array.from()` creates a true `Array` instance from array-like objects.
+> #### Technical Explanation
+>
+> 1. **Implicit arguments Object**: Standard function declarations contain an implicit local arguments object containing passed parameter values.
+> 2. **Array-Like Structure**: The arguments object has a .length property and indexed element access, but lacks Array prototype methods like .map().
+> 3. **Function Scope Binding**: The arguments object is automatically created upon function invocation.
 > 
 ---
 
-### Exercise 3: Rest Parameters vs `arguments`
+### Exercise 2: Parameter Overloading Inspector via arguments.length
 
-**Problem:** Rewrite a function using modern ES6 rest parameters `function multiply(factor, ...numbers)`.
+**Scenario:** A legacy library overload handler inspects arguments.length to route function calls depending on whether 1, 2, or 3 parameters were passed.
 
-**Expected output:**
+**Requirements:**
+1. Write overloadHandler().
+2. Check arguments.length.
+3. If 1 arg, return "SINGLE: " + arg.
+4. If 2 args, return "PAIR: " + arg1 + ", " + arg2.
+5. Else return "MULTI".
+
 > [!check]- Answer
-> ```text
-> [ 10, 20, 30 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function multiply(factor, ...numbers) {
->   return numbers.map(n => n * factor);
+> function overloadHandler() {
+>   if (arguments.length === 1) {
+>     return "SINGLE: " + arguments[0];
+>   } else if (arguments.length === 2) {
+>     return "PAIR: " + arguments[0] + ", " + arguments[1];
+>   } else {
+>     return "MULTI: " + arguments.length;
+>   }
 > }
-> console.log(multiply(10, 1, 2, 3));
+>
+> // Verification tests
+> console.assert(overloadHandler("A") === "SINGLE: A", "Test 1 Failed");
+> console.assert(overloadHandler("A", "B") === "PAIR: A, B", "Test 2 Failed");
+> console.assert(overloadHandler(1, 2, 3) === "MULTI: 3", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Rest parameters (`...args`) gather excess arguments into genuine `Array` instances.
+> #### Technical Explanation
+>
+> 1. **Arity Inspection**: Property arguments.length indicates the actual number of arguments passed by the caller.
+> 2. **Parameter Signature Mismatch**: arguments.length reflects passed arguments regardless of named parameter count in function declaration.
+> 3. **Arrow Function Absence**: Arrow functions do NOT have an arguments object; referencing arguments inside arrow functions targets outer scopes.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Converting arguments to Real Arrays via Array.from()
+
+**Scenario:** A legacy middleware wrapper converts the array-like arguments object into a true JavaScript array using Array.from() to invoke array methods.
+
+**Requirements:**
+1. Write processVariadicList().
+2. Convert arguments to array using Array.from(arguments).
+3. Use array .filter() and .reduce().
+4. Return aggregated total.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function processVariadicList() {
+>   const argsArray = Array.from(arguments);
+>   return argsArray
+>     .filter(val => typeof val === "number")
+>     .reduce((sum, val) => sum + val, 0);
+> }
+>
+> // Verification tests
+> const total = processVariadicList(5, "ignore", 15, null, 20);
+> console.assert(total === 40, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Array Conversion**: Array.from(arguments) or spread [...arguments] converts array-like objects into standard Array instances.
+> 2. **Modern Rest Parameter Alternative**: ES6 rest parameters (...args) replace legacy arguments objects in modern JS.
+> 3. **Strict Mode Behavior**: In strict mode, arguments elements do not dynamically sync with named parameter reassignment.
+---
+
+## 6. Related Terms
 - [Parameters](parameters.md) — The placeholders in the function definition.
 - [Function](function.md) — The block of code being executed.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Arguments are the concrete values you put inside the parentheses when you *call* a function.
 - In JavaScript, passing too many or too few arguments does not crash the program.
 - If you pass too few, the missing parameters become `undefined`.

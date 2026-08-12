@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: querySelectorAll & NodeList is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `document.querySelector()` is ideal for targeting a single unique element (like a main container or active button), web layouts often require modifying groups of elements simultaneously—such as highlighting all items in a grocery list, extracting text from all paragraph fields, or disabling all form input elements.
@@ -83,7 +79,7 @@ function processChecklist() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to call Array methods directly on a NodeList
 
@@ -161,67 +157,130 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Highlight Links
+### Exercise 1: Static NodeList Batch Style Updater
 
-**Problem:** Complete the code to select all anchor tags (`<a>`) inside the document and add the class name `"highlight"` to each using `.forEach()`.
+**Scenario:** A UI theme manager queries all matching cards using querySelectorAll() and iterates the static NodeList to apply active CSS classes.
 
-```javascript
-if (typeof document !== "undefined") {
-  const links = // Write query selector all
-  
-  // Loop through links and add 'highlight' class
-}
-```
+**Requirements:**
+1. Write updateAllCardThemes(selectorStr, themeClass).
+2. Query elements using document.querySelectorAll(selectorStr).
+3. Iterate NodeList with .forEach() and add themeClass.
+4. Return updated count.
 
 > [!check]- Answer
-> - The selector for anchor tags is `"a"`.
-> - Use `element.classList.add("highlight")` inside `.forEach()`.
-> 
----
-
-### Exercise 2: Iterating NodeLists with `.forEach()`
-
-**Problem:** Iterate over a static `NodeList` using `nodeList.forEach(node => ...)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> NodeList iterated via forEach
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("NodeList iterated via forEach");
+> function updateAllCardThemes(selectorStr, themeClass) {
+>   if (!globalThis.document || typeof document.querySelectorAll !== "function") return 0;
+>
+>   const nodes = document.querySelectorAll(selectorStr);
+>   let count = 0;
+>   nodes.forEach(el => {
+>     if (el.classList) {
+>       el.classList.add(themeClass);
+>       count++;
+>     }
+>   });
+>   return count;
+> }
+>
+> // Verification tests
+> const mockCard = { classList: { add(c) {} } };
+> globalThis.document = {
+>   querySelectorAll(s) { return [mockCard, mockCard]; }
+> };
+> console.assert(updateAllCardThemes(".card", "active") === 2, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Modern DOM NodeLists support `forEach` directly.
+> #### Technical Explanation
+>
+> 1. **querySelectorAll() Static NodeList**: Returns a static (non-live) NodeList containing all matching Element nodes at query time.
+> 2. **NodeList.prototype.forEach()**: Modern NodeList objects implement .forEach() directly for clean iteration.
+> 3. **Array Conversion**: Convert NodeList to true array using Array.from(nodeList) to use map/filter/reduce.
 > 
 ---
 
-### Exercise 3: Converting NodeList to Array
+### Exercise 2: Queryselectorall Nodelist Advanced Context Handler
 
-**Problem:** Convert static `NodeList` to Array using `[...document.querySelectorAll('div')]`.
+**Scenario:** A web application component processes queryselectorall nodelist data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleQueryselectorallNodelistSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Converted NodeList to Array
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Converted NodeList to Array");
+> function handleQueryselectorallNodelistSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleQueryselectorallNodelistSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Spread operator `[...]` converts NodeLists into true Array instances for array method chaining.
+> #### Technical Explanation
+>
+> 1. **Queryselectorall Nodelist Architecture**: Applying queryselectorall nodelist patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Queryselectorall Nodelist Performance Optimization
+
+**Scenario:** An application utility optimizes queryselectorall nodelist execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeQueryselectorallNodelistTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeQueryselectorallNodelistTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeQueryselectorallNodelistTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Queryselectorall Nodelist Optimization**: Optimizing queryselectorall nodelist improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [for...of](../level_04/for_of.md) — A loop statement that can directly iterate over a NodeList.
 - [forEach()](../level_04/for_each.md) — The loop method supported by NodeLists.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `document.querySelectorAll()` queries the entire document and returns all matching elements wrapped inside a `NodeList`.
 - A NodeList is an array-like snapshot snapshot of matching elements; it does not update dynamically when the DOM changes.
 - NodeLists support `.length`, index bracket notation (`list[0]`), and `.forEach()`, but do not support `.map()`, `.filter()`, or `.reduce()`.

@@ -600,7 +600,7 @@ Include unit tests with `assert_eq!` verifying interior mutability, volatile rea
 - [FFI (Foreign Function Interface)](ffi.md) — Language boundaries where UB can occur across C/Rust boundaries.
 - [`union`](union.md) — Related concept: `union`.
 - [`unsafe trait` / `unsafe impl`](unsafe_trait.md) — Related concept: `unsafe trait` / `unsafe impl`.
-- [Miri (UB Detector)](miri_ub_detector.md) — Related concept: Miri (UB Detector).
+- [Miri (Undefined Behavior Detector)](miri_ub_detector.md) — Related concept: Miri (UB Detector).
 
 ---
 

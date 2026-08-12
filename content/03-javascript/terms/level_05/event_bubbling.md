@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Only)**: Event Bubbling is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In HTML, elements are nested inside one another. A `<button>` is inside a `<div>`, which is inside the `<body>`. If a user clicks the button, they are *physically* also clicking the `<div>`, and also clicking the `<body>`. 
@@ -75,7 +71,7 @@ container.addEventListener("click", (event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Event Bubbling Scope and Variable Hoisting
 
@@ -148,62 +144,134 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Direction of Bubbling
+### Exercise 1: Multi-Level Table Row Click Handler via Bubbling
 
-**Problem:** You have the following structure: `<body> -> <main> -> <section> -> <p>`. 
-If a user clicks on the `<p>` tag, in what exact order will the click event travel through the DOM?
+**Scenario:** A data grid tracks row clicks by listening on a parent container element, taking advantage of event bubbling from child cells up to the parent container.
 
-**Expected output:**
+**Requirements:**
+1. Write handleRowClickBubbling(event, rowCallback).
+2. Inspect event.target and event.currentTarget.
+3. Find row element.
+4. Invoke rowCallback.
+
 > [!check]- Answer
-> ```text
-> 1. <p> (The target)
-> 2. <section>
-> 3. <main>
-> 4. <body>
-> 5. document
-> ```
-> - Bubbling always goes from the innermost child (the target) UP to the outermost parent.
-> 
----
-
-### Exercise 2: Stopping Event Propagation
-
-**Problem:** Call `event.stopPropagation()` to prevent button clicks from reaching parent div handlers.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Child click handled; parent propagation stopped
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Child click handled; parent propagation stopped");
+> function handleRowClickBubbling(event, rowCallback) {
+>   if (!event || !event.target) return false;
+>
+>   const row = typeof event.target.closest === "function" ? event.target.closest("tr") : null;
+>   if (row) {
+>     rowCallback(row);
+>     return true;
+>   }
+>   return false;
+> }
+>
+> // Verification tests
+> const mockRow = { tag: "tr" };
+> const mockEvent = {
+>   target: {
+>     closest(sel) { return sel === "tr" ? mockRow : null; }
+>   }
+> };
+> let clickedRow = null;
+> handleRowClickBubbling(mockEvent, r => { clickedRow = r; });
+> console.assert(clickedRow === mockRow, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `stopPropagation()` prevents events from bubbling up DOM parent trees.
+> #### Technical Explanation
+>
+> 1. **Event Bubbling Mechanics**: Events propagate upwards from the deepest target element through parent ancestors to document/window.
+> 2. **Bottom-Up Propagation**: Bubbling phase executes after capturing phase completes.
+> 3. **bubbles Property**: Event.bubbles boolean indicates whether an event type propagates up the DOM tree.
 > 
 ---
 
-### Exercise 3: Inspecting Event Phase
+### Exercise 2: Modal Backdrop Click Detector via Bubbling
 
-**Problem:** Match `event.eventPhase` integer constants: `1` (CAPTURING_PHASE), `2` (AT_TARGET), `3` (BUBBLING_PHASE).
+**Scenario:** A modal dialog component detects when clicks bubble up to the backdrop overlay element.
 
-**Expected output:**
+**Requirements:**
+1. Write isBackdropClick(event, backdropEl).
+2. Check if event.target === backdropEl.
+3. Return boolean indicating background overlay click.
+
 > [!check]- Answer
-> ```text
-> Capture: 1, Target: 2, Bubble: 3
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Capture: 1, Target: 2, Bubble: 3");
+> function isBackdropClick(event, backdropEl) {
+>   if (!event || !event.target || !backdropEl) return false;
+>   // If target clicked is exact backdrop element (not child content), return true
+>   return event.target === backdropEl;
+> }
+>
+> // Verification tests
+> const mockBackdrop = { id: "backdrop" };
+> const mockContent = { id: "modal-card" };
+>
+> console.assert(isBackdropClick({ target: mockBackdrop }, mockBackdrop) === true, "Test 1 Failed");
+> console.assert(isBackdropClick({ target: mockContent }, mockBackdrop) === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `eventPhase` numbers indicate current DOM event dispatch propagation stages.
-> 
+> #### Technical Explanation
+>
+> 1. **event.target vs event.currentTarget**: event.target refers to the actual clicked element; event.currentTarget is the listener element.
+> 2. **Backdrop Click Pattern**: Comparing event.target === backdropEl ensures inner modal card clicks don't close the modal.
+> 3. **Bubbling Propagation Path**: Inner child clicks bubble up to backdrop listener, but target comparison isolates content clicks.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Bubbling Tree Path Inspector
+
+**Scenario:** A debugging tool collects all element tags along the event bubbling path from target up to window.
+
+**Requirements:**
+1. Write traceBubblingPath(event).
+2. Use event.composedPath() or parentElement loop.
+3. Return array of element tag names.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function traceBubblingPath(event) {
+>   if (!event) return [];
+>   if (typeof event.composedPath === "function") {
+>     return event.composedPath().map(el => el.tagName || "WINDOW");
+>   }
+>   const path = [];
+>   let curr = event.target;
+>   while (curr) {
+>     path.push(curr.tagName || "UNKNOWN");
+>     curr = curr.parentElement;
+>   }
+>   return path;
+> }
+>
+> // Verification tests
+> const mockEvt = {
+>   target: { tagName: "BUTTON", parentElement: { tagName: "DIV", parentElement: null } }
+> };
+> const path = traceBubblingPath(mockEvt);
+> console.assert(path.join(",") === "BUTTON,DIV", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **composedPath() API**: Event.prototype.composedPath() returns an array of nodes through which the event will propagate.
+> 2. **Shadow DOM Boundary Traversal**: composedPath() traverses Shadow DOM boundaries if shadow roots are open.
+> 3. **Event Propagation Tracing**: Helps debug event propagation behavior across complex component hierarchies.
+---
+
+## 6. Related Terms
 - [Event Capturing](event_capturing.md) — The opposite of bubbling (traveling downwards).
 - [event.stopPropagation()](event_stoppropagation.md) — The method used to pop the bubble and stop it from rising.
 - [Event Delegation](event_delegation.md) — A powerful technique that *relies* on bubbling.
@@ -212,7 +280,7 @@ If a user clicks on the `<p>` tag, in what exact order will the click event trav
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Event Bubbling is the default behavior for most events in the DOM.
 - Events start at the innermost target element and travel upwards through all ancestors.
 - Parent elements can "catch" events that originated on their children.

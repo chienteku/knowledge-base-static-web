@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Animation / Visual Property**
+
+**Animation / Visual Property (Universal Modern Standard .)**: `transform` (Scale, Translate, Rotate) is a fundamental concept in this technology stack. **Level 10 — Transitions & Animations**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The absolute most performant way to animate elements).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to move a button 10px to the right when you hover over it, you *could* change its `margin-left` from 0 to 10px. But this is terrible for performance! When you change `margin`, the browser has to recalculate the layout of every single element on the entire page (a "reflow"), which causes the animation to lag and stutter on cheap smartphones. 
@@ -56,7 +52,7 @@ A very common modern design pattern: when you hover over a UI Card, it lifts up 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to transform `display: inline` elements
 
@@ -182,7 +178,7 @@ span { display: inline-block; transform: rotate(45deg); }
 .box:hover { transform: translate(-50%, -50%) scale(1.1); } /* Include translate offset */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Performance Test
 
@@ -242,14 +238,14 @@ Which option will look perfectly smooth on a cheap 5-year-old smartphone?
 >
 > **Explanation:** 3D transforms promote elements to dedicated GPU compositor layers for 60fps animations.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`transition`](transition.md) — Without a transition, a transform just instantly snaps to its new shape/position.
 - [`@keyframes` & `animation`](animation.md) — Complex animations that often chain multiple transforms together.
 - [Stacking Context](../level_04/stacking_context.md) — Related concept: Stacking Context.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `transform` manipulates elements visually without altering the page layout.
 - **Translate** moves, **Scale** resizes, and **Rotate** spins.
 - It is the most performant way to animate movement on the web (handled by the GPU).

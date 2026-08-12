@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **HTTP Standard / Error Handling**
+
+**HTTP Standard / Error Handling (Universal Standard)**: HTTP Status Codes is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a Client sends a request, the Server processes it and sends back a Response. But how does the Client know if it worked? 
@@ -53,7 +49,7 @@ Imagine ordering food at a drive-thru.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Always returning `200 OK` even on errors
 
@@ -109,77 +105,158 @@ HTTP/1.1 403 Forbidden ; Correct code: User authenticated, but forbidden permiss
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Whose fault is it?
+### Exercise 1: REST Error Response Factory with Standard Status Codes
 
-**Problem:** You are building a React frontend that talks to a Node.js backend. You click "Submit" and check the Network tab in your DevTools. The API returned a `502 Bad Gateway`. 
-Should you spend the next hour debugging your React code, or call the backend engineer?
+**Scenario:** An API framework builds a factory function that generates consistent JSON error response payloads for common HTTP status codes.
 
-**Expected output:**
+**Requirements:**
+1. Write createErrorResponse(statusCode, customDetail).
+2. Map status codes (400, 401, 403, 404, 409, 429, 500) to standard titles.
+
 > [!check]- Answer
-> ```text
-> Call the backend engineer! 
-> Any code starting with `5` means the Server failed. Your React code is completely fine; the backend infrastructure is broken.
+>
+> #### Implementation
+>
+> ```javascript
+> function createErrorResponse(statusCode, customDetail = null) {
+>   const statusTitles = {
+>     400: "Bad Request",
+>     401: "Unauthorized",
+>     403: "Forbidden",
+>     404: "Not Found",
+>     409: "Conflict",
+>     429: "Too Many Requests",
+>     500: "Internal Server Error"
+>   };
+>
+>   const title = statusTitles[statusCode] || "Unknown Error";
+>
+>   return {
+>     status: statusCode,
+>     error: {
+>       code: statusCode,
+>       title,
+>       detail: customDetail || title,
+>       timestamp: new Date().toISOString()
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const err404 = createErrorResponse(404, "User #42 not found");
+> console.assert(err404.status === 404, "Test 1 Failed");
+> console.assert(err404.error.title === "Not Found", "Test 2 Failed");
+> console.assert(err404.error.detail === "User #42 not found", "Test 3 Failed");
 > ```
-> - Remember the 4xx vs 5xx rule! 4 is your fault, 5 is their fault.
+>
+> #### Technical Explanation
+>
+> 1. **Standardized Error Payloads**: Returning uniform JSON error structures (code, title, detail) improves client error handling.
+> 2. **RFC 7807 (Problem Details)**: Industry standard format for HTTP API error details.
+> 3. **Status Code Semantics**: 400 (Syntax error), 401 (Unauthenticated), 403 (Unauthorized), 404 (Missing), 409 (State collision).
 > 
 ---
 
-### Exercise 2: HTTP Status Code Categorization
+### Exercise 2: Automatic Retry Logic for 5xx and 429 Status Codes
 
-**Problem:** Match the 3-digit status code class to its category:
-1. 1xx
-2. 2xx
-3. 3xx
-4. 4xx
-5. 5xx
+**Scenario:** An API client implements intelligent retry logic that retries requests ONLY when receiving 5xx server errors or 429 rate limit responses.
 
-**Expected output:**
+**Requirements:**
+1. Write executeWithRetry(fetchFn, maxRetries).
+2. Retry on 500, 502, 503, 504, or 429.
+3. Do NOT retry on 400, 401, 403, 404.
+
 > [!check]- Answer
-> ```text
-> 1. Informational
-> 2. Success
-> 3. Redirection
-> 4. Client Error
-> 5. Server Error
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeWithRetry(fetchFn, maxRetries = 2) {
+>   let attempt = 0;
+>   while (attempt <= maxRetries) {
+>     const res = await fetchFn();
+>     const shouldRetry = res.status === 429 || (res.status >= 500 && res.status <= 599);
+>
+>     if (!shouldRetry || attempt === maxRetries) {
+>       return res;
+>     }
+>
+>     attempt++;
+>   }
+> }
+>
+> // Verification tests
+> let calls = 0;
+> const mockFetch = async () => {
+>   calls++;
+>   if (calls === 1) return { status: 503 };
+>   return { status: 200, data: "ok" };
+> };
+>
+> executeWithRetry(mockFetch, 2).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed");
+>   console.assert(calls === 2, "Test 2 Failed: Should retry once on 503");
+> });
 > ```
-> ```text
-> 1xx -> Informational
-> 2xx -> Success
-> 3xx -> Redirection
-> 4xx -> Client Error
-> 5xx -> Server Error
-> ```
-> - **Explanation:** The first digit of HTTP status codes defines response class.
+>
+> #### Technical Explanation
+>
+> 1. **Transient vs Permanent Errors**: 5xx server errors and 429 rate limits are transient and safe to retry; 4xx client errors are permanent.
+> 2. **429 Too Many Requests**: Indicates client exceeded rate limit threshold; usually paired with Retry-After header.
+> 3. **Exponential Backoff**: Retries should incorporate exponential delays to avoid overwhelming recovering servers.
+> 
 ---
 
-### Exercise 3: Status Code Identification
+### Exercise 3: 201 Created vs 202 Accepted Response Disambiguator
 
-**Problem:** Identify the proper HTTP status code for each scenario:
-1. New resource created successfully via POST.
-2. Requested resource ID does not exist in database.
-3. Server rate limit exceeded by client.
-4. Database connection timeout inside backend service.
+**Scenario:** An API task manager returns 201 Created for synchronous resource creation, and 202 Accepted for long-running async background jobs.
 
-**Expected output:**
+**Requirements:**
+1. Write handleTaskSubmission(taskPayload, isAsyncJob).
+2. Return 201 Created with resource URL if sync.
+3. Return 202 Accepted with status check URL if async.
+
 > [!check]- Answer
-> ```text
-> 1. 201 Created
-> 2. 404 Not Found
-> 3. 429 Too Many Requests
-> 4. 500 Internal Server Error (or 504 Gateway Timeout)
+>
+> #### Implementation
+>
+> ```javascript
+> function handleTaskSubmission(taskPayload, isAsyncJob = false) {
+>   if (isAsyncJob) {
+>     const jobId = `job_${Date.now()}`;
+>     return {
+>       status: 202,
+>       headers: { "Location": `/api/jobs/${jobId}` },
+>       body: { message: "Task accepted for processing", jobId, statusUrl: `/api/jobs/${jobId}` }
+>     };
+>   }
+>
+>   const resourceId = `res_${Date.now()}`;
+>   return {
+>     status: 201,
+>     headers: { "Location": `/api/resources/${resourceId}` },
+>     body: { id: resourceId, ...taskPayload }
+>   };
+> }
+>
+> // Verification tests
+> const syncRes = handleTaskSubmission({ name: "Doc1" }, false);
+> console.assert(syncRes.status === 201 && syncRes.headers.Location.includes("resources"), "Test 1 Failed");
+>
+> const asyncRes = handleTaskSubmission({ name: "Doc2" }, true);
+> console.assert(asyncRes.status === 202 && asyncRes.headers.Location.includes("jobs"), "Test 2 Failed");
 > ```
-> ```text
-> 1. 201 Created
-> 2. 404 Not Found
-> 3. 429 Too Many Requests
-> 4. 500 Internal Server Error (or 504 Gateway Timeout)
-> ```
-> - **Explanation:** Standard HTTP status codes communicate specific application outcomes.
+>
+> #### Technical Explanation
+>
+> 1. **201 Created**: Indicates request succeeded and a new resource was created synchronously.
+> 2. **202 Accepted**: Indicates request was accepted for asynchronous processing, but processing is not complete.
+> 3. **Location Header Contract**: Both 201 and 202 responses return Location header pointing to the created resource or job status endpoint.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — How we check the status code in JavaScript using `response.status` and `response.ok`.
 - [Request & Response Lifecycle](../level_01/request_response.md) — Related concept: Request & Response Lifecycle.
 - [Caching (ETag, Cache-Control)](../level_06/caching.md) — Related concept: Caching (ETag, Cache-Control).
@@ -189,7 +266,7 @@ Should you spend the next hour debugging your React code, or call the backend en
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Status Codes are a 3-digit standard for communicating success/failure over the network.
 - **`2xx` = Success.**
 - **`4xx` = Client Error** (Frontend messed up: Bad data, not logged in, wrong URL).

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: indexOf / includes / findIndex is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Finding data inside lists is one of the most common programming tasks. However, depending on the scenario, developers need different search outcomes:
@@ -85,7 +81,7 @@ console.log("First available book slot:", availableBookIndex); // 1 (which repre
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `indexOf` or `includes` to Find Objects
 
@@ -167,72 +163,50 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Search and Edit
+### Exercise 1: Role Permission & Index Locator Suite
 
-**Problem:** Complete the code to check if `"Soda"` is inside the `cart` list using `includes`. If it is, find its index using `indexOf` and replace it with `"Water"` using `splice`.
+**Scenario:** An authorization middleware checks element presence with includes() and locates replacement indices with findIndex().
 
-```javascript
-const cart = ["Apple", "Bread", "Soda", "Cheese"];
+**Requirements:**
+1. Write checkRoleAndIndex(roles, targetRole).
+2. Check presence using roles.includes(targetRole).
+3. Find index using roles.findIndex(r => r === targetRole).
+4. Return object { hasRole, index }.
 
-// Check and replace
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> [ 'Apple', 'Bread', 'Water', 'Cheese' ]
-> ```
-> - Check existence using `cart.includes("Soda")`.
-> - Find index using `const index = cart.indexOf("Soda")`.
-> - Replace using `cart.splice(index, 1, "Water")`.
-> 
----
-
-### Exercise 2: Searching Objects with `findIndex`
-
-**Problem:** Find the index of user `{ id: 2 }` in `[{ id: 1 }, { id: 2 }]` using `findIndex`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const users = [{ id: 1 }, { id: 2 }];
-> console.log(users.findIndex(u => u.id === 2));
+> function checkRoleAndIndex(roles, targetRole) {
+>   if (!Array.isArray(roles)) return { hasRole: false, index: -1 };
+>   const hasRole = roles.includes(targetRole);
+>   const index = roles.findIndex(r => r === targetRole);
+>   return { hasRole, index };
+> }
+>
+> // Verification tests
+> const userRoles = ["READ", "WRITE", "EXECUTE"];
+> const res = checkRoleAndIndex(userRoles, "WRITE");
+> console.assert(res.hasRole === true && res.index === 1, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `findIndex` uses predicate callbacks, enabling object property search.
-> 
----
-
-### Exercise 3: Checking Element Inclusion with `includes`
-
-**Problem:** Check if array `[1, 2, NaN]` contains `NaN` using `.includes(NaN)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
-> ```javascript
-> const arr = [1, 2, NaN];
-> console.log(arr.includes(NaN));
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `Array.prototype.includes` uses SameValueZero equality, correctly detecting `NaN`.
-> 
+> 1. **includes() Primitive Check**: Array.prototype.includes(val) checks primitive value presence returning boolean true/false.
+> 2. **findIndex() Predicate Check**: Array.prototype.findIndex(predicate) checks complex object conditions returning index number or -1.
+> 3. **indexOf() Strict Equality**: indexOf() uses strict equality (===) but treats NaN as non-matching (unlike includes()).
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [find()](find.md) — Returns the actual matched element itself (rather than its index).
 - [some()](some.md) — Checks if at least one element satisfies a callback condition.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `includes(element)` checks for primitive existence and returns a boolean (`true`/`false`).
 - `indexOf(element)` searches for a primitive and returns its index, or `-1` if not found.
 - `findIndex(callback)` is a higher-order method used to find indices in complex arrays (like arrays of objects) using logic evaluations.

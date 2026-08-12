@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout System (Flexbox)**
+
+**Layout System (Flexbox) (Universal Modern Standard .)**: Flexbox (Concept) & `display: flex` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The primary way modern websites are built).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before Flexbox, developers used ugly hacks like `float` or `inline-block` to make things sit side-by-side. Trying to perfectly center a `<div>` both vertically and horizontally was famously impossible and the subject of thousands of internet memes.
@@ -54,7 +50,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to apply Flexbox properties to the children
 
@@ -108,7 +104,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 .container > .item { flex-grow: 1; } /* Applied to child flex item */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Parent Trap
 
@@ -169,7 +165,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 >
 > **Explanation:** `display: inline-flex` combines inline outer layout flow with inner flex formatting.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`flex-direction`](flex_direction.md) — Rotating the main layout axis.
 - [`justify-content`](justify_content.md) — Aligns children along the main axis.
 - [`align-items`](align_items.md) — Aligns children along the cross axis.
@@ -180,7 +176,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `display: flex;` is the modern standard for building website layouts.
 - It is applied to the **Parent Container**.
 - By default, it instantly forces all direct children to sit side-by-side in a horizontal row.

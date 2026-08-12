@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: every() is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you need absolute certainty about a dataset. For instance, before letting a user submit a form, you need to verify that *every single required field* is filled out. 
@@ -68,7 +64,7 @@ if (isFormValid) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Every Scope and Variable Hoisting
 
@@ -141,70 +137,131 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Are they all strings?
+### Exercise 1: Order Checkout Compliance Checklist
 
-**Problem:** You have an array: `["apple", "banana", 42, "cherry"]`. Use `every()` and the `typeof` operator to check if every single item in the array is a string.
+**Scenario:** An e-commerce checkout engine verifies that all cart item objects satisfy inventory, pricing, and compliance requirements using every().
 
-**Expected output:**
+**Requirements:**
+1. Write validateOrderItems(cartItems).
+2. Use cartItems.every(predicate).
+3. Verify item.inStock is true and item.price > 0.
+4. Return boolean validation status.
+
 > [!check]- Answer
-> ```text
-> false
-> ```
-> - `array.every(item => typeof item === "string")`
-> 
----
-
-### Exercise 2: Validating Array Positive Numbers
-
-**Problem:** Check if all items in `[2, 4, 6]` are even using `.every()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [2, 4, 6];
-> console.log(nums.every(x => x % 2 === 0));
+> function validateOrderItems(cartItems) {
+>   if (!Array.isArray(cartItems) || cartItems.length === 0) return false;
+>   return cartItems.every(item => item.inStock === true && typeof item.price === "number" && item.price > 0);
+> }
+>
+> // Verification tests
+> const validCart = [{ inStock: true, price: 10 }, { inStock: true, price: 25 }];
+> console.assert(validateOrderItems(validCart) === true, "Test 1 Failed");
+>
+> const invalidCart = [{ inStock: true, price: 10 }, { inStock: false, price: 15 }];
+> console.assert(validateOrderItems(invalidCart) === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `.every()` returns `true` if every element satisfies the testing predicate.
+> #### Technical Explanation
+>
+> 1. **every() Predicate Evaluation**: Array.prototype.every(predicate) checks whether all elements in the array satisfy the predicate condition.
+> 2. **Short-Circuit Execution**: every() stops iterating immediately (short-circuits) upon encountering the first falsy predicate result.
+> 3. **Vacuous Truth for Empty Arrays**: Calling every() on an empty array returns true for any predicate condition (vacuous truth).
 > 
 ---
 
-### Exercise 3: Short-Circuiting in `.every()`
+### Exercise 2: Form Input Field Constraints Validator
 
-**Problem:** Demonstrate that `.every()` stops testing upon encountering the first `false` element.
+**Scenario:** A registration form engine checks whether all required input field objects meet length and validation criteria.
 
-**Expected output:**
+**Requirements:**
+1. Write validateFormInputs(fields).
+2. Use fields.every(field => field.value.trim().length >= field.minLen).
+3. Return boolean validity.
+
 > [!check]- Answer
-> ```text
-> Tested: 1
-> Tested: -2
-> false
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const res = [1, -2, 3].every(x => {
->   console.log(`Tested: ${x}`);
->   return x > 0;
-> });
-> console.log(res);
+> function validateFormInputs(fields) {
+>   if (!Array.isArray(fields) || fields.length === 0) return false;
+>   return fields.every(field => typeof field.value === "string" && field.value.trim().length >= (field.minLen || 1));
+> }
+>
+> // Verification tests
+> const fields1 = [
+>   { name: "username", value: "alice", minLen: 3 },
+>   { name: "email", value: "alice@example.com", minLen: 5 }
+> ];
+> console.assert(validateFormInputs(fields1) === true, "Test 1 Failed");
+>
+> const fields2 = [
+>   { name: "username", value: "bo", minLen: 3 }
+> ];
+> console.assert(validateFormInputs(fields2) === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `.every()` short-circuits immediately when a falsy result is returned.
-> 
+> #### Technical Explanation
+>
+> 1. **Predicate Boolean Return**: The predicate callback passed to every() must evaluate to a truthy or falsy value for each element.
+> 2. **All-or-Nothing Rule**: Returns true if and only if EVERY element satisfies the condition; otherwise returns false.
+> 3. **Callback Arguments**: The predicate callback receives element, index, and array parameters.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Microservice System Health Probe Array Evaluator
+
+**Scenario:** A cloud monitoring dashboard evaluates status metrics from an array of service probes, verifying system health.
+
+**Requirements:**
+1. Write isClusterHealthy(probeList).
+2. Check if probe.status === "HEALTHY" and probe.latencyMs < 200 using every().
+3. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function isClusterHealthy(probeList) {
+>   if (!Array.isArray(probeList) || probeList.length === 0) return false;
+>   return probeList.every(probe => probe.status === "HEALTHY" && probe.latencyMs < 200);
+> }
+>
+> // Verification tests
+> const probes1 = [
+>   { status: "HEALTHY", latencyMs: 45 },
+>   { status: "HEALTHY", latencyMs: 120 }
+> ];
+> console.assert(isClusterHealthy(probes1) === true, "Test 1 Failed");
+>
+> const probes2 = [
+>   { status: "HEALTHY", latencyMs: 45 },
+>   { status: "DEGRADED", latencyMs: 500 }
+> ];
+> console.assert(isClusterHealthy(probes2) === false, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **High-Performance Short-Circuit**: If the first probe is DEGRADED, every() returns false instantly without inspecting remaining probes.
+> 2. **Pure Inspection**: every() does not mutate the source array.
+> 3. **Guard against Empty Inputs**: Check Array.isArray() and length > 0 before calling every() to prevent empty array vacuous truth bugs.
+---
+
+## 6. Related Terms
 - [some()](some.md) — The lenient sibling. Returns true if *at least one* passes.
 - [filter()](filter.md) — Actually extracts the elements that pass, rather than just returning true/false.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `every()` returns a strict boolean: `true` or `false`.
 - It returns `true` only if **all** elements pass the test.
 - It "short-circuits" (stops executing) the moment it finds a falsy result.

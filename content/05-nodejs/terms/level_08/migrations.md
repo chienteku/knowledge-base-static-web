@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Database Architecture / DevOps**
+
+**Database Architecture / DevOps (System Architecture)**: Migrations is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **System Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you build a Node.js app, you use Git to track the history of your code. If you make a mistake, you can revert to yesterday's code.
@@ -44,7 +40,7 @@ A proper migration always has two parts:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Editing old migration files
 
@@ -90,7 +86,7 @@ Create a NEW migration file: npx prisma migrate dev --name add_new_column
 node -e 'runMigrations()'
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Rollback
 
@@ -144,7 +140,7 @@ node -e 'runMigrations()'
 >
 > **Explanation:** `migrate dev` creates new migration files; `migrate deploy` applies pending migrations deterministically.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — ORMs like Prisma automatically generate these migration files for you based on your JavaScript code!
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.
 - [Prisma / Sequelize (SQL ORMs)](prisma_sequelize.md) — Related concept: Prisma / Sequelize (SQL ORMs).
@@ -152,7 +148,7 @@ node -e 'runMigrations()'
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Migrations** are version control for your database structure.
 - They are a series of timestamped scripts that alter the database tables step-by-step.
 - They guarantee that every developer's local database matches the production database perfectly.

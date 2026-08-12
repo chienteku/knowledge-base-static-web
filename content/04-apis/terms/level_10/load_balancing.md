@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Implemented within cloud networks , ingress controllers, and system architecture topologies.)**: Load Balancing is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented within cloud networks (AWS, Cloudflare), ingress controllers, and system architecture topologies.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A single backend server machine has physical limits (CPU cores, RAM size, network card throughput). If a web application receives a sudden spike in traffic, a single server will become overloaded, slow down, and crash.
@@ -61,7 +57,7 @@ Imagine a busy grocery store checkout area.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Scaling stateless web servers without scaling the database
 
@@ -111,61 +107,168 @@ app.get('/healthz', (req, res) => res.status(200).send('OK'));
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Traffic Distribution
+### Exercise 1: Weighted Round-Robin Load Balancer
 
-**Problem:** A load balancer routes traffic to 3 backend servers using a **Round Robin** algorithm. If 300 requests arrive, how many requests will Server B handle under normal conditions?
+**Scenario:** An API load balancer selects backend target servers using a Weighted Round-Robin algorithm to distribute traffic based on server capacity.
+
+**Requirements:**
+1. Write createWeightedLoadBalancer(serversList).
+2. Implement selectNextServer().
+3. Distribute calls proportional to weights.
 
 > [!check]- Answer
-> - **100 requests.** (Under Round Robin, requests are distributed evenly down the list. Each of the 3 servers handles $300 / 3 = 100$ requests).
+>
+> #### Implementation
+>
+> ```javascript
+> function createWeightedLoadBalancer(serversList = []) {
+>   if (!Array.isArray(serversList) || serversList.length === 0) {
+>     throw new Error("Servers list required");
+>   }
+>
+>   const pool = [];
+>   serversList.forEach(s => {
+>     const weight = s.weight || 1;
+>     for (let i = 0; i < weight; i++) {
+>       pool.push(s.url);
+>     }
+>   });
+>
+>   let index = 0;
+>
+>   return {
+>     selectNextServer() {
+>       const selected = pool[index];
+>       index = (index + 1) % pool.length;
+>       return selected;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const servers = [
+>   { url: "server1", weight: 2 },
+>   { url: "server2", weight: 1 }
+> ];
+>
+> const lb = createWeightedLoadBalancer(servers);
+> const choices = [lb.selectNextServer(), lb.selectNextServer(), lb.selectNextServer()];
+>
+> console.assert(choices.filter(s => s === "server1").length === 2, "Test 1 Failed: server1 selected twice");
+> console.assert(choices.filter(s => s === "server2").length === 1, "Test 2 Failed: server2 selected once");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Load Balancing Purpose**: Distributes incoming network traffic across multiple backend servers to maximize throughput.
+> 2. **Weighted Round-Robin**: Directs more traffic to higher-capacity servers (e.g. 16-core servers vs 4-core servers).
+> 3. **High Availability**: Ensures no single server becomes a performance bottleneck under heavy traffic.
 > 
+---
+
+### Exercise 2: IP Hash Sticky Session Load Balancer Router
+
+**Scenario:** A load balancer routes client requests to backend servers based on client IP hash, ensuring sticky session persistence.
+
+**Requirements:**
+1. Write selectServerByIpHash(clientIp, serversArray).
+2. Compute simple numeric hash of clientIp.
+3. Select server via `hash % serversArray.length`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function selectServerByIpHash(clientIp, serversArray = []) {
+>   if (!clientIp || serversArray.length === 0) return null;
+>
+>   let hash = 0;
+>   for (let i = 0; i < clientIp.length; i++) {
+>     hash = (hash << 5) - hash + clientIp.charCodeAt(i);
+>     hash |= 0;
+>   }
+>
+>   const positiveHash = Math.abs(hash);
+>   const selectedIndex = positiveHash % serversArray.length;
+>
+>   return serversArray[selectedIndex];
+> }
+>
+> // Verification tests
+> const pool = ["serverA", "serverB", "serverC"];
+> const s1 = selectServerByIpHash("192.168.1.50", pool);
+> const s2 = selectServerByIpHash("192.168.1.50", pool);
+>
+> console.assert(s1 === s2, "Test 1 Failed: Same IP must ALWAYS map to the same server");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **IP Hashing Mechanics**: Hashes client IP address to deterministically map clients to specific backend servers.
+> 2. **Sticky Sessions**: Guarantees a client connects to the same backend server on every request.
+> 3. **Stateful Service Support**: Necessary for legacy stateful applications storing in-memory user session state.
 > 
 ---
 
-### Exercise 2: Layer 4 vs Layer 7 Load Balancing
+### Exercise 3: Passive Health Check & Auto-Removal Circuit Engine
 
-**Problem:** Distinguish Layer 4 (Transport) vs Layer 7 (Application) Load Balancing.
+**Scenario:** An API load balancer monitors backend server failure rates and temporarily removes unhealthy servers from the active pool.
 
-**Expected output:**
+**Requirements:**
+1. Write auditServerHealth(serversMap, maxFailures).
+2. Remove servers exceeding maxFailures.
+
 > [!check]- Answer
-> ```text
-> Layer 4: Balances traffic at IP/TCP level without inspecting packet payload content (faster, high throughput).
-> Layer 7: Balances traffic inspecting HTTP headers, URIs, and cookies (content-aware routing).
+>
+> #### Implementation
+>
+> ```javascript
+> function auditServerHealth(serversMap = new Map(), maxFailures = 3) {
+>   const healthyPool = [];
+>   const removedServers = [];
+>
+>   for (const [url, state] of serversMap.entries()) {
+>     if (state.failedCount >= maxFailures) {
+>       state.isHealthy = false;
+>       removedServers.push(url);
+>     } else {
+>       state.isHealthy = true;
+>       healthyPool.push(url);
+>     }
+>   }
+>
+>   return { healthyPool, removedServers };
+> }
+>
+> // Verification tests
+> const map = new Map([
+>   ["server1", { failedCount: 0 }],
+>   ["server2", { failedCount: 3 }]
+> ]);
+>
+> const audit = auditServerHealth(map, 3);
+> console.assert(audit.healthyPool.length === 1 && audit.healthyPool[0] === "server1", "Test 1 Failed");
+> console.assert(audit.removedServers.includes("server2"), "Test 2 Failed");
 > ```
-> ```text
-> Layer 4 (Network/TCP) -> IP & Port routing (Fast, high throughput, payload agnostic).
-> Layer 7 (Application) -> HTTP header, URL path, and cookie routing (Content aware).
-> ```
-> - **Explanation:** Layer 7 balances by application content; Layer 4 balances by raw TCP streams.
+>
+> #### Technical Explanation
+>
+> 1. **Passive Health Checks**: Monitors actual client request failures to detect broken backend servers.
+> 2. **Active Health Checks**: Periodically pings health endpoints (`/healthz`) to verify server readiness.
+> 3. **Self-Healing Pools**: Re-adds servers to active load balancer pool when health checks succeed again.
 ---
 
-### Exercise 3: Load Balancing Algorithm Selection
-
-**Problem:** Which algorithm is best for long-lived WebSocket connections?
-1. Round-Robin
-2. Least Connections
-3. IP Hash
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Least Connections (routes new connections to the server currently handling the fewest active sockets).
-> ```
-> ```text
-> Least Connections (routes new connections to the server currently handling the fewest active sockets).
-> ```
-> - **Explanation:** Least Connections maintains balanced socket distributions over long durations.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [API Gateway](api_gateway.md) — The edge proxy that often integrates load balancing features.
 - [Session vs Token Authentication](../level_04/session_vs_token_auth.md) — The authentication models that determine whether server state is required.
 - [Microservices vs Monolith](microservices_monolith.md) — Related concept: Microservices vs Monolith.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Load balancers distribute incoming network traffic across a cluster of backend servers.
 - Horizontal scaling runs multiple identical servers; vertical scaling increases one server's resources.
 - Round Robin and Least Connections are standard routing algorithms.

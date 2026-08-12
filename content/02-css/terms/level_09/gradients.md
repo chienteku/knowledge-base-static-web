@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `linear-gradient` & `radial-gradient` (Gradients) is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Evaluated as a GPU-accelerated graphic element inside the browser's painting subsystem).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early web design, if you wanted a button or header to fade from blue to purple, you had to slice a narrow `1px` wide image block in Photoshop, export it as a PNG, download it via HTTP, and repeat it horizontally using `background-repeat: repeat-x;`.
@@ -150,7 +146,7 @@ Split stripe background (no color blending):
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to apply gradients to `background-color`
 
@@ -199,7 +195,7 @@ div {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hard Stop Card Split
 
@@ -255,13 +251,13 @@ div {
 >
 > **Explanation:** `radial-gradient` radiates outward from a center focal point.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — Scaling backgrounds.
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background declarations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSS gradients generate background graphics mathematically in the browser.
 - Gradients are compiled as image files (`background-image`), never colors (`background-color`).
 - `linear-gradient` draws color transitions along a straight directional line.

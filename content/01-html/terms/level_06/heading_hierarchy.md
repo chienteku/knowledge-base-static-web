@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Heading Hierarchy & Document Outline is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all SEO spiders and screen readers to construct document outline indices).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sighted users scroll down a page and instantly scan heading styles (bold, size changes) to understand what the document is about. They can tell that a large centered header is a main chapter, and a smaller left-aligned header is a subsection.
@@ -130,7 +126,7 @@ A simple outline schema:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Choosing heading levels for font styling
 
@@ -191,7 +187,7 @@ A simple outline schema:
 <h2>Features</h2>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Outline Repair
 
@@ -251,7 +247,7 @@ A simple outline schema:
 >
 > **Explanation:** Screen reader users rely on heading hotkeys to scan document outlines.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — The tags that define outline points.
 - [Semantic HTML](semantic_html.md) — The concept framework.
 - [`<article>` and `<section>`](article_section.md) — Containers that enclose outline sections.
@@ -259,7 +255,7 @@ A simple outline schema:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The document outline is the machine-readable table of contents of a webpage.
 - Only use one `<h1>` per page.
 - Heading levels must decrease sequentially (`<h1>` -> `<h2>` -> `<h3>`) without skipping numbers.

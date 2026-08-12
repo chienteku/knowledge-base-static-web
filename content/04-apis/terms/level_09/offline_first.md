@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Browser-Specific: Built on modern Progressive Web App  browser APIs.)**: Offline-First / PWA is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Built on modern Progressive Web App (PWA) browser APIs.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional web applications are "online-first." If a user loses internet connectivity, the browser displays a "No Connection" page, blocking access to the app's features.
@@ -106,7 +102,7 @@ self.addEventListener('fetch', (event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Applying Cache-First routing to highly dynamic data
 
@@ -159,65 +155,191 @@ catch (err) { setItems(prevItems); } // Rollback to previous state on sync error
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Strategy Selector
+### Exercise 1: Offline Mutation Sync Queue Manager
 
-**Problem:** Choose the most appropriate routing strategy (**Cache-First**, **Network-First**, or **Stale-While-Revalidate**) for the following assets:
+**Scenario:** An offline-first PWA queues API mutations (POST/PUT) in IndexedDB when offline, automatically flushing them when network connectivity is restored.
 
-1.  A CSS stylesheet file `main.hash123.css` (renamed on compile when updated).
-2.  A user's inbox email list widget.
-3.  A weather widget showing current temperatures.
+**Requirements:**
+1. Write createOfflineQueue(apiSyncFn).
+2. Queue mutations when offline.
+3. Flush queue on network reconnect.
 
 > [!check]- Answer
-> - 1.  **Cache-First** (The file name changes when updated, so we can cache it indefinitely without risk of serving stale styles).
-> - 2.  **Network-First** (Users expect to see new emails immediately if they have an active connection, with a fallback to cached emails when offline).
-> - 3.  **Stale-While-Revalidate** (Provides an instant load state using cached weather data, then updates the temperature in the background once the network response resolves).
-> 
-> 
----
-
-### Exercise 2: Service Worker Background Sync API
-
-**Problem:** What is the role of the Service Worker `BackgroundSync` API in offline-first applications?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BackgroundSync allows web apps to defer tasks (e.g. sending a message) to the Service Worker, which automatically executes the network request when user regains connection.
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> // Register background sync task:
-> const registration = await navigator.serviceWorker.ready;
-> await registration.sync.register('send-offline-messages');
+> function createOfflineQueue(apiSyncFn) {
+>   const queue = [];
+>   let isOnline = false;
+>
+>   return {
+>     setOnlineStatus(status) {
+>       isOnline = status;
+>     },
+>     async enqueueMutation(mutation) {
+>       if (isOnline) {
+>         return await apiSyncFn(mutation);
+>       }
+>       queue.push(mutation);
+>       return { queued: true, queueLength: queue.length };
+>     },
+>     async flushQueue() {
+>       if (!isOnline || queue.length === 0) return [];
+>       const pending = [...queue];
+>       queue.length = 0;
+>
+>       const results = [];
+>       for (const item of pending) {
+>         try {
+>           const res = await apiSyncFn(item);
+>           results.push({ item, success: true, res });
+>         } catch (e) {
+>           queue.push(item); // Re-queue failed item
+>           results.push({ item, success: false, error: e.message });
+>         }
+>       }
+>       return results;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const mockSync = async (m) => ({ synced: true, action: m.action });
+> const offQueue = createOfflineQueue(mockSync);
+>
+> offQueue.setOnlineStatus(false);
+> offQueue.enqueueMutation({ action: "UPDATE_PROFILE" }).then(res => {
+>   console.assert(res.queued === true, "Test 1 Failed");
+>
+>   offQueue.setOnlineStatus(true);
+>   return offQueue.flushQueue().then(flushed => {
+>     console.assert(flushed.length === 1 && flushed[0].success === true, "Test 2 Failed");
+>   });
+> });
 > ```
-> - **Explanation:** `BackgroundSync` guarantees network delivery even if user closes the browser tab.
+>
+> #### Technical Explanation
+>
+> 1. **Offline-First Philosophy**: Architectural pattern where apps function seamlessly without network, using local storage as source of truth.
+> 2. **Background Re-Sync**: Queues mutations offline and syncs them automatically when network connection is restored.
+> 3. **Optimistic UI Updates**: Updates UI state immediately in local storage before backend synchronization confirms.
+> 
 ---
 
-### Exercise 3: Network First vs Cache First Strategies
+### Exercise 2: Network Availability Listener & Guard
 
-**Problem:** Which Service Worker caching strategy is preferred for static CSS/JS assets vs dynamic user feeds?
+**Scenario:** Monitors browser online/offline status using `navigator.onLine` and `window.addEventListener('online'/'offline')`.
 
-**Expected output:**
+**Requirements:**
+1. Write monitorNetworkStatus(onStatusChangeFn, mockWindow).
+2. Emit current status.
+3. Listen for online and offline window events.
+
 > [!check]- Answer
-> ```text
-> Static assets: Cache First (Fallback to Network)
-> Dynamic feeds: Network First (Fallback to Cache)
+>
+> #### Implementation
+>
+> ```javascript
+> function monitorNetworkStatus(onStatusChangeFn, mockWindow) {
+>   const win = mockWindow || globalThis;
+>   const isOnline = () => win.navigator ? win.navigator.onLine : true;
+>
+>   const handleOnline = () => onStatusChangeFn({ online: true });
+>   const handleOffline = () => onStatusChangeFn({ online: false });
+>
+>   if (win.addEventListener) {
+>     win.addEventListener("online", handleOnline);
+>     win.addEventListener("offline", handleOffline);
+>   }
+>
+>   return {
+>     getCurrentStatus: () => isOnline(),
+>     cleanup: () => {
+>       if (win.removeEventListener) {
+>         win.removeEventListener("online", handleOnline);
+>         win.removeEventListener("offline", handleOffline);
+>       }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const events = [];
+> const mockWin = {
+>   navigator: { onLine: false },
+>   listeners: {},
+>   addEventListener(evt, fn) { this.listeners[evt] = fn; },
+>   removeEventListener(evt) { delete this.listeners[evt]; }
+> };
+>
+> const monitor = monitorNetworkStatus((status) => events.push(status), mockWin);
+> console.assert(monitor.getCurrentStatus() === false, "Test 1 Failed");
+>
+> mockWin.listeners["online"]();
+> console.assert(events.length === 1 && events[0].online === true, "Test 2 Failed");
 > ```
-> ```text
-> Static assets (CSS/JS) -> Cache First, Network Fallback
-> Dynamic feeds (API data) -> Network First, Cache Fallback
-> ```
-> - **Explanation:** Cache First maximizes asset speed; Network First ensures data freshness.
+>
+> #### Technical Explanation
+>
+> 1. **navigator.onLine Property**: Boolean indicating whether browser is connected to a network interface.
+> 2. **Online/Offline Window Events**: Fires when browser transitions between connected and disconnected network states.
+> 3. **Network Edge Cases**: navigator.onLine = true indicates connection to a router, but does NOT guarantee internet access (captive portals).
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Last-Write-Wins Conflict Resolution Engine
+
+**Scenario:** Resolves offline data sync conflicts between local offline mutations and server data using Last-Write-Wins (LWW) timestamp evaluation.
+
+**Requirements:**
+1. Write resolveLwwConflict(localRecord, serverRecord).
+2. Compare updatedTimestamp.
+3. Return record with newest timestamp.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveLwwConflict(localRecord, serverRecord) {
+>   if (!localRecord) return serverRecord;
+>   if (!serverRecord) return localRecord;
+>
+>   const localTime = new Date(localRecord.updatedTimestamp || 0).getTime();
+>   const serverTime = new Date(serverRecord.updatedTimestamp || 0).getTime();
+>
+>   if (localTime >= serverTime) {
+>     return { ...localRecord, conflictResolved: true, winner: "LOCAL" };
+>   }
+>
+>   return { ...serverRecord, conflictResolved: true, winner: "SERVER" };
+> }
+>
+> // Verification tests
+> const local = { id: 1, name: "Alice Offline", updatedTimestamp: "2026-08-12T10:05:00Z" };
+> const server = { id: 1, name: "Alice Server", updatedTimestamp: "2026-08-12T10:00:00Z" };
+>
+> const winner = resolveLwwConflict(local, server);
+> console.assert(winner.winner === "LOCAL" && winner.name === "Alice Offline", "Test 1 Failed: Local record is newer");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Sync Conflict Problem**: Occurs when data is modified offline on the client and simultaneously updated on the server.
+> 2. **Last-Write-Wins (LWW) Strategy**: Simple deterministic strategy choosing the record with the most recent timestamp.
+> 3. **CRDTs & Vector Clocks**: Advanced alternatives for multi-user offline collaboration without data loss.
+---
+
+## 6. Related Terms
 - [Service Workers](service_workers.md) — The background scripts that orchestrate PWA caching.
 - [IndexedDB](indexeddb.md) — The browser-native database used for offline data storage.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Offline-First applications remain functional without a network connection.
 - PWAs cache their UI App Shell locally to enable offline loads.
 - Cache-First routing serves local assets instantly, falling back to the network on cache misses.

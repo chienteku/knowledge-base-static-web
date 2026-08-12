@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Form Element** / **Interactive Element**
+
+**Form Element / Interactive Element (Universal Browser Support)**: `<button>` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While the W3C did create an `<input type="button">` and an `<input type="submit">`, they had a major limitation: because `<input>` is a void element, it cannot contain anything other than plain text. You couldn't put an image, an icon, or a formatted `<strong>` tag *inside* the button.
@@ -60,7 +56,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `type` attribute
 
@@ -130,7 +126,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 <button type="submit" class="button">Submit</button>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Button vs Anchor
 
@@ -184,7 +180,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 >
 > **Explanation:** Native `<button>` tags provide built-in keyboard accessibility for Enter and Space.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<form>`](form.md) — The element that the button usually submits.
 - [`action` & `method` Attributes](action_method.md) — The parameters that govern form submission when `type="submit"` is pressed.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The navigation element that is often confused with a button.
@@ -192,7 +188,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<button>` tag creates a clickable UI element.
 - Unlike `<input type="submit">`, you can nest HTML (like images and spans) inside a `<button>`.
 - Inside a form, a button defaults to `type="submit"`.

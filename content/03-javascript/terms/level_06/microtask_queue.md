@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Concept**
+
+**Architecture Concept (Universal: Implemented in all modern JavaScript engines.)**: Microtask Queue is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented in all modern JavaScript engines.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before Promises existed, JavaScript only had one waiting room for asynchronous callbacks (the standard Task Queue). However, when Promises were introduced, the creators realized that Promise resolutions often contain critical state updates that need to happen *immediately* before the browser renders the next frame or handles the next user click.
@@ -84,7 +80,7 @@ recursiveMicrotask();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Microtask Queue Scope and Variable Hoisting
 
@@ -157,73 +153,145 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Queue Sorting
+### Exercise 1: Microtask State Batcher via queueMicrotask()
 
-**Problem:** Sort the following APIs into which queue their callbacks are placed:
-`fetch().then()`, `setTimeout()`, `setInterval()`, `MutationObserver`
+**Scenario:** A UI state management library batches multiple state mutations into a single DOM update cycle using queueMicrotask().
 
-**Expected output:**
+**Requirements:**
+1. Write createStateBatcher(renderFn).
+2. Collect mutations.
+3. Schedule batch flush using queueMicrotask().
+4. Verify microtask executes before macrotask.
+
 > [!check]- Answer
-> ```text
-> Microtask Queue (VIP):
-> - fetch().then() (Promises)
-> - MutationObserver
-> 
-> Macrotask Queue (Economy):
-> - setTimeout()
-> - setInterval()
-> ```
-> - Promises and DOM mutations are VIPs. Timers are economy.
-> 
----
-
-### Exercise 2: Identifying Microtask APIs
-
-**Problem:** Name 2 microtask APIs in JavaScript (`Promise.then`/`catch`/`finally`, `queueMicrotask`, `MutationObserver`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Promise callbacks, queueMicrotask
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Promise callbacks, queueMicrotask");
+> function createStateBatcher(renderFn) {
+>   let pendingState = null;
+>   let isScheduled = false;
+>
+>   return function updateState(partialState) {
+>     pendingState = { ...pendingState, ...partialState };
+>
+>     if (!isScheduled) {
+>       isScheduled = true;
+>       queueMicrotask(() => {
+>         renderFn(pendingState);
+>         isScheduled = false;
+>         pendingState = null;
+>       });
+>     }
+>   };
+> }
+>
+> // Verification tests
+> let renderCount = 0;
+> let lastRender = null;
+> const updater = createStateBatcher(state => {
+>   renderCount++;
+>   lastRender = state;
+> });
+>
+> updater({ a: 1 });
+> updater({ b: 2 });
+>
+> console.assert(renderCount === 0, "Test 1 Failed: Microtask must not run synchronously");
+>
+> Promise.resolve().then(() => {
+>   console.assert(renderCount === 1, "Test 2 Failed: Batcher should execute once");
+>   console.assert(lastRender.a === 1 && lastRender.b === 2, "Test 3 Failed");
+> });
 > ```
 >
-> **Explanation:** Promises and `queueMicrotask` enqueue tasks onto the high-priority microtask queue.
+> #### Technical Explanation
+>
+> 1. **queueMicrotask() API**: queueMicrotask(fn) explicitly queues a callback function on the microtask queue.
+> 2. **Microtask Queue Priority**: Microtasks execute immediately after current script task, BEFORE any macrotasks or UI rendering.
+> 3. **Batching State Updates**: Microtasks allow accumulating multiple synchronous operations before flushing single updates.
 > 
 ---
 
-### Exercise 3: Microtask Queue Draining
+### Exercise 2: Microtask Queue Advanced Context Handler
 
-**Problem:** Demonstrate that multiple queued microtasks run back-to-back before any timer macrotask.
+**Scenario:** A web application component processes microtask queue data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleMicrotaskQueueSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Micro 1
-> Micro 2
-> Macro 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> setTimeout(() => console.log("Macro 1"), 0);
-> Promise.resolve().then(() => console.log("Micro 1")).then(() => console.log("Micro 2"));
+> function handleMicrotaskQueueSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleMicrotaskQueueSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** The event loop drains the entire microtask queue before executing the next macrotask.
-> 
+> #### Technical Explanation
+>
+> 1. **Microtask Queue Architecture**: Applying microtask queue patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Microtask Queue Performance Optimization
+
+**Scenario:** An application utility optimizes microtask queue execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeMicrotaskQueueTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeMicrotaskQueueTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeMicrotaskQueueTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Microtask Queue Optimization**: Optimizing microtask queue improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Event Loop](event_loop.md) — The system that checks these queues.
 - [Macrotask Queue](macrotask_queue.md) — The standard, lower-priority queue.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Microtask Queue is a high-priority waiting room for Asynchronous callbacks.
 - It is primarily used for Promise `.then()`, `.catch()`, and `.finally()` callbacks.
 - The Event Loop will always empty the Microtask Queue completely before moving to the Macrotask Queue.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design Philosophy**
+
+**Architecture / Design Philosophy (System Architecture)**: REST API Design is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **System Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, every developer named their API routes differently.
@@ -47,7 +43,7 @@ If a user logs in, the server doesn't keep a sticky note saying "User 12 is logg
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Verbs in the URL
 
@@ -166,7 +162,7 @@ app.delete('/users/:id', ...); // DELETE removes resource
 app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: RESTful Refactoring
 
@@ -232,7 +228,7 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 >
 > **Explanation:** Idempotent methods produce identical system state results regardless of how many times they are repeated.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Routing](../level_07/routing.md) — How you physically implement REST in Express.
 - [HTTP Status Codes](status_codes.md) — REST APIs must return standard status codes to indicate success or failure.
 - [API Versioning](api_versioning.md) — Related concept: API Versioning.
@@ -242,7 +238,7 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **REST API** uses standard HTTP Methods to indicate the action, and Nouns in the URL to indicate the resource.
 - **Statelessness** means the server does not remember the client; every request must contain all necessary authentication data.
 - Never put action verbs (`create`, `delete`) in your URLs.

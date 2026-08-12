@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard .)**: `align-self` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively by all modern browsers. Re-calculates individual item coordinates along the Cross Axis without affecting sibling boxes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, Flexbox works from the top down: you set layout rules on the Parent container, and they apply to all the Children equally. 
@@ -119,7 +115,7 @@ Nudging a single child button to the bottom:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Applying `align-self` to the parent container
 
@@ -182,7 +178,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 .item-right { margin-left: auto; } /* Margin auto overrides main axis position */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Layout Overrides
 
@@ -240,7 +236,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 >
 > **Explanation:** `auto` inherits the parent container's `align-items` rule.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`align-items`](align_items.md) — The parent alignment controller.
 - [`justify-content`](justify_content.md) — The main axis spacing controller.
 - [`order`](order.md) — The visual child ordering property.
@@ -248,7 +244,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `align-self` is applied to individual child flex items.
 - It overrides the parent container's `align-items` setting along the Cross Axis.
 - It accepts the values: `auto`, `flex-start`, `flex-end`, `center`, `stretch`, and `baseline`.

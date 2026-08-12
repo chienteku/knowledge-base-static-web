@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout System (Grid)**
+
+**Layout System (Grid) (Universal Modern Standard .)**: CSS Grid (Concept) & `display: grid` is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Used for macro-layouts, while Flexbox is used for micro-layouts).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Flexbox is incredible, but it is **one-dimensional**. It is designed to lay things out in a single Row *or* a single Column. While `flex-wrap` allows things to wrap to a new line, you cannot strictly control how the items align vertically with the row above them. 
@@ -67,7 +63,7 @@ Grid introduces a brand new CSS unit called the **`fr` (Fractional Unit)**. `1fr
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Grid when Flexbox is better (and vice-versa)
 
@@ -199,7 +195,7 @@ nav { display: flex; gap: 20px; }
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Asymmetrical Grid
 
@@ -250,7 +246,7 @@ nav { display: flex; gap: 20px; }
 >
 > **Explanation:** `grid-auto-rows` sets dimensions for implicit rows generated beyond explicit templates.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Flexbox (Concept) & `display: flex`](../level_05/flex_parent.md) — The 1D alternative.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Track columns and rows template definitions.
 - [`gap` (Grid Gap)](gap.md) — Spacing between cells.
@@ -259,7 +255,7 @@ nav { display: flex; gap: 20px; }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `display: grid;` creates a two-dimensional layout system.
 - You explicitly define the columns using `grid-template-columns`.
 - The `fr` (Fractional Unit) is the secret weapon of CSS Grid, allowing columns to dynamically share available space.

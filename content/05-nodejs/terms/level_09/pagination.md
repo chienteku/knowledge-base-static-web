@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Performance**
+
+**API Architecture / Performance (Database Queries / API Responses)**: Pagination is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Database Queries / API Responses**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you build Twitter. A user asks for the global timeline: `GET /tweets`.
@@ -57,7 +53,7 @@ Modern apps (like Infinite Scrolling feeds on Instagram) use **Cursor Pagination
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Paginating in Node.js instead of the Database
 
@@ -176,7 +172,7 @@ const limit = req.query.limit; // ❌ Could be 10000000!
 const limit = Math.min(parseInt(req.query.limit, 10) || 10, 100); // Clamp to max 100
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Math
 
@@ -230,13 +226,13 @@ How many items should the database `skip` (OFFSET)?
 >
 > **Explanation:** Offset allows arbitrary page skipping; Cursor guarantees stable pagination across real-time list inserts.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](../level_08/orms_odms.md) — The tools that execute the `take` and `skip` commands.
 - [The req & res Objects](../level_07/req_res.md) — You extract the page numbers from `req.query`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Pagination** prevents servers from crashing when returning massive datasets.
 - **Offset Pagination** uses `page` and `limit` to calculate how many items to skip in the database.
 - **Cursor Pagination** uses a specific ID/timestamp to grab the next set of items (perfect for Infinite Scrolling).

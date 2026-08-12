@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag / Landmark**
+
+**Semantic Tag / Landmark (Universal Browser Support)**: `<footer>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Just like the `<header>` was created to replace `<div id="header">`, the `<footer>` was created to replace `<div id="footer">`. 
@@ -76,7 +72,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting massive navigation blocks in the footer without a `<nav>`
 
@@ -151,7 +147,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 <footer>Footer content</footer>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Footer
 
@@ -206,7 +202,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 >
 > **Explanation:** Root-level `<footer>` elements act as `contentinfo` accessibility landmarks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<header>`](header.md) — The introductory equivalent to the footer.
 - [`<article>` and `<section>`](article_section.md) — Often contains its own specific `<footer>`.
 - [`<address>`](address.md) — The semantic tag for contact info, typically hosted in page footers.
@@ -214,7 +210,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<footer>` element represents the conclusion of a document or a section.
 - It typically contains copyright info, metadata, tags, or legal links.
 - Just like headers, you can have multiple footers on a page (e.g., a main site footer and an article-specific footer).

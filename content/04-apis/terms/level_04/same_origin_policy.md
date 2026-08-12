@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Browser-Specific: Enforced strictly by web browsers . It does not apply to server-to-server calls or tools like Postman.)**: Same-Origin Policy is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Enforced strictly by web browsers (Chrome, Safari, Firefox, Edge). It does not apply to server-to-server calls or tools like Postman.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web browsers run code from untrusted servers simultaneously in separate tabs. Imagine you have two tabs open in your browser:
@@ -66,7 +62,7 @@ Imagine a high-security hotel.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing SOP prevents a cross-origin request from hitting your server
 
@@ -115,69 +111,146 @@ Imagine a high-security hotel.
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Origin Inspector
+### Exercise 1: Same-Origin Policy (SOP) Tuple Evaluator
 
-**Problem:** You are running a script on `http://localhost:3000`. Determine if the browser will allow the script to read raw data from the following URLs:
+**Scenario:** A browser security engine evaluates two URLs to check if they share the exact same Origin tuple (Protocol, Host, Port).
 
-1. `http://localhost:3000/api/data`
-2. `https://localhost:3000/api/data`
-3. `http://127.0.0.1:3000/api/data`
-4. `http://localhost:4000/api/data`
+**Requirements:**
+1. Write isSameOrigin(urlA, urlB).
+2. Compare protocol, hostname, and port.
+3. Return boolean.
 
 > [!check]- Answer
-> - 1. **Allowed** (Same protocol, host, and port).
-> - 2. **Blocked** (Protocol differs: `http` vs `https`).
-> - 3. **Blocked** (Host string differs: `localhost` vs numerical loopback `127.0.0.1`).
-> - 4. **Blocked** (Port differs: `3000` vs `4000`).
+>
+> #### Implementation
+>
+> ```javascript
+> function isSameOrigin(urlA, urlB) {
+>   try {
+>     const a = new URL(urlA);
+>     const b = new URL(urlB);
+>
+>     const portA = a.port || (a.protocol === "https:" ? "443" : "80");
+>     const portB = b.port || (b.protocol === "https:" ? "443" : "80");
+>
+>     return (
+>       a.protocol === b.protocol &&
+>       a.hostname === b.hostname &&
+>       portA === portB
+>     );
+>   } catch (err) {
+>     return false;
+>   }
+> }
+>
+> // Verification tests
+> console.assert(isSameOrigin("https://example.com/page1", "https://example.com/page2") === true, "Test 1 Failed");
+> console.assert(isSameOrigin("http://example.com", "https://example.com") === false, "Test 2 Failed: Protocol mismatch");
+> console.assert(isSameOrigin("https://api.example.com", "https://example.com") === false, "Test 3 Failed: Subdomain mismatch");
+> console.assert(isSameOrigin("https://example.com:8080", "https://example.com:443") === false, "Test 4 Failed: Port mismatch");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Origin Definition**: Origin tuple consists of Protocol + Hostname + Port.
+> 2. **Same-Origin Policy Core Rule**: Browsers restrict scripts on Origin A from reading DOM or response data from Origin B.
+> 3. **Port & Protocol Strictness**: Even minor differences (http vs https, port 80 vs 8080) constitute cross-origin isolation.
 > 
+---
+
+### Exercise 2: Cross-Origin Read Restriction Auditor
+
+**Scenario:** Demonstrates SOP restriction rules: Cross-Origin Writes/Embeds are permitted, but Cross-Origin Reads are blocked.
+
+**Requirements:**
+1. Write auditSopOperation(opType, targetUrl, currentOrigin).
+2. Classify operation as EMBED (allowed), WRITE (allowed), or READ (blocked by SOP).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditSopOperation(opType, targetUrl, currentOrigin) {
+>   const same = isSameOrigin(targetUrl, currentOrigin);
+>   if (same) {
+>     return { allowed: true, reason: "Same Origin" };
+>   }
+>
+>   if (opType === "EMBED") {
+>     return { allowed: true, reason: "Cross-Origin Embed allowed" };
+>   }
+>   if (opType === "WRITE") {
+>     return { allowed: true, reason: "Cross-Origin Write allowed" };
+>   }
+>   if (opType === "READ") {
+>     return { allowed: false, reason: "Blocked by Same-Origin Policy (Requires CORS)" };
+>   }
+>
+>   return { allowed: false, reason: "Disallowed operation" };
+> }
+>
+> // Verification tests
+> const cur = "https://app.com";
+> console.assert(auditSopOperation("EMBED", "https://cdn.com/image.png", cur).allowed === true, "Test 1 Failed");
+> console.assert(auditSopOperation("READ", "https://api.com/data", cur).allowed === false, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SOP Read Isolation**: SOP prevents attacker sites from reading private user data from banking APIs via fetch/XHR.
+> 2. **Embedding Exceptions**: Browsers permit embedding cross-origin images (<img>), scripts (<script>), and stylesheets (<link>).
+> 3. **CORS as SOP Exemption**: CORS provides an explicit mechanism for servers to opt out of SOP read restrictions.
 > 
 ---
 
-### Exercise 2: Same-Origin Evaluation Matrix
+### Exercise 3: postMessage Cross-Origin Window Communication Guard
 
-**Problem:** Given target origin `https://example.com:443/page.html`, evaluate if request is Same-Origin (Yes/No):
-1. `https://example.com/about.html` 
-2. `http://example.com/about.html` 
-3. `https://api.example.com/about.html` 
-4. `https://example.com:8080/about.html` 
+**Scenario:** A web application uses `window.postMessage` to communicate securely across iframe origin boundaries, validating `event.origin`.
 
-**Expected output:**
+**Requirements:**
+1. Write handlePostMessage(event, trustedOrigin, handlerFn).
+2. Verify event.origin === trustedOrigin before executing handlerFn.
+
 > [!check]- Answer
-> ```text
-> 1. Yes (Same scheme, host, port)
-> 2. No (Different scheme http vs https)
-> 3. No (Different host api.example.com)
-> 4. No (Different port 8080 vs 443)
+>
+> #### Implementation
+>
+> ```javascript
+> function handlePostMessage(event, trustedOrigin, handlerFn) {
+>   if (!event || typeof event.origin !== "string") {
+>     return { status: 400, error: "Invalid postMessage event" };
+>   }
+>
+>   if (event.origin !== trustedOrigin) {
+>     return { status: 403, error: `Security Violation: Ignored postMessage from untrusted origin '${event.origin}'` };
+>   }
+>
+>   const result = handlerFn(event.data);
+>   return { status: 200, result };
+> }
+>
+> // Verification tests
+> const mockHandler = (data) => `Processed: ${data.msg}`;
+>
+> const validEvent = { origin: "https://trusted.com", data: { msg: "Hello" } };
+> const res1 = handlePostMessage(validEvent, "https://trusted.com", mockHandler);
+> console.assert(res1.status === 200 && res1.result === "Processed: Hello", "Test 1 Failed");
+>
+> const maliciousEvent = { origin: "https://evil.com", data: { msg: "Hack" } };
+> console.assert(handlePostMessage(maliciousEvent, "https://trusted.com", mockHandler).status === 403, "Test 2 Failed");
 > ```
-> ```text
-> 1. Yes -> Scheme, host, and port match.
-> 2. No  -> Scheme mismatch (http vs https).
-> 3. No  -> Host mismatch (subdomain).
-> 4. No  -> Port mismatch (8080 vs 443).
-> ```
-> - **Explanation:** SOP requires exact 3-tuple match of Scheme, Host, and Port.
+>
+> #### Technical Explanation
+>
+> 1. **window.postMessage API**: Enables safe cross-origin communication between parent window and child iframe.
+> 2. **Mandatory Origin Validation**: ALWAYS verify event.origin in message listeners to prevent cross-site scripting vulnerabilities.
+> 3. **Explicit Target Origin**: Specify targetOrigin in postMessage(data, targetOrigin) instead of wildcard *.
 ---
 
-### Exercise 3: SOP Bypass Mechanisms
-
-**Problem:** List 2 legitimate browser mechanisms used to bypass default SOP restrictions.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. CORS (Cross-Origin Resource Sharing headers)
-> 2. WebSocket connections (ws:// / wss://)
-> ```
-> ```text
-> 1. CORS (Cross-Origin Resource Sharing headers)
-> 2. WebSockets (wss://)
-> ```
-> - **Explanation:** CORS and WebSockets allow controlled cross-origin browser communication.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [CORS (Cross-Origin Resource Sharing)](cors.md) — The protocol relaxations enabling safe cross-origin API queries.
 - [CSRF (Cross-Site Request Forgery)](csrf.md) — The session-riding exploit that bypasses SOP write-blindness.
 - [Preflight Request (OPTIONS)](preflight_request.md) — Related concept: Preflight Request (OPTIONS).
@@ -185,7 +258,7 @@ Imagine a high-security hotel.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Same-Origin Policy is a fundamental browser-enforced security wall.
 - An origin is the exact match of protocol, host domain, and port.
 - SOP prevents scripts on one domain from reading the DOM, cookies, or fetch responses of another domain.

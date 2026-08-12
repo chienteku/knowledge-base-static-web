@@ -268,7 +268,7 @@ unsafe { asm!("add {0}, 1", inout(reg) val, options(nomem, nostack)); }
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`unsafe` Block](unsafe_block.md) — Unsafe blocks.
 

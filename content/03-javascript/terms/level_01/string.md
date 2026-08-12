@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: String is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers fundamentally process numbers, but humans communicate using text. We needed a data type that allows developers to store, manipulate, and display human-readable characters—everything from letters and numbers to punctuation and emojis. 
@@ -62,7 +58,7 @@ if (cleanEmail.includes('@')) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mismatched Quotes
 
@@ -142,63 +138,112 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Extracting Substrings
+### Exercise 1: User Profile Display Name Sanitizer
 
-**Problem:** Given the string `const url = "https://www.example.com";`, extract just the domain name `"example.com"` using string methods and log it to the console.
+**Scenario:** A user onboarding service formats and truncates raw profile names using string manipulation methods (trim(), slice(), toUpperCase(), template literals).
 
-**Expected output:**
+**Requirements:**
+1. Trim leading and trailing whitespace using .trim().
+2. Capitalize the first letter using .toUpperCase().
+3. Truncate name if it exceeds maxLen using .slice().
+4. Return formatted string using template literals.
+
 > [!check]- Answer
-> ```text
-> example.com
-> ```
-> - Check out the `.slice()` or `.substring()` methods.
-> - You can find the starting position by looking at the index after `"www."`.
-> - `.slice(12)` will extract everything from the 12th character to the end.
-> 
----
-
-### Exercise 2: String Immutability & Method Returns
-
-**Problem:** Call `str.toUpperCase()` on `let str = "hello"` and demonstrate that `str` remains unchanged unless reassigned.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Original: hello, Upper: HELLO
-> ```
+> #### Implementation
 > ```javascript
-> let str = "hello";
-> let upper = str.toUpperCase();
-> console.log(`Original: ${str}, Upper: ${upper}`);
+> function formatDisplayName(rawName, maxLen = 10) {
+>   if (typeof rawName !== "string") return "";
+>   const trimmed = rawName.trim();
+>   if (trimmed.length === 0) return "";
+> const capitalized = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+>   if (capitalized.length > maxLen) {
+>     return capitalized.slice(0, maxLen) + "...";
+>   }
+>   return capitalized;
+> }
+> // Verification tests
+> console.assert(formatDisplayName("  alice  ") === "Alice", "Test 1 Failed");
+> console.assert(formatDisplayName("alexander", 5) === "Alexa...", "Test 2 Failed");
 > ```
->
-> **Explanation:** String methods do not mutate strings in-place; they return brand new primitive string values.
+> #### Technical Explanation
+> 1. **String Immutability**: Strings in JavaScript are immutable primitive values; methods return brand new strings without modifying the original.
+> 2. **UTF-16 Character Encoding**: JavaScript strings are sequences of 16-bit code units.
+> 3. **Template Literals**: Backtick syntax enables expressions inside placeholders.
 > 
 ---
 
-### Exercise 3: String UTF-16 Code Points vs Length
+### Exercise 2: URL Query Parameter Extractor
 
-**Problem:** Print `"hello".length` vs `"👍".length` and explain why the emoji length is `2`.
+**Scenario:** A web router utility parses key-value pairs from raw URL query strings using .indexOf(), .substring(), and .split().
 
-**Expected output:**
+**Requirements:**
+1. Remove leading ? character if present.
+2. Split parameter pairs using .split("&").
+3. Split keys and values using .split("=").
+4. Return a key-value dictionary object.
+
 > [!check]- Answer
-> ```text
-> 5
-> 2
-> ```
+> #### Implementation
 > ```javascript
-> console.log("hello".length);
-> console.log("👍".length); // Surrogate pair (2 UTF-16 code units)
+> function parseQueryString(queryString) {
+>   const result = {};
+>   if (!queryString || typeof queryString !== "string") return result;
+> let cleanQuery = queryString.startsWith("?") ? queryString.slice(1) : queryString;
+>   const pairs = cleanQuery.split("&");
+>   for (const pair of pairs) {
+>     if (!pair) continue;
+>     const [key, val] = pair.split("=");
+>     if (key) {
+>       result[decodeURIComponent(key)] = val ? decodeURIComponent(val) : "";
+>     }
+>   }
+>   return result;
+> }
+> // Verification tests
+> const parsed = parseQueryString("?user=alice&role=admin");
+> console.assert(parsed.user === "alice" && parsed.role === "admin", "Test 1 Failed");
 > ```
->
-> **Explanation:** String `.length` measures 16-bit code units, not Unicode grapheme clusters. Emoji outside BMP take 2 surrogate code units.
-> 
+> #### Technical Explanation
+> 1. **String Searching & Extraction**: Methods like .startsWith(), .slice(), and .split() enable string parsing.
+> 2. **Immutability Protection**: String operations create new string segments in memory without modifying source text.
+> 3. **Primitive Status**: Primitive strings use memory-efficient stack representation with auto-boxing when calling methods.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Dynamic Email Template Interpolator
+
+**Scenario:** A notification service generates dynamic email body content by replacing template placeholders using .replaceAll().
+
+**Requirements:**
+1. Accept template string and variables dictionary object.
+2. Replace all {{key}} placeholders with corresponding dictionary values.
+3. Return populated message text.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function populateEmailTemplate(template, vars) {
+>   let message = template;
+>   for (const key of Object.keys(vars)) {
+>     const placeholder = "{{" + key + "}}";
+>     message = message.replaceAll(placeholder, String(vars[key]));
+>   }
+>   return message;
+> }
+> // Verification tests
+> const tpl = "Hello {{name}}, your order {{orderId}} is confirmed.";
+> const msg = populateEmailTemplate(tpl, { name: "Bob", orderId: "10042" });
+> console.assert(msg === "Hello Bob, your order 10042 is confirmed.", "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **ES2021 replaceAll()**: Replaces all matching substring instances across a target string.
+> 2. **Sequential Immutability**: Each .replaceAll() step returns a new string version, leaving intermediate strings for garbage collection.
+> 3. **Template Composition**: Clean text substitution separates markup templates from dynamic runtime data.
+---
+
+## 6. Related Terms
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [Number](number.md) — Related concept: Number.
 - [Type Coercion](type_coercion.md) — Related concept: Type Coercion.
@@ -206,7 +251,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Strings are immutable primitives; methods that manipulate strings always return a new string.
 - You can create strings using single quotes (`'`), double quotes (`"`), or backticks (`` ` ``).
 - Backticks (Template Literals) are preferred in modern JavaScript because they allow multi-line strings and easy variable interpolation using `${}`.

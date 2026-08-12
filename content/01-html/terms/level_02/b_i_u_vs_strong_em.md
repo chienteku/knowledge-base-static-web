@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Universal Browser Support .)**: `<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>` is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all browsers since the early 1990s).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the 1990s, HTML was used to control both the structure *and* the visual styling of a page. Tags like `<b>` (Bold), `<i>` (Italic), and `<u>` (Underline) were designed simply to control what text looked like. 
@@ -108,7 +104,7 @@ Semantic vs presentational markup comparison:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Underlining text using `<u>` or CSS just for decoration
 
@@ -227,7 +223,7 @@ Semantic vs presentational markup comparison:
 <p>This is <strong class="underlined">important text</strong></p>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Semantic Correction
 
@@ -286,14 +282,14 @@ Semantic vs presentational markup comparison:
 >
 > **Explanation:** `<strong>` provides semantic emphasis; `<b>` provides visual offset.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — The baseline semantic text tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container used for visual formatting with CSS.
 - [`<mark>`](../level_06/mark.md) — Related concept: `<mark>`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Presentational tags (`<b>`, `<i>`, `<u>`) only tell the browser how text looks visually.
 - Semantic tags (`<strong>`, `<em>`, `<ins>`) tell screen readers and Google what the text means.
 - Screen readers read semantic tags with vocal inflection changes, but read presentational tags in a flat voice.

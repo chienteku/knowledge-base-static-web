@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata**
+
+**Metadata (Universal Browser Support)**: `<title>` is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a user has multiple tabs open, or when they bookmark a page, the browser needs a concise, human-readable name for that specific document. Furthermore, search engines like Google need to know the primary topic of a page to display it in search results.
@@ -44,7 +40,7 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting the `<title>` in the `<body>`
 
@@ -105,7 +101,7 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 <title>Welcome to My Site</title>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: SEO Impact
 
@@ -156,13 +152,13 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 >
 > **Explanation:** Keeping titles under 60 characters prevents text clipping on search engine result pages.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The container that holds the `<title>` tag.
 - [`<meta>`](../level_08/meta.md) — The tag used for other types of invisible head data.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<title>` defines the text shown in the browser tab and bookmarks.
 - It is the most critical tag for SEO (Search Engine Optimization).
 - It MUST be placed inside the `<head>` element.

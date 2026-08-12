@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard)**: `justify-content` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you have a 1000px wide navigation bar, and only three 100px buttons inside it, you have 700px of empty, unused space. By default, Flexbox packs all the buttons tightly against the left side. 
@@ -64,7 +60,7 @@ Imagine three people sitting on a long bench.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use it when there is no empty space
 
@@ -114,7 +110,7 @@ Imagine three people sitting on a long bench.
 .container { display: flex; justify-content: space-evenly; } /* Equal outer and inner spacing */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Right-Aligned Menu
 
@@ -177,17 +173,17 @@ Imagine three people sitting on a long bench.
 >
 > **Explanation:** `justify-content` controls main axis flex item distribution.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`align-items`](align_items.md) — The sister property that aligns things on the *opposite* (Cross) axis.
 - [`align-content`](align_content.md) — Distribution of rows in multi-line flex containers.
 - [`align-self`](align_self.md) — Child item alignment overrides.
 - [`flex-direction`](flex_direction.md) — Related concept: `flex-direction`.
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
-- [`display: flex`](display_flex.md) — Flexbox parent container.
+- [`display: flex` — Flexbox Container](display_flex.md) — Flexbox parent container.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `justify-content` distributes empty space along the **Main Axis**.
 - If `flex-direction: row` (default), it aligns things Horizontally.
 - `space-between` is the absolute most common value used for headers and navbars.

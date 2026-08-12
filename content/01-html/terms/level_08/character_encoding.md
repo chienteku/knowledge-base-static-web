@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Character Encoding (`charset`) is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Crucial standard. All modern web files must be saved and served as UTF-8).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers only store and understand numbers in binary format (zeroes and ones). When you save an HTML file containing words like "Hello World" or emojis like "👋", the computer converts those characters into a sequence of binary bytes.
@@ -94,7 +90,7 @@ Correct placement of the charset tag:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the charset tag below the `<title>` tag
 
@@ -161,7 +157,7 @@ Correct placement of the charset tag:
 <meta charset="UTF-8">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Encoding Diagnosis
 
@@ -211,14 +207,14 @@ Correct placement of the charset tag:
 >
 > **Explanation:** Server HTTP `Content-Type` headers override HTML `<meta>` tags.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<meta>`](meta.md) — The parent tag containing the charset key.
 - [`<head>`](../level_01/head.md) — The container housing the charset definition.
 - [HTML Entities](../level_09/html_entities.md) — A legacy way to display special characters when UTF-8 encoding is unavailable.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Character encoding tells the browser how to translate binary file bytes into readable characters.
 - UTF-8 is the universal standard encoding, covering all languages, symbols, and emojis.
 - Declare the character set using `<meta charset="UTF-8">`.

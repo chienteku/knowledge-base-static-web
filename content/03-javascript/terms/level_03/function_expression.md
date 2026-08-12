@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Function Expression is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Because JavaScript treats functions as "first-class citizens" (like strings or numbers), you don't *have* to declare them globally using the `function` keyword. You can create a function on the fly and shove it directly into a variable. 
@@ -68,7 +64,7 @@ console.log(mathOperation(2, 2)); // 4
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to invoke before initialization
 
@@ -149,62 +145,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Anonymous Assignment
+### Exercise 1: Conditional Feature Strategy Assignment
 
-**Problem:** Create a Function Expression that takes one parameter `name` and logs `"Goodbye, [name]"`. Assign it to a `const` variable called `farewell`. Call `farewell("Alice")`.
+**Scenario:** A runtime feature toggle engine assigns function expressions to variables conditionally, creating distinct algorithm strategies based on environment settings.
 
-**Expected output:**
+**Requirements:**
+1. Assign function expression const calcTax = isVat ? function(amt) { ... } : function(amt) { ... }.
+2. Execute variable as function.
+3. Verify conditional assignment.
+
 > [!check]- Answer
-> ```text
-> Goodbye, Alice
+>
+> #### Implementation
+>
+> ```javascript
+> function createTaxCalculator(isVatRegion) {
+>   // Function Expression assigned conditionally to a variable
+>   const calcTax = isVatRegion
+>     ? function(amount) { return amount * 0.20; }
+>     : function(amount) { return amount * 0.05; };
+>
+>   return calcTax;
+> }
+>
+> // Verification tests
+> const vatCalc = createTaxCalculator(true);
+> const stdCalc = createTaxCalculator(false);
+> console.assert(vatCalc(100) === 20, "Test 1 Failed");
+> console.assert(stdCalc(100) === 5, "Test 2 Failed");
 > ```
-> - `const farewell = function(name) { ... };`
+>
+> #### Technical Explanation
+>
+> 1. **Function Expression Syntax**: A Function Expression creates a function as part of a larger expression (e.g. variable assignment).
+> 2. **No Function Hoisting**: Variables holding Function Expressions are hoisted as let/const (TDZ) or var (undefined), preventing execution before assignment.
+> 3. **Anonymous vs Named Expressions**: Function expressions can be anonymous or named for stack trace identification.
 > 
 ---
 
-### Exercise 2: Anonymous vs Named Function Expressions
+### Exercise 2: Named Function Expression for Self-Referential Debugging
 
-**Problem:** Create a named function expression `const fn = function myName() { return myName.name; };` and print `fn()`.
+**Scenario:** A performance profiling library uses Named Function Expressions to ensure clear function names display in error stack traces.
 
-**Expected output:**
+**Requirements:**
+1. Create named function expression const fib = function fibonacci(n) { ... }.
+2. Use internal name for recursive calls.
+3. Verify execution.
+
 > [!check]- Answer
-> ```text
-> myName
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const fn = function myName() {
->   return myName.name;
+> const computeFib = function fibonacci(n) {
+>   if (n <= 0) return 0;
+>   if (n === 1) return 1;
+>   return fibonacci(n - 1) + fibonacci(n - 2);
 > };
-> console.log(fn());
+>
+> // Verification tests
+> console.assert(computeFib(6) === 8, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Named function expressions bind function names internally for diagnostic tracing and recursion.
+> #### Technical Explanation
+>
+> 1. **Named Function Expressions**: Adding an identifier name (function foo() {}) makes the name available strictly inside the function's local scope.
+> 2. **Stack Trace Clarity**: Named function expressions display explicit names in debugging stack traces instead of (anonymous).
+> 3. **Scope Isolation of Name**: The name identifier (fibonacci) is NOT bound in the outer scope; outer scope uses variable name (computeFib).
 > 
 ---
 
-### Exercise 3: Conditional Function Expression Assignment
+### Exercise 3: Encapsulated Function Expression State Reducer
 
-**Problem:** Assign `const logger` dynamically using ternary expression based on boolean `debug` flag.
+**Scenario:** A state manager assigns function expressions to action lookup tables for dynamic state transitions.
 
-**Expected output:**
+**Requirements:**
+1. Define action map object with function expression values.
+2. Dispatch action key.
+3. Return evaluated state.
+
 > [!check]- Answer
-> ```text
-> Log: hello
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const debug = true;
-> const logger = debug ? (msg) => console.log(`Log: ${msg}`) : () => {};
-> logger("hello");
+> function createReducer() {
+>   const handlers = {
+>     INCREMENT: function(state, action) {
+>       return { ...state, count: state.count + action.payload };
+>     },
+>     DECREMENT: function(state, action) {
+>       return { ...state, count: state.count - action.payload };
+>     }
+>   };
+>
+>   return function(state, action) {
+>     const handler = handlers[action.type];
+>     return handler ? handler(state, action) : state;
+>   };
+> }
+>
+> // Verification tests
+> const reducer = createReducer();
+> const s1 = reducer({ count: 10 }, { type: "INCREMENT", payload: 5 });
+> console.assert(s1.count === 15, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Function expressions permit conditional, dynamic assignment at runtime.
-> 
-> 
+> #### Technical Explanation
+>
+> 1. **Expression Assignment**: Function expressions fit naturally into object literal values and array elements.
+> 2. **Runtime Evaluation**: Evaluates to a function object when execution reaches the assignment statement.
+> 3. **First-Class Integration**: Combines seamlessly with higher-order functions and closures.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Function Declaration](function_declaration.md) — The traditional way to define a function (which is hoisted).
 - [Arrow Function](arrow_function.md) — A modern, shorter syntax for writing Function Expressions.
 - [Hoisting](hoisting.md) — Related concept: Hoisting.
@@ -212,7 +268,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Function Expression creates a function and assigns it to a variable.
 - They are usually "anonymous" (the function itself has no name after the `function` keyword).
 - They are **not hoisted**. You cannot call them before they are defined in the code.

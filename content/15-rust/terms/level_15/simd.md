@@ -10,7 +10,6 @@
 
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — How LLVM auto-vectorizes loops into SIMD instructions in release mode.
 - [Release Profile](release_profile.md) — Optimization levels driving hardware instruction generation.
-- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Contiguous memory buffers suitable for SIMD vector loading.
 
 ---
 

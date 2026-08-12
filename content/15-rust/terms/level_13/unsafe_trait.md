@@ -10,7 +10,7 @@
 
 - [`unsafe` Block](unsafe_block.md) — Understanding `unsafe` superpowers, safety contracts, and invariant responsibilities.
 - [Trait](../level_04/trait.md) — Understanding standard Rust trait definitions and `impl Trait for Type` blocks.
-- [`Send` Trait](../level_09/send_trait.md)
+- [`Send` Trait](../level_09/send_trait.md) — 
 
 ---
 
@@ -615,7 +615,7 @@ Requirements:
 
 
 - [`unsafe` Block](unsafe_block.md) — The core unsafe syntax construct.
-- [`Send` Trait](../level_09/send_trait.md)
+- [`Send` Trait](../level_09/send_trait.md) — 
 - [Trait](../level_04/trait.md) — Standard Rust trait abstraction system.
 - [Undefined Behavior (UB)](undefined_behavior.md) — The memory safety violations prevented by enforcing `unsafe trait` invariants.
 

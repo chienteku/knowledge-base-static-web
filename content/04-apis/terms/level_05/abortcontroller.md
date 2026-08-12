@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Universal: Supported in modern web browsers and Node.js .)**: AbortController / Cancellation is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Supported in modern web browsers and Node.js (version 15+).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In client-side applications, there are scenarios where a network request is started but its response is no longer needed:
@@ -94,7 +90,7 @@ async function handleSearchInput(event) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reusing a single `AbortController` instance for new requests
 
@@ -150,85 +146,195 @@ previousController = new AbortController();
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cleanup Handler
+### Exercise 1: Cancelable Fetch Request Engine with AbortController
 
-**Problem:** Complete the React-style cleanup effect template to abort a profile fetch request if the user navigates away (component unmounts):
+**Scenario:** An autocomplete search input cancels outdated HTTP requests when the user types new characters.
 
-```javascript
-function loadProfileComponent(userId) {
-  // 1. Instantiate the controller
-  const controller = new AbortController();
-  
-  fetch(`/api/user/${userId}`, { signal: controller.signal })
-    .then(r => r.json())
-    .then(data => renderProfile(data))
-    .catch(err => {
-      if (err.name !== 'AbortError') console.error(err);
-    });
-
-  // 2. Return the component cleanup unmount function
-  return function onUnmount() {
-    controller.abort();
-  };
-}
-```
-
----
+**Requirements:**
+1. Write fetchWithCancel(url, controller).
+2. Attach controller.signal to fetch.
+3. Catch AbortError and return cancelled status.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchWithCancel(url, controller, mockFetch) {
+>   try {
+>     const fetchFn = mockFetch || globalThis.fetch;
+>     const response = await fetchFn(url, { signal: controller.signal });
+>     return { success: true, data: await response.json() };
+>   } catch (err) {
+>     if (err.name === "AbortError") {
+>       return { success: false, aborted: true, message: "Request aborted by user" };
+>     }
+>     return { success: false, error: err.message };
+>   }
+> }
+>
+> // Verification tests
+> const controller = new AbortController();
+> const mockFetch = (url, opts) => new Promise((resolve, reject) => {
+>   opts.signal.addEventListener("abort", () => {
+>     const err = new Error("The user aborted a request.");
+>     err.name = "AbortError";
+>     reject(err);
+>   });
+> });
+>
+> const promise = fetchWithCancel("https://api.com/search", controller, mockFetch);
+> controller.abort();
+>
+> promise.then(res => {
+>   console.assert(res.success === false && res.aborted === true, "Test 1 Failed: Request must report aborted");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **AbortController Purpose**: Provides standard mechanism to cancel ongoing asynchronous Web API operations (Fetch, Event Listeners).
+> 2. **AbortSignal Object**: The signal property is passed to fetch options; when controller.abort() is invoked, signal emits abort event.
+> 3. **AbortError Exception**: Fetch rejects with AbortError DOMException when canceled; must catch specifically to ignore user-initiated cancels.
 > 
 ---
 
-### Exercise 2: Timeout Fetch with AbortSignal.timeout()
+### Exercise 2: Debounced Auto-Aborting Search Client
 
-**Problem:** Write JavaScript `fetch()` request automatically aborting after 5000ms timeout using `AbortSignal.timeout()`.
+**Scenario:** A real-time search widget automatically cancels the previous pending fetch request before dispatching a new search query.
 
-**Expected output:**
+**Requirements:**
+1. Write createAutoAbortingSearch(searchApiFn).
+2. Maintain active AbortController instance.
+3. Abort previous request when new search begins.
+
 > [!check]- Answer
-> ```text
-> fetch('/api/data', { signal: AbortSignal.timeout(5000) })
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> try {
-> const res = await fetch('/api/data', { signal: AbortSignal.timeout(5000) });
-> const data = await res.json();
-> } catch (err) {
-> if (err.name === 'TimeoutError') console.error('Request timed out after 5s');
+> function createAutoAbortingSearch(searchApiFn) {
+>   let currentController = null;
+>
+>   return async function search(query) {
+>     if (currentController) {
+>       currentController.abort();
+>     }
+>
+>     currentController = new AbortController();
+>     const controller = currentController;
+>
+>     try {
+>       const results = await searchApiFn(query, controller.signal);
+>       return { success: true, query, results };
+>     } catch (err) {
+>       if (err.name === "AbortError") {
+>         return { success: false, aborted: true };
+>       }
+>       throw err;
+>     } finally {
+>       if (currentController === controller) {
+>         currentController = null;
+>       }
+>     }
+>   };
 > }
+>
+> // Verification tests
+> let activeCalls = 0;
+> const mockSearchApi = async (q, signal) => {
+>   activeCalls++;
+>   return new Promise((resolve, reject) => {
+>     signal.addEventListener("abort", () => {
+>       const err = new Error("Aborted");
+>       err.name = "AbortError";
+>       reject(err);
+>     });
+>     setTimeout(() => resolve([`Result for ${q}`]), 50);
+>   });
+> };
+>
+> const searcher = createAutoAbortingSearch(mockSearchApi);
+> const p1 = searcher("react");
+> const p2 = searcher("react hooks");
+>
+> Promise.all([p1, p2]).then(([res1, res2]) => {
+>   console.assert(res1.aborted === true, "Test 1 Failed: First query must abort");
+>   console.assert(res2.success === true, "Test 2 Failed: Latest query must succeed");
+> });
 > ```
-> - **Explanation:** `AbortSignal.timeout(ms)` automatically triggers abort after specified milliseconds.
+>
+> #### Technical Explanation
+>
+> 1. **Race Condition Prevention**: Canceling stale requests prevents older delayed responses from overwriting newer search results.
+> 2. **Bandwidth Conservation**: Aborting requests closes TCP streams early, saving network bandwidth.
+> 3. **Re-usable Controller Pattern**: Creating a new AbortController per request avoids reusing triggered signal states.
+> 
 ---
 
-### Exercise 3: Handling AbortError Exception
+### Exercise 3: Timeout Abort Signal Wrapper
 
-**Problem:** What error name property is set on the thrown Exception when a `fetch()` call is aborted via `AbortController`?
+**Scenario:** A utility creates a combined AbortSignal that triggers automatically after a specified timeout duration.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchWithTimeoutSignal(url, timeoutMs, mockFetch).
+2. Use AbortSignal.timeout(timeoutMs) or setTimeout fallback.
+3. Cancel request if timeout expires.
+
 > [!check]- Answer
-> ```text
-> err.name === 'AbortError'
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> catch (err) {
-> if (err.name === 'AbortError') {
-> console.log('Fetch request was intentionally aborted');
+> async function fetchWithTimeoutSignal(url, timeoutMs = 3000, mockFetch) {
+>   const controller = new AbortController();
+>   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+>
+>   try {
+>     const fetchFn = mockFetch || globalThis.fetch;
+>     const response = await fetchFn(url, { signal: controller.signal });
+>     clearTimeout(timeoutId);
+>     return { success: true, data: await response.json() };
+>   } catch (err) {
+>     clearTimeout(timeoutId);
+>     if (err.name === "AbortError") {
+>       return { success: false, timedOut: true, error: `Request timed out after ${timeoutMs}ms` };
+>     }
+>     return { success: false, error: err.message };
+>   }
 > }
-> }
+>
+> // Verification tests
+> const slowFetch = (url, opts) => new Promise((res, rej) => {
+>   opts.signal.addEventListener("abort", () => {
+>     const err = new Error("Aborted");
+>     err.name = "AbortError";
+>     rej(err);
+>   });
+> });
+>
+> fetchWithTimeoutSignal("https://api.com/slow", 50, slowFetch).then(res => {
+>   console.assert(res.timedOut === true, "Test 1 Failed: Must timeout after 50ms");
+> });
 > ```
-> - **Explanation:** `AbortController.abort()` throws a DOMException named `AbortError`.
+>
+> #### Technical Explanation
+>
+> 1. **AbortSignal.timeout(ms)**: Modern Web API method returning an AbortSignal that automatically aborts after specified milliseconds.
+> 2. **Timer Cleanup**: Always call clearTimeout(timeoutId) when request finishes to avoid memory leaks.
+> 3. **Unified Cancellation**: Allows combining manual user cancellation with automatic network timeouts.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Request Timeout](request_timeout.md) — The timing pattern built on top of AbortController triggers.
 - [XMLHttpRequest / AJAX](xmlhttprequest_ajax.md) — The legacy request API which supported request cancellation via `xhr.abort()`.
 - [The fetch() API](fetch.md) — Related concept: The fetch() API.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `AbortController` is the web standard mechanism for canceling in-flight fetch requests.
 - It prevents race conditions in dynamic user interfaces (like search autocomplete).
 - Link the controller to a fetch call by passing `controller.signal` in the options object.

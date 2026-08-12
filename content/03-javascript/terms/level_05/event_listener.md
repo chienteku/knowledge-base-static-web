@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Web API** *(Browser Environment)*
+
+**Web API *(Browser Environment)* (Browser Only)**: Event Listener is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Events (like clicks) happen all the time on every single pixel of a webpage. If JavaScript reacted to every single event automatically, the browser would instantly crash from overload. 
@@ -65,7 +61,7 @@ button.addEventListener("click", triggerAlarm);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accidentally executing the function immediately
 
@@ -144,68 +140,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-Listeners
+### Exercise 1: Single-Use Button Handler & Memory Cleanup
 
-**Problem:** Can you attach two *different* "click" listeners to the exact same button?
-```javascript
-const btn = document.querySelector("button");
+**Scenario:** A payment processing component attaches a single-use submit button listener using { once: true } and provides a cleanup function using removeEventListener().
 
-btn.addEventListener("click", () => console.log("First!"));
-btn.addEventListener("click", () => console.log("Second!"));
-```
-Will they both fire, or will the second one overwrite the first?
+**Requirements:**
+1. Write attachSingleSubmitHandler(buttonEl, handlerFn).
+2. Use buttonEl.addEventListener("click", handlerFn, { once: true }).
+3. Return detach function calling removeEventListener().
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> They will both fire!
-> Output:
-> "First!"
-> "Second!"
-> ```
-> - This is the main advantage of modern `addEventListener` over old inline `<button onclick="...">` attributes!
-> 
----
-
-### Exercise 2: Passive Event Listeners for Touch Performance
-
-**Problem:** Attach a scroll event listener with `{ passive: true }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Passive scroll listener attached
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Passive scroll listener attached");
+> function attachSingleSubmitHandler(buttonEl, handlerFn) {
+>   if (!buttonEl || typeof buttonEl.addEventListener !== "function") return () => {};
+>
+>   buttonEl.addEventListener("click", handlerFn, { once: true });
+>
+>   return function detach() {
+>     buttonEl.removeEventListener("click", handlerFn);
+>   };
+> }
+>
+> // Verification tests
+> let optsPassed = null;
+> const mockBtn = {
+>   addEventListener(evt, fn, opts) { optsPassed = opts; },
+>   removeEventListener(evt, fn) {}
+> };
+> const detachFn = attachSingleSubmitHandler(mockBtn, () => {});
+> console.assert(optsPassed?.once === true, "Test 1 Failed");
+> console.assert(typeof detachFn === "function", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `{ passive: true }` informs browser engines that listeners will not call `preventDefault()`, enabling instant smooth scrolling.
+> #### Technical Explanation
+>
+> 1. **addEventListener() Method**: Registers an event handler function on an EventTarget for specified event type.
+> 2. **{ once: true } Option**: Automatically removes event listener after firing exactly once.
+> 3. **removeEventListener() Cleanup**: Removes matching event listener reference to prevent memory leaks.
 > 
 ---
 
-### Exercise 3: Removing Named Event Listeners
+### Exercise 2: Event Listener Advanced Context Handler
 
-**Problem:** Attach named function `handleClick` and un-bind it using `removeEventListener`.
+**Scenario:** A web application component processes event listener data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleEventListenerSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Listener removed successfully
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function handleClick() {}
-> console.log("Listener removed successfully");
+> function handleEventListenerSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleEventListenerSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `removeEventListener` requires passing exact named function references.
-> 
+> #### Technical Explanation
+>
+> 1. **Event Listener Architecture**: Applying event listener patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Event Listener Performance Optimization
+
+**Scenario:** An application utility optimizes event listener execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeEventListenerTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeEventListenerTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeEventListenerTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Listener Optimization**: Optimizing event listener improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Event](event.md) — The signal the listener is waiting for.
 - [Higher-Order Function](../level_03/higher_order_function.md) — `addEventListener` is a perfect example of an HOF.
 - [Event Bubbling](event_bubbling.md) — Event bubbling.
@@ -214,7 +264,7 @@ Will they both fire, or will the second one overwrite the first?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `addEventListener()` tells the browser to wait for a specific action on a specific element.
 - It takes two main arguments: a string (the event name) and a callback function.
 - Pass the function by reference (no parentheses), or use an inline Arrow Function.

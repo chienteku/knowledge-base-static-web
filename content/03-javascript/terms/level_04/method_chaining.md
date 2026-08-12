@@ -14,16 +14,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Method Chaining is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In data processing, we rarely perform a single operation on a dataset. For example, to print user labels, you might need to:
@@ -88,7 +84,7 @@ console.log("Total Cost:", totalCostOfTopElectronics); // Total Cost: 2000 (1200
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Chaining After a Method that Does Not Return an Array
 
@@ -170,83 +166,57 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format Premium Products
+### Exercise 1: Functional Data Pipeline Chaining
 
-**Problem:** Complete the code to filter the list of numbers, keep only values greater than `50`, multiply them by `1.1` (adding 10% tax), and format them to strings prefixing `$` (e.g. `"$55.00"`).
+**Scenario:** An analytics engine chains filter(), map(), and reduce() into a single fluent data transformation pipeline.
 
-```javascript
-const prices = [20, 60, 45, 80];
+**Requirements:**
+1. Write processSalesData(transactions).
+2. Filter completed transactions.
+3. Map to amount with tax.
+4. Reduce to total revenue.
+5. Return total.
 
-const formattedPrices = prices
-  // Filter > 50
-  // Map multiply by 1.1 and format with toFixed(2) and prefix "$"
-  
-console.log(formattedPrices);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> [ '$66.00', '$88.00' ]
-> ```
-> - In step 1: `.filter(p => p > 50)`
-> - In step 2: `.map(p => "$" + (p * 1.1).toFixed(2))`
-> 
----
-
-### Exercise 2: Fluent Processing Pipeline
-
-**Problem:** Filter `[1, 2, 3, 4, 5, 6]` for even numbers, double them with `.map()`, and sum with `.reduce()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 24
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const result = [1, 2, 3, 4, 5, 6]
->   .filter(x => x % 2 === 0)
->   .map(x => x * 2)
->   .reduce((sum, x) => sum + x, 0);
-> console.log(result);
+> function processSalesData(transactions) {
+>   if (!Array.isArray(transactions)) return 0;
+>
+>   return transactions
+>     .filter(tx => tx.status === "COMPLETED")
+>     .map(tx => tx.amount * 1.10)
+>     .reduce((sum, amount) => sum + amount, 0);
+> }
+>
+> // Verification tests
+> const sales = [
+>   { amount: 100, status: "COMPLETED" },
+>   { amount: 50, status: "CANCELLED" },
+>   { amount: 200, status: "COMPLETED" }
+> ];
+> const total = processSalesData(sales);
+> console.assert(total === 330, "Test 1 Failed: (100+200)*1.10 = 330");
 > ```
 >
-> **Explanation:** Method chaining passes intermediate transformed collections down functional pipelines.
-> 
----
-
-### Exercise 3: Chaining Custom Object Builders
-
-**Problem:** Create a fluent builder object `Calc` supporting `.add(5).sub(2).val()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 3
-> ```
-> ```javascript
-> const Calc = {
->   num: 0,
->   add(n) { this.num += n; return this; },
->   sub(n) { this.num -= n; return this; },
->   val() { return this.num; }
-> };
-> console.log(Calc.add(5).sub(2).val());
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Returning `this` from object methods enables fluent chaining.
-> 
+> 1. **Fluent Method Chaining**: Method chaining links sequential array methods where each method returns a new array instance.
+> 2. **Declarative Readability**: Expresses complex data pipelines in clean readable steps.
+> 3. **Intermediate Array Allocation**: Chaining array methods creates temporary intermediate arrays in memory at each step.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Pure Function & Side Effects](../level_03/pure_function.md) — The building blocks of functional pipeline flows.
 - [Anonymous Function](../level_03/anonymous_function.md) — Frequently written inside chains for compactness.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Method chaining is the technique of invoking multiple methods sequentially in a single statement.
 - Chaining is enabled because non-mutating array methods (like `.map()`, `.filter()`, `.slice()`) return new Array instances.
 - Never try to chain array methods after call terminators like `.forEach()`, `.reduce()`, or mutating boundary methods like `.push()`.

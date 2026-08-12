@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Function / Architecture**
+
+**CSS Function / Architecture (Universal Modern Standard .)**: `var()` (CSS Custom Properties) is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The foundation of Dark Mode and modern "Design Systems").
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are building a website for a brand whose primary color is `rgb(25, 118, 210)`. You use this exact color code 500 times across 50 different CSS files (for buttons, links, borders, backgrounds). 
@@ -56,7 +52,7 @@ Variables in CSS MUST start with two dashes (`--`). They are typically defined o
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Double Dashes
 
@@ -107,7 +103,7 @@ color: var(--undefined-color); /* Resolves to invalid if variable missing */
 color: var(--undefined-color, #005fcc); /* Fallback color provided */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Dark Mode Magic
 
@@ -160,7 +156,7 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 >
 > **Explanation:** `setProperty()` modifies live DOM CSS custom variables dynamically in runtime.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Overwriting variables inside media queries for responsive layouts.
 - [`:root` Pseudo-class](root_pseudo_class.md) — The global scope selector where custom properties are declared.
 - [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Custom property theme swaps.
@@ -168,7 +164,7 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Custom Properties (Variables) must begin with `--`.
 - Define them globally on the `:root` selector.
 - Access them using the `var(--variable-name)` function.

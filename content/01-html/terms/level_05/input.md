@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Form Element**
+
+**Form Element (Universal Browser Support)**: `<input>` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To build an interactive website, developers need a way to collect data from the user. They need text boxes for names, hidden fields for passwords, checkboxes for terms of service, and radio buttons for multiple-choice questions. 
@@ -64,7 +60,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `name` attribute
 
@@ -120,7 +116,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 <input type="tel" name="phone"> <!-- Triggers mobile numeric dialpad -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Form Validation
 
@@ -179,7 +175,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 >
 > **Explanation:** `pattern` accepts regular expressions for native input validation.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<label>`](label.md) — The tag that provides an accessible text description for the input.
 - [`placeholder` Attribute](placeholder.md) — The inline visual text hint.
 - [`value` Attribute (in Form Fields)](value.md) — The field content value representation.
@@ -191,7 +187,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<input>` tag is a void element (no closing tag).
 - Its behavior and appearance are entirely controlled by the `type` attribute (e.g., `text`, `password`, `email`, `checkbox`).
 - The `name` attribute is absolutely required if you want the form to actually send the data to a server.

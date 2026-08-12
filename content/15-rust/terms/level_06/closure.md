@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [`fn` (Functions)](../level_01/fn.md) — The standard, named functions that closures provide a lightweight alternative to.
+- [fn](../level_01/fn.md) — The standard, named functions that closures provide a lightweight alternative to.
 - [Borrowing (`&`)](../level_03/borrowing.md) — The mechanism closures use behind the scenes to read variables from their environment.
 - [Ownership](../level_03/ownership.md) — The rules that closures must still strictly obey.
 
@@ -313,7 +313,7 @@ assert_eq!(apply(f, 5), 15);
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

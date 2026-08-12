@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Functional Programming**
+
+**Design Pattern / Functional Programming (Universal)**: Currying is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Functional Programming, developers often want to create highly reusable "utility" functions. 
@@ -75,7 +71,7 @@ console.log(myWebsite("store"));   // "https://mycoolsite.com/store"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Currying Scope and Variable Hoisting
 
@@ -148,67 +144,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Magic of Closure
+### Exercise 1: Universal Function Currying Utility
 
-**Problem:** In the `curriedMultiply` example above, when the inner function `function(b)` finally runs, how does it still remember what `a` was?
+**Scenario:** A functional programming library provides a generic `curry(fn)` utility that transforms multi-parameter functions into unary curried function chains.
 
-**Expected output:**
+**Requirements:**
+1. Write curry(fn).
+2. Inspect fn.length for arity.
+3. Return curried function accumulating arguments until arity is met.
+4. Support partial parameter invocation.
+
 > [!check]- Answer
-> ```text
-> Through Closure! 
-> Even though the outer function finished executing, the inner function maintains a "backpack" of memory containing the variables (like `a`) from its parent's scope.
-> ```
-> - Currying relies 100% on this memory mechanic.
-> 
----
-
-### Exercise 2: Writing a 3-Level Curried Add Function
-
-**Problem:** Write a curried function `curriedAdd(a)(b)(c)` returning the sum.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 6
-> ```
-> ```javascript
-> const curriedAdd = a => b => c => a + b + c;
-> console.log(curriedAdd(1)(2)(3));
-> ```
 >
-> **Explanation:** Currying transforms multi-argument functions into unary function chains.
-> 
----
-
-### Exercise 3: Auto-Currying Utility Function
-
-**Problem:** Write a generic `curry(fn)` wrapper that auto-curries any $N$-arity function.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 10
-> ```
+> #### Implementation
+>
 > ```javascript
 > function curry(fn) {
 >   return function curried(...args) {
->     if (args.length >= fn.length) return fn(...args);
->     return (...nextArgs) => curried(...args, ...nextArgs);
+>     if (args.length >= fn.length) {
+>       return fn.apply(this, args);
+>     }
+>     return function(...nextArgs) {
+>       return curried.apply(this, args.concat(nextArgs));
+>     };
 >   };
 > }
-> const mult = (a, b) => a * b;
-> const curriedMult = curry(mult);
-> console.log(curriedMult(2)(5));
+>
+> // Verification tests
+> const sum3 = (a, b, c) => a + b + c;
+> const curriedSum = curry(sum3);
+>
+> console.assert(curriedSum(1)(2)(3) === 6, "Test 1 Failed");
+> console.assert(curriedSum(1, 2)(3) === 6, "Test 2 Failed");
+> console.assert(curriedSum(1)(2, 3) === 6, "Test 3 Failed");
 > ```
 >
-> **Explanation:** Auto-currying checks argument length against `fn.length` arity.
-> 
+> #### Technical Explanation
+>
+> 1. **Currying Definition**: Currying translates a function with N arguments into N nested functions taking 1 argument each.
+> 2. **Arity Inspection via fn.length**: Function.length reports the expected number of formal parameters defined in function signatures.
+> 3. **Closure Argument Accumulation**: Nested closures retain previously supplied arguments until sufficient parameters exist to execute original function.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Discount & Tax Price Calculator Pipeline
+
+**Scenario:** An enterprise checkout system uses currying to create specialized tax and discount calculation functions for different store locations.
+
+**Requirements:**
+1. Write calculatePrice(taxRate)(discount)(basePrice).
+2. Apply discount to basePrice.
+3. Apply taxRate to discounted price.
+4. Return total price rounded to 2 decimals.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const calculatePrice = (taxRate) => (discount) => (basePrice) => {
+>   const discounted = basePrice * (1 - discount);
+>   const total = discounted * (1 + taxRate);
+>   return Number(total.toFixed(2));
+> };
+>
+> // Verification tests
+> const nyPriceCalc = calculatePrice(0.08); // 8% NY tax
+> const nyBlackFriday = nyPriceCalc(0.20);   // 20% discount
+>
+> console.assert(nyBlackFriday(100) === 86.40, "Test 1 Failed: $100 -> $80 + 8% tax = $86.40");
+> console.assert(calculatePrice(0.05)(0.10)(50) === 47.25, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Specialized Function Creation**: Currying allows fixing higher-order configuration parameters (e.g., tax rate) to produce reusable domain utilities.
+> 2. **Functional Reusability**: nyBlackFriday can be passed directly into array mapping functions without passing configuration options again.
+> 3. **Concise Arrow Syntax**: ES6 arrow functions provide syntax for nested curried function signatures: a => b => c => result.
+> 
+---
+
+### Exercise 3: Structured Logger Context Partial Currier
+
+**Scenario:** A logging framework uses curried functions to attach application layer names and log severity levels to log messages.
+
+**Requirements:**
+1. Write log(severity)(component)(message).
+2. Return formatted string `[SEVERITY] [Component]: Message`.
+3. Create specialized logger for "AUTH" component.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const log = (severity) => (component) => (message) => {
+>   return `[${severity.toUpperCase()}] [${component}]: ${message}`;
+> };
+>
+> // Verification tests
+> const errorLog = log("error");
+> const authErrorLog = errorLog("AUTH");
+>
+> console.assert(authErrorLog("Invalid credentials") === "[ERROR] [AUTH]: Invalid credentials", "Test 1 Failed");
+> console.assert(log("info")("DB")("Connected") === "[INFO] [DB]: Connected", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Layered Context Composition**: Currying separates generic log levels, component scopes, and specific message strings into distinct invocations.
+> 2. **Partial Application Alignment**: Curried functions act as natural partial application pipelines when invoked step-by-step.
+> 3. **Zero Side-Effect Pure Functions**: Pure curried loggers return structured strings without mutating external global context.
+---
+
+## 6. Related Terms
 - [Closure](../level_03/closure.md) — The mechanic powering currying.
 - [Arrow Function](../level_03/arrow_function.md) — The cleanest syntax for writing curried functions.
 - [Functional Programming & Composition](functional_programming.md) — Related concept: Functional Programming & Composition.
@@ -216,7 +267,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Currying transforms a function of `n` arguments into `n` functions of 1 argument.
 - It is heavily used in Functional Programming to create reusable, "preset" functions.
 - You invoke them using chained parentheses: `func(a)(b)(c)`.

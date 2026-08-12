@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support)**: Border is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you need a visual boundary to separate one piece of content from another, like a line between a header and a paragraph, or a box drawn entirely around a profile picture.
@@ -68,7 +64,7 @@ You can apply borders to specific sides to create underlines or dividers.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Border Style
 
@@ -118,7 +114,7 @@ button:focus { border: 2px solid blue; } /* ❌ Expands element, causing layout 
 button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout space */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Size Math
 
@@ -175,7 +171,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 >
 > **Explanation:** Pre-allocating transparent borders prevents dynamic layout shifts.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Padding](padding.md) — The space directly inside the border.
 - [Margin](margin.md) — The space directly outside the border.
 - [`overflow` (hidden, scroll, auto, visible)](overflow.md) — Spilling content boundaries.
@@ -187,7 +183,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Border is the visible wall separating Padding and Margin.
 - You must define three things: **Width**, **Style**, and **Color** (e.g., `2px solid red`).
 - The most common style is `solid`, but `dashed` and `dotted` are also valid.

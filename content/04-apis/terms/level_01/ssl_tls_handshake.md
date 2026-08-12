@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Universal: Initiated automatically by browsers and network clients .)**: SSL/TLS & the Handshake is a fundamental concept in this technology stack. **Level 1 — Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Initiated automatically by browsers and network clients (like `fetch`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard HTTP traffic is sent in clear, readable plain text. Anyone sitting on the same local network router (or any internet service provider along the path) can intercept your packets and read your passwords, credit card numbers, or API keys in plain text. This is called a **Man-in-the-Middle (MITM) attack**.
@@ -62,7 +58,7 @@ How do we know the server is who it claims to be? The server sends an **SSL Cert
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting HTTPS to protect against database hacks or code bugs
 
@@ -111,64 +107,167 @@ const agent = new https.Agent({ keepAlive: true });
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cryptographic Matchmaker
+### Exercise 1: TLS Handshake Step Order Simulator
 
-**Problem:** Match the task to the correct cryptographic approach:
+**Scenario:** A network security auditor simulates the steps of a TLS 1.3 handshake sequence between client and server.
 
-1. Verification that `api.stripe.com` actually belongs to Stripe Inc. and not a hacker.
-2. Encrypting the 10MB JSON response payload sent back from the server.
-3. Exchanging parameters to create the shared session key during the handshake.
+**Requirements:**
+1. Write simulateTlsHandshake(clientHello).
+2. Step 1: ClientHello.
+3. Step 2: ServerHello + Certificate.
+4. Step 3: Key Exchange.
+5. Return session established status.
 
 > [!check]- Answer
-> - 1. **Certificate Authority (CA) validation** (Identity verification using signed public-key certificates).
-> - 2. **Symmetric Encryption** (Fast throughput encryption for large payloads).
-> - 3. **Asymmetric Encryption** (Secure key negotiation using public/private key pairs).
+>
+> #### Implementation
+>
+> ```javascript
+> function simulateTlsHandshake(clientConfig) {
+>   if (!clientConfig || !clientConfig.supportedVersions.includes("TLSv1.3")) {
+>     return { success: false, error: "Protocol Version Mismatch" };
+>   }
+>
+>   const steps = [];
+>   steps.push("ClientHello (TLSv1.3)");
+>   steps.push("ServerHello + Certificate + KeyShare");
+>   steps.push("Client Finished");
+>   steps.push("Server Finished");
+>
+>   return {
+>     success: true,
+>     protocol: "TLSv1.3",
+>     handshakeSteps: steps,
+>     encryptedSessionReady: true
+>   };
+> }
+>
+> // Verification tests
+> const res = simulateTlsHandshake({ supportedVersions: ["TLSv1.2", "TLSv1.3"] });
+> console.assert(res.success === true, "Test 1 Failed");
+> console.assert(res.protocol === "TLSv1.3", "Test 2 Failed");
+> console.assert(res.handshakeSteps.length === 4, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **TLS Handshake Purpose**: Establishes cryptographic keys and authenticates server certificate before application data is sent.
+> 2. **TLS 1.3 Latency Optimization**: TLS 1.3 completes handshake in 1 Round-Trip Time (1-RTT) compared to 2-RTT in TLS 1.2.
+> 3. **Asymmetric to Symmetric Encryption**: Asymmetric encryption verifies certificate; symmetric encryption encrypts high-volume session data.
 > 
+---
+
+### Exercise 2: X.509 Certificate Expiry & Hostname Verification
+
+**Scenario:** An HTTPS client verifies server SSL/TLS certificate expiration date and hostname match before accepting connection.
+
+**Requirements:**
+1. Write verifySslCertificate(cert, targetHostname).
+2. Check validFrom and validTo dates.
+3. Check subjectAltNames for targetHostname.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function verifySslCertificate(cert, targetHostname) {
+>   if (!cert || !cert.validTo || !cert.subjectAltNames) {
+>     return { valid: false, reason: "Malformed Certificate" };
+>   }
+>
+>   const now = Date.now();
+>   const validTo = new Date(cert.validTo).getTime();
+>   const validFrom = new Date(cert.validFrom).getTime();
+>
+>   if (now < validFrom || now > validTo) {
+>     return { valid: false, reason: "Certificate Expired" };
+>   }
+>
+>   const hostnameMatch = cert.subjectAltNames.some(domain => {
+>     if (domain.startsWith("*.")) {
+>       const baseDomain = domain.slice(2);
+>       return targetHostname.endsWith(baseDomain);
+>     }
+>     return domain === targetHostname;
+>   });
+>
+>   if (!hostnameMatch) {
+>     return { valid: false, reason: "Hostname Mismatch" };
+>   }
+>
+>   return { valid: true };
+> }
+>
+> // Verification tests
+> const cert = {
+>   validFrom: "2026-01-01",
+>   validTo: "2026-12-31",
+>   subjectAltNames: ["*.example.com", "example.com"]
+> };
+>
+> console.assert(verifySslCertificate(cert, "api.example.com").valid === true, "Test 1 Failed");
+> console.assert(verifySslCertificate(cert, "other.com").valid === false, "Test 2 Failed: Hostname mismatch");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Certificate Authority (CA)**: Trusted third parties (e.g. Let's Encrypt) digitally sign server certificates.
+> 2. **Subject Alternative Name (SAN)**: Lists all hostnames and wildcard domains (*.example.com) secured by the certificate.
+> 3. **Certificate Expiration Risk**: Expired certificates cause browsers to show security warning screens to users.
 > 
 ---
 
-### Exercise 2: Asymmetric vs Symmetric Encryption in TLS
+### Exercise 3: Cipher Suite Compatibility Inspector
 
-**Problem:** Explain the role of Asymmetric vs Symmetric encryption during a TLS Handshake.
+**Scenario:** A security scanner inspects server-offered cipher suites and flags weak deprecated encryption algorithms (e.g. RC4, 3DES, MD5).
 
-**Expected output:**
+**Requirements:**
+1. Write auditCipherSuite(cipherString).
+2. Flag insecure algorithms.
+3. Return audit object.
+
 > [!check]- Answer
-> ```text
-> Asymmetric (Public/Private key) encryption is used during initial handshake to authenticate server identity and exchange session keys. Symmetric encryption uses the shared session key to encrypt actual data streams efficiently.
+>
+> #### Implementation
+>
+> ```javascript
+> function auditCipherSuite(cipherString) {
+>   if (typeof cipherString !== "string") return { secure: false };
+>
+>   const insecureKeywords = ["RC4", "3DES", "MD5", "NULL", "ANON", "EXPORT"];
+>   const upper = cipherString.toUpperCase();
+>
+>   const isWeak = insecureKeywords.some(kw => upper.includes(kw));
+>
+>   return {
+>     cipher: cipherString,
+>     secure: !isWeak,
+>     recommended: upper.includes("AES") || upper.includes("CHACHA20")
+>   };
+> }
+>
+> // Verification tests
+> console.assert(auditCipherSuite("TLS_AES_256_GCM_SHA384").secure === true, "Test 1 Failed");
+> console.assert(auditCipherSuite("TLS_RSA_WITH_RC4_128_SHA").secure === false, "Test 2 Failed: RC4 is weak");
 > ```
-> ```text
-> Asymmetric (Public/Private key) -> Authentication and session key exchange.
-> Symmetric (Shared session key) -> High-speed bulk data payload encryption.
-> ```
-> - **Explanation:** TLS combines asymmetric key exchange with fast symmetric stream encryption.
+>
+> #### Technical Explanation
+>
+> 1. **Cipher Suite Components**: Defines Key Exchange, Authentication, Bulk Encryption (e.g. AES-GCM), and Message Authentication (e.g. SHA256).
+> 2. **Deprecating Legacy Algorithms**: RC4, 3DES, and MD5 are vulnerable to attacks and blocked in modern HTTPS configurations.
+> 3. **Forward Secrecy (PFS)**: Modern ciphers (ECDHE) ensure compromised private keys cannot decrypt past recorded sessions.
 ---
 
-### Exercise 3: TLS 1.2 vs TLS 1.3 Handshake Round Trips
-
-**Problem:** How many network round-trips (RTT) are required for an initial TLS 1.2 handshake vs a TLS 1.3 handshake?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TLS 1.2: 2 RTT
-> TLS 1.3: 1 RTT (and 0 RTT for session resumption)
-> ```
-> ```text
-> TLS 1.2: 2 RTT
-> TLS 1.3: 1 RTT (0-RTT for session resumption)
-> ```
-> - **Explanation:** TLS 1.3 reduces latency by completing handshake negotiation in a single RTT.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP / HTTPS](http_https.md) — The application protocols secured by SSL/TLS.
 - [API Keys](../level_04/api_keys.md) — Authentication tokens that must be sent over HTTPS to prevent interception.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SSL/TLS wraps clear HTTP traffic inside an encrypted secure tunnel, preventing Man-in-the-Middle snooping.
 - TLS is the modern standard protocol; SSL is legacy.
 - The TLS Handshake validates the server's identity using SSL certificates signed by Certificate Authorities (CAs).

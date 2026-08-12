@@ -121,9 +121,7 @@ fn main() {
 }
 ```
 
----
-
-## 5. Other Memory Representation Modifiers
+### (4) Other Memory Representation Modifiers
 
 Besides `#[repr(C)]`, Rust supports additional representation attributes:
 
@@ -137,7 +135,7 @@ Besides `#[repr(C)]`, Rust supports additional representation attributes:
 
 ---
 
-## 6. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting `#[repr(C)]` on Structs Passed to C FFI
 
@@ -228,7 +226,7 @@ pub enum Status {
 
 ---
 
-## 7. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Binary Network Packet Header & Field Alignment Verification
 

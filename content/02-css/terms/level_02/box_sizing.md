@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Math Rule**
+
+**Layout Math Rule (Universal Standard in Modern Development)**: `box-sizing: border-box` is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard in Modern Development**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard CSS (which uses `box-sizing: content-box`), if you set an element to `width: 200px` and add `padding: 20px`, the browser adds the padding *on top* of the width, making the element `240px` wide on the screen. 
@@ -57,7 +53,7 @@ Because `border-box` is infinitely superior to the default behavior, almost ever
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to apply it universally
 
@@ -111,7 +107,7 @@ div {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Math Problem
 
@@ -167,7 +163,7 @@ If you are using `box-sizing: border-box` (the modern way), what is the total wi
 >
 > **Explanation:** `border-box` absorbs padding and border into the specified width.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Box Model (Concept)](box_model.md) — The fundamental math system this property modifies.
 - [`overflow` (hidden, scroll, auto, visible)](overflow.md) — How content behaves when forced into constrained borders.
 - [Padding](padding.md) — Related concept: Padding.
@@ -176,7 +172,7 @@ If you are using `box-sizing: border-box` (the modern way), what is the total wi
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The default Box Model math is terrible because padding and borders increase the size of the element.
 - `box-sizing: border-box` fixes this by forcing the padding and border to fit *inside* the width you define.
 - **You should apply `* { box-sizing: border-box; }` at the top of every CSS file you ever write.**

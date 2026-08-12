@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Browser-Specific: Governs the client-side interaction with browser-native Web Storage contexts.)**: Storage Serialization is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Governs the client-side interaction with browser-native Web Storage contexts.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The browser Web Storage APIs (`localStorage` and `sessionStorage`) provide a simple key-value database. However, they were designed with a strict limitation: **both keys and values must be stored as strings**.
@@ -95,7 +91,7 @@ if (isSubscribed) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Date objects to parse back into Date instances automatically
 
@@ -161,77 +157,171 @@ try {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Storage Debugger
+### Exercise 1: Structured Clone Algorithm vs JSON Serialization Benchmark
 
-**Problem:** Complete the code to safely retrieve a shopping cart array from `localStorage` under the key `'cart'`. If the cart key does not exist, return an empty array `[]` as a default fallback:
+**Scenario:** Measures and compares deep copying complex object trees using `structuredClone()` vs `JSON.parse(JSON.stringify())`.
 
-```javascript
-function getCart() {
-  const rawCart = localStorage.getItem('cart');
-  if (!rawCart) {
-    return [];
-  }
-  try {
-    return JSON.parse(rawCart);
-  } catch (err) {
-    return [];
-  }
-}
-```
-
----
+**Requirements:**
+1. Write compareCloningMethods(targetObj).
+2. Clone with structuredClone.
+3. Clone with JSON.
+4. Compare supported data types.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function compareCloningMethods(targetObj) {
+>   const structuredCopy = structuredClone(targetObj);
+>
+>   let jsonCopy = null;
+>   let jsonSupported = true;
+>
+>   try {
+>     jsonCopy = JSON.parse(JSON.stringify(targetObj));
+>   } catch (e) {
+>     jsonSupported = false;
+>   }
+>
+>   const preservesDate = targetObj.date instanceof Date && structuredCopy.date instanceof Date;
+>   const preservesSet = targetObj.set instanceof Set && structuredCopy.set instanceof Set;
+>
+>   return {
+>     structuredCopy,
+>     jsonCopy,
+>     jsonSupported,
+>     preservesDate,
+>     preservesSet
+>   };
+> }
+>
+> // Verification tests
+> const complexObj = {
+>   name: "Test",
+>   date: new Date(),
+>   set: new Set([1, 2])
+> };
+>
+> const res = compareCloningMethods(complexObj);
+> console.assert(res.preservesDate === true, "Test 1 Failed: structuredClone preserves Date instances");
+> console.assert(res.preservesSet === true, "Test 2 Failed: structuredClone preserves Set instances");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **structuredClone() Web API**: Modern native JS API for deep-cloning object graphs using the Structured Clone algorithm.
+> 2. **Structured Clone Strengths**: Handles Map, Set, Date, ArrayBuffer, RegExp, and circular references losslessly.
+> 3. **JSON Serialization Defects**: JSON.stringify converts Dates to strings, drops Sets/Maps, and crashes on circular references.
 > 
 ---
 
-### Exercise 2: Safe LocalStorage Wrapper Helper
+### Exercise 2: Custom Web Storage Serialization Adapter
 
-**Problem:** Write `getStorageItem(key, defaultValue)` helper reading and deserializing JSON from `localStorage` safely.
+**Scenario:** An API storage wrapper serializes non-JSON data types (Dates, RegExps, BigInts) into string payloads for `localStorage`.
 
-**Expected output:**
+**Requirements:**
+1. Write serializeForStorage(data).
+2. Write deserializeFromStorage(str).
+3. Ensure full roundtrip.
+
 > [!check]- Answer
-> ```text
-> function getStorageItem(key, defaultValue) { try { const item = localStorage.getItem(key); return item ? JSON.parse(item) : defaultValue; } catch (e) { return defaultValue; } }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function getStorageItem(key, defaultValue) {
-> try {
-> const item = localStorage.getItem(key);
-> return item ? JSON.parse(item) : defaultValue;
-> } catch (err) {
-> return defaultValue;
+> function serializeForStorage(data) {
+>   return JSON.stringify(data, (key, value) => {
+>     if (value instanceof Date) {
+>       return { _type: "Date", val: value.toISOString() };
+>     }
+>     if (typeof value === "bigint") {
+>       return { _type: "BigInt", val: value.toString() };
+>     }
+>     return value;
+>   });
 > }
+>
+> function deserializeFromStorage(storageStr) {
+>   if (!storageStr) return null;
+>   return JSON.parse(storageStr, (key, value) => {
+>     if (value && typeof value === "object" && value._type) {
+>       if (value._type === "Date") return new Date(value.val);
+>       if (value._type === "BigInt") return BigInt(value.val);
+>     }
+>     return value;
+>   });
 > }
+>
+> // Verification tests
+> const original = { created: new Date("2026-08-12T00:00:00Z"), amount: 100n };
+> const serialized = serializeForStorage(original);
+> const deserialized = deserializeFromStorage(serialized);
+>
+> console.assert(deserialized.created instanceof Date, "Test 1 Failed");
+> console.assert(typeof deserialized.amount === "bigint", "Test 2 Failed");
 > ```
-> - **Explanation:** Safe storage wrappers handle missing keys and JSON parsing exceptions.
+>
+> #### Technical Explanation
+>
+> 1. **Web Storage String Limitation**: localStorage and sessionStorage ONLY store DOMString text key-value pairs.
+> 2. **Implicit String Conversion**: Passing non-strings to localStorage.setItem() implicitly invokes .toString() (e.g. [object Object]).
+> 3. **Type Hydration Pattern**: Custom revivers preserve non-primitive types during storage serialization.
+> 
 ---
 
-### Exercise 3: Structured Clone Algorithm in IndexedDB
+### Exercise 3: Circular Reference Safe Web Storage Serializer
 
-**Problem:** Why can IndexedDB store native `Date` objects and `ArrayBuffer` instances without calling `JSON.stringify()`?
+**Scenario:** Adapts storage serialization to safely handle objects with circular references without throwing JSON parse exceptions.
 
-**Expected output:**
+**Requirements:**
+1. Write safeStorageSerialize(obj).
+2. Use WeakSet to catch circular references.
+3. Return clean JSON string.
+
 > [!check]- Answer
-> ```text
-> IndexedDB uses the browser HTML Structured Clone Algorithm internally, which natively supports serializing complex types like Date, RegExp, Blob, and ArrayBuffer.
+>
+> #### Implementation
+>
+> ```javascript
+> function safeStorageSerialize(obj) {
+>   const seen = new WeakSet();
+>
+>   return JSON.stringify(obj, (key, value) => {
+>     if (typeof value === "object" && value !== null) {
+>       if (seen.has(value)) {
+>         return "[Circular]";
+>       }
+>       seen.add(value);
+>     }
+>     return value;
+>   });
+> }
+>
+> // Verification tests
+> const node = { id: 1 };
+> node.self = node; // Circular!
+>
+> const json = safeStorageSerialize(node);
+> console.assert(json.includes('"self":"[Circular]"'), "Test 1 Failed");
 > ```
-> ```text
-> IndexedDB uses the browser HTML Structured Clone Algorithm internally, which natively supports serializing complex types like Date, RegExp, Blob, and ArrayBuffer.
-> ```
-> - **Explanation:** The Structured Clone Algorithm handles rich JS object serialization natively.
+>
+> #### Technical Explanation
+>
+> 1. **Circular Object Trees**: DOM node references and graph structures often contain circular references.
+> 2. **WeakSet Tracking**: WeakSet keeps track of visited objects during recursive serialization traversal.
+> 3. **Safe Fallback Representation**: Replaces circular nodes with text markers ('[Circular]') to allow successful storage serialization.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [JSON Methods (parse / stringify)](../level_07/json_methods.md) — The core utilities executing JavaScript storage serialization.
 - [Cookies](cookies.md) — The header-based storage strings that also require custom parsing mechanisms.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Browser Web Storage (`localStorage` / `sessionStorage`) only stores keys and values as strings.
 - Passing non-string objects directly leads to value corruption or truthy evaluation bugs.
 - Serialize data using `JSON.stringify` before storing, and decode it using `JSON.parse` on retrieval.

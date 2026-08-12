@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Browser-Specific: Governed by the local storage management engines of web browsers.)**: Storage Limits & Eviction is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Governed by the local storage management engines of web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web developers can store data directly on a user's device using browser APIs like `localStorage`, `IndexedDB`, and the `Cache API`. However, local disk space is finite. To prevent malicious websites from filling up the user's hard drive, browsers enforce **Storage Limits & Eviction Policies**:
@@ -86,7 +82,7 @@ async function manageLocalStorage() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating local browser storage as a permanent database
 
@@ -138,67 +134,166 @@ console.log(`Available quota: ${remainingMB} MB`);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Quota Trap
+### Exercise 1: Storage Quota & Usage Estimator
 
-**Problem:** You are building a logging utility that appends lines to `localStorage`. After running fine for days, the script suddenly throws:
-`DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'logs' exceeded the quota.`
-Explain why this happened and how to handle it.
+**Scenario:** An API storage manager uses `navigator.storage.estimate()` to inspect available quota and usage in bytes.
+
+**Requirements:**
+1. Write inspectStorageQuota(mockStorage).
+2. Calculate usage and quota in MB.
+3. Return percentage used.
 
 > [!check]- Answer
-> - The log size crossed the `5MB` storage limit, triggering a `QuotaExceededError`. The write was blocked. To handle this, implement a cleanup rotation (e.g. keeping only the latest 100 logs), catch the exception, and prune old entries when the quota is exceeded.
-> 
-> 
----
-
-### Exercise 2: Browser Storage Capacity Matrix
-
-**Problem:** Estimate standard maximum storage capacity limits for:
-1. Cookies
-2. LocalStorage / SessionStorage
-3. IndexedDB
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Cookies: 4 KB per cookie
-> 2. LocalStorage: ~5 MB per origin
-> 3. IndexedDB: Hundreds of MBs up to 60%+ of available disk space
-> ```
-> ```text
-> Cookies                  -> ~4 KB
-> LocalStorage/Session     -> ~5 MB
-> IndexedDB / Cache API    -> Hundreds of MBs / GBs (Percentage of free disk)
-> ```
-> - **Explanation:** Storage mechanisms vary drastically in capacity limits.
----
-
-### Exercise 3: Persistent Storage Request
-
-**Problem:** Which Web API method requests browser permission to prevent automatic storage eviction under disk pressure?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> navigator.storage.persist()
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> if (navigator.storage && navigator.storage.persist) {
-> const isPersisted = await navigator.storage.persist();
-> console.log(`Persistent storage granted: ${isPersisted}`);
+> async function inspectStorageQuota(mockStorage) {
+>   const storage = mockStorage || (globalThis.navigator ? globalThis.navigator.storage : null);
+>
+>   if (!storage || typeof storage.estimate !== "function") {
+>     return { supported: false, usageMb: 0, quotaMb: 0, percentUsed: 0 };
+>   }
+>
+>   const estimate = await storage.estimate();
+>   const usageBytes = estimate.usage || 0;
+>   const quotaBytes = estimate.quota || 1;
+>
+>   const usageMb = Number((usageBytes / (1024 * 1024)).toFixed(2));
+>   const quotaMb = Number((quotaBytes / (1024 * 1024)).toFixed(2));
+>   const percentUsed = Number(((usageBytes / quotaBytes) * 100).toFixed(2));
+>
+>   return {
+>     supported: true,
+>     usageMb,
+>     quotaMb,
+>     percentUsed
+>   };
 > }
+>
+> // Verification tests
+> const mockStorage = {
+>   estimate: async () => ({ usage: 50 * 1024 * 1024, quota: 500 * 1024 * 1024 })
+> };
+>
+> inspectStorageQuota(mockStorage).then(res => {
+>   console.assert(res.usageMb === 50, "Test 1 Failed: 50MB");
+>   console.assert(res.quotaMb === 500, "Test 2 Failed: 500MB");
+>   console.assert(res.percentUsed === 10, "Test 3 Failed: 10%");
+> });
 > ```
-> - **Explanation:** `navigator.storage.persist()` requests immune status from eviction.
+>
+> #### Technical Explanation
+>
+> 1. **navigator.storage.estimate()**: Standard Web API returning usage and quota byte estimates for origin storage.
+> 2. **Origin Storage Limits**: Browsers allocate dynamic origin quotas based on total free disk space (typically 10-20% of disk).
+> 3. **Storage Overflow Risks**: Writing beyond quota throws QuotaExceededError exceptions.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: Persistent Storage Request Handler
+
+**Scenario:** Requests persistent storage permission (`navigator.storage.persist()`) to prevent the browser from automatically evicting PWA data under low disk space.
+
+**Requirements:**
+1. Write requestPersistentStorage(mockStorage).
+2. Check if already persisted.
+3. Request persistence permission.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function requestPersistentStorage(mockStorage) {
+>   const storage = mockStorage || (globalThis.navigator ? globalThis.navigator.storage : null);
+>
+>   if (!storage || typeof storage.persist !== "function") {
+>     return { supported: false, isPersisted: false };
+>   }
+>
+>   const alreadyPersisted = await storage.persisted();
+>   if (alreadyPersisted) {
+>     return { supported: true, isPersisted: true, newlyGranted: false };
+>   }
+>
+>   const granted = await storage.persist();
+>   return {
+>     supported: true,
+>     isPersisted: granted,
+>     newlyGranted: granted
+>   };
+> }
+>
+> // Verification tests
+> const mockStorage = {
+>   persisted: async () => false,
+>   persist: async () => true
+> };
+>
+> requestPersistentStorage(mockStorage).then(res => {
+>   console.assert(res.isPersisted === true && res.newlyGranted === true, "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Best-Effort vs Persistent Storage**: By default, browser storage is Best-Effort and can be cleared during low disk space.
+> 2. **navigator.storage.persist()**: Promotes origin storage to Persistent, preventing automatic browser eviction.
+> 3. **User Prompt Criteria**: Browsers grant persistent storage based on PWA installability or explicit user interaction.
+> 
+---
+
+### Exercise 3: Emergency Storage Eviction Guard
+
+**Scenario:** An API storage guard detects when storage usage exceeds 90% quota, purging non-essential cached media to prevent QuotaExceededError.
+
+**Requirements:**
+1. Write auditAndEvictCache(mockStorage, purgeCacheFn).
+2. If percentUsed > 90%, trigger purgeCacheFn.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function auditAndEvictCache(mockStorage, purgeCacheFn) {
+>   const estimate = await mockStorage.estimate();
+>   const percentUsed = (estimate.usage / estimate.quota) * 100;
+>
+>   if (percentUsed > 90) {
+>     const bytesFreed = await purgeCacheFn();
+>     return { evicted: true, bytesFreed, percentUsed };
+>   }
+>
+>   return { evicted: false, bytesFreed: 0, percentUsed };
+> }
+>
+> // Verification tests
+> const mockStorage = { estimate: async () => ({ usage: 95, quota: 100 }) }; // 95% used
+> let purged = false;
+>
+> auditAndEvictCache(mockStorage, async () => { purged = true; return 500; }).then(res => {
+>   console.assert(res.evicted === true && purged === true, "Test 1 Failed: Must trigger emergency purge");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **QuotaExceededError DOMException**: Thrown when localStorage, IndexedDB, or Cache API exceeds allotted byte quota.
+> 2. **Proactive Storage Guard**: Auditing usage before large downloads prevents abrupt runtime storage failures.
+> 3. **LRU Eviction Strategy**: Emergency purges should delete oldest media assets while preserving user database state.
+---
+
+## 6. Related Terms
 - [IndexedDB](indexeddb.md) — The browser-native transactional database.
 - [Cache API](cache_api.md) — The network response storage API.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Browsers enforce storage quotas and eviction policies to prevent disk space exhaustion.
 - `localStorage` and `sessionStorage` have a strict, non-negotiable limit of 5MB per origin.
 - IndexedDB and the Cache API share a dynamic pool of up to 50% of the device's free disk space.

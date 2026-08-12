@@ -6,22 +6,18 @@
 ---
 
 ## 1. Prerequisites
-- [`<body>`](../level_01/body.md)
+- [`<body>`](../level_01/body.md) — 
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<script>` tag is NOT a void element; it must have a closing tag, even if it is empty!
 
 ---
 
 ## 2. Term Category
-- **Metadata / Interactive Tag**
+
+**Metadata / Interactive Tag (Universal Browser Support)**: `<script>` is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTML provides the structure. CSS provides the design. But what if you want logic? What if you want a modal popup to appear when a button is clicked, or you want to fetch new data from a server without refreshing the page?
@@ -66,7 +62,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating `<script>` as a void element
 
@@ -138,7 +134,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 </script>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Bug
 
@@ -197,7 +193,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 >
 > **Explanation:** `type="text/javascript"` is redundant in modern HTML5.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<link>`](link.md) — Used to import CSS, whereas `<script>` is used to import JavaScript.
 - [`defer` & `async` (Script Loading Strategies)](defer_async.md) — Tag parameters optimized for asynchronous asset parsing.
 - [`<noscript>`](noscript.md) — A fallback frame shown if script execution is blocked or disabled.
@@ -208,7 +204,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<script>` tag is used to execute JavaScript logic on a webpage.
 - It is NOT a void element; you must always write `</script>`, even when using the `src` attribute.
 - Because scripts pause HTML rendering, they should usually be placed at the very bottom of the `<body>` tag, or in the `<head>` using the `defer` attribute.

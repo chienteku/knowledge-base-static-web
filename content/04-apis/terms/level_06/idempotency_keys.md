@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Crucial for payment gateways , financial ledgers, and critical resource creations.)**: Idempotency Keys is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Crucial for payment gateways (like Stripe or PayPal), financial ledgers, and critical resource creations.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Certain operations are non-idempotent by nature—for example, calling `POST /api/payments` to charge a customer's credit card. If the client makes a payment request, but the network connection drops before receiving the server's response, the client enters an uncertain state.
@@ -88,7 +84,7 @@ async function idempotencyMiddleware(req, res, next) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Generating the idempotency key on the server side
 
@@ -149,68 +145,173 @@ await redis.set(`idempotency:${key}`, JSON.stringify(response), 'EX', 86400);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Collision Prevention
+### Exercise 1: Idempotency-Key Header Processing Middleware
 
-**Problem:** Determine if the server should process the request or return the cached response:
+**Scenario:** A billing API middleware inspects the `Idempotency-Key` header on POST payment requests, returning cached responses for duplicate keys.
 
-1. **Request 1:** `POST /charge`, Header: `Idempotency-Key: abc`, Payload: `{ "amount": 10 }` -> (Server processes and returns `200 OK`).
-2. **Request 2:** `POST /charge`, Header: `Idempotency-Key: xyz`, Payload: `{ "amount": 10 }`
-3. **Request 3:** `POST /charge`, Header: `Idempotency-Key: abc`, Payload: `{ "amount": 10 }`
+**Requirements:**
+1. Write processIdempotentPayment(idempotencyKey, paymentPayload, cacheMap).
+2. If key cached, return saved response.
+3. Else process payment and save in cacheMap.
 
 > [!check]- Answer
-> - 1. **Processed** (First time seeing key `abc`).
-> - 2. **Processed** (New key `xyz` is registered).
-> - 3. **Cached Response Returned** (Matches cached key `abc`; server skips processing to prevent double-charging).
+>
+> #### Implementation
+>
+> ```javascript
+> function processIdempotentPayment(idempotencyKey, paymentPayload, cacheMap = new Map()) {
+>   if (!idempotencyKey || typeof idempotencyKey !== "string") {
+>     return { status: 400, error: "Missing Idempotency-Key header" };
+>   }
+>
+>   if (cacheMap.has(idempotencyKey)) {
+>     const cached = cacheMap.get(idempotencyKey);
+>     return {
+>       status: cached.status,
+>       isDuplicateResponse: true,
+>       body: cached.body
+>     };
+>   }
+>
+>   // Process new payment transaction
+>   const responseBody = {
+>     chargeId: `ch_${Date.now()}`,
+>     amount: paymentPayload.amount,
+>     status: "SUCCEEDED"
+>   };
+>
+>   cacheMap.set(idempotencyKey, { status: 201, body: responseBody });
+>
+>   return {
+>     status: 201,
+>     isDuplicateResponse: false,
+>     body: responseBody
+>   };
+> }
+>
+> // Verification tests
+> const cache = new Map();
+> const key = "key_uuid_8888";
+> const payload = { amount: 100 };
+>
+> const res1 = processIdempotentPayment(key, payload, cache);
+> console.assert(res1.status === 201 && res1.isDuplicateResponse === false, "Test 1 Failed");
+>
+> const res2 = processIdempotentPayment(key, payload, cache);
+> console.assert(res2.status === 201 && res2.isDuplicateResponse === true, "Test 2 Failed");
+> console.assert(res1.body.chargeId === res2.body.chargeId, "Test 3 Failed: Must return identical charge ID");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Idempotency-Key Header Pattern**: Client sends unique UUID header with non-idempotent POST requests.
+> 2. **Response Caching**: Server caches HTTP status code and response body under key; duplicate requests replay cached response.
+> 3. **Financial API Defense**: Prevents charging customers twice during network timeouts or accidental button double-clicks.
 > 
+---
+
+### Exercise 2: Idempotency Lock & Concurrent Collision Guard
+
+**Scenario:** A lock manager handles concurrent duplicate requests arriving simultaneously with the same `Idempotency-Key`, placing secondary requests in IN_PROGRESS lock wait.
+
+**Requirements:**
+1. Write acquireIdempotencyLock(key, lockStore).
+2. If key is locked, return 409 Conflict.
+3. Set lock status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function acquireIdempotencyLock(key, lockStore = new Map()) {
+>   if (lockStore.has(key)) {
+>     const lock = lockStore.get(key);
+>     if (lock.status === "IN_PROGRESS") {
+>       return { acquired: false, status: 409, error: "Concurrent request in progress for this Idempotency-Key" };
+>     }
+>     if (lock.status === "COMPLETED") {
+>       return { acquired: false, status: 200, cachedResponse: lock.response };
+>     }
+>   }
+>
+>   lockStore.set(key, { status: "IN_PROGRESS", startTime: Date.now() });
+>   return { acquired: true };
+> }
+>
+> // Verification tests
+> const locks = new Map();
+> const k = "key_123";
+>
+> const first = acquireIdempotencyLock(k, locks);
+> console.assert(first.acquired === true, "Test 1 Failed");
+>
+> const concurrent = acquireIdempotencyLock(k, locks);
+> console.assert(concurrent.acquired === false && concurrent.status === 409, "Test 2 Failed: Concurrent lock must return 409 Conflict");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Concurrent Request Race Conditions**: Two identical requests with same key arriving simultaneously require lock coordination.
+> 2. **IN_PROGRESS Status Lock**: Locks key while first request is processing to prevent double database execution.
+> 3. **409 Conflict Status**: Returns 409 Conflict if client sends concurrent duplicate before first request completes.
 > 
 ---
 
-### Exercise 2: Idempotency Key Header Lifecycle
+### Exercise 3: Idempotency Key Cache TTL Expiration Manager
 
-**Problem:** Trace the server workflow when receiving request with `Idempotency-Key: uuid-abc`:
-1. Key check in Redis
-2. Execution path
-3. Cache storing
+**Scenario:** A key expiration manager purges cached idempotency keys after a configured TTL (e.g. 24 hours).
 
-**Expected output:**
+**Requirements:**
+1. Write purgeExpiredIdempotencyKeys(cacheMap, maxAgeMs).
+2. Delete entries older than maxAgeMs.
+
 > [!check]- Answer
-> ```text
-> 1. Check Redis for uuid-abc
-> 2. If key exists: Return cached response immediately without re-executing logic
-> 3. If key missing: Lock key, execute business logic, store response in Redis with TTL, return response
+>
+> #### Implementation
+>
+> ```javascript
+> function purgeExpiredIdempotencyKeys(cacheMap = new Map(), maxAgeMs = 86400000) {
+>   const now = Date.now();
+>   let purgedCount = 0;
+>
+>   for (const [key, record] of cacheMap.entries()) {
+>     if (now - record.created > maxAgeMs) {
+>       cacheMap.delete(key);
+>       purgedCount++;
+>     }
+>   }
+>
+>   return { purgedCount, remainingCount: cacheMap.size };
+> }
+>
+> // Verification tests
+> const cache = new Map([
+>   ["k1", { created: Date.now() - 100000 }],
+>   ["k2", { created: Date.now() - 90000000 }] // Expired! (> 86400000ms)
+> ]);
+>
+> const res = purgeExpiredIdempotencyKeys(cache, 86400000);
+> console.assert(res.purgedCount === 1, "Test 1 Failed");
+> console.assert(cache.has("k1") === true && cache.has("k2") === false, "Test 2 Failed");
 > ```
-> ```text
-> 1. Search Redis for key uuid-abc.
-> 2. If present -> Return cached HTTP status and body payload instantly.
-> 3. If absent -> Acquire lock, execute transaction, save result in Redis (24h TTL), return response.
-> ```
-> - **Explanation:** Idempotency keys cache and return exact historical HTTP responses.
+>
+> #### Technical Explanation
+>
+> 1. **Idempotency Key TTL**: Idempotency keys should be retained for 24-48 hours to handle retries, then purged to free memory.
+> 2. **Memory Footprint Control**: Purging old keys prevents unbounded growth in Redis / database storage.
+> 3. **Client Key Generation Rule**: Clients generate fresh V4 UUIDs for every distinct business transaction attempt.
 ---
 
-### Exercise 3: Standard Idempotency Header Name
-
-**Problem:** What is the standard IETF draft header name for idempotency keys?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Idempotency-Key
-> ```
-> ```http
-> Idempotency-Key: 7b9b8b08-8e65-4f36-a363-2287f3b5f903
-> ```
-> - **Explanation:** `Idempotency-Key` is the standard header used by payment APIs (Stripe).
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — The HTTP safety definitions.
 - [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — The server protections that clients retry against.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Idempotency Keys allow clients to safely retry non-idempotent POST operations.
 - The client generates the key (typically a UUID v4) and sends it in request headers.
 - The server checks a cache (like Redis); if present, it returns the cached response and skips processing.

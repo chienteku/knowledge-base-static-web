@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support)**: `style` Attribute is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, CSS (Cascading Style Sheets) is written in a separate `.css` file or inside a `<style>` tag in the `<head>`. You use `class` attributes to link the HTML to the CSS rules. 
@@ -52,7 +48,7 @@ Using the `style` attribute is like grabbing a sharpie and coloring a tiny dot o
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing inline styles instead of classes
 
@@ -118,7 +114,7 @@ Using the `style` attribute is like grabbing a sharpie and coloring a tiny dot o
 button:hover { color: blue; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: CSS Syntax inside HTML
 
@@ -170,7 +166,7 @@ button:hover { color: blue; }
 >
 > **Explanation:** Inline styles excel at binding dynamic JavaScript runtime properties.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`class` Attribute](class.md) — The correct, maintainable way to apply CSS to elements.
 - [`id` Attribute](id.md) — The unique identifier attribute.
 - [`data-*` Attributes](data_attributes.md) — Custom metadata values often styled via CSS.
@@ -179,7 +175,7 @@ button:hover { color: blue; }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `style` attribute allows you to write raw CSS code directly onto an HTML element.
 - It is useful for one-off tweaks or dynamically calculated values (like progress bars or animation frames).
 - **NEVER use it as your primary way of designing a website.** Always prefer external CSS files and `class` attributes for maintainability.

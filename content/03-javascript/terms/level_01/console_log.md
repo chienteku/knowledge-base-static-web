@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM** *(Note: Also heavily implemented in Node.js ecosystem)*
+
+**Browser API / DOM *(Note: Also heavily implemented in Node.js ecosystem)* (Universal: Provided by the host environment . Technically not part of the core ECMAScript language specification, but implemented universally by runtimes.)**: console.log() is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Provided by the host environment (Browsers, Node.js, Deno). Technically not part of the core ECMAScript language specification, but implemented universally by runtimes.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing a script, developers are effectively flying blind. If a variable holds the wrong value, or a loop doesn't run, there is no physical indication of the failure. We needed a window into the engine's internal state.
@@ -63,7 +59,7 @@ processPayment(100);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving `console.log()` in production code
 
@@ -142,64 +138,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Logging multiple values
+### Exercise 1: Structured Microservice Log Formatter
 
-**Problem:** You have two variables: `const x = 10;` and `const y = 20;`. Write a single `console.log` statement that prints both of them separated by a space.
+**Scenario:** A backend microservice formats diagnostic log messages. It uses console.log, console.warn, and console.error with structured metadata parameters for cloud logging aggregators.
 
-**Expected output:**
+**Requirements:**
+1. Write logServiceEvent(level, message, metaObj).
+2. Route "error" logs to console.error.
+3. Route "warn" logs to console.warn.
+4. Route "info" logs to console.log.
+5. Include formatted JSON metadata.
+
 > [!check]- Answer
-> ```text
-> 10 20
-> ```
-> - `console.log()` can take multiple arguments separated by commas (e.g., `console.log(var1, var2)`).
-> 
----
-
-### Exercise 2: Console Formatting Specifiers
-
-**Problem:** Use console format specifiers `%s`, `%d`, and `%o` to print string `"Alice"`, score `100`, and object `{ active: true }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> User Alice scored 100 on { active: true }
-> ```
+> #### Implementation
 > ```javascript
-> console.log("User %s scored %d on %o", "Alice", 100, { active: true });
+> function logServiceEvent(level, message, metaObj = {}) {
+>   const timestamp = new Date().toISOString();
+>   const logPayload = "[" + timestamp + "] [" + level.toUpperCase() + "]: " + message;
+> switch (level) {
+>     case "error":
+>       console.error(logPayload, metaObj);
+>       break;
+>     case "warn":
+>       console.warn(logPayload, metaObj);
+>       break;
+>     default:
+>       console.log(logPayload, metaObj);
+>       break;
+>   }
+>   return logPayload;
+> }
+> // Verification tests
+> const entry = logServiceEvent("info", "User logged in", { userId: 42 });
+> console.assert(entry.includes("[INFO]: User logged in"), "Test 1 Failed");
 > ```
->
-> **Explanation:** `console.log` supports ANSI/C-style format specifiers: `%s` (string), `%d` (integer), `%o` (object).
+> #### Technical Explanation
+> 1. **Console Stream Routing**: console.log writes to standard output (stdout), whereas console.error and console.warn write to standard error (stderr).
+> 2. **Multiple Arguments**: console.log accepts multiple comma-separated arguments, printing each formatted parameter sequentially.
+> 3. **Non-Blocking DevTools Interface**: Console methods interact with the host debugging interface without interrupting runtime code flow.
 > 
 ---
 
-### Exercise 3: Console Timing and Table Operations
+### Exercise 2: Tabular Metric Data Output
 
-**Problem:** Use `console.time('op')` / `console.timeEnd('op')` to measure execution time of a 1,000,000 iteration loop.
+**Scenario:** An analytics script displays dataset arrays in developer tools using console.table() to improve visual readability during local debugging.
 
-**Expected output:**
+**Requirements:**
+1. Format an array of user objects with id, name, and role properties.
+2. Use console.table() to format the output.
+3. Return the dataset length.
+
 > [!check]- Answer
-> ```text
-> op: time elapsed
-> ```
+> #### Implementation
 > ```javascript
-> console.time("op");
-> for (let i = 0; i < 1000000; i++) {}
-> console.timeEnd("op");
+> function displayUserTable(users) {
+>   if (!Array.isArray(users)) return 0;
+> console.table(users);
+> return users.length;
+> }
+> // Verification tests
+> const testUsers = [
+>   { id: 1, name: "Alice", role: "Admin" },
+>   { id: 2, name: "Bob", role: "Developer" }
+> ];
+> const count = displayUserTable(testUsers);
+> console.assert(count === 2, "Test 1 Failed");
 > ```
->
-> **Explanation:** `console.time` and `console.timeEnd` benchmark execution duration between matching label strings.
-> 
+> #### Technical Explanation
+> 1. **Tabular Formatting**: console.table() formats arrays of objects or 2D arrays as interactive visual tables in supported console runtimes.
+> 2. **Host Environment API**: The console object is provided by the host environment (Browser / Node.js runtime) rather than being a core JS language keyword.
+> 3. **Debugging Utility**: Useful for inspecting array datasets without manual stringification.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Execution Time Profiling Utility
+
+**Scenario:** A performance monitoring script measures the execution duration of synchronous functions using console.time() and console.timeEnd().
+
+**Requirements:**
+1. Start a performance timer using console.time(label).
+2. Execute a calculation task.
+3. Stop the timer using console.timeEnd(label).
+4. Return the calculated result.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function profileTask(label, taskFn) {
+>   console.time(label);
+> const result = taskFn();
+> console.timeEnd(label);
+>   return result;
+> }
+> // Verification tests
+> const sum = profileTask("heavyMath", () => {
+>   let acc = 0;
+>   for (let i = 0; i < 1000; i++) acc += i;
+>   return acc;
+> });
+> console.assert(sum === 499500, "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Console Timers**: console.time(label) and console.timeEnd(label) track elapsed time in milliseconds for matching string labels.
+> 2. **Label Matching**: Timer labels must match exactly to pair start and end profiling events.
+> 3. **Host API Support**: Timer resolution depends on the host engine's high-resolution timer implementation.
+---
+
+## 6. Related Terms
 - [Variable](variable.md) — A named container for storing data values.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `console.log()` prints messages to the developer console.
 - It is the most common tool for debugging and inspecting variables during execution.
 - It is provided by the runtime environment (like the Browser or Node.js), not the core JavaScript language engine itself.

@@ -279,7 +279,7 @@ let _guard = lock.lock().unwrap(); // Held until end of block scope!
 
 ## 6. Related Terms
 
-- [Scoped Threads (`std::thread::scope`)](../level_09/scoped_threads.md)
+- [Scoped Threads (`std::thread::scope`)](../level_09/scoped_threads.md) — 
 - [`Drop` Trait](../level_03/drop_trait.md) — Drop trait destructors.
 - [`Mutex<T>`](../level_09/mutex_t.md) — RAII mutex guard locking.
 

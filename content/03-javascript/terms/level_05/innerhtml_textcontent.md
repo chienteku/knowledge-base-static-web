@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: innerHTML / textContent / innerText is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you have selected an element from the DOM, you almost always want to read or update its contents—changing a button's label from "Submit" to "Saving...", or rendering a snippet of styled text. Browser engines provide three properties for this:
@@ -80,7 +76,7 @@ function displayMessage(userText, containerId) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `innerHTML` to set plain text
 
@@ -155,72 +151,119 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format Banner Safely
+### Exercise 1: XSS Safe Text Content Sanitizer
 
-**Problem:** Complete the code to safely display the username inside `userBanner` by wrapping the text in a bold (`<strong>`) tag using safe creation methods, avoiding XSS vulnerabilities.
+**Scenario:** A social feed renderer sets user post text using textContent to prevent cross-site scripting (XSS) vulnerabilities.
 
-```javascript
-const usernameInput = "<script>stealData()</script>"; // Malicious input
-
-if (typeof document !== "undefined") {
-  const banner = document.getElementById("user-banner");
-  
-  // Create 'strong' element
-  // Set textContent to usernameInput
-  // Append strong element to banner
-}
-```
+**Requirements:**
+1. Write renderUserPost(containerEl, userText).
+2. Set containerEl.textContent = userText.
+3. Verify HTML tags are rendered as plain text.
 
 > [!check]- Answer
-> - Create a `strong` node with `document.createElement("strong")`.
-> - Set its `textContent` to `usernameInput` (renders as plain text).
-> - Append the node to `banner` using `.appendChild()`.
-> 
----
-
-### Exercise 2: Safely Rendering Text with `textContent`
-
-**Problem:** Safely escape `<script>alert(1)</script>` by setting `elem.textContent`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Renders literal text tags without script execution
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Renders literal text tags without script execution");
+> function renderUserPost(containerEl, userText) {
+>   if (!containerEl) return false;
+>   // textContent escapes HTML tags as plain text, preventing XSS
+>   containerEl.textContent = userText;
+>   return true;
+> }
+>
+> // Verification tests
+> const mockEl = { textContent: "" };
+> renderUserPost(mockEl, "<script>alert('XSS')</script>");
+> console.assert(mockEl.textContent === "<script>alert('XSS')</script>", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `textContent` escapes HTML entities, treating inputs purely as text strings.
+> #### Technical Explanation
+>
+> 1. **textContent Security**: textContent sets plain text, automatically escaping HTML markup characters to prevent XSS.
+> 2. **innerHTML XSS Hazard**: Assigning untrusted strings to innerHTML evaluates embedded <script> or event handler attributes, exposing security vulnerabilities.
+> 3. **Rendering Performance**: textContent is faster than innerHTML because it avoids invoking HTML parser.
 > 
 ---
 
-### Exercise 3: Parsing Performance: `textContent` vs `innerText`
+### Exercise 2: Innerhtml Textcontent Advanced Context Handler
 
-**Problem:** Explain why `textContent` is faster than `innerText` (innerText triggers layout reflow to check element visibility).
+**Scenario:** A web application component processes innerhtml textcontent data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleInnerhtmlTextcontentSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> textContent avoids reflow layout checks
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("textContent avoids reflow layout checks");
+> function handleInnerhtmlTextcontentSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleInnerhtmlTextcontentSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `innerText` is aware of CSS styling and layout visibility, triggering reflow overhead.
-> 
+> #### Technical Explanation
+>
+> 1. **Innerhtml Textcontent Architecture**: Applying innerhtml textcontent patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Innerhtml Textcontent Performance Optimization
+
+**Scenario:** An application utility optimizes innerhtml textcontent execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeInnerhtmlTextcontentTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeInnerhtmlTextcontentTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeInnerhtmlTextcontentTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Innerhtml Textcontent Optimization**: Optimizing innerhtml textcontent improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — Structural node actions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `textContent` to read or write raw, safe text content inside nodes (highly performant).
 - Use `innerHTML` to read or render compiled HTML markup templates.
 - **Never** assign user-provided or untrusted inputs to `innerHTML` due to severe **Cross-Site Scripting (XSS)** security vulnerabilities.

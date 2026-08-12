@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Universal: Implemented inside API gateways, auth servers, and client OAuth libraries.)**: OAuth Scopes is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented inside API gateways, auth servers, and client OAuth libraries.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you authorize a third-party application (like a scheduling calendar) to connect to your GitHub or Google account, you do not want to give that application full access to delete your repositories, read your personal emails, or change your password. You want to grant only the minimum permissions necessary for the tool to function. This is the **Principle of Least Privilege**.
@@ -83,7 +79,7 @@ app.patch('/api/calendar/events', requireScope('write:calendar'), (req, res) => 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Conflating user permission checks with scope checks
 
@@ -135,64 +131,146 @@ app.post('/items', verifyToken, requireScope('write:items'), (req, res) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Scope Evaluator
+### Exercise 1: OAuth 2.0 Scope Permission Validator
 
-**Problem:** A client application queries your API with a token containing the following scopes: `["read:profile", "read:orders"]`. Determine if the server should authorize (`200 OK`) or block (`403 Forbidden`) the request:
+**Scenario:** An API endpoint middleware verifies that the client's OAuth access token contains required scopes before granting access.
 
-1. `GET /api/profile` (Requires scope: `read:profile`)
-2. `POST /api/orders` (Requires scope: `write:orders`)
-3. `GET /api/orders/99` (Requires scope: `read:orders`)
+**Requirements:**
+1. Write validateOAuthScopes(grantedScopeString, requiredScopesArray).
+2. Parse space-separated granted scopes.
+3. Ensure ALL required scopes are present.
 
 > [!check]- Answer
-> - 1. **Authorize (`200 OK`)** - Token contains the matching scope.
-> - 2. **Block (`403 Forbidden`)** - Token lacks `write:orders`.
-> - 3. **Authorize (`200 OK`)** - Token contains the matching scope.
-> 
-> 
----
-
-### Exercise 2: Least Privilege Scope Design
-
-**Problem:** Specify minimal scopes for an app that reads user profile info and posts tweets on user's behalf.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> read:profile write:tweets (or read:user user:write)
-> ```
-> ```text
-> read:user write:tweets
-> ```
-> - **Explanation:** Requesting granular scopes enforces Principle of Least Privilege.
----
-
-### Exercise 3: Scope Representation in Tokens
-
-**Problem:** How are multiple granted scopes formatted inside a standard OAuth 2.0 access token payload?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> As a space-separated string of scope names (e.g. "scope": "read:user write:orders").
-> ```
-> ```json
-> {
-> "sub": "user_123",
-> "scope": "read:user write:orders"
+>
+> #### Implementation
+>
+> ```javascript
+> function validateOAuthScopes(grantedScopeString, requiredScopesArray = []) {
+>   if (!grantedScopeString || typeof grantedScopeString !== "string") {
+>     return { authorized: false, status: 403, error: "No scopes granted in token" };
+>   }
+>
+>   const grantedSet = new Set(grantedScopeString.split(" ").map(s => s.trim()));
+>   const missing = requiredScopesArray.filter(req => !grantedSet.has(req));
+>
+>   if (missing.length > 0) {
+>     return {
+>       authorized: false,
+>       status: 403,
+>       error: `Insufficient Scope: missing ${missing.join(", ")}`
+>     };
+>   }
+>
+>   return { authorized: true, status: 200 };
 > }
+>
+> // Verification tests
+> const tokenScopes = "read:user write:user read:orders";
+>
+> console.assert(validateOAuthScopes(tokenScopes, ["read:user"]).authorized === true, "Test 1 Failed");
+> console.assert(validateOAuthScopes(tokenScopes, ["read:user", "delete:user"]).authorized === false, "Test 2 Failed");
 > ```
-> - **Explanation:** OAuth 2.0 standardizes scope claims as space-delimited string tokens.
+>
+> #### Technical Explanation
+>
+> 1. **OAuth Scope Concept**: Scopes specify the exact permissions granted by user to third-party client (e.g. read:profile).
+> 2. **Space-Separated Format**: RFC 6749 specifies scopes are formatted as space-delimited string tokens.
+> 3. **Fine-Grained Access Control**: Limits client application capabilities to least-privilege subset of user permissions.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: Hierarchical Scope Expansion Resolver
+
+**Scenario:** An API scope parser resolves master scopes (e.g. `admin:all`) into fine-grained child permission scopes (`read:users`, `write:users`).
+
+**Requirements:**
+1. Write expandScopeHierarchy(scopeArray, scopeMap).
+2. Expand parent scopes into full permission set.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function expandScopeHierarchy(grantedScopes, scopeMap) {
+>   const expanded = new Set();
+>
+>   for (const s of grantedScopes) {
+>     expanded.add(s);
+>     if (scopeMap[s]) {
+>       for (const child of scopeMap[s]) {
+>         expanded.add(child);
+>       }
+>     }
+>   }
+>
+>   return Array.from(expanded);
+> }
+>
+> // Verification tests
+> const map = {
+>   "admin": ["read:users", "write:users", "delete:users"],
+>   "user": ["read:users"]
+> };
+>
+> const expanded = expandScopeHierarchy(["admin"], map);
+> console.assert(expanded.includes("read:users") && expanded.includes("delete:users"), "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Hierarchical Scopes**: Master administrative scopes implicitly grant all nested sub-permission scopes.
+> 2. **Simplified User Consent**: Presents single clear scope choice to user during authorization consent prompt.
+> 3. **Internal Permission Mapping**: Translates high-level OAuth scopes to low-level backend RBAC rules.
+> 
+---
+
+### Exercise 3: Least-Privilege Scope Minimizer Auditor
+
+**Scenario:** A security auditor flags client requests asking for excessive or unneeded OAuth scopes.
+
+**Requirements:**
+1. Write auditRequestedScopes(requestedScopes, requiredEndpointScopes).
+2. Flag unnecessary scopes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditRequestedScopes(requestedScopes = [], allowedScopes = []) {
+>   const unnecessary = requestedScopes.filter(s => !allowedScopes.includes(s));
+>
+>   return {
+>     leastPrivilege: unnecessary.length === 0,
+>     unnecessaryScopes: unnecessary
+>   };
+> }
+>
+> // Verification tests
+> const requested = ["read:user", "delete:all_data"];
+> const allowed = ["read:user", "write:user"];
+>
+> const audit = auditRequestedScopes(requested, allowed);
+> console.assert(audit.leastPrivilege === false && audit.unnecessaryScopes[0] === "delete:all_data", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Principle of Least Privilege**: Applications should request ONLY the minimum scope permissions required for functionality.
+> 2. **User Trust Impact**: Asking for excessive scopes (e.g. full account deletion) frightens users into abandoning consent.
+> 3. **Blast Radius Reduction**: Minimizes potential damage if client access token is compromised.
+---
+
+## 6. Related Terms
 - [API Keys](api_keys.md) — Simple tokens that usually grant full access without fine-grained scope limitations.
 - [JWT (JSON Web Tokens)](jwt.md) — The token format where OAuth scopes are typically stored in the payload (often under the `scp` or `scope` claims).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - OAuth Scopes represent fine-grained access boundaries granted to client applications.
 - They enforce the Principle of Least Privilege, protecting users' private data from third-party app overreach.
 - Scopes define client application permissions; they do not replace user roles (RBAC).

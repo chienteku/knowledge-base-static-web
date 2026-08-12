@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Browser-Specific: Built-in objects provided by the browser window engine. Not natively available in Node.js.)**: XMLHttpRequest / AJAX is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Built-in objects provided by the browser window engine. Not natively available in Node.js.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, clicking a link or submitting a form required the browser to discard the current page completely, fetch a new HTML file from the server, and rebuild the entire window. This made browsing slow and jarring.
@@ -82,7 +78,7 @@ xhr.send();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming XHR is completely obsolete and useless
 
@@ -135,83 +131,183 @@ xhr.open('GET', '/api/data', false); // ❌ Freezes browser main thread!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Refactoring Legacy Code
+### Exercise 1: Legacy XMLHttpRequest (XHR) Progress Tracker
 
-**Problem:** Refactor this legacy XHR request code into a clean, modern `async`/`await` `fetch` request:
+**Scenario:** An API file upload component uses legacy `XMLHttpRequest` to track real-time upload progress events (`onprogress`).
 
-```javascript
-// Legacy XHR
-function sendData(data) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/data', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.onload = function() {
-    console.log("Saved!");
-  };
-  xhr.send(JSON.stringify(data));
-}
-```
+**Requirements:**
+1. Write trackXhrUpload(url, fileBuffer, onProgressFn, mockXhr).
+2. Attach upload.onprogress event listener.
+3. Calculate percentage.
 
 > [!check]- Answer
-> - ```javascript
-> - async function sendData(data) {
-> - try {
-> - const res = await fetch('/api/data', {
-> - method: 'POST',
-> - headers: { 'Content-Type': 'application/json' },
-> - body: JSON.stringify(data)
-> - });
-> - if (!res.ok) throw new Error('Request failed');
-> - console.log("Saved!");
-> - } catch (err) {
-> - console.error("Error:", err);
-> - }
-> - }
-> - ```
+>
+> #### Implementation
+>
+> ```javascript
+> function trackXhrUpload(url, fileBuffer, onProgressFn, mockXhrInstance) {
+>   const xhr = mockXhrInstance || new XMLHttpRequest();
+>   xhr.open("POST", url, true);
+>
+>   if (xhr.upload && typeof onProgressFn === "function") {
+>     xhr.upload.onprogress = (event) => {
+>       if (event.lengthComputable) {
+>         const percent = Math.round((event.loaded / event.total) * 100);
+>         onProgressFn(percent, event.loaded, event.total);
+>       }
+>     };
+>   }
+>
+>   xhr.send(fileBuffer);
+>   return xhr;
+> }
+>
+> // Verification tests
+> const progressLog = [];
+> const mockXhr = {
+>   open() {},
+>   send(data) {
+>     if (this.upload.onprogress) {
+>       this.upload.onprogress({ lengthComputable: true, loaded: 50, total: 100 });
+>       this.upload.onprogress({ lengthComputable: true, loaded: 100, total: 100 });
+>     }
+>   },
+>   upload: {}
+> };
+>
+> trackXhrUpload("/upload", Buffer.from("data"), (p) => progressLog.push(p), mockXhr);
+> console.assert(progressLog[0] === 50 && progressLog[1] === 100, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Legacy XHR Upload Progress**: Unlike basic fetch(), legacy XMLHttpRequest exposes upload.onprogress for fine-grained file upload tracking.
+> 2. **lengthComputable Property**: Boolean flag indicating whether total payload byte length is known.
+> 3. **Modern Fetch Streams Alternative**: Modern browsers now support ReadableStream in Fetch, but XHR remains common in legacy upload libraries.
 > 
+---
+
+### Exercise 2: Promisified XMLHttpRequest Wrapper
+
+**Scenario:** Converts legacy event-driven `XMLHttpRequest` calls into modern Promise-returning functions.
+
+**Requirements:**
+1. Write xhrPromise(url, options, mockXhr).
+2. Handle onload, onerror, ontimeout.
+3. Resolve or reject Promise.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function xhrPromise(url, options = {}, mockXhrInstance) {
+>   return new Promise((resolve, reject) => {
+>     const xhr = mockXhrInstance || new XMLHttpRequest();
+>     const method = options.method || "GET";
+>
+>     xhr.open(method, url, true);
+>     xhr.timeout = options.timeoutMs || 5000;
+>
+>     xhr.onload = () => {
+>       if (xhr.status >= 200 && xhr.status < 300) {
+>         resolve({ status: xhr.status, responseText: xhr.responseText });
+>       } else {
+>         reject(new Error(`XHR HTTP Error ${xhr.status}`));
+>       }
+>     };
+>
+>     xhr.onerror = () => reject(new Error("XHR Network Error"));
+>     xhr.ontimeout = () => reject(new Error("XHR Timeout Error"));
+>
+>     xhr.send(options.body || null);
+>   });
+> }
+>
+> // Verification tests
+> const mockXhr = {
+>   open(m, u) {},
+>   send() {
+>     this.status = 200;
+>     this.responseText = '{"ok":true}';
+>     this.onload();
+>   }
+> };
+>
+> xhrPromise("/api/data", {}, mockXhr).then(res => {
+>   console.assert(res.status === 200 && res.responseText.includes("ok"), "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event-Driven Architecture**: XHR relies on event handlers (onload, onerror, ontimeout) rather than promises.
+> 2. **readyState Progression**: UNSENT (0) -> OPENED (1) -> HEADERS_RECEIVED (2) -> LOADING (3) -> DONE (4).
+> 3. **Migration Strategy**: Promisifying XHR enables using async/await syntax while preserving legacy XHR capabilities.
 > 
 ---
 
-### Exercise 2: AJAX Acronym Breakdown
+### Exercise 3: XHR vs Fetch API Migration Adapter
 
-**Problem:** What does the AJAX acronym stand for?
+**Scenario:** An API migration layer translates legacy XHR config objects into modern Fetch API parameter objects.
 
-**Expected output:**
+**Requirements:**
+1. Write adaptXhrToFetchOptions(xhrConfig).
+2. Map method, headers, timeout, and body.
+
 > [!check]- Answer
-> ```text
-> Asynchronous JavaScript And XML
+>
+> #### Implementation
+>
+> ```javascript
+> function adaptXhrToFetchOptions(xhrConfig = {}) {
+>   const method = (xhrConfig.method || "GET").toUpperCase();
+>   const headers = xhrConfig.headers || {};
+>   const body = xhrConfig.data || null;
+>
+>   const fetchOptions = {
+>     method,
+>     headers: { ...headers }
+>   };
+>
+>   if (body && method !== "GET" && method !== "HEAD") {
+>     fetchOptions.body = typeof body === "object" && !(body instanceof FormData) 
+>       ? JSON.stringify(body) 
+>       : body;
+>   }
+>
+>   return fetchOptions;
+> }
+>
+> // Verification tests
+> const xhrConfig = {
+>   method: "POST",
+>   headers: { "Accept": "application/json" },
+>   data: { username: "alice" }
+> };
+>
+> const fetchOpts = adaptXhrToFetchOptions(xhrConfig);
+> console.assert(fetchOpts.method === "POST", "Test 1 Failed");
+> console.assert(fetchOpts.body === '{"username":"alice"}', "Test 2 Failed");
 > ```
-> ```text
-> Asynchronous JavaScript And XML
-> ```
-> - **Explanation:** AJAX describes asynchronous web data fetching without reloading the HTML page.
+>
+> #### Technical Explanation
+>
+> 1. **AJAX Concept**: Asynchronous JavaScript and XML: umbrella term for updating web page content asynchronously without full reload.
+> 2. **Fetch API Superiority**: Fetch offers cleaner promise syntax, Service Worker integration, and stream processing.
+> 3. **Migration Abstraction**: Adapters facilitate codebase refactoring from legacy XHR to modern Fetch API.
 ---
 
-### Exercise 3: XHR readyState Matrix
-
-**Problem:** Identify the `readyState` integer corresponding to XHR DONE (request completed):
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> readyState 4 (DONE)
-> ```
-> ```text
-> readyState 4 (DONE - The operation is complete).
-> ```
-> - **Explanation:** `readyState === 4` signals XHR network transfer completion.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [The fetch() API](fetch.md) — The modern Promise-based request standard.
 - [Promises (in the context of networks)](promises.md) — The asynchronous data container object returned by fetch.
 - [AbortController / Cancellation](abortcontroller.md) — Related concept: AbortController / Cancellation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - AJAX is a design concept for performing background network queries to dynamically update the DOM.
 - XMLHttpRequest (XHR) is the legacy browser constructor object that implemented AJAX.
 - XHR relies on event callbacks, often leading to callback hell on sequential requests.

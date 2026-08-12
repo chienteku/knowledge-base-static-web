@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture Bug / Concept**
+
+**Architecture Bug / Concept (Universal .)**: Circular Dependencies is a fundamental concept in this technology stack. **Level 3 — Module Systems**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Can happen in Node.js, React, or any modular language).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We didn't design this; this is a catastrophic architectural failure.
@@ -44,7 +40,7 @@ Create File C. Have A import C, and B import C. The circle is broken!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Blaming the framework
 
@@ -101,7 +97,7 @@ export const b = a + 1;
 // Refactor to export functions or pass dependencies explicitly to break the cycle
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Parent and Child
 
@@ -154,12 +150,12 @@ If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dep
 >
 > **Explanation:** CommonJS exposes partial export objects; ESM enforces strict static TDZ live bindings.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Module Resolution](module_resolution.md) — The process that gets trapped in the infinite loop.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Circular Dependency** occurs when two or more files import each other in a loop (A $\rightarrow$ B $\rightarrow$ A).
 - Node.js handles this by forcefully resolving one of the imports as an empty object or `undefined`, crashing your app.
 - It is an architectural flaw, not a language bug.

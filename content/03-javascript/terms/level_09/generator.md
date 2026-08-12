@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal)**: Generator (function*) is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normal JavaScript functions have "Run-to-Completion" semantics. Once you call a function, it runs all its code top-to-bottom and returns a single value. You cannot pause it halfway through.
@@ -81,7 +77,7 @@ console.log(myIDs.next().value); // 2
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Generator Scope and Variable Hoisting
 
@@ -154,74 +150,142 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The `.next()` object
+### Exercise 1: Infinite Unique ID Generator Sequence
 
-**Problem:** When you call `gen.next()`, it doesn't just return the number. It returns an object. What two properties does that object contain?
+**Scenario:** A database entity mapper uses an ES6 Generator function (`function*`) to generate an infinite sequence of incrementing unique IDs.
 
-**Expected output:**
+**Requirements:**
+1. Write generator function createIdGenerator(prefix, start = 1).
+2. Yield formatted string `${prefix}_${id}`.
+3. Increment id infinitely.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> { value: "the yielded data", done: false }
-> // 'done' becomes true when the generator has finished running.
-> ```
-> - We accessed `.value` in the examples above!
-> 
----
-
-### Exercise 2: Infinite ID Generator
-
-**Problem:** Create a generator `function* idGen()` producing auto-incrementing IDs `1, 2, 3...`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1
-> 2
-> ```
-> ```javascript
-> function* idGen() {
->   let id = 1;
->   while (true) yield id++;
+> function* createIdGenerator(prefix = "ID", start = 1) {
+>   let count = start;
+>   while (true) {
+>     yield `${prefix}_${count++}`;
+>   }
 > }
-> const gen = idGen();
-> console.log(gen.next().value);
-> console.log(gen.next().value);
+>
+> // Verification tests
+> const gen = createIdGenerator("USER", 100);
+>
+> console.assert(gen.next().value === "USER_100", "Test 1 Failed");
+> console.assert(gen.next().value === "USER_101", "Test 2 Failed");
+> console.assert(gen.next().value === "USER_102", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Generators pause execution at `yield` statements, resuming upon `.next()` calls.
+> #### Technical Explanation
+>
+> 1. **Generator Function Syntax**: Declared using function* syntax; calling it returns a Generator iterator object.
+> 2. **yield Keyword**: Pauses generator execution and returns specified value to caller via { value, done } object.
+> 3. **Infinite Iterables**: Generators lazily compute values on demand, making infinite sequence generation safe without memory overflow.
 > 
 ---
 
-### Exercise 3: Delegating Generators with `yield*`
+### Exercise 2: Paginated API Cursor Consumer Generator
 
-**Problem:** Delegate iteration to another generator using `yield* innerGen()`.
+**Scenario:** A data ingestion service uses a generator function to fetch and yield paginated records page by page.
 
-**Expected output:**
+**Requirements:**
+1. Write generator paginatePages(fetchPageFn, totalPages).
+2. Loop from page 1 to totalPages.
+3. Yield page items.
+4. Return total items count.
+
 > [!check]- Answer
-> ```text
-> a
-> b
-> ```
-> function* inner() { yield "a"; yield "b"; }
-> function* outer() { yield* inner(); }
-> for (const val of outer()) console.log(val);
+>
+> #### Implementation
+>
+> ```javascript
+> function* paginatePages(fetchPageFn, totalPages) {
+>   let totalProcessed = 0;
+>   for (let page = 1; page <= totalPages; page++) {
+>     const items = fetchPageFn(page);
+>     totalProcessed += items.length;
+>     yield items;
+>   }
+>   return totalProcessed;
+> }
+>
+> // Verification tests
+> const mockFetch = (p) => [`p${p}_item1`, `p${p}_item2`];
+> const pagedGen = paginatePages(mockFetch, 2);
+>
+> const step1 = pagedGen.next();
+> console.assert(step1.value.join(",") === "p1_item1,p1_item2", "Test 1 Failed");
+> console.assert(step1.done === false, "Test 2 Failed");
+>
+> const step2 = pagedGen.next();
+> console.assert(step2.value.join(",") === "p2_item1,p2_item2", "Test 3 Failed");
+>
+> const step3 = pagedGen.next();
+> console.assert(step3.value === 4 && step3.done === true, "Test 4 Failed: Return value yielded when done is true");
 > ```
 >
-> **Explanation:** `yield*` delegates generator iteration to another iterable or generator function.
-> 
+> #### Technical Explanation
+>
+> 1. **Lazy Execution**: Generator body executes code only up to the next yield statement per .next() invocation.
+> 2. **Iterator Protocol Integration**: Generators implement both Iterable and Iterator protocols, supporting for...of loops.
+> 3. **Generator Return Values**: Returning a value from a generator sets done: true and value: returnVal on final step.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Bidirectional Generator Data Processing
+
+**Scenario:** An interactive workflow engine uses generator `.next(val)` passing to inject dynamic external state into running generator steps.
+
+**Requirements:**
+1. Write generator workflowEngine().
+2. Yield step questions.
+3. Receive external user input passed into next(val).
+4. Calculate final result.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function* workflowEngine() {
+>   const name = yield "Enter name:";
+>   const age = yield "Enter age:";
+>   return `${name} is ${age} years old.`;
+> }
+>
+> // Verification tests
+> const flow = workflowEngine();
+>
+> const q1 = flow.next(); // Start generator up to first yield
+> console.assert(q1.value === "Enter name:", "Test 1 Failed");
+>
+> const q2 = flow.next("Alice"); // Pass "Alice" into name variable
+> console.assert(q2.value === "Enter age:", "Test 2 Failed");
+>
+> const finalStep = flow.next(30); // Pass 30 into age variable
+> console.assert(finalStep.value === "Alice is 30 years old." && finalStep.done === true, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Bidirectional Generator Communication**: Passing arguments to generator.next(val) injects values into the generator at the paused yield expression.
+> 2. **First .next() Argument Ignored**: The first call to .next() starts the generator; arguments passed to first .next() are ignored.
+> 3. **Co-routine Architecture**: Allows building cooperative async workflows and state machines natively in JS.
+---
+
+## 6. Related Terms
 - [Function](../level_03/function.md) — The standard run-to-completion equivalent.
 - [for await...of / Async Iterators](../level_06/for_await_of.md) — Related concept: for await...of / Async Iterators.
 - [Iterators & Iterables (protocol)](../level_08/iterators_iterables.md) — Related concept: Iterators & Iterables (protocol).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Generators (`function*`) are functions that can be paused and resumed.
 - Use the `yield` keyword to spit out a value and pause execution.
 - Calling a generator returns an Iterator object. You must call `.next()` on that object to execute the code.

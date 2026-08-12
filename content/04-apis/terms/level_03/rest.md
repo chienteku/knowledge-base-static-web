@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Paradigm**
+
+**API Architecture / Paradigm (Universal Standard .)**: REST (Representational State Transfer) is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (The dominant API paradigm of the modern web).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early 2000s, there were no rules for how to build a Web API. 
@@ -64,7 +60,7 @@ Notice how the URL (`/api/users`) barely changes, but the HTTP Method dictates t
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting Verbs in the URL
 
@@ -196,163 +192,157 @@ POST /api/transactions HTTP/1.1 ; RESTful resource endpoint style
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: RESTify this API
+### Exercise 1: REST Architectural Constraints Audit Engine
 
-**Problem:** You inherit a terrible, legacy API. It has the following endpoint: `GET /movies/addMovie?name=Inception&director=Nolan`. Convert this into a proper RESTful endpoint.
+**Scenario:** An API governance tool checks API endpoints against the 6 core REST architectural constraints.
 
-**Expected output:**
+**Requirements:**
+1. Write auditRestConstraints(apiSpec).
+2. Check Client-Server, Statelessness, Cacheability, Layered System, Uniform Interface.
+
 > [!check]- Answer
-> ```text
-> Method: `POST` (Because we are creating something new).
-> URL: `/movies` (Just the plural noun).
-> Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, not the query params!).
+>
+> #### Implementation
+>
+> ```javascript
+> function auditRestConstraints(apiSpec) {
+>   if (!apiSpec) return { score: 0, passes: false };
+>
+>   const checks = {
+>     clientServer: apiSpec.hasSeparatedClientServer === true,
+>     stateless: apiSpec.isStateless === true,
+>     cacheable: apiSpec.supportsCacheHeaders === true,
+>     uniformInterface: apiSpec.usesStandardHttpMethods === true,
+>     layeredSystem: apiSpec.supportsIntermediaryGateways === true
+>   };
+>
+>   const passedCount = Object.values(checks).filter(Boolean).length;
+>
+>   return {
+>     score: (passedCount / 5) * 100,
+>     passes: passedCount === 5,
+>     checks
+>   };
+> }
+>
+> // Verification tests
+> const spec = {
+>   hasSeparatedClientServer: true,
+>   isStateless: true,
+>   supportsCacheHeaders: true,
+>   usesStandardHttpMethods: true,
+>   supportsIntermediaryGateways: true
+> };
+>
+> const result = auditRestConstraints(spec);
+> console.assert(result.score === 100 && result.passes === true, "Test 1 Failed");
 > ```
-> - You are creating data. What HTTP method should you use?
-> - Can GET requests have bodies? Where should large data payloads go?
+>
+> #### Technical Explanation
+>
+> 1. **REST Definition**: Representational State Transfer: an architectural style for distributed hypermedia systems defined by Roy Fielding.
+> 2. **Stateless Constraint**: Every client request must contain all state needed for execution.
+> 3. **Uniform Interface Constraint**: Resource identification, manipulation through representations, self-descriptive messages, and HATEOAS.
 > 
 ---
 
-### Exercise 2: 6 Architectural Constraints of REST
+### Exercise 2: REST Uniform Interface Method & Status Code Router
 
-**Problem:** List the 6 architectural constraints defined by Roy Fielding for RESTful systems.
+**Scenario:** A RESTful router dispatches HTTP requests enforcing uniform interface status code contracts.
 
-**Expected output:**
+**Requirements:**
+1. Write processRestRoute(method, resourceExists, payload).
+2. Return 200/201/204 for success, 404/400 for errors.
+
 > [!check]- Answer
-> ```text
-> 1. Client-Server
-> 2. Statelessness
-> 3. Cacheability
-> 4. Uniform Interface
-> 5. Layered System
-> 6. Code on Demand (Optional)
+>
+> #### Implementation
+>
+> ```javascript
+> function processRestRoute(method, resourceExists, payload) {
+>   const m = method.toUpperCase();
+>
+>   if (m === "GET") {
+>     if (!resourceExists) return { status: 404, body: { error: "Not Found" } };
+>     return { status: 200, body: payload };
+>   }
+>
+>   if (m === "POST") {
+>     return { status: 201, body: { id: `id_${Date.now()}`, ...payload } };
+>   }
+>
+>   if (m === "DELETE") {
+>     if (!resourceExists) return { status: 404, body: { error: "Not Found" } };
+>     return { status: 204, body: null };
+>   }
+>
+>   return { status: 45, body: { error: "Method Not Allowed" } };
+> }
+>
+> // Verification tests
+> console.assert(processRestRoute("GET", true, { name: "A" }).status === 200, "Test 1 Failed");
+> console.assert(processRestRoute("GET", false).status === 404, "Test 2 Failed");
+> console.assert(processRestRoute("POST", false, { name: "B" }).status === 201, "Test 3 Failed");
+> console.assert(processRestRoute("DELETE", true).status === 204, "Test 4 Failed");
 > ```
-> ```text
-> 1. Client-Server Architecture
-> 2. Statelessness
-> 3. Cacheability
-> 4. Uniform Interface
-> 5. Layered System
-> 6. Code on Demand (Optional)
-> ```
-> - **Explanation:** Meeting these 6 constraints defines true RESTful system architecture.
+>
+> #### Technical Explanation
+>
+> 1. **Uniform Interface Core**: Standardized HTTP methods and status codes allow any client to interact with any REST API.
+> 2. **Resource Representations**: Clients manipulate resources by exchanging representations (JSON, XML).
+> 3. **Predictable Contracts**: Clients rely on standard status codes rather than custom response envelope codes.
+> 
 ---
 
-### Exercise 3: Uniform Interface Sub-Constraints
+### Exercise 3: RESTful State Machine Navigation Engine
 
-**Problem:** Identify the 4 key requirements of the REST Uniform Interface constraint.
+**Scenario:** Demonstrates REST state transitions by updating client state strictly through representation representations.
 
-**Expected output:**
+**Requirements:**
+1. Write transitionRestState(currentState, action).
+2. Return new state representation.
+
 > [!check]- Answer
-> ```text
-> 1. Resource Identification in requests (URIs)
-> 2. Resource Manipulation through representations
-> 3. Self-descriptive messages (Content-Type/headers)
-> 4. HATEOAS (Hypermedia As The Engine Of Application State)
+>
+> #### Implementation
+>
+> ```javascript
+> function transitionRestState(currentState, action) {
+>   const transitions = {
+>     DRAFT: { submit: "PENDING_REVIEW" },
+>     PENDING_REVIEW: { approve: "PUBLISHED", reject: "REJECTED" },
+>     REJECTED: { resubmit: "PENDING_REVIEW" }
+>   };
+>
+>   const allowed = transitions[currentState];
+>   if (!allowed || !allowed[action]) {
+>     return { success: false, state: currentState, error: "Invalid State Transition" };
+>   }
+>
+>   return { success: true, state: allowed[action] };
+> }
+>
+> // Verification tests
+> const step1 = transitionRestState("DRAFT", "submit");
+> console.assert(step1.state === "PENDING_REVIEW", "Test 1 Failed");
+>
+> const step2 = transitionRestState("PENDING_REVIEW", "approve");
+> console.assert(step2.state === "PUBLISHED", "Test 2 Failed");
+>
+> const invalid = transitionRestState("PUBLISHED", "submit");
+> console.assert(invalid.success === false, "Test 3 Failed");
 > ```
-> ```text
-> 1. Resource Identification (URIs)
-> 2. Resource Manipulation through representations
-> 3. Self-descriptive messages
-> 4. HATEOAS
-> ```
-> - **Explanation:** Uniform Interface standardizes client-server interaction mechanics.
+>
+> #### Technical Explanation
+>
+> 1. **Application State Transitions**: REST applications transition between states by exchanging representations.
+> 2. **Hypermedia Driven**: Clients discover valid state transitions dynamically from hypermedia links.
+> 3. **Decoupled Workflows**: State transition logic is managed server-side, keeping clients lightweight.
 ---
 
-### Exercise 4: 6 Architectural Constraints of REST
-
-**Problem:** List the 6 architectural constraints defined by Roy Fielding for RESTful systems.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Client-Server
-> 2. Statelessness
-> 3. Cacheability
-> 4. Uniform Interface
-> 5. Layered System
-> 6. Code on Demand (Optional)
-> ```
-> ```text
-> 1. Client-Server Architecture
-> 2. Statelessness
-> 3. Cacheability
-> 4. Uniform Interface
-> 5. Layered System
-> 6. Code on Demand (Optional)
-> ```
-> - **Explanation:** Meeting these 6 constraints defines true RESTful system architecture.
----
-
-### Exercise 5: Uniform Interface Sub-Constraints
-
-**Problem:** Identify the 4 key requirements of the REST Uniform Interface constraint.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Resource Identification in requests (URIs)
-> 2. Resource Manipulation through representations
-> 3. Self-descriptive messages (Content-Type/headers)
-> 4. HATEOAS (Hypermedia As The Engine Of Application State)
-> ```
-> ```text
-> 1. Resource Identification (URIs)
-> 2. Resource Manipulation through representations
-> 3. Self-descriptive messages
-> 4. HATEOAS
-> ```
-> - **Explanation:** Uniform Interface standardizes client-server interaction mechanics.
----
-
-### Exercise 6: 6 Architectural Constraints of REST
-
-**Problem:** List the 6 architectural constraints defined by Roy Fielding for RESTful systems.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Client-Server
-> 2. Statelessness
-> 3. Cacheability
-> 4. Uniform Interface
-> 5. Layered System
-> 6. Code on Demand (Optional)
-> ```
-> ```text
-> 1. Client-Server Architecture
-> 2. Statelessness
-> 3. Cacheability
-> 4. Uniform Interface
-> 5. Layered System
-> 6. Code on Demand (Optional)
-> ```
-> - **Explanation:** Meeting these 6 constraints defines true RESTful system architecture.
----
-
-### Exercise 7: Uniform Interface Sub-Constraints
-
-**Problem:** Identify the 4 key requirements of the REST Uniform Interface constraint.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Resource Identification in requests (URIs)
-> 2. Resource Manipulation through representations
-> 3. Self-descriptive messages (Content-Type/headers)
-> 4. HATEOAS (Hypermedia As The Engine Of Application State)
-> ```
-> ```text
-> 1. Resource Identification (URIs)
-> 2. Resource Manipulation through representations
-> 3. Self-descriptive messages
-> 4. HATEOAS
-> ```
-> - **Explanation:** Uniform Interface standardizes client-server interaction mechanics.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Endpoints & Resources](endpoints_resources.md) — The nouns that REST APIs are built around.
 - [GraphQL (The REST Alternative)](../level_07/graphql.md) — The modern alternative to REST, which abandons HTTP methods entirely in favor of a single `/graphql` endpoint.
 - [HTTP / HTTPS](../level_01/http_https.md) — Related concept: HTTP / HTTPS.
@@ -368,7 +358,7 @@ POST /api/transactions HTTP/1.1 ; RESTful resource endpoint style
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **REST** is an architectural style for designing predictable APIs.
 - URLs must be **Plural Nouns** (e.g., `/users`, `/products`).
 - URLs must **never contain Verbs** (e.g., no `/getUsers` or `/deleteProduct`).

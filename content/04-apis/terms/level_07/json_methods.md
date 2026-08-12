@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **JavaScript Core Feature**
+
+**JavaScript Core Feature (Universal JavaScript .)**: JSON Methods (parse / stringify) is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal JavaScript** (Browsers and Node.js).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To implement the concept of [Serialization](../level_07/serialization.md), developers used to write complex custom scripts to loop through their objects, manually wrapping keys in quotes and adding commas. 
@@ -52,7 +48,7 @@ console.log(gameObject.score); // Output: 99
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Parsing something that isn't JSON
 
@@ -104,67 +100,143 @@ JSON.stringify(user); // ❌ TypeError: Converting circular structure to JSON!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Disappearing Function
+### Exercise 1: Advanced JSON.stringify Formatter with Custom Replacer
 
-**Problem:** What happens if you run this code?
-```javascript
-const myObj = {
-  name: "Bob",
-  sayHi: function() { console.log("Hi"); }
-};
+**Scenario:** A logging utility formats complex object trees into pretty-printed JSON while masking sensitive attributes.
 
-const stringified = JSON.stringify(myObj);
-console.log(stringified);
-```
+**Requirements:**
+1. Write formatDebugJson(dataObj, sensitiveKeys, indentSpaces).
+2. Use JSON.stringify(value, replacer, space).
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> '{"name":"Bob"}'
-> `JSON.stringify` intentionally ignores and deletes functions. A function is code, not data. JSON only supports data.
+>
+> #### Implementation
+>
+> ```javascript
+> function formatDebugJson(dataObj, sensitiveKeys = ["password", "secret"], indentSpaces = 2) {
+>   const keysSet = new Set(sensitiveKeys.map(k => k.toLowerCase()));
+>
+>   return JSON.stringify(dataObj, (key, val) => {
+>     if (keysSet.has(key.toLowerCase())) {
+>       return "[REDACTED]";
+>     }
+>     return val;
+>   }, indentSpaces);
+> }
+>
+> // Verification tests
+> const user = { name: "Alice", password: "123", details: { secret: "xyz" } };
+> const json = formatDebugJson(user);
+>
+> console.assert(json.includes('"password": "[REDACTED]"'), "Test 1 Failed");
+> console.assert(json.includes('"secret": "[REDACTED]"'), "Test 2 Failed");
+> console.assert(json.includes("
+> "), "Test 3 Failed: Must be pretty-printed with indents");
 > ```
-> - Remember the rules of Serialization. Can you send a function over a network?
+>
+> #### Technical Explanation
+>
+> 1. **JSON.stringify 3-Argument Signature**: JSON.stringify(value, replacer, space) configures serialization and formatting.
+> 2. **Replacer Function**: Filters or transforms object key-value nodes during serialization.
+> 3. **Space Parameter**: Accepts number of indent spaces or string indent characters for pretty-printing.
 > 
 ---
 
-### Exercise 2: JSON.stringify Formatting Indentation
+### Exercise 2: Circular Reference Safe JSON Serializer
 
-**Problem:** Write `JSON.stringify()` call formatting object `data` with 2-space pretty-print indentation.
+**Scenario:** A serialization guard uses a `WeakSet` inside a `JSON.stringify` replacer to prevent 'TypeError: Converting circular structure to JSON' crashes.
 
-**Expected output:**
+**Requirements:**
+1. Write safeStringifyCircular(obj).
+2. Track visited objects in WeakSet.
+3. Replace circular references with '[Circular]'.
+
 > [!check]- Answer
-> ```text
-> JSON.stringify(data, null, 2);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const formatted = JSON.stringify(data, null, 2);
-> ```
-> - **Explanation:** The 3rd parameter of `JSON.stringify(value, replacer, space)` specifies indentation.
----
-
-### Exercise 3: JSON.parse Reviver Function Pattern
-
-**Problem:** Write `JSON.parse()` reviver function automatically converting date strings matching ISO pattern back into JavaScript `Date` instances.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> JSON.parse(jsonStr, (key, value) => { return typeof value === 'string' && ISO_REGEX.test(value) ? new Date(value) : value; });
-> ```
-> ```javascript
-> const data = JSON.parse(jsonStr, (key, val) => {
-> if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) {
-> return new Date(val);
+> function safeStringifyCircular(obj) {
+>   const visited = new WeakSet();
+>
+>   return JSON.stringify(obj, (key, value) => {
+>     if (typeof value === "object" && value !== null) {
+>       if (visited.has(value)) {
+>         return "[Circular]";
+>       }
+>       visited.add(value);
+>     }
+>     return value;
+>   });
 > }
-> return val;
-> });
+>
+> // Verification tests
+> const parent = { name: "Parent" };
+> const child = { name: "Child", parent };
+> parent.child = child; // Circular reference!
+>
+> const json = safeStringifyCircular(parent);
+> console.assert(json.includes('"child": "[Circular]"') || json.includes('"parent": "[Circular]"'), "Test 1 Failed");
 > ```
-> - **Explanation:** Reviver functions transform parsed values during JSON deserialization.
+>
+> #### Technical Explanation
+>
+> 1. **Circular Reference Exception**: Standard JSON.stringify throws TypeError when an object references itself directly or indirectly.
+> 2. **WeakSet Tracking**: WeakSet tracks visited object references during tree traversal without causing memory leaks.
+> 3. **Defensive Serialization**: Crucial for logging complex DOM objects or graph data structures safely.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Custom .toJSON() Method Serialization Decorator
+
+**Scenario:** A domain model class implements a custom `.toJSON()` method to control how its private state is serialized by `JSON.stringify`.
+
+**Requirements:**
+1. Create UserDomain class with private fields.
+2. Implement toJSON().
+3. Verify JSON.stringify output.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> class UserDomain {
+>   #internalHash;
+>
+>   constructor(id, name, secretHash) {
+>     this.id = id;
+>     this.name = name;
+>     this.#internalHash = secretHash;
+>   }
+>
+>   toJSON() {
+>     return {
+>       id: this.id,
+>       name: this.name,
+>       exportedAt: "2026-08-12"
+>     };
+>   }
+> }
+>
+> // Verification tests
+> const user = new UserDomain("u1", "Alice", "hash_secret_123");
+> const json = JSON.stringify(user);
+>
+> console.assert(json.includes('"name":"Alice"'), "Test 1 Failed");
+> console.assert(!json.includes("hash_secret_123"), "Test 2 Failed: Private hash must not be serialized");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **.toJSON() Method Protocol**: If an object defines a .toJSON() method, JSON.stringify calls it to get the object representation to serialize.
+> 2. **Private Field Protection**: Controls object serialization, concealing internal private class fields (#fields).
+> 3. **Custom Type Formatting**: Used by native Date.prototype.toJSON() to format date objects as ISO strings.
+---
+
+## 6. Related Terms
 - [localStorage & sessionStorage](../level_09/web_storage.md) — A browser API that can ONLY store strings, making `JSON.stringify` mandatory when saving objects.
 - [Bulk / Batch Requests](../level_06/batch_requests.md) — Related concept: Bulk / Batch Requests.
 - [Binary vs Text Formats](binary_vs_text_formats.md) — Related concept: Binary vs Text Formats.
@@ -174,7 +246,7 @@ console.log(stringified);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`JSON.stringify()`** turns objects into strings (used before sending data).
 - **`JSON.parse()`** turns strings into objects (used after receiving data).
 - `JSON.parse` will throw a fatal error if the text is not perfectly formatted JSON.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Applies to backend routing setups and frontend client requests.)**: Resource Naming & URI Design is a fundamental concept in this technology stack. **Level 3 — RESTful APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applies to backend routing setups and frontend client requests.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Technically, developers can design URL endpoint paths in any way they want—for example, calling `POST /getUserProfile?userId=12` or `GET /doDeleteUser`. However, when external developers consume your API, inconsistent or action-based paths make it difficult to guess endpoint structures, leading to integration friction.
@@ -69,7 +65,7 @@ Here is how to map typical actions to clean RESTful URIs:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing action verbs in REST URL paths
 
@@ -203,143 +199,143 @@ Accept: application/json ; Content negotiation header
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: REST Refactoring
+### Exercise 1: REST Resource URL Naming Sanitizer & Linter
 
-**Problem:** Refactor the following action-based endpoints into clean, standardized RESTful URIs:
+**Scenario:** A Linter validates API endpoint URI paths, enforcing lowercase kebab-case, plural nouns, and zero file extensions.
 
-1. `POST /api/createNewOrder`
-2. `GET /api/getCommentsForPost/99`
-3. `POST /api/removeUserFromGroup?userId=12&groupId=5`
+**Requirements:**
+1. Write lintResourcePath(uriPath).
+2. Check lowercase, hyphen-separated kebab-case, plural nouns, no file extensions.
 
 > [!check]- Answer
-> - 1. **`POST /orders`** (Returns the created order).
-> - 2. **`GET /posts/99/comments`** (Hierarchy nesting).
-> - 3. **`DELETE /groups/5/users/12`** (Deletes user 12 from group 5's list).
+>
+> #### Implementation
+>
+> ```javascript
+> function lintResourcePath(uriPath) {
+>   if (!uriPath || typeof uriPath !== "string") return { valid: false, errors: ["Invalid input"] };
+>
+>   const errors = [];
+>   const segments = uriPath.split("/").filter(Boolean);
+>
+>   if (uriPath !== uriPath.toLowerCase()) {
+>     errors.push("URI path must be lowercase");
+>   }
+>
+>   if (/\.(json|xml|html|php)$/.test(uriPath)) {
+>     errors.push("URI path must not contain file extensions");
+>   }
+>
+>   if (segments.some(s => s.includes("_"))) {
+>     errors.push("Use hyphens (kebab-case) instead of underscores");
+>   }
+>
+>   return {
+>     valid: errors.length === 0,
+>     errors
+>   };
+> }
+>
+> // Verification tests
+> console.assert(lintResourcePath("/v1/user-profiles/usr-42").valid === true, "Test 1 Failed");
+>
+> const badRes = lintResourcePath("/V1/user_profiles/usr-42.json");
+> console.assert(badRes.valid === false && badRes.errors.length === 3, "Test 2 Failed: Lowercase, hyphens, and no extensions enforced");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Kebab-Case Convention**: REST URIs use lowercase letters and hyphens (user-profiles) for readability.
+> 2. **No File Extensions**: Avoid .json or .xml in paths; use Accept headers for format negotiation.
+> 3. **No Underscores**: Underscores can be obscured by underlines in hyperlinked text interfaces.
 > 
+---
+
+### Exercise 2: Filtering vs Path Parameter URL Structure Analyzer
+
+**Scenario:** An API architect helper categorizes URI path variables vs query parameters for search/filtering endpoints.
+
+**Requirements:**
+1. Write analyzeUrlParameters(resourcePath, queryParams).
+2. Path variables identity unique resources; query parameters filter/sort.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function analyzeUrlParameters(resourcePath, queryParams) {
+>   const segments = resourcePath.split("/").filter(Boolean);
+>   const pathIds = segments.filter((s, i) => i % 2 === 1); // e.g. /users/:id
+>
+>   const queryKeys = Object.keys(queryParams || {});
+>
+>   return {
+>     identifyingResourceIds: pathIds,
+>     filteringQueryKeys: queryKeys,
+>     isCanonicalPath: pathIds.length > 0
+>   };
+> }
+>
+> // Verification tests
+> const res = analyzeUrlParameters("/users/123/orders", { status: "shipped", sort: "date" });
+> console.assert(res.identifyingResourceIds[0] === "123", "Test 1 Failed");
+> console.assert(res.filteringQueryKeys.join(",") === "status,sort", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Path Parameters for Identity**: Path parameters (/users/123) identify specific unique resources in a hierarchy.
+> 2. **Query Parameters for Options**: Query parameters (?status=active) modify or filter how resources are retrieved.
+> 3. **Clean Resource Boundaries**: Keeps resource hierarchy intuitive and consistent.
 > 
 ---
 
-### Exercise 2: URI Naming Best Practices Checklist
+### Exercise 3: Sub-Resource Action Naming Converter
 
-**Problem:** Correct the following 3 poorly formatted REST API endpoint paths:
-1. `/API/v1/Get_All_Active_Orders` 
-2. `/api/v1/user_profile/` 
-3. `/api/v1/deleteItem?id=4` 
+**Scenario:** Converts RPC-style controller actions (`/cancelOrder?id=12`) into RESTful resource sub-paths (`POST /orders/12/cancellations`).
 
-**Expected output:**
+**Requirements:**
+1. Write convertRpcToRestPath(rpcAction, id).
+2. Map cancelOrder to POST /orders/:id/cancellations.
+
 > [!check]- Answer
-> ```text
-> 1. /api/v1/active-orders (GET)
-> 2. /api/v1/user-profiles (no trailing slash)
-> 3. /api/v1/items/4 (DELETE)
+>
+> #### Implementation
+>
+> ```javascript
+> function convertRpcToRestPath(rpcAction, id) {
+>   const mappings = {
+>     cancelOrder: { method: "POST", path: `/orders/${id}/cancellations` },
+>     resendInvoice: { method: "POST", path: `/invoices/${id}/resends` },
+>     activateUser: { method: "PUT", path: `/users/${id}/activation` }
+>   };
+>
+>   return mappings[rpcAction] || { method: "POST", path: `/actions/${rpcAction}/${id}` };
+> }
+>
+> // Verification tests
+> const restCancel = convertRpcToRestPath("cancelOrder", "1001");
+> console.assert(restCancel.method === "POST" && restCancel.path === "/orders/1001/cancellations", "Test 1 Failed");
 > ```
-> ```text
-> 1. GET /api/v1/active-orders
-> 2. GET /api/v1/user-profiles
-> 3. DELETE /api/v1/items/4
-> ```
-> - **Explanation:** REST URIs use lowercase kebab-case, plural nouns, no trailing slashes, and HTTP methods for actions.
+>
+> #### Technical Explanation
+>
+> 1. **Sub-Resource Actions**: Model non-CRUD actions as sub-resource creations (e.g. POST /cancellations).
+> 2. **RPC vs REST Alignment**: RPC focuses on verb execution; REST focuses on creating resource representations.
+> 3. **Uniform Interface Compliance**: Preserves standard HTTP method semantics across all domain actions.
 ---
 
-### Exercise 3: Trailing Slash Convention
-
-**Problem:** Why should REST API design avoid trailing slashes in endpoint paths (e.g. `/users/` vs `/users`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-> ```
-> ```text
-> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-> ```
-> - **Explanation:** Standardizing on paths without trailing slashes prevents URL ambiguity.
----
-
-### Exercise 4: URI Naming Best Practices Checklist
-
-**Problem:** Correct the following 3 poorly formatted REST API endpoint paths:
-1. `/API/v1/Get_All_Active_Orders` 
-2. `/api/v1/user_profile/` 
-3. `/api/v1/deleteItem?id=4` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. /api/v1/active-orders (GET)
-> 2. /api/v1/user-profiles (no trailing slash)
-> 3. /api/v1/items/4 (DELETE)
-> ```
-> ```text
-> 1. GET /api/v1/active-orders
-> 2. GET /api/v1/user-profiles
-> 3. DELETE /api/v1/items/4
-> ```
-> - **Explanation:** REST URIs use lowercase kebab-case, plural nouns, no trailing slashes, and HTTP methods for actions.
----
-
-### Exercise 5: Trailing Slash Convention
-
-**Problem:** Why should REST API design avoid trailing slashes in endpoint paths (e.g. `/users/` vs `/users`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-> ```
-> ```text
-> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-> ```
-> - **Explanation:** Standardizing on paths without trailing slashes prevents URL ambiguity.
----
-
-### Exercise 6: URI Naming Best Practices Checklist
-
-**Problem:** Correct the following 3 poorly formatted REST API endpoint paths:
-1. `/API/v1/Get_All_Active_Orders` 
-2. `/api/v1/user_profile/` 
-3. `/api/v1/deleteItem?id=4` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. /api/v1/active-orders (GET)
-> 2. /api/v1/user-profiles (no trailing slash)
-> 3. /api/v1/items/4 (DELETE)
-> ```
-> ```text
-> 1. GET /api/v1/active-orders
-> 2. GET /api/v1/user-profiles
-> 3. DELETE /api/v1/items/4
-> ```
-> - **Explanation:** REST URIs use lowercase kebab-case, plural nouns, no trailing slashes, and HTTP methods for actions.
----
-
-### Exercise 7: Trailing Slash Convention
-
-**Problem:** Why should REST API design avoid trailing slashes in endpoint paths (e.g. `/users/` vs `/users`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-> ```
-> ```text
-> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-> ```
-> - **Explanation:** Standardizing on paths without trailing slashes prevents URL ambiguity.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [CRUD Operations](crud.md) — The database actions that align with RESTful resource endpoints.
 - [API Versioning (v1, v2)](../level_10/versioning.md) — The strategy of prefixing paths with versions (e.g. `/v1/users`).
 - [Over-fetching vs Under-fetching](../level_07/overfetching_underfetching.md) — Related concept: Over-fetching vs Under-fetching.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - REST URIs should name resources (nouns), never actions (verbs).
 - Use plural nouns for collections (e.g. `/users` instead of `/user`).
 - Use hierarchy paths (e.g. `/parents/child`) to represent sub-resource relationships.

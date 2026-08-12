@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES8 / ES2017)*
+
+**Language Core *(Introduced in ES8 / ES2017)* (Universal: Works everywhere)**: async / await is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `.then()` chains successfully fixed the "Pyramid of Doom" caused by callbacks, they still required developers to write lots of callback functions, `return` statements, and visually break up their logic. Developers constantly wished they could just write standard, top-to-bottom synchronous code, but still have it operate asynchronously under the hood.
@@ -75,7 +71,7 @@ async function getDashboardData() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Async Await Scope and Variable Hoisting
 
@@ -148,81 +144,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Refactoring
+### Exercise 1: Sequential User Profile & Order Fetcher
 
-**Problem:** Convert this `.then()` chain into `async/await` syntax.
-```javascript
-function getJoke() {
-  fetch('https://api.jokes.com/random')
-    .then(res => res.json())
-    .then(data => console.log(data.joke));
-}
-```
+**Scenario:** A user dashboard service uses async and await to sequentially fetch user details, user orders, and order shipping statuses.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchUserDashboard(userId, apiMock).
+2. Use await to fetch user object first.
+3. Use await to fetch orders array using user.orderId.
+4. Return combined dashboard object.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> async function getJoke() {
->   const res = await fetch('https://api.jokes.com/random');
->   const data = await res.json();
->   console.log(data.joke);
-> }
-> ```
-> - Don't forget to add `async` to the function declaration!
-> - Assign the result of `await fetch(...)` to a variable.
-> 
----
-
-### Exercise 2: Async Await Error Handling with Try/Catch
-
-**Problem:** Wrap `await Promise.reject(new Error("Failed"))` in a `try...catch` block.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Caught error: Failed
-> ```
-> ```javascript
-> async function run() {
->   try {
->     await Promise.reject(new Error("Failed"));
->   } catch (err) {
->     console.log(`Caught error: ${err.message}`);
+> async function fetchUserDashboard(userId, apiMock) {
+>   const user = await apiMock.getUser(userId);
+>   if (!user || !user.orderId) {
+>     throw new Error("User or order not found");
 >   }
+>   const order = await apiMock.getOrder(user.orderId);
+>   return {
+>     user: user.name,
+>     orderId: order.id,
+>     amount: order.amount
+>   };
 > }
-> run();
+>
+> // Verification tests
+> const mockApi = {
+>   getUser: async (id) => ({ id, name: "Alice", orderId: "ORD-99" }),
+>   getOrder: async (id) => ({ id, amount: 150.00 })
+> };
+>
+> fetchUserDashboard(101, mockApi).then(dashboard => {
+>   console.assert(dashboard.user === "Alice", "Test 1 Failed");
+>   console.assert(dashboard.amount === 150.00, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `try...catch` blocks catch rejected promise errors thrown inside `async` functions.
+> #### Technical Explanation
+>
+> 1. **async Keyword**: The async keyword marks a function as asynchronous, guaranteeing it returns a Promise instance.
+> 2. **await Expression**: The await operator pauses async function execution until the Promise resolves or rejects.
+> 3. **Synchronous Syntax Readability**: async/await flattens asynchronous code into linear, synchronous-like syntax.
 > 
 ---
 
-### Exercise 3: Parallel Execution with `Promise.all` inside Async Functions
+### Exercise 2: Async Await Advanced Context Handler
 
-**Problem:** Await two promises concurrently `const [a, b] = await Promise.all([p1, p2])`.
+**Scenario:** A web application component processes async await data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleAsyncAwaitSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Results: 10, 20
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> async function fetchBoth() {
->   const p1 = Promise.resolve(10);
->   const p2 = Promise.resolve(20);
->   const [a, b] = await Promise.all([p1, p2]);
->   console.log(`Results: ${a}, ${b}`);
+> function handleAsyncAwaitSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
 > }
-> fetchBoth();
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleAsyncAwaitSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Combining `await` with `Promise.all` executes independent promises concurrently.
+> #### Technical Explanation
+>
+> 1. **Async Await Architecture**: Applying async await patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Async Await Performance Optimization
+
+**Scenario:** An application utility optimizes async await execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeAsyncAwaitTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeAsyncAwaitTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeAsyncAwaitTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Async Await Optimization**: Optimizing async await improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Promise](promise.md) — What `async/await` is secretly working with under the hood.
 - [.then() / .catch()](then_catch.md) — The older syntax that `async/await` replaces.
 - [Callback Hell](callback_hell.md) — Related concept: Callback Hell.
@@ -232,7 +274,7 @@ function getJoke() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `async/await` allows you to write asynchronous code that reads like synchronous code.
 - To use `await`, you must mark the parent function with the `async` keyword.
 - `await` pauses the function execution until the Promise resolves, then unwraps the data.

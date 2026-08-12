@@ -10,7 +10,7 @@
 
 - [`std::thread::spawn`](std_thread_spawn.md) — The raw multi-threading tool that Rayon abstracts away.
 - [Iterator Adapters](../level_02/iterator_adapters.md) — The `.iter().map().filter()` chains that Rayon supercharges.
-- [Closure](../level_06/closure.md) — The syntax used to pass logic into Rayon iterators.
+- [Closures (`|args| body`)](../level_06/closure.md) — The syntax used to pass logic into Rayon iterators.
 
 ---
 

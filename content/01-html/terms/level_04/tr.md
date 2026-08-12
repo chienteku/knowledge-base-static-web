@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<tr>` (Table Row) is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A table needs a way to organize its grid. In HTML, tables are built horizontally, row by row (not column by column). 
@@ -50,7 +46,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting text directly inside a `<tr>`
 
@@ -118,7 +114,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 <tr><td>4</td><td colspan="2">5</td></tr> <!-- Merge remaining column -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Counting Rows
 
@@ -178,7 +174,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 >
 > **Explanation:** `tr:hover` highlights the active data row for visual tracking.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<table>`](table.md) — The parent that holds the `<tr>`.
 - [`<td>` (Table Data)](td.md) — The data cells that go *inside* the `<tr>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing table rows.
@@ -187,7 +183,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<tr>` stands for Table Row.
 - It is used to slice a table horizontally.
 - You cannot put text directly inside a `<tr>`; it must contain `<td>` or `<th>` cells.

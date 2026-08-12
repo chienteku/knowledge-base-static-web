@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `scroll-behavior` & `scroll-snap` is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Runs natively on the browser UI threat. Leverages hardware momentum scrolling to calculate slide intersections without blocking JavaScript processes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, creating a smooth experience on web applications was difficult:
@@ -164,7 +160,7 @@ Vertical snap layout:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaring scroll-snap properties without an overflow value
 
@@ -216,7 +212,7 @@ Vertical snap layout:
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Landing Presentation Slide Deck
 
@@ -285,12 +281,12 @@ Vertical snap layout:
 >
 > **Explanation:** `mandatory` enforces strict snap points; `proximity` allows free scrolling until near points.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent scrolling trigger.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `scroll-behavior: smooth` animates anchor link jumps smoothly.
 - Scroll Snapping locks viewports to specific slide boundaries during scroll deceleration.
 - Set `scroll-snap-type` on the scrollable parent container.

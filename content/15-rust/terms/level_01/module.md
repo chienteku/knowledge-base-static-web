@@ -953,7 +953,7 @@ Implement the complete `compiler` module hierarchy with unit tests.
 - [Crate](crate.md) — Modules are the internal organizational units within a single crate
 - [Cargo](cargo.md) — The tool that compiles your crate and its modules
 - [Package](package.md) — The top-level structure that contains crates (which in turn contain modules)
-- [`fn` (Functions)](fn.md) — Related concept: fn.
+- [fn](fn.md) — Related concept: fn.
 - [Prelude](../level_07/prelude.md) — Related concept: Prelude.
 - [Visibility and Modules (`pub`, `mod`)](../level_07/visibility_and_modules.md) — Visibility rules across modules.
 - [`mod` Declaration](../level_07/mod_declaration.md) — mod statement syntax.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Performance / Infrastructure**
+
+**API Performance / Infrastructure (Universal .)**: Caching (ETag, Cache-Control) is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Implemented on Browsers, CDNs, and Backend Servers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If your API serves the daily weather for Tokyo, the weather only changes every few hours. 
@@ -46,7 +42,7 @@ If the data is exactly the same, the Server responds with a **`304 Not Modified`
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Caching User-Specific Data Globally
 
@@ -95,59 +91,185 @@ Cache-Control: no-store ; Completely disables caching and disk storage
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Fast, but Stale
+### Exercise 1: HTTP Cache-Control Header Evaluator
 
-**Problem:** You are building a news website API. You set `Cache-Control: max-age=86400` (24 hours) on the `/api/top-headlines` endpoint. 
-A major breaking news event happens at noon. Your journalists publish the story to the database. Why are users complaining that they can't see the breaking news?
+**Scenario:** An HTTP cache manager parses Cache-Control response headers (`max-age`, `no-cache`, `no-store`, `private`) to determine caching rules.
 
-**Expected output:**
+**Requirements:**
+1. Write evaluateCacheHeader(headerStr).
+2. Extract max-age in seconds.
+3. Check no-store and no-cache flags.
+4. Return cache directive object.
+
 > [!check]- Answer
-> ```text
-> Because their browsers are using the cached copy! 
-> You told the browsers they don't need to ask the server for updates for a full 24 hours. Even though the database updated, the browsers refuse to make a new network request until tomorrow. 
-> Caching is a trade-off between Speed and "Staleness" (how outdated the data is).
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluateCacheHeader(headerStr) {
+>   if (!headerStr || typeof headerStr !== "string") {
+>     return { cacheable: false, maxAge: 0, reason: "Missing Cache-Control header" };
+>   }
+>
+>   const directives = headerStr.split(",").map(d => d.trim().toLowerCase());
+>   const hasNoStore = directives.includes("no-store");
+>   const hasNoCache = directives.includes("no-cache");
+>   const isPrivate = directives.includes("private");
+>
+>   if (hasNoStore) {
+>     return { cacheable: false, maxAge: 0, reason: "no-store directive forbids caching" };
+>   }
+>
+>   let maxAge = 0;
+>   for (const dir of directives) {
+>     if (dir.startsWith("max-age=")) {
+>       const val = parseInt(dir.split("=")[1], 10);
+>       maxAge = isNaN(val) ? 0 : val;
+>     }
+>   }
+>
+>   return {
+>     cacheable: maxAge > 0 && !hasNoStore,
+>     requiresRevalidation: hasNoCache,
+>     isPrivate,
+>     maxAge
+>   };
+> }
+>
+> // Verification tests
+> const res1 = evaluateCacheHeader("public, max-age=3600");
+> console.assert(res1.cacheable === true && res1.maxAge === 3600, "Test 1 Failed");
+>
+> const res2 = evaluateCacheHeader("no-store, no-cache");
+> console.assert(res2.cacheable === false, "Test 2 Failed");
+>
+> const res3 = evaluateCacheHeader("no-cache, max-age=60");
+> console.assert(res3.requiresRevalidation === true, "Test 3 Failed");
 > ```
-> - What does `max-age` tell the browser to do for the next 24 hours?
+>
+> #### Technical Explanation
+>
+> 1. **Cache-Control Directives**: Standard HTTP header controlling browser and CDN caching behavior.
+> 2. **no-store vs no-cache**: no-store forbids storing payload anywhere; no-cache allows storing but requires revalidating before serving.
+> 3. **max-age Directive**: Specifies maximum duration in seconds response is considered fresh before revalidation.
 > 
 ---
 
-### Exercise 2: ETag Validation Request Headers
+### Exercise 2: ETag & If-None-Match Conditional Request Handler (304 Not Modified)
 
-**Problem:** When a client has a cached response with `ETag: "v123"`, which conditional header does it send on subsequent GET requests?
+**Scenario:** An API server uses ETag hash validation to return `304 Not Modified` for unchanged resources, saving bandwidth.
 
-**Expected output:**
+**Requirements:**
+1. Write handleConditionalRequest(reqHeader, resourceData, mockHashFn).
+2. Compute ETag hash of resourceData.
+3. If ETag matches If-None-Match header, return 304.
+
 > [!check]- Answer
-> ```text
-> If-None-Match: "v123"
+>
+> #### Implementation
+>
+> ```javascript
+> function handleConditionalRequest(ifNoneMatchHeader, resourceData, mockHashFn) {
+>   const etag = mockHashFn 
+>     ? `"${mockHashFn(resourceData)}"` 
+>     : `"${JSON.stringify(resourceData).length}_hash"`;
+>
+>   if (ifNoneMatchHeader && ifNoneMatchHeader === etag) {
+>     return {
+>       status: 304,
+>       headers: { "ETag": etag },
+>       body: null
+>     };
+>   }
+>
+>   return {
+>     status: 200,
+>     headers: { "ETag": etag },
+>     body: resourceData
+>   };
+> }
+>
+> // Verification tests
+> const data = { id: 1, name: "Widget" };
+>
+> const res1 = handleConditionalRequest(null, data);
+> console.assert(res1.status === 200 && res1.headers.ETag !== undefined, "Test 1 Failed");
+>
+> const res2 = handleConditionalRequest(res1.headers.ETag, data);
+> console.assert(res2.status === 304 && res2.body === null, "Test 2 Failed: Must return 304 with no body");
 > ```
-> ```http
-> GET /api/items HTTP/1.1
-> Host: api.example.com
-> If-None-Match: "v123"
-> ```
-> - **Explanation:** `If-None-Match` sends stored ETag for conditional server validation.
+>
+> #### Technical Explanation
+>
+> 1. **ETag (Entity Tag)**: HTTP header containing a cryptographic hash or version tag representing resource content.
+> 2. **If-None-Match Request Header**: Client sends previously received ETag header; server compares content hash.
+> 3. **304 Not Modified**: Status code indicating resource has not changed, allowing client to use cached copy with zero body bandwidth.
+> 
 ---
 
-### Exercise 3: HTTP 304 Not Modified Behavior
+### Exercise 3: In-Memory LRU (Least Recently Used) Cache Store
 
-**Problem:** What does an HTTP `304 Not Modified` status code indicate to the client, and does it include a response body?
+**Scenario:** An API client implements an LRU Cache with a maximum capacity limit, evicting the least recently accessed items when full.
 
-**Expected output:**
+**Requirements:**
+1. Write createLruCache(capacity).
+2. Implement get(key) and set(key, value).
+3. Evict LRU item when size exceeds capacity.
+
 > [!check]- Answer
-> ```text
-> Indicates the cached resource is still fresh and unmodified. It contains NO response body.
+>
+> #### Implementation
+>
+> ```javascript
+> function createLruCache(capacity = 3) {
+>   const map = new Map();
+>
+>   return {
+>     get(key) {
+>       if (!map.has(key)) return null;
+>       const value = map.get(key);
+>       map.delete(key);
+>       map.set(key, value);
+>       return value;
+>     },
+>     set(key, value) {
+>       if (map.has(key)) {
+>         map.delete(key);
+>       } else if (map.size >= capacity) {
+>         const oldestKey = map.keys().next().value;
+>         map.delete(oldestKey);
+>       }
+>       map.set(key, value);
+>     },
+>     size() {
+>       return map.size;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const lru = createLruCache(2);
+> lru.set("a", 1);
+> lru.set("b", 2);
+> lru.get("a");
+>
+> lru.set("c", 3);
+>
+> console.assert(lru.get("a") === 1, "Test 1 Failed: 'a' preserved");
+> console.assert(lru.get("b") === null, "Test 2 Failed: 'b' evicted");
+> console.assert(lru.get("c") === 3, "Test 3 Failed: 'c' added");
 > ```
-> ```http
-> HTTP/1.1 304 Not Modified
-> ETag: "v123"
-> (Empty Response Body)
-> ```
-> - **Explanation:** 304 Not Modified saves network bandwidth by omitting the payload body.
+>
+> #### Technical Explanation
+>
+> 1. **LRU Cache Strategy**: Evicts least recently accessed items when capacity limit is reached.
+> 2. **Map Key Order**: JavaScript Map maintains key insertion order; re-inserting items updates access recency.
+> 3. **Memory Overflow Protection**: Bounded capacity prevents client or server memory exhaustion under heavy traffic.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP Headers](../level_02/http_headers.md) — Where `Cache-Control` and `ETag` live.
 - [HTTP Status Codes](../level_02/status_codes.md) — `304 Not Modified` is the king of bandwidth-saving codes.
 - [Latency & Bandwidth](../level_01/latency_bandwidth.md) — Related concept: Latency & Bandwidth.
@@ -157,7 +279,7 @@ A major breaking news event happens at noon. Your journalists publish the story 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Caching** dramatically speeds up APIs and reduces server load by serving saved copies of data.
 - **`Cache-Control`** dictates how long a browser or network router is allowed to use a saved copy without checking the server.
 - **`ETag`** is a fingerprint of the data. If the fingerprint hasn't changed, the server returns a `304 Not Modified` to save bandwidth.

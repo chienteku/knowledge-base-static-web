@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Number Methods & Parsing is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, data received from the outside world (such as HTML form text fields, query parameters in URLs, or API responses) is almost always formatted as a `String`. If you attempt to run math calculations on these strings directly, JavaScript's weak typing will either concatenate them (e.g. `"10" + 5` becomes `"105"`) or fail with `NaN`. 
@@ -72,7 +68,7 @@ console.log("Type of formattedPrice:", typeof formattedPrice); // "string"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `.toFixed()` to Return a Number
 
@@ -154,81 +150,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format and Sum Price
+### Exercise 1: Invoice Line Item Price Formatter
 
-**Problem:** Complete the code to parse the string input `"39.90USD"`, apply a 20% discount (multiply by 0.8), and format the output to exactly 2 decimal places.
+**Scenario:** An invoicing service formats floating-point prices into currency strings using Number.prototype.toFixed(2) and validates numbers using Number.isFinite().
 
-```javascript
-const rawInput = "39.90USD";
+**Requirements:**
+1. Write formatInvoiceItem(rawPrice, quantity).
+2. Validate inputs using Number.isFinite().
+3. Compute subtotal.
+4. Return subtotal formatted using .toFixed(2).
 
-// Parse number
-// Apply discount
-// Format to 2 decimal places
-const finalOutput = // Write code here
-
-console.log(finalOutput);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 31.92
-> ```
-> - Use `parseFloat(rawInput)` to extract the decimal value.
-> - Multiply the result by `0.8`.
-> - Call `.toFixed(2)` to format the output.
-> 
----
-
-### Exercise 2: Formatting Currency Numbers with `toFixed`
-
-**Problem:** Format `19.999` to 2 decimal places string.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 20.00
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const price = 19.999;
-> console.log(price.toFixed(2));
+> function formatInvoiceItem(rawPrice, quantity) {
+>   if (!Number.isFinite(rawPrice) || !Number.isFinite(quantity)) {
+>     throw new Error("Invalid numeric payload");
+>   }
+>   const subtotal = rawPrice * quantity;
+>   return subtotal.toFixed(2);
+> }
+>
+> // Verification tests
+> console.assert(formatInvoiceItem(19.99, 3) === "59.97", "Test 1 Failed");
+> console.assert(typeof formatInvoiceItem(10, 2) === "string", "Test 2 Failed: toFixed must return string");
 > ```
 >
-> **Explanation:** `toFixed(digits)` rounds numbers to fixed decimal places and returns a formatted string.
+> #### Technical Explanation
+>
+> 1. **toFixed() Return Type**: Number.prototype.toFixed(digits) formats numbers into fixed-point decimal strings.
+> 2. **Number.isFinite() Security**: Static method Number.isFinite() rejects Infinity, -Infinity, and NaN.
+> 3. **Auto-Boxing Primitives**: Calling prototype methods on primitive numbers triggers temporary auto-boxing.
 > 
 ---
 
-### Exercise 3: Checking Integer Status with `Number.isInteger`
+### Exercise 2: Precision Metric Exponent Formatter
 
-**Problem:** Check `Number.isInteger(10)` vs `Number.isInteger(10.5)` vs `Number.isInteger("10")`.
+**Scenario:** A telemetry service formats large scientific measurement values into exponential notation using .toExponential() and custom precision using .toPrecision().
 
-**Expected output:**
+**Requirements:**
+1. Write formatTelemetryMetric(value, precision).
+2. Format using .toExponential() and .toPrecision().
+3. Return object { expString, precString }.
+
 > [!check]- Answer
-> ```text
-> true
-> false
-> false
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(Number.isInteger(10));
-> console.log(Number.isInteger(10.5));
-> console.log(Number.isInteger("10"));
+> function formatTelemetryMetric(value, precision) {
+>   const num = Number(value);
+>   if (!Number.isFinite(num)) {
+>     return { expString: "Invalid", precString: "Invalid" };
+>   }
+>   return {
+>     expString: num.toExponential(2),
+>     precString: num.toPrecision(precision)
+>   };
+> }
+>
+> // Verification tests
+> const res = formatTelemetryMetric(123456, 4);
+> console.assert(res.expString === "1.23e+5", "Test 1 Failed");
+> console.assert(res.precString === "1.235e+5", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Number.isInteger` returns `true` strictly if input is of type `number` without fractional components.
-> 
+> #### Technical Explanation
+>
+> 1. **toExponential() Method**: Formats numbers in scientific exponential notation with specified decimal places.
+> 2. **toPrecision() Method**: Formats numbers to a specified total count of significant digits.
+> 3. **String Conversion**: All Number prototype formatting methods return string primitive values.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Numeric String Parser with Radix Validation
+
+**Scenario:** An API data parser parses integer IDs and floating point metrics from string payloads using Number.parseInt() and Number.parseFloat().
+
+**Requirements:**
+1. Write parsePayloadNumbers(idStr, priceStr).
+2. Parse id using Number.parseInt(idStr, 10).
+3. Parse price using Number.parseFloat(priceStr).
+4. Return object { id, price, isIdInteger }.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parsePayloadNumbers(idStr, priceStr) {
+>   const id = Number.parseInt(idStr, 10);
+>   const price = Number.parseFloat(priceStr);
+>   const isIdInteger = Number.isInteger(id);
+>
+>   return { id, price, isIdInteger };
+> }
+>
+> // Verification tests
+> const parsed = parsePayloadNumbers("42", "19.95");
+> console.assert(parsed.id === 42, "Test 1 Failed");
+> console.assert(parsed.price === 19.95, "Test 2 Failed");
+> console.assert(parsed.isIdInteger === true, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Number.parseInt() Radix**: Always pass explicit radix 10 to Number.parseInt(str, 10) to specify decimal parsing.
+> 2. **Number.parseFloat()**: Parses floating-point number values from string inputs until non-numeric characters occur.
+> 3. **Number.isInteger()**: Validates whether a number is a finite integer without fractional components.
+---
+
+## 6. Related Terms
 - [NaN](../level_01/nan.md) — Sentinels returned when parsing completely invalid inputs.
 - [Math object](math_object.md) — Built-in object for more advanced math operations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `Number(str)` for strict type conversion (returns `NaN` if any character is invalid).
 - Use `parseInt(str, radix)` or `parseFloat(str)` for lenient parsing (reads left-to-right, ignores trailing letters/units).
 - Always include the radix parameter (usually `10`) in `parseInt` to specify the numbering base system.

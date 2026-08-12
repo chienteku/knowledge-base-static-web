@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: DOMContentLoaded / load events is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A web browser parses an HTML document line-by-line from top to bottom, building the DOM tree dynamically. If a browser encounters a `<script>` tag in the HTML `<head>` and executes it immediately, the script will attempt to query elements (like `#submit-btn`) that the browser's HTML parser hasn't even reached yet, resulting in `null` references and crashes.
@@ -83,7 +79,7 @@ window.addEventListener("load", function(event) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Querying DOM Elements in Head Scripts Without Waiting
 
@@ -174,65 +170,138 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Deferred Initialization
+### Exercise 1: Fast Interactive Script Initialization Listener
 
-**Problem:** Complete the code to print `"Initializing interface..."` only when the DOM is fully constructed.
+**Scenario:** A web application registers startup initializers on DOMContentLoaded to execute code as soon as HTML DOM parsing completes.
 
-```javascript
-// Add event listener here
-  console.log("Initializing interface...");
-```
+**Requirements:**
+1. Write registerFastInit(initFn).
+2. Check if document.readyState is "interactive" or "complete".
+3. If already ready, call initFn instantly; else add DOMContentLoaded listener.
 
 > [!check]- Answer
-> - Add an event listener to the `document` object.
-> - Listen for the event `"DOMContentLoaded"`.
-> 
----
-
-### Exercise 2: Attaching DOMContentLoaded Listeners
-
-**Problem:** Write a `document.addEventListener('DOMContentLoaded', ...)` setup handler.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DOM parsed and ready
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("DOM parsed and ready");
+> function registerFastInit(initFn) {
+>   if (!globalThis.document || typeof initFn !== "function") return false;
+>
+>   if (document.readyState === "interactive" || document.readyState === "complete") {
+>     initFn();
+>     return true;
+>   }
+>
+>   document.addEventListener("DOMContentLoaded", initFn);
+>   return true;
+> }
+>
+> // Verification tests
+> let initCalled = false;
+> globalThis.document = {
+>   readyState: "interactive",
+>   addEventListener(event, fn) {}
+> };
+> registerFastInit(() => { initCalled = true; });
+> console.assert(initCalled === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `DOMContentLoaded` signals that DOM elements are safe for script query access.
+> #### Technical Explanation
+>
+> 1. **DOMContentLoaded Event**: Fires when HTML document has been completely parsed and DOM tree built, without waiting for stylesheets/images.
+> 2. **load Event Difference**: The window load event waits for all external resources (images, subframes, stylesheets) to finish loading.
+> 3. **readyState Check Pattern**: Checking document.readyState handles scripts loaded asynchronously after DOMContentLoaded fired.
 > 
 ---
 
-### Exercise 3: Comparing Window Load vs DOMContentLoaded
+### Exercise 2: Image & Media Asset Preloader Listener
 
-**Problem:** State which event fires first: `DOMContentLoaded` or `load`.
+**Scenario:** A image gallery preloader listens to the window load event to verify all external image assets have completed downloading.
 
-**Expected output:**
+**Requirements:**
+1. Write registerMediaPreloader(onAllLoaded).
+2. Attach window.addEventListener("load", onAllLoaded).
+3. Verify execution upon page asset completion.
+
 > [!check]- Answer
-> ```text
-> DOMContentLoaded fires first
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("DOMContentLoaded fires first");
+> function registerMediaPreloader(onAllLoaded) {
+>   if (!globalThis.window || typeof window.addEventListener !== "function") return false;
+>   window.addEventListener("load", onAllLoaded);
+>   return true;
+> }
+>
+> // Verification tests
+> let loadedEventFired = false;
+> globalThis.window = {
+>   addEventListener(evt, fn) {
+>     if (evt === "load") { fn(); loadedEventFired = true; }
+>   }
+> };
+> registerMediaPreloader(() => {});
+> console.assert(loadedEventFired === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `DOMContentLoaded` executes upon HTML parse completion; `load` waits for external assets.
-> 
+> #### Technical Explanation
+>
+> 1. **window load Event**: The load event fires after DOM structure AND all dependent resources (images, sub-frames, async scripts) finish loading.
+> 2. **Asset Loading Guarantee**: Essential for image processing or canvas rendering that requires fully loaded media assets.
+> 3. **Execution Ordering**: Fires strictly after DOMContentLoaded has completed.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Document readyState Transition Monitor
+
+**Scenario:** A diagnostic tool tracks transitions across document.readyState states ('loading' -> 'interactive' -> 'complete').
+
+**Requirements:**
+1. Write monitorReadyState(stateCallback).
+2. Listen to readystatechange event on document.
+3. Pass current document.readyState to stateCallback.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function monitorReadyState(stateCallback) {
+>   if (!globalThis.document || typeof document.addEventListener !== "function") return false;
+>
+>   document.addEventListener("readystatechange", () => {
+>     stateCallback(document.readyState);
+>   });
+>   return true;
+> }
+>
+> // Verification tests
+> let recordedState = null;
+> globalThis.document = {
+>   readyState: "complete",
+>   addEventListener(evt, fn) { if (evt === "readystatechange") fn(); }
+> };
+> monitorReadyState(s => { recordedState = s; });
+> console.assert(recordedState === "complete", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **readystatechange Event**: Fires on document whenever document.readyState changes.
+> 2. **Three States**: 'loading' (parsing HTML), 'interactive' (DOM built, images loading), 'complete' (all assets loaded).
+> 3. **Asynchronous Initialization**: Allows tracking document loading lifecycle in modular applications.
+---
+
+## 6. Related Terms
 - [window object / BOM](window_bom.md) — The global object hosting the `load` event.
 - [document object](document_object.md) — The webpage gateway hosting the `DOMContentLoaded` event.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `DOMContentLoaded` (attached to `document`) to query and manipulate elements as soon as the HTML structure is parsed (recommended for script initializations).
 - Use `load` (attached to `window`) when you must wait for all images, subframes, and external assets to finish loading (recommended for layout calculations).
 - Placing script tags at the bottom of the `<body>` or using the `defer` attribute on script tags achieves a similar execution timing to `DOMContentLoaded`.

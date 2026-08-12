@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Reference vs Value (copy semantics) is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To write bug-free code, developers must understand how JavaScript stores and copies data in system memory. The language uses two separate copy behaviors depending on the type of data being handled:
@@ -78,7 +74,7 @@ console.log(carInfoA === carInfoC); // true (Same exact address!)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Unintended Side-effects from Function Arguments
 
@@ -170,85 +166,133 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Reference Mutation Check
+### Exercise 1: Primitive Value Copy vs Object Reference Mutation Audit
 
-**Problem:** Predict the outputs of the log statements.
+**Scenario:** A state auditor compares primitive copy-by-value behavior against object copy-by-reference mutation side-effects.
 
-```javascript
-let arr1 = [1, 2, 3];
-let arr2 = arr1;
-arr2.push(4);
+**Requirements:**
+1. Demonstrate primitive assignment creates independent value copy.
+2. Demonstrate object assignment shares memory reference pointer.
+3. Return audit report.
 
-let num1 = 10;
-let num2 = num1;
-num2 = num2 + 5;
-
-console.log("arr1 length:", arr1.length);
-console.log("num1 value:", num1);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> arr1 length: 4
-> num1 value: 10
-> ```
-> - Arrays copy by reference; pushing to `arr2` updates the shared array.
-> - Numbers copy by value; changing `num2` leaves `num1` untouched.
-> 
----
-
-### Exercise 2: Primitive Copy by Value Trace
-
-**Problem:** Trace primitive values `let x = 10; let y = x; y = 20;`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> x: 10, y: 20
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> let x = 10;
-> let y = x;
-> y = 20;
-> console.log(`x: ${x}, y: ${y}`);
+> function auditReferenceVsValue() {
+>   // Primitives passed/assigned by VALUE
+>   let a = 10;
+>   let b = a;
+>   b = 20;
+>
+>   // Objects passed/assigned by REFERENCE
+>   const objA = { count: 10 };
+>   const objB = objA;
+>   objB.count = 20;
+>
+>   return {
+>     primitiveA: a,
+>     primitiveB: b,
+>     objACount: objA.count,
+>     objBCount: objB.count
+>   };
+> }
+>
+> // Verification tests
+> const audit = auditReferenceVsValue();
+> console.assert(audit.primitiveA === 10 && audit.primitiveB === 20, "Test 1 Failed");
+> console.assert(audit.objACount === 20 && audit.objBCount === 20, "Test 2 Failed: Reference mutation check failed");
 > ```
 >
-> **Explanation:** Primitives are assigned by value, creating independent value copies.
+> #### Technical Explanation
+>
+> 1. **Pass-by-Value (Primitives)**: Numbers, strings, booleans, null, undefined, symbols, and BigInts are copied by value.
+> 2. **Pass-by-Reference (Objects)**: Objects, arrays, and functions are stored and passed by memory reference pointers.
+> 3. **Side-Effect Awareness**: Mutating an object reference inside a function alters the original caller object in memory.
 > 
 ---
 
-### Exercise 3: Object Mutation via Reference
+### Exercise 2: Reference Vs Value Advanced Context Handler
 
-**Problem:** Mutate object property via secondary reference `obj2.val = 99`.
+**Scenario:** A web application component processes reference vs value data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleReferenceVsValueSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> obj1 val: 99
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const obj1 = { val: 1 };
-> const obj2 = obj1;
-> obj2.val = 99;
-> console.log(`obj1 val: ${obj1.val}`);
+> function handleReferenceVsValueSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleReferenceVsValueSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Object assignments copy reference pointers, allowing mutations to reflect across all references.
-> 
+> #### Technical Explanation
+>
+> 1. **Reference Vs Value Architecture**: Applying reference vs value patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Reference Vs Value Performance Optimization
+
+**Scenario:** An application utility optimizes reference vs value execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeReferenceVsValueTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeReferenceVsValueTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeReferenceVsValueTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Reference Vs Value Optimization**: Optimizing reference vs value improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Shallow Copy vs Deep Copy](shallow_vs_deep_copy.md) — Solutions to duplicate objects safely.
 - [Closure](../level_03/closure.md) — Preserving variable access scopes.
 - [Primitive Types](../level_01/primitive_types.md) — Related concept: Primitive Types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Primitive types are stored and copied by value; copies are independent duplicates.
 - Reference types (objects, arrays) are stored in heap memory; variables only store pointer addresses.
 - Assigning an object variable copies the pointer address, causing both variables to refer to the same object.

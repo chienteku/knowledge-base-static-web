@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept / CSS Syntax**
+
+**Core Concept / CSS Syntax (Universal Browser Support .)**: `!important` Declaration is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Parsed as a priority flag during Cascade calculations. Overrides standard stylesheet layers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, the browser uses a strict point system called [Specificity](../level_01/specificity.md) to decide which CSS style wins when multiple selectors target the same element.
@@ -124,7 +120,7 @@ Bypassing high specificity:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing `!important` in the wrong location
 
@@ -179,7 +175,7 @@ p { color: red !important; }
 /* Design accessible layouts respecting user high-contrast preferences */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Conflict Resolution
 
@@ -244,14 +240,14 @@ p {
 >
 > **Explanation:** Utility classes use `!important` to ensure state overrides apply regardless of component rules.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Specificity](specificity.md) — The point system overridden by the flag.
 - [The Cascade](the_cascade.md) — The conflict resolver.
 - [Inheritance](inheritance.md) — How properties fall back to parent element style selectors.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `!important` flag forces a CSS declaration to apply, bypassing specificity.
 - Place it at the end of the declaration value, immediately before the semicolon.
 - Conflicting `!important` rules are resolved using normal specificity and cascade rules.

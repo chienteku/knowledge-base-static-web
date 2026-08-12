@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Legacy Layout Property**
+
+**Legacy Layout Property (Universal Browser Support, but largely obsolete for modern layout.)**: `float` & `clear` (Legacy context) is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support, but largely obsolete for modern layout.**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, people wanted to write an article and put an image on the left side, with the paragraph text smoothly wrapping around the right side of the image (exactly like a newspaper or a magazine). 
@@ -59,7 +55,7 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Float for Layout in 2024+
 
@@ -184,7 +180,7 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Modern vs Legacy
 
@@ -240,13 +236,13 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 >
 > **Explanation:** Clearfix pseudo-element clears floated children to prevent parent height collapse.
 > 
-## 7. Related Terms
-- [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.
+## 6. Related Terms
+- [`display: flex` — Flexbox Container](../level_05/display_flex.md) — The modern Flexbox layout container.
 - [Document Flow (Normal Flow)](document_flow.md) — The layout engine disrupted by floats.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `float` was designed solely to make text wrap around images (like a magazine).
 - `clear` is used to force an element to drop below a floated element.
 - **Legacy Warning**: Never use `float` to build columns, grids, or side-by-side UI layouts. Use Flexbox or CSS Grid instead!

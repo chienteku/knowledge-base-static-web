@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Computer Science Concept / Data Formatting**
+
+**Computer Science Concept / Data Formatting (Universal)**: Base64 Encoding is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTTP and JSON were designed to send *Text*. 
@@ -41,7 +37,7 @@ Encryption requires a secret password to reverse. Never use Base64 to "hide" pas
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Base64 for large files
 
@@ -89,53 +85,143 @@ GET /api/verify?token=abc-def_123 HTTP/1.1 ; Safe Base64URL encoding
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Encoding vs Encryption
+### Exercise 1: Binary Buffer to Data URI Base64 Encoder
 
-**Problem:** You are building a login system. You don't want the database admin to see the user's passwords. You run the passwords through a Base64 encoder and save the resulting string (`cGFzc3dvcmQxMjM=`) in the database. Why are you fired the next day?
+**Scenario:** An API asset manager converts raw binary image buffers into inline Base64 Data URIs (`data:image/png;base64,...`) for web rendering.
 
-**Expected output:**
+**Requirements:**
+1. Write toBase64DataUri(mimeType, bufferData).
+2. Convert buffer to Base64 string.
+3. Prepend `data:<mimeType>;base64,` header string.
+
 > [!check]- Answer
-> ```text
-> Because Base64 is not encryption! 
-> Any hacker (or the database admin) can take that string, paste it into an online Base64 Decoder, and instantly see the original password ("password123"). You must use a one-way hashing algorithm (like bcrypt) for passwords!
+>
+> #### Implementation
+>
+> ```javascript
+> function toBase64DataUri(mimeType, bufferData) {
+>   if (!mimeType || !bufferData) return null;
+>
+>   const base64Str = Buffer.isBuffer(bufferData)
+>     ? bufferData.toString("base64")
+>     : Buffer.from(bufferData).toString("base64");
+>
+>   return `data:${mimeType};base64,${base64Str}`;
+> }
+>
+> // Verification tests
+> const buf = Buffer.from("PNG_BINARY_HEADER_DATA");
+> const uri = toBase64DataUri("image/png", buf);
+>
+> console.assert(uri.startsWith("data:image/png;base64,"), "Test 1 Failed");
+> console.assert(uri.includes(buf.toString("base64")), "Test 2 Failed");
 > ```
-> - Does Base64 require a secret key to decode? (No).
+>
+> #### Technical Explanation
+>
+> 1. **Base64 Purpose**: Encodes binary data into 64 printable ASCII characters (A-Z, a-z, 0-9, +, /) for safe text transport.
+> 2. **Data URI Scheme**: Allows embedding inline binary resources (images, fonts) directly inside HTML/CSS or JSON APIs.
+> 3. **Base64 Expansion Overhead**: Base64 increases data size by exactly 33% (4 bytes encoded for every 3 raw binary bytes).
 > 
 ---
 
-### Exercise 2: Base64 Overhead Size Calculation
+### Exercise 2: Base64URL Safe Encoder & Decoder for JWT Tokens
 
-**Problem:** Calculate the approximate size increase percentage when converting binary data into Base64 encoded text.
+**Scenario:** A JWT parser converts standard Base64 strings into URL-safe Base64URL representations by replacing `+` and `/` and stripping `=` padding.
 
-**Expected output:**
+**Requirements:**
+1. Write toBase64Url(base64Str).
+2. Write fromBase64Url(base64UrlStr).
+3. Ensure lossless roundtrip encoding.
+
 > [!check]- Answer
-> ```text
-> 33% size increase (4 bytes of text generated for every 3 bytes of binary data).
+>
+> #### Implementation
+>
+> ```javascript
+> function toBase64Url(base64Str) {
+>   if (typeof base64Str !== "string") return "";
+>   return base64Str
+>     .replace(/=/g, "")
+>     .replace(/\+/g, "-")
+>     .replace(/\//g, "_");
+> }
+>
+> function fromBase64Url(base64UrlStr) {
+>   if (typeof base64UrlStr !== "string") return "";
+>   let base64 = base64UrlStr
+>     .replace(/-/g, "+")
+>     .replace(/_/g, "/");
+>
+>   while (base64.length % 4 !== 0) {
+>     base64 += "=";
+>   }
+>   return base64;
+> }
+>
+> // Verification tests
+> const origBase64 = "usr/42+test==";
+> const urlSafe = toBase64Url(origBase64);
+>
+> console.assert(!urlSafe.includes("+") && !urlSafe.includes("/") && !urlSafe.includes("="), "Test 1 Failed");
+> console.assert(fromBase64Url(urlSafe) === origBase64, "Test 2 Failed: Lossless roundtrip");
 > ```
-> ```text
-> 33% size increase (Ratio of 4:3 -> 4/3 = 133.3%).
-> ```
-> - **Explanation:** Base64 expands binary size by ~33% due to encoding 6 bits per character.
+>
+> #### Technical Explanation
+>
+> 1. **Base64URL Variation**: RFC 4648 variation replacing + with - and / with _ to avoid URL query parameter escaping issues.
+> 2. **Padding Equal Sign (=)**: Standard Base64 uses = for 4-byte block alignment; Base64URL omits padding.
+> 3. **URL Safety**: Guarantees tokens can be transmitted in URL path segments without corruption.
+> 
 ---
 
-### Exercise 3: Base64 Padding Character
+### Exercise 3: Base64 Bandwidth Overhead Auditor
 
-**Problem:** What is the purpose of the trailing equals sign (`=`) padding characters in Base64 strings?
+**Scenario:** An API performance tool computes exact byte size explosion when sending binary files as Base64 JSON payloads vs raw binary.
 
-**Expected output:**
+**Requirements:**
+1. Write auditBase64Overhead(rawByteCount).
+2. Calculate encoded Base64 byte length `ceil(bytes / 3) * 4`.
+3. Return percentage increase.
+
 > [!check]- Answer
-> ```text
-> Padding (`=` or `==`) pads the input to a multiple of 4 output characters when the binary byte length is not divisible by 3.
+>
+> #### Implementation
+>
+> ```javascript
+> function auditBase64Overhead(rawByteCount) {
+>   if (typeof rawByteCount !== "number" || rawByteCount <= 0) {
+>     return { rawBytes: 0, base64Bytes: 0, overheadPct: 0 };
+>   }
+>
+>   const base64Bytes = Math.ceil(rawByteCount / 3) * 4;
+>   const overheadBytes = base64Bytes - rawByteCount;
+>   const overheadPct = Number(((overheadBytes / rawByteCount) * 100).toFixed(2));
+>
+>   return {
+>     rawBytes: rawByteCount,
+>     base64Bytes,
+>     overheadBytes,
+>     overheadPct
+>   };
+> }
+>
+> // Verification tests
+> const audit = auditBase64Overhead(3000);
+> console.assert(audit.base64Bytes === 4000, "Test 1 Failed: 3000 raw -> 4000 Base64");
+> console.assert(audit.overheadPct === 33.33, "Test 2 Failed: 33.33% overhead");
 > ```
-> ```text
-> Padding (`=` or `==`) pads the input to a multiple of 4 output characters when the binary byte length is not divisible by 3.
-> ```
-> - **Explanation:** Equals signs pad Base64 character blocks to align with 4-byte boundaries.
+>
+> #### Technical Explanation
+>
+> 1. **Base64 Math Ratio**: Every 3 input bytes (24 bits) map to 4 output Base64 index values (6 bits each).
+> 2. **Network Cost Impact**: Transmitting large files (videos, high-res images) as Base64 wastes significant network bandwidth.
+> 3. **Prefer Multipart/Octet-Stream**: Large file uploads should use raw binary streams (application/octet-stream) instead of Base64 JSON strings.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Basic & Bearer Authentication](../level_04/basic_bearer_auth.md) — Basic Auth literally uses Base64 to combine the username and password into the header.
 - [JWT (JSON Web Tokens)](../level_04/jwt.md) — The Header and Payload of a JSON Web Token are Base64 encoded (which is why anyone can read them!).
 - [FormData & Multipart Uploads](../level_05/formdata.md) — Related concept: FormData & Multipart Uploads.
@@ -144,7 +230,7 @@ GET /api/verify?token=abc-def_123 HTTP/1.1 ; Safe Base64URL encoding
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Base64** converts raw binary files (images, PDFs) into a safe string of text.
 - It allows non-text data to be sent inside JSON payloads.
 - It increases file size by ~33%, so it should only be used for small files.

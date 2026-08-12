@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Industry Standard / Convention**
+
+**Industry Standard / Convention (Software Engineering / NPM)**: Semantic Versioning (SemVer) is a fundamental concept in this technology stack. **Level 4 — Package Management**
 
 ---
 
-## 3. Environment Context
-- **Software Engineering / NPM**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you install the `express` package, version `4.0`. Two months later, the Express team releases version `5.0`. Should you upgrade? 
@@ -41,7 +37,7 @@ If the author releases `4.19.0`, NPM will download it automatically. If the auth
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Ignoring Major version bumps
 
@@ -86,7 +82,7 @@ Increment MAJOR version for breaking API changes: 2.0.0
 Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute locks
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Safe or Dangerous?
 
@@ -151,12 +147,12 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 >
 > **Explanation:** Tilde `~` locks MINOR version; Caret `^` locks MAJOR version.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [package.json](package_json.md) — Where the SemVer ranges (using `^` and `~`) are stored.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Semantic Versioning** uses the format `MAJOR.MINOR.PATCH`.
 - **MAJOR:** Breaking changes. Upgrading requires code rewrites.
 - **MINOR:** New features. Fully backwards-compatible.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture**
+
+**API Architecture (Web Servers)**: Routing is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Web Servers**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a server only had one job (like returning the current time), you wouldn't need routing. Any request to the server would return the time.
@@ -51,7 +47,7 @@ Express provides the `express.Router()` class, which allows you to split your ro
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Route Order (The "Catch-All" Trap)
 
@@ -190,7 +186,7 @@ module.exports = router;
 app.use('/users', userRouter);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Express Router
 
@@ -259,7 +255,7 @@ app.use('/users', userRouter);
 >
 > **Explanation:** `app.route()` avoids duplicate path definitions for multi-method endpoints.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Middleware](middleware.md) — Middleware executes right before the Router triggers your code.
 - [REST API Design](../level_09/rest_api.md) — The strict rules for naming your routes properly.
 - [Express.js](express_js.md) — Related concept: Express.js.
@@ -269,7 +265,7 @@ app.use('/users', userRouter);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Routing** directs incoming requests to the correct block of code.
 - A Route is a unique combination of an **HTTP Method** (GET/POST) and a **Path** (`/users`).
 - Routes are evaluated **Top-to-Bottom**. Always put specific routes above generic/dynamic routes.

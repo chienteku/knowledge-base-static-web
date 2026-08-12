@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Syntax**
+
+**CSS Syntax (Universal Browser Support)**: Selectors (Element, Class, ID) is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you write a CSS file, you are essentially yelling instructions into the void: "Make the background blue! Make the font size 20px!" But the browser needs to know *what* you want to style. 
@@ -82,7 +78,7 @@ h2 {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the dot (`.`) or hash (`#`) in CSS
 
@@ -140,7 +136,7 @@ div > p { color: blue; } /* ❌ Misses <p> nested inside <article>! */
 div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Reading Selectors
 
@@ -204,7 +200,7 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 >
 > **Explanation:** Chaining class selectors without spaces (`.btn.primary`) targets elements possessing all listed classes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Specificity](specificity.md) — What happens when an Element selector and a Class selector both try to style the exact same element?
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The curly braces and properties that come immediately *after* the selector.
 - [Inheritance](inheritance.md) — How properties fall back to parent element style selectors.
@@ -214,7 +210,7 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Selectors define *which* HTML elements your CSS rules apply to.
 - **Element selectors** (e.g., `p`) target all tags of that type.
 - **Class selectors** (e.g., `.btn`) start with a dot and target `class` attributes. This is the most common way to style websites!

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Architecture / Math Concept**
+
+**API Architecture / Math Concept (Universal Standard .)**: Idempotency is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Critical for processing payments safely).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you click "Pay $50" on an e-commerce website. Your browser sends the API request to the server. The server successfully charges your credit card $50. But before the server can send the `200 OK` response back to you, your Wi-Fi drops!
@@ -47,7 +43,7 @@ The Server charges the card and saves `9876xyz` in the database. When the Fronte
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `PUT` for relative updates
 
@@ -95,71 +91,153 @@ DELETE /api/notifications/45 HTTP/1.1 ; Idempotent target deletion
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Idempotent or Not?
+### Exercise 1: Idempotent PUT vs Non-Idempotent POST Request Disambiguator
 
-**Problem:** You are building an API for a smart home. Are the following commands Idempotent or Non-Idempotent?
-1. "Toggle the living room light."
-2. "Set the living room light to ON."
+**Scenario:** An API controller enforces idempotency semantics for resource updates (`PUT`) vs resource creations (`POST`).
 
-**Expected output:**
+**Requirements:**
+1. Write processResourceMethod(method, resourceId, payload, dbStore).
+2. PUT produces identical state regardless of invocation count.
+3. POST creates unique new entity on each call.
+
 > [!check]- Answer
-> ```text
-> 1. Non-Idempotent. (If it was off, 1 call turns it on, 2 calls turns it off. The state changes every time).
-> 2. Idempotent. (No matter how many times you tell it to turn ON, the end result is simply that the light is ON).
+>
+> #### Implementation
+>
+> ```javascript
+> function processResourceMethod(method, resourceId, payload, dbStore = new Map()) {
+>   const m = method.toUpperCase();
+>
+>   if (m === "PUT") {
+>     // Idempotent: replaces entity with exact payload at resourceId
+>     dbStore.set(resourceId, { id: resourceId, ...payload });
+>     return { status: 200, isIdempotent: true, data: dbStore.get(resourceId) };
+>   }
+>
+>   if (m === "POST") {
+>     // Non-idempotent: creates a brand new unique record every time
+>     const newId = `id_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+>     const newRecord = { id: newId, ...payload };
+>     dbStore.set(newId, newRecord);
+>     return { status: 201, isIdempotent: false, data: newRecord };
+>   }
+>
+>   throw new Error(`Unsupported method: ${method}`);
+> }
+>
+> // Verification tests
+> const db = new Map();
+>
+> // Repeated PUTs produce identical state
+> processResourceMethod("PUT", "res-1", { name: "Alice" }, db);
+> processResourceMethod("PUT", "res-1", { name: "Alice" }, db);
+> console.assert(db.get("res-1").name === "Alice" && db.size === 1, "Test 1 Failed: PUT must be idempotent");
+>
+> // Repeated POSTs create multiple records
+> processResourceMethod("POST", null, { name: "Bob" }, db);
+> processResourceMethod("POST", null, { name: "Bob" }, db);
+> console.assert(db.size === 3, "Test 2 Failed: POST creates duplicate records");
 > ```
-> - If you run the command 1 time vs 100 times, is the final state of the house exactly the same?
+>
+> #### Technical Explanation
+>
+> 1. **Idempotency Definition**: An operation is idempotent if executing it 1 time or N times produces identical server state.
+> 2. **Idempotent Verbs**: GET, PUT, DELETE, HEAD, OPTIONS are idempotent by RFC specification.
+> 3. **Non-Idempotent Verbs**: POST and PATCH (when adding elements to lists) are non-idempotent.
 > 
 ---
 
-### Exercise 2: Idempotency Evaluation Matrix
+### Exercise 2: Safe Retry Policy for Idempotent Methods
 
-**Problem:** Evaluate if the operation is Idempotent (Yes/No):
-1. `SET score = 100` 
-2. `SET score = score + 1` 
-3. `DELETE FROM users WHERE id = 5` 
-4. `INSERT INTO logs VALUES ('login')` 
+**Scenario:** An HTTP retry engine automatically retries failed network requests ONLY for idempotent HTTP methods.
 
-**Expected output:**
+**Requirements:**
+1. Write shouldRetryHttpRequest(method, errorStatus).
+2. Return true for GET, PUT, DELETE; false for POST.
+
 > [!check]- Answer
-> ```text
-> 1. Yes
-> 2. No
-> 3. Yes
-> 4. No
+>
+> #### Implementation
+>
+> ```javascript
+> function shouldRetryHttpRequest(method, errorStatus) {
+>   const m = method.toUpperCase();
+>   const idempotentMethods = ["GET", "PUT", "DELETE", "HEAD", "OPTIONS"];
+>
+>   // Retry on transient server errors (5xx) or network disconnect (0)
+>   const isTransient = errorStatus === 0 || (errorStatus >= 500 && errorStatus <= 599);
+>
+>   return isTransient && idempotentMethods.includes(m);
+> }
+>
+> // Verification tests
+> console.assert(shouldRetryHttpRequest("PUT", 503) === true, "Test 1 Failed: PUT is idempotent and retryable");
+> console.assert(shouldRetryHttpRequest("DELETE", 500) === true, "Test 2 Failed: DELETE is idempotent");
+> console.assert(shouldRetryHttpRequest("POST", 503) === false, "Test 3 Failed: POST retry risks duplicate mutations");
 > ```
-> ```text
-> 1. SET score = 100               -> Yes (State is 100 regardless of N runs)
-> 2. SET score = score + 1         -> No  (State increments on every run)
-> 3. DELETE FROM users WHERE id=5  -> Yes (User remains deleted on N runs)
-> 4. INSERT INTO logs              -> No  (Creates duplicate rows on N runs)
-> ```
-> - **Explanation:** Idempotency requires state outcome to be invariant across N executions.
+>
+> #### Technical Explanation
+>
+> 1. **Safe Network Retries**: Retrying idempotent methods (PUT, DELETE) is guaranteed safe against duplicate side-effects.
+> 2. **Non-Idempotent Danger**: Retrying POST requests carries risk of double charges or duplicate database records.
+> 3. **Idempotency Keys Solution**: Non-idempotent POST requests can be made idempotent using Idempotency-Key headers.
+> 
 ---
 
-### Exercise 3: Idempotency in Message Queues
+### Exercise 3: Idempotent State Mutation Guard
 
-**Problem:** Why is idempotency critical in "At-Least-Once" event delivery systems (e.g. Kafka/RabbitMQ)?
+**Scenario:** A state manager ensures data update handlers set state deterministically rather than performing incremental counter increments.
 
-**Expected output:**
+**Requirements:**
+1. Write updateCounterState(currentState, patch, isIdempotent).
+2. If isIdempotent: state = patch.value; else state += patch.value.
+
 > [!check]- Answer
-> ```text
-> At-Least-Once queues may deliver duplicate event messages. Consumers must process events idempotently to avoid duplicate charges or database mutations.
+>
+> #### Implementation
+>
+> ```javascript
+> function updateCounterState(currentVal, patchVal, isIdempotent = true) {
+>   if (isIdempotent) {
+>     // Idempotent: set absolute state value
+>     return patchVal;
+>   }
+>   // Non-idempotent: incremental relative mutation
+>   return currentVal + patchVal;
+> }
+>
+> // Verification tests
+> let state = 10;
+>
+> // Idempotent set: calling 3 times yields 25
+> state = updateCounterState(state, 25, true);
+> state = updateCounterState(state, 25, true);
+> state = updateCounterState(state, 25, true);
+> console.assert(state === 25, "Test 1 Failed");
+>
+> // Non-idempotent increment: calling 3 times yields +15
+> state = 10;
+> state = updateCounterState(state, 5, false);
+> state = updateCounterState(state, 5, false);
+> console.assert(state === 20, "Test 2 Failed");
 > ```
-> ```text
-> At-Least-Once queues may deliver duplicate event messages. Consumers must process events idempotently to avoid duplicate charges or database mutations.
-> ```
-> - **Explanation:** Idempotent consumer design guarantees safety against message redelivery.
+>
+> #### Technical Explanation
+>
+> 1. **Absolute vs Relative Mutations**: Absolute state assignments (= 25) are idempotent; relative increments (+= 5) are non-idempotent.
+> 2. **API Parameter Design**: Prefer sending absolute target state in API payloads to ensure idempotency.
+> 3. **Event Sourcing Idempotency**: Deduplicating event streams by event ID preserves idempotent state replay.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — Where the rules of Idempotency are heavily enforced.
 - [Retry & Exponential Backoff](../level_05/retry_backoff.md) — Related concept: Retry & Exponential Backoff.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Idempotency** means executing a request 1 time has the exact same effect as executing it 100 times.
 - `GET`, `PUT`, and `DELETE` are idempotent by definition.
 - `POST` is NOT idempotent (it creates new things every time).

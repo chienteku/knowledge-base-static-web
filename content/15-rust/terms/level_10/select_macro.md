@@ -412,7 +412,7 @@ Build an event multiplexer loop using `tokio::select!`.
 > 
 ## 6. Related Terms
 
-- [`join!` Macro](join_macro.md) — The opposite of `select!` (waits for *all* futures to finish).
+- [`join!`](join_macro.md) — The opposite of `select!` (waits for *all* futures to finish).
 
 ---
 

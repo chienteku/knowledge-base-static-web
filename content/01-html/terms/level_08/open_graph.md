@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata**
+
+**Metadata (Universal Web Integration .)**: Open Graph Tags (`og:`) is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Web Integration** (Scraped and parsed by messaging applications like Slack, Discord, and iMessage, and social networks like Facebook, LinkedIn, and X).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Have you ever pasted a website URL into Slack, Discord, or a text message, and watched it instantly convert into a beautiful card with a large preview image, a bold headline, and a short summary paragraph? 
@@ -100,7 +96,7 @@ A standard Open Graph metadata package:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using relative paths for `og:image`
 
@@ -159,7 +155,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 <meta property="og:title" content="My Article">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Preview Tag Checklist
 
@@ -215,7 +211,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 >
 > **Explanation:** `twitter:card` configures Twitter summary card presentation layout.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<meta>`](meta.md) — The tag that packages these properties.
 - [`<head>`](../level_01/head.md) — The folder container holding the tags.
 - [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Structural layouts that impact search indexers.
@@ -223,7 +219,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Open Graph tags control how your links look when shared on social media and messaging platforms.
 - They are `<meta>` tags that use the `property` attribute instead of the `name` attribute.
 - The `og:image` preview URL **must** be an absolute link starting with `https://`.

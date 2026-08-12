@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "05-nodejs",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-12",
   "terms": {
     "blocking_event_loop": {
       "level": 1,
@@ -42,8 +42,8 @@
           "description": "Related concept: Memory Leaks & Garbage Collection."
         },
         {
-          "module": "05-nodejs",
           "term": "non_blocking_io",
+          "module": "05-nodejs",
           "description": "Related concept: Non-Blocking I/O."
         }
       ]
@@ -59,8 +59,8 @@
           "description": "JavaScript runs on exactly one call stack."
         },
         {
-          "module": "05-nodejs",
           "term": "v8_engine",
+          "module": "05-nodejs",
           "description": "V8 JavaScript execution engine and call stack."
         }
       ],
@@ -105,8 +105,8 @@
           "description": "The core design constraint behind Node's CPU limits."
         },
         {
-          "module": "05-nodejs",
           "term": "non_blocking_io",
+          "module": "05-nodejs",
           "description": "Related concept: Non-Blocking I/O."
         }
       ]
@@ -174,8 +174,8 @@
           "description": "Related concept: process.nextTick() vs setImmediate()."
         },
         {
-          "module": "05-nodejs",
           "term": "nodejs",
+          "module": "05-nodejs",
           "description": "Related concept: Node.js (Runtime Environment)."
         }
       ]
@@ -202,13 +202,13 @@
           "description": "Related concept: Docker."
         },
         {
-          "module": "05-nodejs",
           "term": "event_loop",
+          "module": "05-nodejs",
           "description": "Node.js Event Loop."
         },
         {
-          "module": "05-nodejs",
           "term": "non_blocking_io",
+          "module": "05-nodejs",
           "description": "Non-blocking I/O model."
         },
         {
@@ -246,18 +246,18 @@
           "description": "Related concept: Single-Threaded Architecture."
         },
         {
-          "module": "05-nodejs",
           "term": "blocking_event_loop",
+          "module": "05-nodejs",
           "description": "Blocking vs non-blocking code."
         },
         {
-          "module": "05-nodejs",
           "term": "cpu_vs_io",
+          "module": "05-nodejs",
           "description": "CPU vs I/O intensive tasks."
         },
         {
-          "module": "05-nodejs",
           "term": "nodejs",
+          "module": "05-nodejs",
           "description": "Related concept: Node.js (Runtime Environment)."
         }
       ]
@@ -399,8 +399,8 @@
           "description": "The global namespace containing built-in primitives."
         },
         {
-          "module": "05-nodejs",
           "term": "process_object",
+          "module": "05-nodejs",
           "description": "Node.js core modules and event emitter architecture."
         }
       ],
@@ -416,8 +416,8 @@
           "description": "Data-flow streams that inherit directly from `EventEmitter`."
         },
         {
-          "module": "05-nodejs",
           "term": "http_module",
+          "module": "05-nodejs",
           "description": "HTTP server events."
         }
       ]
@@ -523,13 +523,13 @@
           "description": "Related concept: Serving Static Files (express.static)."
         },
         {
-          "module": "05-nodejs",
           "term": "req_res",
+          "module": "05-nodejs",
           "description": "Request & Response objects."
         },
         {
-          "module": "05-nodejs",
           "term": "events_module",
+          "module": "05-nodejs",
           "description": "EventEmitter in HTTP server."
         }
       ]
@@ -545,8 +545,8 @@
           "description": "Built-in variables in the Node execution context."
         },
         {
-          "module": "05-nodejs",
           "term": "process_object",
+          "module": "05-nodejs",
           "description": "Node.js OS and utility core modules."
         }
       ],
@@ -736,8 +736,8 @@
           "description": "NPM packages are historically distributed as CommonJS modules."
         },
         {
-          "module": "05-nodejs",
           "term": "module_resolution",
+          "module": "05-nodejs",
           "description": "Node.js module resolution."
         },
         {
@@ -814,8 +814,8 @@
           "description": "Related concept: Built-in vs External Modules."
         },
         {
-          "module": "05-nodejs",
           "term": "commonjs",
+          "module": "05-nodejs",
           "description": "Related concept: CommonJS (require, module.exports)."
         }
       ]
@@ -826,8 +826,8 @@
       "display_name": "Built-in vs External Modules",
       "prerequisites": [
         {
-          "module": "05-nodejs",
           "term": "nodejs",
+          "module": "05-nodejs",
           "description": "Node.js module system architecture."
         }
       ],
@@ -931,8 +931,8 @@
           "description": "Related concept: Built-in vs External Modules."
         },
         {
-          "module": "05-nodejs",
           "term": "package_lock",
+          "module": "05-nodejs",
           "description": "package-lock.json lockfile."
         }
       ]
@@ -1004,8 +1004,8 @@
           "description": "The human-readable blueprint. (The lock file is the machine-readable exact receipt)."
         },
         {
-          "module": "05-nodejs",
           "term": "npm",
+          "module": "05-nodejs",
           "description": "Related concept: NPM (Node Package Manager)."
         }
       ]
@@ -1062,8 +1062,8 @@
           "description": "The mechanisms used to capture errors during await."
         },
         {
-          "module": "05-nodejs",
           "term": "promisification",
+          "module": "05-nodejs",
           "description": "Promisifying callbacks."
         }
       ]
@@ -1125,11 +1125,6 @@
       ],
       "related": [
         {
-          "term": "promises",
-          "module": "04-apis",
-          "description": "The modern solution that completely eliminated Callback Hell."
-        },
-        {
           "term": "promisification",
           "module": "05-nodejs",
           "description": "How you convert old callback code into modern Promise code."
@@ -1150,9 +1145,14 @@
           "description": "Related concept: Async Error Handling (try/catch + .catch)."
         },
         {
-          "module": "05-nodejs",
           "term": "event_emitter",
+          "module": "05-nodejs",
           "description": "Related concept: Event Emitter."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The modern solution that completely eliminated Callback Hell."
         }
       ]
     },
@@ -1189,13 +1189,13 @@
           "description": "Related concept: The events Module."
         },
         {
-          "module": "05-nodejs",
           "term": "callbacks",
+          "module": "05-nodejs",
           "description": "Callbacks vs events."
         },
         {
-          "module": "05-nodejs",
           "term": "unhandled_rejections",
+          "module": "05-nodejs",
           "description": "Error events."
         }
       ]
@@ -1286,8 +1286,8 @@
           "description": "Related concept: The os & util Modules."
         },
         {
-          "module": "05-nodejs",
           "term": "async_await",
+          "module": "05-nodejs",
           "description": "Related concept: async / await in Node."
         }
       ]
@@ -1335,8 +1335,8 @@
           "description": "Related concept: HTTP Status Codes."
         },
         {
-          "module": "05-nodejs",
           "term": "event_emitter",
+          "module": "05-nodejs",
           "description": "Related concept: Event Emitter."
         }
       ]
@@ -1369,8 +1369,8 @@
           "description": "The components that exchange flow-control signals."
         },
         {
-          "module": "05-nodejs",
           "term": "streams",
+          "module": "05-nodejs",
           "description": "Related concept: Streams (General Concept)."
         }
       ]
@@ -1642,8 +1642,8 @@
           "description": "Related concept: Body Parsing (express.json())."
         },
         {
-          "module": "05-nodejs",
           "term": "backpressure",
+          "module": "05-nodejs",
           "description": "Stream backpressure."
         }
       ]
@@ -1730,13 +1730,13 @@
           "description": "Related concept: The http Module Deep Dive."
         },
         {
-          "module": "05-nodejs",
           "term": "req_res",
+          "module": "05-nodejs",
           "description": "Request and Response parameters."
         },
         {
-          "module": "05-nodejs",
           "term": "cors",
+          "module": "05-nodejs",
           "description": "Related concept: CORS."
         }
       ]
@@ -1896,13 +1896,13 @@
           "description": "Related concept: Pagination."
         },
         {
-          "module": "05-nodejs",
           "term": "http_module",
+          "module": "05-nodejs",
           "description": "Related concept: The http Module."
         },
         {
-          "module": "05-nodejs",
           "term": "express_js",
+          "module": "05-nodejs",
           "description": "Related concept: Express.js."
         }
       ]
@@ -2382,8 +2382,8 @@
           "description": "Receives errors bubble-passed by controllers and services."
         },
         {
-          "module": "05-nodejs",
           "term": "rest_api",
+          "module": "05-nodejs",
           "description": "Related concept: REST API Design."
         }
       ]
@@ -2416,8 +2416,8 @@
           "description": "What the browser is trying to protect."
         },
         {
-          "module": "05-nodejs",
           "term": "express_js",
+          "module": "05-nodejs",
           "description": "Express CORS setup."
         }
       ]
@@ -2513,8 +2513,8 @@
           "description": "The database mapping technologies representing Models."
         },
         {
-          "module": "05-nodejs",
           "term": "rest_api",
+          "module": "05-nodejs",
           "description": "Related concept: REST API Design."
         }
       ]
@@ -2610,13 +2610,13 @@
           "description": "Related concept: CORS."
         },
         {
-          "module": "05-nodejs",
           "term": "controllers_services",
+          "module": "05-nodejs",
           "description": "Controllers and Services architecture."
         },
         {
-          "module": "05-nodejs",
           "term": "mvc_pattern",
+          "module": "05-nodejs",
           "description": "MVC pattern."
         }
       ]

@@ -291,7 +291,7 @@ let mut buf = String::new(); while reader.read_line(&mut buf)? > 0 { process(&bu
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`Path` / `PathBuf`](../level_01/path_pathbuf.md) — Related concept: `Path` / `PathBuf`.
 

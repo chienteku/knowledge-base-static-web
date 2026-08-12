@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics** (For `<code>`) / **Structural Tag** (For `<pre>`)
+
+**Inline Text Semantics (For `<code>`) / Structural Tag (For `<pre>`) (Universal Browser Support .)**: `<pre>` & `<code>` is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, web browsers compress multiple spaces and ignore keyboard line breaks (Whitespace Collapse). While this makes formatting code easy, it is a nightmare when you want to display:
@@ -96,7 +92,7 @@ fruits.forEach((fruit) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to escape HTML characters inside code blocks
 
@@ -224,7 +220,7 @@ fruits.forEach((fruit) => {
 <pre><code>const x = 10;</code></pre>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: HTML Entity Escaping
 
@@ -268,13 +264,13 @@ fruits.forEach((fruit) => {
 >
 > **Explanation:** Monospace fonts ensure uniform character width for code readability.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The default browser behavior that `<pre>` overrides.
 - [`<span>` (Inline container)](span.md) — A generic inline container that does not enforce monospacing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<pre>` is a block-level container that preserves all spaces, tabs, and newlines.
 - `<code>` is an inline container used to represent programming code snippets.
 - To display a block of programming code, nest `<code>` inside `<pre>`.

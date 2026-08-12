@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design Pattern**
+
+**Architecture / Design Pattern (Web App Server Layer .)**: Controllers & Services is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Further refines the separation of concerns by separating the HTTP transport layer from business logic).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a basic MVC architecture, controllers handle HTTP requests and execute database queries directly using the Model.
@@ -95,7 +91,7 @@ exports.postRegister = async (req, res, next) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing the Express `req` or `res` objects directly into a service function
 
@@ -241,7 +237,7 @@ await UserService.createUser(req, res); // ❌ Couples service to Express HTTP!
 await UserService.createUser(req.body); // Pass plain JS payload data
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Controller Refactoring
 
@@ -326,14 +322,14 @@ exports.createPost = async (req, res, next) => {
 >
 > **Explanation:** Framework-agnostic service layer functions can be unit-tested with standard input values.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — The parent application layout pattern.
 - [Error Handling Middleware](error_handling_middleware.md) — Receives errors bubble-passed by controllers and services.
 - [REST API Design](rest_api.md) — Related concept: REST API Design.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Controllers manage HTTP transport details; services contain core business logic.
 - Services should be completely decoupled from Express `req` and `res` objects.
 - Decoupling services allows them to be reused in cron jobs, test suites, and scripts.

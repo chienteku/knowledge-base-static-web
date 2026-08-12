@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Legacy Systems / Enterprise Architecture)**: XML is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Legacy Systems / Enterprise Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the late 1990s and 2000s, before JSON existed, computers still needed a standardized way to send text data to one another. 
@@ -55,7 +51,7 @@ Furthermore, parsing XML in JavaScript was a nightmare. Because JSON is literall
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that XML still runs the world
 
@@ -106,69 +102,132 @@ parser.setFeature("http://xml.org/sax/features/external-general-entities", false
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Spot the Inefficiency
+### Exercise 1: XML Document to JSON Converter Parser
 
-**Problem:** Look at the XML below. If you had to convert this to JSON, why would the JSON payload be physically smaller in file size?
-```xml
-<product>
-  <id>99</id>
-  <name>Laptop</name>
-</product>
-```
+**Scenario:** A legacy API integration module converts simple XML response text strings into JavaScript JSON objects.
 
-**Expected output:**
+**Requirements:**
+1. Write simpleXmlToJson(xmlString).
+2. Extract tags and inner text content.
+3. Return object.
+
 > [!check]- Answer
-> ```text
-> Because JSON doesn't use closing tags! 
-> In XML, the word "product" is written twice, "id" is written twice, and "name" is written twice. In JSON, the keys are only written once (`"name": "Laptop"`), which drastically reduces the total number of characters transferred over the network.
+>
+> #### Implementation
+>
+> ```javascript
+> function simpleXmlToJson(xmlString) {
+>   if (!xmlString || typeof xmlString !== "string") return null;
+>
+>   const result = {};
+>   const tagRegex = /<([^>]+)>([^<]*)<\/>/g;
+>   let match;
+>
+>   while ((match = tagRegex.exec(xmlString)) !== null) {
+>     const [, tagName, tagValue] = match;
+>     result[tagName] = tagValue.trim();
+>   }
+>
+>   return result;
+> }
+>
+> // Verification tests
+> const xml = "<user><name>Alice</name><role>Admin</role></user>";
+> const json = simpleXmlToJson(xml);
+>
+> console.assert(json.name === "Alice" && json.role === "Admin", "Test 1 Failed");
 > ```
-> - Count how many times the word "name" appears.
+>
+> #### Technical Explanation
+>
+> 1. **XML (Extensible Markup Language)**: Legacy markup language for structured data exchange, predating JSON.
+> 2. **XML vs JSON Verbosity**: XML requires closing tags (<name>Alice</name>), making payloads significantly larger than JSON.
+> 3. **Legacy API Integration**: SOAP web services and enterprise systems still require XML request/response handling.
 > 
 ---
 
-### Exercise 2: Well-Formed XML Validation Rules
+### Exercise 2: XML External Entity (XXE) Injection Security Filter
 
-**Problem:** Identify 2 syntax errors in the following XML snippet:
-```xml
-<user id="5">
-  <name>Alice</name
-  <email>alice@example.com</Email>
-</user>
-```
+**Scenario:** An API gateway sanitizes incoming XML payloads to block dangerous `<!DOCTYPE` and `<!ENTITY` declarations that trigger XXE attacks.
 
-**Expected output:**
+**Requirements:**
+1. Write sanitizeXmlPayload(xmlString).
+2. Check for <!DOCTYPE and <!ENTITY.
+3. Reject or strip dangerous declarations.
+
 > [!check]- Answer
-> ```text
-> Line 2: Missing closing angle bracket `>` on `</name>` tag
-> Line 3: Mismatched tag case `<email>` vs `</Email>`
+>
+> #### Implementation
+>
+> ```javascript
+> function sanitizeXmlPayload(xmlString) {
+>   if (typeof xmlString !== "string") return { valid: false };
+>
+>   const hasXxe = /<!DOCTYPE|<!ENTITY/i.test(xmlString);
+>   if (hasXxe) {
+>     return {
+>       valid: false,
+>       error: "Security Alert: XXE (XML External Entity) injection detected!"
+>     };
+>   }
+>
+>   return { valid: true, cleanXml: xmlString };
+> }
+>
+> // Verification tests
+> const maliciousXml = '<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><user>&xxe;</user>';
+> console.assert(sanitizeXmlPayload(maliciousXml).valid === false, "Test 1 Failed: Must block XXE payload");
+>
+> const safeXml = "<user><name>Alice</name></user>";
+> console.assert(sanitizeXmlPayload(safeXml).valid === true, "Test 2 Failed");
 > ```
-> ```xml
-> <user id="5">
-> <name>Alice</name>
-> <email>alice@example.com</email>
-> </user>
-> ```
-> - **Explanation:** XML requires matched closing tags and case-sensitive element names.
+>
+> #### Technical Explanation
+>
+> 1. **XXE Attack Vulnerability**: Attacker injects external entity references into XML to read local server files or scan internal networks.
+> 2. **Disabling DTD Processing**: Disabling Document Type Definitions (DTDs) in XML parsers prevents XXE execution.
+> 3. **Legacy Security Defense**: Critical security check when supporting XML endpoints in Node.js or Java backends.
+> 
 ---
 
-### Exercise 3: XPath Query Purpose
+### Exercise 3: REST XML Request Payload Builder
 
-**Problem:** What is the purpose of XPath in XML processing?
+**Scenario:** Constructs a structured XML payload string for sending to legacy SOAP/XML REST endpoints.
 
-**Expected output:**
+**Requirements:**
+1. Write buildXmlPayload(rootTag, dataObj).
+2. Wrap key-values in XML tags.
+
 > [!check]- Answer
-> ```text
-> XPath is a query language used to search and select specific nodes or attributes within an XML document tree.
+>
+> #### Implementation
+>
+> ```javascript
+> function buildXmlPayload(rootTag, dataObj = {}) {
+>   const tags = Object.entries(dataObj)
+>     .map(([k, v]) => `<${k}>${v}</${k}>`)
+>     .join("");
+>
+>   return `<?xml version="1.0" encoding="UTF-8"?><${rootTag}>${tags}</${rootTag}>`;
+> }
+>
+> // Verification tests
+> const xml = buildXmlPayload("request", { id: 101, action: "sync" });
+>
+> console.assert(xml.startsWith('<?xml version="1.0"'), "Test 1 Failed");
+> console.assert(xml.includes("<id>101</id><action>sync</action>"), "Test 2 Failed");
 > ```
-> ```text
-> XPath is a query language used to search and select specific nodes or attributes within an XML document tree.
-> ```
-> - **Explanation:** XPath navigates XML document tree structures.
+>
+> #### Technical Explanation
+>
+> 1. **XML Declaration Header**: <?xml version='1.0' encoding='UTF-8'?> specifies XML spec version and character encoding.
+> 2. **Content-Type: application/xml**: XML API requests require Content-Type: application/xml or text/xml headers.
+> 3. **Strict Syntax Rules**: XML mandates closing tags, quote attributes, and case-sensitive matching.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The lightweight successor to XML.
 - [REST (Representational State Transfer)](../level_03/rest.md) — REST APIs typically use JSON, while SOAP APIs typically use XML.
 - [Deserialization / Parsing](deserialization.md) — Related concept: Deserialization / Parsing.
@@ -176,7 +235,7 @@ parser.setFeature("http://xml.org/sax/features/external-general-entities", false
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **XML** is a data format that uses HTML-like tags (`<data></data>`) to structure information.
 - It was the industry standard for APIs before JSON took over.
 - It is highly verbose (wordy), making files larger and harder to parse in JavaScript.

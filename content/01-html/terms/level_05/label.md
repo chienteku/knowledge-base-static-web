@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Form Element**
+
+**Form Element (Universal Browser Support)**: `<label>` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you put a blank text box on a screen, the user doesn't know what they are supposed to type. They need a text description next to it. 
@@ -63,7 +59,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Matching `for` with `name` instead of `id`
 
@@ -125,7 +121,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 <input type="text" id="usr-id" name="usr">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Implicit Wrapping Method
 
@@ -187,7 +183,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 >
 > **Explanation:** Bound labels enlarge small touch target areas for mobile users.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The element that requires a label.
 - [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Selection toggles that heavily depend on labels for target clicking.
 - [`id` Attribute](../level_07/id.md) — The unique identifier required to link the label to the input.
@@ -199,7 +195,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<label>` tag provides an accessible description for an input field.
 - It MUST be programmatically bound to its input using the `for` attribute.
 - The `for` attribute must perfectly match the `id` of the input (NOT the `name`).

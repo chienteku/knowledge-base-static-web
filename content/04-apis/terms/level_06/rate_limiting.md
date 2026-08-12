@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Infrastructure**
+
+**Security / Infrastructure (Backend Architecture)**: Rate Limiting (429 Too Many Requests) is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Backend Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 APIs are expensive to run. Every time a Client calls your API, it uses your server's CPU and database memory. 
@@ -41,7 +37,7 @@ A good API will also send special HTTP Headers back in the response to tell the 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Ignoring the 429 in Frontend Code
 
@@ -98,54 +94,156 @@ X-RateLimit-Reset: 1700000060
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Billing Model
+### Exercise 1: Token Bucket Rate Limiter Algorithm
 
-**Problem:** You are building a SaaS (Software as a Service) API. You offer a Free Tier and a Pro Tier ($99/month). How do you use Rate Limiting to enforce this business model?
+**Scenario:** An API gateway implements a Token Bucket Rate Limiter that allows burst capacity while enforcing an average request refill rate.
 
-**Expected output:**
+**Requirements:**
+1. Write createTokenBucket(capacity, refillRatePerSec).
+2. Implement consume(tokens).
+3. Refill tokens based on elapsed time.
+
 > [!check]- Answer
-> ```text
-> You assign different Rate Limits based on the API Key! 
-> If the API Key belongs to a Free Tier user, the backend sets their limit to 100 requests per day. If the API Key belongs to a Pro Tier user, the backend sets their limit to 10,000 requests per day. Rate limiting isn't just for security; it's the core engine of API monetization.
+>
+> #### Implementation
+>
+> ```javascript
+> function createTokenBucket(capacity = 5, refillRatePerSec = 1) {
+>   let tokens = capacity;
+>   let lastRefill = Date.now();
+>
+>   return {
+>     consume(tokensRequested = 1) {
+>       const now = Date.now();
+>       const elapsedSeconds = (now - lastRefill) / 1000;
+>       tokens = Math.min(capacity, tokens + elapsedSeconds * refillRatePerSec);
+>       lastRefill = now;
+>
+>       if (tokens >= tokensRequested) {
+>         tokens -= tokensRequested;
+>         return { allowed: true, remainingTokens: Math.floor(tokens) };
+>       }
+>
+>       return { allowed: false, remainingTokens: Math.floor(tokens) };
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const bucket = createTokenBucket(2, 1);
+> console.assert(bucket.consume(1).allowed === true, "Test 1 Failed");
+> console.assert(bucket.consume(1).allowed === true, "Test 2 Failed");
+> console.assert(bucket.consume(1).allowed === false, "Test 3 Failed: Bucket empty!");
 > ```
-> - Rate limiting doesn't have to be a global setting. It can be per-user.
+>
+> #### Technical Explanation
+>
+> 1. **Token Bucket Algorithm**: Allows temporary traffic bursts up to capacity while refilling tokens continuously at fixed rate.
+> 2. **Burst Handling**: Capacity parameter controls maximum burst size allowed in a fraction of a second.
+> 3. **Smooth Refill Rate**: Continuously adds tokens to bucket based on elapsed time delta.
 > 
 ---
 
-### Exercise 2: Token Bucket vs Leaky Bucket Algorithms
+### Exercise 2: Sliding Window Log Rate Limiter Middleware
 
-**Problem:** Compare Token Bucket vs Leaky Bucket rate limiting algorithms.
+**Scenario:** An API security filter logs request timestamps in a sliding window to block client IP addresses exceeding request limits.
 
-**Expected output:**
+**Requirements:**
+1. Write checkSlidingWindowRateLimit(clientIp, windowMs, maxRequests, logStore).
+2. Filter logs older than windowMs.
+3. Check count against maxRequests.
+
 > [!check]- Answer
-> ```text
-> Token Bucket allows short bursty traffic up to bucket capacity; Leaky Bucket forces smooth constant-rate request processing.
+>
+> #### Implementation
+>
+> ```javascript
+> function checkSlidingWindowRateLimit(clientIp, windowMs = 60000, maxRequests = 3, logStore = new Map()) {
+>   const now = Date.now();
+>   const windowStart = now - windowMs;
+>
+>   const timestamps = logStore.get(clientIp) || [];
+>   // Filter out timestamps outside current sliding window
+>   const validTimestamps = timestamps.filter(ts => ts > windowStart);
+>
+>   if (validTimestamps.length >= maxRequests) {
+>     logStore.set(clientIp, validTimestamps);
+>     return {
+>       allowed: false,
+>       status: 429,
+>       currentCount: validTimestamps.length,
+>       retryAfterSeconds: Math.ceil((validTimestamps[0] - windowStart) / 1000)
+>     };
+>   }
+>
+>   validTimestamps.push(now);
+>   logStore.set(clientIp, validTimestamps);
+>
+>   return {
+>     allowed: true,
+>     status: 200,
+>     currentCount: validTimestamps.length
+>   };
+> }
+>
+> // Verification tests
+> const store = new Map();
+> const ip = "192.168.1.1";
+>
+> console.assert(checkSlidingWindowRateLimit(ip, 10000, 2, store).allowed === true, "Test 1 Failed");
+> console.assert(checkSlidingWindowRateLimit(ip, 10000, 2, store).allowed === true, "Test 2 Failed");
+> console.assert(checkSlidingWindowRateLimit(ip, 10000, 2, store).allowed === false, "Test 3 Failed: 3rd request blocked");
 > ```
-> ```text
-> Token Bucket -> Allows bursty traffic up to token bucket capacity.
-> Leaky Bucket -> Smooths out bursts to a strict constant output rate.
-> ```
-> - **Explanation:** Token Bucket handles bursty web traffic; Leaky Bucket smooths data flow.
+>
+> #### Technical Explanation
+>
+> 1. **Sliding Window Accuracy**: Accurate sliding window tracking prevents boundary burst exploits inherent in fixed window limiters.
+> 2. **429 Too Many Requests**: Standard HTTP status code returned when client rate limits are exceeded.
+> 3. **Memory Optimization**: Requires pruning old timestamps to manage memory consumption.
+> 
 ---
 
-### Exercise 3: HTTP 429 Retry Header
+### Exercise 3: HTTP Rate Limit Response Headers Generator
 
-**Problem:** Which response header informs a rate-limited client how many seconds to wait before retrying?
+**Scenario:** An API middleware builds standard RFC 6585 rate limit response headers for client consumption.
 
-**Expected output:**
+**Requirements:**
+1. Write buildRateLimitHeaders(limit, remaining, resetTimeMs).
+2. Return X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset.
+
 > [!check]- Answer
-> ```text
-> Retry-After: 60
+>
+> #### Implementation
+>
+> ```javascript
+> function buildRateLimitHeaders(limit = 100, remaining = 99, resetTimeMs) {
+>   const resetEpochSeconds = Math.ceil(resetTimeMs / 1000);
+>
+>   return {
+>     "X-RateLimit-Limit": String(limit),
+>     "X-RateLimit-Remaining": String(Math.max(0, remaining)),
+>     "X-RateLimit-Reset": String(resetEpochSeconds)
+>   };
+> }
+>
+> // Verification tests
+> const headers = buildRateLimitHeaders(60, 45, Date.now() + 30000);
+> console.assert(headers["X-RateLimit-Limit"] === "60", "Test 1 Failed");
+> console.assert(headers["X-RateLimit-Remaining"] === "45", "Test 2 Failed");
+> console.assert(headers["X-RateLimit-Reset"] !== undefined, "Test 3 Failed");
 > ```
-> ```http
-> Retry-After: 60
-> ```
-> - **Explanation:** `Retry-After` communicates required delay in seconds or HTTP date string.
+>
+> #### Technical Explanation
+>
+> 1. **X-RateLimit Headers**: De-facto standard headers informing client of remaining quota before throttling.
+> 2. **X-RateLimit-Limit**: Maximum number of allowed requests per time window.
+> 3. **X-RateLimit-Remaining**: Number of requests client has remaining in current window.
+> 4. **X-RateLimit-Reset**: Unix epoch timestamp when current rate limit window resets.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP Status Codes](../level_02/status_codes.md) — `429` is the official code for Rate Limiting.
 - [Error Handling (try / catch)](../level_05/error_handling.md) — Where you write the logic to pause your requests.
 - [Bulk / Batch Requests](batch_requests.md) — Related concept: Bulk / Batch Requests.
@@ -157,7 +255,7 @@ X-RateLimit-Reset: 1700000060
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Rate Limiting** protects APIs from crashing due to too much traffic (accidental or malicious).
 - Exceeding the limit results in a **`429 Too Many Requests`** HTTP error.
 - Well-designed APIs use **Headers** to tell you exactly how many requests you have left and when the limit resets.

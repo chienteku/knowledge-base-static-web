@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security (Browser-Specific: Relies entirely on the browser's automatic cookie-handling behavior.)**: CSRF (Cross-Site Request Forgery) is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Relies entirely on the browser's automatic cookie-handling behavior.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Browsers are designed to be convenient. By default, when a browser makes a request to a website, it **automatically attaches all cookies** associated with that domain, regardless of which website initiated the request. 
@@ -82,7 +78,7 @@ app.post('/api/login', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing stateless JWT token APIs are naturally immune to CSRF
 
@@ -135,61 +131,146 @@ res.cookie('session', id, { sameSite: 'strict', httpOnly: true });
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: CSRF Risk Assessor
+### Exercise 1: Double-Submit Cookie CSRF Protection Middleware
 
-**Problem:** Evaluate the vulnerability of the API endpoint setup:
+**Scenario:** A web server middleware implements the Double-Submit Cookie pattern to defend POST requests against Cross-Site Request Forgery.
 
-1. A GET request (`GET /api/profile`) returning profile details, using session cookies with no SameSite config.
-2. A POST request (`POST /api/settings`) updating user settings, using session cookies with no SameSite config.
-3. A POST request (`POST /api/settings`) where the client reads a custom header `X-CSRF-Token` from the page DOM and attaches it.
-4. An API using JWT tokens stored strictly in browser `localStorage`.
+**Requirements:**
+1. Write validateCsrfToken(cookieToken, headerToken).
+2. Compare cookieToken and headerToken.
+3. If missing or unequal, return 403 Forbidden.
 
 > [!check]- Answer
-> - 1. **Low Risk** (GET is read-only. While the request runs, SOP prevents the hacker from reading the returned profile data).
-> - 2. **High Risk** (State-mutating POST request. Browser attaches the cookie automatically, executing the settings change).
-> - 3. **No Risk** (The hacker's cross-site script cannot read the token from your DOM, so the server rejects the request).
-> - 4. **No Risk** (The browser does not attach localStorage contents automatically; they must be attached manually by the app code).
+>
+> #### Implementation
+>
+> ```javascript
+> function validateCsrfToken(cookieToken, headerToken) {
+>   if (!cookieToken || typeof cookieToken !== "string") {
+>     return { valid: false, status: 403, error: "Missing CSRF Cookie" };
+>   }
+>   if (!headerToken || typeof headerToken !== "string") {
+>     return { valid: false, status: 403, error: "Missing X-CSRF-Token Header" };
+>   }
+>
+>   if (cookieToken !== headerToken) {
+>     return { valid: false, status: 403, error: "CSRF Token Mismatch" };
+>   }
+>
+>   return { valid: true, status: 200 };
+> }
+>
+> // Verification tests
+> console.assert(validateCsrfToken("token123", "token123").valid === true, "Test 1 Failed");
+> console.assert(validateCsrfToken("token123", "wrongtoken").valid === false, "Test 2 Failed");
+> console.assert(validateCsrfToken(null, "token123").valid === false, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **CSRF Vulnerability Mechanism**: Attackers trick victim's browser into submitting unauthorized requests to a site where victim is authenticated.
+> 2. **Double-Submit Cookie Pattern**: Server sets CSRF token in cookie and requires client JS to read it and send identical token in HTTP header.
+> 3. **Same-Origin Defense**: Cross-origin attacker sites cannot read the victim's cookie to supply the matching header value.
 > 
+---
+
+### Exercise 2: SameSite Cookie Attribute Security Auditor
+
+**Scenario:** An API security linter inspects Set-Cookie headers and verifies SameSite attribute configurations (`Strict` vs `Lax` vs `None`).
+
+**Requirements:**
+1. Write auditSameSiteCookie(setCookieHeader).
+2. Verify SameSite attribute presence.
+3. Require Secure attribute if SameSite=None.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditSameSiteCookie(setCookieHeader) {
+>   if (!setCookieHeader || typeof setCookieHeader !== "string") {
+>     return { valid: false, error: "Missing Set-Cookie header" };
+>   }
+>
+>   const parts = setCookieHeader.split(";").map(p => p.trim());
+>   let sameSiteVal = null;
+>   let hasSecure = false;
+>
+>   for (const part of parts) {
+>     const [k, v] = part.split("=");
+>     if (k.toLowerCase() === "samesite") sameSiteVal = v ? v.toLowerCase() : "lax";
+>     if (k.toLowerCase() === "secure") hasSecure = true;
+>   }
+>
+>   if (!sameSiteVal) {
+>     return { valid: false, warning: "Missing SameSite attribute (defaults to Lax in modern browsers)" };
+>   }
+>
+>   if (sameSiteVal === "none" && !hasSecure) {
+>     return { valid: false, error: "SameSite=None requires Secure attribute!" };
+>   }
+>
+>   return { valid: true, sameSite: sameSiteVal };
+> }
+>
+> // Verification tests
+> console.assert(auditSameSiteCookie("sessionId=123; SameSite=Strict").valid === true, "Test 1 Failed");
+> console.assert(auditSameSiteCookie("sessionId=123; SameSite=None").valid === false, "Test 2 Failed: None requires Secure");
+> console.assert(auditSameSiteCookie("sessionId=123; SameSite=None; Secure").valid === true, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SameSite=Strict**: Cookies are NEVER sent in cross-site requests (highest security, best for banking APIs).
+> 2. **SameSite=Lax**: Cookies are sent on top-level GET navigations (default setting in modern browsers).
+> 3. **SameSite=None; Secure**: Allows cross-site cookies, but MANDATES HTTPS encryption.
 > 
 ---
 
-### Exercise 2: SameSite Cookie Attribute Defense
+### Exercise 3: Synchronizer Token Pattern (STP) Session Manager
 
-**Problem:** Compare `SameSite=Strict`, `SameSite=Lax`, and `SameSite=None` cookie settings for CSRF mitigation.
+**Scenario:** A session store generates and validates unique cryptographic anti-CSRF tokens tied to the server session ID.
 
-**Expected output:**
+**Requirements:**
+1. Write generateSessionCsrfToken(sessionId, sessionStore).
+2. Store CSRF token in session.
+3. Validate on request.
+
 > [!check]- Answer
-> ```text
-> Strict: Cookie never sent in cross-site requests.
-> Lax: Cookie sent on top-level GET navigation only (default).
-> None: Cookie sent on all cross-site requests (requires Secure).
+>
+> #### Implementation
+>
+> ```javascript
+> function generateSessionCsrfToken(sessionId, sessionStore = new Map()) {
+>   if (!sessionId || !sessionStore.has(sessionId)) return null;
+>
+>   const csrfToken = `csrf_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+>   const session = sessionStore.get(sessionId);
+>   session.csrfToken = csrfToken;
+>   sessionStore.set(sessionId, session);
+>
+>   return csrfToken;
+> }
+>
+> // Verification tests
+> const sessions = new Map([["sess_101", { userId: "usr-1" }]]);
+> const token = generateSessionCsrfToken("sess_101", sessions);
+>
+> console.assert(token.startsWith("csrf_"), "Test 1 Failed");
+> console.assert(sessions.get("sess_101").csrfToken === token, "Test 2 Failed");
 > ```
-> ```text
-> Strict -> Blocks all cross-site cookie transmission.
-> Lax -> Permits cookies on top-level GET links only.
-> None -> Disables CSRF cookie protection (requires Secure).
-> ```
-> - **Explanation:** `SameSite=Strict` or `Lax` blocks automatic cross-site form cookie attachments.
+>
+> #### Technical Explanation
+>
+> 1. **Synchronizer Token Pattern**: Stateful CSRF defense: server generates random token per session and verifies token on POST/PUT requests.
+> 2. **Cryptographic Randomness**: CSRF tokens must be unpredictable random strings to prevent attacker brute-forcing.
+> 3. **Form Embedding**: Token is rendered into hidden form fields or injected into AJAX request headers.
 ---
 
-### Exercise 3: Custom Header CSRF Mitigation
-
-**Problem:** Why does sending custom headers (e.g. `X-Requested-With` or `Authorization: Bearer`) prevent HTML form CSRF attacks?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Standard HTML forms cannot set custom headers. Adding custom headers forces browsers to issue a CORS preflight OPTIONS request, which is blocked if cross-site origins are disallowed.
-> ```
-> ```text
-> Standard HTML forms cannot set custom headers. Adding custom headers forces browsers to issue a CORS preflight OPTIONS request, which is blocked if cross-site origins are disallowed.
-> ```
-> - **Explanation:** Custom headers trigger CORS preflights, thwarting simple form CSRF exploits.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [XSS (Cross-Site Scripting)](xss.md) — The script injection attack that can steal credentials directly.
 - [Cookies](../level_09/cookies.md) — The browser storage mechanism targeted by CSRF.
 - [Same-Origin Policy](same_origin_policy.md) — Related concept: Same-Origin Policy.
@@ -197,7 +278,7 @@ res.cookie('session', id, { sameSite: 'strict', httpOnly: true });
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSRF forces a user's browser to send authenticated requests to a target website using cached cookies.
 - SOP does not prevent CSRF because it blocks reading responses, not sending requests.
 - Configure `SameSite=Lax` or `Strict` on cookies to prevent browsers from sending them on cross-site POST requests.

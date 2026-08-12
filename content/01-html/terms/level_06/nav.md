@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag / Landmark**
+
+**Semantic Tag / Landmark (Universal Browser Support)**: `<nav>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Navigation menus are the steering wheel of a website. Before HTML5, screen readers had a very difficult time finding the navigation menu because it was just a `<div id="menu">` buried among dozens of other `<div>`s. 
@@ -63,7 +59,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Wrapping *every* link in a `<nav>`
 
@@ -129,7 +125,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 <nav aria-label="Footer Navigation">...</nav>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Multiple Nav Scenario
 
@@ -183,7 +179,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 >
 > **Explanation:** `<nav>` acts as the `navigation` accessibility landmark.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<header>`](header.md) — The parent container that usually holds the primary `<nav>`.
 - [`<ul>`, `<ol>`, and `<li>` (Lists)](../level_02/lists.md) — The element almost always used *inside* a `<nav>` to structure the links.
 - [`<aside>`](aside.md) — The tangential layout block.
@@ -191,7 +187,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<nav>` element defines a major block of navigation links.
 - It is a crucial "landmark" for screen readers, allowing users to skip or jump to the menu.
 - Do NOT use it for minor, single links (like footer links or "read more" buttons).

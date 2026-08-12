@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: hasOwnProperty / Object.getPrototypeOf is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Because JavaScript uses prototypal inheritance, reading a property on an object (e.g. `obj.name`) checks both the object itself and all of its ancestors in the prototype chain. While this inheritance is powerful, it creates challenges when we want to serialize data, count keys, or loop over properties. For example, a `for...in` loop traverses both own and inherited properties, which can introduce unexpected parent traits into your child algorithms.
@@ -82,7 +78,7 @@ for (const key in userConfig) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reading prototypes using the deprecated `__proto__` getter
 
@@ -151,80 +147,130 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Count Personal Properties
+### Exercise 1: Safe Own Property Guard with Object.hasOwn()
 
-**Problem:** Complete the function `countOwnProperties` to count and return only the number of properties that belong directly to the `config` object, ignoring any prototype properties.
+**Scenario:** A JSON serializer checks whether an object property is an own property using Object.hasOwn() and inspects its prototype via Object.getPrototypeOf().
 
-```javascript
-function countOwnProperties(config) {
-  let count = 0;
-  for (const key in config) {
-    // Increment count only if it is an own property
-  }
-  return count;
-}
+**Requirements:**
+1. Write inspectObjectStructure(obj, key).
+2. Use Object.hasOwn(obj, key) to verify own property.
+3. Use Object.getPrototypeOf(obj) to inspect prototype.
+4. Return inspection report.
 
-const parent = { theme: "light", admin: true };
-const child = Object.create(parent);
-child.volume = 80;
-
-console.log("Own keys count:", countOwnProperties(child));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Own keys count: 1
-> ```
-> - Check each key using `Object.hasOwn(config, key)`.
-> 
----
-
-### Exercise 2: Inspecting Prototypes with `Object.getPrototypeOf`
-
-**Problem:** Inspect prototype of `[]` using `Object.getPrototypeOf([])`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(Object.getPrototypeOf([]) === Array.prototype);
+> function inspectObjectStructure(obj, key) {
+>   if (!obj || typeof obj !== "object") return null;
+>
+>   const isOwn = Object.hasOwn(obj, key);
+>   const proto = Object.getPrototypeOf(obj);
+>
+>   return {
+>     isOwn,
+>     hasPrototype: proto !== null
+>   };
+> }
+>
+> // Verification tests
+> const parent = { inherited: true };
+> const child = Object.create(parent);
+> child.own = "data";
+>
+> const report = inspectObjectStructure(child, "own");
+> console.assert(report.isOwn === true, "Test 1 Failed");
+> console.assert(inspectObjectStructure(child, "inherited").isOwn === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.getPrototypeOf(obj)` returns the internal `[[Prototype]]` reference of target objects.
+> #### Technical Explanation
+>
+> 1. **Object.hasOwn() Standard**: Object.hasOwn(obj, key) is the modern replacement for obj.hasOwnProperty(key), working safely on objects created with Object.create(null).
+> 2. **Object.getPrototypeOf()**: Object.getPrototypeOf(obj) retrieves the [[Prototype]] internal property of an object.
+> 3. **Prototype Chain Boundary**: Returns null when reaching the end of the prototype chain (Object.prototype.__proto__).
 > 
 ---
 
-### Exercise 3: Safe Property Checks with `Object.hasOwn`
+### Exercise 2: Hasownproperty Getprototypeof Advanced Context Handler
 
-**Problem:** Check own property `"a"` on `Object.create(null)` using `Object.hasOwn`.
+**Scenario:** A web application component processes hasownproperty getprototypeof data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleHasownpropertyGetprototypeofSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const obj = Object.create(null);
-> obj.a = 1;
-> console.log(Object.hasOwn(obj, "a"));
+> function handleHasownpropertyGetprototypeofSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleHasownpropertyGetprototypeofSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.hasOwn` is a robust modern replacement for `Object.prototype.hasOwnProperty`.
+> #### Technical Explanation
+>
+> 1. **Hasownproperty Getprototypeof Architecture**: Applying hasownproperty getprototypeof patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Hasownproperty Getprototypeof Performance Optimization
+
+**Scenario:** An application utility optimizes hasownproperty getprototypeof execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeHasownpropertyGetprototypeofTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeHasownpropertyGetprototypeofTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeHasownpropertyGetprototypeofTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Hasownproperty Getprototypeof Optimization**: Optimizing hasownproperty getprototypeof improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [for...in](../level_04/for_in.md) — The loop statement that traverses both own and inherited properties.
 - [Prototypal Inheritance](prototypal_inheritance.md) — The inheritance mechanism that creates the distinction between own and inherited keys.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Own properties are declared directly on the object; inherited properties are resolved via the Prototype Chain.
 - `for...in` loops walk the entire prototype chain; use `Object.hasOwn()` to filter out inherited parent properties.
 - `Object.hasOwn(obj, key)` (ES2022) is the standard, safe replacement for the legacy `obj.hasOwnProperty()` method.

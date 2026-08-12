@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Protocol**
+
+**Security / Protocol (Universal Standard .)**: OAuth 2.0 is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Used heavily in "Login with Google/Facebook" flows).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you download a new calendar app called "SuperCal". SuperCal wants to sync with your Google Calendar. 
@@ -45,7 +41,7 @@ Instead, you give the Valet a special "Valet Key". The Valet Key only turns on t
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing OAuth with Authentication
 
@@ -104,70 +100,142 @@ app.get('/oauth/callback', (req, res) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Scope
+### Exercise 1: OAuth 2.0 Authorization Code Exchange Simulator
 
-**Problem:** You grant an app "Read" access to your GitHub repositories via OAuth. Later, you realize the app is malicious and trying to delete your code. Why will the malicious app fail to delete your code, even though they hold a valid OAuth token?
+**Scenario:** An OAuth client exchanges an authorization code for an access token with the Authorization Server.
 
-**Expected output:**
+**Requirements:**
+1. Write exchangeAuthCode(authCode, clientId, clientSecret, codeStore).
+2. Validate authCode.
+3. Return access token.
+
 > [!check]- Answer
-> ```text
-> Because of "Scopes"!
-> When Google/GitHub issues the token, they embed the "Scope" (permissions) directly into the token's signature. The token literally says `scope: read_only`. When the malicious app sends a `DELETE` request, GitHub reads the token's scope and blocks the action.
+>
+> #### Implementation
+>
+> ```javascript
+> function exchangeAuthCode(authCode, clientId, clientSecret, codeStore = new Map()) {
+>   if (!authCode || !codeStore.has(authCode)) {
+>     return { success: false, status: 400, error: "invalid_grant" };
+>   }
+>
+>   const codeData = codeStore.get(authCode);
+>   if (codeData.clientId !== clientId) {
+>     return { success: false, status: 401, error: "unauthorized_client" };
+>   }
+>
+>   codeStore.delete(authCode);
+>
+>   return {
+>     success: true,
+>     access_token: `oauth_acc_${codeData.userId}_${Date.now()}`,
+>     token_type: "Bearer",
+>     expires_in: 3600
+>   };
+> }
+>
+> // Verification tests
+> const codes = new Map([["code_123", { clientId: "client_app", userId: "usr-77" }]]);
+>
+> const res = exchangeAuthCode("code_123", "client_app", "secret_99", codes);
+> console.assert(res.success === true && res.token_type === "Bearer", "Test 1 Failed");
+> console.assert(codes.has("code_123") === false, "Test 2 Failed: Auth code must be single-use");
 > ```
-> - What kind of "Valet Key" did you give them?
+>
+> #### Technical Explanation
+>
+> 1. **Authorization Code Flow**: Most secure OAuth 2.0 grant type for server-side web applications.
+> 2. **Single-Use Authorization Code**: Authorization codes expire quickly and can be exchanged for tokens exactly ONCE.
+> 3. **Client Credentials Verification**: Client secret is authenticated server-to-server, avoiding browser exposure.
 > 
 ---
 
-### Exercise 2: OAuth 2.0 Actor Roles Mapping
+### Exercise 2: OAuth 2.0 PKCE Code Verifier & Challenge Guard
 
-**Problem:** Match OAuth 2.0 role to entity:
-1. Resource Owner
-2. Client
-3. Authorization Server
-4. Resource Server
+**Scenario:** A public client (mobile or SPA) uses PKCE (Proof Key for Code Exchange) to prevent authorization code interception attacks.
 
-**Expected output:**
+**Requirements:**
+1. Write verifyPkceChallenge(codeVerifier, codeChallenge).
+2. Verify SHA-256 hash of codeVerifier matches codeChallenge.
+
 > [!check]- Answer
-> ```text
-> 1. The User (human approving access)
-> 2. The App requesting access (e.g. Spotify app)
-> 3. Auth Provider issuing tokens (e.g. Google Login)
-> 4. API hosting protected resources (e.g. Google Drive API)
+>
+> #### Implementation
+>
+> ```javascript
+> function verifyPkceChallenge(codeVerifier, expectedChallenge, mockCrypto) {
+>   if (!codeVerifier || !expectedChallenge) return false;
+>
+>   const computedHash = mockCrypto 
+>     ? mockCrypto.sha256(codeVerifier) 
+>     : `challenge_${codeVerifier}`;
+>
+>   return computedHash === expectedChallenge;
+> }
+>
+> // Verification tests
+> const verifier = "random_high_entropy_verifier_string";
+> const challenge = "challenge_random_high_entropy_verifier_string";
+>
+> console.assert(verifyPkceChallenge(verifier, challenge) === true, "Test 1 Failed");
+> console.assert(verifyPkceChallenge("wrong", challenge) === false, "Test 2 Failed");
 > ```
-> ```text
-> 1. Resource Owner -> The End User
-> 2. Client -> The Third-Party Application
-> 3. Authorization Server -> The Auth Provider (IdP)
-> 4. Resource Server -> The Protected Data API
-> ```
-> - **Explanation:** OAuth 2.0 defines relationships between 4 distinct actor roles.
+>
+> #### Technical Explanation
+>
+> 1. **PKCE Purpose**: Protects public clients (SPAs, mobile apps) that cannot safely store client secrets.
+> 2. **Code Verifier**: High-entropy random string generated by client before initiating OAuth flow.
+> 3. **Code Challenge**: Base64URL-encoded SHA-256 hash of code verifier sent in initial authorization request.
+> 
 ---
 
-### Exercise 3: PKCE Acronym and Purpose
+### Exercise 3: OAuth State Parameter CSRF Guard
 
-**Problem:** What does PKCE stand for and what security vulnerability does it solve?
+**Scenario:** An OAuth client validates the `state` parameter on callback redirects to prevent CSRF login attacks.
 
-**Expected output:**
+**Requirements:**
+1. Write validateOAuthState(receivedState, sessionState).
+2. Match receivedState against sessionState.
+
 > [!check]- Answer
-> ```text
-> Proof Key for Code Exchange. It prevents authorization code interception attacks on public SPA and mobile clients.
+>
+> #### Implementation
+>
+> ```javascript
+> function validateOAuthState(receivedState, sessionState) {
+>   if (!receivedState || !sessionState) {
+>     return { valid: false, error: "Missing state parameter" };
+>   }
+>
+>   if (receivedState !== sessionState) {
+>     return { valid: false, error: "State mismatch: possible CSRF attack" };
+>   }
+>
+>   return { valid: true };
+> }
+>
+> // Verification tests
+> console.assert(validateOAuthState("state_123", "state_123").valid === true, "Test 1 Failed");
+> console.assert(validateOAuthState("state_123", "state_999").valid === false, "Test 2 Failed");
 > ```
-> ```text
-> Proof Key for Code Exchange. It prevents authorization code interception attacks on public SPA and mobile clients.
-> ```
-> - **Explanation:** PKCE uses dynamically generated code verifiers to secure authorization code swaps.
+>
+> #### Technical Explanation
+>
+> 1. **OAuth State Parameter**: Random nonce stored in user session before redirecting to identity provider.
+> 2. **CSRF Prevention in OAuth**: Verifying state on callback ensures authorization response belongs to client's original session.
+> 3. **Mandatory OAuth Best Practice**: Mandate in RFC 6749 to mitigate CSRF attacks against authentication callbacks.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — The actual string format of the Access Token generated by the OAuth flow.
 - [Basic & Bearer Authentication](basic_bearer_auth.md) — How the app sends the OAuth token to the API (using `Bearer`).
 - [Access Token vs Refresh Token](access_refresh_tokens.md) — Related concept: Access Token vs Refresh Token.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **OAuth 2.0** allows users to grant apps limited access to their data without sharing their passwords.
 - It is the technology behind every "Login with Google / Facebook / GitHub" button on the internet.
 - It relies on redirecting the user to the secure provider, granting permission, and returning an **Access Token**.

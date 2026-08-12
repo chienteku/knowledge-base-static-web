@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Handling**
+
+**Data Handling (Node.js Core Architecture .)**: Duplex & Transform Streams is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Native stream classes implemented within Node's built-in `stream` core module).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Readable streams are read-only (like reading a file) and Writable streams are write-only (like saving to a file). 
@@ -83,7 +79,7 @@ readStream
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting a basic Duplex stream to automatically modify data
 
@@ -138,7 +134,7 @@ const transform = new Transform({
 Use Transform stream when input data mutates into output data (e.g. gzip compression)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Transform Stream
 
@@ -211,13 +207,13 @@ process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
 >
 > **Explanation:** Compression and encryption modules rely on Transform streams to process data in transit.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Piping (.pipe())](piping.md) — The method used to link readable, transform, and writable streams together.
 - [Readable & Writable Streams](readable_writable.md) — The base classes for unidirectional data streams.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Duplex streams combine independent reading and writing channels into one class (e.g. TCP sockets).
 - Transform streams are Duplex streams that modify data on the fly (e.g. Gzip compression, cryptography).
 - Duplex streams have separate read/write paths; writing to them does not populate their read buffer.

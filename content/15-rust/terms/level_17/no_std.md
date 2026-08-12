@@ -10,7 +10,7 @@
 
 - [`core` Library](core_library.md) — The fundamental dependency-free library available in `#![no_std]`.
 - [`alloc` Library](alloc_library.md) — Optional heap allocation library for `#![no_std]`.
-- [Panic Handling (`panic!`)](../level_04/panic_handling.md) — Custom panic handlers required in `#![no_std]`.
+- [Panic and `panic!` Macro](../level_04/panic_handling.md) — Custom panic handlers required in `#![no_std]`.
 
 ---
 

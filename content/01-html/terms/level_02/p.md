@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<p>` (Paragraph) is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you've defined the structural outline of your page using headings, you need a way to present the actual readable content. In HTML, browsers ignore standard line breaks (pressing "Enter" on your keyboard). If you write 100 lines of text in your code without any tags, the browser will smash them all together into one massive, unreadable block.
@@ -59,7 +55,7 @@ The `<p>` tag is the equivalent of the author hitting the "Return/Enter" key to 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on raw text without a tag
 
@@ -238,7 +234,7 @@ The `<p>` tag is the equivalent of the author hitting the "Return/Enter" key to 
 <p>Section 2</p>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: White Space Collapse
 
@@ -285,7 +281,7 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 >
 > **Explanation:** User-agent stylesheets apply `1em` top and bottom block margins to paragraphs.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Headings (`<h1>` to `<h6>`)](headings.md) — The titles that usually precede a `<p>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing paragraphs.
 - [`<br>` & `<hr>`](br_hr.md) — Ways to break lines without starting a completely new paragraph block.
@@ -293,7 +289,7 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<p>` element is the standard way to group sentences into a block of text.
 - Browsers automatically add vertical space (margin) above and below paragraphs.
 - HTML ignores multiple spaces and keyboard "Enter" presses; you must use tags to structure text.

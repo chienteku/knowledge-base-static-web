@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (HTML5 Standard)**: Semantic HTML is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **HTML5 Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early 2000s, websites were built almost entirely out of `<div>` and `<span>` tags. A typical webpage would look like this: `<div class="header">`, `<div class="menu">`, `<div class="post">`, `<div class="footer">`.
@@ -50,7 +46,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Choosing tags based on visual appearance
 
@@ -110,7 +106,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 <button type="button" class="btn" onclick="save()">Save</button>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Replacing Divs
 
@@ -166,7 +162,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 >
 > **Explanation:** Eliminate redundant wrapper divs by using native semantic containers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<main>`](main.md) — The most important semantic tag, denoting the primary content.
 - [`<article>` and `<section>`](article_section.md) — Semantic tags used to break up large blocks of text.
 - [`<aside>`](aside.md) — Non-essential sidebar or sidebar callout container.
@@ -185,7 +181,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Semantic HTML means using tags that convey the *meaning* of the content, not the visual style.
 - It is the foundation of Search Engine Optimization (SEO). Google prioritizes sites it can understand.
 - It is the foundation of Web Accessibility (a11y). Screen readers rely on semantic tags to navigate.

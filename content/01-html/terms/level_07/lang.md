@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support .)**: `lang` Attribute is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Read by all browser translation overlays, search engines, and screen-reader synthesizers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The World Wide Web is global, and websites are written in hundreds of different languages. 
@@ -100,7 +96,7 @@ Root declaration on the HTML tag:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving off the `lang` attribute entirely
 
@@ -150,7 +146,7 @@ Root declaration on the HTML tag:
 <html lang="en"> <!-- Standard BCP 47 language code -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Multilingual markup
 
@@ -203,13 +199,13 @@ Root declaration on the HTML tag:
 >
 > **Explanation:** `:lang()` pseudo-class matches elements based on declared document language.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<html>`](../level_01/html_tag.md) — The parent container where `lang` is declared.
 - [`<meta>`](../level_08/meta.md) — Metadata tags used for other page settings.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `lang` attribute defines the primary language of the text.
 - It should **always** be declared on the root `<html>` tag (e.g. `<html lang="en">`).
 - Use standardized ISO two-letter language codes.

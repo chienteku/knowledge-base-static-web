@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Third-Party Framework Concept (Express.js)**
+
+**Third-Party Framework Concept (Express.js) (Web App Server Layer .)**: Body Parsing (express.json()) is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Extracts and formats network payloads during request routing).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a client sends data to a server (e.g. submitting a form or sending a JSON payload via `fetch`), the payload is sent inside the HTTP request body. 
@@ -97,7 +93,7 @@ app.post('/api/users', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Registering routes before the body parsing middleware
 
@@ -239,7 +235,7 @@ app.use(express.json()); // Accepts default payload limits
 app.use(express.json({ limit: '10kb' })); // Restrict JSON body payload size
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Debugging Undefined Payloads
 
@@ -307,7 +303,7 @@ app.post('/submit', (req, res) => {
 >
 > **Explanation:** `multer` processes multipart form requests containing file attachments.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The req & res Objects](req_res.md) — The HTTP request and response structures.
 - [Middleware](middleware.md) — The pipeline routing pattern.
 - [Streams (General Concept)](../level_06/streams.md) — The underlying network stream technology.
@@ -315,7 +311,7 @@ app.post('/submit', (req, res) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The request body (`req.body`) is `undefined` by default in Express.
 - Node receives HTTP request payloads as an active stream of raw binary buffers.
 - `express.json()` is middleware that intercepts, buffers, and parses incoming JSON streams.

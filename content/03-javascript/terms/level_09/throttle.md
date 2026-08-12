@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Design Pattern / Optimization**
+
+**Design Pattern / Optimization (Universal)**: Throttle is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Especially critical in Browser UI development)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If [Debounce](./debounce.md) waits for the user to *stop* doing something, what happens if they never stop?
@@ -87,7 +83,7 @@ Result: It fired exactly 5 times, instead of 1000! Massive performance save!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Throttle Scope and Variable Hoisting
 
@@ -160,75 +156,198 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The FPS limit
+### Exercise 1: High-Frequency Window Scroll Event Throttler
 
-**Problem:** Most computer monitors refresh at 60 Frames Per Second (FPS). That is roughly 1 frame every 16 milliseconds. If you are building a tool that tracks the user's mouse cursor to draw a trail behind it, what is a logical limit to set your `throttle(drawTrail, limit)` to?
+**Scenario:** A web page scroll progress indicator uses `throttle(fn, limitMs)` to limit scroll listener execution to once every 100 milliseconds.
 
-**Expected output:**
+**Requirements:**
+1. Write throttle(fn, limitMs).
+2. Track lastExecTime timestamp.
+3. Execute fn immediately if limitMs elapsed; else schedule or skip.
+
 > [!check]- Answer
-> ```text
-> `16` milliseconds!
-> If you allow it to fire faster than 16ms, you are doing math that the monitor cannot physically display fast enough. It's wasted CPU power. Throttling to 16ms guarantees buttery smooth 60 FPS without wasting resources.
-> ```
-> - `1000ms / 60 frames = 16.6ms`
-> 
----
-
-### Exercise 2: Implementing Basic Throttle Helper
-
-**Problem:** Implement `throttle(fn, limit)` preventing execution more than once per `limit` milliseconds.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Throttled call executed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function throttle(fn, limit) {
->   let inThrottle = false;
+> function throttle(fn, limitMs) {
+>   let lastExecTime = 0;
+>   let timerId = null;
+>
 >   return function(...args) {
->     if (!inThrottle) {
->       fn.apply(this, args);
->       inThrottle = true;
->       setTimeout(() => inThrottle = false, limit);
+>     const context = this;
+>     const now = Date.now();
+>
+>     if (now - lastExecTime >= limitMs) {
+>       if (timerId !== null) {
+>         clearTimeout(timerId);
+>         timerId = null;
+>       }
+>       fn.apply(context, args);
+>       lastExecTime = now;
+>     } else if (timerId === null) {
+>       const remaining = limitMs - (now - lastExecTime);
+>       timerId = setTimeout(() => {
+>         fn.apply(context, args);
+>         lastExecTime = Date.now();
+>         timerId = null;
+>       }, remaining);
 >     }
 >   };
 > }
-> const throttled = throttle(() => console.log("Throttled call executed"), 100);
-> throttled(); throttled();
+>
+> // Verification tests
+> let execCount = 0;
+> const throttledScroll = throttle(() => { execCount++; }, 100);
+>
+> throttledScroll(); // Executes immediately (leading edge)
+> throttledScroll(); // Suppressed
+> throttledScroll(); // Suppressed
+>
+> console.assert(execCount === 1, "Test 1 Failed: Throttled function should run leading execution");
 > ```
 >
-> **Explanation:** Throttling enforces a maximum execution frequency rate limit for high-frequency events.
+> #### Technical Explanation
+>
+> 1. **Throttle Mechanics**: Enforces a maximum execution rate, ensuring target function runs at most once per specified time interval.
+> 2. **Throttle vs Debounce**: Throttle guarantees execution at regular periodic intervals during continuous calls; Debounce waits until calls stop.
+> 3. **FPS Performance Protection**: Prevents main thread UI layout thrashing during continuous high-frequency events (scroll, resize, mousemove).
 > 
 ---
 
-### Exercise 3: Scroll Event Throttling
+### Exercise 2: Mouse Pointer Coordinate Tracker with Trailing Edge Throttle
 
-**Problem:** Explain why throttling is suited for window scroll positioning updates.
+**Scenario:** An analytics tracker throttles mouse move coordinate logging, ensuring both leading and trailing edge events are captured.
 
-**Expected output:**
+**Requirements:**
+1. Write throttleTrailing(fn, limitMs).
+2. Ensure final mouse position is logged after mouse movement stops.
+
 > [!check]- Answer
-> ```text
-> Throttling limits scroll callback rate
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Throttling limits scroll callback rate");
+> function throttleTrailing(fn, limitMs) {
+>   let lastFn = null;
+>   let lastTime = 0;
+>   let timerId = null;
+>
+>   return function(...args) {
+>     const context = this;
+>     const now = Date.now();
+>
+>     if (now - lastTime >= limitMs) {
+>       if (timerId !== null) {
+>         clearTimeout(timerId);
+>         timerId = null;
+>       }
+>       fn.apply(context, args);
+>       lastTime = now;
+>     } else {
+>       lastFn = () => fn.apply(context, args);
+>       if (timerId === null) {
+>         const remaining = limitMs - (now - lastTime);
+>         timerId = setTimeout(() => {
+>           if (lastFn) {
+>             lastFn();
+>             lastTime = Date.now();
+>             lastFn = null;
+>           }
+>           timerId = null;
+>         }, remaining);
+>       }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> let moves = [];
+> const logMove = throttleTrailing((x, y) => { moves.push(`${x},${y}`); }, 100);
+>
+> logMove(10, 10); // Leading edge
+> logMove(20, 20); // Trailing edge target
+>
+> console.assert(moves.length === 1 && moves[0] === "10,10", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Throttling maintains smooth periodic UI updates during continuous user scrolling.
-> 
+> #### Technical Explanation
+>
+> 1. **Trailing Edge Guarantee**: Schedules a trailing execution to capture final argument state after rapid events cease.
+> 2. **Rate Limiting Accuracy**: Guarantees function execution frequency never exceeds limitMs interval.
+> 3. **Memory-Safe Timers**: Clears trailing timers and references once executed to assist garbage collection.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Cancellable API Request Rate Limiter
+
+**Scenario:** A stock ticker widget throttles API refresh button clicks to once every 2000ms, exposing a `.cancel()` method to clear pending rate limits.
+
+**Requirements:**
+1. Write createCancellableThrottle(fn, limitMs).
+2. Return throttled function with `.cancel()` method.
+3. cancel() resets internal timer and timestamp.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createCancellableThrottle(fn, limitMs) {
+>   let lastExec = 0;
+>   let timerId = null;
+>
+>   function throttled(...args) {
+>     const context = this;
+>     const now = Date.now();
+>
+>     if (now - lastExec >= limitMs) {
+>       fn.apply(context, args);
+>       lastExec = now;
+>     }
+>   }
+>
+>   throttled.cancel = function() {
+>     if (timerId !== null) {
+>       clearTimeout(timerId);
+>       timerId = null;
+>     }
+>     lastExec = 0;
+>   };
+>
+>   return throttled;
+> }
+>
+> // Verification tests
+> let requests = 0;
+> const fetchTicker = createCancellableThrottle(() => { requests++; }, 1000);
+>
+> fetchTicker(); // Run 1
+> fetchTicker(); // Rate limited
+>
+> console.assert(requests === 1, "Test 1 Failed");
+>
+> fetchTicker.cancel(); // Reset rate limit
+> fetchTicker(); // Should run immediately after cancel
+> console.assert(requests === 2, "Test 2 Failed: After cancel(), next call should run immediately");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Cancellable Throttle API**: Exposing `.cancel()` allows manual reset of rate limit timestamps and timers.
+> 2. **API Rate Limit Protection**: Protects backend API endpoints against rapid button spamming or abusive polling.
+> 3. **Timestamp Reset Mechanics**: Setting lastExec = 0 allows the next call to execute immediately as a new leading edge event.
+---
+
+## 6. Related Terms
 - [Debounce](debounce.md) — Waits for total silence before firing.
 - [Closure](../level_03/closure.md) — The mechanic holding the `inThrottle` boolean.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Throttle guarantees a function runs at a consistent, restricted interval (e.g., max once per second).
 - It ignores any extra triggers that occur during the "cooldown" period.
 - Use **Throttle** for continuous actions (Scrolling, Mouse Dragging, Window Resizing animations, Gaming Inputs).

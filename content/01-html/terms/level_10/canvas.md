@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Multimedia / Graphic Element**
+
+**Multimedia / Graphic Element (HTML5 Standard)**: `<canvas>` is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **HTML5 Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before HTML5, if you wanted to build a web-based video game, render a dynamic financial chart, or create an interactive drawing app, you had to use third-party plugins like Adobe Flash or Java Applets. These plugins were notoriously insecure, slow, and crashed frequently.
@@ -59,7 +55,7 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting width and height with CSS instead of HTML attributes
 
@@ -189,7 +185,7 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 </canvas>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Canvas Accessibility
 
@@ -234,14 +230,14 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 >
 > **Explanation:** Canvas renders pixels procedurally; SVG manages XML vector DOM node trees.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<svg>` (Scalable Vector Graphics)](svg.md) — The alternative way to draw graphics on the web (Vector vs. Raster).
 - [`<progress>` & `<meter>` Elements](progress_meter.md) — Semantic gauges for loading states and scalars.
 - [Web Components](web_components.md) — Related concept: Web Components.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<canvas>` element provides a blank surface for JavaScript to draw 2D or 3D graphics.
 - It is heavily used for browser games, data visualization (charts), and image manipulation.
 - Always set the dimensions using the HTML `width` and `height` attributes to prevent blurry stretching.

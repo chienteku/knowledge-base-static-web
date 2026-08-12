@@ -394,7 +394,7 @@ let result: Vec<_> = data.iter().filter(|&&x| x > 0).map(|&x| x * 2).collect(); 
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

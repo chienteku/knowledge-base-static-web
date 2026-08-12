@@ -537,7 +537,7 @@ Requirements:
 
 - [Collecting](collecting.md) — The process of forcing a lazy Iterator to do its work and save the results back into a concrete collection (like a new `Vec`).
 - [`for` / Range](for_range.md) — The loop syntax that consumes iterators.
-- [Closure](../level_06/closure.md) — Anonymous functions heavily used alongside iterator methods like `.map()` and `.filter()`.
+- [Closures (`|args| body`)](../level_06/closure.md) — Anonymous functions heavily used alongside iterator methods like `.map()` and `.filter()`.
 - [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — Related concept: `FromIterator` / `Extend` Traits.
 - [Iterator Adapters](iterator_adapters.md) — Related concept: Iterator Adapters.
 - [`Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`)](iterator_consumers.md) — Related concept: `Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`).

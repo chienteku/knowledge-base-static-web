@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [`fn` (Functions)](fn.md) — The standard way to write reusable code in Rust.
+- [fn](fn.md) — The standard way to write reusable code in Rust.
 - [`println!` / `format!`](println_format.md) — Common macros like println!.
 
 ---
@@ -635,7 +635,7 @@ The macro must:
 
 
 - [`println!` / `format!`](println_format.md) — The most common macros in Rust.
-- [`panic!` Macro](../level_04/panic.md) — The macro used to crash the program on an unrecoverable error.
+- [`panic!`](../level_04/panic.md) — The macro used to crash the program on an unrecoverable error.
 - [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — macro_rules! macros.
 
 ---

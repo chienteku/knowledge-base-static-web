@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Third-Party Framework Concept (Express.js)**
+
+**Third-Party Framework Concept (Express.js) (Web App Server Layer .)**: Route Parameters & Query Strings is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Governed by URL parsing logic in Express routing).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web servers need to capture input data sent by clients. While large payloads are sent in the HTTP request body, short identifiers, filters, and searches are usually embedded directly in the request URL.
@@ -81,7 +77,7 @@ app.get('/api/users', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating route parameters and query strings as Numbers
 
@@ -232,7 +228,7 @@ app.get('/users/active', ...); // Specific routes first
 app.get('/users/:id', ...); // Generic param routes after
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: URL Parameters Extraction
 
@@ -297,13 +293,13 @@ app.get('/api/products/:category', (req, res) => {
 >
 > **Explanation:** Question mark (`:id?`) designates optional route parameters.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Routing](routing.md) — The routing system matching URL structures.
 - [The req & res Objects](req_res.md) — The HTTP wrapper structures holding incoming parameters.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Route parameters (`req.params`) match named URL segments prefixed with a colon.
 - Query strings (`req.query`) capture key-value filters appended after the `?` in a URL.
 - Use route parameters for hierarchical resources; use query strings for filters, sorting, and pagination.

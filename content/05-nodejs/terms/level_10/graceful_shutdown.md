@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps**
+
+**Production / DevOps (Operating System Layer .)**: Graceful Shutdown & Process Signals is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Operating System Layer** (Interprets POSIX signal communications between the OS scheduler and Node).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In production environments, servers are constantly restarted, scaled down, or redeployed. When a container manager (like Docker) or process manager (like PM2) needs to stop your application, it sends a POSIX signal to the process:
@@ -98,7 +94,7 @@ function shutdown() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting a fallback force-exit timeout
 
@@ -152,7 +148,7 @@ process.on('SIGTERM', () => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Signal Registration
 
@@ -220,14 +216,14 @@ process.on('SIGINT', async () => {
 >
 > **Explanation:** Kubernetes sends `SIGTERM` to initiate graceful shutdown, giving processes time to finish active requests.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Automatically sends SIGINT and awaits graceful shutdowns during updates.
 - [Docker](docker.md) — Relies on SIGTERM handling to shut down containers cleanly.
 - [Logging & Monitoring](logging_monitoring.md) — Related concept: Logging & Monitoring.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Graceful shutdown prevents data loss and connection interruptions during restarts.
 - OS managers signal shutdown requests using POSIX signals: `SIGTERM` and `SIGINT`.
 - `server.close()` stops new connections while allowing active requests to finish.

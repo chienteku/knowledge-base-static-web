@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps**
+
+**Production / DevOps (Server Scaling Layer .)**: The cluster Module is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Server Scaling Layer** (Directs incoming TCP network socket distributions across OS processes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, a Node.js application executes on a single CPU core. However, modern production servers typically have 4, 8, or 16 CPU cores. If you run your server as a single Node process, you leave the other CPU cores idle, wasting hardware capacity.
@@ -84,7 +80,7 @@ if (cluster.isPrimary) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Keeping state in local memory inside clustered applications
 
@@ -147,7 +143,7 @@ cluster.on('exit', (worker, code, signal) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Cluster Setup
 
@@ -219,7 +215,7 @@ if (numCPUs > 1 && cluster.isPrimary) {
 >
 > **Explanation:** Cluster primary hands off incoming TCP connections to worker processes transparently.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Production tool automating cluster creation and management.
 - [Load Balancing](load_balancing.md) — The networking architecture distributing traffic across server instances.
 - [Child Processes (child_process)](child_processes.md) — Related concept: Child Processes (child_process).
@@ -227,7 +223,7 @@ if (numCPUs > 1 && cluster.isPrimary) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `cluster` module enables a Node.js server to run across all available CPU cores.
 - The Primary process orchestrates workers but does not handle requests directly.
 - Worker processes share the same port and handle incoming network requests.

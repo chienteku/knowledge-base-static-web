@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Void Elements (Self-closing Tags) is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard HTML elements act as containers. They wrap around text or other elements:
@@ -105,7 +101,7 @@ Void elements in action alongside standard container elements:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to write a closing tag for a void element
 
@@ -157,7 +153,7 @@ Void elements in action alongside standard container elements:
 <label>Username <input type="text"></label>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding Void Elements
 
@@ -224,7 +220,7 @@ Void elements in action alongside standard container elements:
 >
 > **Explanation:** Modern HTML5 parsers ignore optional trailing `/` slashes on void tags.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The fundamental components of markup.
 - [Block-level vs Inline Elements](block_inline.md) — How display properties apply to void elements (e.g. `<img>` is inline, while `<hr>` behaves like a block).
 - [Attribute](attribute.md) — Related concept: Attribute.
@@ -236,7 +232,7 @@ Void elements in action alongside standard container elements:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Void elements cannot contain child elements, tags, or text.
 - They consist of a single tag and must never have a closing tag.
 - Traits: they are placeholders or browser instructions (e.g., `<img>`, `<input>`, `<br>`, `<meta>`).

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Utility / Design Pattern**
+
+**Node.js Core Utility / Design Pattern (Node.js Only .)**: Promisification (util.promisify) is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Though the concept exists in browsers, the `util` module is Node-specific).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In 2015, JavaScript introduced **Promises** to fix Callback Hell. In 2017, they introduced **`async/await`** to make asynchronous code read like synchronous code.
@@ -57,7 +53,7 @@ Instead of requiring `fs` and Promisifying it, you can just require the pre-prom
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Promisifying functions that don't follow the rules
 
@@ -112,7 +108,7 @@ function get() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Manual Promisification
 
@@ -175,7 +171,7 @@ function get() {
 >
 > **Explanation:** Modern Node.js core modules (`fs/promises`, `dns/promises`, `timers/promises`) provide native promises out-of-the-box.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Callbacks & Callback Hell](callbacks.md) — The problem this tool solves.
 - [The fs Module (File System)](../level_02/fs_module.md) — The most common module that was historically Promisified.
 - [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.
@@ -183,7 +179,7 @@ function get() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Promisification** converts legacy Callback functions into modern Promises.
 - It allows you to use modern **`async/await`** syntax with ancient Node.js libraries.
 - Node provides the built-in **`util.promisify`** method to do this automatically.

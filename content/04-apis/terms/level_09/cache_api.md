@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Offline Architecture**
+
+**Browser API / Offline Architecture (Client-Side)**: Cache API is a fundamental concept in this technology stack. **Level 9 — Browser APIs (Storage & State)**
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser Only)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We have [localStorage](../level_09/web_storage.md) for small text, and [IndexedDB](../level_09/indexeddb.md) for big JSON data. But what happens if the user has no Wi-Fi and tries to load your website? 
@@ -39,7 +35,7 @@ The **Cache API** is a completely manual, developer-controlled database. You use
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not versioning your Cache names
 
@@ -89,66 +85,186 @@ const CACHE_NAME = 'app-cache-v2'; // Versioned cache name for invalidation
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: IndexedDB vs Cache API
+### Exercise 1: Service Worker Cache-First Fetch Strategy
 
-**Problem:** You are building an offline Spotify clone. 
-1. Where should you store the list of the user's favorite song titles (JSON)?
-2. Where should you store the actual `.mp3` audio files and the `.css` file for the dark theme?
+**Scenario:** A Progressive Web App (PWA) uses the `CacheStorage` API to implement a Cache-First strategy for static CSS and JavaScript assets.
 
-**Expected output:**
+**Requirements:**
+1. Write cacheFirstFetch(requestUrl, cacheName, mockCaches, mockFetch).
+2. Check cache for match.
+3. If found, return cached response.
+4. Else fetch network, cache response, and return.
+
 > [!check]- Answer
-> ```text
-> 1. IndexedDB. It is perfect for structured JSON data and querying lists.
-> 2. Cache API. It is perfectly optimized for storing large, raw HTTP File responses (like MP3s, Images, and CSS).
+>
+> #### Implementation
+>
+> ```javascript
+> async function cacheFirstFetch(requestUrl, cacheName = "v1-assets", mockCaches, mockFetch) {
+>   const cacheStorage = mockCaches || globalThis.caches;
+>   const fetchFn = mockFetch || globalThis.fetch;
+>
+>   const cache = await cacheStorage.open(cacheName);
+>   const cachedResponse = await cache.match(requestUrl);
+>
+>   if (cachedResponse) {
+>     return { source: "CACHE", response: cachedResponse };
+>   }
+>
+>   try {
+>     const networkResponse = await fetchFn(requestUrl);
+>     if (networkResponse.ok) {
+>       await cache.put(requestUrl, networkResponse.clone());
+>     }
+>     return { source: "NETWORK", response: networkResponse };
+>   } catch (err) {
+>     throw new Error(`Network and cache failed for ${requestUrl}`);
+>   }
+> }
+>
+> // Verification tests
+> const mockCache = {
+>   store: new Map(),
+>   async match(url) { return this.store.get(url) || null; },
+>   async put(url, res) { this.store.set(url, res); }
+> };
+> const mockCaches = { open: async () => mockCache };
+> const mockFetch = async (url) => ({ ok: true, status: 200, clone() { return this; } });
+>
+> cacheFirstFetch("https://app.com/styles.css", "v1", mockCaches, mockFetch).then(r1 => {
+>   console.assert(r1.source === "NETWORK", "Test 1 Failed: First fetch reads network");
+>   return cacheFirstFetch("https://app.com/styles.css", "v1", mockCaches, mockFetch).then(r2 => {
+>     console.assert(r2.source === "CACHE", "Test 2 Failed: Second fetch reads cache");
+>   });
+> });
 > ```
-> - Which one stores Data? Which one stores Files?
+>
+> #### Technical Explanation
+>
+> 1. **Cache Storage API**: Modern Web API storing Request/Response objects directly in browser memory for offline capability.
+> 2. **Cache-First Strategy**: Serves resources instantly from cache, falling back to network only when missing.
+> 3. **Cloning Response Streams**: Must call response.clone() before passing to cache.put() because Response bodies are single-use streams.
 > 
 ---
 
-### Exercise 2: Cache API Match & Add Pattern
+### Exercise 2: Static Asset Pre-Caching Module
 
-**Problem:** Write JS snippet opening cache `v1` and matching requested URL `/api/data`.
+**Scenario:** During Service Worker installation, a PWA pre-caches critical app shell assets (`index.html`, `app.js`, `styles.css`) in bulk.
 
-**Expected output:**
+**Requirements:**
+1. Write precacheAppShell(cacheName, assetsArray, mockCaches).
+2. Open cache.
+3. Add all assets using cache.addAll().
+
 > [!check]- Answer
-> ```text
-> const cache = await caches.open('v1'); const res = await cache.match('/api/data');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const cache = await caches.open('v1');
-> const response = await cache.match('/api/data');
-> if (response) {
-> const data = await response.json();
+> async function precacheAppShell(cacheName = "app-shell-v1", assetsArray = [], mockCaches) {
+>   if (!Array.isArray(assetsArray) || assetsArray.length === 0) return 0;
+>
+>   const cacheStorage = mockCaches || globalThis.caches;
+>   const cache = await cacheStorage.open(cacheName);
+>
+>   if (typeof cache.addAll === "function") {
+>     await cache.addAll(assetsArray);
+>     return assetsArray.length;
+>   }
+>
+>   let count = 0;
+>   for (const asset of assetsArray) {
+>     await cache.put(asset, { ok: true, status: 200 });
+>     count++;
+>   }
+>   return count;
 > }
+>
+> // Verification tests
+> const mockStore = new Map();
+> const mockCaches = {
+>   open: async () => ({
+>     addAll: async (assets) => assets.forEach(a => mockStore.set(a, true))
+>   })
+> };
+>
+> precacheAppShell("v1", ["/index.html", "/app.js"], mockCaches).then(count => {
+>   console.assert(count === 2, "Test 1 Failed");
+>   console.assert(mockStore.has("/app.js") === true, "Test 2 Failed");
+> });
 > ```
-> - **Explanation:** `caches.open()` and `cache.match()` provide programmatic HTTP caching.
+>
+> #### Technical Explanation
+>
+> 1. **Pre-Caching on Install**: Ensures essential UI assets are downloaded and cached before the user goes offline.
+> 2. **cache.addAll() Method**: Atomically fetches and caches an array of URLs; if any single request fails, installation fails.
+> 3. **App Shell Architecture**: Caches minimal HTML/CSS/JS shell to provide instant UI loads on repeat visits.
+> 
 ---
 
-### Exercise 3: Cache Storage Scope
+### Exercise 3: Stale Cache Cleaner Manager
 
-**Problem:** Is Cache API accessible from both main browser window JavaScript AND Service Worker scripts? (Yes/No).
+**Scenario:** During Service Worker activation, an asset manager purges outdated cache buckets while preserving active versions.
 
-**Expected output:**
+**Requirements:**
+1. Write purgeOldCaches(currentCacheName, mockCaches).
+2. List cache names.
+3. Delete caches not matching currentCacheName.
+
 > [!check]- Answer
-> ```text
-> Yes. Cache API is available in window, web workers, and service workers.
+>
+> #### Implementation
+>
+> ```javascript
+> async function purgeOldCaches(currentCacheName, mockCaches) {
+>   const cacheStorage = mockCaches || globalThis.caches;
+>   const allCacheNames = await cacheStorage.keys();
+>
+>   const deletedCaches = [];
+>
+>   for (const cacheName of allCacheNames) {
+>     if (cacheName !== currentCacheName) {
+>       await cacheStorage.delete(cacheName);
+>       deletedCaches.push(cacheName);
+>     }
+>   }
+>
+>   return { deletedCaches, activeCache: currentCacheName };
+> }
+>
+> // Verification tests
+> const cacheKeys = ["static-v1", "static-v2", "static-v3"];
+> const mockCaches = {
+>   keys: async () => [...cacheKeys],
+>   delete: async (name) => {
+>     const idx = cacheKeys.indexOf(name);
+>     if (idx !== -1) cacheKeys.splice(idx, 1);
+>   }
+> };
+>
+> purgeOldCaches("static-v3", mockCaches).then(res => {
+>   console.assert(res.deletedCaches.length === 2, "Test 1 Failed: Must delete v1 and v2");
+>   console.assert(cacheKeys.length === 1 && cacheKeys[0] === "static-v3", "Test 2 Failed");
+> });
 > ```
-> ```text
-> Yes. Cache API is exposed globally in window and worker contexts.
-> ```
-> - **Explanation:** `caches` is available across main threads and worker scopes.
+>
+> #### Technical Explanation
+>
+> 1. **Cache Storage Cleanup**: Prevents browser storage quota exhaustion by deleting obsolete cache versions.
+> 2. **Service Worker Activation Phase**: The activate event is the standard lifecycle stage for purging old caches.
+> 3. **Atomic Bucket Rotation**: Switching cache bucket names (v1 -> v2) guarantees clean cache transitions.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Service Workers](service_workers.md) — The scripts that actively use the Cache API to intercept network requests.
 - [IndexedDB](indexeddb.md) — The complementary database used for JSON, while the Cache API handles Files.
 - [Storage Limits & Eviction](storage_limits.md) — Related concept: Storage Limits & Eviction.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **Cache API** is a browser database used to store raw HTTP `Response` objects (HTML, CSS, JS, Images).
 - It allows websites to load instantly and function completely offline.
 - Unlike automatic HTTP caching, the Cache API is manually controlled via JavaScript.

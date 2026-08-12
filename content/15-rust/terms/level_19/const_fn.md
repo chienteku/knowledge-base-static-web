@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Constants (`const`)](../level_01/constants_const.md) — Constants.
-- [`fn` (Functions)](../level_01/fn.md) — Functions.
+- [fn](../level_01/fn.md) — Functions.
 
 ---
 
@@ -258,7 +258,7 @@ Validate inputs inside const fn using conditional guards or Option/Result!
 ## 6. Related Terms
 
 - [`const` Generics](const_generics.md) — Const generics.
-- [Const Evaluation Ctfe](const_evaluation_ctfe.md) — Compile-time evaluation.
+- [Const Evaluation (CTFE)](const_evaluation_ctfe.md) — Compile-time evaluation.
 
 ---
 

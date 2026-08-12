@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Typography Property**
+
+**Typography Property (Universal Browser Support)**: `letter-spacing` & `word-spacing` is a fundamental concept in this technology stack. **Level 7 — Text & List Formatting**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In graphic design, adjusting the space between letters is called **Tracking**. Sometimes, a font looks too cramped, making it hard to read at small sizes. Other times, designers deliberately spread letters far apart to create a sleek, cinematic, or "premium" look (think of the massive, spaced-out titles on movie posters).
@@ -57,7 +53,7 @@ p {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `letter-spacing` on lowercase text
 
@@ -102,7 +98,7 @@ h1 { font-size: 4rem; letter-spacing: 2px; } /* Fixed px spacing */
 h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Fix
 
@@ -154,12 +150,12 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 >
 > **Explanation:** `letter-spacing` targets character tracking; `word-spacing` targets word gaps.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`text-transform`](text_transform.md) — The property most commonly paired with `letter-spacing`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `letter-spacing` adds horizontal space between individual characters.
 - `word-spacing` adds horizontal space between words (at the spacebar).
 - A best practice is to add slight `letter-spacing` to `uppercase` text to improve readability and aesthetics.

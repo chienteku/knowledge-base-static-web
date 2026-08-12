@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Database Architecture**
+
+**Database Architecture (System Architecture)**: SQL vs NoSQL is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **System Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Relational Databases (SQL)
 Think of a Relational Database like a massive **Excel Spreadsheet**.
@@ -45,7 +41,7 @@ Today, the industry heavily favors **PostgreSQL (Relational)** for 90% of applic
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating NoSQL like SQL
 
@@ -90,7 +86,7 @@ Use relational SQL database (PostgreSQL) for ACID relational financial data
 Use NoSQL document database (MongoDB) or JSONB columns in PostgreSQL for flexible schema data
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Pick the Database
 
@@ -152,14 +148,14 @@ App B: A web scraper that collects arbitrary, constantly changing JSON metadata 
 >
 > **Explanation:** Document schemas naturally accommodate varied product attribute structures per item.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The tools Node.js uses to talk to these databases.
 - [Migrations](migrations.md) — A concept that exists in SQL, but rarely in NoSQL.
 - [Mongoose (MongoDB ODM)](mongoose.md) — Related concept: Mongoose (MongoDB ODM).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Relational (SQL)** databases use strict tables, rows, and columns. Excellent for structured, connected data (PostgreSQL).
 - **NoSQL** databases use flexible JSON documents. Excellent for unstructured, rapidly changing data (MongoDB).
 - Node.js works perfectly with both, but PostgreSQL is the modern industry standard for general-purpose apps.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography Property**
+
+**Typography Property (Universal Browser Support)**: `font-size` & `font-weight` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A website needs visual hierarchy. A page title must be huge and bold, while a footer copyright notice should be small and thin. 
@@ -57,7 +53,7 @@ p {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Pixels (`px`) for font size
 
@@ -108,7 +104,7 @@ h2 { font-weight: 600; } /* ❌ Triggers synthetic bolding distortion! */
 h2 { font-weight: 700; } /* Use explicitly imported font weight */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: REM Math
 
@@ -169,7 +165,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 >
 > **Explanation:** Numeric font-weights map standard typographic font thickness grades.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`font-family`](font_family.md) — Defines the actual typeface.
 - [`font-style` & `font-variant`](font_style_variant.md) — Styling and small-caps variations.
 - [`rem` vs `em`](../level_08/rem_em.md) — Responsive typography units.
@@ -178,7 +174,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `font-size` controls text height; `font-weight` controls text thickness.
 - Font weights are usually defined numerically from `100` (thin) to `900` (black). `400` is normal, `700` is bold.
 - **Accessibility Rule**: Always use `rem` instead of `px` for `font-size` so visually impaired users can scale your text!

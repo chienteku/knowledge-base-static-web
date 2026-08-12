@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Web Architecture / Core Concept**
+
+**Web Architecture / Core Concept (Universal Standard .)**: Request & Response Lifecycle is a fundamental concept in this technology stack. **Level 1 — The Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (The heartbeat of all API communication).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To build resilient web applications, developers must understand that data does not teleport instantly. The internet is a physical network of copper wires and fiber-optic cables spanning the globe.
@@ -43,7 +39,7 @@ If the pizza never arrives, you have to debug the lifecycle: Did you dial the wr
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Ignoring Network Latency
 
@@ -103,63 +99,142 @@ if (!res.ok) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Where did it break?
+### Exercise 1: HTTP Response Status Code Classifier
 
-**Problem:** A user clicks "Login". The browser immediately throws an error: `net::ERR_NAME_NOT_RESOLVED`. The server logs show absolutely nothing. Which step of the lifecycle failed?
+**Scenario:** An API gateway helper classifies HTTP response status codes into standard REST result categories.
 
-**Expected output:**
+**Requirements:**
+1. Write classifyHttpStatus(statusCode).
+2. Return category string: "INFORMATIONAL", "SUCCESS", "REDIRECTION", "CLIENT_ERROR", "SERVER_ERROR".
+
 > [!check]- Answer
-> ```text
-> Step 2 (The Network Routing) failed! 
-> The server logs show nothing because the Request never physically reached the server. The Client failed to resolve the URL into an IP address (a DNS error), meaning the request died before leaving the user's computer/ISP.
+>
+> #### Implementation
+>
+> ```javascript
+> function classifyHttpStatus(statusCode) {
+>   const code = Number(statusCode);
+>   if (isNaN(code) || code < 100 || code > 599) return "UNKNOWN";
+>
+>   if (code >= 100 && code <= 199) return "INFORMATIONAL";
+>   if (code >= 200 && code <= 299) return "SUCCESS";
+>   if (code >= 300 && code <= 399) return "REDIRECTION";
+>   if (code >= 400 && code <= 499) return "CLIENT_ERROR";
+>   if (code >= 500 && code <= 599) return "SERVER_ERROR";
+>
+>   return "UNKNOWN";
+> }
+>
+> // Verification tests
+> console.assert(classifyHttpStatus(200) === "SUCCESS", "Test 1 Failed");
+> console.assert(classifyHttpStatus(301) === "REDIRECTION", "Test 2 Failed");
+> console.assert(classifyHttpStatus(404) === "CLIENT_ERROR", "Test 3 Failed");
+> console.assert(classifyHttpStatus(500) === "SERVER_ERROR", "Test 4 Failed");
 > ```
-> - If the server has no logs, did the request ever make it there?
+>
+> #### Technical Explanation
+>
+> 1. **HTTP Status Categories**: 1xx Informational, 2xx Success, 3xx Redirection, 4xx Client Error, 5xx Server Error.
+> 2. **Client Error vs Server Error**: 4xx means the client sent an invalid request (e.g. 404 Not Found); 5xx means the server crashed (e.g. 500 Internal Error).
+> 3. **REST Contract**: API endpoints must return accurate HTTP status codes matching transaction results.
 > 
 ---
 
-### Exercise 2: HTTP Request Anatomy Identification
+### Exercise 2: HTTP Request & Response Header Map Normalizer
 
-**Problem:** Identify the 3 core structural components of a standard HTTP Request message.
+**Scenario:** A web server middleware normalizes case-insensitive HTTP header keys into lowercase dictionary keys.
 
-**Expected output:**
+**Requirements:**
+1. Write normalizeHeaders(headersObj).
+2. Convert all key names to lowercase.
+3. Return normalized header object.
+
 > [!check]- Answer
-> ```text
-> 1. Request Line (Method, URI, Protocol Version)
-> 2. Request Headers (Key-value metadata)
-> 3. Request Body (Payload data)
-> ```
-> ```http
-> POST /v1/users HTTP/1.1
-> Host: api.example.com
-> Content-Type: application/json
-> {"name": "Alice"}
-> ```
-> - **Explanation:** HTTP requests contain a request line, headers, and an optional body.
----
-
-### Exercise 3: HTTP Response Status & Header Check
-
-**Problem:** Write JS snippet checking if a `fetch` response is successful (`res.ok`) before parsing JSON.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> if (res.ok) { return await res.json(); } else { throw new Error(res.statusText); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const res = await fetch('/api/items');
-> if (res.ok) {
-> const data = await res.json();
-> } else {
-> console.error(`Request failed with status ${res.status}`);
+> function normalizeHeaders(headersObj) {
+>   if (!headersObj || typeof headersObj !== "object") return {};
+>
+>   const normalized = {};
+>   for (const [key, value] of Object.entries(headersObj)) {
+>     normalized[key.toLowerCase()] = String(value).trim();
+>   }
+>   return normalized;
 > }
+>
+> // Verification tests
+> const rawHeaders = {
+>   "Content-Type": "application/json ",
+>   "AUTHORIZATION": "Bearer token123"
+> };
+>
+> const clean = normalizeHeaders(rawHeaders);
+> console.assert(clean["content-type"] === "application/json", "Test 1 Failed");
+> console.assert(clean["authorization"] === "Bearer token123", "Test 2 Failed");
 > ```
-> - **Explanation:** `res.ok` evaluates to `true` if HTTP status code is in range 200–299.
+>
+> #### Technical Explanation
+>
+> 1. **Case-Insensitive Headers**: HTTP spec dictates header field names are case-insensitive (Content-Type === content-type).
+> 2. **Header Value Whitespace Trimming**: Trimming values prevents header parsing bugs in HTTP parsers.
+> 3. **Header Standardization in HTTP/2**: HTTP/2 requires all header names to be lowercased in frame transmissions.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: HTTP Request Body Serializer & Content-Type Injector
+
+**Scenario:** An HTTP client library serializes JavaScript objects into request payload bodies and sets appropriate Content-Type headers.
+
+**Requirements:**
+1. Write buildRequestBody(data, format).
+2. Support "json" and "form-urlencoded".
+3. Return { body, contentType }.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function buildRequestBody(data, format = "json") {
+>   if (format === "json") {
+>     return {
+>       body: JSON.stringify(data),
+>       contentType: "application/json"
+>     };
+>   }
+>   if (format === "form-urlencoded") {
+>     const params = new URLSearchParams();
+>     for (const [k, v] of Object.entries(data)) {
+>       params.append(k, String(v));
+>     }
+>     return {
+>       body: params.toString(),
+>       contentType: "application/x-www-form-urlencoded"
+>     };
+>   }
+>   throw new Error("Unsupported format");
+> }
+>
+> // Verification tests
+> const jsonReq = buildRequestBody({ name: "Alice" }, "json");
+> console.assert(jsonReq.contentType === "application/json", "Test 1 Failed");
+>
+> const formReq = buildRequestBody({ user: "bob", page: 1 }, "form-urlencoded");
+> console.assert(formReq.body === "user=bob&page=1", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Content-Type Header**: Informs server how to parse incoming request body (application/json vs application/x-www-form-urlencoded).
+> 2. **Body Serialization**: Objects must be serialized to string or binary formats for network transmission.
+> 3. **URLSearchParams API**: Standard browser & Node API for building form-urlencoded query strings.
+---
+
+## 6. Related Terms
 - [HTTP Status Codes](../level_02/status_codes.md) — How the Server communicates the result of the processing step back to the Client.
 - [The fetch() API](../level_05/fetch.md) — The JavaScript function used to trigger this lifecycle manually.
 - [HTTP / HTTPS](http_https.md) — Related concept: HTTP / HTTPS.
@@ -167,7 +242,7 @@ if (!res.ok) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Request/Response lifecycle is the fundamental pulse of the internet.
 - It is NOT instant. Network latency (transit time) is a massive factor in web development.
 - When APIs break, mentally trace the lifecycle to isolate the bug (Client error vs Network error vs Server error).

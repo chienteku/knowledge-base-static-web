@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Module**
+
+**Node.js Core Module (Universal .)**: The path Module is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Available in Node.js, and heavily used in build tools like Webpack).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to read a file located in a subfolder, you might write code like this:
@@ -52,7 +48,7 @@ The `path` module also provides incredible utilities for breaking a path apart:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hardcoding slashes in `require()` or `fs.readFile()`
 
@@ -98,7 +94,7 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 // Use path.join for simple joining; use path.resolve for absolute working directory resolution
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Extension
 
@@ -152,13 +148,13 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 >
 > **Explanation:** `path.join` normalizes slashes automatically for Windows and Unix operating systems.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The fs Module (File System)](fs_module.md) — The module that consumes the paths you build.
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — Related concept: Global Objects (global, __dirname, __filename).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`path`** module is a core utility for manipulating file paths.
 - Different Operating Systems use different slashes for paths (Windows uses `\`, Mac/Linux uses `/`).
 - **`path.join()`** automatically uses the correct slash for the current OS.

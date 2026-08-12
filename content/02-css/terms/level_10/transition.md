@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Animation Property**
+
+**Animation Property (Universal Modern Standard .)**: `transition` is a fundamental concept in this technology stack. **Level 10 — Transitions & Animations**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The easiest way to make a website feel "premium").
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you have a blue button, and you set it to turn red on `:hover`, the change happens in exactly 0.001 seconds. It instantly snaps from blue to red. While functional, this feels harsh, robotic, and cheap. 
@@ -60,7 +56,7 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting the transition on the `:hover` state
 
@@ -199,7 +195,7 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 .card { transition: transform 0.3s ease, opacity 0.3s ease; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Targeting Specific Properties
 
@@ -255,14 +251,14 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 >
 > **Explanation:** Discrete properties (`display`, `visibility`) cannot interpolate intermediate animation frames without `@starting-style`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The most common property to animate (e.g., smoothly scaling a button up to be 10% larger on hover).
 - [`@keyframes` & `animation`](animation.md) — The multi-step alternative for complex, non-interactive animation loops.
 - [`:hover` & `:focus` (Pseudo-classes)](../level_09/hover_focus.md) — Related concept: `:hover` & `:focus` (Pseudo-classes).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `transition` smoothly animates changes in CSS.
 - It is most commonly used to make `:hover` states feel smooth and premium.
 - **ALWAYS apply `transition` to the default base class**, never the `:hover` class!

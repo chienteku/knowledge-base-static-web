@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **ECMAScript Standard / Module System**
+
+**ECMAScript Standard / Module System (Universal .)**: ES Modules (import, export) is a fundamental concept in this technology stack. **Level 3 — Module Systems**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Supported natively in both Node.js and Modern Browsers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For years, the JavaScript ecosystem was fractured. If you wrote backend code in Node.js, you used `require()`. But because browsers didn't understand `require()`, if you wrote frontend code, you had to use complex bundlers like Webpack, or rely on global `<script>` tags. 
@@ -51,7 +47,7 @@ This means before the code even runs, the engine scans all the `import` statemen
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `.js` extension in Node.js
 
@@ -97,7 +93,7 @@ import cjsPkg from 'cjs-legacy';
 const { dynamicFn } = cjsPkg;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Enabling ESM in Node
 
@@ -152,14 +148,14 @@ const { dynamicFn } = cjsPkg;
 >
 > **Explanation:** ES Modules support Top-Level Await natively without wrapping code in `(async () => {})()`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [CommonJS (require, module.exports)](commonjs.md) — The legacy system that ESM is slowly replacing.
 - [package.json](../level_04/package_json.md) — Where you configure Node to use `"type": "module"`.
 - [Module Resolution](module_resolution.md) — Related concept: Module Resolution.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **ES Modules (ESM)** is the modern, universal standard for sharing JavaScript code across files.
 - It uses **`import`** and **`export`** syntax.
 - It is supported by both Browsers and Node.js.

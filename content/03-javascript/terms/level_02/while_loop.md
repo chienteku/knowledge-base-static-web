@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: while Loop is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A `for` loop is great when you know *exactly* how many times you want to run a block of code (like iterating through a 10-item list). But what if you don't know how many times the loop should run? What if the loop needs to run until a user clicks a button, or until a random number generator hits a specific target? 
@@ -67,7 +63,7 @@ findRandomMatch(7);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The Infinite Loop
 
@@ -148,82 +144,134 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Halving numbers
+### Exercise 1: Job Queue Batch Processor with Work Limit
 
-**Problem:** Write a `while` loop that takes a starting number of `100`. Inside the loop, divide the number by `2` and log it. The loop should stop *before* the number drops below `1`.
+**Scenario:** A background worker processes a queue array using a while loop while items remain in the queue (queue.length > 0) and processed count is below batch limit.
 
-**Expected output:**
+**Requirements:**
+1. Write processJobQueue(jobQueue, batchLimit).
+2. Process jobs while queue.length > 0 and processed < batchLimit.
+3. Remove item using queue.shift().
+4. Return processed items.
+
 > [!check]- Answer
-> ```text
-> 50
-> 25
-> 12.5
-> 6.25
-> 3.125
-> 1.5625
-> ```
-> - Start with `let num = 100;`
-> - The condition should be `while (num / 2 >= 1)` or similar.
-> - Inside the loop, do `num = num / 2;` and then `console.log(num);`.
-> 
----
-
-### Exercise 2: Standard While Loop Accumulator
-
-**Problem:** Sum numbers from `1` to `5` using a `while` loop.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 15
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> let sum = 0;
-> let i = 1;
-> while (i <= 5) {
->   sum += i;
->   i++;
+> function processJobQueue(jobQueue, batchLimit) {
+>   const queue = [...jobQueue];
+>   const processed = [];
+>
+>   while (queue.length > 0 && processed.length < batchLimit) {
+>     const job = queue.shift();
+>     processed.push(job);
+>   }
+>   return { processed, remainingCount: queue.length };
 > }
-> console.log(sum);
+>
+> // Verification tests
+> const res = processJobQueue(["job1", "job2", "job3", "job4"], 2);
+> console.assert(res.processed.length === 2, "Test 1 Failed");
+> console.assert(res.remainingCount === 2, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `while` loops execute code blocks repeatedly as long as conditional expressions evaluate to truthy.
+> #### Technical Explanation
+>
+> 1. **Pre-Check Condition**: A while loop tests its condition before executing the loop body statement.
+> 2. **Queue Draining Pattern**: Loop condition while (queue.length > 0) drains work queues dynamically.
+> 3. **Infinite Loop Prevention**: Ensure loop body mutates state toward condition termination.
 > 
 ---
 
-### Exercise 3: Sentinel Value Loop Termination
+### Exercise 2: Financial Compounding Periods Halving Counter
 
-**Problem:** Pop items off an array `[10, 20, 30]` using `while (stack.length > 0)`.
+**Scenario:** A financial algorithm determines how many compounding periods are required for a debt balance to halve by repeatedly dividing balance in a while loop.
 
-**Expected output:**
+**Requirements:**
+1. Write countHalvingPeriods(initialBalance, targetBalance).
+2. Divide balance by 2 inside while (balance > targetBalance).
+3. Increment period count.
+4. Return period count.
+
 > [!check]- Answer
-> ```text
-> Popped: 30
-> Popped: 20
-> Popped: 10
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const stack = [10, 20, 30];
-> while (stack.length > 0) {
->   console.log(`Popped: ${stack.pop()}`);
+> function countHalvingPeriods(initialBalance, targetBalance) {
+>   let balance = initialBalance;
+>   let periods = 0;
+>
+>   while (balance > targetBalance) {
+>     balance /= 2;
+>     periods++;
+>   }
+>   return periods;
 > }
+>
+> // Verification tests
+> const periods = countHalvingPeriods(100, 25);
+> console.assert(periods === 2, "Test 1 Failed: 100 -> 50 -> 25 requires 2 periods");
 > ```
 >
-> **Explanation:** Mutating collection boundaries in loop conditions provides clean sentinel termination.
-> 
+> #### Technical Explanation
+>
+> 1. **Dynamic Halving**: While loops suit scenarios where iteration count is determined dynamically by mathematical state.
+> 2. **State Mutation Requirement**: Modifying balance /= 2 inside the body guarantees reaching the termination condition.
+> 3. **Pre-Test Safety**: If initial balance <= target, the loop body executes 0 times safely.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Linked Data Node Traversal Engine
+
+**Scenario:** A graph data structure utility traverses a chain of linked node objects (node = node.next) using a while (node !== null) loop until reaching the end node.
+
+**Requirements:**
+1. Write traverseLinkedList(headNode).
+2. Traverse chain using while (currentNode !== null).
+3. Collect node values into array.
+4. Return values array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function traverseLinkedList(headNode) {
+>   const values = [];
+>   let currentNode = headNode;
+>
+>   while (currentNode !== null) {
+>     values.push(currentNode.value);
+>     currentNode = currentNode.next;
+>   }
+>   return values;
+> }
+>
+> // Verification tests
+> const list = { value: "A", next: { value: "B", next: { value: "C", next: null } } };
+> const res = traverseLinkedList(list);
+> console.assert(res.join(",") === "A,B,C", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Pointer Traversal Pattern**: while (node !== null) is the standard pattern for traversing pointer-linked data structures.
+> 2. **Null Termination**: Reaching next === null terminates loop execution cleanly.
+> 3. **Variable Reference Updating**: Updating currentNode = currentNode.next advances traversal to subsequent heap memory references.
+---
+
+## 6. Related Terms
 - [for Loop](for_loop.md) — A loop that repeats until a specified condition evaluates to false (better for known iterations).
 - [do...while](do_while.md) — A variation that executes the block at least once.
 - [break / continue](break_continue.md) — Related concept: break / continue.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `while` loops when you don't know exactly how many iterations you need.
 - The condition is checked *before* the block of code executes. If the condition is false initially, the code never runs.
 - You must manually update the condition variable inside the loop to avoid infinite loops.

@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [Closure](../level_06/closure.md) — Standard synchronous closures in Rust.
+- [Closures (`|args| body`)](../level_06/closure.md) — Standard synchronous closures in Rust.
 - [`async fn`](async_fn.md) — Asynchronous functions.
 - [`Future` Trait](future_trait.md) — The return type of async closure calls.
 

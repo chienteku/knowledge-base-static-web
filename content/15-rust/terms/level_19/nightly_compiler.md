@@ -225,8 +225,8 @@ toolchain: nightly-2026-08-01
 
 ## 6. Related Terms
 
-- [Specialization](specialization.md) — Unstable specialization.
-- [Generators Coroutines](generators_coroutines.md) — Unstable coroutines.
+- [Specialization (Unstable)](specialization.md) — Unstable specialization.
+- [Generators / Coroutines (Unstable)](generators_coroutines.md) — Unstable coroutines.
 
 ---
 

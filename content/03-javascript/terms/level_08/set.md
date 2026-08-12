@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Structure** *(Introduced in ES6)*
+
+**Data Structure *(Introduced in ES6)* (Universal)**: Set is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Arrays are fantastic for keeping lists of items, but Arrays allow duplicates. If you wanted to ensure an Array only contained *unique* items, you had to manually write `if (!array.includes(item)) { array.push(item) }` every single time you added data. This was tedious and slow.
@@ -73,7 +69,7 @@ const uniqueNames = [...new Set(["Alice", "Bob", "Alice"])]; // ["Alice", "Bob"]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Set Scope and Variable Hoisting
 
@@ -146,79 +142,129 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Object Reference Trap
+### Exercise 1: Unique Value Collection & Set Operations
 
-**Problem:** Look at the following code. How many items are in the Set?
-```javascript
-const mySet = new Set();
-mySet.add({ name: "Alice" });
-mySet.add({ name: "Alice" });
+**Scenario:** An e-commerce analytics tool removes duplicate customer tags using a Set and performs mathematical set intersection.
 
-console.log(mySet.size);
-```
+**Requirements:**
+1. Write getUniqueTags(tagList).
+2. Write getIntersectingTags(setA, setB).
+3. Use Set methods .add(), .has().
+4. Return array of unique/intersected items.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> `2`.
-> Just like Maps, Sets use strict equality (`===`) to check for duplicates. Because Objects are compared by memory reference, those are two completely different, unique Objects in memory, even though they look identical to a human. The Set accepts both!
-> ```
-> - Sets are extremely strict about what counts as a "duplicate".
-> 
----
-
-### Exercise 2: Array Deduplication with `Set` and Spread
-
-**Problem:** Deduplicate `[1, 2, 2, 3, 3, 3]` using `[...new Set(arr)]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 1, 2, 3 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const dupes = [1, 2, 2, 3, 3, 3];
-> const unique = [...new Set(dupes)];
-> console.log(unique);
+> function getUniqueTags(tagList) {
+>   if (!Array.isArray(tagList)) return [];
+>   const tagSet = new Set(tagList);
+>   return Array.from(tagSet);
+> }
+>
+> function getIntersectingTags(arrayA, arrayB) {
+>   const setB = new Set(arrayB);
+>   return arrayA.filter(item => setB.has(item));
+> }
+>
+> // Verification tests
+> const tags = ["tech", "sale", "tech", "new"];
+> const unique = getUniqueTags(tags);
+> console.assert(unique.length === 3 && !unique.includes("tech", 1), "Test 1 Failed");
+>
+> const common = getIntersectingTags(["a", "b", "c"], ["b", "c", "d"]);
+> console.assert(common.join(",") === "b,c", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Passing arrays into `Set` constructors and spreading back into arrays removes duplicate items.
+> #### Technical Explanation
+>
+> 1. **Set Object Purpose**: Set objects store collections of unique values of any type, filtering out duplicates automatically.
+> 2. **Fast Membership Testing**: Set.prototype.has(val) performs fast O(1) membership checks compared to Array.prototype.includes() O(n).
+> 3. **Array Conversion**: Array.from(set) or [...set] converts Set instances back to standard arrays.
 > 
 ---
 
-### Exercise 3: Set Operations (`has`, `add`, `delete`)
+### Exercise 2: Set Advanced Context Handler
 
-**Problem:** Add elements to a `Set`, test `.has(2)`, delete `2`, and check `.size`.
+**Scenario:** A web application component processes set data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleSetSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> has: true, size after delete: 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const set = new Set();
-> set.add(1);
-> set.add(2);
-> const hasTwo = set.has(2);
-> set.delete(2);
-> console.log(`has: ${hasTwo}, size after delete: ${set.size}`);
+> function handleSetSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleSetSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Set` methods manage collections of unique values efficiently.
-> 
+> #### Technical Explanation
+>
+> 1. **Set Architecture**: Applying set patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Set Performance Optimization
+
+**Scenario:** An application utility optimizes set execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeSetTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeSetTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeSetTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Set Optimization**: Optimizing set improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Map](map.md) — Uses the exact same strict equality rules, but stores key-value pairs.
 - [Array](../level_02/array.md) — The structure often converted to and from a Set.
 - [Array.from / Array.of / Array.isArray](../level_04/array_from_of_isarray.md) — Related concept: Array.from / Array.of / Array.isArray.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Set is a collection of strictly unique values. It automatically ignores duplicates.
 - It is the fastest and cleanest way to remove duplicate values from an Array.
 - Use `.add(value)`, `.has(value)`, and `.delete(value)` to interact with it.

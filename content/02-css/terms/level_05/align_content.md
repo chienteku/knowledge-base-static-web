@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard .)**: `align-content` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Supported natively by all browsers. Calculates spacing parameters for multi-line layout blocks).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you use `flex-wrap: wrap;` in a Flex Container, items that don't fit on the first line drop down to start a second line. 
@@ -141,7 +137,7 @@ Centering multi-row grids:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `align-content` on a single-row flexbox
 
@@ -196,7 +192,7 @@ To center elements inside a single row vertically, you must use **`align-items: 
 .container { display: flex; align-items: center; } /* Aligns items on single row */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Spacing Rows
 
@@ -254,14 +250,14 @@ To center elements inside a single row vertically, you must use **`align-items: 
 >
 > **Explanation:** Default `normal`/`stretch` expands flex lines to fill container height.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`flex-wrap`](flex_wrap.md) — The required prerequisite.
 - [`align-items`](align_items.md) — Single-line vertical alignment.
 - [`justify-content`](justify_content.md) — Horizontal main axis alignment.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `align-content` distributes space between **rows** of flex items.
 - It **only works if wrapping (`flex-wrap: wrap`) is enabled** and there are multiple rows.
 - The parent container must have an explicit height (or min-height) so there is vertical space to distribute.

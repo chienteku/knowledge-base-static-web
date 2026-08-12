@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Tooling**
+
+**Tooling (Browser-Specific: Built natively into all desktop web browsers .)**: DevTools Network Tab is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Built natively into all desktop web browsers (Chrome, Firefox, Safari, Edge).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web developers spend much of their time debugging client-server interactions: verifying that the frontend sends correct payload properties, checking why a server returns a `500 Internal Server Error`, or finding out which specific script is slowing down page loads.
@@ -68,7 +64,7 @@ Click on the `search?q=query` request to open the inspector panel:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to check "Preserve Log" when debugging page redirects
 
@@ -117,68 +113,170 @@ Click on the `search?q=query` request to open the inspector panel:
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Throttling Test
+### Exercise 1: DevTools Network HAR Log Inspector & Waterfall Analyzer
 
-**Problem:** You are building an offline-first PWA. You turn off your Wi-Fi, but your app still hits local cache layers, and you want to test how the browser behaves without disabling your computer's internet connection. How can you simulate this?
+**Scenario:** An API developer tool inspects HTTP Archive (HAR) entries to calculate request waterfall timing bottlenecks (DNS -> TCP -> TTFB -> Download).
+
+**Requirements:**
+1. Write analyzeHarWaterfall(harEntry).
+2. Extract dns, connect, wait (TTFB), receive.
+3. Identify slowest phase.
 
 > [!check]- Answer
-> - Open the Network Tab, locate the throttling dropdown (usually set to **No Throttling**), select **Offline**, and refresh the page. The browser will block all outbound network traffic from that tab, allowing you to test offline features safely.
+>
+> #### Implementation
+>
+> ```javascript
+> function analyzeHarWaterfall(harEntry = {}) {
+>   const timings = harEntry.timings || {};
+>
+>   const dnsMs = Math.max(0, timings.dns || 0);
+>   const connectMs = Math.max(0, timings.connect || 0);
+>   const ttfbMs = Math.max(0, timings.wait || 0);
+>   const downloadMs = Math.max(0, timings.receive || 0);
+>
+>   const totalDurationMs = dnsMs + connectMs + ttfbMs + downloadMs;
+>
+>   let slowestPhase = "DOWNLOAD";
+>   let maxTime = downloadMs;
+>
+>   if (ttfbMs > maxTime) {
+>     slowestPhase = "TTFB_SERVER_WAIT";
+>     maxTime = ttfbMs;
+>   }
+>   if (dnsMs > maxTime) {
+>     slowestPhase = "DNS_LOOKUP";
+>     maxTime = dnsMs;
+>   }
+>
+>   return {
+>     totalDurationMs,
+>     dnsMs,
+>     connectMs,
+>     ttfbMs,
+>     downloadMs,
+>     slowestPhase
+>   };
+> }
+>
+> // Verification tests
+> const har = {
+>   timings: { dns: 5, connect: 15, wait: 250, receive: 20 }
+> };
+>
+> const analysis = analyzeHarWaterfall(har);
+> console.assert(analysis.totalDurationMs === 290, "Test 1 Failed");
+> console.assert(analysis.slowestPhase === "TTFB_SERVER_WAIT", "Test 2 Failed: 250ms TTFB is slowest phase");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **HAR (HTTP Archive) Format**: JSON-formatted export file containing detailed network request logs from DevTools Network tab.
+> 2. **TTFB (Time to First Byte)**: Duration spent waiting for server to process request and return first byte; high TTFB signals slow backend queries.
+> 3. **Network Bottleneck Diagnosis**: Isolates network latency issues (DNS/TLS) from server processing bottlenecks (TTFB).
 > 
+---
+
+### Exercise 2: DevTools Network Throttling Simulator
+
+**Scenario:** Calculates request latency and download times under simulated network profiles (Fast 3G, Slow 3G, Offline).
+
+**Requirements:**
+1. Write simulateNetworkProfile(payloadByteSize, profileName).
+2. Apply RTT and download speed caps (kbps).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function simulateNetworkProfile(payloadByteSize = 1000, profileName = "Fast 3G") {
+>   const profiles = {
+>     "Slow 3G": { rttMs: 400, kbps: 400 },
+>     "Fast 3G": { rttMs: 150, kbps: 1600 },
+>     "Wifi": { rttMs: 20, kbps: 30000 }
+>   };
+>
+>   const prof = profiles[profileName] || profiles["Fast 3G"];
+>   const bytesPerSec = (prof.kbps * 1000) / 8;
+>   const transferSec = payloadByteSize / bytesPerSec;
+>   const transferMs = Math.round(transferSec * 1000);
+>
+>   const totalEstimatedMs = prof.rttMs + transferMs;
+>
+>   return {
+>     profileName,
+>     rttMs: prof.rttMs,
+>     transferMs,
+>     totalEstimatedMs
+>   };
+> }
+>
+> // Verification tests
+> const fast3g = simulateNetworkProfile(100_000, "Fast 3G"); // 100KB on Fast 3G
+> console.assert(fast3g.totalEstimatedMs > 600, "Test 1 Failed");
+>
+> const wifi = simulateNetworkProfile(100_000, "Wifi");
+> console.assert(wifi.totalEstimatedMs < fast3g.totalEstimatedMs, "Test 2 Failed: Wifi faster than 3G");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **DevTools Network Throttling**: Emulates slow 3G/4G mobile network speeds to test web application performance under low bandwidth.
+> 2. **RTT Latency Impact**: High RTT latency severely impacts applications making multiple sequential HTTP requests.
+> 3. **Optimizing Mobile Payloads**: Minifying payloads and reducing HTTP roundtrips is essential for high-latency networks.
 > 
 ---
 
-### Exercise 2: DevTools Network Timing Waterfall Analysis
+### Exercise 3: DevTools Request Payload vs Response Header Inspector
 
-**Problem:** Match DevTools timing phase to definition:
-1. Queueing / Stalled
-2. DNS Lookup
-3. Initial Connection / SSL
-4. TTFB (Time To First Byte)
-5. Content Download
+**Scenario:** Parses raw HTTP request headers and payload text extracted from DevTools Network panel.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectNetworkEntry(entryObj).
+2. Extract status, Content-Type, Content-Length, and body.
+
 > [!check]- Answer
-> ```text
-> 1. Request waiting for browser connection slot
-> 2. Resolving hostname IP address
-> 3. TCP handshake and TLS negotiation
-> 4. Waiting for backend server to send 1st response byte
-> 5. Receiving full response body stream
+>
+> #### Implementation
+>
+> ```javascript
+> function inspectNetworkEntry(entryObj = {}) {
+>   const status = entryObj.status || 0;
+>   const headers = entryObj.headers || {};
+>   const contentType = headers["content-type"] || headers["Content-Type"] || "unknown";
+>
+>   return {
+>     status,
+>     contentType,
+>     isSuccess: status >= 200 && status < 300,
+>     hasJsonContent: contentType.includes("application/json")
+>   };
+> }
+>
+> // Verification tests
+> const entry = { status: 200, headers: { "Content-Type": "application/json" } };
+> const res = inspectNetworkEntry(entry);
+>
+> console.assert(res.isSuccess === true && res.hasJsonContent === true, "Test 1 Failed");
 > ```
-> ```text
-> 1. Queueing/Stalled -> Waiting for connection slot / connection pool limit.
-> 2. DNS Lookup       -> Resolving IP address.
-> 3. SSL/Connection   -> TCP 3-way handshake and TLS negotiation.
-> 4. TTFB             -> Server processing time until 1st byte returned.
-> 5. Content Download -> Downloading payload body over network.
-> ```
-> - **Explanation:** Network timing waterfalls isolate specific network performance bottlenecks.
+>
+> #### Technical Explanation
+>
+> 1. **DevTools Network Tab Debugging**: Essential developer tool for inspecting HTTP headers, payloads, status codes, and timing.
+> 2. **Filtering Network Traffic**: Filter by Fetch/XHR, JS, CSS, WS (WebSockets) to isolate specific API calls.
+> 3. **Replaying Requests**: Allows copying requests as cURL or fetch to test API calls in terminal or Postman.
 ---
 
-### Exercise 3: Exporting Network Activity
-
-**Problem:** Which standard file format is used to export complete DevTools Network tab trace logs for sharing?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HAR (HTTP Archive format - .har file)
-> ```
-> ```text
-> HAR (HTTP Archive format - .har file).
-> ```
-> - **Explanation:** HAR files export complete network request/response trace logs.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Postman / Insomnia (API Clients)](api_clients.md) — External tools used to test endpoints in isolation.
 - [CORS Errors in the Browser](../level_05/cors_errors.md) — The console blocks diagnosed using the Network tab.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The DevTools Network Tab logs all network requests triggered by a browser tab.
 - It displays status codes, request/response payloads, headers, and cookies.
 - Timeline waterfalls help developers locate slow API requests and assets.

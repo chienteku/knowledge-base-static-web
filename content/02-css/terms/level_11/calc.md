@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Function**
+
+**CSS Function (Universal Modern Standard)**: `calc()` is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you have a fixed 200px sidebar, and you want a main content area to take up *all the remaining space* on the screen. 
@@ -55,7 +51,7 @@ A classic use case: You want a hero section to take up the full height of the sc
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the spaces around operators
 
@@ -101,7 +97,7 @@ width: calc(10px * 20px); /* ❌ Invalid! Cannot multiply length by length! */
 width: calc(10px * 2); /* Unitless multiplier */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Three Column Grid
 
@@ -155,14 +151,14 @@ width: calc(10px * 2); /* Unitless multiplier */
 >
 > **Explanation:** Parentheses inside `calc()` handle math operation grouping.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`gap` (Grid Gap)](../level_06/gap.md) — Calculating space widths between grid tracks.
 - [`var()` (CSS Custom Properties)](var.md) — Evaluating custom variables inside math equations.
 - [`min()`, `max()`, `clamp()` (Responsive Functions)](../level_08/min_max_clamp.md) — Advanced responsive scaling functions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `calc()` lets you perform math directly in CSS.
 - Its superpower is **mixing units** (e.g., subtracting fixed `px` from fluid `%`).
 - You **must** include spaces around the `+` and `-` operators.

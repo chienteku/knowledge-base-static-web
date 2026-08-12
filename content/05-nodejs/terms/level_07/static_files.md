@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Third-Party Framework Concept (Express.js)**
+
+**Third-Party Framework Concept (Express.js) (Web App Server Layer .)**: Serving Static Files (express.static) is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Directly manages static assets and file serving logic).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Web applications require static assets (such as HTML pages, CSS stylesheets, client-side JavaScript, and images) that do not change dynamically per request.
@@ -84,7 +80,7 @@ The files can be accessed at:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using relative directory paths
 
@@ -216,7 +212,7 @@ app.use(express.static(__dirname)); // ❌ Exposes .env secrets and source code!
 app.use(express.static(path.join(__dirname, 'public'))); // Dedicated public subfolder
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Configuring Static Routes
 
@@ -271,13 +267,13 @@ app.use('/static', express.static(assetsPath));
 >
 > **Explanation:** Options object configures HTTP `Cache-Control` maxAge headers for served assets.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Routing](routing.md) — The system matching URL structures.
 - [The http Module](../level_02/http_module.md) — The underlying HTTP server layer.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `express.static` serves static files (HTML, CSS, images, client JS) from a directory.
 - If a requested file exists, the middleware sends it and ends the request cycle.
 - If the file does not exist, the middleware calls `next()` to continue down the route chain.

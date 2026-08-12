@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: DOM Traversal is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing interactive web interfaces, you often start with an element reference and need to access other elements near it. For example, if a user clicks a "Delete" button inside a list item, JavaScript needs to navigate from the button to the enclosing list item (`<li>`) to delete it.
@@ -87,7 +83,7 @@ console.log(`The list has ${listItems.length} elements.`);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `nextSibling` with `nextElementSibling`
 
@@ -175,68 +171,136 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Highlight Sibling
+### Exercise 1: DOM Tree Container Finder with closest()
 
-**Problem:** Complete the code to find the element with ID `"target"` and add the class `"highlight"` to its immediate next element sibling.
+**Scenario:** A UI component locates its parent card container from an inner button click event using Element.prototype.closest().
 
-```javascript
-if (typeof document !== "undefined") {
-  const target = document.getElementById("target");
-  
-  // Find next sibling element
-  // Add highlight class
-}
-```
+**Requirements:**
+1. Write findParentCardContainer(buttonEl, containerClass).
+2. Use buttonEl.closest("." + containerClass).
+3. Return container element or null.
 
 > [!check]- Answer
-> - Use `target.nextElementSibling` to target the next element.
-> - Call `.classList.add("highlight")` on it.
-> 
----
-
-### Exercise 2: Finding Ancestor Elements with `closest()`
-
-**Problem:** Find nearest ancestor matching `.card` using `elem.closest(".card")`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card ancestor found
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(".card ancestor found");
+> function findParentCardContainer(buttonEl, containerClass) {
+>   if (!buttonEl || typeof buttonEl.closest !== "function") return null;
+>   return buttonEl.closest("." + containerClass);
+> }
+>
+> // Verification tests
+> const mockContainer = { className: "card" };
+> const mockBtn = {
+>   closest(sel) {
+>     return sel === ".card" ? mockContainer : null;
+>   }
+> };
+> console.assert(findParentCardContainer(mockBtn, "card") === mockContainer, "Test 1 Failed");
+> console.assert(findParentCardContainer(mockBtn, "missing") === null, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Element.closest(selector)` traverses upward through parent nodes until a matching selector is found.
+> #### Technical Explanation
+>
+> 1. **closest() Traversal**: Element.closest(selector) traverses up the DOM tree (including self) returning first matching ancestor.
+> 2. **Upward Tree Traversal**: Replaces repetitive parentElement.parentElement chains with declarative CSS selector matching.
+> 3. **Null Return Guard**: Returns null if no matching ancestor element is found in the DOM hierarchy.
 > 
 ---
 
-### Exercise 3: Sibling Traversal with `nextElementSibling`
+### Exercise 2: Sibling Accordion Component Navigator
 
-**Problem:** Traverse to next sibling element using `elem.nextElementSibling`.
+**Scenario:** An accordion widget toggles content visibility by inspecting nextElementSibling properties of header elements.
 
-**Expected output:**
+**Requirements:**
+1. Write getAccordionPanel(headerEl).
+2. Inspect headerEl.nextElementSibling.
+3. Verify element has class "accordion-panel".
+4. Return panel element or null.
+
 > [!check]- Answer
-> ```text
-> Next sibling element traversed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Next sibling element traversed");
+> function getAccordionPanel(headerEl) {
+>   if (!headerEl || !headerEl.nextElementSibling) return null;
+>   const sibling = headerEl.nextElementSibling;
+>   if (sibling.classList && sibling.classList.contains("accordion-panel")) {
+>     return sibling;
+>   }
+>   return null;
+> }
+>
+> // Verification tests
+> const mockPanel = { classList: { contains(c) { return c === "accordion-panel"; } } };
+> const mockHeader = { nextElementSibling: mockPanel };
+> console.assert(getAccordionPanel(mockHeader) === mockPanel, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `nextElementSibling` skips whitespace text nodes to return adjacent HTML elements.
-> 
+> #### Technical Explanation
+>
+> 1. **nextElementSibling Traversal**: nextElementSibling returns the next adjacent Element node, skipping comment and text nodes.
+> 2. **Element vs Node Traversal**: Element traversal properties (nextElementSibling, previousElementSibling) avoid whitespace text node pitfalls.
+> 3. **DOM Layout Dependency**: Relies on physical adjacent placement of elements inside the parent container.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Child Element Node Filtering Engine
+
+**Scenario:** A component tree parser extracts all button elements from a parent element's children collection.
+
+**Requirements:**
+1. Write extractChildButtons(parentEl).
+2. Iterate parentEl.children HTMLCollection.
+3. Filter elements where tagName === "BUTTON".
+4. Return array of button elements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function extractChildButtons(parentEl) {
+>   if (!parentEl || !parentEl.children) return [];
+>   const buttons = [];
+>   for (let i = 0; i < parentEl.children.length; i++) {
+>     const child = parentEl.children[i];
+>     if (child.tagName === "BUTTON") {
+>       buttons.push(child);
+>     }
+>   }
+>   return buttons;
+> }
+>
+> // Verification tests
+> const mockParent = {
+>   children: [
+>     { tagName: "SPAN" },
+>     { tagName: "BUTTON", id: "b1" },
+>     { tagName: "BUTTON", id: "b2" }
+>   ]
+> };
+> const btns = extractChildButtons(mockParent);
+> console.assert(btns.length === 2 && btns[0].id === "b1", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **children HTMLCollection**: The children property returns a live HTMLCollection of child Element nodes.
+> 2. **Filtering Element Nodes**: Filters elements by tagName or class properties cleanly.
+> 3. **Index Iteration**: HTMLCollections support length and zero-based index access (children[i]).
+---
+
+## 6. Related Terms
 - [Event Delegation](event_delegation.md) — An event pattern that heavily relies on `.closest()` to identify event sources.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - DOM Traversal is the technique of navigating up, down, or sideways from an existing element reference.
 - Upward lookup: `parentNode` targets the parent; `closest(selector)` scans upwards to find the nearest matching ancestor element.
 - Downward lookup: `children` targets a live list of child elements (ignoring text/whitespace nodes).

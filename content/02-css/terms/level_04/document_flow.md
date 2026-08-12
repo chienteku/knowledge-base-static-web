@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Browser Support .)**: Document Flow (Normal Flow) is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Calculated during the rendering engine's layout step, where it processes the DOM and CSSOM to build the render tree).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you write a document in a word processor (like Microsoft Word), you type words and they automatically flow left-to-right, wrapping down to the next line when they hit the page edge. If you press Enter, a new block starts below.
@@ -124,7 +120,7 @@ Comparing flow styles:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to align blocks side-by-side using margins
 
@@ -264,7 +260,7 @@ Comparing flow styles:
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Flow Classifications
 
@@ -338,7 +334,7 @@ Comparing flow styles:
 >
 > **Explanation:** `display: flow-root` creates a BFC containing all internal floated children.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](display.md) — The fundamental flow markers.
 - [`position: static` vs `relative`](position_static_relative.md) — In-flow positioning options.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Out-of-flow positioning options.
@@ -346,7 +342,7 @@ Comparing flow styles:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Document Flow is the default algorithm the browser uses to lay out pages.
 - Block elements stack vertically and take up 100% width.
 - Inline elements flow horizontally and wrap at boundaries.

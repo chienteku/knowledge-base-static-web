@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Aesthetic / Visual Effect Property**
+
+**Aesthetic / Visual Effect Property (Universal Modern Standard .)**: `box-shadow` (Card Shadows) is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The foundation of Google's "Material Design" philosophy).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern UI design (especially since the release of Google's Material Design in 2014), the web is treated like sheets of digital paper stacked on top of each other. 
@@ -63,7 +59,7 @@ A common interaction pattern is making a card "lift up" toward the user when the
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using solid, harsh colors
 
@@ -108,7 +104,7 @@ input { box-shadow: 0 2px 4px rgba(0,0,0,0.2); } /* Drop shadow outside input */
 input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Inner Shadow
 
@@ -162,7 +158,7 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 >
 > **Explanation:** Layering multiple box shadows creates realistic lighting depth.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Border](../level_02/border.md) — Sizing layouts with structural boundaries.
 - [`border-radius` (Rounded Corners)](border_radius.md) — Card rounding properties which crop shadow layouts.
 - [`filter`](filter.md) — Image processing filters that include `drop-shadow()`.
@@ -171,7 +167,7 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `box-shadow` elevates elements to create a 3D hierarchy on a 2D screen.
 - Syntax: X-Offset, Y-Offset, Blur, Spread (optional), Color.
 - Always use highly transparent colors (e.g., `rgba(0,0,0, 0.1)`) for realistic shadows.

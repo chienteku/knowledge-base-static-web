@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support)**: Padding is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you create a button and add text inside it, by default, the text will touch the exact edges of the button's background and border. It looks cramped and ugly.
@@ -67,7 +63,7 @@ The **Padding** is the white cardboard matting that sits *between* the photograp
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Thinking padding doesn't affect the element's total size
 
@@ -116,7 +112,7 @@ span {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Background Color Test
 
@@ -167,7 +163,7 @@ span {
 >
 > **Explanation:** Padding expands inner content space; margin pushes outside boundaries.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Margin](margin.md) — The outer spacing (outside the border).
 - [`box-sizing: border-box`](box_sizing.md) — The layout sizing model.
 - [Border](border.md) — The border box.
@@ -178,7 +174,7 @@ span {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Padding creates space *inside* an element's border.
 - Background colors and images will stretch to fill the padding area.
 - Padding uses the exact same shorthand syntax as margin (Top, Right, Bottom, Left).

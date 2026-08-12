@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Modern Standard .)**: `grid-template-areas` is a fundamental concept in this technology stack. **Level 6 — Layouts — CSS Grid**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Parses string arrays to construct layout bounds).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Calculating numbered grid lines (like `grid-column: 1 / 4`) works fine for simple card grids. 
@@ -143,7 +139,7 @@ Leaving blank cells:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating Non-Rectangular Area Shapes
 
@@ -297,7 +293,7 @@ grid-template-areas:
   "main main side"; /* 3 columns across both rows */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: ASCII Map Design
 
@@ -361,14 +357,14 @@ grid-template-areas:
 >
 > **Explanation:** Period `.` tokens represent empty grid cell slots.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Sizing the track grid.
 - [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Placing items manually.
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Related concept: CSS Grid (Concept) & `display: grid`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `grid-template-areas` defines named regions inside a grid layout using an ASCII-art string map.
 - Map strings are written row-by-row inside quotes.
 - Adjacent identical names merge cells into larger rectangular regions.

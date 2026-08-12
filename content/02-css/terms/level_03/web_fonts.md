@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography / CSS At-Rule**
+
+**Typography / CSS At-Rule (Universal Browser Support .)**: `@font-face` & Web Fonts (Google Fonts) is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively. The browser initiates background asset downloading operations when it parses custom font source URLs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, a browser can only display a font if it is **already installed** on the user's computer. 
@@ -124,7 +120,7 @@ body {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving out `font-display: swap`
 
@@ -183,7 +179,7 @@ body {
 src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Font Hook
 
@@ -244,13 +240,13 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 >
 > **Explanation:** `rel="preload"` with `crossorigin` initiates high-priority early font network fetches.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`font-family`](font_family.md) — The styling property that applies these fonts.
-- [`@import` Rule](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
+- [`@import`](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Web Fonts allow websites to display custom branded typography on any device.
 - Use Google Fonts to load typefaces directly via external CDN links.
 - Use `@font-face` to self-host font files on your own server.

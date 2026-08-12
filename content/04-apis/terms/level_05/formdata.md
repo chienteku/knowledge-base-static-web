@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Supported in browsers and modern server-side environment parsers .)**: FormData & Multipart Uploads is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Supported in browsers and modern server-side environment parsers (like Multer in Node/Express).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard modern APIs exchange data using JSON (`application/json`). However, JSON is a strict text-based format. If you want to send binary files (like a PDF contract or a JPEG profile photo), you cannot place them directly into a standard JSON string.
@@ -95,7 +91,7 @@ Content-Type: image/jpeg
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Manually setting the `Content-Type: multipart/form-data` header
 
@@ -161,70 +157,157 @@ fetch('/upload', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Form Append Audit
+### Exercise 1: Multipart File Upload FormData Constructor
 
-**Problem:** Review this code designed to send a file to the server. Find the bug that will cause the server to fail to extract the file correctly:
+**Scenario:** A file upload module constructs a native `FormData` payload containing binary file buffers and text metadata fields.
 
-```javascript
-const form = new FormData();
-form.append('description', 'User document');
-form.append('doc', document.querySelector('#doc-input').value); // <-- Look here!
-
-fetch('/api/doc', { method: 'POST', body: form });
-```
+**Requirements:**
+1. Write buildFileUploadFormData(fileBuffer, filename, metadata).
+2. Append file blob/buffer.
+3. Append key-value metadata strings.
+4. Return FormData instance.
 
 > [!check]- Answer
-> - `.value` on a file input element only returns a dummy text path string (like `C:\fakepath\file.txt`).
-> - To grab the actual file object, access the element's `.files` array.
-> 
-> [!check]- Answer
-> - **The `.value` bug.** On line 3, calling `.value` appends a plain text string representing the filename. To upload the actual binary file, replace it with `document.querySelector('#doc-input').files[0]`.
-> 
-> 
----
-
-### Exercise 2: FormData Construction and Append Pattern
-
-**Problem:** Write JS snippet appending text field `username: 'Alice'` and file input `avatar` to a `FormData` object.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const data = new FormData(); data.append('username', 'Alice'); data.append('avatar', fileInput.files[0]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const data = new FormData();
-> data.append('username', 'Alice');
-> data.append('avatar', fileInput.files[0]);
+> function buildFileUploadFormData(fileBuffer, filename, metadata = {}) {
+>   const formData = new FormData();
+>
+>   if (fileBuffer) {
+>     const blob = new Blob([fileBuffer], { type: "application/octet-stream" });
+>     formData.append("file", blob, filename);
+>   }
+>
+>   for (const [key, val] of Object.entries(metadata)) {
+>     formData.append(key, String(val));
+>   }
+>
+>   return formData;
+> }
+>
+> // Verification tests
+> const buf = Buffer.from("sample image data");
+> const fd = buildFileUploadFormData(buf, "avatar.png", { userId: "usr-42" });
+>
+> console.assert(fd.has("file") === true, "Test 1 Failed: Must append file");
+> console.assert(fd.get("userId") === "usr-42", "Test 2 Failed: Must append metadata");
 > ```
-> - **Explanation:** `.append(key, value)` appends text strings and binary File/Blob objects.
+>
+> #### Technical Explanation
+>
+> 1. **FormData Object Purpose**: Compiles key-value pairs formatted as multipart/form-data for API submission.
+> 2. **File Append Syntax**: formData.append(name, blob/file, filename) attaches binary files to payload.
+> 3. **Automatic Content-Type Boundary**: When sending FormData via fetch, DO NOT manually set Content-Type header; browser must auto-generate boundary delimiter.
+> 
 ---
 
-### Exercise 3: FormData Conversion to URLSearchParams
+### Exercise 2: FormData to URLSearchParams Serialization Adapter
 
-**Problem:** Write single line converting `FormData` object to URL-encoded query string format.
+**Scenario:** Converts a FormData instance into a URLSearchParams query string for form-urlencoded endpoints.
 
-**Expected output:**
+**Requirements:**
+1. Write formDataToUrlEncoded(formData).
+2. Iterate entries.
+3. Return url-encoded string.
+
 > [!check]- Answer
-> ```text
-> const query = new URLSearchParams(formData).toString();
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const query = new URLSearchParams(formData).toString();
+> function formDataToUrlEncoded(formData) {
+>   if (!formData) return "";
+>   const params = new URLSearchParams();
+>
+>   for (const [key, value] of formData.entries()) {
+>     if (typeof value === "string") {
+>       params.append(key, value);
+>     }
+>   }
+>
+>   return params.toString();
+> }
+>
+> // Verification tests
+> const fd = new FormData();
+> fd.append("username", "alice");
+> fd.append("role", "admin");
+>
+> const encoded = formDataToUrlEncoded(fd);
+> console.assert(encoded === "username=alice&role=admin", "Test 1 Failed");
 > ```
-> - **Explanation:** `URLSearchParams` accepts `FormData` instances directly for URL-encoding.
+>
+> #### Technical Explanation
+>
+> 1. **FormData Iteration**: formData.entries() returns an iterator over key/value pairs in the payload.
+> 2. **URLSearchParams Conversion**: Converts form fields to application/x-www-form-urlencoded string format.
+> 3. **Ignoring Binary Files**: Binary Blob/File entries cannot be serialized to text url-encoded strings.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: FormData Inspection & Validation Linter
+
+**Scenario:** An API validator inspects FormData entries before submission, verifying file size and required field presence.
+
+**Requirements:**
+1. Write validateFormDataPayload(formData, requiredFields, maxFileBytes).
+2. Validate required text fields.
+3. Check file byte sizes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function validateFormDataPayload(formData, requiredFields = [], maxFileBytes = 5_000_000) {
+>   if (!formData) return { valid: false, errors: ["Missing FormData"] };
+>
+>   const errors = [];
+>
+>   for (const field of requiredFields) {
+>     if (!formData.has(field) || String(formData.get(field)).trim() === "") {
+>       errors.push(`Field '${field}' is required`);
+>     }
+>   }
+>
+>   for (const [key, value] of formData.entries()) {
+>     if (value && typeof value === "object" && typeof value.size === "number") {
+>       if (value.size > maxFileBytes) {
+>         errors.push(`File '${key}' exceeds max size of ${maxFileBytes} bytes`);
+>       }
+>     }
+>   }
+>
+>   return { valid: errors.length === 0, errors };
+> }
+>
+> // Verification tests
+> const fd = new FormData();
+> fd.append("title", "Report");
+>
+> const res1 = validateFormDataPayload(fd, ["title", "author"]);
+> console.assert(res1.valid === false && res1.errors[0].includes("author"), "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Pre-Submit Client Validation**: Validates FormData inputs in browser memory before initiating large network uploads.
+> 2. **Blob Size Inspection**: File objects in FormData expose size property in bytes for client-side file size guards.
+> 3. **Improved User Feedback**: Provides immediate validation feedback without waiting for server response timeouts.
+---
+
+## 6. Related Terms
 - [Content-Type & MIME Types](../level_02/content_type.md) — The media type descriptors.
 - [Base64 Encoding](../level_07/base64.md) — The alternative text-based binary transport encoding method.
 - [Blob & ArrayBuffer](../level_07/blob_arraybuffer.md) — Related concept: Blob & ArrayBuffer.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - FormData allows sending text fields and binary files together in a single request body.
 - It is significantly more performance-efficient than converting files to Base64 JSON text.
 - The `multipart/form-data` format isolates fields using distinct boundary delimiters.

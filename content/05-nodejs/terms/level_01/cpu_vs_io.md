@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture**
+
+**Node.js Core Architecture (Node.js Core Architecture .)**: CPU-bound vs I/O-bound is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Governs execution profiles across server-side hardware environments).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Every server application performs two primary activities: computing data or transferring data. Understanding the difference between **CPU-bound** and **I/O-bound** operations is key to understanding when to use Node.js and when to choose another language:
@@ -82,7 +78,7 @@ app.listen(3000);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Node.js as a primary engine for data science or machine learning
 
@@ -136,7 +132,7 @@ app.post('/encrypt', (req, res) => {
 const users = await db.query('SELECT * FROM users');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Task Classification
 
@@ -200,14 +196,14 @@ const users = await db.query('SELECT * FROM users');
 >
 > **Explanation:** Async I/O handles tens of thousands of concurrent network connections easily, while Worker Threads parallelize CPU processing.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Blocking the Event Loop](blocking_event_loop.md) — The consequence of running CPU-bound code on the main thread.
 - [Single-Threaded Architecture](single_threaded.md) — The core design constraint behind Node's CPU limits.
 - [Non-Blocking I/O](non_blocking_io.md) — Related concept: Non-Blocking I/O.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - I/O-bound tasks are bottlenecked by data transfers (disk, network, databases).
 - CPU-bound tasks are bottlenecked by mathematical calculations.
 - Node.js is highly optimized for high-concurrency I/O-bound operations.

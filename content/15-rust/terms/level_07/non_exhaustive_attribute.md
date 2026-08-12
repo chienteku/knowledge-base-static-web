@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [Enum](../level_02/enum.md)
+- [Enum](../level_02/enum.md) — 
 - [`match`](../level_02/match.md) — Whose exhaustiveness checking this attribute specifically restricts for external crates.
 - [`pub` Visibility](pub_visibility.md) — The public-API concern this attribute is designed to protect.
 - [Edition](edition.md) — The versioning context this attribute's SemVer guarantees operate within.
@@ -232,7 +232,7 @@ Then answer: **can the `my_server` library's own `src/lib.rs` use struct literal
 ## 6. Related Terms
 
 
-- [Enum](../level_02/enum.md)
+- [Enum](../level_02/enum.md) — 
 - [`match`](../level_02/match.md) — Whose exhaustiveness-checking behavior this attribute specifically alters for external crates.
 - [Edition](edition.md) — The broader SemVer/compatibility context this attribute is one tool within.
 

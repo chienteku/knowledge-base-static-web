@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Structure**
+
+**Data Structure (Universal: Works everywhere)**: Object is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While Primitives (like Strings and Numbers) are great for storing single values, real-world entities are complex. A "User" isn't just a string; a User has a name, an age, an email, and an active status. 
@@ -71,7 +67,7 @@ spaceship.isReadyForLaunch = true;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Dot Notation with Bracket Notation
 
@@ -150,65 +146,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Book
+### Exercise 1: User Account Profile Manager
 
-**Problem:** Create an object called `book` with three properties: `title` (a string), `author` (a string), and `pages` (a number). Then, use dot notation to log a sentence like: "The book [Title] was written by [Author]."
+**Scenario:** A user management system creates, updates, and inspects user profile objects containing nested address properties using object literal syntax {}.
 
-**Expected output:**
-*(Depends on your strings, e.g., "The book Dune was written by Frank Herbert.")*
+**Requirements:**
+1. Write createUserProfile(id, email, options).
+2. Construct object literal with id, email, and nested options.
+3. Return created object.
 
 > [!check]- Answer
-> - Create it like `const book = { title: "Dune", author: "Frank Herbert", pages: 412 };`
-> - Use template literals `` `The book ${book.title}...` `` for easy logging.
-> 
----
-
-### Exercise 2: Object Keys, Values, and Entries
-
-**Problem:** Print keys, values, and entries of `{ a: 1, b: 2 }` using `Object.keys`, `Object.values`, and `Object.entries`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ["a","b"]
-> [1,2]
-> [["a",1],["b",2]]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const obj = { a: 1, b: 2 };
-> console.log(JSON.stringify(Object.keys(obj)));
-> console.log(JSON.stringify(Object.values(obj)));
-> console.log(JSON.stringify(Object.entries(obj)));
+> function createUserProfile(id, email, options = {}) {
+>   const profile = {
+>     id: id,
+>     email: email,
+>     role: options.role || "USER",
+>     settings: {
+>       theme: options.theme || "light",
+>       notifications: Boolean(options.notifications)
+>     }
+>   };
+>   return profile;
+> }
+>
+> // Verification tests
+> const p = createUserProfile(101, "alice@example.com", { role: "ADMIN", notifications: true });
+> console.assert(p.id === 101 && p.role === "ADMIN", "Test 1 Failed");
+> console.assert(p.settings.notifications === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.keys`, `Object.values`, and `Object.entries` extract iterable arrays of object metadata.
+> #### Technical Explanation
+>
+> 1. **Object Literal Syntax**: Objects are created using curly brace literals {} containing key: value property pairs.
+> 2. **Key Representation**: Object property keys are strings or symbols mapping to any valid JavaScript value.
+> 3. **Heap Reference Memory**: Objects are stored in heap memory and accessed via reference variables.
 > 
 ---
 
-### Exercise 3: Deep Copying with `structuredClone`
+### Exercise 2: Shallow Copy & Default Configuration Merger
 
-**Problem:** Create a deep clone of nested object `{ a: { b: 1 } }` using `structuredClone()`.
+**Scenario:** A service initializer merges user options with default configuration objects using Object.assign() and object spread syntax { ...defaults, ...options }.
 
-**Expected output:**
+**Requirements:**
+1. Write mergeServiceOptions(defaultOpts, userOpts).
+2. Merge defaultOpts and userOpts into a new object.
+3. Ensure user values override default values.
+4. Return merged object.
+
 > [!check]- Answer
-> ```text
-> Original b: 1, Clone b: 99
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const orig = { a: { b: 1 } };
-> const copy = structuredClone(orig);
-> copy.a.b = 99;
-> console.log(`Original b: ${orig.a.b}, Clone b: ${copy.a.b}`);
+> function mergeServiceOptions(defaultOpts, userOpts) {
+>   // Merging options using object spread
+>   const merged = { ...defaultOpts, ...userOpts };
+>   return merged;
+> }
+>
+> // Verification tests
+> const defaults = { port: 8080, host: "localhost", timeout: 5000 };
+> const user = { port: 3000 };
+> const result = mergeServiceOptions(defaults, user);
+> console.assert(result.port === 3000, "Test 1 Failed: User option should override default");
+> console.assert(result.host === "localhost", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `structuredClone` creates complete, independent deep memory copies of objects and nested collections.
-> 
+> #### Technical Explanation
+>
+> 1. **Object Spread Operator**: Expression { ...a, ...b } shallow-copies properties, with later properties overriding earlier ones.
+> 2. **Object.assign() Equivalent**: Object.assign({}, a, b) performs identical shallow property copies into a target object.
+> 3. **Shallow Copy Limitations**: Nested objects inside merged objects retain their original reference addresses.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Locked Registry Key Inspector & Freezing
+
+**Scenario:** A security registry inspects object keys using Object.keys() and locks the object using Object.freeze() to prevent property modification.
+
+**Requirements:**
+1. Write createLockedRegistry(initialData).
+2. Inspect keys using Object.keys().
+3. Freeze registry object using Object.freeze().
+4. Return object { registry, keysCount, isFrozen }.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createLockedRegistry(initialData) {
+>   const registry = Object.assign({}, initialData);
+>   const keysCount = Object.keys(registry).length;
+>   Object.freeze(registry);
+>
+>   return {
+>     registry,
+>     keysCount,
+>     isFrozen: Object.isFrozen(registry)
+>   };
+> }
+>
+> // Verification tests
+> const res = createLockedRegistry({ env: "production", version: "1.0.0" });
+> console.assert(res.keysCount === 2, "Test 1 Failed");
+> console.assert(res.isFrozen === true, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object.keys() Utility**: Returns an array of an object's own enumerable string property names.
+> 2. **Object.freeze() Mechanics**: Prevents adding, deleting, or mutating properties on an object.
+> 3. **Object.isFrozen() Validation**: Returns boolean indicating whether an object has been frozen.
+---
+
+## 6. Related Terms
 - [Property](property.md) — An association between a key and a value in an object.
 - [Method](method.md) — A function that is stored as a property of an object.
 - [Array](array.md) — A specialized list-like object.
@@ -224,7 +282,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Objects are collections of key-value pairs enclosed in `{}`.
 - Use **Dot Notation** (`user.name`) when you know the exact name of the property.
 - Use **Bracket Notation** (`user["name"]` or `user[variable]`) when the property name contains special characters, or when you are using a variable to find the key.

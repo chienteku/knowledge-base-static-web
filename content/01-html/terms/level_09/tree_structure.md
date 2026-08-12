@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser Architecture / Concept**
+
+**Browser Architecture / Concept (Universal Browser Architecture)**: The Tree Structure is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When the browser converts your HTML into a living DOM, it needs a logical way to organize thousands of elements so that JavaScript can easily find them and move them around.
@@ -69,7 +65,7 @@ html (Root)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that text itself is a node
 
@@ -113,7 +109,7 @@ html (Root)
 <!-- Flat, clean semantic tree structure -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Family Relationships
 
@@ -177,14 +173,14 @@ html (Root)
 >
 > **Explanation:** `.parentElement` travels up one level in the DOM tree hierarchy.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The system that uses this tree structure.
 - [Nesting](../level_01/nesting.md) — The act of writing the HTML code that generates this tree.
 - [Critical Rendering Path](critical_rendering_path.md) — The browser compilation pipeline converting layout trees into visuals.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The browser organizes the DOM into a hierarchical Tree Structure.
 - Elements are organized by "Family" relationships: Parents, Children, and Siblings.
 - This strict organization allows CSS to apply styles (like targeting all children of a `<div>`) and JavaScript to navigate the document efficiently.

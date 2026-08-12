@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [`Pin<T>`](pin_t.md) — The primary concept of memory pinning in Rust.
+- [`pin!`, `Pin<T>`, and `Unpin`](pin_t.md) — The primary concept of memory pinning in Rust.
 - [`Future` Trait](future_trait.md) — The state machines that rely on pinning.
 - [Trait](../level_04/trait.md) — Traits with no methods used to mark compiler capabilities.
 

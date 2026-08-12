@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Truthy / Falsy is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In strongly typed languages, an `if` statement strictly requires a Boolean (`true` or `false`). If you pass a string or a number into an `if` statement, the program crashes. 
@@ -68,7 +64,7 @@ greetUser();        // undefined is Falsy -> "Hello, Guest!"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `0` trap
 
@@ -153,72 +149,110 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Truthy or Falsy?
+### Exercise 1: Form Required Input Validator against Falsy Values
 
-**Problem:** Look at the following values. Predict whether they are Truthy or Falsy.
-1. `"false"` (a string)
-2. `0`
-3. `[]` (an empty array)
-4. `NaN`
+**Scenario:** A user registration validator evaluates input values against JavaScript's exact 8 falsy values to verify required form fields.
 
-**Expected output:**
+**Requirements:**
+1. Write isInputTruthy(val).
+2. Check if value is truthy using Boolean(val) or !!val.
+3. Return boolean indication.
+
 > [!check]- Answer
-> ```text
-> 1. Truthy (Any non-empty string is truthy, even the word "false"!)
-> 2. Falsy
-> 3. Truthy (All objects and arrays are truthy, even if they are empty!)
-> 4. Falsy
-> ```
-> - There are only 6 falsy values in JavaScript: `false`, `0`, `""` (empty string), `null`, `undefined`, and `NaN`. Everything else is Truthy.
-> 
----
-
-### Exercise 2: Falsy Value Identification
-
-**Problem:** Filter an array `[0, "", "hello", null, 42, undefined, NaN, false]` to extract only truthy values.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ["hello",42]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const items = [0, "", "hello", null, 42, undefined, NaN, false];
-> const truthy = items.filter(Boolean);
-> console.log(JSON.stringify(truthy));
+> function isInputTruthy(val) {
+>   return Boolean(val);
+> }
+>
+> // Verification tests
+> console.assert(isInputTruthy("Alice") === true, "Test 1 Failed");
+> console.assert(isInputTruthy(" ") === true, "Test 2 Failed: Whitespace string is truthy");
+> console.assert(isInputTruthy("") === false, "Test 3 Failed: Empty string is falsy");
+> console.assert(isInputTruthy(0) === false, "Test 4 Failed: 0 is falsy");
+> console.assert(isInputTruthy(null) === false, "Test 5 Failed: null is falsy");
 > ```
 >
-> **Explanation:** `Array.prototype.filter(Boolean)` removes all 8 falsy JavaScript values.
+> #### Technical Explanation
+>
+> 1. **The 8 Falsy Values**: JavaScript has exactly 8 falsy values: false, 0, -0, 0n, "", null, undefined, and NaN.
+> 2. **Truthy Coercion**: All other values (including empty objects {} and empty arrays []) evaluate to truthy.
+> 3. **Explicit Boolean Coercion**: Functions Boolean(val) and !!val convert truthy/falsy values into primitive booleans.
 > 
 ---
 
-### Exercise 3: Boolean Type Coercion with `Boolean()`
+### Exercise 2: Default Value Assignment Guard (Falsy vs Nullish)
 
-**Problem:** Test truthiness of `"0"`, `"false"`, `[]`, `{}` using `Boolean()`.
+**Scenario:** A UI component compares logical OR (||) fallback behavior against nullish coalescing (??) when processing inputs like 0 or empty strings.
 
-**Expected output:**
+**Requirements:**
+1. Write resolveNumericSetting(userVal, defaultVal).
+2. Compare result of userVal || defaultVal vs userVal ?? defaultVal.
+3. Return object with both results.
+
 > [!check]- Answer
-> ```text
-> true
-> true
-> true
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(Boolean("0"));
-> console.log(Boolean("false"));
-> console.log(Boolean([]));
-> console.log(Boolean({}));
+> function resolveNumericSetting(userVal, defaultVal) {
+>   return {
+>     logicalOrResult: userVal || defaultVal,
+>     nullishResult: userVal ?? defaultVal
+>   };
+> }
+>
+> // Verification tests
+> const res = resolveNumericSetting(0, 100);
+> console.assert(res.logicalOrResult === 100, "Test 1 Failed: 0 is falsy for ||");
+> console.assert(res.nullishResult === 0, "Test 2 Failed: 0 is NOT nullish for ??");
 > ```
 >
-> **Explanation:** Non-empty strings and object references are always truthy in JavaScript.
-> 
+> #### Technical Explanation
+>
+> 1. **Logical OR Behavior**: Operator || triggers fallback for any falsy value, which can accidentally overwrite valid 0 or "" inputs.
+> 2. **Nullish Coalescing Behavior**: Operator ?? triggers fallback strictly for null or undefined.
+> 3. **Falsy Bug Mitigation**: Use ?? when 0 or false are valid domain values to prevent unintended fallback bugs.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Data Stream Falsy Element Filter
+
+**Scenario:** A data ingestion pipeline cleans input array streams by filtering out all falsy entries using array.filter(Boolean).
+
+**Requirements:**
+1. Write cleanDataStream(rawStream).
+2. Filter out falsy entries using rawStream.filter(Boolean).
+3. Return cleaned array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function cleanDataStream(rawStream) {
+>   if (!Array.isArray(rawStream)) return [];
+>   return rawStream.filter(Boolean);
+> }
+>
+> // Verification tests
+> const cleaned = cleanDataStream(["data", "", 0, null, "valid", undefined, NaN]);
+> console.assert(cleaned.length === 2, "Test 1 Failed");
+> console.assert(cleaned.join(",") === "data,valid", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Boolean Constructor Predicate**: Passing Boolean to array.filter(Boolean) coerces each element to boolean and removes falsy elements.
+> 2. **Array Object Truthiness**: Objects {} and arrays [] are always truthy, even when empty.
+> 3. **Data Sanitization**: Quickly cleans sparse or corrupted array streams containing falsy values.
+---
+
+## 6. Related Terms
 - [Type Coercion](../level_01/type_coercion.md) — Automatic conversion of values from one data type to another.
 - [Boolean](../level_01/boolean.md) — Related concept: Boolean.
 - [Comparison Operators](../level_01/comparison_operators.md) — Related concept: Comparison Operators.
@@ -228,7 +262,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Falsy values evaluate to `false` in conditionals.
 - **Memorize the 6 falsy values**: `false`, `0`, `""`, `null`, `undefined`, and `NaN`.
 - Everything that is not on that list of 6 is Truthy. This includes empty arrays `[]` and empty objects `{}`.

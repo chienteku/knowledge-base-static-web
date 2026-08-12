@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Number is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In many programming languages like C or Java, developers must explicitly choose between integers (whole numbers) and floating-point numbers (decimals). This requires understanding memory allocation and hardware limits. Brendan Eich designed JavaScript to be accessible. To simplify things, JavaScript uses a single `Number` type for all numerical values.
@@ -64,7 +60,7 @@ console.log(`0.1 + 0.2 = ${sum}`); // 0.30000000000000004
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Floating Point Math Precision
 
@@ -145,64 +141,93 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Math Operations
+### Exercise 1: Precision Financial Tax & Rounding Engine
 
-**Problem:** Calculate the area of a circle with a radius of 5. Use `Math.PI` for Pi, and log the result rounded to two decimal places.
+**Scenario:** A checkout system calculates sales tax on item prices. Because JavaScript numbers are IEEE 754 double-precision floats, rounding errors must be handled using Number.EPSILON and fixed precision rounding.
 
-**Expected output:**
+**Requirements:**
+1. Write a function calculateRoundedTax(price, taxRate).
+2. Multiply price by tax rate.
+3. Round cleanly to 2 decimal places using Math.round() and scaling.
+4. Return rounded number.
+
 > [!check]- Answer
-> ```text
-> 78.54
-> ```
-> - Area = Pi * radius^2
-> - To round a number to a specific number of decimal places, you can use `Number.prototype.toFixed(2)`, but remember that `.toFixed()` returns a *string*, so you may need to convert it back or just log it.
-> 
----
-
-### Exercise 2: Safe Integer Boundaries
-
-**Problem:** Print `Number.MAX_SAFE_INTEGER` and explain why `9007199254740991 + 1 === 9007199254740991 + 2`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 9007199254740991
-> true
-> ```
+> #### Implementation
 > ```javascript
-> console.log(Number.MAX_SAFE_INTEGER);
-> console.log((9007199254740991 + 1) === (9007199254740991 + 2));
+> function calculateRoundedTax(price, taxRate) {
+>   const rawTax = price * taxRate;
+>   const rounded = Math.round((rawTax + Number.EPSILON) * 100) / 100;
+>   return rounded;
+> }
+> // Verification tests
+> console.assert(calculateRoundedTax(10.05, 0.08) === 0.80, "Test 1 Failed");
+> console.assert(calculateRoundedTax(100, 0.075) === 7.50, "Test 2 Failed");
 > ```
->
-> **Explanation:** Double precision floats lose 1-unit integer precision beyond $2^{53} - 1$ (`9007199254740991`).
+> #### Technical Explanation
+> 1. **IEEE 754 Floating-Point Format**: All numbers in JS are 64-bit binary floating-point numbers (double precision), leading to precision artifacts like 0.1 + 0.2 !== 0.3.
+> 2. **Number.EPSILON**: Represents the difference between 1 and the smallest floating-point number greater than 1; used to neutralize rounding errors.
+> 3. **Unified Number Type**: JavaScript does not have separate integer and float primitive types; both are instances of the number primitive.
 > 
 ---
 
-### Exercise 3: Parsing Numbers with `parseInt` and `parseFloat`
+### Exercise 2: Safe Integer Boundary Guard
 
-**Problem:** Parse `"100px"`, `"10.5em"`, and `"abc100"` using `parseInt` and `parseFloat`.
+**Scenario:** A database migration tool handles 64-bit primary key values. It must verify that numeric IDs do not exceed Number.MAX_SAFE_INTEGER ($2^{53} - 1$) to prevent silent truncation.
 
-**Expected output:**
+**Requirements:**
+1. Write validateSafeIntegerId(id).
+2. Check if ID is a safe integer using Number.isSafeInteger().
+3. Return boolean indication.
+
 > [!check]- Answer
-> ```text
-> 100
-> 10.5
-> NaN
-> ```
+> #### Implementation
 > ```javascript
-> console.log(parseInt("100px", 10));
-> console.log(parseFloat("10.5em"));
-> console.log(parseInt("abc100", 10));
+> function validateSafeIntegerId(id) {
+>   return Number.isSafeInteger(id);
+> }
+> // Verification tests
+> console.assert(validateSafeIntegerId(9007199254740991) === true, "Test 1 Failed");
+> console.assert(validateSafeIntegerId(9007199254740992) === false, "Test 2 Failed: Unsafe integer passed");
 > ```
->
-> **Explanation:** `parseInt` and `parseFloat` read leading numeric characters until encountering non-numeric characters.
-> 
+> #### Technical Explanation
+> 1. **Safe Integer Range**: Integers between -(2^53 - 1) and 2^53 - 1 can be represented exactly without rounding precision loss.
+> 2. **Number.isSafeInteger()**: Validates that a value is of type number, is an integer, and falls within the safe precision range.
+> 3. **Overflow Behavior**: Numbers exceeding safe integer bounds silently lose precision during arithmetic operations.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: String to Number Parsing Pipeline
+
+**Scenario:** An HTTP API query parser parses string parameters into integer page numbers and floating-point price filters using parseInt() and parseFloat().
+
+**Requirements:**
+1. Parse page number string using parseInt(str, 10) with explicit radix 10.
+2. Parse price string using parseFloat(str).
+3. Return object { page, price }.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function parseQueryParams(pageStr, priceStr) {
+>   const page = parseInt(pageStr, 10);
+>   const price = parseFloat(priceStr);
+> const validPage = Number.isNaN(page) ? 1 : page;
+>   const validPrice = Number.isNaN(price) ? 0.0 : price;
+> return { page: validPage, price: validPrice };
+> }
+> // Verification tests
+> const res = parseQueryParams("5", "19.99");
+> console.assert(res.page === 5 && res.price === 19.99, "Test 1 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Radix Enforcement**: Always specify radix 10 in parseInt(str, 10) to prevent unexpected octal/hexadecimal parsing.
+> 2. **parseFloat Parsing**: Extracts leading floating-point numbers from strings, stopping at the first non-numeric character.
+> 3. **NaN Validation**: Invalid conversions return NaN, which should be checked using Number.isNaN().
+---
+
+## 6. Related Terms
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [String](string.md) — A sequence of characters representing text.
 - [BigInt](bigint.md) — Related concept: BigInt.
@@ -211,7 +236,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JavaScript uses a single `Number` type for both integers and decimals.
 - All numbers are 64-bit floating-point numbers.
 - Watch out for precision issues when doing math with decimals.

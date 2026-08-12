@@ -275,9 +275,9 @@ for _ in 0..10_000 {
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`'static` Lifetime](../level_05/static_lifetime.md)
+- [`'static` Lifetime](../level_05/static_lifetime.md) — 
 - [`std::thread::spawn`](std_thread_spawn.md) — std::thread::spawn reference.
 
 ---

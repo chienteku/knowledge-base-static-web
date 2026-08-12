@@ -9,7 +9,7 @@
 
 
 - [Iterator](../level_02/iterator.md) — The core trait that makes these chains possible.
-- [Closure](closure.md) — The tiny anonymous functions that are passed into the chain links.
+- [Closures (`|args| body`)](closure.md) — The tiny anonymous functions that are passed into the chain links.
 - [Iterator Adapters](../level_02/iterator_adapters.md) — Methods like `.map()` and `.filter()` that are linked together to form the chain.
 
 ---
@@ -271,7 +271,7 @@ items.iter().for_each(|x| println!("{x}")); // Use for_each consumer!
 
 
 - [Lazy Evaluation](lazy_evaluation.md) — The fundamental concept explaining why Iterator Chains do absolutely nothing until a Consumer like `.collect()` is called.
-- [Closure](closure.md) — The tiny anonymous functions you are passing into `map()` and `filter()`.
+- [Closures (`|args| body`)](closure.md) — The tiny anonymous functions you are passing into `map()` and `filter()`.
 
 ---
 

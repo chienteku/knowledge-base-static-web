@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Database / Third-Party Library**
+
+**Database / Third-Party Library (Web App Server Layer .)**: Prisma / Sequelize (SQL ORMs) is a fundamental concept in this technology stack. **Level 8 — Database Integration**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Translates relational table tables into application objects).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 SQL databases (such as PostgreSQL and MySQL) enforce strict tables, keys, and schemas. While writing raw SQL queries (`SELECT * FROM users JOIN posts ON...`) is highly performant, doing so manually inside a Node.js application is prone to typos, syntax errors, and SQL injection security issues.
@@ -86,7 +82,7 @@ getAuthorsAndPosts();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Triggering the N+1 Query Problem
 
@@ -154,7 +150,7 @@ module.exports = prisma;
 npx prisma generate // Regenerates Prisma Client types and code
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Query Optimization
 
@@ -217,13 +213,13 @@ const productsWithReviews = await Product.findAll({
 >
 > **Explanation:** Prisma generates client code from `.prisma` schemas; Sequelize uses object models.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The design categories for SQL and NoSQL databases.
 - [Migrations](migrations.md) — Schema updates managed through SQL ORMs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SQL ORMs map relational database tables to JavaScript object models.
 - Sequelize uses programmatic model definitions; Prisma uses a declarative schema file.
 - Prisma automatically generates a custom, type-safe client based on your schema.

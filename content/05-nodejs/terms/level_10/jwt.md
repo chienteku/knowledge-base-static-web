@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Authentication Standard**
+
+**Security / Authentication Standard (Full Stack)**: JWT (JSON Web Tokens) is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Full Stack (Server creates it, Browser stores it)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, servers used "Sessions." When Bob logged in, the server wrote "Bob is logged in" into its RAM. This is fine for one server, but if you have 10 servers, Server #2 doesn't know Bob is logged in!
@@ -43,7 +39,7 @@ Unless the hacker knows the server's Secret Password, they cannot generate a val
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing secrets in the Payload
 
@@ -88,7 +84,7 @@ localStorage.setItem('jwt', token); // ❌ Vulnerable to XSS token theft!
 res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Forgery
 
@@ -144,13 +140,13 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 >
 > **Explanation:** `jwt.verify` checks signature validity and expiration before returning decoded payload.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Environment Variables (dotenv)](env_vars.md) — Where you store the Secret Password used to sign the JWTs.
 - [Bcrypt (Password Hashing)](bcrypt.md) — The tool used to check the user's password *before* giving them the JWT.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **JWTs** allow servers to be Stateless. The server doesn't remember who is logged in; the client proves who they are on every request.
 - A JWT has 3 parts: Header, Payload (JSON data), and Signature (Security seal).
 - The Payload is readable by **everyone**. It is not encrypted. Never store passwords in it.

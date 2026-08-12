@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal)**: super is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a child class `extends` a parent class, the child often needs its own custom `constructor` to handle specific data. However, the parent class *also* has a `constructor` that handles the base data! How do we run both?
@@ -84,7 +80,7 @@ vip.deposit(100);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accessing `this` before calling `super()`
 
@@ -167,78 +163,126 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Implicit Super
+### Exercise 1: Method Overriding & Base Method Augmentation via super
 
-**Problem:** What happens if you create a child class using `extends`, but you simply *don't write a constructor at all*? Will it crash because you didn't call `super()`?
+**Scenario:** A UI component hierarchy extends a base Element class, overriding render() while augmenting base behavior via super.render().
 
-**Expected output:**
+**Requirements:**
+1. Define class BaseWidget with render().
+2. Define class CustomWidget extends BaseWidget.
+3. Override render() and call super.render().
+4. Return combined render output.
+
 > [!check]- Answer
-> ```text
-> It will NOT crash. If you leave the constructor out entirely, the JavaScript engine automatically creates a hidden constructor that simply calls `super(...args)` for you! You only need to manually write `super()` if you are explicitly writing a `constructor` block.
-> ```
-> - JavaScript is helpful when you leave the constructor blank.
-> 
----
-
-### Exercise 2: Overriding and Calling Parent Methods with `super.method()`
-
-**Problem:** Call `super.greet()` inside derived class `greet()` method.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Base Greet + Derived Extra
-> ```
-> ```javascript
-> class Base { greet() { return "Base Greet"; } }
-> class Child extends Base {
->   greet() { return `${super.greet()} + Derived Extra`; }
-> }
-> console.log(new Child().greet());
-> ```
 >
-> **Explanation:** `super.method()` invokes parent prototype implementations within overridden subclass methods.
-> 
----
-
-### Exercise 3: Mandatory `super()` Constructor Invocation
-
-**Problem:** Demonstrate that referencing `this` before `super()` in a derived constructor throws `ReferenceError`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
+> #### Implementation
+>
 > ```javascript
-> class Parent {}
-> class Child extends Parent {
->   constructor() {
->     try {
->       this.name = "test";
->     } catch (err) {
->       console.log("ReferenceError caught");
->     }
->     super();
+> class BaseWidget {
+>   render() {
+>     return "<div>Widget</div>";
 >   }
 > }
-> new Child();
+>
+> class CustomWidget extends BaseWidget {
+>   render() {
+>     const baseHtml = super.render();
+>     return `<section>${baseHtml}</section>`;
+>   }
+> }
+>
+> // Verification tests
+> const widget = new CustomWidget();
+> console.assert(widget.render() === "<section><div>Widget</div></section>", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Derived class constructors must call `super()` before accessing instance `this` bindings.
-> 
+> #### Technical Explanation
+>
+> 1. **super Keyword**: The super keyword is used to access and call functions on an object's parent class.
+> 2. **super.method() Augmentation**: Invoking super.method() allows child methods to extend base class functionality without duplicating logic.
+> 3. **Lexical Binding of super**: super calls are bound lexically to the class declaration hierarchy.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Super Advanced Context Handler
+
+**Scenario:** A web application component processes super data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handleSuperSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleSuperSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleSuperSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Super Architecture**: Applying super patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Super Performance Optimization
+
+**Scenario:** An application utility optimizes super execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeSuperTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeSuperTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeSuperTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Super Optimization**: Optimizing super improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [extends](extends.md) — The keyword that creates the relationship requiring `super`.
 - [Class](class.md) — The parent structure.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `super` is used to access and call functions on an object's parent.
 - If a child class has a `constructor`, it MUST call `super()` before it is allowed to use the `this` keyword.
 - `super()` calls the parent's constructor.

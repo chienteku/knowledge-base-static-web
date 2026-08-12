@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag / Landmark**
+
+**Semantic Tag / Landmark (Universal Browser Support .)**: `<aside>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all modern browsers. Formally designated as an accessibility landmark).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users read an article or visit a homepage, they are focused on the primary topic (e.g. the news story or the product features). However, pages frequently contain secondary information next to the main text:
@@ -119,7 +115,7 @@ A simple blog post alongside a tangential ad banner:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing essential content inside `<aside>`
 
@@ -172,7 +168,7 @@ A simple blog post alongside a tangential ad banner:
 </article>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Semantic Classification
 
@@ -236,7 +232,7 @@ A simple blog post alongside a tangential ad banner:
 >
 > **Explanation:** Screen readers announce top-level `<aside>` elements as complementary landmarks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<main>`](main.md) — The container for the primary document content.
 - [`<article>` and `<section>`](article_section.md) — The self-contained semantic blocks.
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic block container.
@@ -245,7 +241,7 @@ A simple blog post alongside a tangential ad banner:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<aside>` tag represents content that is secondary or tangential to the main content.
 - It is commonly used for sidebars, advertisements, callout boxes, and pull-quotes.
 - It acts as an accessibility landmark for screen readers to easily bypass secondary content.

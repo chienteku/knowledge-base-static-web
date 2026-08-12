@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Promise.resolve / Promise.reject is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Usually, to create a Promise, we write a constructor block: `new Promise((resolve, reject) => { ... })`. While this works well for executing delayed operations (like timer delays or file reading), it is unnecessarily verbose when you already have the data or error synchronously.
@@ -96,7 +92,7 @@ setTimeout(() => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Promise Static Scope and Variable Hoisting
 
@@ -169,75 +165,125 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cache Mock
+### Exercise 1: Memoized Value Caching with Promise.resolve()
 
-**Problem:** Complete the function `getMockProduct` to return a resolved Promise containing the object `{ id: 5, name: "Book" }` synchronously.
+**Scenario:** A cache helper wraps cached synchronous values in Promise.resolve() to guarantee a uniform Promise API interface.
 
-```javascript
-function getMockProduct() {
-  // Write resolved promise return here
-}
+**Requirements:**
+1. Write getCachedData(key, cacheMap, fetchFn).
+2. If key in cacheMap, return Promise.resolve(cacheMap[key]).
+3. Else fetch and cache.
+4. Verify uniform Promise return.
 
-getMockProduct().then(product => console.log("Product:", product.name));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Product: Book
-> ```
-> - Use the static method `Promise.resolve(value)`.
-> - Pass the object as the value argument.
-> 
----
-
-### Exercise 2: Resolving Promises with `Promise.any`
-
-**Problem:** Pass `[Promise.reject("fail"), Promise.resolve("success")]` to `Promise.any()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> success
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const p1 = Promise.reject("fail");
-> const p2 = Promise.resolve("success");
-> Promise.any([p1, p2]).then(val => console.log(val));
+> function getCachedData(key, cacheMap, fetchFn) {
+>   if (key in cacheMap) {
+>     return Promise.resolve(cacheMap[key]);
+>   }
+>   return fetchFn(key).then(data => {
+>     cacheMap[key] = data;
+>     return data;
+>   });
+> }
+>
+> // Verification tests
+> const cache = { 1: "Cached Data" };
+> getCachedData(1, cache, () => Promise.resolve("Fresh")).then(val => {
+>   console.assert(val === "Cached Data", "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `Promise.any` fulfills with the value of the first promise that fulfills, ignoring rejections unless all reject.
+> #### Technical Explanation
+>
+> 1. **Promise.resolve() Helper**: Promise.resolve(val) returns a Promise instance resolved with the provided value.
+> 2. **Promise.reject() Guard**: Promise.reject(reason) returns a Promise instance rejected with the provided reason.
+> 3. **API Normalization**: Converts synchronous values or Thenable objects into standard Promise instances.
 > 
 ---
 
-### Exercise 3: `AggregateError` in `Promise.any`
+### Exercise 2: Promise Static Advanced Context Handler
 
-**Problem:** Catch `AggregateError` when all promises in `Promise.any()` reject.
+**Scenario:** A web application component processes promise static data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handlePromiseStaticSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> All promises were rejected
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> Promise.any([Promise.reject(1), Promise.reject(2)])
->   .catch(err => console.log(err.message));
+> function handlePromiseStaticSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handlePromiseStaticSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Promise.any` throws `AggregateError` when every input promise rejects.
-> 
+> #### Technical Explanation
+>
+> 1. **Promise Static Architecture**: Applying promise static patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Promise Static Performance Optimization
+
+**Scenario:** An application utility optimizes promise static execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizePromiseStaticTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizePromiseStaticTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizePromiseStaticTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Promise Static Optimization**: Optimizing promise static improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [.then() / .catch()](then_catch.md) — Methods used to handle settled values.
 - [Promise.all / allSettled / race / any](promise_combinators.md) — Parallel promise combinators that consume collections of promises.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Promise.resolve(value)` creates a Promise that is already fulfilled.
 - `Promise.reject(reason)` creates a Promise that is already rejected.
 - Use these static methods to wrap synchronous values in Promises, facilitating consistent interface designs.

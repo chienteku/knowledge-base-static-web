@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Affects release management, API gateways, and microservice lifecycles.)**: Deprecation & Sunsetting is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Affects release management, API gateways, and microservice lifecycles.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As web applications grow, their API designs evolve. Database restructures, security enhancements, and new features eventually make old API endpoints obsolete.
@@ -70,7 +66,7 @@ Link: <https://api.example.com/v2/users>; rel="successor-version"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deleting legacy endpoints without reviewing server access logs
 
@@ -121,66 +117,153 @@ Deprecation: @1700000000
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Header Auditor
+### Exercise 1: RFC 8594 Sunset & Deprecation Header Generator
 
-**Problem:** Review this response header segment. Determine the date the client integration will break:
+**Scenario:** An API gateway constructs RFC 8594 `Sunset` and `Deprecation` response headers to notify clients of upcoming endpoint retirement.
 
-`Deprecation: true; Sunset: Tue, 01 Sep 2026 00:00:00 GMT; Link: <https://api.com/v3>; rel="successor-version"`
+**Requirements:**
+1. Write buildDeprecationHeaders(sunsetDate, sunsetLinkStr).
+2. Format Sunset date header (HTTP date).
+3. Format Deprecation header.
 
 > [!check]- Answer
-> - **September 1st, 2026.** (The `Sunset` header defines the deactivation date. After this timestamp, the route is retired and will return a `410 Gone` status).
+>
+> #### Implementation
+>
+> ```javascript
+> function buildDeprecationHeaders(sunsetDate, sunsetLinkStr) {
+>   const headers = {};
+>
+>   if (sunsetDate instanceof Date) {
+>     headers["Sunset"] = sunsetDate.toUTCString();
+>     headers["Deprecation"] = "true";
+>   }
+>
+>   if (sunsetLinkStr) {
+>     headers["Link"] = `<${sunsetLinkStr}>; rel="deprecation"; type="text/html"`;
+>   }
+>
+>   return headers;
+> }
+>
+> // Verification tests
+> const date = new Date("2026-12-31T00:00:00Z");
+> const link = "https://api.example.com/docs/deprecation-v1";
+> const headers = buildDeprecationHeaders(date, link);
+>
+> console.assert(headers["Deprecation"] === "true", "Test 1 Failed");
+> console.assert(headers["Sunset"].includes("2026"), "Test 2 Failed");
+> console.assert(headers["Link"].includes('rel="deprecation"'), "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **RFC 8594 Sunset Header**: Standard HTTP response header indicating exact date when API endpoint will be decommissioned.
+> 2. **Deprecation Header**: HTTP header signaling that endpoint is deprecated and should not be used for new integrations.
+> 3. **Link rel='deprecation'**: Provides documentation link detailing migration instructions to newer API versions.
 > 
+---
+
+### Exercise 2: Deprecated Endpoint Warning Client Logger
+
+**Scenario:** An API SDK inspects response headers and logs developer warnings when calling deprecated API endpoints.
+
+**Requirements:**
+1. Write inspectDeprecationWarning(responseHeaders, loggerFn).
+2. Read Sunset and Deprecation headers.
+3. Invoke loggerFn with warning message.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function inspectDeprecationWarning(responseHeaders = {}, loggerFn) {
+>   const sunset = responseHeaders["Sunset"] || responseHeaders["sunset"];
+>   const deprecation = responseHeaders["Deprecation"] || responseHeaders["deprecation"];
+>
+>   if (deprecation || sunset) {
+>     const msg = `WARNING: API Endpoint is deprecated! Sunset date: ${sunset || "TBD"}. Please upgrade client SDK.`;
+>     if (typeof loggerFn === "function") {
+>       loggerFn(msg);
+>     }
+>     return { isDeprecated: true, sunsetDate: sunset, warning: msg };
+>   }
+>
+>   return { isDeprecated: false };
+> }
+>
+> // Verification tests
+> const headers = { "Sunset": "Thu, 31 Dec 2026 00:00:00 GMT", "Deprecation": "true" };
+> let loggedMsg = null;
+>
+> const result = inspectDeprecationWarning(headers, (msg) => { loggedMsg = msg; });
+> console.assert(result.isDeprecated === true, "Test 1 Failed");
+> console.assert(loggedMsg.includes("31 Dec 2026"), "Test 2 Failed: Logger must receive sunset date");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Proactive Client Notification**: Alerts client developers during API execution before hard sunset decommissioning.
+> 2. **SDK Logging Decorators**: Automatically logs console warnings in development builds when accessing deprecated endpoints.
+> 3. **Smooth Sunset Phase-Out**: Allows client teams months of notice to schedule API migration tasks.
 > 
 ---
 
-### Exercise 2: IETF Sunset and Deprecation Header Syntax
+### Exercise 3: Sunset Version Migration Redirect Router
 
-**Problem:** Write HTTP headers declaring an endpoint deprecated as of timestamp `1700000000` and scheduled for final Sunset on `Sun, 01 Nov 2026 00:00:00 GMT`.
+**Scenario:** An API gateway returns `301 Moved Permanently` or `410 Gone` for endpoints whose Sunset date has passed.
 
-**Expected output:**
+**Requirements:**
+1. Write handleSunsetRouting(sunsetDate, newEndpointUrl).
+2. If past sunsetDate, return 410 Gone.
+
 > [!check]- Answer
-> ```text
-> Deprecation: @1700000000
-> Sunset: Sun, 01 Nov 2026 00:00:00 GMT
+>
+> #### Implementation
+>
+> ```javascript
+> function handleSunsetRouting(sunsetDate, newEndpointUrl) {
+>   const now = new Date();
+>   const isPastSunset = sunsetDate instanceof Date && now > sunsetDate;
+>
+>   if (isPastSunset) {
+>     return {
+>       status: 410,
+>       headers: {
+>         "Link": `<${newEndpointUrl}>; rel="successor-version"`
+>       },
+>       error: "410 Gone: This API version has been sunset and is no longer available."
+>     };
+>   }
+>
+>   return { status: 200 };
+> }
+>
+> // Verification tests
+> const pastDate = new Date("2020-01-01");
+> const res = handleSunsetRouting(pastDate, "https://api.example.com/v2/users");
+>
+> console.assert(res.status === 410, "Test 1 Failed: Must return 410 Gone for past sunset date");
+> console.assert(res.headers.Link.includes("v2/users"), "Test 2 Failed");
 > ```
-> ```http
-> Deprecation: @1700000000
-> Sunset: Sun, 01 Nov 2026 00:00:00 GMT
-> Link: <https://api.example.com/docs/v2-migration>; rel="deprecation"
-> ```
-> - **Explanation:** Standard IETF `Deprecation` and `Sunset` headers communicate API lifecycles.
+>
+> #### Technical Explanation
+>
+> 1. **HTTP 410 Gone Status**: Standard HTTP status indicating target resource is permanently deleted and has no forwarding address.
+> 2. **Sunset Date Enforcement**: Automatically switches from deprecation warnings (200 OK) to error responses (410 Gone) after deadline.
+> 3. **Successor Link Header**: Guides developers to the successor API version endpoint.
 ---
 
-### Exercise 3: API Sunset Lifecycle Phases
-
-**Problem:** Identify the 4 phases of a formal API deprecation process.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Announcement (Documentation & headers added)
-> 2. Deprecated phase (API works, warning headers returned)
-> 3. Brownout phase (Temporary scheduled outages testing client resilience)
-> 4. Sunset phase (Permanent shutdown and 410 Gone response)
-> ```
-> ```text
-> 1. Announcement
-> 2. Deprecation (with headers)
-> 3. Brownout (simulated temporary outages)
-> 4. Sunset (Permanent HTTP 410 Gone shutdown)
-> ```
-> - **Explanation:** Structured deprecation phases manage client migration safely.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [API Versioning (v1, v2)](versioning.md) — The process of releasing new API versions.
 - [API Contract / Schema-First Design](api_contract.md) — The interface definitions that outline version upgrades.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Deprecation warns consumers that an API endpoint is obsolete but keeps it functional.
 - Sunsetting deactivates the endpoint permanently, returning `410 Gone` or `404 Not Found`.
 - Standard `Deprecation` and `Sunset` HTTP headers communicate deactivation details.

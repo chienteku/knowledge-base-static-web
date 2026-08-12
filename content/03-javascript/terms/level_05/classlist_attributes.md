@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: classList & setAttribute/getAttribute is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To make a webpage dynamic, JavaScript must go beyond updating text; it must change the appearance and behaviors of elements. This is achieved by updating **CSS classes** and **HTML attributes** (such as turning a button grey by adding a class, disabling form fields, or updating a link's destination URL).
@@ -89,7 +85,7 @@ function updateFeaturedImage(imageUrl, imageAlt) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overwriting All Classes using `className`
 
@@ -168,81 +164,151 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Class and Attribute Update
+### Exercise 1: Dynamic Component Theme Switcher with classList
 
-**Problem:** Complete the code to check if `cardElement` has the class `"collapsed"`. If it does, remove `"collapsed"` and set the attribute `"aria-expanded"` to `"true"`.
+**Scenario:** A design system component toggles dark mode classes on UI elements using classList.toggle() and classList.contains() to inspect active CSS states.
 
-```javascript
-if (typeof document !== "undefined") {
-  const cardElement = document.querySelector(".card");
-
-  // Check if class 'collapsed' exists
-  // If yes, remove 'collapsed' and set attribute 'aria-expanded' to 'true'
-}
-```
+**Requirements:**
+1. Write toggleThemeClass(element, themeName).
+2. Use element.classList.toggle(themeName).
+3. Return boolean indicating if theme class is active.
 
 > [!check]- Answer
-> - Check presence using `cardElement.classList.contains("collapsed")`.
-> - Remove class using `cardElement.classList.remove("collapsed")`.
-> - Set attribute using `cardElement.setAttribute("aria-expanded", "true")`.
-> 
----
-
-### Exercise 2: Toggling Element Classes with `classList.toggle`
-
-**Problem:** Simulate `elem.classList.toggle("hidden")` on a class list array representation.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ["btn","hidden"]
-> ["btn"]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class MockClassList {
->   constructor(classes) { this.classes = classes; }
->   toggle(cls) {
->     const idx = this.classes.indexOf(cls);
->     if (idx > -1) this.classes.splice(idx, 1);
->     else this.classes.push(cls);
->     return this.classes;
+> function toggleThemeClass(element, themeName) {
+>   if (!element || !element.classList) {
+>     throw new Error("Invalid DOM element");
 >   }
+>   return element.classList.toggle(themeName);
 > }
-> const list = new MockClassList(["btn"]);
-> console.log(JSON.stringify(list.toggle("hidden")));
-> console.log(JSON.stringify(list.toggle("hidden")));
+>
+> // Verification tests
+> const mockEl = {
+>   classes: new Set(),
+>   classList: {
+>     toggle(c) {
+>       if (this.classes.has(c)) { this.classes.delete(c); return false; }
+>       else { this.classes.add(c); return true; }
+>     }
+>   }
+> };
+> console.assert(toggleThemeClass(mockEl, "dark-mode") === true, "Test 1 Failed");
+> console.assert(toggleThemeClass(mockEl, "dark-mode") === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `classList.toggle(cls)` adds class if missing, and removes class if present.
+> #### Technical Explanation
+>
+> 1. **classList API**: The classList property returns a token list (DOMTokenList) providing helper methods (.add, .remove, .toggle, .contains).
+> 2. **classList.toggle()**: Toggles class presence: adds class if absent, removes if present, and returns boolean indicating final state.
+> 3. **Performance over className**: Modifying individual classes via classList avoids string parsing errors associated with className manipulation.
 > 
 ---
 
-### Exercise 3: Managing Data Attributes via `dataset`
+### Exercise 2: Accessible Form Input State Attribute Manager
 
-**Problem:** Read data attribute `data-user-id="42"` using `elem.dataset.userId` concept.
+**Scenario:** A form validation helper manages accessibility state on input elements using setAttribute() and getAttribute() to update aria-invalid and aria-describedby.
 
-**Expected output:**
+**Requirements:**
+1. Write setFieldValidationState(inputEl, isValid, errorId).
+2. Use setAttribute() to set aria-invalid to "true" or "false".
+3. Link aria-describedby to errorId when invalid.
+4. Return updated attribute map.
+
 > [!check]- Answer
-> ```text
-> 42
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const dataset = { userId: "42" };
-> console.log(dataset.userId);
+> function setFieldValidationState(inputEl, isValid, errorId) {
+>   if (!inputEl || typeof inputEl.setAttribute !== "function") return false;
+>
+>   if (!isValid) {
+>     inputEl.setAttribute("aria-invalid", "true");
+>     inputEl.setAttribute("aria-describedby", errorId);
+>   } else {
+>     inputEl.setAttribute("aria-invalid", "false");
+>     if (typeof inputEl.removeAttribute === "function") {
+>       inputEl.removeAttribute("aria-describedby");
+>     }
+>   }
+>   return true;
+> }
+>
+> // Verification tests
+> const attrs = {};
+> const mockInput = {
+>   setAttribute(k, v) { attrs[k] = v; },
+>   removeAttribute(k) { delete attrs[k]; }
+> };
+>
+> setFieldValidationState(mockInput, false, "err-username");
+> console.assert(attrs["aria-invalid"] === "true", "Test 1 Failed");
+> console.assert(attrs["aria-describedby"] === "err-username", "Test 2 Failed");
 > ```
 >
-> **Explanation:** The DOM `dataset` property automatically converts kebab-case `data-*` attributes to camelCase properties.
+> #### Technical Explanation
+>
+> 1. **Attribute Manipulation**: setAttribute(name, value) sets HTML/ARIA attribute strings directly on DOM elements.
+> 2. **Accessibility Standards**: Updating aria-* attributes dynamically communicates validation states to assistive screen readers.
+> 3. **String Value Requirement**: All attribute values set via setAttribute() are implicitly coerced to strings.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Analytics Dataset Property Extractor
+
+**Scenario:** An analytics tracking library reads custom data attributes from DOM elements using the dataset API (data-* attributes).
+
+**Requirements:**
+1. Write extractTrackingMetadata(element).
+2. Read custom data attributes via element.dataset.
+3. Return metadata object { category, action, label }.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function extractTrackingMetadata(element) {
+>   if (!element || !element.dataset) return {};
+>
+>   return {
+>     category: element.dataset.trackCategory || "general",
+>     action: element.dataset.trackAction || "click",
+>     label: element.dataset.trackLabel || ""
+>   };
+> }
+>
+> // Verification tests
+> const mockButton = {
+>   dataset: {
+>     trackCategory: "ecommerce",
+>     trackAction: "checkout",
+>     trackLabel: "cart-btn"
+>   }
+> };
+> const meta = extractTrackingMetadata(mockButton);
+> console.assert(meta.category === "ecommerce", "Test 1 Failed");
+> console.assert(meta.action === "checkout", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **dataset Property API**: The dataset property provides access to custom data-* attributes as camelCase object properties.
+> 2. **Attribute Name Mapping**: HTML data-track-category maps automatically to dataset.trackCategory in JavaScript.
+> 3. **DOM Attribute Inspection**: Allows embedding structured UI metadata directly inside HTML markup.
+---
+
+## 6. Related Terms
 - [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — Structural element modifications.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `element.classList` methods (`add`, `remove`, `toggle`, `contains`) to safely modify CSS classes without overwriting existing ones.
 - Avoid raw assignment to `element.className` unless you intentionally want to delete all existing classes.
 - Use `setAttribute(name, value)` to update HTML attributes and `getAttribute(name)` to read them.

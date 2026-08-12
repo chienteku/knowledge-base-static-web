@@ -536,7 +536,7 @@ Implement `ConfigManager`:
 
 
 - [`Weak<T>`](weak_t.md) — The non-owning pointer specifically designed to break reference cycles.
-- [`Rc<T>`](../level_03/rc_t.md)
+- [`Rc<T>`](../level_03/rc_t.md) — 
 - [`Drop` Trait](../level_03/drop_trait.md) — The destructor that never runs on leaked data.
 - [Ownership](../level_03/ownership.md) — `mem::forget` is the "intentional leak" primitive; see also `Box::leak`.
 - [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](../level_03/std_mem_utilities.md) — Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`).

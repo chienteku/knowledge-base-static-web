@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Engine Feature / Architecture**
+
+**Engine Feature / Architecture (Universal)**: Garbage Collection is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal** (V8, SpiderMonkey, WebKit all implement this)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In lower-level languages like C or C++, developers must manually manage computer memory. When they create an object, they write code to request RAM. When they are done with the object, they must write code to release the RAM. If they forget, the computer runs out of memory and crashes (a "Memory Leak").
@@ -66,7 +62,7 @@ admin = null;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Garbage Collection Scope and Variable Hoisting
 
@@ -139,74 +135,160 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Island of Isolation
+### Exercise 1: Circular Reference Memory Leak Prevention with WeakMap
 
-**Problem:** Look at the following code. Two objects reference *each other*, but nothing else references them. Will they be garbage collected?
-```javascript
-function marry(man, woman) {
-  woman.husband = man;
-  man.wife = woman;
-  
-  return {
-    father: man,
-    mother: woman
-  }
-}
+**Scenario:** An object metadata registry uses WeakMap to associate private metadata with DOM nodes without creating circular retention memory leaks.
 
-let family = marry({ name: "John" }, { name: "Ann" });
+**Requirements:**
+1. Write createWeakNodeCache().
+2. Store metadata using WeakMap.prototype.set(node, meta).
+3. Verify entries are garbage collected when node references drop.
 
-// We delete the entire family object
-family = null; 
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Yes, they will be destroyed!
-> Even though John points to Ann, and Ann points to John, neither of them are connected to the "Root" (the global scope) anymore. They form an "Island of Isolation". The Garbage Collector sweeps away the entire island.
-> ```
-> - The algorithm only cares if an object can be reached from the ROOT.
-> 
----
-
-### Exercise 2: Identifying Common Memory Leak Sources
-
-**Problem:** Name 3 common causes of memory leaks in web applications (global variables, forgotten timers/listeners, detached DOM nodes).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Globals, Timers/Listeners, Detached DOM nodes
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Globals, Timers/Listeners, Detached DOM nodes");
+> function createWeakNodeCache() {
+>   const cache = new WeakMap();
+>
+>   return {
+>     setMeta(node, meta) {
+>       if (typeof node !== "object" || node === null) return;
+>       cache.set(node, meta);
+>     },
+>     getMeta(node) {
+>       return cache.get(node);
+>     },
+>     hasMeta(node) {
+>       return cache.has(node);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const cache = createWeakNodeCache();
+> let domNode = { tag: "div", id: "app" };
+>
+> cache.setMeta(domNode, { renderedAt: Date.now() });
+> console.assert(cache.hasMeta(domNode) === true, "Test 1 Failed");
+> console.assert(cache.getMeta(domNode).renderedAt > 0, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Retaining unneeded object references in active scope trees prevents GC cleanup.
+> #### Technical Explanation
+>
+> 1. **Garbage Collection (GC) Mechanics**: Browsers use Mark-and-Sweep garbage collection to reclaim memory occupied by unreachable objects.
+> 2. **Weak Reference Semantics**: WeakMap holds WEAK references to object keys; if no other references to key exist, key/value is eligible for GC.
+> 3. **Circular Reference Prevention**: Prevents memory leaks caused by circular references between JavaScript objects and DOM nodes.
 > 
 ---
 
-### Exercise 3: Weak References with `WeakMap`
+### Exercise 2: Detached DOM Node Reference Cleaning
 
-**Problem:** Explain why `WeakMap` keys do not prevent garbage collection of metadata objects.
+**Scenario:** A single-page app widget cleanup routine detaches DOM nodes and clears external array references to ensure memory can be reclaimed.
 
-**Expected output:**
+**Requirements:**
+1. Write WidgetContainer class.
+2. Maintain array of child nodes.
+3. Implement destroy() to clear references and unbind DOM nodes.
+
 > [!check]- Answer
-> ```text
-> WeakMap keys allow GC collection
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("WeakMap keys allow GC collection");
+> class WidgetContainer {
+>   constructor() {
+>     this.nodes = [];
+>   }
+>
+>   addNode(node) {
+>     this.nodes.push(node);
+>   }
+>
+>   destroy() {
+>     // Clear array references to release memory for GC
+>     this.nodes.length = 0;
+>     this.nodes = null;
+>   }
+> }
+>
+> // Verification tests
+> const widget = new WidgetContainer();
+> widget.addNode({ id: "btn-1" });
+> widget.addNode({ id: "btn-2" });
+>
+> console.assert(widget.nodes.length === 2, "Test 1 Failed");
+> widget.destroy();
+> console.assert(widget.nodes === null, "Test 2 Failed: Destroy must clear references");
 > ```
 >
-> **Explanation:** `WeakMap` stores weak key pointers that do not count as reachability roots.
-> 
+> #### Technical Explanation
+>
+> 1. **Detached DOM Node Memory Leaks**: If a DOM node is removed from DOM tree but retained in JS variables, GC cannot free its memory.
+> 2. **Explicit Nullification**: Setting arrays or variables to null breaks reference retention paths for Mark-and-Sweep GC.
+> 3. **Lifecycle Cleanup Methods**: Providing explicit destroy() or unmount() methods is critical for memory hygiene in SPAs.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Mark-and-Sweep Reachability Inspector Simulation
+
+**Scenario:** A memory profiler simulator implements a Mark-and-Sweep reachability algorithm to detect reachable vs unreachable memory nodes.
+
+**Requirements:**
+1. Write markAndSweep(rootNode).
+2. Traverse reachable objects starting from rootNode using Breadth-First Search.
+3. Return set of reachable object IDs.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function markAndSweep(rootNode) {
+>   const reachableIds = new Set();
+>   const queue = [rootNode];
+>
+>   while (queue.length > 0) {
+>     const current = queue.shift();
+>     if (!current || !current.id || reachableIds.has(current.id)) {
+>       continue;
+>     }
+>
+>     reachableIds.add(current.id);
+>
+>     if (Array.isArray(current.references)) {
+>       for (const ref of current.references) {
+>         queue.push(ref);
+>       }
+>     }
+>   }
+>
+>   return reachableIds;
+> }
+>
+> // Verification tests
+> const nodeC = { id: "C", references: [] };
+> const nodeB = { id: "B", references: [nodeC] };
+> const root = { id: "ROOT", references: [nodeB] };
+> const leakedNodeD = { id: "D", references: [] }; // Unreachable from root
+>
+> const reachable = markAndSweep(root);
+> console.assert(reachable.has("ROOT") === true, "Test 1 Failed");
+> console.assert(reachable.has("C") === true, "Test 2 Failed");
+> console.assert(reachable.has("D") === false, "Test 3 Failed: Unreachable node must be swept");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Mark-and-Sweep Algorithm**: GC algorithm that marks all objects reachable from roots (globals, call stack), then sweeps unreachable objects.
+> 2. **Root Object Traversal**: Starts traversal from roots: global variables, active function call frames, and DOM document.
+> 3. **Reachability Criterion**: An object is memory-retained ONLY if it can be reached via a chain of references from a root.
+---
+
+## 6. Related Terms
 - [Closure](../level_03/closure.md) — Closures deliberately prevent garbage collection by keeping references to variables in parent scopes alive.
 - [Object](../level_02/object.md) — The primary consumers of heap memory.
 - [WeakMap / WeakSet](../level_08/weakmap_weakset.md) — Related concept: WeakMap / WeakSet.
@@ -214,7 +296,7 @@ family = null;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Garbage Collection is an automatic background process that frees up RAM.
 - It uses a "Mark-and-Sweep" algorithm based on **Reachability**.
 - If an object cannot be reached by following references from the global root, it is deleted.

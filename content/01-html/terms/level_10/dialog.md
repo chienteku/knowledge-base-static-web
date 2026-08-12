@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support .)**: `<dialog>` Element is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively by all modern browsers. Screen readers recognize the tag natively as an interactive dialog landmark).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Almost every modern website uses pop-up overlay boxes (commonly called **modals** or **dialogs**) for tasks like:
@@ -136,7 +132,7 @@ HTML structure:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Opening the dialog using the HTML `open` attribute
 
@@ -272,7 +268,7 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 </dialog>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Modal Setup
 
@@ -345,14 +341,14 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 >
 > **Explanation:** `::backdrop` pseudo-element styles background screen overlays behind open modals.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`<details>` & `<summary>`](../level_06/details_summary.md) — The native toggle layout widget.
 - [ARIA Attributes](../level_09/aria_attributes.md) — Manual accessibility descriptions (not needed when using `<dialog>`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<dialog>` element creates native, accessible popups and modals.
 - Always use `element.showModal()` in JavaScript to open dialogs as true modals.
 - True modals automatically apply backdrops, lock keyboard focus (focus trap), and close on `Escape`.

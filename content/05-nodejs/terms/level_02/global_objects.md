@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core API**
+
+**Node.js Core API (Node.js Only .)**: Global Objects (global, __dirname, __filename) is a fundamental concept in this technology stack. **Level 2 — Core Modules & Globals**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Does not exist in the Browser).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the browser, if you need the current URL, you type `window.location.href`. The `window` object is the ultimate "Global" scope. Everything attaches to it.
@@ -49,7 +45,7 @@ console.log(__filename); // Output: "/Users/bob/projects/my-api/src/app.js"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on relative paths instead of `__dirname`
 
@@ -98,7 +94,7 @@ import { dirname } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Global equivalent
 
@@ -154,14 +150,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 >
 > **Explanation:** `import.meta.url` provides the file URL in ES Modules, convertible to local paths via `fileURLToPath`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The process Object](process_object.md) — The most powerful global object in Node.js.
 - [The path Module](path_module.md) — The module you use in conjunction with `__dirname` to build file paths safely.
 - [The Node.js REPL](repl.md) — Related concept: The Node.js REPL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Node.js doesn't have a `window` object. It uses the **`global`** object instead.
 - **`__dirname`** gives you the absolute path to the current folder.
 - **`__filename`** gives you the absolute path to the current file.

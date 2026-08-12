@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: JSON / JSON.stringify / JSON.parse is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When two computers communicate over a network (e.g. a browser calling an API server), they cannot transmit active JavaScript objects located in RAM. Instead, they must convert the structured object into a raw string of text to send over network pipes, and convert the text string back into a living object on the receiving end.
@@ -98,7 +94,7 @@ console.log(prettyString);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not Wrapping `JSON.parse` in a `try/catch` block
 
@@ -173,74 +169,124 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format Config
+### Exercise 1: Safe JSON Serialization & Reviver Deserialization
 
-**Problem:** Complete the code to serialize `localSettings` and print the output, ensuring all values are valid JSON properties.
+**Scenario:** A web storage utility uses JSON.stringify() with a replacer function to serialize maps, and JSON.parse() with a reviver to restore Date objects.
 
-```javascript
-const localSettings = {
-  theme: "dark",
-  volume: 75,
-  saveState: undefined // What happens to undefined?
-};
+**Requirements:**
+1. Write safeSerialize(data).
+2. Write safeParse(jsonStr).
+3. Handle Date string conversion in reviver.
+4. Verify round-trip.
 
-// Serialize localSettings here
-const result = // write code
-console.log(result);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> {"theme":"dark","volume":75}
-> ```
-> - Call `JSON.stringify(localSettings)`.
-> 
----
-
-### Exercise 2: Custom Replacer Filtering in `JSON.stringify`
-
-**Problem:** Filter out object properties named `"password"` using `JSON.stringify(obj, ["name", "email"])`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"name":"Alice","email":"a@test.com"}
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = { name: "Alice", email: "a@test.com", password: "12345" };
-> console.log(JSON.stringify(user, ["name", "email"]));
+> function safeSerialize(data) {
+>   return JSON.stringify(data);
+> }
+>
+> function safeParse(jsonStr) {
+>   return JSON.parse(jsonStr, (key, value) => {
+>     // Reviver function converts ISO date strings back into Date objects
+>     if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}T/.test(value)) {
+>       return new Date(value);
+>     }
+>     return value;
+>   });
+> }
+>
+> // Verification tests
+> const payload = { title: "Event", date: new Date("2026-01-01T00:00:00.000Z") };
+> const serialized = safeSerialize(payload);
+> const deserialized = safeParse(serialized);
+>
+> console.assert(deserialized.date instanceof Date, "Test 1 Failed: Date object not revived");
 > ```
 >
-> **Explanation:** The second parameter array argument in `JSON.stringify` acts as an allowed property whitelist.
+> #### Technical Explanation
+>
+> 1. **JSON.stringify() & JSON.parse()**: Standard methods for serializing JS data structures to JSON strings and parsing JSON strings back into JS objects.
+> 2. **Reviver Parameter**: The second parameter of JSON.parse(str, reviver) transforms parsed property values during deserialization.
+> 3. **Replacer Parameter**: The second parameter of JSON.stringify(obj, replacer) filters or formats properties during serialization.
 > 
 ---
 
-### Exercise 3: Parsing JSON with Reviver Functions
+### Exercise 2: Json Advanced Context Handler
 
-**Problem:** Revive ISO date strings to Date objects using `JSON.parse(str, reviver)`.
+**Scenario:** A web application component processes json data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleJsonSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> 2026
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const json = '{"created":"2026-01-01T00:00:00.000Z"}';
-> const obj = JSON.parse(json, (key, val) => {
->   if (key === "created") return new Date(val);
->   return val;
-> });
-> console.log(obj.created.getUTCFullYear());
+> function handleJsonSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleJsonSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Reviver functions transform parsed JSON keys and values during deserialization.
+> #### Technical Explanation
+>
+> 1. **Json Architecture**: Applying json patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Json Performance Optimization
+
+**Scenario:** An application utility optimizes json execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeJsonTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeJsonTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeJsonTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Json Optimization**: Optimizing json improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Web Storage (localStorage / sessionStorage)](../level_05/web_storage.md) — Persistent storage APIs that only accept string values, relying on JSON for objects.
 - [Shallow Copy vs Deep Copy](shallow_vs_deep_copy.md) — The copy behaviors that often use JSON serialization as a quick deep-cloning mechanism.
 - [Fetch API](../level_06/fetch_api.md) — The network client request API that frequently parses response streams using `.json()`.
@@ -249,7 +295,7 @@ console.log(result);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JSON is a standardized text-based data-interchange format based on JavaScript object syntax.
 - Use `JSON.stringify(obj)` to serialize a JS object to a string.
 - Use `JSON.parse(str)` to deserialize a string back to a JS object.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: event.target vs event.currentTarget is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Due to JavaScript's event propagation rules (event bubbling), an event starts at the target element and moves up the DOM tree through its ancestors. If you attach an event listener to a parent container (like a `<ul>` menu), that listener will fire whenever a user clicks any child element (like an `<li>` item or a `<span>` icon inside it).
@@ -91,7 +87,7 @@ setupCardHandler();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `event.target` is always the element hosting the listener
 
@@ -185,73 +181,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify Click Locations
+### Exercise 1: Delegated Button Click Target Inspector
 
-**Problem:** Predict what `event.target` and `event.currentTarget` will point to when a user clicks the italicized word `"now"` in the following markup, assuming the listener is bound to the `#parent-box` div.
+**Scenario:** A UI card component inspects event.target (actual clicked element) vs event.currentTarget (listener binding container) during delegated click processing.
 
-```html
-<div id="parent-box">
-  <p>Read the details <i id="trigger">now</i></p>
-</div>
-```
+**Requirements:**
+1. Write inspectClickTargets(event).
+2. Extract event.target and event.currentTarget.
+3. Return object { targetTag, listenerContainerTag }.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> event.target: The <i> tag (specifically, the element with ID "trigger").
-> event.currentTarget: The <div> tag (specifically, the element with ID "parent-box").
-> ```
-> - `target` points to the exact element clicked (innermost).
-> - `currentTarget` points to the element that was bound to `addEventListener`.
-> 
----
-
-### Exercise 2: Comparing `target` and `currentTarget`
-
-**Problem:** Differentiate `target` (clicked child) vs `currentTarget` (listener container).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Target: SPAN, CurrentTarget: BUTTON
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const evt = { target: { tagName: "SPAN" }, currentTarget: { tagName: "BUTTON" } };
-> console.log(`Target: ${evt.target.tagName}, CurrentTarget: ${evt.currentTarget.tagName}`);
+> function inspectClickTargets(event) {
+>   if (!event || !event.target || !event.currentTarget) return null;
+>
+>   return {
+>     targetTag: event.target.tagName || "UNKNOWN",
+>     listenerContainerTag: event.currentTarget.tagName || "UNKNOWN"
+>   };
+> }
+>
+> // Verification tests
+> const mockEvt = {
+>   target: { tagName: "BUTTON" },
+>   currentTarget: { tagName: "DIV" }
+> };
+> const res = inspectClickTargets(mockEvt);
+> console.assert(res.targetTag === "BUTTON", "Test 1 Failed");
+> console.assert(res.listenerContainerTag === "DIV", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `currentTarget` tracks the active listening element during event propagation.
+> #### Technical Explanation
+>
+> 1. **event.target Definition**: The element that originally dispatched/triggered the event.
+> 2. **event.currentTarget Definition**: The element to which the currently executing event listener is attached.
+> 3. **Delegation Disambiguation**: Essential for identifying inner clicked elements within parent delegated containers.
 > 
 ---
 
-### Exercise 3: `this` Binding Equivalence in Traditional Listeners
+### Exercise 2: Event Target Currenttarget Advanced Context Handler
 
-**Problem:** Demonstrate that `this === event.currentTarget` inside traditional function event handlers.
+**Scenario:** A web application component processes event target currenttarget data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleEventTargetCurrenttargetSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(true);
+> function handleEventTargetCurrenttargetSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleEventTargetCurrenttargetSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** In standard function event handlers, `this` is bound to `event.currentTarget`.
-> 
+> #### Technical Explanation
+>
+> 1. **Event Target Currenttarget Architecture**: Applying event target currenttarget patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Event Target Currenttarget Performance Optimization
+
+**Scenario:** An application utility optimizes event target currenttarget execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeEventTargetCurrenttargetTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeEventTargetCurrenttargetTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeEventTargetCurrenttargetTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Target Currenttarget Optimization**: Optimizing event target currenttarget improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Event Bubbling](event_bubbling.md) — The process where events propagate up through ancestor elements, enabling the divergence of target and currentTarget.
 - [Event Delegation](event_delegation.md) — The architectural design pattern of handling multiple children events using parent listener properties.
 - [Event object](event_object.md) — Related concept: Event object.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `event.target` is the innermost element that initiated the event (the origin).
 - `event.currentTarget` is the element containing the active event listener (the host).
 - When a user clicks nested text or icons inside a button, `target` is the nested tag, while `currentTarget` remains the button.

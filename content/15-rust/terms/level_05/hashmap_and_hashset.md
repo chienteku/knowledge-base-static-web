@@ -334,9 +334,9 @@ if !map.contains_key(&key) {
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`Borrow` / `BorrowMut`](../level_14/borrow_borrow_mut.md)
+- [`Borrow` / `BorrowMut`](../level_14/borrow_borrow_mut.md) — 
 
 ---
 

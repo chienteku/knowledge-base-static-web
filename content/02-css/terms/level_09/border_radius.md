@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Aesthetic / Styling Property**
+
+**Aesthetic / Styling Property (Universal Modern Standard .)**: `border-radius` (Rounded Corners) is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The death of sharp-cornered 1990s websites).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the physical world, sharp 90-degree corners are dangerous and aggressive. Soft, rounded corners feel modern, friendly, and approachable (which is why almost every modern smartphone app uses rounded buttons). 
@@ -67,7 +63,7 @@ If you want a button with completely rounded left and right edges (like a medici
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using percentages for standard buttons
 
@@ -115,7 +111,7 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Targeting specific corners
 
@@ -170,14 +166,14 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 >
 > **Explanation:** 4-value `border-radius` sets Top-Left, Top-Right, Bottom-Right, Bottom-Left corners in clockwise order.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Border](../level_02/border.md) — The physical border boundaries.
 - [`box-shadow` (Card Shadows)](box_shadow.md) — Shadow rings which follow the border radius boundaries.
 - [`object-fit` & `object-position`](object_fit.md) — Standard scaling property for images cropped by border radius.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `border-radius` rounds the corners of the Box Model.
 - Use `px` or `rem` for standard, even rounding (e.g., `8px`).
 - Use `50%` on a perfectly square element to create a perfect circle (like profile pictures).

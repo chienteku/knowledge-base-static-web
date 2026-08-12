@@ -9,7 +9,7 @@
 
 
 - [Unit Struct](../level_02/unit_struct.md) — The type of a function that finishes but returns no data.
-- [`panic!` Macro](../level_04/panic.md) — A macro that crashes the program.
+- [`panic!`](../level_04/panic.md) — A macro that crashes the program.
 - [`loop`](../level_02/loop.md) — An infinite loop.
 
 ---
@@ -514,8 +514,8 @@ Implement `WorkerLoop::run_queue` showcasing how `break`, `continue`, and diverg
 
 
 - [Unit Struct](../level_02/unit_struct.md) — The type of a function that finishes safely but yields no data.
-- [`panic!` Macro](../level_04/panic.md) — The most common expression that returns `!`.
-- [`panic!` Macro](../level_04/panic.md) — Macros that return `!` to help you stub out code.
+- [`panic!`](../level_04/panic.md) — The most common expression that returns `!`.
+- [`panic!`](../level_04/panic.md) — Macros that return `!` to help you stub out code.
 - [`let else` Statement](../level_02/let_else_statement.md) — Related concept: `let else` Statement.
 - [`todo!` / `unimplemented!` / `unreachable!`](../level_04/todo_unimplemented_unreachable.md) — Related concept: `todo!` / `unimplemented!` / `unreachable!`.
 - [Unit Type (`()`)](../level_01/unit_type.md) — Related concept: Unit Type (`()`).

@@ -672,7 +672,7 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 - [Release Profile](release_profile.md) — Cargo build profile where LTO is configured.
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — Core performance philosophy realized via LTO passes.
 - [Crate](../level_01/crate.md) — Compilation units unified by LTO during linking.
-- [Llvm Codegen Backend](../level_19/llvm_codegen_backend.md) — Related concept: Llvm Codegen Backend.
+- [LLVM (Codegen Backend)](../level_19/llvm_codegen_backend.md) — Related concept: Llvm Codegen Backend.
 
 ---
 

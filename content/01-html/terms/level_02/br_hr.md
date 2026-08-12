@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<br>` & `<hr>` is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We know that HTML ignores the "Enter" key on your keyboard. If you want a new block of text, you use a new `<p>` tag. 
@@ -67,7 +63,7 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<br>` to create spacing
 
@@ -193,7 +189,7 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 <h2 class="bordered-title">Title</h2> <!-- CSS: .bordered-title { border-bottom: 2px solid grey; } -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Void Elements
 
@@ -238,14 +234,14 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 >
 > **Explanation:** `<hr>` conveys a structural transition between distinct topics.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<p>` (Paragraph)](p.md) — The tag that creates natural block spacing.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The general concept that `<br>` and `<hr>` fall under.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<br>` acts as an inline break and `<hr>` behaves like a block-level break.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<br>` creates a forced line break (carriage return) *without* starting a new paragraph.
 - `<hr>` creates a thematic break (a horizontal line) to separate different topics.
 - Both are **void elements** and do not have closing tags.

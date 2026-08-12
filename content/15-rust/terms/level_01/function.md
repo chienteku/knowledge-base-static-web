@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [`fn` (Functions)](fn.md) — fn keyword syntax.
+- [fn](fn.md) — fn keyword syntax.
 
 ---
 
@@ -228,9 +228,9 @@ fn print_val(s: &str) { println!("{s}"); } // Take reference!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`fn` (Functions)](fn.md) — fn keyword.
+- [fn](fn.md) — fn keyword.
 - [Expressions](expressions.md) — Function body tail expressions.
 
 ---

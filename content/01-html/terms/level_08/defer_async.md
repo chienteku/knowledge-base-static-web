@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Modern Browsers  .)**: `defer` & `async` (Script Loading Strategies) is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers (HTML5)** (Standardized to resolve render-blocking performance limits).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A web browser reads and compiles an HTML document top-to-bottom. If a browser encounters a standard external script tag:
@@ -117,7 +113,7 @@ Comparing script tags in `<head>`:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `defer` or `async` on inline scripts
 
@@ -173,7 +169,7 @@ Comparing script tags in `<head>`:
 <script src="app.js" defer></script>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Strategy Selection
 
@@ -236,14 +232,14 @@ Comparing script tags in `<head>`:
 >
 > **Explanation:** `async` is ideal for standalone analytics scripts with zero dependencies.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<script>`](script.md) — The parent script container element.
 - [`<link>`](link.md) — The element used to connect stylesheets (which are also render-blocking).
 - [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `defer` and `async` attributes prevent scripts from blocking HTML rendering.
 - Both attributes download scripts in the background while the browser compiles the page.
 - `async` scripts execute the instant they finish downloading, blocking the parser briefly (order is random).

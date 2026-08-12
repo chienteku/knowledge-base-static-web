@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics** (For `<cite>`) / **Structural Tag** (For `<blockquote>`)
+
+**Inline Text Semantics (For `<cite>`) / Structural Tag (For `<blockquote>`) (Universal Browser Support .)**: `<blockquote>` & `<cite>` is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively by all web browsers since the earliest versions of HTML).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing articles, essays, or research papers, you often need to quote text from other authors, books, or websites. 
@@ -91,7 +87,7 @@ A simple nested blockquote showing visual indentation and attribution:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the `cite` attribute with the `<cite>` tag
 
@@ -218,7 +214,7 @@ A simple nested blockquote showing visual indentation and attribution:
 <p>— Thomas Edison, <cite>The Art of Invention</cite></p>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Quote Markup
 
@@ -269,13 +265,13 @@ A simple nested blockquote showing visual indentation and attribution:
 >
 > **Explanation:** `<q>` automatically adds language-appropriate quotation marks around inline quotes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<p>` (Paragraph)](p.md) — Standard text container, often nested inside `<blockquote>`.
 - [`<strong>` & `<em>`](strong_em.md) — Inline emphasis tags that sit alongside `<cite>`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `<blockquote>` for multi-line block quotations.
 - Browsers visually indent `<blockquote>` from the left and right margins.
 - Use the `<cite>` inline tag to mark up the title of a work or source name.

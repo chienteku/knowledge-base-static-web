@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support .)**: `title` Attribute is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported by all web browsers. Displays the standard tooltip box after a brief hover delay on desktop systems).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes a button, link, or abbreviation on a webpage needs a little bit of extra context to help the user. For instance:
@@ -94,7 +90,7 @@ Hover tooltips on different elements:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `title` instead of `alt` on images
 
@@ -151,7 +147,7 @@ Hover tooltips on different elements:
 <!-- title="" attribute on body tags sets hover tooltip -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hover prompts
 
@@ -204,7 +200,7 @@ Hover tooltips on different elements:
 >
 > **Explanation:** Hover tooltips require desktop mouse hover interactions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Attribute](../level_01/attribute.md) — The general tag parameter concept.
 - [`alt` Attribute](../level_03/alt.md) — The required visual description attribute for images.
 - [`<head>`](../level_01/head.md) — Related concept: `<head>`.
@@ -213,7 +209,7 @@ Hover tooltips on different elements:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `title` attribute is a global attribute that displays text as a tooltip on hover.
 - It is commonly used on acronyms (`<abbr>`) and icons to provide visual prompts.
 - Do not use `title` for critical instructions because mobile, keyboard, and screen-reader users cannot trigger it.

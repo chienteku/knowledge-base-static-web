@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js API Method**
+
+**Node.js API Method (Node.js Server Code)**: Piping (.pipe()) is a fundamental concept in this technology stack. **Level 6 — Data Handling**
 
 ---
 
-## 3. Environment Context
-- **Node.js Server Code**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to copy a massive 10GB file, you could manually write code to listen to the `'data'` event on a Readable Stream, and then immediately call `.write()` on a Writable Stream.
@@ -56,7 +52,7 @@ readStream
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Ignoring Error Events on Pipes
 
@@ -105,7 +101,7 @@ stream.pipe(res); // ❌ ERR_STREAM_WRITE_AFTER_END!
 stream.pipe(res); // Pipe before ending response
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Express Download
 
@@ -158,7 +154,7 @@ stream.pipe(res); // Pipe before ending response
 >
 > **Explanation:** Stream piping chains multiple transformation steps efficiently.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Readable & Writable Streams](readable_writable.md) — The two ends of the pipe.
 - [Backpressure](backpressure.md) — Related concept: Backpressure.
 - [Duplex & Transform Streams](duplex_transform_streams.md) — Related concept: Duplex & Transform Streams.
@@ -166,7 +162,7 @@ stream.pipe(res); // Pipe before ending response
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`.pipe()`** connects a Readable stream directly to a Writable stream.
 - It automatically manages **Backpressure** (pausing the reader if the writer is too slow).
 - It automatically closes the Writable stream when the Readable stream is finished.

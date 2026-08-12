@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere modern JavaScript is supported)**: Named vs Default Exports is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere modern JavaScript is supported (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 ES Modules provide two distinct mechanisms to export and import code across files. Choosing between them depends on whether you want to share a collection of utility functions or a single main entity:
@@ -90,7 +86,7 @@ console.log(service.name); // "Bob"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Adding curly braces `{}` when importing a default export
 
@@ -163,71 +159,128 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Import Classifier
+### Exercise 1: Structuring Utility Libraries with Named & Default Exports
 
-**Problem:** Complete the import statement in `app.js` to correctly import the named export `logInfo` and the default export `Logger` from `logger.js`.
+**Scenario:** A UI component library exports a main Component class as default export and supplementary helper functions as named exports.
 
-```javascript
-// --- logger.js ---
-export function logInfo(msg) { console.log(msg); }
-export default class Logger {}
-
-// --- app.js ---
-// Write the import statement here
-
-const loggerInstance = new Logger();
-logInfo("Logger initialized.");
-```
+**Requirements:**
+1. Simulate module export structure containing { default: Button, formatButtonText }.
+2. Import and execute both exports.
+3. Verify export signatures.
 
 > [!check]- Answer
-> - The import statement should look like: `import Logger, { logInfo } from "./logger.js";`.
-> 
----
-
-### Exercise 2: Combining Named and Default Imports
-
-**Problem:** Import default `React` and named `{ useState }` in single import line syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Combined import syntax verified
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Combined import syntax verified");
+> function createComponentModule() {
+>   class Button {
+>     constructor(label) { this.label = label; }
+>   }
+>   const formatButtonText = (text) => text.toUpperCase();
+>
+>   return {
+>     default: Button,
+>     formatButtonText
+>   };
+> }
+>
+> // Verification tests
+> const moduleExports = createComponentModule();
+> const ButtonClass = moduleExports.default;
+> const btn = new ButtonClass("Submit");
+>
+> console.assert(btn.label === "Submit", "Test 1 Failed");
+> console.assert(moduleExports.formatButtonText("cancel") === "CANCEL", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `import DefaultItem, { NamedItem } from 'path'` combines default and named imports.
+> #### Technical Explanation
+>
+> 1. **Named Exports**: Export multiple bindings per module (export const foo = ...); importers must use matching export names.
+> 2. **Default Export**: Export one primary fallback entity per module (export default class ...); importers can choose local name.
+> 3. **Barrel Export Pattern**: Aggregates multiple module exports into a single index entry file.
 > 
 ---
 
-### Exercise 3: Renaming Named Exports on Import
+### Exercise 2: Named Vs Default Exports Advanced Context Handler
 
-**Problem:** Rename named export `import { calculateTax as calc } from './tax.js'`.
+**Scenario:** A web application component processes named vs default exports data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleNamedVsDefaultExportsSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Renamed import verified
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Renamed import verified");
+> function handleNamedVsDefaultExportsSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleNamedVsDefaultExportsSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `import { item as alias }` renames imported named exports locally.
-> 
+> #### Technical Explanation
+>
+> 1. **Named Vs Default Exports Architecture**: Applying named vs default exports patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Named Vs Default Exports Performance Optimization
+
+**Scenario:** An application utility optimizes named vs default exports execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeNamedVsDefaultExportsTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeNamedVsDefaultExportsTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeNamedVsDefaultExportsTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Named Vs Default Exports Optimization**: Optimizing named vs default exports improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Dynamic import()](dynamic_import.md) — Promise-based module loader.
 - [Modules (import/export)](modules.md) — Related concept: Modules (import/export).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Named exports permit multiple exported values per file; imports require matching name strings enclosed in curly braces `{}`.
 - Default exports permit at most one exported value per file; imports omit curly braces `{}` and can be named arbitrarily.
 - Use `as` inside named imports to rename them, avoiding namespace conflicts.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Function**
+
+**CSS Function (Universal Modern Standard .)**: `min()`, `max()`, `clamp()` (Responsive Functions) is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Understood natively. Evaluates formulas dynamically inside the browser layout thread during window resizes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To make typography and spacing responsive in the past, developers had to write media queries for every screen tier:
@@ -128,7 +124,7 @@ Fluid typography:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting a relative unit in the preferred value parameter
 
@@ -250,7 +246,7 @@ font-size: clamp(3rem, 1rem, 5vw); /* ❌ Invalid argument order! */
 font-size: clamp(1rem, 5vw, 3rem); /* Min: 1rem, Preferred: 5vw, Max: 3rem */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Clamp Range Math
 
@@ -308,13 +304,13 @@ If a user opens the page on a mobile device where the viewport width is `300px`,
 >
 > **Explanation:** `min(5vw, 40px)` applies 5vw fluid padding on mobile, clamping at 40px on desktop.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Responsive Design (Concept)](responsive_design.md) — The adaptation philosophy.
 - [`calc()`](../level_11/calc.md) — Basic CSS math.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `min()`, `max()`, and `clamp()` evaluate responsive sizing math on the fly inside the browser.
 - `min(valueA, valueB)` acts as a clean shorthand for capping widths (`max-width`).
 - `max(valueA, valueB)` acts as a clean shorthand for setting min baselines (`min-width`).

@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Positioning Property**
+
+**Positioning Property (Universal Browser Support)**: `position: static` vs `relative` is a fundamental concept in this technology stack. **Level 4 — Display & Positioning**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, the browser handles all layout automatically. If you put three `<div>`s in a row, they stack perfectly on top of each other. This is called the "Normal Document Flow."
@@ -60,7 +56,7 @@ If you pull one book slightly forward (`relative`), it sticks out, but the books
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to move a static element
 
@@ -178,7 +174,7 @@ p { position: relative; top: 20px; } /* ❌ Leaves empty gap in original layout 
 p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty gaps */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Overlap
 
@@ -227,7 +223,7 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 >
 > **Explanation:** `position: static` is default un-positioned normal document flow.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Absolute positioning dynamics.
 - [`position: sticky`](position_sticky.md) — Hybrid layout scrolling.
 - [`z-index`](z_index.md) — Overlapping stacking layer values.
@@ -236,7 +232,7 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `static` is the default. It ignores `top/bottom/left/right`.
 - `relative` unlocks `top/bottom/left/right`.
 - `relative` moves the element relative to its original, normal position.

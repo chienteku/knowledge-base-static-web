@@ -247,7 +247,7 @@ Update a user's notification preference inside `settings.notifications` without 
 ## 6. Related Terms
 
 
-- [SurrealDB](../level_01/surrealdb.md)
+- [SurrealDB](../level_01/surrealdb.md) — 
 - [Destructuring & Object Notation in SELECT](../level_06/destructuring_select.md) — Related concept: Destructuring & Object Notation in SELECT.
 
 ---

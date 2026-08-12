@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: do...while is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard `while` loop checks its condition *before* it runs its code block. If the condition is false from the very beginning, the loop's code will execute exactly zero times. 
@@ -66,7 +62,7 @@ console.log(`Success! Assigned new unique ID: ${newId}`);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the semicolon
 
@@ -147,76 +143,143 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Persistent Prompt
+### Exercise 1: Resilient Microservice API Retry Controller
 
-**Problem:** Write a script that declares a variable `isValid` and sets it to `false`. Use a `do...while` loop to log "Checking validity..." and then immediately set `isValid` to `true`. The loop should continue as long as `isValid` is false. How many times will it log?
+**Scenario:** A microservice client dispatches an HTTP request at least once, retrying up to max attempts using a do...while loop until a success status is received or retry budget is spent.
 
-**Expected output:**
+**Requirements:**
+1. Write executeWithRetry(requestFn, maxRetries).
+2. Execute requestFn() at least once inside do block.
+3. Retry while status is NOT 200 and attempt count < maxRetries.
+4. Return execution response object.
+
 > [!check]- Answer
-> ```text
-> Checking validity...
-> (It logs exactly 1 time)
-> ```
-> - `do { console.log(...); isValid = true; } while (!isValid);`
-> - Because it's set to true inside the first pass, the condition evaluates to false at the end, and the loop stops.
-> 
----
-
-### Exercise 2: Guaranteed First Execution Trace
-
-**Problem:** Write a `do...while` loop that runs once even though initial condition `x > 10` is `false` (`x = 5`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Ran once with x = 5
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> let x = 5;
-> do {
->   console.log(`Ran once with x = ${x}`);
-> } while (x > 10);
+> function executeWithRetry(requestFn, maxRetries) {
+>   let attempts = 0;
+>   let response;
+>
+>   do {
+>     attempts++;
+>     response = requestFn(attempts);
+>   } while (response.status !== 200 && attempts < maxRetries);
+>
+>   return { response, totalAttempts: attempts };
+> }
+>
+> // Verification tests
+> let count = 0;
+> const mockFn = (attempt) => ({ status: attempt === 2 ? 200 : 500 });
+> const res = executeWithRetry(mockFn, 3);
+> console.assert(res.totalAttempts === 2 && res.response.status === 200, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `do...while` loops execute the body first before checking the termination condition.
+> #### Technical Explanation
+>
+> 1. **Guaranteed Initial Execution**: A do...while loop evaluates its body statement at least once before testing the condition.
+> 2. **Post-Test Condition Evaluation**: The loop condition check occurs at the end of every iteration after body execution.
+> 3. **Retry Control Flow**: Ideal for operations that must execute once before deciding whether to repeat (polling, retrying).
 > 
 ---
 
-### Exercise 3: Interactive User Retry Simulation
+### Exercise 2: CLI Interactive Port Prompt Validator
 
-**Problem:** Simulate a retry mechanism that executes up to 3 times or until `success` is `true`.
+**Scenario:** An interactive setup wizard prompts for a valid server port number at least once, repeating the prompt until a port in the valid range 1024-65535 is provided.
 
-**Expected output:**
+**Requirements:**
+1. Write promptForPort(inputMockArray).
+2. Extract port inputs from array inside do block.
+3. Repeat while port is out of range 1024-65535.
+4. Return accepted port.
+
 > [!check]- Answer
-> ```text
-> Attempt 1
-> Attempt 2
-> Success on attempt 2
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> let attempt = 0;
-> let success = false;
-> do {
->   attempt++;
->   console.log(`Attempt ${attempt}`);
->   if (attempt === 2) success = true;
-> } while (!success && attempt < 3);
-> console.log(`Success on attempt ${attempt}`);
+> function promptForPort(inputMockArray) {
+>   const inputs = [...inputMockArray];
+>   let chosenPort;
+>   let isValid = false;
+>
+>   do {
+>     chosenPort = inputs.shift();
+>     isValid = typeof chosenPort === "number" && chosenPort >= 1024 && chosenPort <= 65535;
+>   } while (!isValid && inputs.length > 0);
+>
+>   return { chosenPort, isValid };
+> }
+>
+> // Verification tests
+> const res = promptForPort([80, 70000, 8080]);
+> console.assert(res.chosenPort === 8080 && res.isValid === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `do...while` ensures operations execute at least once before testing stopping criteria.
+> #### Technical Explanation
+>
+> 1. **Validation Post-Check**: Guarantees initial user input capture before checking validity conditions.
+> 2. **Loop Variable Scope**: Variables tested in the while (condition) clause must be declared outside the do block.
+> 3. **Difference from while Loop**: A standard while loop evaluates conditions pre-execution, potentially skipping the body completely.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Random Token Unique Generation Guard
+
+**Scenario:** A security token generator generates random tokens, using a do...while loop to generate tokens at least once and repeat generation if a collision with an existing active token set is detected.
+
+**Requirements:**
+1. Write generateUniqueToken(existingTokenSet, generatorFn).
+2. Generate token in do block.
+3. Repeat while existingTokenSet.has(token) is true.
+4. Return unique token.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function generateUniqueToken(existingTokenSet, generatorFn) {
+>   let token;
+>   let attempts = 0;
+>
+>   do {
+>     attempts++;
+>     token = generatorFn();
+>   } while (existingTokenSet.has(token));
+>
+>   return { token, attempts };
+> }
+>
+> // Verification tests
+> const set = new Set(["TOKEN_A", "TOKEN_B"]);
+> let callCount = 0;
+> const mockGen = () => {
+>   callCount++;
+>   return callCount === 1 ? "TOKEN_A" : "TOKEN_C";
+> };
+> const res = generateUniqueToken(set, mockGen);
+> console.assert(res.token === "TOKEN_C" && res.attempts === 2, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Collision Avoidance Pattern**: Guarantees single initial generation without repeating code before entering validation checks.
+> 2. **Set Collection Lookup**: Using Set.prototype.has() provides O(1) existence checks in loop conditions.
+> 3. **Termination Assurance**: Ensure the generator function has finite randomness to avoid infinite do...while loops.
+---
+
+## 6. Related Terms
 - [while Loop](while_loop.md) — The standard while loop that checks the condition first.
 - [for Loop](for_loop.md) — A loop for iterating a specific number of times.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `do...while` loop executes the code block *before* evaluating the condition.
 - It is guaranteed to run at least one time, even if the condition is false.
 - Useful for user prompts or situations where the data needed for the condition is generated *inside* the loop.

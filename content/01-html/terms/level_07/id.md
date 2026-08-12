@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Global Attribute**
+
+**Global Attribute (Universal Browser Support)**: `id` Attribute is a fundamental concept in this technology stack. **Level 7 — Global Attributes**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you build a webpage with 50 different `<p>` paragraphs and 10 different `<div>` containers, you need a way to single out *one specific element*. Maybe you want to style exactly one button differently, maybe you want JavaScript to find a specific text box, or maybe you want a `<label>` to bind to a specific `<input>`.
@@ -56,7 +52,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using the same ID multiple times
 
@@ -115,7 +111,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 <div id="card-123">Card</div> <!-- Start IDs with alphabetical characters -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Error
 
@@ -173,7 +169,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 >
 > **Explanation:** ID selectors have higher CSS specificity rank than class selectors.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`class` Attribute](class.md) — The attribute used for grouping *multiple* elements together (the opposite of `id`).
 - [`style` Attribute](style.md) — The inline styling attribute.
 - [`<label>`](../level_05/label.md) — Relies entirely on `id`s to function.
@@ -183,7 +179,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `id` attribute is a global attribute, meaning it can be placed on *any* HTML tag.
 - It must be **absolutely unique** across the entire page.
 - It is heavily used to bind `<label>`s to `<input>`s, to create jump-to-section anchor links, and to target elements with JavaScript.

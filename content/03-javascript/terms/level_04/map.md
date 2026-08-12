@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: `map()` is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 One of the most common tasks in programming is taking a list of data, modifying every single item in exactly the same way, and saving the result. For example, taking an array of prices and adding a 5% tax to each one.
@@ -63,7 +59,7 @@ console.log(namesArray); // ["Alice", "Bob", "Charlie"]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to `return` inside the callback
 
@@ -148,67 +144,52 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Capitalizer
+### Exercise 1: User Profile DTO Payload Transformation
 
-**Problem:** You have an array of lowercase strings: `["hello", "world"]`. Use `.map()` to return a new array where all strings are completely uppercase. (Hint: use the `toUpperCase()` string method).
+**Scenario:** A REST API serializer maps database model instances to public JSON Data Transfer Objects (DTOs) using map().
 
-**Expected output:**
+**Requirements:**
+1. Write transformUserModels(userModels).
+2. Transform models using userModels.map(u => ({ id: u.id, email: u.email })).
+3. Return mapped array.
+
 > [!check]- Answer
-> ```text
-> ["HELLO", "WORLD"]
-> ```
-> - `const upper = strings.map(str => str.toUpperCase());`
-> 
----
-
-### Exercise 2: Transforming Array Objects
-
-**Problem:** Transform `[1, 2, 3]` into an array of objects `[{ val: 1 }, { val: 2 }, { val: 3 }]` using `.map()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [{"val":1},{"val":2},{"val":3}]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [1, 2, 3];
-> const objs = nums.map(val => ({ val }));
-> console.log(JSON.stringify(objs));
+> function transformUserModels(userModels) {
+>   if (!Array.isArray(userModels)) return [];
+>   return userModels.map(user => ({
+>     id: user.id,
+>     email: user.email.toLowerCase(),
+>     fullName: `${user.firstName} ${user.lastName}`
+>   }));
+> }
+>
+> // Verification tests
+> const raw = [{ id: 1, email: "ALICE@EXAMPLE.COM", firstName: "Alice", lastName: "Smith" }];
+> const dto = transformUserModels(raw);
+> console.assert(dto[0].email === "alice@example.com", "Test 1 Failed");
+> console.assert(dto[0].fullName === "Alice Smith", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `.map()` returns a new array with transformed element values.
-> 
----
-
-### Exercise 3: Parsing Integers in `map` Trap
-
-**Problem:** Fix `["1", "2", "3"].map(parseInt)` bug by passing explicit `parseInt(x, 10)` wrapper.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 1, 2, 3 ]
-> ```
-> ```javascript
-> const strings = ["1", "2", "3"];
-> const nums = strings.map(str => parseInt(str, 10));
-> console.log(nums);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `["1","2","3"].map(parseInt)` fails because `.map` passes `(element, index)` into `parseInt(string, radix)`.
-> 
-> 
+> 1. **map() Transformation**: Array.prototype.map(callback) creates a new array populated with results of calling callback on every element.
+> 2. **1-to-1 Mapping**: Output array length strictly matches input array length.
+> 3. **Pure Function Requirement**: Keep map callbacks pure without mutating original elements.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`forEach()`](../level_04/for_each.md) — Iterates through an array but does *not* return a new array.
 - [`filter()`](../level_04/filter.md) — Creates a new array, but only keeps items that pass a true/false test.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `map()` is used to **transform** an array of data.
 - It always returns a **brand new array** of the exact same length as the original.
 - It does **not** mutate (change) the original array.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Browser Support .)**: Inheritance is a fundamental concept in this technology stack. **Level 1 — Core Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Calculated during DOM tree traversal before computing layout geometries).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are building a website and want to use the Arial font for all your text content. 
@@ -141,7 +137,7 @@ p {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing transparency with background-color inheritance
 
@@ -190,7 +186,7 @@ button, input, select, textarea {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Property Check
 
@@ -264,7 +260,7 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 >
 > **Explanation:** Keyword values override natural property inheritance behavior.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Cascade](the_cascade.md) — The parent priority engine.
 - [Specificity](specificity.md) — Selector point weights.
 - [`!important` Declaration](important.md) — Priority overrides.
@@ -272,7 +268,7 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Inheritance automatically passes property values from parent elements down to nested child elements.
 - Typography properties (fonts, colors, sizes, alignments) are naturally inherited.
 - Box model and layout properties (borders, margins, paddings, dimensions) are not inherited.

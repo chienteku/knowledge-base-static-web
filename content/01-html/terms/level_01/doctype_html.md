@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata**
+
+**Metadata (Universal Browser Support)**: `<!DOCTYPE html>` is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, there were many different versions of HTML floating around (HTML 2.0, HTML 3.2, HTML 4.01, XHTML). Web browsers were struggling to render websites correctly because they didn't know which set of rules the developer was trying to follow.
@@ -50,7 +46,7 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting code before the DOCTYPE
 
@@ -112,7 +108,7 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 <!DOCTYPE html> <!-- Clean modern HTML5 DOCTYPE -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Quirks Mode Investigation
 
@@ -153,14 +149,14 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 >
 > **Explanation:** `<!DOCTYPE html>`, `<!doctype html>`, and `<!DoCtYpE hTmL>` are all valid HTML5 declarations.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<html>`](html_tag.md) — The tag that immediately follows the DOCTYPE declaration.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Like the DOCTYPE declaration, void elements stand as single declarations without closing pairs.
 - [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<!DOCTYPE html>` is not an HTML tag; it is an instruction to the web browser.
 - It guarantees the browser will render the page using modern HTML5 standards.
 - Without it, browsers fall back into "Quirks Mode" and emulate 1990s bugs.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Infinity / -Infinity is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers represent numbers using binary bits. Because memory is finite, JavaScript's default numeric type (IEEE 754 64-bit float) has an upper boundary: `1.7976931348623157e+308`. Any calculation that exceeds this threshold overflows. 
@@ -65,7 +61,7 @@ console.log(10 / Infinity); // 0 (Limit approaches zero)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Division by Zero to Throw an Error
 
@@ -154,84 +150,112 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Infinity Check
+### Exercise 1: IoT Temperature Sensor Boundary Accumulator
 
-**Problem:** Complete the code to check if a math multiplication result overflows the maximum safe integer limit.
+**Scenario:** An IoT telemetry service tracks minimum and maximum temperature readings over time. It initializes minimum and maximum tracker variables using Infinity and -Infinity to guarantee any real sensor reading updates the boundaries.
 
-```javascript
-const initial = 1e308;
-const doubled = initial * 2;
+**Requirements:**
+1. Initialize minTemp to Infinity and maxTemp to -Infinity.
+2. Process an array of numeric readings.
+3. Return an object { min, max }.
 
-// Check if doubled is Infinite
-const isInfinite = // Write code here
-
-console.log("Is infinite:", isInfinite);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Is infinite: true
-> ```
-> - You can check if a value is strictly equal to `Infinity`.
-> - Alternatively, you can use the global `isFinite(value)` function (which returns false for infinity).
-> 
----
-
-### Exercise 2: Division by Zero & Infinity Sign
-
-**Problem:** Calculate `1 / 0`, `-1 / 0`, and `0 / 0`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Infinity
-> -Infinity
-> NaN
-> ```
+> #### Implementation
 > ```javascript
-> console.log(1 / 0);   // Infinity
-> console.log(-1 / 0);  // -Infinity
-> console.log(0 / 0);   // NaN
+> function findSensorExtremes(readings) {
+>   if (!Array.isArray(readings) || readings.length === 0) {
+>     return { min: null, max: null };
+>   }
+> let minTemp = Infinity;
+>   let maxTemp = -Infinity;
+> for (const temp of readings) {
+>     if (temp < minTemp) minTemp = temp;
+>     if (temp > maxTemp) maxTemp = temp;
+>   }
+> return { min: minTemp, max: maxTemp };
+> }
+> // Verification tests
+> const res = findSensorExtremes([21.5, -4.2, 38.0, 15.1]);
+> console.assert(res.min === -4.2, "Test 1 Failed");
+> console.assert(res.max === 38.0, "Test 2 Failed");
 > ```
->
-> **Explanation:** Division by zero in JS yields positive or negative `Infinity` for non-zero numerators, and `NaN` for zero numerators.
+> #### Technical Explanation
+> 1. **Mathematical Identity Neutrality**: Infinity is greater than any finite number, and -Infinity is smaller than any finite number, making them ideal baseline initializers.
+> 2. **Special Primitive Values**: Infinity and -Infinity are global numeric property values representing positive and negative infinity.
+> 3. **Type Identification**: typeof Infinity evaluates to "number".
 > 
 ---
 
-### Exercise 3: Checking Falsy vs Finite Numbers
+### Exercise 2: Division by Zero Safety Sentinel
 
-**Problem:** Use `Number.isFinite()` to check `100`, `Infinity`, `"100"`, and `NaN`.
+**Scenario:** A financial analytics risk calculator detects division by zero operations that produce Infinity and sanitizes values before sending JSON responses to clients.
 
-**Expected output:**
+**Requirements:**
+1. Write a function calculateFinancialRatio(numerator, denominator).
+2. Check if the division produces an infinite value using Number.isFinite().
+3. Return null for non-finite results, or the calculated ratio.
+
 > [!check]- Answer
-> ```text
-> true
-> false
-> false
-> false
-> ```
+> #### Implementation
 > ```javascript
-> console.log(Number.isFinite(100));     // true
-> console.log(Number.isFinite(Infinity));// false
-> console.log(Number.isFinite("100"));   // false (no coercion)
-> console.log(Number.isFinite(NaN));    // false
+> function calculateFinancialRatio(numerator, denominator) {
+>   const ratio = numerator / denominator;
+> if (!Number.isFinite(ratio)) {
+>     return null;
+>   }
+> return ratio;
+> }
+> // Verification tests
+> console.assert(calculateFinancialRatio(100, 2) === 50, "Test 1 Failed");
+> console.assert(calculateFinancialRatio(100, 0) === null, "Test 2 Failed: Division by zero should return null");
+> console.assert(calculateFinancialRatio(-50, 0) === null, "Test 3 Failed");
 > ```
->
-> **Explanation:** `Number.isFinite()` checks if a value is of type `number` and is neither `Infinity`, `-Infinity`, nor `NaN`.
-> 
+> #### Technical Explanation
+> 1. **Division by Zero Behavior**: In JavaScript, dividing a non-zero number by zero does not throw an error; it returns Infinity (or -Infinity).
+> 2. **Finite Validation**: Number.isFinite(val) strictly checks if a value is a primitive number that is neither Infinity, -Infinity, nor NaN.
+> 3. **JSON Serialization Safeguard**: JSON.stringify() converts Infinity and -Infinity into null, making explicit validation essential.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Graph Unreachable Node Distance Initializer
+
+**Scenario:** A routing algorithm populates a distance array for graph nodes, initializing unvisited node distances to Infinity to represent infinite path cost.
+
+**Requirements:**
+1. Create a distance matrix for N nodes.
+2. Initialize all node distances to Infinity, except starting node (set to 0).
+3. Update distance if a shorter path is found.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function initializeNodeDistances(nodeCount, startNode) {
+>   const distances = new Array(nodeCount).fill(Infinity);
+> if (startNode >= 0 && startNode < nodeCount) {
+>     distances[startNode] = 0;
+>   }
+> return distances;
+> }
+> // Verification tests
+> const dists = initializeNodeDistances(4, 0);
+> console.assert(dists[0] === 0, "Test 1 Failed");
+> console.assert(dists[1] === Infinity && dists[2] === Infinity, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Pathfinding Identity**: Setting unvisited nodes to Infinity guarantees that any real edge weight comparison (newDist < distances[v]) evaluates to true.
+> 2. **Global Constants**: Infinity is equivalent to Number.POSITIVE_INFINITY.
+> 3. **Relational Consistency**: Infinity > 1e308 evaluates to true.
+---
+
+## 6. Related Terms
 - [NaN](nan.md) — Not-a-Number, another mathematical sentinel.
 - [Arithmetic Operators](arithmetic_operators.md) — Standard symbols used for math calculations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Infinity` and `-Infinity` are numeric representations of values that exceed bounds or involve division by zero.
 - Division by zero in JavaScript does not throw an error; it returns `Infinity` (or `-Infinity` if dividing a negative number).
 - Use `isFinite()` or compare directly with `Infinity` to detect overflows in calculations.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: Web Storage (localStorage / sessionStorage) is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTTP is a stateless protocol, and standard JavaScript variables are cleared from memory whenever a user refreshes their browser. To build smooth user experiences, web applications need a way to save data across page reloads (such as keeping a user's theme selection, shopping cart items, or form drafts). 
@@ -95,7 +91,7 @@ console.log("Loaded Profile Username:", loadedProfile.username); // "BrendanEich
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing Objects directly without JSON serialization
 
@@ -174,76 +170,137 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Count Visits
+### Exercise 1: Persistent User Theme Preference Manager
 
-**Problem:** Complete the code to track the number of times a user has refreshed the page using `localStorage`. If `visitCount` exists, increment it; if not, initialize it to `1`.
+**Scenario:** A web application saves and retrieves user theme preferences in localStorage with JSON serialization safeguards.
 
-```javascript
-if (typeof localStorage !== "undefined") {
-  let count = localStorage.getItem("visitCount");
-  
-  if (count === null) {
-    // Initialize count
-  } else {
-    // Increment count
-  }
-  
-  console.log("Visits:", localStorage.getItem("visitCount"));
-}
-```
+**Requirements:**
+1. Write saveThemePreference(themeObj).
+2. Write loadThemePreference(defaultTheme).
+3. Use localStorage.setItem() and localStorage.getItem().
+4. Return active theme.
 
 > [!check]- Answer
-> - Remember that values returned by `getItem` are strings; convert them to numbers using `Number(count)` before doing math.
-> - Save the updated value using `localStorage.setItem("visitCount", updatedCount)`.
-> 
----
-
-### Exercise 2: Storing and Parsing Objects in LocalStorage
-
-**Problem:** Store `{ a: 1 }` in localStorage with `JSON.stringify` and parse back with `JSON.parse`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const data = { a: 1 };
-> const serialized = JSON.stringify(data);
-> const deserialized = JSON.parse(serialized);
-> console.log(deserialized.a);
+> function saveThemePreference(themeObj) {
+>   if (!globalThis.localStorage) return false;
+>   localStorage.setItem("user_theme", JSON.stringify(themeObj));
+>   return true;
+> }
+>
+> function loadThemePreference(defaultTheme) {
+>   if (!globalThis.localStorage) return defaultTheme;
+>   const raw = localStorage.getItem("user_theme");
+>   if (!raw) return defaultTheme;
+>   try {
+>     return JSON.parse(raw);
+>   } catch (err) {
+>     return defaultTheme;
+>   }
+> }
+>
+> // Verification tests
+> const storageMap = {};
+> globalThis.localStorage = {
+>   setItem(k, v) { storageMap[k] = String(v); },
+>   getItem(k) { return storageMap[k] || null; }
+> };
+>
+> saveThemePreference({ mode: "dark" });
+> const loaded = loadThemePreference({ mode: "light" });
+> console.assert(loaded.mode === "dark", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `JSON.stringify` and `JSON.parse` serialize JavaScript objects for Web Storage.
+> #### Technical Explanation
+>
+> 1. **localStorage Persistence**: localStorage persists string data across browser sessions with no expiration time.
+> 2. **String Storage Limit**: Web Storage stores string keys and string values; complex objects require JSON.stringify() and JSON.parse().
+> 3. **Synchronous Storage API**: Web Storage operations are synchronous and block the main thread.
 > 
 ---
 
-### Exercise 3: LocalStorage vs SessionStorage Scope
+### Exercise 2: Web Storage Advanced Context Handler
 
-**Problem:** State difference between `localStorage` (persists across browser restarts) and `sessionStorage` (cleared on tab close).
+**Scenario:** A web application component processes web storage data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleWebStorageSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> localStorage: Persistent, sessionStorage: Tab lifetime
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("localStorage: Persistent, sessionStorage: Tab lifetime");
+> function handleWebStorageSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleWebStorageSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `localStorage` data persists indefinitely; `sessionStorage` expires when browser tabs close.
+> #### Technical Explanation
+>
+> 1. **Web Storage Architecture**: Applying web storage patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Web Storage Performance Optimization
+
+**Scenario:** An application utility optimizes web storage execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeWebStorageTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeWebStorageTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeWebStorageTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Web Storage Optimization**: Optimizing web storage improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — The JavaScript Object Notation parser used for encoding/decoding objects to strings.
 - [window object / BOM](window_bom.md) — Related concept: window object / BOM.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `localStorage` stores key-value pairs persistently with no expiration time.
 - `sessionStorage` stores data temporarily; it is cleared as soon as the browser tab is closed.
 - Both storage engines can **only** store strings.

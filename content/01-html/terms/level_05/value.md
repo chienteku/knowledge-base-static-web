@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support .)**: `value` Attribute (in Form Fields) is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported by all web browsers. Dynamically tracked by JavaScript engines when users type).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a form, you need a way to work with the user's data.
@@ -111,7 +107,7 @@ Different elements declaring values:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use the `value` attribute on `<textarea>`
 
@@ -171,7 +167,7 @@ const liveText = inputElement.value; // Accesses current live DOM property
 <input type="hidden" name="token" value="xyz123token">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Form value mapping
 
@@ -230,7 +226,7 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 >
 > **Explanation:** `.value` property retrieves live user input text.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The input elements hosting values.
 - [`<select>` and `<option>`](select_option.md) — Predefined value listings.
 - [`<textarea>`](textarea.md) — The tag that handles content differently (nested inner HTML).
@@ -240,7 +236,7 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `value` attribute represents the data payload of a form control.
 - In text fields, it sets the initial pre-filled text.
 - In checkboxes and radio buttons, it defines the hidden code value sent if selected.

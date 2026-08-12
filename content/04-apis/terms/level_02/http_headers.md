@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **HTTP Standard / Metadata**
+
+**HTTP Standard / Metadata (Universal Standard)**: HTTP Headers is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a Server sends a massive block of raw text to a Client, how does the Client know what to do with it? Is it an HTML page that should be rendered? Is it an MP4 video file that should be played? Is it JSON data? 
@@ -61,7 +57,7 @@ fetch('https://api.example.com/data', {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `Content-Type: application/json`
 
@@ -112,60 +108,140 @@ res.setHeader('User-Token', sanitizedInput);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Inspecting the Real World
+### Exercise 1: Case-Insensitive HTTP Header Accessor & Normalizer
 
-**Problem:** Go to any website (e.g., github.com). Right-click and open Chrome DevTools. Go to the **Network** tab. Refresh the page. Click on the very first document request (usually the website URL). Look at the "Response Headers" section. What is the `Content-Type`?
+**Scenario:** An API gateway implements a helper function to read HTTP header values case-insensitively.
 
-**Expected output:**
+**Requirements:**
+1. Write getHeaderValue(headers, headerName).
+2. Iterate object keys case-insensitively.
+3. Return header value or null.
+
 > [!check]- Answer
-> ```text
-> It will be `text/html; charset=utf-8`. 
-> The server uses this header to tell Chrome, "Hey, this is HTML, please render it visually on the screen instead of just downloading a text file!"
+>
+> #### Implementation
+>
+> ```javascript
+> function getHeaderValue(headers, headerName) {
+>   if (!headers || typeof headers !== "object" || !headerName) return null;
+>
+>   const targetKey = headerName.toLowerCase();
+>   for (const [key, value] of Object.entries(headers)) {
+>     if (key.toLowerCase() === targetKey) {
+>       return String(value).trim();
+>     }
+>   }
+>   return null;
+> }
+>
+> // Verification tests
+> const headers = {
+>   "Content-Type": "application/json",
+>   "X-API-KEY": "secret-123"
+> };
+>
+> console.assert(getHeaderValue(headers, "content-type") === "application/json", "Test 1 Failed");
+> console.assert(getHeaderValue(headers, "x-api-key") === "secret-123", "Test 2 Failed");
+> console.assert(getHeaderValue(headers, "missing") === null, "Test 3 Failed");
 > ```
-> - The Network tab is the most important tool for debugging APIs!
+>
+> #### Technical Explanation
+>
+> 1. **Case-Insensitive Spec**: HTTP specification dictates header field names are case-insensitive.
+> 2. **Dictionary Lookups**: JavaScript object property access is case-sensitive; custom normalization is required.
+> 3. **Header Value Trimming**: Trimming values removes leading/trailing whitespace specified in HTTP RFCs.
 > 
 ---
 
-### Exercise 2: Header Category Classification
+### Exercise 2: Security Response Headers Injector Middleware
 
-**Problem:** Classify header as Request, Response, or Representation header:
-1. `Authorization` 
-2. `Server` 
-3. `Content-Type` 
+**Scenario:** A web server middleware injects essential security headers into outgoing HTTP responses.
 
-**Expected output:**
+**Requirements:**
+1. Write injectSecurityHeaders(responseHeaders).
+2. Add X-Content-Type-Options: nosniff.
+3. Add X-Frame-Options: DENY.
+4. Add Content-Security-Policy.
+
 > [!check]- Answer
-> ```text
-> 1. Request Header
-> 2. Response Header
-> 3. Representation Header
+>
+> #### Implementation
+>
+> ```javascript
+> function injectSecurityHeaders(responseHeaders = {}) {
+>   return {
+>     ...responseHeaders,
+>     "X-Content-Type-Options": "nosniff",
+>     "X-Frame-Options": "DENY",
+>     "Content-Security-Policy": "default-src 'self'",
+>     "Referrer-Policy": "strict-origin-when-cross-origin"
+>   };
+> }
+>
+> // Verification tests
+> const headers = injectSecurityHeaders({ "Content-Type": "text/html" });
+> console.assert(headers["X-Content-Type-Options"] === "nosniff", "Test 1 Failed");
+> console.assert(headers["X-Frame-Options"] === "DENY", "Test 2 Failed");
+> console.assert(headers["Content-Type"] === "text/html", "Test 3 Failed: Original headers must be preserved");
 > ```
-> ```text
-> 1. Authorization -> Request Header
-> 2. Server -> Response Header
-> 3. Content-Type -> Representation Header
-> ```
-> - **Explanation:** Request headers send client metadata; Response headers send server info; Representation headers describe payload encoding.
+>
+> #### Technical Explanation
+>
+> 1. **X-Content-Type-Options**: Prevents browsers from MIME-sniffing responses away from declared Content-Type.
+> 2. **X-Frame-Options**: Protects against Clickjacking by controlling whether page can be embedded in iframe.
+> 3. **Content-Security-Policy (CSP)**: Restricts resources (scripts, styles, images) browser is allowed to load.
+> 
 ---
 
-### Exercise 3: Case-Insensitivity Verification
+### Exercise 3: Custom Application Header Prefix Filter
 
-**Problem:** True or False: HTTP header names are case-insensitive according to RFC specifications.
+**Scenario:** An API auditor inspects headers and flags non-standard custom header prefixes (`X-` vs standard headers).
 
-**Expected output:**
+**Requirements:**
+1. Write auditCustomHeaders(headers).
+2. Identify custom headers starting with "x-".
+3. Return array of custom header keys.
+
 > [!check]- Answer
-> ```text
-> True. `content-type`, `Content-Type`, and `CONTENT-TYPE` are semantically equivalent.
+>
+> #### Implementation
+>
+> ```javascript
+> function auditCustomHeaders(headers) {
+>   if (!headers || typeof headers !== "object") return [];
+>
+>   const customKeys = [];
+>   for (const key of Object.keys(headers)) {
+>     if (key.toLowerCase().startsWith("x-")) {
+>       customKeys.push(key);
+>     }
+>   }
+>   return customKeys;
+> }
+>
+> // Verification tests
+> const headers = {
+>   "Host": "api.com",
+>   "X-Request-ID": "req-123",
+>   "X-Trace-Token": "xyz",
+>   "Authorization": "Bearer token"
+> };
+>
+> const custom = auditCustomHeaders(headers);
+> console.assert(custom.length === 2, "Test 1 Failed");
+> console.assert(custom.includes("X-Request-ID"), "Test 2 Failed");
 > ```
-> ```text
-> True. HTTP header field names are case-insensitive.
-> ```
-> - **Explanation:** HTTP/1.1 defines header field names as case-insensitive; HTTP/2 requires lowercasing headers.
+>
+> #### Technical Explanation
+>
+> 1. **Legacy X- Prefix Convention**: Historically custom headers were prefixed with X-; RFC 6648 deprecated this recommendation.
+> 2. **Custom Application Headers**: Used to pass custom metadata (Request ID, Rate Limit info, Tracing tokens).
+> 3. **Standardization Encouragement**: New custom headers should use clear un-prefixed semantic names.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Request Body & Payloads](request_body.md) — The data that the Headers are describing.
 - [JWT (JSON Web Tokens)](../level_04/jwt.md) — Tokens are placed inside the `Authorization` header.
 - [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
@@ -177,7 +253,7 @@ res.setHeader('User-Token', sanitizedInput);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Headers** are hidden key-value pairs containing metadata about the HTTP message.
 - They dictate security, content parsing, caching, and cookies.
 - **`Content-Type: application/json`** is the most important header you will write; it tells the receiving server how to parse the payload.

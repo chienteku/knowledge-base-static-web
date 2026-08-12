@@ -227,7 +227,7 @@ Inspect the `$auth` context variable available to scoped client sessions after s
 ## 6. Related Terms
 
 
-- [SurrealDB](../level_01/surrealdb.md)
+- [SurrealDB](../level_01/surrealdb.md) — 
 
 ---
 

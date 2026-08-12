@@ -10,7 +10,7 @@
 
 - [`tokio`](../level_16/tokio.md) — The async runtime that provides this macro.
 - [`Future` Trait](future_trait.md) — The state machines that `join!` runs.
-- [`select!` Macro](select_macro.md) — The opposite of `join!` (waits for only one to finish).
+- [`select!`](select_macro.md) — The opposite of `join!` (waits for only one to finish).
 
 ---
 
@@ -558,7 +558,7 @@ Write a function `coordinate_reservation` using `tokio::try_join!` that coordina
 > 
 ## 6. Related Terms
 
-- [`select!` Macro](select_macro.md) — Related concept: `select!`.
+- [`select!`](select_macro.md) — Related concept: `select!`.
 
 ---
 

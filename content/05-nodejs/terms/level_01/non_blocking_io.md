@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Computer Science Concept / Architecture**
+
+**Computer Science Concept / Architecture (Node.js Core Architecture)**: Non-Blocking I/O is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If Node.js only has **one thread**, what happens when it needs to read a 500MB file from the hard drive? Reading that file might take 3 seconds. 
@@ -37,7 +33,7 @@ When you make a database query, the main thread hands the job to the secret C++ 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `*Sync` methods in production
 
@@ -95,7 +91,7 @@ const { setTimeout } = require('timers/promises');
 await setTimeout(2000); // Non-blocking timer pause
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Predict the Order
 
@@ -159,7 +155,7 @@ console.log("3. Done.");
 >
 > **Explanation:** Non-blocking I/O fires all 100 socket queries concurrently without waiting sequentially for each query to finish.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The mechanism that acts as the "buzzer", telling the main thread that the background I/O task is finished.
 - [Callbacks & Callback Hell](../level_05/callbacks.md) — The functions you provide to handle the data once the Non-Blocking I/O is done.
 - [Single-Threaded Architecture](single_threaded.md) — Related concept: Single-Threaded Architecture.
@@ -169,7 +165,7 @@ console.log("3. Done.");
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Non-Blocking I/O** means Node.js never sits idle waiting for network requests, database queries, or file reads to finish.
 - It achieves this by offloading the slow I/O work to background C++ threads.
 - This is the secret to how a Single-Threaded language can handle thousands of concurrent users.

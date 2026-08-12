@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography Property**
+
+**Typography Property (Universal Browser Support)**: `line-height` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you write a massive wall of text, and the bottom of the first line perfectly touches the top of the second line, it creates a claustrophobic, unreadable mess. 
@@ -53,7 +49,7 @@ h1 {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using pixels or percentages for line-height
 
@@ -104,7 +100,7 @@ div { height: 100px; line-height: 100px; } /* ❌ Multi-line text breaks layout!
 div { display: flex; align-items: center; min-height: 100px; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Calculating the Box
 
@@ -160,13 +156,13 @@ div { display: flex; align-items: center; min-height: 100px; }
 >
 > **Explanation:** Matching line-height to explicit element height vertically centers single-line text.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The property that `line-height` multiplies against.
 - [`font-style` & `font-variant`](font_style_variant.md) — Text formatting variants.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `line-height` controls the vertical space between lines of text (line spacing).
 - **Golden Rule**: Always use a unitless number (like `1.5`). Never use pixels (`px`) or percentages (`%`).
 - `1.5` is generally considered the optimal line-height for readable body text. Headings usually require a tighter height, like `1.2`.

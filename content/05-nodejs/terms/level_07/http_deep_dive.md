@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Module**
+
+**Node.js Core Module (Node.js Only `, which is a high-level client, not a server).)**: The http Module Deep Dive is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Browsers have `fetch()`, which is a high-level client, not a server).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before Node.js, if you wanted to host a website, you had to install massive external software like Apache or NGINX. Those programs listened to the internet, and when a request came in, they forwarded it to your PHP or Ruby code.
@@ -39,7 +35,7 @@ Because of this pain, nobody uses raw `http` in production. They use frameworks 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to close the response
 
@@ -155,7 +151,7 @@ const server = app.listen(3000);
 server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Raw Router
 
@@ -227,13 +223,13 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 >
 > **Explanation:** `writeHead()` sets HTTP status code and response header key-values in a single call.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Express.js](express_js.md) — The framework that hides the ugly parts of the `http` module.
 - [The req & res Objects](req_res.md) — What the `http` module passes into your callback.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`http` module** allows Node.js to act as its own web server without needing Apache or NGINX.
 - It is an `EventEmitter` that listens to network ports and emits `'request'` events.
 - It is too low-level for modern API development, requiring manual Buffer parsing and massive `if/else` routing.

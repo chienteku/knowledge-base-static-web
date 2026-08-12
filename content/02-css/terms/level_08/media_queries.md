@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS At-Rule**
+
+**CSS At-Rule (Universal Modern Standard .)**: `@media` (Media Queries Basics) is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The absolute core of Responsive Web Design).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Using percentages (`%`) and Flexbox is great for making a layout squish and stretch. But eventually, a screen gets so small that the layout physically breaks. A 3-column desktop layout looks terrible crushed onto a 320px wide phone screen; it needs to become a 1-column layout.
@@ -58,7 +54,7 @@ In modern web development, we write the CSS for Mobile Phones *first* (the defau
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Desktop-First Design (`max-width`)
 
@@ -180,7 +176,7 @@ In modern web development, we write the CSS for Mobile Phones *first* (the defau
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Breakpoint
 
@@ -238,7 +234,7 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 >
 > **Explanation:** `prefers-color-scheme` detects OS user dark mode preferences.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`flex-direction`](../level_05/flex_direction.md) — Commonly toggled inside media queries for responsive layouts.
 - [Mobile-First Design](mobile_first.md) — Progressive enhancement coding methodology.
 - [Breakpoints](breakpoints.md) — The screen size thresholds that trigger layout changes.
@@ -251,7 +247,7 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `@media` queries apply CSS rules only when specific screen size conditions are met.
 - Always use **Mobile-First Design**: Write mobile CSS as the default, and use `min-width` to add desktop features.
 - The pixel values where the layout changes (e.g., 768px, 1024px) are called **Breakpoints**.

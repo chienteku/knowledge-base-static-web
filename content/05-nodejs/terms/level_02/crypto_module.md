@@ -11,55 +11,71 @@
 ---
 
 ## 2. Term Category
-Node.js Core Module
+
+**Node.js Core Module (cryptography infrastructure)**: The `crypto` module is a built-in Node.js module providing cryptographic functionality. It wraps OpenSSL's C/C++ primitives to enable secure hashing, HMAC generation, symmetric/asymmetric encryption, digital signatures, and cryptographically secure random number generation.
 
 ---
 
-## 3. Core Definition
-The **`crypto`** module provides cryptographic functionality that includes a set of wrappers for OpenSSL's hash, HMAC, cipher, decipher, sign, and verify functions. It is used to secure data, hash passwords (though tools like Bcrypt are preferred for passwords), and generate random data.
+## 3. Explanation
 
-Because it is built into Node.js, you do not need to `npm install` it.
+### (1) Design Motivation — "Why did we design this?"
+Building web servers requires cryptographic operations — securing sensitive communication over HTTPS, hashing user session tokens, generating secure random API keys, and verifying signatures. 
+Implementing cryptographic primitives in JavaScript from scratch would be extremely slow and prone to severe security bugs. Node.js built the `crypto` module into its core to leverage OpenSSL's highly optimized, battle-tested C/C++ implementation directly, exposing fast, zero-dependency cryptographic functions to JavaScript.
 
----
+### (2) Reality Metaphor
+Imagine a **High-Security Bank Vault System**:
+- **`crypto.randomBytes`** is a mechanical lottery ball spinner generating un-guessable combination lock combinations.
+- **`crypto.createHash`** is a one-way shredder and fingerprint scanner that compresses any document into a unique, irreversible digital stamp.
+- **`crypto.createHmac`** is a wax seal stamped using a secret signet ring: anyone can verify the seal's authenticity, but only the secret ring owner could have stamped it.
 
-## 4. Key Characteristics / Rules
-- **Built-in:** Accessed via `require('crypto')` or `import crypto from 'node:crypto'`.
-- **OpenSSL Backed:** It relies heavily on the underlying OpenSSL library compiled into Node.js.
-- **Streams:** Many of the `crypto` classes (`Cipher`, `Decipher`, `Hash`, `Hmac`, `Sign`, `Verify`) extend the `Stream` class, allowing you to pipe large amounts of data through them efficiently.
+### (3) Node.js Code Examples
 
----
-
-## 5. Typical Usage / Common Patterns
-
-### Generating Random Data
+#### Short Snippet (Random Token & Hash Generation)
 ```javascript
 const crypto = require('crypto');
 
-// Generate 32 bytes of secure random data
-const randomBytes = crypto.randomBytes(32);
-console.log(randomBytes.toString('hex')); 
-// Output: something like "a1b2c3d4..."
+// Generate 32 bytes of secure random hex data
+const randomToken = crypto.randomBytes(32).toString('hex');
+console.log('Secure Token:', randomToken);
+
+// Generate SHA-256 hash of a string
+const hash = crypto.createHash('sha256').update('my secret message').digest('hex');
+console.log('SHA-256 Hash:', hash);
 ```
 
-### Simple Hashing (SHA-256)
+#### Fuller Example (HMAC Verification with Constant-Time Comparison)
 ```javascript
-const hash = crypto.createHash('sha256');
-hash.update('my secret message');
-console.log(hash.digest('hex')); 
-// Output: a fixed-length hexadecimal string
+const crypto = require('crypto');
+
+function generateHmacSignature(payload, secret) {
+  return crypto.createHmac('sha256', secret).update(payload).digest('hex');
+}
+
+function verifyHmacSignature(payload, signatureToVerify, secret) {
+  const expectedSignature = generateHmacSignature(payload, secret);
+
+  const bufActual = Buffer.from(signatureToVerify);
+  const bufExpected = Buffer.from(expectedSignature);
+
+  if (bufActual.length !== bufExpected.length) {
+    return false;
+  }
+
+  // Prevent timing side-channel attacks by comparing buffers in constant time
+  return crypto.timingSafeEqual(bufActual, bufExpected);
+}
+
+const secret = 'super-secret-key';
+const message = 'order_id=10042&amount=99.99';
+const sig = generateHmacSignature(message, secret);
+
+console.log('Signature:', sig);
+console.log('Verification Success:', verifyHmacSignature(message, sig, secret));
 ```
 
 ---
 
-## 6. Common Pitfalls
-- **Using `crypto.createHash` for Passwords:** Native hashes like SHA-256 are too fast, making them vulnerable to brute-force attacks. For passwords, you should use `crypto.scrypt`, `crypto.pbkdf2`, or ideally a dedicated library like [Bcrypt](../level_10/bcrypt.md).
-- **Hardcoding Secrets:** Never hardcode secret keys directly in your source code when encrypting data. Use environment variables.
-
----
-
-## 5. Common Mistakes & Pitfalls
-
-
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Weak Hashing Algorithms (MD5 / SHA1) for Passwords
 
@@ -101,8 +117,6 @@ app.post('/login', (req, res) => {
 });
 ```
 
-
-
 ### Mistake 3: Using Insecure String Comparison for Cryptographic Hashes (Timing Attack Vulnerability)
 
 **The mistake:** Comparing expected vs actual hash signatures using standard `if (hash1 === hash2)`.
@@ -121,9 +135,9 @@ const buf2 = Buffer.from(expectedSignature);
 if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 ```
 
-## 6. Practice Exercises
+---
 
-
+## 5. Practice Exercises
 
 ### Exercise 1: Generating Random Bytes with Crypto
 
@@ -131,9 +145,6 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 
 **Expected output:**
 > [!check]- Answer
-> ```text
-> const token = crypto.randomBytes(16).toString('hex');
-> ```
 > ```javascript
 > const token = crypto.randomBytes(16).toString('hex');
 > ```
@@ -148,9 +159,6 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 
 **Expected output:**
 > [!check]- Answer
-> ```text
-> const hmac = crypto.createHmac('sha256', 'secret').update('hello').digest('hex');
-> ```
 > ```javascript
 > const hmac = crypto.createHmac('sha256', 'secret').update('hello').digest('hex');
 > ```
@@ -165,18 +173,22 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 
 **Expected output:**
 > [!check]- Answer
-> ```text
-> crypto.timingSafeEqual(buf1, buf2)
-> ```
 > ```javascript
 > const isMatch = crypto.timingSafeEqual(buf1, buf2);
 > ```
 >
 > **Explanation:** `crypto.timingSafeEqual` executes in constant time regardless of byte match positions.
 > 
-## 7. Related Terms
+---
+
+## 6. Related Terms
 - [Bcrypt (Password Hashing)](../level_10/bcrypt.md) — A specialized third-party library designed specifically for securely hashing passwords, often preferred over native `crypto` methods for that specific use case.
 - [Buffers](../level_06/buffers.md) — Many `crypto` functions return or expect data in the form of Buffers.
 
 ---
 
+## 7. Key Takeaways
+- The `crypto` module is built into Node.js, providing C/C++ OpenSSL cryptographic performance without third-party dependencies.
+- Never use simple fast hashes (`MD5`, `SHA256`) for password storage; use key derivation functions (`scrypt`, `pbkdf2`) or `bcrypt`.
+- Avoid synchronous methods like `pbkdf2Sync` inside request handlers to prevent blocking the single-threaded Event Loop.
+- Always compare cryptographic signatures using `crypto.timingSafeEqual()` to mitigate timing side-channel attacks.

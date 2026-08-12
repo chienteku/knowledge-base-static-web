@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal: Works everywhere)**: Arrow Function is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Writing `function() { ... }` over and over again can feel tedious, especially when passing small, one-line functions as arguments to array methods like `.map()` or `.filter()`. Developers wanted a cleaner, more concise syntax.
@@ -69,7 +65,7 @@ user.printHobbies();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Returning Object Literals Implicitly
 
@@ -145,71 +141,125 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Convert to Arrow Syntax
+### Exercise 1: Lexical 'this' Binding in Event Listener Callbacks
 
-**Problem:** Convert the following traditional function expression into a single-line arrow function with an implicit return.
-```javascript
-const double = function(num) {
-  return num * 2;
-};
-```
+**Scenario:** A frontend UI component retains class instance 'this' context inside asynchronous timers by using arrow functions rather than standard function expressions.
 
-**Expected output:**
-A valid ES6 arrow function.
+**Requirements:**
+1. Create a TimerComponent object with count property and start() method.
+2. Use an arrow function inside setInterval/setTimeout.
+3. Verify this.count updates correctly.
 
 > [!check]- Answer
-> - `const double = (num) => num * 2;`
-> - If there is only exactly one parameter, you can even drop the parentheses: `const double = num => num * 2;`
-> 
----
-
-### Exercise 2: Implicit vs Explicit Return in Arrow Functions
-
-**Problem:** Write an arrow function returning an object literal `{ id: 1 }` implicitly using parenthesized syntax `() => ({ id: 1 })`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> {"id":1}
-> ```
-> ```javascript
-> const getObj = () => ({ id: 1 });
-> console.log(JSON.stringify(getObj()));
-> ```
 >
-> **Explanation:** Wrapping returned object literals in parentheses `({ ... })` distinguishes object brackets from function body blocks.
-> 
----
-
-### Exercise 3: Lexical `this` in Timer Callbacks
-
-**Problem:** Use an arrow function inside a class method callback to preserve `this.count`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Count: 1
-> ```
+> #### Implementation
+>
 > ```javascript
-> class Counter {
->   constructor() { this.count = 0; }
->   inc() {
->     setTimeout(() => {
->       this.count++;
->       console.log(`Count: ${this.count}`);
->     }, 10);
->   }
+> function createTimerComponent() {
+>   return {
+>     count: 0,
+>     start() {
+>       // Arrow function captures lexical 'this' from start() method context
+>       const increment = () => {
+>         this.count++;
+>       };
+>       increment();
+>       increment();
+>       return this.count;
+>     }
+>   };
 > }
-> new Counter().inc();
+>
+> // Verification tests
+> const timer = createTimerComponent();
+> console.assert(timer.start() === 2, "Test 1 Failed: Lexical this binding failed");
 > ```
 >
-> **Explanation:** Arrow functions capture `this` from outer lexical contexts automatically.
+> #### Technical Explanation
+>
+> 1. **Lexical 'this' Binding**: Arrow functions do not have their own this context; they inherit this lexically from the enclosing scope.
+> 2. **No 'this' Rebinding**: The this value inside an arrow function cannot be altered by .bind(), .call(), or .apply().
+> 3. **Concise Function Syntax**: Provides streamlined syntax () => expression for inline functions.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Concise Implicit Return Data Pipeline
+
+**Scenario:** A data stream transformer uses arrow functions with implicit returns to chain clean array mapping and filtering transformations.
+
+**Requirements:**
+1. Write filterAndMultiply(numbers).
+2. Use arrow function implicit return (x => x * 2).
+3. Filter numbers > 10.
+4. Return transformed array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function filterAndMultiply(numbers) {
+>   return numbers
+>     .filter(num => num > 5)
+>     .map(num => num * 2);
+> }
+>
+> // Verification tests
+> const output = filterAndMultiply([2, 6, 8]);
+> console.assert(output.join(",") === "12,16", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Implicit Return Syntax**: Single-expression arrow functions omit braces {} and automatically return the evaluated expression.
+> 2. **Object Literal Parentheses**: To implicitly return an object literal, wrap the object in parentheses: () => ({ key: val }).
+> 3. **Readability in HOFs**: Short arrow functions simplify callback declarations in higher-order functions.
+> 
+---
+
+### Exercise 3: Non-Constructible Arrow Function Guard
+
+**Scenario:** A framework validator verifies that arrow functions cannot be used as constructors with the new keyword.
+
+**Requirements:**
+1. Write an arrow function const MyClass = () => {}.
+2. Attempt to invoke new MyClass() inside try...catch.
+3. Verify TypeError exception is thrown.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const ArrowClass = () => {
+>   this.value = 42;
+> };
+>
+> function testArrowConstructor() {
+>   let caughtError = false;
+>   try {
+>     // @ts-ignore
+>     const instance = new ArrowClass();
+>   } catch (err) {
+>     caughtError = err instanceof TypeError;
+>   }
+>   return caughtError;
+> }
+>
+> // Verification tests
+> console.assert(testArrowConstructor() === true, "Test 1 Failed: Arrow function must throw TypeError on 'new'");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Non-Constructible Nature**: Arrow functions lack a [[Construct]] internal method and prototype property; calling new throws a TypeError.
+> 2. **No arguments Object**: Arrow functions do not bind an arguments object, referencing arguments searches outer lexical scopes.
+> 3. **No super or new.target**: Arrow functions inherit super and new.target lexically from their outer scope.
+---
+
+## 6. Related Terms
 - [Function Expression](function_expression.md) — The traditional syntax for creating a function as a variable.
 - [Method](../level_02/method.md) — An object property that holds a function.
 - [Anonymous Function](anonymous_function.md) — Related concept: Anonymous Function.
@@ -222,7 +272,7 @@ A valid ES6 arrow function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Arrow functions use the `=>` syntax.
 - If there is only one line of code, you can omit `{}` and the `return` keyword (Implicit Return).
 - Arrow functions do **not** have their own `this` context. They inherit it from the surrounding code.

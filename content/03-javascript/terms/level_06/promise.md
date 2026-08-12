@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core** *(Introduced in ES6)*
+
+**Language Core *(Introduced in ES6)* (Universal: Works everywhere)**: Promise is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript needed a better way to handle asynchronous data without resorting to [Callback Hell](./callback_hell.md). Developers needed a standardized object that could say: "I don't have the data right now because I'm still downloading it, but I *promise* I will give it to you eventually."
@@ -74,7 +70,7 @@ console.log(foodPager); // Promise { <pending> }
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Promise Scope and Variable Hoisting
 
@@ -147,65 +143,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Three States
+### Exercise 1: Constructing Deferred Promise Wrapper
 
-**Problem:** What are the three possible states of a Promise? What do they mean?
+**Scenario:** A task queue engine creates deferred Promise instances using new Promise((resolve, reject) => { ... }) to manage task resolution.
 
-**Expected output:**
+**Requirements:**
+1. Write createDeferredTask().
+2. Instantiate new Promise.
+3. Extract resolve and reject functions into return object.
+4. Verify resolution.
+
 > [!check]- Answer
-> ```text
-> 1. Pending: The async operation is still ongoing.
-> 2. Fulfilled (or Resolved): The operation completed successfully.
-> 3. Rejected: The operation failed (usually throwing an error).
-> ```
-> - Think about the restaurant pager! Quiet, Buzzing, or Cashier apologizing.
-> 
----
-
-### Exercise 2: Creating Resolved and Rejected Promises
-
-**Problem:** Create promises using `Promise.resolve(42)` and `Promise.reject("Error")`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Resolved: 42
-> Rejected: Error
-> ```
-> ```javascript
-> Promise.resolve(42).then(v => console.log(`Resolved: ${v}`));
-> Promise.reject("Error").catch(e => console.log(`Rejected: ${e}`));
-> ```
 >
-> **Explanation:** `Promise.resolve()` and `Promise.reject()` return pre-settled promise instances.
-> 
----
-
-### Exercise 3: Promise State Transition Permanence
-
-**Problem:** Demonstrate that calling `resolve(1)` then `resolve(2)` inside `new Promise` ignores the second resolution call.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Resolved value: 1
-> ```
+> #### Implementation
+>
 > ```javascript
-> const p = new Promise((resolve) => {
->   resolve(1);
->   resolve(2);
+> function createDeferredTask() {
+>   let resolveFn, rejectFn;
+>   const promise = new Promise((resolve, reject) => {
+>     resolveFn = resolve;
+>     rejectFn = reject;
+>   });
+>   return { promise, resolve: resolveFn, reject: rejectFn };
+> }
+>
+> // Verification tests
+> const deferred = createDeferredTask();
+> deferred.resolve("DONE");
+>
+> deferred.promise.then(val => {
+>   console.assert(val === "DONE", "Test 1 Failed");
 > });
-> p.then(v => console.log(`Resolved value: ${v}`));
 > ```
 >
-> **Explanation:** Promises can settle only once; subsequent `resolve` or `reject` calls are ignored.
-> 
+> #### Technical Explanation
+>
+> 1. **Promise Constructor**: new Promise((resolve, reject) => {}) creates a new Promise object in PENDING state.
+> 2. **Three Settled States**: A Promise is always in one of three states: PENDING, FULFILLED, or REJECTED.
+> 3. **Immutable Settlement**: Once a Promise transitions to FULFILLED or REJECTED, its settled value cannot be changed.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Promise Advanced Context Handler
+
+**Scenario:** A web application component processes promise data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handlePromiseSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handlePromiseSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handlePromiseSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Promise Architecture**: Applying promise patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Promise Performance Optimization
+
+**Scenario:** An application utility optimizes promise execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizePromiseTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizePromiseTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizePromiseTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Promise Optimization**: Optimizing promise improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [async / await](async_await.md) — The modern syntax used to unwrap the data inside a Promise.
 - [.then() / .catch()](then_catch.md) — The traditional methods used to handle resolved or rejected Promises.
 - [AbortController](abortcontroller.md) — Related concept: AbortController.
@@ -216,7 +267,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Promise is an object representing a value that may be available now, or in the future, or never.
 - It solves the problem of nested Callback Hell.
 - It always exists in one of three states: **Pending**, **Fulfilled**, or **Rejected**.

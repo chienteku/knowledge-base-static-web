@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Compiler / Core Infrastructure**
+
+**Compiler / Core Infrastructure (Universal .)**: V8 JavaScript Engine is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Runs inside Google Chrome AND inside Node.js).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the early days of the web, JavaScript was an "Interpreted" language. This means the browser would read your JS code line-by-line and execute it slowly. It was fine for simple form validations, but terrible for complex applications.
@@ -37,7 +33,7 @@ When you type `node app.js` in your terminal, Node passes your file to V8. V8 co
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Node.js *is* an engine
 
@@ -90,7 +86,7 @@ const bigArray = new Array(1e8).fill('data'); // ❌ Heap out of memory crash!
 node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Streams
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Language Independence
 
@@ -142,14 +138,14 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 >
 > **Explanation:** Ignition interprets bytecode initially; TurboFan compiles hot code functions into optimized machine code.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Node.js (Runtime Environment)](nodejs.md) — The runtime that hosts V8.
 - [The Event Loop & Libuv](event_loop.md) — While V8 executes the JS code, it relies on the Event Loop to handle asynchronous timing.
 - [The Call Stack](call_stack.md) — Related concept: The Call Stack.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **V8** is the JavaScript engine built by Google for the Chrome browser.
 - It uses **JIT Compilation** to convert JS into native machine code instantly, making it incredibly fast.
 - Node.js uses V8 as its core brain to execute JavaScript on the server.

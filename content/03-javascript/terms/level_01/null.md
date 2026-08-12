@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: null is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `undefined` means "the engine hasn't given this a value yet," developers needed a way to explicitly say "I am actively deciding that this variable has *no value*." 
@@ -65,7 +61,7 @@ if (profile === null) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `typeof null` quirk
 
@@ -146,79 +142,110 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Null vs Undefined
+### Exercise 1: Intentional Absence User Profile Sanitizer
 
-**Problem:** Create a variable `a` but do not initialize it. Create a variable `b` and assign it `null`. Log the strict equality (`===`) and loose equality (`==`) comparison of `a` and `b`.
+**Scenario:** A user profile API distinguishes between fields that were omitted (undefined) and fields that were intentionally cleared by the user (null).
 
-**Expected output:**
+**Requirements:**
+1. Write a function processProfileField(fieldVal).
+2. Return "OMITTED" if fieldVal === undefined.
+3. Return "CLEARED" if fieldVal === null.
+4. Return "VALID: " + fieldVal for valid values.
+
 > [!check]- Answer
-> ```text
-> false
-> true
-> ```
-> - `undefined === null` is `false` because they are different types.
-> - `undefined == null` is `true` due to type coercion; they both represent "emptiness".
-> 
----
-
-### Exercise 2: Safe Null Equality Checking
-
-**Problem:** Check if a variable `x` is `null` or `undefined` using loose equality `x == null`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> true
-> false
-> ```
+> #### Implementation
 > ```javascript
-> function isNullish(x) {
->   return x == null;
+> function processProfileField(fieldVal) {
+>   if (fieldVal === undefined) return "OMITTED";
+>   if (fieldVal === null) return "CLEARED";
+>   return "VALID: " + fieldVal;
 > }
-> console.log(isNullish(null));
-> console.log(isNullish(undefined));
-> console.log(isNullish(0));
+> // Verification tests
+> console.assert(processProfileField(undefined) === "OMITTED", "Test 1 Failed");
+> console.assert(processProfileField(null) === "CLEARED", "Test 2 Failed");
+> console.assert(processProfileField("Alice") === "VALID: Alice", "Test 3 Failed");
 > ```
->
-> **Explanation:** `x == null` matches both `null` and `undefined` while returning `false` for all other falsy values (`0`, `false`, `""`).
+> #### Technical Explanation
+> 1. **Intentional Absence**: null represents an explicit, intentional absence of any object value.
+> 2. **Difference from undefined**: undefined indicates an uninitialized binding or missing property, whereas null is an assigned empty sentinel value.
+> 3. **Strict Equality**: Always use strict equality (===) to differentiate null from undefined, as loose equality (null == undefined) evaluates to true.
 > 
 ---
 
-### Exercise 3: Null Coalescing Defaulting
+### Exercise 2: Cache Miss vs Negative Sentinel Query
 
-**Problem:** Use `??` to supply default `"Guest"` for `null` and `undefined`, but keep empty string `""` and `0`.
+**Scenario:** An in-memory caching module returns undefined for a cache miss (record never queried) and null for a confirmed negative result (record queried, confirmed non-existent).
 
-**Expected output:**
+**Requirements:**
+1. Check cache dictionary.
+2. If key missing, return undefined.
+3. If value is null, return cached negative sentinel status.
+4. Return cached record.
+
 > [!check]- Answer
-> ```text
-> Guest
-> Guest
-> ""
-> 0
-> ```
+> #### Implementation
 > ```javascript
-> console.log(null ?? "Guest");
-> console.log(undefined ?? "Guest");
-> console.log("" ?? "Guest");
-> console.log(0 ?? "Guest");
+> function queryCacheStore(cacheMap, key) {
+>   if (!(key in cacheMap)) {
+>     return { status: "MISS", data: undefined };
+>   }
+>   const cachedVal = cacheMap[key];
+>   if (cachedVal === null) {
+>     return { status: "NOT_FOUND", data: null };
+>   }
+>   return { status: "HIT", data: cachedVal };
+> }
+> // Verification tests
+> const cache = { user_1: { name: "Alice" }, user_99: null };
+> console.assert(queryCacheStore(cache, "user_1").status === "HIT", "Test 1 Failed");
+> console.assert(queryCacheStore(cache, "user_99").status === "NOT_FOUND", "Test 2 Failed");
+> console.assert(queryCacheStore(cache, "user_50").status === "MISS", "Test 3 Failed");
 > ```
->
-> **Explanation:** `a ?? b` returns `b` only if `a` is `null` or `undefined`.
-> 
+> #### Technical Explanation
+> 1. **Sentinel Pattern**: Using null as a sentinel value distinguishes 'no result found' from 'uninitialized query state'.
+> 2. **Typeof Legacy Artifact**: typeof null returns "object", a historical JS bug preserved for web compatibility.
+> 3. **Nullish Coalescing Compatibility**: The ?? operator treats both null and undefined as nullish values.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: DOM Node Selection Guard
+
+**Scenario:** A browser UI module queries DOM elements using document.querySelector(). If an element is absent, the browser returns null. The code must guard against dereferencing null.
+
+**Requirements:**
+1. Check if node query result is null.
+2. Safe dereference using null check or optional chaining ?..
+3. Return element text content or fallback string.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function getElementTextContent(node) {
+>   if (node === null) {
+>     return "DEFAULT_TEXT";
+>   }
+>   return node.textContent ?? "DEFAULT_TEXT";
+> }
+> // Verification tests
+> console.assert(getElementTextContent(null) === "DEFAULT_TEXT", "Test 1 Failed");
+> console.assert(getElementTextContent({ textContent: "Header" }) === "Header", "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **DOM Null Returns**: DOM APIs (like querySelector) return null when an element is absent from the DOM tree.
+> 2. **TypeError Prevention**: Dereferencing properties on null (e.g. null.textContent) throws a runtime TypeError.
+> 3. **Primitive Status**: null is one of JavaScript's 7 primitive data types.
+---
+
+## 6. Related Terms
 - [undefined](undefined.md) — A variable that has not yet been assigned a value.
 - [Type Coercion](type_coercion.md) — Automatic conversion of values from one data type to another.
 - [typeof](typeof.md) — Related concept: typeof.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `null` represents the intentional absence of a value.
 - You should use `null` (not `undefined`) when you want to clear a variable or return an empty state from a function.
 - `typeof null` returning `"object"` is a famous, permanent language bug. Use `value === null` to check for it.

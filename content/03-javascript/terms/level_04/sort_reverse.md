@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: sort / reverse is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Organizing collections of data—sorting products by price, listing users alphabetically, or reversing a search results feed—is a daily programming requirement. JavaScript provides `.sort()` and `.reverse()` for this. 
@@ -83,7 +79,7 @@ console.log("Products (Expensive first):", products);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Sorting Numbers without a Comparator Function
 
@@ -163,77 +159,54 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Sort Scores Descending
+### Exercise 1: Multi-Attribute Product Sorting & Non-Mutating Reversal
 
-**Problem:** Complete the code to sort the numeric `scores` array in **descending** order (highest first) without mutating the original `scores` array.
+**Scenario:** An e-commerce catalog engine sorts products by price using custom comparator functions and creates reversed arrays without mutating original collections.
 
-```javascript
-const scores = [80, 95, 60, 100, 75];
+**Requirements:**
+1. Write sortProductsByPrice(products, ascending).
+2. Use non-mutating copy [...products].sort((a, b) => ...).
+3. Support reverse direction.
+4. Return sorted array.
 
-const sortedDesc = // Write clone and sort here
-
-console.log("Original:", scores);
-console.log("Sorted Descending:", sortedDesc);
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Original: [ 80, 95, 60, 100, 75 ]
-> Sorted Descending: [ 100, 95, 80, 75, 60 ]
-> ```
-> - Clone the array using `[...scores]`.
-> - Call `.sort()` on the clone with a comparator callback `(a, b) => b - a`.
-> 
----
-
-### Exercise 2: Numeric Array Sorting
-
-**Problem:** Sort `[40, 100, 1, 5, 25]` numerically in ascending order using compare function.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 1, 5, 25, 40, 100 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [40, 100, 1, 5, 25];
-> nums.sort((a, b) => a - b);
-> console.log(nums);
+> function sortProductsByPrice(products, ascending = true) {
+>   if (!Array.isArray(products)) return [];
+>
+>   const copy = [...products];
+>   copy.sort((a, b) => {
+>     return ascending ? a.price - b.price : b.price - a.price;
+>   });
+>   return copy;
+> }
+>
+> // Verification tests
+> const items = [{ name: "B", price: 20 }, { name: "A", price: 10 }];
+> const sorted = sortProductsByPrice(items, true);
+> console.assert(sorted[0].price === 10, "Test 1 Failed");
+> console.assert(items[0].price === 20, "Test 2 Failed: Original array mutated");
 > ```
 >
-> **Explanation:** Comparator `(a, b) => a - b` sorts numbers in ascending order (negative yields `a < b`).
-> 
----
-
-### Exercise 3: Reversing Array Order in-place
-
-**Problem:** Reverse `[1, 2, 3]` using `.reverse()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 3, 2, 1 ]
-> ```
-> ```javascript
-> const arr = [1, 2, 3];
-> arr.reverse();
-> console.log(arr);
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `.reverse()` mutates the array in-place, reversing element order.
-> 
+> 1. **Numeric Comparator Requirement**: Default .sort() converts elements to strings; always provide custom numeric comparator (a, b) => a - b.
+> 2. **In-Place Mutation Warning**: Array.prototype.sort() and reverse() mutate target array in place; always copy array before sorting.
+> 3. **Comparator Return Conventions**: Return negative if a < b, positive if a > b, 0 if equal.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Comparison Operators](../level_01/comparison_operators.md) — The mathematical relations used inside comparators.
 - [Mutating vs Non-mutating Methods](mutating_vs_non_mutating.md) — The core behavior classification that sort belongs to.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `.sort()` and `.reverse()` modify the original array reference in-place (mutating).
 - By default, `.sort()` orders elements alphabetically by converting them to strings, which breaks numeric sorting.
 - To sort numbers or objects, always pass a comparator callback: `(a, b) => a - b` (for ascending) or `(b - a)` (for descending).

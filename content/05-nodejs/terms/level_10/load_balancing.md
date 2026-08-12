@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps / Systems Architecture**
+
+**Production / DevOps / Systems Architecture (Network Infrastructure Layer .)**: Load Balancing is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Network Infrastructure Layer** (Sits in front of your Node application instances to distribute incoming TCP/HTTP connection requests).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As application traffic grows, a single server instance (even when clustered across all CPU cores) will eventually reach its hardware resource limit (CPU, RAM, or network bandwidth).
@@ -75,7 +71,7 @@ server {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Sticky Sessions as a permanent workaround for stateful applications
 
@@ -121,7 +117,7 @@ app.get('/health', async (req, res) => {
 app.get('/health', (req, res) => res.status(200).send('OK')); // Fast light health check
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Session Architecture Design
 
@@ -183,14 +179,14 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 >
 > **Explanation:** Layer 7 load balancing supports smart HTTP path routing and header inspection.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Reverse Proxy (Nginx)](reverse_proxy.md) — The gateway server that frequently performs load balancing.
 - [PM2 (Process Manager)](pm2.md) — Manages local process clusters under server-wide load balancers.
 - [The cluster Module](cluster_module.md) — Related concept: The cluster Module.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Load balancing distributes client request traffic across multiple backend servers.
 - It prevents single-server bottlenecks and enables horizontal scaling.
 - Common routing algorithms include Round-Robin, Least Connections, and IP Hash.

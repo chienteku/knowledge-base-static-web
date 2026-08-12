@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Universal Browser Support .)**: `<map>` & `<area>` (Image Maps) is a fundamental concept in this technology stack. **Level 10 — Canvas, SVG & Storage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported natively since early HTML specs. Coordinates are resolved in absolute image pixels on the client side).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes a single graphic contains multiple independent points of interest that should link to different pages. For example:
@@ -108,7 +104,7 @@ A circular hotspot link overlay:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the hashtag `#` in `usemap`
 
@@ -242,7 +238,7 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 <area shape="circle" coords="100,100,50" href="/page" alt="Target Zone">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hotspot Alignment
 
@@ -301,14 +297,14 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 >
 > **Explanation:** `shape` defines geometric bounds for interactive image maps.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<img>`](../level_03/img.md) — The host image element.
 - [`href` Attribute](../level_02/href.md) — The destination hyperlink path.
 - [`<svg>` (Scalable Vector Graphics)](svg.md) — The modern vector-based responsive coordinate alternative.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Image maps create multiple clickable link hotspots on a single image.
 - Bind the image to the map using `usemap="#name"` on the image and `name="name"` on the map.
 - The `<area>` tag defines shapes (`rect`, `circle`, `poly`) and absolute pixel coordinates.

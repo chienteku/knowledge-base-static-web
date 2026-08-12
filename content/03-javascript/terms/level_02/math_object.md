@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Math object is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In addition to basic arithmetic operators (like `+` and `-`), developers need ways to perform complex calculations, round numbers dynamically, and generate random values. Rather than forcing developers to write their own complex trigonometry, logarithm, or random number generator formulas, JavaScript provides a single built-in namespace object: **`Math`**. 
@@ -72,7 +68,7 @@ console.log("Ceil rounding:", Math.ceil(rawPrice));   // 25
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to Instantiate the `Math` Object
 
@@ -144,77 +140,123 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Range Randomizer
+### Exercise 1: Financial Currency Rounding & Cent Calculator
 
-**Problem:** Complete the function `getRandomRange` to return a random integer between `min` (inclusive) and `max` (inclusive).
+**Scenario:** A financial ledger formats currency values using Math.floor(), Math.ceil(), and Math.round() to compute tax rounding, tip allocations, and cent conversions.
 
-```javascript
-function getRandomRange(min, max) {
-  // Write formula here
-}
+**Requirements:**
+1. Write calculateCurrencyRounding(amount).
+2. Compute floorVal using Math.floor(amount).
+3. Compute ceilVal using Math.ceil(amount).
+4. Compute roundVal using Math.round(amount).
+5. Return object with computed values.
 
-console.log(getRandomRange(1, 10));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> An integer between 1 and 10 (e.g. 7)
-> ```
-> - The size of the range is `(max - min + 1)`.
-> - Multiply `Math.random()` by the range size.
-> - Apply `Math.floor()` to round down, then add `min` to offset the starting number.
-> 
----
-
-### Exercise 2: Random Integer Generator in Range
-
-**Problem:** Write a function `getRandomInt(min, max)` returning random inclusive integers between `min` and `max`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Random integer in [1, 10]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function getRandomInt(min, max) {
->   return Math.floor(Math.random() * (max - min + 1)) + min;
+> function calculateCurrencyRounding(amount) {
+>   return {
+>     floorVal: Math.floor(amount),
+>     ceilVal: Math.ceil(amount),
+>     roundVal: Math.round(amount)
+>   };
 > }
-> const val = getRandomInt(1, 10);
-> console.log(`Random integer in [1, 10]`);
+>
+> // Verification tests
+> const res = calculateCurrencyRounding(12.75);
+> console.assert(res.floorVal === 12, "Test 1 Failed");
+> console.assert(res.ceilVal === 13, "Test 2 Failed");
+> console.assert(res.roundVal === 13, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `Math.random()` yields floats in $[0, 1)$. Multiplying by `(max - min + 1)` and flooring scales values into target integer ranges.
+> #### Technical Explanation
+>
+> 1. **Math Namespace Object**: Math is a built-in static object; it is not a constructor and cannot be instantiated with new Math().
+> 2. **Rounding Functions**: Math.floor() rounds down, Math.ceil() rounds up, and Math.round() rounds to nearest integer.
+> 3. **Static Method Execution**: Methods on Math are invoked directly as static properties (Math.floor(x)).
 > 
 ---
 
-### Exercise 3: Spreading Array Elements into `Math.max`
+### Exercise 2: Geometric 2D Distance & Vector Magnitude Calculator
 
-**Problem:** Find the maximum number in `[10, 50, 20]` using `Math.max(...nums)`.
+**Scenario:** A 2D game physics engine computes Euclidean distance between two spatial coordinates using Math.hypot(), Math.pow(), and Math.sqrt().
 
-**Expected output:**
+**Requirements:**
+1. Write calculateDistance(x1, y1, x2, y2).
+2. Compute dx = x2 - x1 and dy = y2 - y1.
+3. Calculate distance using Math.hypot(dx, dy).
+4. Return rounded distance value.
+
 > [!check]- Answer
-> ```text
-> 50
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [10, 50, 20];
-> console.log(Math.max(...nums));
+> function calculateDistance(x1, y1, x2, y2) {
+>   const dx = x2 - x1;
+>   const dy = y2 - y1;
+>   const distance = Math.hypot(dx, dy);
+>   return Number(distance.toFixed(2));
+> }
+>
+> // Verification tests
+> const dist = calculateDistance(0, 0, 3, 4);
+> console.assert(dist === 5.00, "Test 1 Failed: Pythagorean distance 3-4-5 failed");
 > ```
 >
-> **Explanation:** `Math.max` accepts variable arguments, requiring the spread operator `...` when passing array elements.
+> #### Technical Explanation
+>
+> 1. **Math.hypot() Method**: Math.hypot(...args) computes square root of sum of squares, preventing intermediate overflow/underflow errors.
+> 2. **Mathematical Constants**: Static properties like Math.PI and Math.E provide high-precision mathematical constants.
+> 3. **Floating-Point Inputs**: Math methods accept numeric primitives and implicitly coerce string numbers via ToNumber.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Bounded Random Integer PIN Generator
+
+**Scenario:** A security utility generates random numeric PIN codes within a specified min/max range using Math.random() and Math.floor().
+
+**Requirements:**
+1. Write generateRandomPin(min, max).
+2. Compute random integer using Math.floor(Math.random() * (max - min + 1)) + min.
+3. Return generated integer PIN.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function generateRandomPin(min, max) {
+>   if (min > max) throw new Error("Min cannot exceed max");
+>   const randomFloat = Math.random();
+>   const scaledPin = Math.floor(randomFloat * (max - min + 1)) + min;
+>   return scaledPin;
+> }
+>
+> // Verification tests
+> const pin = generateRandomPin(1000, 9999);
+> console.assert(pin >= 1000 && pin <= 9999, "Test 1 Failed: PIN out of range");
+> console.assert(Number.isInteger(pin), "Test 2 Failed: PIN must be an integer");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Math.random() Behavior**: Math.random() generates a pseudo-random floating-point number in range [0, 1) (inclusive of 0, exclusive of 1).
+> 2. **Range Scaling Formula**: Formula Math.floor(Math.random() * (max - min + 1)) + min maps uniform distribution across integer boundaries.
+> 3. **Math Object Immutability**: Built-in Math object properties are non-configurable and read-only.
+---
+
+## 6. Related Terms
 - [Number](../level_01/number.md) — The data type `Math` operates on.
 - [Number Methods & Parsing](number_methods.md) — Standard methods for type parsing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The global `Math` object contains static properties and helper functions for mathematical operations.
 - `Math` is not a constructor; call all constants and methods directly on `Math` (e.g. `Math.PI`, `Math.sqrt(9)`).
 - Rounding methods: `Math.round()` (nearest), `Math.floor()` (down), and `Math.ceil()` (up).

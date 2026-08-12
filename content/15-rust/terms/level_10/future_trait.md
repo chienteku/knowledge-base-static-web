@@ -10,7 +10,7 @@
 
 - [`async fn`](async_fn.md) — The syntax that generates types implementing `Future`.
 - [Trait](../level_04/trait.md) — The general concept of defining shared behavior in Rust.
-- [`Pin<T>`](pin_t.md) — The memory guarantee that keeps futures from moving.
+- [`pin!`, `Pin<T>`, and `Unpin`](pin_t.md) — The memory guarantee that keeps futures from moving.
 
 ---
 
@@ -469,8 +469,8 @@ Build a manual `Future` implementation for retry logic.
 > 
 ## 6. Related Terms
 
-- [`Pin<T>`](pin_t.md) — Related concept: `pin!`, `Pin<T>`, and `Unpin`.
-- [Generators Coroutines](../level_19/generators_coroutines.md) — Related concept: Generators Coroutines.
+- [`pin!`, `Pin<T>`, and `Unpin`](pin_t.md) — Related concept: `pin!`, `Pin<T>`, and `Unpin`.
+- [Generators / Coroutines (Unstable)](../level_19/generators_coroutines.md) — Related concept: Generators Coroutines.
 - [`Waker` and `Context`](waker_context.md) — Related concept: `Waker` and `Context`.
 
 ---

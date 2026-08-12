@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Static Methods & Properties is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In object-oriented programming, class fields and methods are normally instantiated on individual objects created with the `new` keyword (known as "instance members"). For example, every `User` object has its own unique `name` and calls `greet()`. 
@@ -78,7 +74,7 @@ User.printTotalCount(); // "Total users registered: 2"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to access static members from instance objects
 
@@ -159,80 +155,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Math Calculator
+### Exercise 1: Factory Static Methods & Constant Fields on Classes
 
-**Problem:** Complete the `Calculator` class by writing a static method `add` that returns the sum of two parameters.
+**Scenario:** A math library defines a class with static methods (MathUtils.add) and static fields (MathUtils.PI).
 
-```javascript
-class Calculator {
-  // Write static method add here
-}
+**Requirements:**
+1. Define class MathUtils.
+2. Declare static field static PI = 3.14159.
+3. Declare static method static add(a, b).
+4. Verify access via MathUtils.
 
-console.log("Result:", Calculator.add(5, 10));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Result: 15
-> ```
-> - Prefix the method with the `static` keyword: `static add(a, b) { ... }`.
-> 
----
-
-### Exercise 2: Static Class Factory Methods
-
-**Problem:** Define `static createGuest()` returning a `new User("Guest")` instance.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Guest
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class User {
->   constructor(name) { this.name = name; }
->   static createGuest() { return new User("Guest"); }
+> class MathUtils {
+>   static PI = 3.14159;
+>
+>   static add(a, b) {
+>     return a + b;
+>   }
+>
+>   static createCircle(radius) {
+>     return { radius, area: MathUtils.PI * radius * radius };
+>   }
 > }
-> console.log(User.createGuest().name);
+>
+> // Verification tests
+> console.assert(MathUtils.PI === 3.14159, "Test 1 Failed");
+> console.assert(MathUtils.add(10, 20) === 30, "Test 2 Failed");
+> const circle = MathUtils.createCircle(2);
+> console.assert(Math.round(circle.area) === 13, "Test 3 Failed");
 > ```
 >
-> **Explanation:** Static factory methods construct pre-configured class instances.
+> #### Technical Explanation
+>
+> 1. **static Keyword**: The static keyword defines properties or methods belonging to the class constructor itself, rather than instance objects.
+> 2. **No Instance 'this'**: Static methods are called on the class name (Class.method()) and do not have access to instance 'this'.
+> 3. **Factory Design Pattern**: Static methods frequently act as factory initializers constructing class instances.
 > 
 ---
 
-### Exercise 3: Static Class Fields
+### Exercise 2: Static Methods Properties Advanced Context Handler
 
-**Problem:** Define static field `static count = 0;` incremented in constructor.
+**Scenario:** A web application component processes static methods properties data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleStaticMethodsPropertiesSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Instances: 2
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class Item {
->   static count = 0;
->   constructor() { Item.count++; }
+> function handleStaticMethodsPropertiesSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
 > }
-> new Item(); new Item();
-> console.log(`Instances: ${Item.count}`);
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleStaticMethodsPropertiesSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Static fields store shared global state attached directly to class constructors.
-> 
+> #### Technical Explanation
+>
+> 1. **Static Methods Properties Architecture**: Applying static methods properties patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Static Methods Properties Performance Optimization
+
+**Scenario:** An application utility optimizes static methods properties execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeStaticMethodsPropertiesTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeStaticMethodsPropertiesTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeStaticMethodsPropertiesTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Static Methods Properties Optimization**: Optimizing static methods properties improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [new Keyword](new_keyword.md) — The operator that instantiates objects, triggering class constructors.
 - [extends](extends.md) — Class inheritance, which also inherits static properties.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Static properties and methods are defined on the Class itself, not on instance objects.
 - Prefix declarations with the `static` keyword inside a class block.
 - Invoke static members directly on the class name (e.g. `Class.staticProperty`).

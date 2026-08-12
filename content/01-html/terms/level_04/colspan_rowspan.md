@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support .)**: `colspan` & `rowspan` Attributes is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Supported by all web browsers since early HTML specs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, HTML tables are strict grids. If your table has 3 columns, then every single row (`<tr>`) should contain exactly 3 cells. 
@@ -116,7 +112,7 @@ A calendar schedule using both column and row spans:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to delete displaced cells
 
@@ -191,7 +187,7 @@ A calendar schedule using both column and row spans:
 <tr><td>B</td></tr> <!-- Lower row has 1 fewer cell -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Spanning Row Count
 
@@ -240,14 +236,14 @@ A calendar schedule using both column and row spans:
 >
 > **Explanation:** `rowspan` and `colspan` can be combined on a single cell to create multi-cell grid blocks.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<td>` (Table Data)](td.md) — The tag that receives span attributes.
 - [`<th>` (Table Header)](th.md) — Header cells which frequently span across categories.
 - [`scope` Attribute (in `<th>`)](scope.md) — Used alongside spans to clarify multi-cell header authority.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `colspan` merges cells horizontally across columns.
 - `rowspan` merges cells vertically down across rows.
 - Always delete the subsequent cell tags that would have occupied the merged area to prevent layout distortion.

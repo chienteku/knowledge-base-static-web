@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Third-Party Framework Concept (Express.js)**
+
+**Third-Party Framework Concept (Express.js) (Web App Server Layer .)**: The Middleware Chain & next() is a fundamental concept in this technology stack. **Level 7 — Web Servers & APIs**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Governs request-response routing inside Express).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 An Express.js application is essentially a stack of middleware functions. Each middleware function has access to the `req` (request) object, the `res` (response) object, and a special function called **`next()`**.
@@ -84,7 +80,7 @@ app.use((err, req, res, next) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to stop execution after calling `next()` or `res.send()`
 
@@ -222,7 +218,7 @@ next('Authentication Failed'); // ❌ Skips to next route instead of error middl
 next(new Error('Authentication Failed')); // Passes Error instance to error middleware
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Debugging a Hanging Route
 
@@ -297,14 +293,14 @@ app.use(m3);
 >
 > **Explanation:** Returning early without calling `next()` halts further chain execution.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Middleware](middleware.md) — The core design pattern.
 - [The req & res Objects](req_res.md) — The shared state containers passed down the chain.
 - [Error Handling Middleware](../level_09/error_handling_middleware.md) — Related concept: Error Handling Middleware.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The middleware chain executes sequentially, passing control using `next()`.
 - If a middleware does not send a response or call `next()`, the client's request hangs.
 - Invoke `next(err)` with an argument to bypass standard routes and trigger error-handling middleware.

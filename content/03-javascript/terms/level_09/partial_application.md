@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Partial Application is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In functional programming, we often work with generic, multi-argument helper functions. However, writing out the same repeated arguments over and over is verbose and error-prone (e.g. repeatedly calling a logging function like `log("DEBUG", "Database", message)`).
@@ -75,7 +71,7 @@ console.log(triple(15)); // 45
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing parameter position in `bind()`
 
@@ -150,81 +146,149 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: API Request Builder
+### Exercise 1: Pre-filling API Endpoint URL Parameters with partial()
 
-**Problem:** Complete the code to partially apply `fetchApi` using `.bind()`, creating a specialized function `fetchUsers` that fixes the host parameter to `"https://api.example.com"` and the endpoint to `"/users"`.
+**Scenario:** An HTTP gateway client uses a `partial(fn, ...presetArgs)` utility to pre-bind API base URLs and headers to generic request handlers.
 
-```javascript
-function fetchApi(host, endpoint, options) {
-  console.log(`Calling ${host}${endpoint} with options:`, options);
-}
+**Requirements:**
+1. Write partial(fn, ...presetArgs).
+2. Return function combining presetArgs with fresh call arguments.
+3. Preserve function context.
 
-// Partially apply fetchApi
-const fetchUsers = // Write code here
-
-fetchUsers({ method: "GET" });
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Calling https://api.example.com/users with options: { method: 'GET' }
-> ```
-> - Bind the first two arguments by writing `fetchApi.bind(null, "https://api.example.com", "/users")`.
-> 
----
-
-### Exercise 2: Partial Application with `bind()`
-
-**Problem:** Use `fn.bind(null, 10)` to fix the first argument of `function add(a, b) { return a + b; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 15
-> ```
-> ```javascript
-> function add(a, b) { return a + b; }
-> const addTen = add.bind(null, 10);
-> console.log(addTen(5));
-> ```
 >
-> **Explanation:** `.bind(thisArg, ...preboundArgs)` partially applies leading function arguments.
-> 
----
-
-### Exercise 3: Custom `partial(fn, ...preset)` Helper
-
-**Problem:** Write a `partial(fn, ...preset)` helper function.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello Alice
-> ```
+> #### Implementation
+>
 > ```javascript
-> function partial(fn, ...preset) {
->   return (...later) => fn(...preset, ...later);
+> function partial(fn, ...presetArgs) {
+>   return function(...laterArgs) {
+>     return fn.apply(this, [...presetArgs, ...laterArgs]);
+>   };
 > }
-> const greet = (salutation, name) => `${salutation} ${name}`;
-> const sayHello = partial(greet, "Hello");
-> console.log(sayHello("Alice"));
+>
+> // Verification tests
+> const fetchApi = (baseUrl, endpoint, query) => `${baseUrl}/${endpoint}?q=${query}`;
+> const fetchFromV1 = partial(fetchApi, "https://api.example.com/v1");
+>
+> console.assert(
+>   fetchFromV1("users", "active") === "https://api.example.com/v1/users?q=active", 
+>   "Test 1 Failed"
+> );
 > ```
 >
-> **Explanation:** Partial application pre-binds specific parameter values ahead of time.
-> 
+> #### Technical Explanation
+>
+> 1. **Partial Application Definition**: Binding fixed values to a subset of a function's parameters, producing a function of smaller arity.
+> 2. **Partial Application vs Currying**: Partial application pre-binds ANY number of arguments at once; Currying strictly transforms to single-argument function chains.
+> 3. **Argument Concatenation**: Combines presetArgs with laterArgs using ES6 spread operator.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Event Handler Listener Pre-binding with Fixed Options
+
+**Scenario:** A UI component pre-binds specific action names and component IDs to generic event click handlers using partial application.
+
+**Requirements:**
+1. Write handleAction(componentId, actionType, event).
+2. Use partial application to create onClickSave listener.
+3. Verify event payload.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleAction(componentId, actionType, event) {
+>   return {
+>     targetId: componentId,
+>     action: actionType,
+>     eventType: event ? event.type : "unknown"
+>   };
+> }
+>
+> function partial(fn, ...presetArgs) {
+>   return function(...laterArgs) {
+>     return fn.apply(this, [...presetArgs, ...laterArgs]);
+>   };
+> }
+>
+> // Verification tests
+> const onSaveUser = partial(handleAction, "user-form-101", "SAVE");
+> const result = onSaveUser({ type: "click" });
+>
+> console.assert(result.targetId === "user-form-101", "Test 1 Failed");
+> console.assert(result.action === "SAVE", "Test 2 Failed");
+> console.assert(result.eventType === "click", "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Callback Adaptors**: Pre-binding contextual variables (IDs, types) makes generic event callbacks compatible with DOM event signatures.
+> 2. **Cleaner Template Bindings**: Eliminates inline arrow functions inside repeated UI render loops.
+> 3. **Closure Variable Retention**: Preset arguments are retained inside closure scope across multiple event trigger invocations.
+> 
+---
+
+### Exercise 3: Placeholder-Supported Partial Application Utility
+
+**Scenario:** A math utility library builds a flexible `partialWithPlaceholders` function supporting placeholder symbols (`_`) for arbitrary argument slot pre-binding.
+
+**Requirements:**
+1. Write partialWithPlaceholders(fn, ...presetArgs).
+2. Use symbol _ as placeholder.
+3. Fill placeholder slots with laterArgs.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const _ = Symbol("PLACEHOLDER");
+>
+> function partialWithPlaceholders(fn, ...presetArgs) {
+>   return function(...laterArgs) {
+>     let laterIdx = 0;
+>     const finalArgs = presetArgs.map(arg => {
+>       if (arg === _) {
+>         return laterArgs[laterIdx++];
+>       }
+>       return arg;
+>     });
+>
+>     while (laterIdx < laterArgs.length) {
+>       finalArgs.push(laterArgs[laterIdx++]);
+>     }
+>
+>     return fn.apply(this, finalArgs);
+>   };
+> }
+>
+> // Verification tests
+> const divide = (numerator, denominator) => numerator / denominator;
+> const divideByTwo = partialWithPlaceholders(divide, _, 2);
+>
+> console.assert(divideByTwo(10) === 5, "Test 1 Failed: 10 / 2 = 5");
+>
+> const divideTenBy = partialWithPlaceholders(divide, 10, _);
+> console.assert(divideTenBy(2) === 5, "Test 2 Failed: 10 / 2 = 5");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Arbitrary Parameter Pre-binding**: Placeholder symbols allow pre-binding trailing or middle arguments while leaving leading slots open.
+> 2. **Symbol Unique Identifier**: Using a unique Symbol ensures placeholders never collide with valid primitive values.
+> 3. **Flexible Argument Filling**: Iterates preset argument templates, filling placeholder slots sequentially from provided runtime arguments.
+---
+
+## 6. Related Terms
 - [Currying](currying.md) — The transformation of a function into a nested chain of single-argument functions.
 - [Functional Programming & Composition](functional_programming.md) — Related concept: Functional Programming & Composition.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Partial Application binds a subset of a function's arguments, returning a new function that accepts the remaining arguments.
 - It differs from Currying: Currying splits arguments into single-parameter chains, whereas Partial Application binds multiple values at once.
 - Implement partial application using `fn.bind(thisArg, ...boundArgs)` or by creating nested arrow function closures.

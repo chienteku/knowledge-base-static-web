@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Metadata Tag**
+
+**Metadata Tag (Universal Browser Support)**: `<link>` is a fundamental concept in this technology stack. **Level 8 — Metadata, SEO & Head**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard webpage usually consists of an HTML file for the structure and a CSS file for the design (colors, layouts). The browser downloads the HTML file first, but it has no idea that the CSS file even exists!
@@ -62,7 +58,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `<link>` with `<a>` (Anchor)
 
@@ -128,7 +124,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 <link rel="stylesheet" href="style.css">
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Favicon
 
@@ -181,7 +177,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 >
 > **Explanation:** `rel="canonical"` informs search engine crawlers of the primary authoritative URL.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The clickable user navigation link (do not confuse with `<link>`).
 - [`<head>`](../level_01/head.md) — The parent container where the `<link>` tag lives.
 - [Favicon](favicon.md) — The visual browser tab icon loaded using a link tag.
@@ -194,7 +190,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<link>` tag connects the HTML document to external resources.
 - It is most commonly used to import CSS stylesheets using `rel="stylesheet"`.
 - It is also used to import favicons (browser tab icons).

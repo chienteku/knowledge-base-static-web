@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Modern Browsers)**: `<audio>` is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Modern Browsers (HTML5)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before HTML5 was released, if a developer wanted to play a sound effect or a song on a webpage, they had to rely on messy, third-party plugins like Adobe Flash or Apple QuickTime. This was a nightmare for users because they had to constantly update plugins, and it was terrible for mobile devices (Steve Jobs famously banned Flash from the iPhone).
@@ -60,7 +56,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using the `autoplay` attribute unnecessarily
 
@@ -116,7 +112,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 <audio src="song.mp3" controls></audio>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Finding the Controls
 
@@ -169,7 +165,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 >
 > **Explanation:** `loop` repeats audio; `muted` sets initial volume to zero.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the audio source.
 - [`<source>` Element](source.md) — The child element used for multi-format audio sources.
 - [`<video>`](video.md) — The visual equivalent of the audio tag.
@@ -177,7 +173,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<audio>` tag natively plays sound files without needing third-party plugins.
 - You must include the `controls` attribute if you want the user to see a play/pause button.
 - You can provide multiple file formats using nested `<source>` tags to ensure cross-browser compatibility.

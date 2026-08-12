@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Functional Programming**
+
+**Functional Programming (Universal: Works everywhere)**: Higher-Order Function is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In many older programming languages, functions are rigid blocks of code. You can pass numbers or strings into them, but you can't pass *behaviors* into them.
@@ -74,7 +70,7 @@ console.log(triple(5)); // 15
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Invoking the function when passing it
 
@@ -156,69 +152,139 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Logger HOF
+### Exercise 1: Custom Higher-Order Map/Filter Implementation
 
-**Problem:** Write a HOF called `withLogging` that takes a function `fn` as an argument. It should return a *new* function that logs `"Executing..."` to the console, and then calls `fn()`.
+**Scenario:** A functional utility package implements custom higher-order functions (HOFs) that take processing callback functions as parameters.
 
-**Expected output:**
+**Requirements:**
+1. Write customMap(array, transformFn).
+2. Write customFilter(array, predicateFn).
+3. Execute callback for each array item.
+4. Return transformed/filtered array.
+
 > [!check]- Answer
-> ```text
-> const loggedSayHi = withLogging(sayHi);
-> loggedSayHi(); // Logs: "Executing..." then "Hi!"
-> ```
-> - `function withLogging(fn) { return function() { console.log("Executing..."); fn(); } }`
-> 
----
-
-### Exercise 2: Custom Array Filter Higher-Order Function
-
-**Problem:** Write a custom HOF `myFilter(arr, predicate)` duplicating `Array.prototype.filter` logic.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 2, 4 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function myFilter(arr, predicate) {
+> function customMap(array, transformFn) {
 >   const result = [];
->   for (let item of arr) {
->     if (predicate(item)) result.push(item);
+>   for (let i = 0; i < array.length; i++) {
+>     result.push(transformFn(array[i], i, array));
 >   }
 >   return result;
 > }
-> console.log(myFilter([1, 2, 3, 4], x => x % 2 === 0));
+>
+> function customFilter(array, predicateFn) {
+>   const result = [];
+>   for (let i = 0; i < array.length; i++) {
+>     if (predicateFn(array[i], i, array)) {
+>       result.push(array[i]);
+>     }
+>   }
+>   return result;
+> }
+>
+> // Verification tests
+> const nums = [1, 2, 3, 4];
+> const doubled = customMap(nums, x => x * 2);
+> const evens = customFilter(nums, x => x % 2 === 0);
+> console.assert(doubled.join(",") === "2,4,6,8", "Test 1 Failed");
+> console.assert(evens.join(",") === "2,4", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Higher-order functions accept functions as arguments to customize execution behavior.
+> #### Technical Explanation
+>
+> 1. **Higher-Order Function Definition**: A Higher-Order Function (HOF) is a function that accepts one or more functions as arguments, returns a function, or both.
+> 2. **Abstraction over Actions**: HOFs abstract execution iteration and action details using callback parameters.
+> 3. **First-Class Integration**: HOFs rely on JavaScript functions being first-class objects.
 > 
 ---
 
-### Exercise 3: Function Composition HOF
+### Exercise 2: Performance Profiler & Logger Decorator HOF
 
-**Problem:** Write `compose(f, g)` that returns a new function executing `f(g(x))`.
+**Scenario:** An APM monitoring library implements a higher-order decorator function that wraps target functions with timing logging.
 
-**Expected output:**
+**Requirements:**
+1. Write withProfiling(targetFn, logFn).
+2. Return wrapped function.
+3. Measure execution time and invoke logFn.
+4. Return targetFn result.
+
 > [!check]- Answer
-> ```text
-> 21
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const add1 = x => x + 1;
-> const double = x => x * 2;
-> const compose = (f, g) => (x) => f(g(x));
-> const addThenDouble = compose(double, add1);
-> console.log(addThenDouble(10)); // double(add1(10)) = double(11) = 21
+> function withProfiling(targetFn, logFn) {
+>   return function(...args) {
+>     const start = Date.now();
+>     const result = targetFn(...args);
+>     const duration = Date.now() - start;
+>     logFn(duration);
+>     return result;
+>   };
+> }
+>
+> // Verification tests
+> let loggedDuration = -1;
+> const mockLog = (dur) => { loggedDuration = dur; };
+> const heavyMath = (a, b) => a + b;
+>
+> const profiledMath = withProfiling(heavyMath, mockLog);
+> const sum = profiledMath(10, 20);
+>
+> console.assert(sum === 30, "Test 1 Failed");
+> console.assert(loggedDuration >= 0, "Test 2 Failed: Profiler log not invoked");
 > ```
 >
-> **Explanation:** Higher-order functions combine smaller functions into composite data pipelines.
-> 
+> #### Technical Explanation
+>
+> 1. **Decorator Pattern**: HOFs can accept functions and return enhanced wrapped function instances.
+> 2. **Transparent Delegation**: Wrapped functions accept rest parameters (...args) and return original target results.
+> 3. **Aspect-Oriented Programming**: Allows injecting cross-cutting concerns (logging, timing, auth) cleanly.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Function Composition & Pipeline Factory HOF
+
+**Scenario:** A data processing library provides a compose() HOF that combines multiple single-argument functions into a unified pipeline function.
+
+**Requirements:**
+1. Write compose(...fns).
+2. Return inner function accepting initial value.
+3. Execute functions right-to-left.
+4. Return final result.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function compose(...fns) {
+>   return function(initialValue) {
+>     return fns.reduceRight((acc, fn) => fn(acc), initialValue);
+>   };
+> }
+>
+> // Verification tests
+> const addTwo = x => x + 2;
+> const multiplyThree = x => x * 3;
+>
+> const compute = compose(multiplyThree, addTwo);
+> console.assert(compute(5) === 21, "Test 1 Failed: Composition failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Function Composition**: Combining multiple HOF functions creates declarative data processing pipelines.
+> 2. **Right-to-Left Evaluation**: Mathematical composition evaluates rightmost function first, then leftwards.
+> 3. **Functional Reusability**: Composed pipelines build complex functionality from small pure functions.
+---
+
+## 6. Related Terms
 - [Callback Function](callback_function.md) — The function that gets passed *into* the Higher-Order Function.
 - [Closure](closure.md) — Often used when a HOF returns a new function.
 - [First-Class Function](first_class_function.md) — Related concept: First-Class Function.
@@ -228,7 +294,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A function is a Higher-Order Function if it meets at least one of two criteria: (1) It accepts a function as an argument. (2) It returns a function.
 - They allow developers to abstract over *actions*, not just values.
 - Built-in array methods like `.map()`, `.filter()`, and `.reduce()` are the most common Higher-Order Functions in JavaScript.

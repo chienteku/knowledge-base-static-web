@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Universal Browser Support)**: `<a>` (Anchor / Link) is a fundamental concept in this technology stack. **Level 2 — Text & Content**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The "HyperText" in HTML specifically refers to the ability to link documents together into a massive, interconnected web. The `<a>` (Anchor) tag is the element that makes this possible. 
@@ -56,7 +52,7 @@ But the door needs to know *where* it leads. The destination is defined by the `
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `href` attribute
 
@@ -194,7 +190,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 <a href="/download-report.pdf">Download 2026 Financial Report (PDF)</a>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Wrapping Images
 
@@ -240,7 +236,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 >
 > **Explanation:** Hash link `#id` targets matching element ID on the current page.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`href` Attribute](href.md) — The required attribute that makes the anchor tag function.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — As `<a>` is an inline text element by default.
@@ -253,7 +249,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<a>` (Anchor) tag creates hyperlinks, which are the fundamental glue of the internet.
 - It requires the `href` attribute to define the destination URL.
 - The content between the opening `<a>` and closing `</a>` tags is what the user clicks on.

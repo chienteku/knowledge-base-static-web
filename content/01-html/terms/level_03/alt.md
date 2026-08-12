@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Attribute**
+
+**Attribute (Universal Browser Support)**: `alt` Attribute is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The web is meant to be accessible to everyone, including users who are blind or visually impaired and rely on Screen Reader software to browse the internet.
@@ -61,7 +57,7 @@ The `alt` attribute is the radio announcer for your website's images.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Starting with "Image of..." or "Picture of..."
 
@@ -134,7 +130,7 @@ If an image is purely decorative and offers no semantic meaning, you MUST includ
 <img src="/icons/star.svg" alt=""> <!-- Empty alt instructs screen readers to skip -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Functional Alt
 
@@ -184,7 +180,7 @@ If an image is purely decorative and offers no semantic meaning, you MUST includ
 >
 > **Explanation:** `alt=""` informs screen readers that the image is purely decorative and should be skipped.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<img>`](img.md) — The element that requires the `alt` attribute.
 - [`<figure>` & `<figcaption>`](figure_figcaption.md) — The semantic containers used to package images and captions.
 - [`title` Attribute](../level_07/title.md) — Related concept: `title` Attribute.
@@ -193,7 +189,7 @@ If an image is purely decorative and offers no semantic meaning, you MUST includ
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `alt` attribute is mandatory for web accessibility (a11y).
 - It provides a text alternative for screen readers and a visual fallback for broken images.
 - Never write "Image of" or "Picture of" in the alt text.

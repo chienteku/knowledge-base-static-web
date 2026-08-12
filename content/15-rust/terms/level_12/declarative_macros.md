@@ -263,7 +263,7 @@ macro_rules! list {
 ---
 
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — macro_rules! macro rules.
 

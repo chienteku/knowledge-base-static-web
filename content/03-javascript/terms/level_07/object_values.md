@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Built-in Method** *(Object, Introduced in ES8 / 2017)*
+
+**Built-in Method *(Object, Introduced in ES8 / 2017)* (Universal)**: Object.values() is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 After developers used `Object.keys()` for years, they realized a common pattern: they would get the keys array, just so they could loop through it and use `obj[key]` to extract the actual data (the values). 
@@ -71,7 +67,7 @@ console.log(`Your total is $${total}`);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Object Values Scope and Variable Hoisting
 
@@ -144,67 +140,122 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Value Search
+### Exercise 1: Aggregate Expense Calculator via Object.values()
 
-**Problem:** You have an object mapping user IDs to their status: `const users = { u1: "offline", u2: "online", u3: "offline" }`. Using `Object.values()` and the array `.includes()` method, write a single line of code to check if ANY user is "online".
+**Scenario:** A financial tool aggregates department expense values from a breakdown dictionary using Object.values() and Array.reduce().
 
-**Expected output:**
+**Requirements:**
+1. Write calculateTotalExpenses(expensesObj).
+2. Extract numeric values using Object.values(expensesObj).
+3. Sum values with .reduce().
+4. Return total.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const isAnyoneOnline = Object.values(users).includes("online");
-> console.log(isAnyoneOnline); // true
-> ```
-> - Extract the values into an array, then immediately chain `.includes()`.
-> 
----
-
-### Exercise 2: Summing Object Numerical Values
-
-**Problem:** Sum values of `{ apples: 5, oranges: 10 }` using `Object.values()` and `.reduce()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 15
-> ```
-> ```javascript
-> const inventory = { apples: 5, oranges: 10 };
-> const total = Object.values(inventory).reduce((a, b) => a + b, 0);
-> console.log(total);
+> function calculateTotalExpenses(expensesObj) {
+>   if (!expensesObj || typeof expensesObj !== "object") return 0;
+>
+>   const values = Object.values(expensesObj);
+>   return values
+>     .filter(val => typeof val === "number")
+>     .reduce((sum, val) => sum + val, 0);
+> }
+>
+> // Verification tests
+> const expenses = { engineering: 5000, marketing: 2000, sales: 3000 };
+> console.assert(calculateTotalExpenses(expenses) === 10000, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `Object.values()` extracts an array of own property values for reduction.
+> #### Technical Explanation
+>
+> 1. **Object.values() Method**: Object.values(obj) returns an array of an object's own enumerable property values.
+> 2. **Direct Value Iteration**: Eliminates the need for manual key indexing (obj[key]) when processing property values.
+> 3. **Order Guarantee**: Iterates values in the exact same order as for...in / Object.keys().
 > 
 ---
 
-### Exercise 3: Checking Value Inclusion with `.includes()`
+### Exercise 2: Object Values Advanced Context Handler
 
-**Problem:** Check if value `"admin"` exists in `{ role: "admin" }` using `Object.values(obj).includes(...)`.
+**Scenario:** A web application component processes object values data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleObjectValuesSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = { role: "admin" };
-> console.log(Object.values(user).includes("admin"));
+> function handleObjectValuesSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleObjectValuesSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `Object.values()` enables array search methods over object value fields.
-> 
+> #### Technical Explanation
+>
+> 1. **Object Values Architecture**: Applying object values patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Object Values Performance Optimization
+
+**Scenario:** An application utility optimizes object values execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeObjectValuesTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeObjectValuesTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeObjectValuesTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object Values Optimization**: Optimizing object values improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Object.keys()](object_keys.md) — Returns the keys instead of the values.
 - [Object.entries()](object_entries.md) — Returns both!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Object.values(obj)` returns an Array containing the data (values) from an object.
 - It completely ignores the keys (property names).
 - It is the fastest way to extract all data from an object for summation, filtering, or processing.

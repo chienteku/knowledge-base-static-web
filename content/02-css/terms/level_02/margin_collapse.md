@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Browser Support .)**: Margin Collapse is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively. Appended to the vertical document flow algorithm during block layout parsing).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early web design, most pages were text-heavy articles consisting of headings (`<h1>`), paragraphs (`<p>`), and lists (`<ul>`). 
@@ -129,7 +125,7 @@ Vertical margin merge:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Debugging "ghost" spacing on empty containers
 
@@ -180,7 +176,7 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Margin Calculator
 
@@ -240,14 +236,14 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 >
 > **Explanation:** Creating a Block Formatting Context (BFC) prevents internal margins from collapsing outside parent.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Margin](margin.md) — The parent spacing property.
 - [Padding](padding.md) — The inner spacing used to block margin leakage.
 - [The Box Model (Concept)](box_model.md) — The parent model framework.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Margin collapse combines adjacent vertical margins of block-level elements in normal document flow.
 - The browser resolves positive merges by selecting the single largest margin value.
 - Child margins will leak out and shift the parent container if the parent has no padding or border.

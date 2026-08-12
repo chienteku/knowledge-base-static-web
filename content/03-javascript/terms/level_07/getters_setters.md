@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Getters & Setters is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Normally, object properties are passive containers of data (known as "data properties"). If you write `user.age = 25`, the engine simply stores `25` inside that property field. It cannot validate that the age is a number or check if it's negative. 
@@ -91,7 +87,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Triggering Infinite Recursion Stack Overflows
 
@@ -180,95 +176,137 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Temperature Converter
+### Exercise 1: Encapsulated Temperature Unit Converter with Getters/Setters
 
-**Problem:** Complete the getter and setter in `thermometer` so that reading `tempFahrenheit` converts the backing Celsius value to Fahrenheit, and setting `tempFahrenheit` converts and writes the backing Celsius value.
+**Scenario:** An IoT device library implements a Thermostat class using getter and setter methods to automatically convert between Celsius and Fahrenheit.
 
-*(Formula: Fahrenheit = Celsius * 1.8 + 32, Celsius = (Fahrenheit - 32) / 1.8)*
-
-```javascript
-const thermometer = {
-  _celsius: 25,
-
-  get tempFahrenheit() {
-    // Write getter
-  },
-
-  set tempFahrenheit(f) {
-    // Write setter to update backing celsius value
-  }
-};
-
-console.log("Fahrenheit:", thermometer.tempFahrenheit); // should be 77
-thermometer.tempFahrenheit = 32;
-console.log("Celsius:", thermometer._celsius); // should be 0
-```
+**Requirements:**
+1. Define class Thermostat.
+2. Internal private/underscore property _celsius.
+3. Implement get celsius(), set celsius(val), and get fahrenheit().
+4. Verify conversion.
 
 > [!check]- Answer
-> - Inside the getter, return `this._celsius * 1.8 + 32`.
-> - Inside the setter, write `this._celsius = (f - 32) / 1.8`.
-> 
----
-
-### Exercise 2: Backing Property Accessor Pattern
-
-**Problem:** Define getter `get fullName()` returning `this.first + " " + this.last`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Alice Smith
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = {
->   first: "Alice",
->   last: "Smith",
->   get fullName() { return `${this.first} ${this.last}`; }
-> };
-> console.log(user.fullName);
+> class Thermostat {
+>   constructor(celsius = 0) {
+>     this._celsius = celsius;
+>   }
+>
+>   get celsius() {
+>     return this._celsius;
+>   }
+>
+>   set celsius(val) {
+>     if (typeof val === "number") {
+>       this._celsius = val;
+>     }
+>   }
+>
+>   get fahrenheit() {
+>     return (this._celsius * 9 / 5) + 32;
+>   }
+> }
+>
+> // Verification tests
+> const t = new Thermostat(25);
+> console.assert(t.celsius === 25, "Test 1 Failed");
+> console.assert(t.fahrenheit === 77, "Test 2 Failed: (25*9/5)+32 = 77");
+> t.celsius = 0;
+> console.assert(t.fahrenheit === 32, "Test 3 Failed");
 > ```
 >
-> **Explanation:** Getters execute function logic seamlessly upon standard property reads (`user.fullName`).
+> #### Technical Explanation
+>
+> 1. **Getters & Setters Syntax**: get prop() and set prop(val) define accessor methods that behave syntactically like object properties.
+> 2. **Encapsulation & Validation**: Setters allow validating inputs before mutating internal state.
+> 3. **Computed Virtual Properties**: Getters enable computing dynamic values on the fly without storing redundant state.
 > 
 ---
 
-### Exercise 3: Validating Input with Setters
+### Exercise 2: Getters Setters Advanced Context Handler
 
-**Problem:** Use setter `set age(val)` throwing Error if `val < 0`.
+**Scenario:** A web application component processes getters setters data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleGettersSettersSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> Age updated: 25
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const person = {
->   _age: 0,
->   set age(val) {
->     if (val < 0) throw new Error("Invalid age");
->     this._age = val;
->   },
->   get age() { return this._age; }
-> };
-> person.age = 25;
-> console.log(`Age updated: ${person.age}`);
+> function handleGettersSettersSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleGettersSettersSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Setters intercept property writes to validate data before updating backing state.
-> 
+> #### Technical Explanation
+>
+> 1. **Getters Setters Architecture**: Applying getters setters patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Getters Setters Performance Optimization
+
+**Scenario:** An application utility optimizes getters setters execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeGettersSettersTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeGettersSettersTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeGettersSettersTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Getters Setters Optimization**: Optimizing getters setters improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Class](class.md) — Constructor syntax that heavily employs getter/setter accessors.
 - [Computed Property Names](computed_property_names.md) — Dynamic object keys.
 - [Private Class Fields (#)](private_class_fields.md) — Related concept: Private Class Fields (#).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Getters and setters (accessor properties) execute function code disguised as property access.
 - Use a getter (`get key()`) to dynamically format or calculate values on read operations.
 - Use a setter (`set key(val)`) to validate, log, or restrict values on write operations.

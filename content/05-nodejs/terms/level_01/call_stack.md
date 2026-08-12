@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture**
+
+**Node.js Core Architecture (Node.js Core Architecture .)**: The Call Stack is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Governed by the V8 JavaScript engine runtime environment).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When JavaScript code runs, the V8 engine needs a way to keep track of function execution order: which function is currently executing, which variables are locally active, and where to return control when a function finishes.
@@ -82,7 +78,7 @@ Imagine a **stack of dinner plates** in a kitchen.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Infinite recursion causing a stack overflow
 
@@ -144,7 +140,7 @@ console.log('Sync 1');
 // Prints: Sync 1 -> Timeout
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Order of Execution
 
@@ -218,13 +214,13 @@ first();
 >
 > **Explanation:** `setImmediate` queues callback on event loop, unwinding the V8 stack on each recursion step.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The coordinator that pushes callbacks onto the Call Stack once it is empty.
 - [V8 JavaScript Engine](v8_engine.md) — The engine that allocates and runs the Call Stack.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Call Stack is a LIFO (Last In, First Out) stack that tracks active function calls.
 - When a function is called, its frame is pushed; when it returns, its frame is popped.
 - There is only one Call Stack on the single JavaScript execution main thread in Node.js.

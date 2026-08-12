@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Typography Property**
+
+**Typography Property (Universal Browser Support .)**: `font-style` & `font-variant` is a fundamental concept in this technology stack. **Level 3 — Typography & Colors**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Natively supported. Browsers request specific italic font face files dynamically if configured).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Text formatting requires more options than simply changing size and thickness. To create professional visual layouts and hierarchies, designers need:
@@ -120,7 +116,7 @@ h3 {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `font-style: italic` with synthetic slanting (Faux Italics)
 
@@ -178,7 +174,7 @@ span { font-style: small-caps; } /* ❌ Invalid font-style value! */
 span { font-variant: small-caps; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Shorthand Compiler
 
@@ -242,14 +238,14 @@ span { font-variant: small-caps; }
 >
 > **Explanation:** Italic is a distinct font design; Oblique is a slanting angle transformation.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The parent typography properties.
 - [`text-transform`](../level_07/text_transform.md) — Uppercase/lowercase formatting overrides (different from small-caps).
 - [`line-height`](line_height.md) — Related concept: `line-height`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `font-style` controls text posture: `normal`, `italic`, or slanted `oblique`.
 - True italics use unique custom letter curves, whereas oblique simply skews standard letters.
 - `font-variant: small-caps` converts lowercase letters to scaled-down capital letters.

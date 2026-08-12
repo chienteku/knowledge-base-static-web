@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **DevOps / Production Tooling**
+
+**DevOps / Production Tooling (Production Servers)**: PM2 (Process Manager) is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Production Servers (VPS, AWS EC2, DigitalOcean)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you deploy your app to a production server and run `node server.js`, you have two massive problems:
@@ -41,7 +37,7 @@ PM2 then acts as a Load Balancer. When 8 users request the homepage, PM2 sends U
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing data in RAM while in Cluster Mode
 
@@ -89,7 +85,7 @@ pm2 restart my-app # ❌ Drops active connections simultaneously!
 pm2 reload my-app # Zero-downtime rolling reload
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Development vs Production
 
@@ -139,7 +135,7 @@ pm2 reload my-app # Zero-downtime rolling reload
 >
 > **Explanation:** `pm2 init` creates an `ecosystem.config.js` configuration file for managing app environments.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Docker](docker.md) — The modern alternative/companion to PM2. Docker also manages keeping processes alive and isolated.
 - [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.
 - [The cluster Module](cluster_module.md) — Related concept: The cluster Module.
@@ -149,7 +145,7 @@ pm2 reload my-app # Zero-downtime rolling reload
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Never run raw `node server.js` in a production environment. If it crashes, it stays dead.
 - **PM2** is a process manager that automatically restarts your app if it crashes.
 - **Cluster Mode** allows PM2 to spawn multiple copies of your app, utilizing 100% of the server's CPU cores.

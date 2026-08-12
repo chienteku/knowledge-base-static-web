@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Architecture**
+
+**Layout Architecture (Universal Browser Support)**: The Box Model (Concept) is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To draw a website on a screen, the browser needs a mathematical system to calculate exactly how much physical space every element takes up, and how far apart elements should be from each other. 
@@ -61,7 +57,7 @@ Imagine ordering a fragile vase from an online store.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing that circular elements are mathematically circles
 
@@ -112,7 +108,7 @@ div {
 div { background-color: yellow; padding: 20px; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Identifying the Layers
 
@@ -169,7 +165,7 @@ Margin, Content, Border, Padding
 >
 > **Explanation:** Total element box height includes content height plus vertical padding and border.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Padding](padding.md) — The inner space.
 - [Border](border.md) — The visible edge.
 - [Margin](margin.md) — The outer space.
@@ -179,7 +175,7 @@ Margin, Content, Border, Padding
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Absolutely every HTML element is treated as a rectangular box by the browser.
 - The Box Model consists of 4 layers: Content -> Padding -> Border -> Margin.
 - Understanding this model is the absolute prerequisite for learning any CSS layout system (like Flexbox or Grid).

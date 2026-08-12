@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Form Input Tag**
+
+**Form Input Tag (Universal Browser Support .)**: `<input type="radio">` & `<input type="checkbox">` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Rendered natively by all browsers. Browsers display checkboxes as square toggles and radio buttons as circular bubbles).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In addition to free-form text typing, websites need a way to collect structured selections from users:
@@ -127,7 +123,7 @@ Basic selector templates:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to connect `<label>` elements
 
@@ -187,7 +183,7 @@ Basic selector templates:
 <input type="radio" name="pay" value="paypal"> PayPal
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Building a Checklist
 
@@ -249,7 +245,7 @@ Basic selector templates:
 >
 > **Explanation:** Checkboxes use boolean `.checked` property, not string `.value`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The parent element.
 - [`<label>`](label.md) — The text label companion.
 - [`name` Attribute (in Form Fields)](name.md) — Essential grouping parameter.
@@ -257,7 +253,7 @@ Basic selector templates:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `type="radio"` creates single-choice selections where only one item can be active at a time.
 - `type="checkbox"` creates multi-choice toggles that act independently.
 - Radio buttons must share the exact same `name` attribute to enforce mutual exclusion.

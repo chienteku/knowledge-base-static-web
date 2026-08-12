@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Form Element**
+
+**Form Element (Universal Browser Support)**: `<select>` and `<option>` is a fundamental concept in this technology stack. **Level 5 — Forms & User Input**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you need a user to select their Country, providing a blank `<input type="text">` is a terrible idea. One user might type "US", another "USA", another "United States", and another might misspell it as "Untied States". This makes saving the data to a database a nightmare.
@@ -64,7 +60,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `value` attribute on options
 
@@ -120,7 +116,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 </select>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Optgroup
 
@@ -188,7 +184,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 >
 > **Explanation:** `<optgroup>` organizes select dropdown choices into categorized sections.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<input>`](input.md) — The alternative way to collect data (free-form typing).
 - [`placeholder` Attribute](placeholder.md) — The visual cue comparison.
 - [`value` Attribute (in Form Fields)](value.md) — The option value parameters.
@@ -197,7 +193,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `<select>` to create a dropdown menu.
 - Place `<option>` tags inside it for each choice.
 - The user sees the text between the `<option>` tags, but the server receives the data inside the `value` attribute.

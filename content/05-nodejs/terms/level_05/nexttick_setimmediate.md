@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Async Pattern**
+
+**Async Pattern (Node.js Core Architecture .)**: process.nextTick() vs setImmediate() is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Specific to the Node.js runtime scheduler; does not exist in standard browser environments).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Node.js development, you sometimes need to defer the execution of a callback function. While browsers provide `setTimeout(callback, 0)` to achieve this, Node.js implements two specialized built-in queue functions: `process.nextTick()` and `setImmediate()`.
@@ -88,7 +84,7 @@ Imagine boarding a commercial airplane.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the naming conventions of the two functions
 
@@ -138,7 +134,7 @@ function processQueue() {
 // Inside I/O callbacks, setImmediate is GUARANTEED to run before setTimeout(..., 0)!
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Queue Starvation Test
 
@@ -198,13 +194,13 @@ app.get('/health', (res) => res.send('OK'));
 >
 > **Explanation:** `process.nextTick` defers emission until after current call stack finishes listener attachments.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Microtasks vs Macrotasks](microtasks_macrotasks.md) — The standard V8 microtask scheduling queues.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The parent routing system managing execution phases.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `process.nextTick` and `setImmediate` schedule asynchronous callback execution.
 - `process.nextTick` has higher priority, running immediately after the current synchronous block.
 - `setImmediate` runs inside the Check Phase of Libuv's Event Loop.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<th>` (Table Header) is a fundamental concept in this technology stack. **Level 4 — Tables**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In most data tables, the first row (or the first column) doesn't contain actual data; instead, it contains the *labels* for that data (e.g., "Name", "Age", "Email").
@@ -62,7 +58,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<td>` and `<strong>` instead of `<th>`
 
@@ -120,7 +116,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 <tr><td class="bold">Total: $500</td></tr>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Row Headers
 
@@ -172,7 +168,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 >
 > **Explanation:** Browsers render header cells bold and centered by default.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<tr>` (Table Row)](tr.md) — The row that contains the `<th>`.
 - [`<td>` (Table Data)](td.md) — The standard data cell that corresponds to the `<th>`.
 - [`scope` Attribute (in `<th>`)](scope.md) — The attribute used to declare cell header associations.
@@ -182,7 +178,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<th>` stands for Table Header.
 - It is used to label columns or rows.
 - Browsers render it bold and centered by default.

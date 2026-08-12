@@ -245,9 +245,9 @@ fs::write(std::path::Path::new(&out_dir).join("generated.rs"), code);
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
-- [`bindgen`](../level_13/bindgen.md)
+- [`bindgen`](../level_13/bindgen.md) — 
 
 ---
 

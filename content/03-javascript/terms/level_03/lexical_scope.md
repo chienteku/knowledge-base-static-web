@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Lexical (Static) Scope / Environment is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In programming, we need to know exactly which variable a function accesses when multiple variables share the same name across nested functions. If scope lookup were dynamic (determined by *where* a function is called at runtime), code would be incredibly unpredictable, hard to analyze, and highly insecure. 
@@ -84,7 +80,7 @@ containerFunction(); // Logs: "Global Message" (NOT "Container Message"!)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Lexical Scope Scope and Variable Hoisting
 
@@ -157,102 +153,133 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Trace the Scope Chain
+### Exercise 1: Nested Scope Chain Variable Lookup Engine
 
-**Problem:** Predict the output of the following code snippet and explain which scopes are traversed to look up the variable `count`.
+**Scenario:** A state management framework resolves nested scope variable lookups, demonstrating how inner functions access variables from outer lexical environments.
 
-```javascript
-let count = 5;
+**Requirements:**
+1. Create outer, middle, and inner nested functions.
+2. Access outer and middle variables inside inner function.
+3. Return combined string.
 
-function stepOne() {
-  console.log(count);
-}
-
-function stepTwo() {
-  let count = 10;
-  stepOne();
-}
-
-stepTwo();
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Output: 5
-> Explanation: When stepOne is invoked inside stepTwo, the engine executes stepOne.
-> The scope lookup chain for 'count' in stepOne starts in stepOne's local scope (not found)
-> and immediately jumps to the global scope (where stepOne was defined), resolving to '5'.
-> stepTwo's local scope is bypassed entirely.
+>
+> #### Implementation
+>
+> ```javascript
+> function outerScope(globalTag) {
+>   const outerVar = "OUTER";
+>
+>   return function middleScope(middleTag) {
+>     const middleVar = "MIDDLE";
+>
+>     return function innerScope() {
+>       return `${globalTag}:${outerVar}:${middleTag}:${middleVar}:INNER`;
+>     };
+>   };
+> }
+>
+> // Verification tests
+> const innerFn = outerScope("APP")("ENV");
+> console.assert(innerFn() === "APP:OUTER:ENV:MIDDLE:INNER", "Test 1 Failed");
 > ```
-> - Remember that scope in JavaScript is determined by where the function is written in the code.
-> - `stepOne` is defined in the global scope, not inside `stepTwo`.
+>
+> #### Technical Explanation
+>
+> 1. **Lexical Scope Definition**: Lexical scope means variable accessibility is determined by physical code structure placement at compile time.
+> 2. **Scope Chain Resolution**: Identifier lookup searches current scope first, then moves sequentially upward along outer enclosing scope chains.
+> 3. **Static Scope Resolution**: Lexical scope is static; it depends on where functions are declared, NOT where they are invoked.
 > 
 ---
 
-### Exercise 2: Lexical Scope Chain Trace
+### Exercise 2: Lexical Scope vs Dynamic Invocation Context
 
-**Problem:** Trace `val` inside nested functions where `val` exists in global, outer, and inner scopes.
+**Scenario:** An event handling library demonstrates that lexical scope bindings remain fixed even when functions are invoked from different execution contexts.
 
-**Expected output:**
+**Requirements:**
+1. Declare function inside outerScope returning local variable.
+2. Invoke function from separate object context.
+3. Verify return value reads static lexical scope.
+
 > [!check]- Answer
-> ```text
-> inner
-> outer
-> global
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const val = "global";
-> function outer() {
->   const val = "outer";
->   function inner() {
->     const val = "inner";
->     console.log(val);
+> function createScopeBoundFn() {
+>   const secretKey = "LEXICAL_SECRET";
+>
+>   return function() {
+>     return secretKey;
+>   };
+> }
+>
+> const externalObj = {
+>   secretKey: "DYNAMIC_OVERRIDE",
+>   getSecret: createScopeBoundFn()
+> };
+>
+> // Verification tests
+> console.assert(externalObj.getSecret() === "LEXICAL_SECRET", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Static vs Dynamic Scope**: JavaScript uses lexical scoping for variables, ignoring dynamic caller invocation contexts.
+> 2. **Lexical Scope Stability**: Inner functions retain access to their birth lexical environment permanently.
+> 3. **Closure Foundation**: Lexical scope is the underlying language rule that powers JavaScript closures.
+> 
+---
+
+### Exercise 3: Outer Scope Variable Shadowing Analysis
+
+**Scenario:** A compiler AST parser analyzes variable shadowing where an inner lexical scope declares a variable with the same name as an outer scope variable.
+
+**Requirements:**
+1. Declare outer const theme = "LIGHT".
+2. Declare inner block scope containing const theme = "DARK".
+3. Verify inner scope shadows outer variable without mutating outer scope.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function testScopeShadowing() {
+>   const theme = "LIGHT";
+>   let innerTheme = "";
+>
+>   if (true) {
+>     const theme = "DARK";
+>     innerTheme = theme;
 >   }
->   inner();
->   console.log(val);
+>
+>   return { outerTheme: theme, innerTheme: innerTheme };
 > }
-> outer();
-> console.log(val);
+>
+> // Verification tests
+> const res = testScopeShadowing();
+> console.assert(res.outerTheme === "LIGHT", "Test 1 Failed");
+> console.assert(res.innerTheme === "DARK", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Scope resolution walks outward from local scope to parent scopes along the static lexical structure.
-> 
----
-
-### Exercise 3: Lexical Scope Closure Preservation
-
-**Problem:** Demonstrate a function `makeGetter()` returning a closure that reads `secret` defined in `makeGetter` scope.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> top secret
-> ```
-> ```javascript
-> function makeGetter() {
->   const secret = "top secret";
->   return () => secret;
-> }
-> const getSecret = makeGetter();
-> console.log(getSecret());
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Functions retain lifetime references to their parent lexical environment.
-> 
-> 
+> 1. **Variable Shadowing**: Declaring an identifier in an inner scope masks (shadows) identical identifiers in outer scopes during lookup.
+> 2. **Outer Scope Preservation**: Shadowing creates an independent local binding without altering or mutating outer scope variables.
+> 3. **Lookup Short-Circuit**: Scope chain search terminates immediately upon finding the first matching identifier.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Closure](closure.md) — The mechanism where a function retains access to its lexical scope even when executed outside that scope.
 - [Hoisting](hoisting.md) — The compiler behavior of moving declarations to the top of their lexical scopes.
 - [Arrow Function](arrow_function.md) — Functions that lack their own `this` binding, resolving it lexically.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Lexical Scope (Static Scope) means a variable's visibility is determined by its physical location in the written code structure.
 - JavaScript resolves variables by scanning the local scope first, and then stepping outwards through nested parent scopes (the scope chain) until it reaches the global scope.
 - The location where a function is called (the call site) has no effect on which variable values the function has access to.

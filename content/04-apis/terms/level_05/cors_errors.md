@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Browser-Specific: Thrown exclusively by browser rendering engines. Server-to-server requests are immune to CORS blocks.)**: CORS Errors in the Browser is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Browser-Specific**: Thrown exclusively by browser rendering engines. Server-to-server requests are immune to CORS blocks.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Every web developer has encountered a red CORS error blocking their API requests in the browser console. Understanding how to read, diagnose, and fix these browser-specific console errors is a critical practical skill:
@@ -86,7 +82,7 @@ app.get('/api/data', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Adding CORS headers inside the client-side `fetch` request headers
 
@@ -141,55 +137,154 @@ fetch('https://api.com/data', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Console Logger
+### Exercise 1: CORS Error Diagnostic Inspector & Parser
 
-**Problem:** Read the console log error message and identify the correct resolution step:
+**Scenario:** A developer tools utility inspects failed HTTP fetch errors and identifies whether failure was caused by a CORS violation.
 
-`Access to fetch at 'https://api.example.com/users' from origin 'http://localhost:3000' has been blocked by CORS policy: Method PUT is not allowed by Access-Control-Allow-Methods in preflight response.`
-
-- **A.** Change the client request to use the `POST` method instead of `PUT`.
-- **B.** Add `'Access-Control-Allow-Methods': 'PUT'` to the client fetch headers.
-- **C.** Configure the server CORS policy at `api.example.com` to include `'PUT'` in the list of allowed methods.
+**Requirements:**
+1. Write diagnoseCorsError(fetchError, requestDetails).
+2. Check TypeError message and response origin headers.
+3. Return diagnostic explanation.
 
 > [!check]- Answer
-> - **C** (CORS configurations are resolved on the server. The server must add `PUT` to the allowed methods headers in the preflight response).
+>
+> #### Implementation
+>
+> ```javascript
+> function diagnoseCorsError(fetchError, requestDetails = {}) {
+>   if (!fetchError) return { isCorsError: false };
+>
+>   const isTypeError = fetchError.name === "TypeError" || fetchError.message?.includes("Failed to fetch");
+>
+>   if (isTypeError && requestDetails.isCrossOrigin) {
+>     return {
+>       isCorsError: true,
+>       category: "CORS_POLICY_VIOLATION",
+>       possibleCauses: [
+>         "Server missing Access-Control-Allow-Origin header",
+>         "Disallowed HTTP method in Access-Control-Allow-Methods",
+>         "Disallowed custom header in Access-Control-Allow-Headers",
+>         "Missing Access-Control-Allow-Credentials when credentials mode is 'include'"
+>       ],
+>       remedy: "Configure CORS response headers on target backend server"
+>     };
+>   }
+>
+>   return { isCorsError: false, message: fetchError.message };
+> }
+>
+> // Verification tests
+> const err = new TypeError("Failed to fetch");
+> const diag = diagnoseCorsError(err, { isCrossOrigin: true });
+>
+> console.assert(diag.isCorsError === true, "Test 1 Failed");
+> console.assert(diag.category === "CORS_POLICY_VIOLATION", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Browser CORS Enforcement**: CORS errors are enforced strictly by the browser; client JS cannot bypass CORS security without server cooperation.
+> 2. **Opaque TypeError**: For security reasons, browsers conceal CORS error details from JavaScript, throwing a generic TypeError.
+> 3. **Server-Side Remediation**: Fixing CORS errors requires updating response headers on the destination API server or using a proxy.
 > 
+---
+
+### Exercise 2: Reverse Proxy CORS Bypass Gateway Simulator
+
+**Scenario:** A frontend development gateway routes API requests through a same-origin reverse proxy (`/api/*` -> `https://api.external.com/*`) to eliminate browser CORS preflights.
+
+**Requirements:**
+1. Write proxyRequest(clientPath, targetHost).
+2. Rewrite client URI to target URL server-side.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function proxyRequest(clientPath, targetHost = "https://api.external.com") {
+>   if (!clientPath.startsWith("/api/")) {
+>     return { proxied: false, url: clientPath };
+>   }
+>
+>   const relativePath = clientPath.substring(5);
+>   const targetUrl = `${targetHost}/${relativePath}`;
+>
+>   return {
+>     proxied: true,
+>     targetUrl,
+>     headers: {
+>       "Host": new URL(targetHost).hostname
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const res = proxyRequest("/api/v1/users");
+> console.assert(res.proxied === true, "Test 1 Failed");
+> console.assert(res.targetUrl === "https://api.external.com/v1/users", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Reverse Proxy Pattern**: Proxy receives request on same origin, forwards to external API server-to-server, avoiding browser CORS.
+> 2. **Dev Server Proxying**: Vite, Next.js, and Webpack Dev Server use proxies during local development.
+> 3. **Same-Origin Compliance**: Browser views proxy endpoint as same-origin, bypassing CORS restrictions completely.
 > 
 ---
 
-### Exercise 2: CORS Error Diagnostic Flowchart
+### Exercise 3: Preflight OPTIONS Response Header Linter
 
-**Problem:** Identify the root cause for DevTools error: `No 'Access-Control-Allow-Origin' header is present on the requested resource.`
+**Scenario:** An API gateway validator verifies outgoing preflight response headers to prevent CORS errors in SPA frontend clients.
 
-**Expected output:**
+**Requirements:**
+1. Write lintCorsResponseHeaders(headers, reqOrigin, reqMethod).
+2. Check Access-Control-Allow-Origin, Allow-Methods, Allow-Headers.
+
 > [!check]- Answer
-> ```text
-> The backend server did not include the Access-Control-Allow-Origin response header matching the frontend requesting origin.
+>
+> #### Implementation
+>
+> ```javascript
+> function lintCorsResponseHeaders(headers = {}, reqOrigin, reqMethod) {
+>   const allowOrigin = headers["Access-Control-Allow-Origin"] || headers["access-control-allow-origin"];
+>   const allowMethods = headers["Access-Control-Allow-Methods"] || headers["access-control-allow-methods"];
+>
+>   const issues = [];
+>   if (!allowOrigin) {
+>     issues.push("Missing Access-Control-Allow-Origin header");
+>   } else if (allowOrigin !== "*" && allowOrigin !== reqOrigin) {
+>     issues.push(`Origin '${reqOrigin}' not allowed by Access-Control-Allow-Origin '${allowOrigin}'`);
+>   }
+>
+>   if (reqMethod && allowMethods && !allowMethods.includes(reqMethod.toUpperCase())) {
+>     issues.push(`Method '${reqMethod}' not allowed by Access-Control-Allow-Methods`);
+>   }
+>
+>   return { valid: issues.length === 0, issues };
+> }
+>
+> // Verification tests
+> const headers = {
+>   "Access-Control-Allow-Origin": "https://app.com",
+>   "Access-Control-Allow-Methods": "GET, POST"
+> };
+>
+> console.assert(lintCorsResponseHeaders(headers, "https://app.com", "POST").valid === true, "Test 1 Failed");
+> console.assert(lintCorsResponseHeaders(headers, "https://evil.com", "POST").valid === false, "Test 2 Failed");
+> console.assert(lintCorsResponseHeaders(headers, "https://app.com", "DELETE").valid === false, "Test 3 Failed");
 > ```
-> ```text
-> The backend server did not include the Access-Control-Allow-Origin response header matching the frontend requesting origin.
-> ```
-> - **Explanation:** Missing `Access-Control-Allow-Origin` headers cause browsers to block response access.
+>
+> #### Technical Explanation
+>
+> 1. **Preflight Validation**: Browsers verify OPTIONS preflight response headers before sending actual cross-origin request.
+> 2. **Strict Origin Matching**: Access-Control-Allow-Origin must match request Origin exactly if credentials are included.
+> 3. **Method Access List**: Access-Control-Allow-Methods must explicitly include requested HTTP method (PUT, DELETE).
 ---
 
-### Exercise 3: Development Localhost Proxy Pattern
-
-**Problem:** How does setting a development proxy (`"proxy": "http://localhost:5000"` in React/Vite) eliminate CORS errors during local development?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The frontend dev server proxies API calls server-to-server. Browser communicates with same-origin dev server, bypassing CORS rules.
-> ```
-> ```text
-> The frontend dev server proxies API calls server-to-server. Browser communicates with same-origin dev server, bypassing CORS rules.
-> ```
-> - **Explanation:** Dev proxies convert browser requests into same-origin local calls.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Same-Origin Policy](../level_04/same_origin_policy.md) — The security wall that triggers CORS blocks.
 - [Preflight Request (OPTIONS)](../level_04/preflight_request.md) — The pre-request probe that often triggers CORS errors if it fails.
 - [DevTools Network Tab](../level_10/network_tab.md) — Related concept: DevTools Network Tab.
@@ -197,7 +292,7 @@ fetch('https://api.com/data', {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CORS errors are browser-enforced security actions, not connection failures.
 - Client-side JavaScript catch blocks only receive a generic `Failed to fetch` error.
 - Open browser DevTools (Console/Network) to diagnose the specific CORS issue.

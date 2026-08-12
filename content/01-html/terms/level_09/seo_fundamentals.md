@@ -14,16 +14,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Search Engine Architecture .)**: SEO Fundamentals for HTML is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Search Engine Architecture** (Applicable to all major search engine indexers including Google, Bing, DuckDuckGo, and Yahoo).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You can write the most beautifully designed, highly functional website in the world. But if search engines (like Google) cannot find it or understand its content, nobody will visit.
@@ -115,7 +111,7 @@ Add a canonical link in the `<head>` to declare the "master copy":
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using boilerplate alt texts on images
 
@@ -171,7 +167,7 @@ Add a canonical link in the `<head>` to declare the "master copy":
 <!-- Deliver pre-rendered HTML text from server for instant SEO indexing -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: SEO Header Fix
 
@@ -235,7 +231,7 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 >
 > **Explanation:** Keeping meta descriptions under 160 characters prevents search snippet clipping.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<meta>`](../level_08/meta.md) — The container for search descriptions.
 - [`title` Attribute](../level_07/title.md) — The primary SEO page title.
 - [Semantic HTML](../level_06/semantic_html.md) — Structural layout tags crawled by spiders.
@@ -244,7 +240,7 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SEO for HTML is the practice of writing clean, semantic markup that search engine crawlers can parse easily.
 - The `<title>` tag is the most critical on-page SEO element; keep it under 60 characters and lead with keywords.
 - Meta descriptions provide the search result text snippet (keep under 160 characters).

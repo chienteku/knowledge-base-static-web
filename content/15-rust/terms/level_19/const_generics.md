@@ -301,7 +301,7 @@ process(&[0; 5]); // Coerces array to slice!
 ## 6. Related Terms
 
 - [`const fn`](const_fn.md) — Const functions.
-- [Const Evaluation Ctfe](const_evaluation_ctfe.md) — Compile-time evaluation.
+- [Const Evaluation (CTFE)](const_evaluation_ctfe.md) — Compile-time evaluation.
 
 ---
 

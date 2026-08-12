@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal .)**: WebSockets is a fundamental concept in this technology stack. **Level 8 — Real-Time APIs**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Browser & Server).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTTP is inherently **Stateless** and **Unidirectional**. The Client must ask a question (`fetch()`), the Server gives an answer, and then the connection is instantly closed and forgotten. 
@@ -40,7 +36,7 @@ WebSockets (`ws://` or `wss://`) don't actually start as WebSockets.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use HTTP Status Codes over WebSockets
 
@@ -168,117 +164,155 @@ const ws = new WebSocket('wss://api.example.com');
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: HTTP vs WebSockets
+### Exercise 1: Full-Duplex Bi-Directional Chat Messenger
 
-**Problem:** For the following 3 applications, which protocol should you use?
-1. Fetching a user's profile settings.
-2. A live GPS tracker showing an Uber driver's car moving on a map.
-3. A collaborative Google Doc where you see other people typing.
+**Scenario:** A real-time messenger leverages full-duplex WebSockets to send client messages and process incoming server messages concurrently.
 
-**Expected output:**
+**Requirements:**
+1. Write createFullDuplexClient(wsInstance).
+2. Implement sendChatMessage(text).
+3. Implement onMessageReceived(callback).
+
 > [!check]- Answer
-> ```text
-> 1. HTTP (REST API). It only happens once.
-> 2. WebSockets. Data needs to stream continuously.
-> 3. WebSockets. Users need to instantly receive keystrokes from other users without refreshing.
+>
+> #### Implementation
+>
+> ```javascript
+> function createFullDuplexClient(wsInstance) {
+>   const messageCallbacks = new Set();
+>
+>   wsInstance.onmessage = (event) => {
+>     messageCallbacks.forEach(cb => cb(event.data));
+>   };
+>
+>   return {
+>     sendChatMessage(text) {
+>       wsInstance.send(JSON.stringify({ type: "chat", text, timestamp: Date.now() }));
+>     },
+>     onMessageReceived(cb) {
+>       messageCallbacks.add(cb);
+>       return () => messageCallbacks.delete(cb);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> let sentData = null;
+> const mockWs = { send: (d) => { sentData = JSON.parse(d); }, onmessage: null };
+> const client = createFullDuplexClient(mockWs);
+>
+> client.sendChatMessage("Hello World!");
+> console.assert(sentData.text === "Hello World!", "Test 1 Failed");
 > ```
-> - Is it a one-time request, or a continuous flow of live updates?
+>
+> #### Technical Explanation
+>
+> 1. **Full-Duplex Communication**: Both client and server can transmit data simultaneously over a single TCP socket without waiting.
+> 2. **Persistent TCP Socket**: Keeps TCP connection open continuously, eliminating HTTP request-response handshake latency.
+> 3. **Framing Overhead**: WebSocket frames add minimal 2 to 10 bytes overhead per message vs kilobytes for HTTP headers.
 > 
 ---
 
-### Exercise 2: WebSocket Frame Overhead Size
+### Exercise 2: WebSocket Connection Lifecycle Event Router
 
-**Problem:** What is the minimum frame header overhead size for a WebSocket message frame?
+**Scenario:** An API client manages complete WebSocket lifecycle events (`onOpen`, `onMessage`, `onError`, `onClose`) with state tracking.
 
-**Expected output:**
+**Requirements:**
+1. Write createLifecycleRouter(wsInstance).
+2. Bind handlers to lifecycle hooks.
+3. Maintain status object.
+
 > [!check]- Answer
-> ```text
-> 2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
+>
+> #### Implementation
+>
+> ```javascript
+> function createLifecycleRouter(wsInstance) {
+>   const status = { connected: false, errorCount: 0, lastEvent: null };
+>
+>   wsInstance.onopen = () => {
+>     status.connected = true;
+>     status.lastEvent = "OPEN";
+>   };
+>
+>   wsInstance.onclose = () => {
+>     status.connected = false;
+>     status.lastEvent = "CLOSE";
+>   };
+>
+>   wsInstance.onerror = (err) => {
+>     status.errorCount++;
+>     status.lastEvent = "ERROR";
+>   };
+>
+>   return { getStatus: () => status };
+> }
+>
+> // Verification tests
+> const mockWs = { onopen: null, onclose: null, onerror: null };
+> const router = createLifecycleRouter(mockWs);
+>
+> mockWs.onopen();
+> console.assert(router.getStatus().connected === true, "Test 1 Failed");
+>
+> mockWs.onerror(new Error("Network loss"));
+> console.assert(router.getStatus().errorCount === 1, "Test 2 Failed");
 > ```
-> ```text
-> 2 to 10 bytes per frame (extremely lightweight framing overhead).
-> ```
-> - **Explanation:** Microscopic frame header overhead enables high-frequency real-time messaging.
+>
+> #### Technical Explanation
+>
+> 1. **Lifecycle Hooks**: Four core events governing WebSocket behavior: Open, Message, Error, Close.
+> 2. **State Synchronization**: Synchronizes internal application state with underlying physical socket connection status.
+> 3. **Resilient Error Handling**: Error events precede Close events; handling both ensures accurate recovery.
+> 
 ---
 
-### Exercise 3: Load Balancing WebSockets with Sticky Sessions
+### Exercise 3: Protocol Frame Overhead Comparison (WebSocket vs HTTP REST)
 
-**Problem:** Why do WebSocket handshake requests require Sticky Sessions (session affinity) on HTTP/1.1 load balancers?
+**Scenario:** An API performance calculator measures byte overhead savings of WebSocket frames (2-6 bytes) vs HTTP REST headers (~500 bytes) over 1,000 messages.
 
-**Expected output:**
+**Requirements:**
+1. Write compareProtocolOverhead(messageCount, avgHeaderBytes).
+2. Calculate HTTP overhead vs WS overhead.
+
 > [!check]- Answer
-> ```text
-> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
+>
+> #### Implementation
+>
+> ```javascript
+> function compareProtocolOverhead(messageCount = 1000, avgHttpHeaderBytes = 500) {
+>   const totalHttpOverheadBytes = messageCount * avgHttpHeaderBytes;
+>   // WebSocket framing overhead: ~4 bytes per message
+>   const totalWsOverheadBytes = messageCount * 4;
+>
+>   const bytesSaved = totalHttpOverheadBytes - totalWsOverheadBytes;
+>   const savingsPct = Number(((bytesSaved / totalHttpOverheadBytes) * 100).toFixed(2));
+>
+>   return {
+>     totalHttpOverheadBytes,
+>     totalWsOverheadBytes,
+>     bytesSaved,
+>     savingsPct
+>   };
+> }
+>
+> // Verification tests
+> const res = compareProtocolOverhead(1000, 500);
+> console.assert(res.totalHttpOverheadBytes === 500000, "Test 1 Failed: 500KB HTTP overhead");
+> console.assert(res.totalWsOverheadBytes === 4000, "Test 2 Failed: 4KB WS overhead");
+> console.assert(res.savingsPct === 99.2, "Test 3 Failed: 99.2% overhead savings");
 > ```
-> ```text
-> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-> ```
-> - **Explanation:** Sticky sessions route persistent socket connections to consistent server nodes.
+>
+> #### Technical Explanation
+>
+> 1. **HTTP Header Overhead**: Every HTTP REST request carries ~500-1000 bytes of headers (Cookies, User-Agent, Accept).
+> 2. **WebSocket Frame Overhead**: WebSocket frames carry only 2-6 bytes of header overhead per message payload.
+> 3. **99%+ Bandwidth Savings**: For high-frequency streaming (stock quotes, location tracking), WebSockets reduce network bandwidth overhead by >99%.
 ---
 
-### Exercise 4: WebSocket Frame Overhead Size
-
-**Problem:** What is the minimum frame header overhead size for a WebSocket message frame?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
-> ```
-> ```text
-> 2 to 10 bytes per frame (extremely lightweight framing overhead).
-> ```
-> - **Explanation:** Microscopic frame header overhead enables high-frequency real-time messaging.
----
-
-### Exercise 5: Load Balancing WebSockets with Sticky Sessions
-
-**Problem:** Why do WebSocket handshake requests require Sticky Sessions (session affinity) on HTTP/1.1 load balancers?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-> ```
-> ```text
-> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-> ```
-> - **Explanation:** Sticky sessions route persistent socket connections to consistent server nodes.
----
-
-### Exercise 6: WebSocket Frame Overhead Size
-
-**Problem:** What is the minimum frame header overhead size for a WebSocket message frame?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
-> ```
-> ```text
-> 2 to 10 bytes per frame (extremely lightweight framing overhead).
-> ```
-> - **Explanation:** Microscopic frame header overhead enables high-frequency real-time messaging.
----
-
-### Exercise 7: Load Balancing WebSockets with Sticky Sessions
-
-**Problem:** Why do WebSocket handshake requests require Sticky Sessions (session affinity) on HTTP/1.1 load balancers?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-> ```
-> ```text
-> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-> ```
-> - **Explanation:** Sticky sessions route persistent socket connections to consistent server nodes.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Webhooks](../level_06/webhooks.md) — Webhooks are Server-to-Server. WebSockets are usually Browser-to-Server.
 - [Socket.io (Ecosystem tool)](socket_io.md) — The most popular library for working with WebSockets in Node.js.
 - [TCP/IP (high-level)](../level_01/tcp_ip.md) — Related concept: TCP/IP (high-level).
@@ -289,7 +323,7 @@ const ws = new WebSocket('wss://api.example.com');
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **WebSockets** allow persistent, real-time, two-way communication between Browser and Server.
 - It bypasses the traditional HTTP Request/Response lifecycle.
 - It is essential for multiplayer games, chat apps, and live financial tickers.

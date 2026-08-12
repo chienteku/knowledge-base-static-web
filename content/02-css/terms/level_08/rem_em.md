@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Measurement Unit**
+
+**CSS Measurement Unit (Universal Modern Standard .)**: `rem` vs `em` is a fundamental concept in this technology stack. **Level 8 — Responsive Design & Units**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (The absolute gold standard for defining sizes in CSS).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, developers used Pixels (`px`) for everything. The problem? Pixels are fixed. If a visually impaired user goes into their browser settings and changes their default text size from 16px to 24px so they can read better, a website built with hardcoded `14px` fonts will ignore their settings, ruining the accessibility.
@@ -65,7 +61,7 @@ p {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `em` Snowball Effect
 
@@ -186,7 +182,7 @@ html { font-size: 16px; } /* ❌ Overrides user browser accessibility settings! 
 html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Multiplier Math
 
@@ -239,7 +235,7 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 >
 > **Explanation:** `rem` maintains consistent global scaling; `em` enables component-relative scaling.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that controls the baseline font scale.
 - [`%` (Percentages)](percentages.md) — Sizing relative to parent containers.
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport.
@@ -247,7 +243,7 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `rem` and `em` are relative multipliers, making them perfect for Accessibility.
 - **Rule of Thumb:** Use **`rem`** for `font-size`, `margin`, and global spacing.
 - **Rule of Thumb:** Use **`em`** for local element `padding` (like buttons) so the box scales with the text inside it.

@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Primitive Types is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 At its core, a computer processor only understands bits (0s and 1s). To make programming human-readable, language designers create higher-level abstractions. In JavaScript, we needed a fundamental set of "building blocks" to represent the most basic forms of data: text, math, truth, and emptiness. 
@@ -61,7 +57,7 @@ console.log(originalMessage); // 'Hello' - the original copy is untouched
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to mutate a primitive
 
@@ -139,71 +135,106 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Primitive
+### Exercise 1: Primitive Value Copy vs Reference Mutation Inspector
 
-**Problem:** Create five variables, assigning one of each of the five most common primitive types (String, Number, Boolean, Undefined, Null) to them. Use the `typeof` operator to log the type of each variable.
+**Scenario:** A state management library validates that primitive values (string, number, boolean, bigint, symbol, undefined, null) are copied by value, ensuring immutability when passed to functions.
 
-**Expected output:**
+**Requirements:**
+1. Write a function testPrimitiveImmutability(originalNum, originalStr).
+2. Modify local copies inside the function.
+3. Verify that original primitive arguments remain completely unchanged.
+
 > [!check]- Answer
-> ```text
-> string
-> number
-> boolean
-> undefined
-> object (Note: typeof null is an infamous historical bug!)
-> ```
-> - `undefined` is the default value for an uninitialized variable.
-> - To use `typeof`, simply type `typeof variableName`.
-> 
----
-
-### Exercise 2: Identifying All 7 JavaScript Primitives
-
-**Problem:** List all 7 primitive types in JavaScript and test their `typeof` outputs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string, number, boolean, undefined, object, symbol, bigint
-> ```
+> #### Implementation
 > ```javascript
-> console.log(typeof "text");
-> console.log(typeof 42);
-> console.log(typeof true);
-> console.log(typeof undefined);
-> console.log(typeof null); // "object" (legacy bug)
-> console.log(typeof Symbol());
-> console.log(typeof 10n);
+> function testPrimitiveImmutability(num, str) {
+>   let copyNum = num;
+>   let copyStr = str;
+>   copyNum += 100;
+>   copyStr += " WORLD";
+>   return {
+>     numUnchanged: num === 10,
+>     strUnchanged: str === "HELLO"
+>   };
+> }
+> // Verification tests
+> const n = 10;
+> const s = "HELLO";
+> const res = testPrimitiveImmutability(n, s);
+> console.assert(res.numUnchanged === true && res.strUnchanged === true, "Test 1 Failed");
 > ```
->
-> **Explanation:** JavaScript contains 7 primitive types: string, number, boolean, undefined, null, symbol, and bigint.
+> #### Technical Explanation
+> 1. **Pass-by-Value**: Primitive values are stored directly in stack memory and passed by value (copied on assignment).
+> 2. **Immutability**: Primitive values themselves cannot be mutated; operations on primitives create entirely new primitive values.
+> 3. **The 7 Primitives**: JavaScript has 7 primitive types: number, string, boolean, bigint, symbol, undefined, and null.
 > 
 ---
 
-### Exercise 3: Primitive Copy-by-Value Behavior
+### Exercise 2: Primitive Type Categorizer & Serializer
 
-**Problem:** Demonstrate that assigning `let b = a` for primitives copies the value, leaving `a` unaffected when `b` changes.
+**Scenario:** An API serializer categorizes payload values into primitive vs non-primitive types and builds a type summary diagnostic map.
 
-**Expected output:**
+**Requirements:**
+1. Check if input is a primitive type using typeof and null checks.
+2. Return object { isPrimitive: boolean, type: string }.
+
 > [!check]- Answer
-> ```text
-> a: 10, b: 20
-> ```
+> #### Implementation
 > ```javascript
-> let a = 10;
-> let b = a;
-> b = 20;
-> console.log(`a: ${a}, b: ${b}`);
+> function inspectPrimitiveType(value) {
+>   if (value === null) {
+>     return { isPrimitive: true, type: "null" };
+>   }
+>   const typeStr = typeof value;
+>   const primitiveTypes = ["string", "number", "boolean", "bigint", "symbol", "undefined"];
+>   const isPrimitive = primitiveTypes.includes(typeStr);
+>   return { isPrimitive, type: isPrimitive ? typeStr : "object" };
+> }
+> // Verification tests
+> console.assert(inspectPrimitiveType("hello").isPrimitive === true, "Test 1 Failed");
+> console.assert(inspectPrimitiveType(42n).type === "bigint", "Test 2 Failed");
+> console.assert(inspectPrimitiveType(null).type === "null", "Test 3 Failed");
 > ```
->
-> **Explanation:** Primitive values are passed and assigned by value, creating independent copies.
-> 
+> #### Technical Explanation
+> 1. **Typeof Anomalies**: typeof null returns "object", requiring an explicit value === null check when identifying primitives.
+> 2. **Primitive Collection**: All non-primitive values in JS inherit from Object.
+> 3. **Stack Storage**: Primitives are lightweight and stored directly in stack frames.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Auto-Boxing Mechanism Inspector
+
+**Scenario:** A JavaScript engine utility demonstrates auto-boxing: accessing methods on primitive strings ("hello".toUpperCase()) temporarily wraps the primitive in a Object wrapper before returning the primitive result.
+
+**Requirements:**
+1. Call string and number primitive methods (.toUpperCase(), .toFixed()).
+2. Verify that the primitive itself remains an immutable primitive type.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function inspectAutoBoxing(primitiveStr, primitiveNum) {
+>   const upper = primitiveStr.toUpperCase();
+>   const formatted = primitiveNum.toFixed(2);
+>   const isStrPrimitive = typeof primitiveStr === "string";
+>   const isNumPrimitive = typeof primitiveNum === "number";
+>   return { upper, formatted, isStrPrimitive, isNumPrimitive };
+> }
+> // Verification tests
+> const res = inspectAutoBoxing("javascript", 42.1);
+> console.assert(res.upper === "JAVASCRIPT", "Test 1 Failed");
+> console.assert(res.formatted === "42.10", "Test 2 Failed");
+> console.assert(res.isStrPrimitive && res.isNumPrimitive, "Test 3 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Auto-Boxing Mechanism**: When a method is called on a primitive, JavaScript temporarily wraps it in its object equivalent (e.g. String, Number).
+> 2. **Transient Wrapper Disposal**: As soon as the method execution completes, the temporary wrapper object is discarded by garbage collection.
+> 3. **Primitive Preservation**: Auto-boxing allows primitives to access helper methods without sacrificing lightweight stack storage performance.
+---
+
+## 6. Related Terms
 - [typeof](typeof.md) — Operator that returns a string indicating the type.
 - [String](string.md) — A sequence of characters.
 - [Number](number.md) — Represents numerical values.
@@ -217,7 +248,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - There are 7 primitive types: `String`, `Number`, `Boolean`, `Undefined`, `Null`, `Symbol`, and `BigInt`.
 - Primitives are passed by **value**, meaning a copy is made when you assign them to a new variable.
 - Primitives are **immutable**; their values cannot be changed in memory. You can only reassign a variable to point to a new primitive value.

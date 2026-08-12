@@ -296,7 +296,7 @@ atomic.store(1, Ordering::Release); // Correct!
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`Atomic` Types](atomic_types.md) — Lock-free atomic types.
 

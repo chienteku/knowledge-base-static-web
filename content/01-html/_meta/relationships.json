@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "01-html",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-12",
   "terms": {
     "attribute": {
       "level": 1,
@@ -146,8 +146,8 @@
           "description": "Related concept: `<tr>` (Table Row)."
         },
         {
-          "module": "01-html",
           "term": "body",
+          "module": "01-html",
           "description": "Related concept: `<body>`."
         }
       ]
@@ -185,13 +185,13 @@
           "description": "Related concept: `<noscript>`."
         },
         {
-          "module": "01-html",
           "term": "block_inline",
+          "module": "01-html",
           "description": "Block vs inline elements."
         },
         {
-          "module": "01-html",
           "term": "semantic_html",
+          "module": "01-html",
           "description": "Semantic HTML layout."
         }
       ]
@@ -419,8 +419,8 @@
           "description": "The declaration that tells the browser it is reading modern HTML."
         },
         {
-          "module": "01-html",
           "term": "html_tag",
+          "module": "01-html",
           "description": "Root <html> element."
         }
       ]
@@ -463,8 +463,8 @@
           "description": "Related concept: `lang` Attribute."
         },
         {
-          "module": "01-html",
           "term": "html",
+          "module": "01-html",
           "description": "Related concept: HTML (HyperText Markup Language)."
         }
       ]
@@ -673,11 +673,6 @@
           "description": "Proper tag structure which relies on source code indentation."
         },
         {
-          "term": "declaration_files",
-          "module": "08-typescript",
-          "description": "Like `&nbsp;`, used to bypass the browser's default spacing rules."
-        },
-        {
           "term": "pre_code",
           "module": "01-html",
           "description": "Related concept: `<pre>` & `<code>`."
@@ -686,6 +681,11 @@
           "term": "html_entities",
           "module": "01-html",
           "description": "Related concept: HTML Entities."
+        },
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "Like `&nbsp;`, used to bypass the browser's default spacing rules."
         }
       ]
     },
@@ -1832,8 +1832,8 @@
           "description": "Related concept: `<thead>`, `<tbody>`, `<tfoot>`."
         },
         {
-          "module": "01-html",
           "term": "th",
+          "module": "01-html",
           "description": "Table header cells."
         }
       ]
@@ -1925,8 +1925,8 @@
           "description": "Related concept: `<caption>`."
         },
         {
-          "module": "01-html",
           "term": "table",
+          "module": "01-html",
           "description": "Related concept: `<table>`."
         }
       ]
@@ -2115,8 +2115,8 @@
           "description": "Related concept: `name` Attribute (in Form Fields)."
         },
         {
-          "module": "01-html",
           "term": "label",
+          "module": "01-html",
           "description": "Input label element."
         },
         {
@@ -2248,8 +2248,8 @@
           "description": "Related concept: Accessibility (a11y) Fundamentals."
         },
         {
-          "module": "01-html",
           "term": "form",
+          "module": "01-html",
           "description": "Related concept: `<form>`."
         }
       ]
@@ -2305,6 +2305,40 @@
           "term": "textarea",
           "module": "01-html",
           "description": "Related concept: `<textarea>`."
+        }
+      ]
+    },
+    "output": {
+      "level": 5,
+      "file": "terms/level_05/output.md",
+      "display_name": "The `<output>` Element",
+      "prerequisites": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "Container establishing HTML form control scope."
+        },
+        {
+          "term": "input_types",
+          "module": "01-html",
+          "description": "User inputs (`<input>`, `<range>`) feeding calculation data."
+        }
+      ],
+      "related": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "Parent container for form controls and outputs."
+        },
+        {
+          "term": "progress_meter",
+          "module": "01-html",
+          "description": "Specialized elements for displaying completion progress and scalar range measurements."
+        },
+        {
+          "term": "input_types",
+          "module": "01-html",
+          "description": "Input types feeding data to `<output>`."
         }
       ]
     },
@@ -2747,8 +2781,8 @@
           "description": "The semantic tag for contact info, typically hosted in page footers."
         },
         {
-          "module": "01-html",
           "term": "semantic_html",
+          "module": "01-html",
           "description": "Related concept: Semantic HTML."
         }
       ]
@@ -2791,8 +2825,8 @@
           "description": "The navigation block commonly nested inside main headers."
         },
         {
-          "module": "01-html",
           "term": "semantic_html",
+          "module": "01-html",
           "description": "Related concept: Semantic HTML."
         }
       ]
@@ -2947,8 +2981,8 @@
           "description": "The tangential layout block."
         },
         {
-          "module": "01-html",
           "term": "semantic_html",
+          "module": "01-html",
           "description": "Related concept: Semantic HTML."
         }
       ]
@@ -3026,23 +3060,23 @@
           "description": "Related concept: SEO Fundamentals for HTML."
         },
         {
-          "module": "01-html",
           "term": "nav",
+          "module": "01-html",
           "description": "Navigation container."
         },
         {
-          "module": "01-html",
           "term": "header",
+          "module": "01-html",
           "description": "Header element."
         },
         {
-          "module": "01-html",
           "term": "footer",
+          "module": "01-html",
           "description": "Footer element."
         },
         {
-          "module": "01-html",
           "term": "body",
+          "module": "01-html",
           "description": "Related concept: `<body>`."
         },
         {
@@ -3883,8 +3917,8 @@
           "description": "The HTML tags you type are converted into \"Objects\" in the DOM."
         },
         {
-          "module": "01-html",
           "term": "html",
+          "module": "01-html",
           "description": "Browser Document Object Model tree structure representation."
         }
       ],
@@ -4446,29 +4480,6 @@
           "description": "Related concept: Geolocation API."
         }
       ]
-    },
-    "output": {
-      "file": "terms/level_05/output.md",
-      "prerequisites": [
-        {
-          "module": "01-html",
-          "term": "form",
-          "description": "Form element calculation output display."
-        }
-      ],
-      "related": [
-        {
-          "module": "01-html",
-          "term": "progress_meter"
-        },
-        {
-          "module": "01-html",
-          "term": "form",
-          "description": "Displaying dynamic form calculation results."
-        }
-      ],
-      "display_name": "`<output>` Element",
-      "level": 5
     }
   }
 }

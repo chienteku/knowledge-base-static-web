@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Universal: Standardized as a Web API in browsers and implemented globally in Node.js  and Deno.)**: AbortController is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Standardized as a Web API in browsers and implemented globally in Node.js (v15+) and Deno.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users interact with web applications, they frequently change their minds—navigating away from a page before a large image finishes loading, typing rapidly in a autocomplete search bar (triggering multiple API calls), or clicking a "Cancel Download" button. 
@@ -99,7 +95,7 @@ fetchWithTimeout("https://jsonplaceholder.typicode.com/photos", 2000)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reusing the same `AbortController` instance for new requests
 
@@ -181,81 +177,178 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cancelable Fetch
+### Exercise 1: Cancel Stale Search Fetch Requests via AbortController
 
-**Problem:** Complete the code to attach the abort signal to the fetch request, and trigger the abort cancellation after a 100ms delay.
+**Scenario:** A search autocomplete UI component cancels in-flight HTTP requests when a user types new input, preventing stale API responses from overwriting fresh results.
 
-```javascript
-const controller = new AbortController();
+**Requirements:**
+1. Write createSearchFetcher().
+2. Instantiate AbortController and pass controller.signal to fetch.
+3. Abort previous in-flight request when new query arrives.
+4. Return current response data.
 
-fetch("https://jsonplaceholder.typicode.com/posts", {
-  // 1. Pass the signal here
-})
-  .then(res => res.json())
-  .catch(err => {
-    if (err.name === "AbortError") {
-      console.log("Operation Cancelled");
-    }
-  });
-
-// 2. Schedule controller.abort() after 100ms
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Operation Cancelled
-> ```
-> - In fetch options, write `signal: controller.signal`.
-> - Use `setTimeout(() => controller.abort(), 100);` to trigger the cancellation.
-> 
----
-
-### Exercise 2: Cancelling Fetch Requests with `AbortController`
-
-**Problem:** Create an `AbortController` and pass its `signal` into `fetch(url, { signal })`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Signal attached to fetch
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const controller = new AbortController();
-> const signal = controller.signal;
-> console.log("Signal attached to fetch");
+> function createSearchFetcher(mockFetchFn) {
+>   let currentController = null;
+>
+>   return async function search(query) {
+>     if (currentController) {
+>       currentController.abort("New query initiated");
+>     }
+>
+>     currentController = new AbortController();
+>     const signal = currentController.signal;
+>
+>     try {
+>       const result = await mockFetchFn(query, { signal });
+>       return result;
+>     } catch (err) {
+>       if (err.name === "AbortError") {
+>         return { aborted: true };
+>       }
+>       throw err;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const mockFetch = (q, opts) => new Promise((resolve, reject) => {
+>   if (opts.signal.aborted) return reject(new DOMException("Aborted", "AbortError"));
+>   opts.signal.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")));
+>   setTimeout(() => resolve({ query: q }), 50);
+> });
+>
+> const doSearch = createSearchFetcher(mockFetch);
+> const p1 = doSearch("js");
+> const p2 = doSearch("javascript");
+>
+> Promise.all([p1, p2]).then(([r1, r2]) => {
+>   console.assert(r1.aborted === true, "Test 1 Failed: First request should be aborted");
+>   console.assert(r2.query === "javascript", "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `AbortController.signal` allows cancelling in-flight HTTP requests and async operations.
+> #### Technical Explanation
+>
+> 1. **AbortController Concept**: AbortController provides an AbortSignal instance used to communicate cancellation signals to asynchronous tasks.
+> 2. **signal Parameter**: Passing signal into fetch() or async operations allows listening for the 'abort' event.
+> 3. **AbortError Exception**: Aborted async tasks reject with a DOMException named 'AbortError'.
 > 
 ---
 
-### Exercise 3: Setting Request Timeouts with `AbortSignal.timeout()`
+### Exercise 2: Network Timeout Guard via AbortSignal.timeout()
 
-**Problem:** Use `AbortSignal.timeout(5000)` concept for automatic request cancellation timeouts.
+**Scenario:** An API gateway client enforces a strict request timeout, automatically aborting HTTP requests if the server fails to respond within 200ms.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchWithTimeout(mockFetchFn, timeoutMs).
+2. Use AbortSignal.timeout(timeoutMs) to create timeout signal.
+3. Pass signal to fetch.
+4. Return response or handle AbortError.
+
 > [!check]- Answer
-> ```text
-> 5000ms timeout signal created
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("5000ms timeout signal created");
+> async function fetchWithTimeout(mockFetchFn, timeoutMs) {
+>   const signal = AbortSignal.timeout ? AbortSignal.timeout(timeoutMs) : (() => {
+>     const controller = new AbortController();
+>     setTimeout(() => controller.abort(new DOMException("Timeout", "TimeoutError")), timeoutMs);
+>     return controller.signal;
+>   })();
+>
+>   try {
+>     return await mockFetchFn({ signal });
+>   } catch (err) {
+>     if (err.name === "TimeoutError" || err.name === "AbortError") {
+>       return { timedOut: true };
+>     }
+>     throw err;
+>   }
+> }
+>
+> // Verification tests
+> const slowFetch = (opts) => new Promise((res, rej) => {
+>   opts.signal.addEventListener("abort", () => rej(new DOMException("Timeout", "TimeoutError")));
+> });
+>
+> fetchWithTimeout(slowFetch, 10).then(res => {
+>   console.assert(res.timedOut === true, "Test 1 Failed: Request should time out");
+> });
 > ```
 >
-> **Explanation:** `AbortSignal.timeout(ms)` returns a pre-configured signal that aborts automatically after specified milliseconds.
-> 
+> #### Technical Explanation
+>
+> 1. **AbortSignal.timeout() API**: Modern standard AbortSignal.timeout(ms) creates an AbortSignal that automatically aborts after a millisecond delay.
+> 2. **Timeout Error Handling**: Requests timed out by AbortSignal.timeout() reject with a TimeoutError DOMException.
+> 3. **Resource Cleanup**: Automatically releases underlying network sockets and resources upon signal emission.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Multi-Request Batch Cancellation via Shared AbortSignal
+
+**Scenario:** A batch file uploader creates a single parent AbortController and shares its signal across multiple parallel fetch upload operations, enabling one-click batch cancellation.
+
+**Requirements:**
+1. Write uploadBatch(urls, mockFetchFn).
+2. Create single parent AbortController.
+3. Pass controller.signal to all fetch calls.
+4. Provide cancelAll() method calling controller.abort().
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createBatchUploader(mockFetchFn) {
+>   const controller = new AbortController();
+>
+>   const upload = async (urls) => {
+>     const promises = urls.map(url => mockFetchFn(url, { signal: controller.signal }));
+>     return Promise.allSettled(promises);
+>   };
+>
+>   return {
+>     upload,
+>     cancelAll: (reason) => controller.abort(reason)
+>   };
+> }
+>
+> // Verification tests
+> const mockFetch = (url, opts) => new Promise((res, rej) => {
+>   opts.signal.addEventListener("abort", () => rej(new DOMException("Aborted batch", "AbortError")));
+> });
+>
+> const uploader = createBatchUploader(mockFetch);
+> const p = uploader.upload(["/url1", "/url2"]);
+> uploader.cancelAll();
+>
+> p.then(results => {
+>   console.assert(results.every(r => r.status === "rejected"), "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Shared AbortSignal**: A single AbortSignal instance can be passed to multiple concurrent fetch operations.
+> 2. **Batch Cancellation**: Calling controller.abort() triggers cancellation across all tasks listening to that signal simultaneously.
+> 3. **Promise.allSettled Integration**: Using Promise.allSettled captures individual cancellation statuses cleanly.
+> 
+---
+
+## 6. Related Terms
 - [Promise](promise.md) — The asynchronous wrapper rejected when fetches are aborted.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `AbortController` is a Web API used to cancel active, in-flight asynchronous operations like fetch requests.
 - Pass the `controller.signal` reference to `fetch` options to link the controller to the request.
 - Invoke `controller.abort()` to terminate the fetch; this immediately rejects the promise with an `AbortError` exception.

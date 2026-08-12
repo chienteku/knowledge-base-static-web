@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Configured inside all HTTP requests and responses.)**: Content-Type & MIME Types is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Configured inside all HTTP requests and responses.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data traveling across network cables consists of raw streams of binary bytes. When a client or server receives a message body, it only sees zeroes and ones. How does the receiving application know how to interpret those bytes? Do they represent a JPEG image, a JSON dataset, a plain text message, or a HTML page?
@@ -81,7 +77,7 @@ app.post('/api/users', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `Content-Type: application/json` header in client requests
 
@@ -147,65 +143,153 @@ fetch('/upload', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: MIME Type Matcher
+### Exercise 1: Content-Type Header Parser & Parameters Extractor
 
-**Problem:** Match the request scenario to the correct MIME Type:
+**Scenario:** A backend server middleware parses Content-Type header strings to extract media type and optional charset parameters.
 
-1. Submitting a user feedback form containing a text message and a profile picture file.
-2. Fetching a list of inventory products from a REST API endpoint.
-3. Submitting a simple login form containing username and password fields without any files.
+**Requirements:**
+1. Write parseContentTypeHeader(headerStr).
+2. Extract main media type (e.g. "application/json").
+3. Extract boundary or charset parameters.
+4. Return parsed object.
 
 > [!check]- Answer
-> - 1. **`multipart/form-data`** (Necessary to segment files and metadata inputs).
-> - 2. **`application/json`** (Standard API text payload format).
-> - 3. **`application/x-www-form-urlencoded`** (Standard key-value form format).
+>
+> #### Implementation
+>
+> ```javascript
+> function parseContentTypeHeader(headerStr) {
+>   if (!headerStr || typeof headerStr !== "string") {
+>     return { mediaType: "application/octet-stream", parameters: {} };
+>   }
+>
+>   const parts = headerStr.split(";").map(p => p.trim());
+>   const mediaType = parts[0].toLowerCase();
+>   const parameters = {};
+>
+>   for (let i = 1; i < parts.length; i++) {
+>     const [key, val] = parts[i].split("=");
+>     if (key && val) {
+>       parameters[key.toLowerCase()] = val.replace(/^"|"$/g, "");
+>     }
+>   }
+>
+>   return { mediaType, parameters };
+> }
+>
+> // Verification tests
+> const res1 = parseContentTypeHeader("application/json; charset=utf-8");
+> console.assert(res1.mediaType === "application/json", "Test 1 Failed");
+> console.assert(res1.parameters.charset === "utf-8", "Test 2 Failed");
+>
+> const res2 = parseContentTypeHeader('multipart/form-data; boundary="---12345"');
+> console.assert(res2.mediaType === "multipart/form-data", "Test 3 Failed");
+> console.assert(res2.parameters.boundary === "---12345", "Test 4 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Content-Type Structure**: Consists of primary media type (type/subtype) followed by optional semicolon-separated parameters.
+> 2. **charset Parameter**: Specifies text character encoding (e.g. utf-8) used to decode payload bytes.
+> 3. **boundary Parameter**: Specifies unique delimiter string used in multipart/form-data file upload requests.
 > 
+---
+
+### Exercise 2: Unsupported Media Type (415) Guard Middleware
+
+**Scenario:** An API endpoint validator verifies that incoming POST request Content-Type matches expected endpoint media types.
+
+**Requirements:**
+1. Write validateRequestContentType(request, allowedMediaTypes).
+2. Extract Content-Type.
+3. Return 415 Unsupported Media Type error if disallowed.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function validateRequestContentType(request, allowedMediaTypes = ["application/json"]) {
+>   const header = request?.headers?.["content-type"] || request?.headers?.["Content-Type"];
+>   if (!header) {
+>     return { valid: false, status: 415, error: "Missing Content-Type header" };
+>   }
+>
+>   const mediaType = header.split(";")[0].trim().toLowerCase();
+>   if (!allowedMediaTypes.includes(mediaType)) {
+>     return { valid: false, status: 415, error: `Media type ${mediaType} not allowed` };
+>   }
+>
+>   return { valid: true, mediaType };
+> }
+>
+> // Verification tests
+> const req1 = { headers: { "Content-Type": "application/json" } };
+> console.assert(validateRequestContentType(req1).valid === true, "Test 1 Failed");
+>
+> const req2 = { headers: { "Content-Type": "text/xml" } };
+> const res2 = validateRequestContentType(req2);
+> console.assert(res2.valid === false && res2.status === 415, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **415 Status Code**: HTTP status code 415 Unsupported Media Type indicates server refuses to accept payload format.
+> 2. **Defensive Server Validation**: Ensures server payload parsers do not attempt to process unexpected file formats.
+> 3. **Security Hardening**: Prevents XML External Entity (XXE) attacks by rejecting unvalidated XML payloads on JSON endpoints.
 > 
 ---
 
-### Exercise 2: Common MIME Type Mapping
+### Exercise 3: Form vs JSON Payload Body Decoder Router
 
-**Problem:** Match the payload format to its standard MIME type:
-1. JSON
-2. HTML document
-3. URL-encoded form data
-4. Binary PNG image
+**Scenario:** An API request router routes incoming requests to appropriate body decoders based on Content-Type.
 
-**Expected output:**
+**Requirements:**
+1. Write routePayloadDecoder(contentTypeHeader, rawBody).
+2. Route application/json to JSON.parse.
+3. Route application/x-www-form-urlencoded to URLSearchParams.
+
 > [!check]- Answer
-> ```text
-> 1. application/json
-> 2. text/html
-> 3. application/x-www-form-urlencoded
-> 4. image/png
+>
+> #### Implementation
+>
+> ```javascript
+> function routePayloadDecoder(contentTypeHeader, rawBody) {
+>   if (!contentTypeHeader) return null;
+>   const mediaType = contentTypeHeader.split(";")[0].trim().toLowerCase();
+>
+>   if (mediaType === "application/json") {
+>     return JSON.parse(rawBody);
+>   }
+>   if (mediaType === "application/x-www-form-urlencoded") {
+>     const params = new URLSearchParams(rawBody);
+>     const result = {};
+>     for (const [k, v] of params.entries()) {
+>       result[k] = v;
+>     }
+>     return result;
+>   }
+>   throw new Error(`Decoder unavailable for ${mediaType}`);
+> }
+>
+> // Verification tests
+> const jsonDecoded = routePayloadDecoder("application/json", '{"name":"Alice"}');
+> console.assert(jsonDecoded.name === "Alice", "Test 1 Failed");
+>
+> const formDecoded = routePayloadDecoder("application/x-www-form-urlencoded", "name=Bob&age=25");
+> console.assert(formDecoded.name === "Bob" && formDecoded.age === "25", "Test 2 Failed");
 > ```
-> ```text
-> 1. application/json
-> 2. text/html
-> 3. application/x-www-form-urlencoded
-> 4. image/png
-> ```
-> - **Explanation:** MIME types standardize representation formats for web streams.
+>
+> #### Technical Explanation
+>
+> 1. **Content-Driven Processing**: Server selects parsing strategy based on Content-Type header rather than endpoint path.
+> 2. **application/x-www-form-urlencoded**: Standard form encoding format where key-value pairs are joined by & and =.
+> 3. **Structured Parsing Safety**: Encapsulates body decoding behind unified interface for clean handler processing.
 ---
 
-### Exercise 3: Charset Encoding Parameter
-
-**Problem:** Write `Content-Type` header value for UTF-8 encoded JSON payload.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Content-Type: application/json; charset=utf-8
-> ```
-> ```http
-> Content-Type: application/json; charset=utf-8
-> ```
-> - **Explanation:** The optional `charset` parameter specifies text character encoding.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Request Body & Payloads](request_body.md) — The raw message payload described by Content-Type.
 - [Serialization & Deserialization](../level_07/serialization.md) — The process of transforming objects into raw MIME formats.
 - [FormData & Multipart Uploads](../level_05/formdata.md) — Related concept: FormData & Multipart Uploads.
@@ -214,7 +298,7 @@ fetch('/upload', {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `Content-Type` header tells the receiver how to decode and parse the raw binary payload stream.
 - MIME Types represent formats using the `type/subtype` syntax structure.
 - `application/json` is the standard MIME type for modern JSON APIs.

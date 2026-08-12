@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / DOM**
+
+**Browser API / DOM (Browser-only: Only exists in web browsers.)**: DOM Manipulation (createElement, appendChild, remove) is a fundamental concept in this technology stack. **Level 5 — DOM & Browser Environment**
 
 ---
 
-## 3. Environment Context
-- **Browser-only**: Only exists in web browsers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Static HTML files are immutable on the user's screen once loaded. To build interactive web applications—like displaying new chat messages, rendering items in a shopping cart, or hiding alerts—JavaScript needs to dynamically modify the document tree structure at runtime. This process is called **DOM Manipulation**.
@@ -91,7 +87,7 @@ function addShoppingItem(itemName) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to Append Created Elements
 
@@ -168,71 +164,155 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Dynamic Message Banner
+### Exercise 1: Dynamic Product Card Builder with append()
 
-**Problem:** Complete the code to create a paragraph (`<p>`) element, set its text content to `"Loading data..."`, and append it inside the container with ID `"loader-wrapper"`.
+**Scenario:** An e-commerce UI renderer dynamically creates product card containers using createElement() and appends child elements.
 
-```javascript
-if (typeof document !== "undefined") {
-  const container = document.getElementById("loader-wrapper");
-  
-  // Create element
-  // Set textContent
-  // Append to container
-}
-```
+**Requirements:**
+1. Write createProductCard(title, price).
+2. Create div container, heading, and price paragraph.
+3. Append elements using append().
+4. Return container element.
 
 > [!check]- Answer
-> - Use `document.createElement("p")` to create the paragraph.
-> - Assign the string `"Loading data..."` to `paragraph.textContent`.
-> - Call `container.appendChild(paragraph)`.
-> 
----
-
-### Exercise 2: Safe Node Replacement
-
-**Problem:** Simulate replacing `oldChild` with `newChild` using `parent.replaceChild(newChild, oldChild)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Replaced child node
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Replaced child node");
+> function createProductCard(title, price) {
+>   if (!globalThis.document) return null;
+>
+>   const card = document.createElement("div");
+>   card.className = "product-card";
+>
+>   const titleEl = document.createElement("h3");
+>   titleEl.textContent = title;
+>
+>   const priceEl = document.createElement("p");
+>   priceEl.textContent = `$${Number(price).toFixed(2)}`;
+>
+>   card.append(titleEl, priceEl);
+>   return card;
+> }
+>
+> // Verification tests
+> globalThis.document = {
+>   createElement(tag) {
+>     return {
+>       tag,
+>       children: [],
+>       append(...nodes) { this.children.push(...nodes); }
+>     };
+>   }
+> };
+> const card = createProductCard("Laptop", 999.99);
+> console.assert(card.children.length === 2, "Test 1 Failed");
+> console.assert(card.children[0].textContent === "Laptop", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `replaceChild(new, old)` swaps DOM nodes atomically.
+> #### Technical Explanation
+>
+> 1. **createElement() Method**: document.createElement(tagName) instantiates a new Element node of specified tag name.
+> 2. **append() vs appendChild()**: Element.append() allows appending multiple Node objects and string primitives at once.
+> 3. **In-Memory DOM Creation**: Creating nodes in memory before attaching to document minimizes live layout reflows.
 > 
 ---
 
-### Exercise 3: Removing Nodes with `.remove()`
+### Exercise 2: Safe Element Removal & Replacement
 
-**Problem:** Remove an element directly using `elem.remove()`.
+**Scenario:** A UI task list manager removes completed task items using Element.remove() and replaces old elements using replaceWith().
 
-**Expected output:**
+**Requirements:**
+1. Write replaceTaskItem(oldEl, newText).
+2. Create new li element with newText.
+3. Invoke oldEl.replaceWith(newEl).
+4. Return new element.
+
 > [!check]- Answer
-> ```text
-> Element removed
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Element removed");
+> function replaceTaskItem(oldEl, newText) {
+>   if (!oldEl || typeof oldEl.replaceWith !== "function" || !globalThis.document) return null;
+>
+>   const newEl = document.createElement("li");
+>   newEl.textContent = newText;
+>   oldEl.replaceWith(newEl);
+>   return newEl;
+> }
+>
+> // Verification tests
+> let replacedWithNode = null;
+> const mockOld = {
+>   replaceWith(node) { replacedWithNode = node; }
+> };
+> const newLi = replaceTaskItem(mockOld, "Updated Task");
+> console.assert(replacedWithNode === newLi, "Test 1 Failed");
+> console.assert(newLi.textContent === "Updated Task", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `ChildNode.remove()` removes elements directly from their parent DOM containers.
+> #### Technical Explanation
+>
+> 1. **Element.remove() Method**: Element.prototype.remove() removes the target element directly from its parent DOM tree.
+> 2. **Element.replaceWith() Method**: Element.prototype.replaceWith(...nodes) replaces the target element with specified new node objects.
+> 3. **Clean Parent Detachment**: Modern manipulation methods eliminate legacy parentNode.removeChild(child) boilerplate.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Adjacent HTML Insertion Engine via insertAdjacentHTML()
+
+**Scenario:** A notification banner inserts alert elements at specific positions relative to a container using insertAdjacentHTML().
+
+**Requirements:**
+1. Write insertAlert(containerEl, position, alertHtml).
+2. Use containerEl.insertAdjacentHTML(position, alertHtml).
+3. Validate position string ("beforebegin", "afterbegin", "beforeend", "afterend").
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function insertAlert(containerEl, position, alertHtml) {
+>   const validPositions = ["beforebegin", "afterbegin", "beforeend", "afterend"];
+>   if (!containerEl || !validPositions.includes(position) || typeof containerEl.insertAdjacentHTML !== "function") {
+>     return false;
+>   }
+>   containerEl.insertAdjacentHTML(position, alertHtml);
+>   return true;
+> }
+>
+> // Verification tests
+> let insertedPos = null;
+> let insertedText = null;
+> const mockContainer = {
+>   insertAdjacentHTML(pos, html) { insertedPos = pos; insertedText = html; }
+> };
+>
+> const ok = insertAlert(mockContainer, "afterbegin", "<div class='alert'>Success</div>");
+> console.assert(ok === true, "Test 1 Failed");
+> console.assert(insertedPos === "afterbegin", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **insertAdjacentHTML() API**: Parses specified HTML string and inserts resulting nodes at specified position relative to target element.
+> 2. **Four Standard Positions**: 'beforebegin' (before target), 'afterbegin' (inside target before first child), 'beforeend' (inside target after last child), 'afterend' (after target).
+> 3. **Performance Efficiency**: Avoids re-parsing existing innerHTML children when adding new HTML markup.
+---
+
+## 6. Related Terms
 - [innerHTML / textContent / innerText](innerhtml_textcontent.md) — Properties used to read or update text/HTML inside nodes.
 - [classList & setAttribute/getAttribute](classlist_attributes.md) — Modifying node styling classes and attributes.
 - [DOM (Document Object Model)](dom.md) — Related concept: DOM (Document Object Model).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - DOM Manipulation is the runtime addition, removal, or modification of webpage nodes using JavaScript.
 - `document.createElement("tag")` initializes a new element in memory (orphaned state).
 - An element only appears on-screen when appended to the active DOM tree via `parentElement.appendChild(childNode)`.

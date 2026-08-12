@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Production / DevOps**
+
+**Production / DevOps (Operating System Layer .)**: Child Processes (child_process) is a fundamental concept in this technology stack. **Level 10 — Security & Production**
 
 ---
 
-## 3. Environment Context
-- **Operating System Layer** (Directly interface with the host OS kernel process tables).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Because JavaScript executes in a single-threaded runtime, running a long, CPU-bound task (like video processing or heavy file compression) inside the main thread will block the Call Stack. While the stack is blocked, the Event Loop cannot process incoming client requests, causing the server to hang for all other users.
@@ -74,7 +70,7 @@ app.get('/api/files', (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Shell Injection vulnerabilities using `exec`
 
@@ -138,7 +134,7 @@ exec(`ls ${req.query.dir}`, (err, stdout) => {}); // ❌ Critical Command Inject
 execFile('ls', [req.query.dir], (err, stdout) => {}); // Safe parameter array execution
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Multi-Process Node Forking
 
@@ -203,13 +199,13 @@ child.on('message', (result) => {
 >
 > **Explanation:** `fork()` is a specialized `spawn()` variant that opens an IPC channel between parent and child Node processes.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Worker Threads](worker_threads.md) — Multi-threading inside a single OS process.
 - [The cluster Module](cluster_module.md) — Forking duplicate server instances across CPU cores.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Child processes offload CPU-heavy or system-level tasks to prevent blocking Node's main thread.
 - Each child process has its own isolated OS memory pool and V8 instance.
 - `exec` buffers command output in memory; `spawn` streams output asynchronously.

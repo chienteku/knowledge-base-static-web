@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Aesthetic / Visual Effect Property**
+
+**Aesthetic / Visual Effect Property (Universal Modern Standard)**: `opacity` is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you want an element to look like glass, allowing the background image behind it to bleed through. Other times, you want to visually "disable" a button, making it look faded out so the user knows they can't click it yet.
@@ -52,7 +48,7 @@ Now replace the frosted glass with a perfectly clean, polished window (`opacity:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not realizing `opacity` affects the children too
 
@@ -105,7 +101,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Invisible vs Gone
 
@@ -160,7 +156,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 >
 > **Explanation:** Alpha channel colors isolate transparency to a specific property.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — The much safer alternative if you only want to fade the background color, not the children.
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Used when you want an element to be completely removed from the layout.
 - [`filter`](filter.md) — Sizing visual filters.
@@ -171,7 +167,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `opacity` ranges from `0` (invisible) to `1` (solid).
 - It fades the element AND all of its children. (You cannot override this on the child).
 - If you only want a translucent background, use `rgba()` colors instead!

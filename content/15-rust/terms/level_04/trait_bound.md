@@ -580,7 +580,7 @@ You are implementing an enterprise payload validation and transformation engine.
 - [Trait](trait.md) — Related concept: Trait.
 - [Higher-Ranked Trait Bounds (HRTB)](../level_05/higher_ranked_trait_bounds.md) — Related concept: Higher-Ranked Trait Bounds (HRTB).
 - [`Fn` / `FnMut` / `FnOnce`](../level_06/fn_traits.md) — Related concept: `Fn` / `FnMut` / `FnOnce`.
-- [Dependency Injection](../level_18/dependency_injection.md) — Related concept: Dependency Injection.
+- [Dependency Injection via Generics](../level_18/dependency_injection.md) — Related concept: Dependency Injection.
 
 ---
 

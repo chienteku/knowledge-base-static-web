@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Browser Policy**
+
+**Security / Browser Policy (Browser Only .)**: CORS (Cross-Origin Resource Sharing) is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Browser Only** (CORS does NOT exist in Node.js, Python, or mobile apps!).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are logged into your bank (`bank.com`). Your browser has a secret login cookie saved. 
@@ -46,7 +42,7 @@ It basically asks the Server: "Hey, I'm about to send a POST request with JSON. 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to "fix" CORS on the Frontend
 
@@ -101,57 +97,135 @@ app.use(cors({ origin: 'https://app.example.com' }));
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Why did it work in Postman?
+### Exercise 1: Dynamic Origin Whitelist CORS Middleware
 
-**Problem:** You build an API. You test it in Postman, and it works perfectly! You then write a React app to call the API, and you immediately get a `CORS error`. Why did Postman work, but React failed?
+**Scenario:** An API gateway inspects the incoming request `Origin` header and matches it against an allowed whitelist before reflecting CORS headers.
 
-**Expected output:**
+**Requirements:**
+1. Write handleCorsOrigin(requestOrigin, allowedWhitelist).
+2. If origin is in whitelist, reflect Access-Control-Allow-Origin.
+3. Else reject CORS access.
+
 > [!check]- Answer
-> ```text
-> Because CORS is a *Browser* security feature! 
-> Postman is a desktop application; it doesn't care about the Same-Origin Policy. It just sends raw HTTP text over the network. Only web browsers (Chrome, Safari, Firefox) actively enforce CORS rules to protect users from malicious websites.
+>
+> #### Implementation
+>
+> ```javascript
+> function handleCorsOrigin(requestOrigin, allowedWhitelist = []) {
+>   if (!requestOrigin) {
+>     return { status: 200, headers: {} };
+>   }
+>
+>   if (allowedWhitelist.includes(requestOrigin)) {
+>     return {
+>       status: 200,
+>       headers: {
+>         "Access-Control-Allow-Origin": requestOrigin,
+>         "Vary": "Origin"
+>       }
+>     };
+>   }
+>
+>   return {
+>     status: 403,
+>     error: "CORS Policy Error: Origin not allowed",
+>     headers: {}
+>   };
+> }
+>
+> // Verification tests
+> const whitelist = ["https://app.example.com", "https://admin.example.com"];
+>
+> const res1 = handleCorsOrigin("https://app.example.com", whitelist);
+> console.assert(res1.status === 200 && res1.headers["Access-Control-Allow-Origin"] === "https://app.example.com", "Test 1 Failed");
+>
+> const res2 = handleCorsOrigin("https://evil.com", whitelist);
+> console.assert(res2.status === 403, "Test 2 Failed: Disallowed origin must return 403");
 > ```
-> - Who enforces CORS? The server, the network, or the browser?
+>
+> #### Technical Explanation
+>
+> 1. **CORS Mechanism**: Cross-Origin Resource Sharing allows servers to declare which origins can load browser assets.
+> 2. **Vary: Origin Header**: Tells caching proxies that responses differ based on the request Origin header.
+> 3. **Wildcard Risk**: Using `Access-Control-Allow-Origin: *` prevents sending cookies/credentials in cross-origin requests.
 > 
 ---
 
-### Exercise 2: CORS Preflight Trigger Identification
+### Exercise 2: CORS Credentials & Cookie Configuration Evaluator
 
-**Problem:** Which 2 requests trigger a CORS Preflight (`OPTIONS`) request?
-1. `GET /api/items` with `Content-Type: text/plain`
-2. `POST /api/items` with `Content-Type: application/json`
-3. `DELETE /api/items/5` with `Authorization: Bearer xyz`
+**Scenario:** An API security auditor checks CORS configurations to ensure `Access-Control-Allow-Credentials: true` is NEVER paired with `Access-Control-Allow-Origin: *`.
 
-**Expected output:**
+**Requirements:**
+1. Write auditCorsCredentialsConfig(allowOrigin, allowCredentials).
+2. Flag invalid spec combination.
+
 > [!check]- Answer
-> ```text
-> Requests 2 and 3 trigger preflight OPTIONS requests.
+>
+> #### Implementation
+>
+> ```javascript
+> function auditCorsCredentialsConfig(allowOrigin, allowCredentials) {
+>   if (allowCredentials === true && allowOrigin === "*") {
+>     return {
+>       valid: false,
+>       error: "Spec Error: Access-Control-Allow-Credentials cannot be true when Access-Control-Allow-Origin is '*'"
+>     };
+>   }
+>
+>   return { valid: true };
+> }
+>
+> // Verification tests
+> console.assert(auditCorsCredentialsConfig("*", true).valid === false, "Test 1 Failed: Wildcard + Credentials is invalid");
+> console.assert(auditCorsCredentialsConfig("https://app.com", true).valid === true, "Test 2 Failed");
 > ```
-> ```text
-> Request 2 -> Content-Type application/json is not a simple Content-Type.
-> Request 3 -> DELETE verb and custom Authorization header trigger preflight.
-> ```
-> - **Explanation:** Non-simple HTTP verbs, custom headers, and application/json trigger preflight OPTIONS calls.
+>
+> #### Technical Explanation
+>
+> 1. **Credentials Spec Constraint**: Browsers reject CORS responses if allow-credentials is true while allow-origin is wildcard *.
+> 2. **Cookies in CORS**: Setting allow-credentials to true permits cross-origin HTTP-only cookies and Authorization headers.
+> 3. **Security Hardening**: Explicit origin reflection prevents malicious sites from stealing authenticated user cookies.
+> 
 ---
 
-### Exercise 3: Same-Origin Definition
+### Exercise 3: CORS Exposed Custom Headers Generator
 
-**Problem:** Do `https://example.com:443` and `http://example.com:443` share the same origin?
+**Scenario:** An API server explicitly configures `Access-Control-Expose-Headers` so browser JavaScript can read custom response headers (e.g. `X-Total-Count`).
 
-**Expected output:**
+**Requirements:**
+1. Write buildCorsExposeHeaders(customHeaderList).
+2. Return Access-Control-Expose-Headers header string.
+
 > [!check]- Answer
-> ```text
-> No. Origin comparison checks Protocol, Hostname, AND Port. Different protocol schemes mean different origins.
+>
+> #### Implementation
+>
+> ```javascript
+> function buildCorsExposeHeaders(customHeaderList = []) {
+>   const defaultExposed = ["Cache-Control", "Content-Language", "Content-Type", "Expires", "Last-Modified", "Pragma"];
+>   const allExposed = new Set([...defaultExposed, ...customHeaderList]);
+>
+>   return {
+>     "Access-Control-Expose-Headers": Array.from(allExposed).join(", ")
+>   };
+> }
+>
+> // Verification tests
+> const headers = buildCorsExposeHeaders(["X-Total-Count", "X-Request-Id"]);
+> console.assert(headers["Access-Control-Expose-Headers"].includes("X-Total-Count"), "Test 1 Failed");
+> console.assert(headers["Access-Control-Expose-Headers"].includes("X-Request-Id"), "Test 2 Failed");
 > ```
-> ```text
-> No. Origin requires exact match of Scheme (https vs http), Hostname, and Port.
-> ```
-> - **Explanation:** A difference in any 1 of the 3 components constitutes a cross-origin request.
+>
+> #### Technical Explanation
+>
+> 1. **Browser Header Exposure Limit**: By default, browser JS can only read simple CORS response headers.
+> 2. **Access-Control-Expose-Headers**: Explicitly lists custom headers (X-Total-Count) frontend code is permitted to read in fetch responses.
+> 3. **API Gateway Integration**: Mandatory configuration when returning custom pagination or tracing headers to single-page applications.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — The Preflight request uses the obscure `OPTIONS` method.
 - [HTTP Headers](../level_02/http_headers.md) — CORS is entirely driven by `Access-Control` headers.
 - [Same-Origin Policy](same_origin_policy.md) — Related concept: Same-Origin Policy.
@@ -160,7 +234,7 @@ app.use(cors({ origin: 'https://app.example.com' }));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **CORS** is a browser security mechanism that blocks websites from calling APIs on different domains.
 - It protects users from malicious scripts making unauthorized background requests.
 - To allow communication between different domains, the **Server** must send back specific `Access-Control-Allow-Origin` headers.

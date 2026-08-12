@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Affects client-side request orchestrations and backend database query layout designs.)**: Over-fetching vs Under-fetching is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Affects client-side request orchestrations and backend database query layout designs.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In RESTful architectures, endpoints are strictly organized around server-side database resources (for example: `GET /api/users/:id`, `GET /api/posts`, `GET /api/comments`).
@@ -109,7 +105,7 @@ The server returns exactly that structure in a single response:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating custom endpoints to bypass REST under-fetching
 
@@ -158,69 +154,148 @@ GET /api/users/5?embed=posts,comments ; Single request fetching nested sub-resou
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Diagnostic Audit
+### Exercise 1: REST Sparse Fieldsets Payload Trimmer
 
-**Problem:** Read this scenario and determine which data transfer issue is occurring:
+**Scenario:** An API gateway implements Sparse Fieldsets (`?fields=id,name,email`), filtering out unwanted payload attributes to eliminate overfetching.
 
-*A mobile app fetches `/api/products`. The response contains a list of 100 products. Each product object includes a 5,000-character description field and a history log array of edits. The mobile app only displays the product names and prices.*
-
-- **A.** Under-fetching
-- **B.** Over-fetching
-- **C.** Idempotency collision
+**Requirements:**
+1. Write trimSparseFieldsets(resourceObj, requestedFieldsArray).
+2. Return object containing ONLY requested fields.
 
 > [!check]- Answer
-> - **B (Over-fetching).** The mobile app only displays names and prices, but downloads descriptions and edit logs, wasting device bandwidth and memory.
-> 
-> 
----
-
-### Exercise 2: Overfetching vs Underfetching Definitions
-
-**Problem:** Define Overfetching and Underfetching in API design.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Overfetching: API response returns more data fields than the client needs.
-> Underfetching: API response returns insufficient data, forcing client to make additional requests.
-> ```
-> ```text
-> Overfetching -> Fetching extra unneeded data fields (wasteful payload size).
-> Underfetching -> Fetching partial data (forces additional round-trip requests).
-> ```
-> - **Explanation:** Both problems represent inefficient payload granularity.
----
-
-### Exercise 3: GraphQL Payload Solution
-
-**Problem:** How does GraphQL solve both Overfetching and Underfetching in a single request?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Clients specify exact required fields in query requests, fetching precisely what is needed in a single round trip.
-> ```
-> ```graphql
-> query {
-> user(id: 5) {
-> name
-> posts { title }
+>
+> #### Implementation
+>
+> ```javascript
+> function trimSparseFieldsets(resourceObj, requestedFieldsArray = []) {
+>   if (!resourceObj || requestedFieldsArray.length === 0) return resourceObj;
+>
+>   const allowedSet = new Set(requestedFieldsArray.map(f => f.trim()));
+>   const trimmed = {};
+>
+>   for (const [key, value] of Object.entries(resourceObj)) {
+>     if (allowedSet.has(key)) {
+>       trimmed[key] = value;
+>     }
+>   }
+>
+>   return trimmed;
 > }
-> }
+>
+> // Verification tests
+> const fullUser = { id: 1, name: "Alice", email: "a@a.com", address: "123 St", ssn: "999" };
+> const trimmed = trimSparseFieldsets(fullUser, ["id", "name"]);
+>
+> console.assert(trimmed.id === 1 && trimmed.name === "Alice", "Test 1 Failed");
+> console.assert(trimmed.email === undefined && trimmed.ssn === undefined, "Test 2 Failed: Overfetched fields must be trimmed");
 > ```
-> - **Explanation:** Declarative field queries eliminate overfetching and underfetching.
+>
+> #### Technical Explanation
+>
+> 1. **Overfetching Definition**: When an API endpoint returns far more data fields than the client needs for its current UI view.
+> 2. **Sparse Fieldsets**: JSON:API standard query parameter (?fields=name,email) allowing clients to select desired fields.
+> 3. **Bandwidth Reduction**: Reduces JSON payload size and mobile data consumption.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: Underfetching Batch Aggregator
+
+**Scenario:** An API client solves Underfetching by aggregating multiple N+1 resource requests into a single batch query.
+
+**Requirements:**
+1. Write fetchAggregatedUserData(userId, fetchUserFn, fetchOrdersFn).
+2. Combine user profile and user orders into single response.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchAggregatedUserData(userId, fetchUserFn, fetchOrdersFn) {
+>   const [user, orders] = await Promise.all([
+>     fetchUserFn(userId),
+>     fetchOrdersFn(userId)
+>   ]);
+>
+>   return {
+>     ...user,
+>     orders
+>   };
+> }
+>
+> // Verification tests
+> const fUser = async (id) => ({ id, name: "Alice" });
+> const fOrders = async (id) => [{ orderId: 101 }];
+>
+> fetchAggregatedUserData("u1", fUser, fOrders).then(aggregated => {
+>   console.assert(aggregated.name === "Alice" && aggregated.orders.length === 1, "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Underfetching Definition**: When a single REST endpoint does not return enough data, forcing the client to make multiple roundtrip requests (N+1 problem).
+> 2. **N+1 Query Problem**: Fetching a list of N items then making N separate HTTP calls to fetch details for each item.
+> 3. **Compound Endpoints**: Aggregating related sub-resources in single response to prevent underfetching.
+> 
+---
+
+### Exercise 3: Overfetching vs Underfetching Diagnostic Audit
+
+**Scenario:** An API auditor analyzes endpoint consumption metrics and flags overfetching (>50% unused fields) or underfetching (>3 sequential calls).
+
+**Requirements:**
+1. Write auditApiEfficiency(usedFieldsCount, totalFieldsCount, sequentialHttpCalls).
+2. Return diagnostic metrics.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditApiEfficiency(usedFieldsCount, totalFieldsCount, sequentialHttpCalls) {
+>   const fieldUsagePct = Math.round((usedFieldsCount / totalFieldsCount) * 100);
+>
+>   const isOverfetching = fieldUsagePct < 50;
+>   const isUnderfetching = sequentialHttpCalls > 2;
+>
+>   return {
+>     fieldUsagePct,
+>     isOverfetching,
+>     isUnderfetching,
+>     recommendation: isOverfetching 
+>       ? "Use Sparse Fieldsets or GraphQL to avoid overfetching"
+>       : isUnderfetching 
+>         ? "Use batch endpoints or GraphQL to avoid underfetching"
+>         : "Optimal API efficiency"
+>   };
+> }
+>
+> // Verification tests
+> const audit1 = auditApiEfficiency(2, 10, 1);
+> console.assert(audit1.isOverfetching === true, "Test 1 Failed: 20% field usage is overfetching");
+>
+> const audit2 = auditApiEfficiency(8, 10, 5);
+> console.assert(audit2.isUnderfetching === true, "Test 2 Failed: 5 calls is underfetching");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Payload Efficiency**: Optimizing field count and HTTP call frequency maximizes mobile app performance.
+> 2. **GraphQL Solution**: GraphQL addresses both overfetching (clients request exact fields) and underfetching (nested queries in 1 call).
+> 3. **Network Latency Impact**: Multiple sequential calls (underfetching) compound RTT latency severely over cellular networks.
+---
+
+## 6. Related Terms
 - [Resource Naming & URI Design](../level_03/resource_naming.md) — The design pattern governing REST routes.
 - [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — The methods of splitting large resource collections to prevent over-fetching.
 - [GraphQL (The REST Alternative)](graphql.md) — Related concept: GraphQL (The REST Alternative).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Over-fetching is receiving more data fields than required, wasting bandwidth.
 - Under-fetching is receiving insufficient data, forcing sequential requests (N+1 query problem).
 - REST architectures are prone to over-fetching and under-fetching due to resource-focused endpoints.

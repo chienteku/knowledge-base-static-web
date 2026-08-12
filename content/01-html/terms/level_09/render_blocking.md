@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support .)**: Render-Blocking Resources is a fundamental concept in this technology stack. **Level 9 — DOM, Rendering & Accessibility**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (A core performance concept. Tracked heavily by page performance auditing tools like Google Lighthouse and PageSpeed Insights).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a user visits your website, they want to see content as fast as possible. If they stare at a blank white screen for longer than two seconds, they are likely to leave. 
@@ -93,7 +89,7 @@ JavaScript has the power to modify the DOM (e.g. adding new elements or writing 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing non-essential styles or scripts in the `<head>`
 
@@ -158,7 +154,7 @@ JavaScript has the power to modify the DOM (e.g. adding new elements or writing 
 </head>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bottleneck Audit
 
@@ -223,7 +219,7 @@ Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the
 >
 > **Explanation:** Inlining critical CSS enables instant above-the-fold rendering.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Critical Rendering Path](critical_rendering_path.md) — The pipeline that gets blocked.
 - [`<link>`](../level_08/link.md) — The stylesheet wrapper.
 - [`<script>`](../level_08/script.md) — The script wrapper.
@@ -231,7 +227,7 @@ Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Render-blocking resources prevent the browser from displaying visible page elements.
 - CSS is render-blocking by default to prevent a Flash of Unstyled Content (FOUC).
 - Synchronous JavaScript is render-blocking because scripts can modify the DOM mid-parse.

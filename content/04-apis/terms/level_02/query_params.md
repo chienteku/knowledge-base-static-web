@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **HTTP Standard / URL Structure**
+
+**HTTP Standard / URL Structure (Universal Standard .)**: Query Parameters & Path Variables is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Essential for REST API design).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a `GET` request is forbidden from having a Request Body, how do you tell the Server *which* data you want? 
@@ -63,7 +59,7 @@ fetch(url); // Sends a GET request
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Query Params when you should use Path Variables
 
@@ -114,61 +110,154 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the pieces
+### Exercise 1: Pagination & Sorting Query Parameter Parser
 
-**Problem:** Look at this URL: `https://shop.com/categories/electronics/laptops?brand=apple&sort=price`
-1. What are the Path Variables?
-2. What are the Query Parameters?
+**Scenario:** A REST API handler parses pagination and sorting query parameters from request URLs, applying default fallbacks.
 
-**Expected output:**
+**Requirements:**
+1. Write parseListQueryParams(queryString).
+2. Extract page (default 1), limit (default 10, max 100), and sort.
+
 > [!check]- Answer
-> ```text
-> 1. Path Variables: `electronics` and `laptops` (they define the specific categories we are looking in).
-> 2. Query Parameters: `brand=apple` and `sort=price` (they filter and sort the list of laptops).
+>
+> #### Implementation
+>
+> ```javascript
+> function parseListQueryParams(queryString) {
+>   const params = new URLSearchParams(queryString || "");
+>
+>   let page = parseInt(params.get("page"), 10);
+>   if (isNaN(page) || page < 1) page = 1;
+>
+>   let limit = parseInt(params.get("limit"), 10);
+>   if (isNaN(limit) || limit < 1) limit = 10;
+>   if (limit > 100) limit = 100; // Cap at max limit
+>
+>   const sort = params.get("sort") || "createdAt:desc";
+>
+>   return { page, limit, sort, offset: (page - 1) * limit };
+> }
+>
+> // Verification tests
+> const p1 = parseListQueryParams("page=2&limit=20&sort=name:asc");
+> console.assert(p1.page === 2 && p1.limit === 20 && p1.offset === 20, "Test 1 Failed");
+> console.assert(p1.sort === "name:asc", "Test 2 Failed");
+>
+> const p2 = parseListQueryParams("limit=500");
+> console.assert(p2.limit === 100, "Test 3 Failed: Must cap limit at 100");
 > ```
-> - Where does the question mark start?
+>
+> #### Technical Explanation
+>
+> 1. **Query Parameter Usage**: Query parameters (?key=val) pass non-hierarchical parameters like filtering, sorting, and pagination.
+> 2. **Defensive Defaults**: Applying fallbacks prevents runtime NaN crashes when clients omit query arguments.
+> 3. **Offset Calculation**: Offset = (page - 1) * limit maps page numbers directly to SQL OFFSET database queries.
 > 
 ---
 
-### Exercise 2: URLSearchParams Usage Pattern
+### Exercise 2: Dynamic Filter Object to Query String Builder
 
-**Problem:** Write JavaScript code using `URLSearchParams` to construct query string for `page=2`, `limit=50`, `sort=asc`.
+**Scenario:** A search SDK serializes complex filter objects into clean URL query strings, omitting empty or null fields.
 
-**Expected output:**
+**Requirements:**
+1. Write buildQueryString(filterObj).
+2. Filter out null, undefined, and empty string values.
+3. Return query string starting with ?.
+
 > [!check]- Answer
-> ```text
-> const params = new URLSearchParams({ page: '2', limit: '50', sort: 'asc' });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const params = new URLSearchParams({
-> page: '2',
-> limit: '50',
-> sort: 'asc'
-> });
-> console.log(params.toString()); // 'page=2&limit=50&sort=asc'
+> function buildQueryString(filterObj) {
+>   if (!filterObj || typeof filterObj !== "object") return "";
+>
+>   const params = new URLSearchParams();
+>   for (const [key, value] of Object.entries(filterObj)) {
+>     if (value !== null && value !== undefined && value !== "") {
+>       if (Array.isArray(value)) {
+>         value.forEach(v => params.append(key, String(v)));
+>       } else {
+>         params.set(key, String(value));
+>       }
+>     }
+>   }
+>
+>   const str = params.toString();
+>   return str ? `?${str}` : "";
+> }
+>
+> // Verification tests
+> const filters = { search: "node", status: "active", category: null, tags: ["js", "api"] };
+> const qs = buildQueryString(filters);
+>
+> console.assert(qs.includes("search=node"), "Test 1 Failed");
+> console.assert(qs.includes("status=active"), "Test 2 Failed");
+> console.assert(!qs.includes("category"), "Test 3 Failed: null must be omitted");
+> console.assert(qs.includes("tags=js&tags=api"), "Test 4 Failed: Arrays must append repeated keys");
 > ```
-> - **Explanation:** `URLSearchParams` handles escaping and formatting query strings safely.
+>
+> #### Technical Explanation
+>
+> 1. **URLSearchParams Serialization**: URLSearchParams converts objects and array entries into valid URL-encoded query strings.
+> 2. **Omitted Blank Values**: Omitting empty parameters keeps URL strings concise and avoids unnecessary server filter logic.
+> 3. **Repeated Key Array Formatting**: Arrays can be represented as repeated query keys (?tags=js&tags=api).
+> 
 ---
 
-### Exercise 3: Query Params vs Path Params Guideline
+### Exercise 3: Query Parameter Array Syntax Normalizer
 
-**Problem:** When should you use Path Parameters (`/users/123`) vs Query Parameters (`/users?role=admin`)?
+**Scenario:** An API gateway normalizes different array query parameter conventions (`?tag=a&tag=b` vs `?tag=a,b` vs `?tag[]=a&tag[]=b`).
 
-**Expected output:**
+**Requirements:**
+1. Write normalizeArrayQueryParam(queryParams, paramName).
+2. Extract array items regardless of syntax format.
+
 > [!check]- Answer
-> ```text
-> Use Path Parameters for identifying specific resources; use Query Parameters for filtering, sorting, pagination, or searching collections.
+>
+> #### Implementation
+>
+> ```javascript
+> function normalizeArrayQueryParam(queryParams, paramName) {
+>   if (!queryParams) return [];
+>   const params = new URLSearchParams(queryParams);
+>
+>   // Format 1: ?tag[]=a&tag[]=b
+>   const bracketKey = `${paramName}[]`;
+>   if (params.has(bracketKey)) {
+>     return params.getAll(bracketKey);
+>   }
+>
+>   // Format 2: ?tag=a&tag=b
+>   const repeated = params.getAll(paramName);
+>   if (repeated.length > 1) {
+>     return repeated;
+>   }
+>
+>   // Format 3: ?tag=a,b
+>   if (repeated.length === 1) {
+>     return repeated[0].split(",").map(s => s.trim());
+>   }
+>
+>   return [];
+> }
+>
+> // Verification tests
+> console.assert(normalizeArrayQueryParam("tag[]=a&tag[]=b", "tag").join(",") === "a,b", "Test 1 Failed");
+> console.assert(normalizeArrayQueryParam("tag=a&tag=b", "tag").join(",") === "a,b", "Test 2 Failed");
+> console.assert(normalizeArrayQueryParam("tag=a,b", "tag").join(",") === "a,b", "Test 3 Failed");
 > ```
-> ```text
-> Path Parameters -> Resource identification (/users/123)
-> Query Parameters -> Filtering, sorting, and pagination (/users?role=admin&page=1)
-> ```
-> - **Explanation:** Path params target resource hierarchy; query params filter representation state.
+>
+> #### Technical Explanation
+>
+> 1. **Query Array Conventions**: Different frameworks use different conventions: repeated keys, comma-separated lists, or bracket notation ([]).
+> 2. **Gateway Normalization**: Normalizing query array inputs at the gateway protects internal API services from parser discrepancies.
+> 3. **URLSearchParams.getAll()**: getAll(key) retrieves ALL values associated with a repeated query parameter key.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Request Body & Payloads](request_body.md) — The alternative way to send data (used for `POST`/`PUT`).
 - [REST (Representational State Transfer)](../level_03/rest.md) — The architectural style that dictates when to use Path vs Query params.
 - [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — Related concept: URL / URI (Uniform Resource Identifier).
@@ -178,7 +267,7 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Path Variables** are built into the URL path (e.g., `/users/5`) and are used to identify a specific, unique resource.
 - **Query Parameters** are tacked onto the end of the URL (e.g., `?color=red&size=M`) and are used to filter, sort, or paginate data.
 - Both are incredibly useful for `GET` requests, because `GET` requests are not allowed to have a Request Body.

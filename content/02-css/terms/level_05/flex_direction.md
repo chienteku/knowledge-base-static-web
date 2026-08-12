@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Flexbox Property**
+
+**Flexbox Property (Universal Modern Standard)**: `flex-direction` is a fundamental concept in this technology stack. **Level 5 — Layouts — Flexbox**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, when you apply `display: flex;` to a container, it organizes its children in a horizontal line (left-to-right). This is perfect for navigation bars.
@@ -55,7 +51,7 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not realizing `column` swaps the alignment properties
 
@@ -99,7 +95,7 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 .col { display: flex; flex-direction: column; align-items: center; } /* Horizontal alignment */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Reverse Order
 
@@ -158,18 +154,18 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 >
 > **Explanation:** `flex-direction` dictates main axis orientation and direction.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`justify-content`](justify_content.md) — Aligns children along the axis defined by `flex-direction`.
 - [`align-items`](align_items.md) — Aligns children along the perpendicular (cross) axis.
 - [`align-self`](align_self.md) — Overrides align-items for a single child item.
 - [`order`](order.md) — Visual ordering of items.
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Related concept: `@media` (Media Queries Basics).
-- [`display: flex`](display_flex.md) — Related concept: `display: flex`.
+- [`display: flex` — Flexbox Container](display_flex.md) — Related concept: `display: flex`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `flex-direction` sets the **Main Axis** for the Flex Container.
 - `row` (horizontal) is the default.
 - `column` (vertical) is commonly used for mobile layouts.

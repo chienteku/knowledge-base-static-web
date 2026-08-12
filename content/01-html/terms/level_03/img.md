@@ -14,16 +14,12 @@
 ---
 
 ## 2. Term Category
-- **Media Element**
+
+**Media Element (Universal Browser Support)**: `<img>` is a fundamental concept in this technology stack. **Level 3 — Media & Embedding**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the very first iteration of HTML (1991), the web was entirely text-based. In 1993, Marc Andreessen (creator of the Mosaic browser) proposed a new tag to allow inline images to be displayed directly alongside text. The W3C standardized the `<img>` tag.
@@ -62,7 +58,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to close the `<img>` tag
 
@@ -132,7 +128,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 <p>Write real HTML text paragraph content</p>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Broken Image
 
@@ -181,7 +177,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 >
 > **Explanation:** WebP and AVIF formats reduce file size by 30-50% while preserving image quality.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`alt` Attribute](alt.md) — The required accessibility attribute for images.
 - [`src` Attribute](src.md) — The attribute used to define the image source URL.
 - [`<figure>` & `<figcaption>`](figure_figcaption.md) — The semantic containers used to package images and captions.
@@ -194,7 +190,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<img>` tag embeds an image into an HTML document.
 - It is a void element (no closing tag).
 - It requires the `src` attribute to locate the image file.

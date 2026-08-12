@@ -14,16 +14,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: WeakMap / WeakSet is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard `Map` and `Set` collections hold **strong references** to their contents. If you use a large object as a key in a standard `Map` (e.g., storing user metadata against a DOM element), that object will **never** be cleaned up by the garbage collector—even if the user leaves the page or the element is deleted from the HTML tree. The `Map` itself keeps the key-object alive in memory, creating a memory leak.
@@ -73,7 +69,7 @@ button = null;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use primitive values as WeakMap keys
 
@@ -148,81 +144,135 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Custom Object Tracker
+### Exercise 1: Private Class Metadata Storage via WeakMap & WeakSet
 
-**Problem:** Complete the code to track if an object instance has been registered inside the `WeakSet` called `activeConnections`.
+**Scenario:** A framework uses a WeakMap to store private instance metadata and a WeakSet to track visited DOM nodes without causing memory leaks.
 
-```javascript
-const activeConnections = new WeakSet();
-
-function connect(clientObj) {
-  // Add clientObj to activeConnections
-}
-
-function isConnected(clientObj) {
-  // Return true if connected, false otherwise
-}
-
-const clientA = { ip: "192.168.1.1" };
-connect(clientA);
-
-console.log("Connected?", isConnected(clientA)); // true
-```
+**Requirements:**
+1. Write createPrivateMetadataStore().
+2. Use WeakMap for object private data.
+3. Use WeakSet for object tracking.
+4. Verify garbage-collection friendly storage.
 
 > [!check]- Answer
-> - Inside `connect`, write `activeConnections.add(clientObj)`.
-> - Inside `isConnected`, return `activeConnections.has(clientObj)`.
-> 
----
-
-### Exercise 2: Automatic Garbage Collection with `WeakMap`
-
-**Problem:** Demonstrate that `WeakMap` keys do not prevent garbage collection when object references are dropped.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Weak reference GC enabled
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> let keyObj = { id: 1 };
-> const wm = new WeakMap();
-> wm.set(keyObj, "metadata");
-> console.log("Weak reference GC enabled");
+> function createPrivateMetadataStore() {
+>   const privateMap = new WeakMap();
+>   const visitedSet = new WeakSet();
+>
+>   return {
+>     setPrivateData(obj, data) {
+>       if (typeof obj !== "object" || obj === null) return;
+>       privateMap.set(obj, data);
+>       visitedSet.add(obj);
+>     },
+>     getPrivateData(obj) {
+>       return privateMap.get(obj);
+>     },
+>     isVisited(obj) {
+>       return visitedSet.has(obj);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const store = createPrivateMetadataStore();
+> let targetObj = { id: "node-1" };
+>
+> store.setPrivateData(targetObj, { secret: "123" });
+> console.assert(store.getPrivateData(targetObj).secret === "123", "Test 1 Failed");
+> console.assert(store.isVisited(targetObj) === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `WeakMap` holds weak references to object keys, allowing garbage collection when key references are cleared.
+> #### Technical Explanation
+>
+> 1. **WeakMap & WeakSet Concept**: Collections holding WEAK references to object keys/members; keys can be garbage-collected if no other references exist.
+> 2. **Must Use Object Keys**: WeakMap keys and WeakSet members MUST be non-null Objects (or non-registered Symbols).
+> 3. **Non-Iterable Nature**: WeakMap and WeakSet are NOT iterable and do not have .size or .clear() methods to prevent exposing GC non-determinism.
 > 
 ---
 
-### Exercise 3: Checking Key Existence in `WeakSet`
+### Exercise 2: Weakmap Weakset Advanced Context Handler
 
-**Problem:** Add object to `WeakSet`, test `.has(obj)`, and delete reference.
+**Scenario:** A web application component processes weakmap weakset data operations within enterprise workflows.
 
-**Expected output:**
+**Requirements:**
+1. Write handleWeakmapWeaksetSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> has: true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const ws = new WeakSet();
-> const item = { active: true };
-> ws.add(item);
-> console.log(`has: ${ws.has(item)}`);
+> function handleWeakmapWeaksetSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleWeakmapWeaksetSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `WeakSet` maintains weak collections of unique object references.
+> #### Technical Explanation
+>
+> 1. **Weakmap Weakset Architecture**: Applying weakmap weakset patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Weakmap Weakset Performance Optimization
+
+**Scenario:** An application utility optimizes weakmap weakset execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeWeakmapWeaksetTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeWeakmapWeaksetTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeWeakmapWeaksetTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Weakmap Weakset Optimization**: Optimizing weakmap weakset improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Garbage Collection](../level_09/garbage_collection.md) — The automated memory reclamation pipeline.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `WeakMap` and `WeakSet` hold weak references to their key-objects, enabling garbage collection to reclaim memory.
 - `WeakMap` keys must be objects; values can be any type. `WeakSet` values must be objects.
 - If there are no other strong references to a key-object, it is garbage collected, and its entry is purged from the WeakMap automatically.

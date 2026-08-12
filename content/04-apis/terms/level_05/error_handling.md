@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **JavaScript Core Concept / Control Flow**
+
+**JavaScript Core Concept / Control Flow (Universal .)**: Error Handling (try / catch) is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Standard programming paradigm).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The network is inherently unreliable. The user might drive into a tunnel and lose cell service. The server might run out of memory and crash. 
@@ -63,7 +59,7 @@ async function getProfile() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that `fetch()` doesn't throw on 404s!
 
@@ -126,80 +122,176 @@ app.use((err, req, res, next) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Tracing the Jump
+### Exercise 1: Defensive HTTP Fetch Error Normalizer
 
-**Problem:** Look at the code below. If the user's internet is turned off, which numbers will be logged to the console?
-```javascript
-async function doMath() {
-  try {
-    console.log("1");
-    await fetch('/api/data'); // Network fails here!
-    console.log("2");
-  } catch (err) {
-    console.log("3");
-  }
-  console.log("4");
-}
-```
+**Scenario:** An API client normalizes both network failures (type errors) and non-2xx HTTP status responses into a unified error format.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchSafeJson(url, mockFetch).
+2. Check response.ok.
+3. Parse error JSON body on 4xx/5xx responses.
+4. Throw structured ApiError.
+
 > [!check]- Answer
-> ```text
-> 1, 3, 4.
-> It logs 1. The fetch fails, so it instantly skips line 2 and jumps directly into the catch block, logging 3. After the catch block finishes, the function continues normally, logging 4.
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchSafeJson(url, mockFetch) {
+>   const fetchFn = mockFetch || globalThis.fetch;
+>   let response;
+>
+>   try {
+>     response = await fetchFn(url);
+>   } catch (netErr) {
+>     return { success: false, status: 0, code: "NETWORK_ERROR", error: "Network failure or CORS block" };
+>   }
+>
+>   if (!response.ok) {
+>     let errorData = {};
+>     try {
+>       errorData = await response.json();
+>     } catch (e) {
+>       errorData = { message: response.statusText };
+>     }
+>     return {
+>       success: false,
+>       status: response.status,
+>       code: errorData.code || "HTTP_ERROR",
+>       error: errorData.message || `HTTP ${response.status}`
+>     };
+>   }
+>
+>   const data = await response.json();
+>   return { success: true, status: response.status, data };
+> }
+>
+> // Verification tests
+> const mock404 = async () => ({
+>   ok: false,
+>   status: 404,
+>   statusText: "Not Found",
+>   json: async () => ({ code: "USER_NOT_FOUND", message: "User #42 does not exist" })
+> });
+>
+> fetchSafeJson("/api/users/42", mock404).then(res => {
+>   console.assert(res.success === false && res.status === 404, "Test 1 Failed");
+>   console.assert(res.code === "USER_NOT_FOUND", "Test 2 Failed");
+> });
 > ```
-> - As soon as an error happens, execution immediately jumps to the catch block!
+>
+> #### Technical Explanation
+>
+> 1. **Fetch Does Not Reject on 4xx/5xx**: The standard fetch() promise ONLY rejects on network errors; HTTP 404/500 resolve with response.ok === false.
+> 2. **Checking response.ok**: Developers MUST explicitly check response.ok (status 200-299) before reading success payloads.
+> 3. **Error Payload Parsing**: Attempts to parse JSON error bodies from 4xx/5xx responses before falling back to statusText.
 > 
 ---
 
-### Exercise 2: Standard RFC 7807 Problem Details Object Design
+### Exercise 2: Custom API Error Hierarchy
 
-**Problem:** Write RFC 7807 compliant error JSON payload for a 400 Bad Request invalid email error.
+**Scenario:** An API SDK defines custom Error sub-classes (`ApiError`, `ValidationError`, `AuthenticationError`) for precise exception handling.
 
-**Expected output:**
+**Requirements:**
+1. Create ApiError base class.
+2. Create ValidationError sub-class with fieldErrors property.
+3. Implement handleApiError(err).
+
 > [!check]- Answer
-> ```json
-> {
->   "type": "https://example.com/errors/invalid-email",
->   "title": "Invalid Email Address",
->   "status": 400,
->   "detail": "The provided email format is invalid."
-> }
-> ```
-> ```json
-> {
-> "type": "https://example.com/errors/invalid-email",
-> "title": "Invalid Email Address",
-> "status": 400,
-> "detail": "The provided email format is invalid."
-> }
-> ```
-> - **Explanation:** RFC 7807 defines standard machine-readable problem detail error schemas.
----
-
-### Exercise 3: Custom Error Class Pattern
-
-**Problem:** Write custom JavaScript `APIError` class extending `Error` holding `statusCode` property.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> class APIError extends Error { constructor(message, statusCode) { super(message); this.statusCode = statusCode; } }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class APIError extends Error {
-> constructor(message, statusCode) {
-> super(message);
-> this.statusCode = statusCode;
+> class ApiError extends Error {
+>   constructor(message, status = 500, code = "API_ERROR") {
+>     super(message);
+>     this.name = "ApiError";
+>     this.status = status;
+>     this.code = code;
+>   }
 > }
+>
+> class ValidationError extends ApiError {
+>   constructor(message, fieldErrors = {}) {
+>     super(message, 400, "VALIDATION_ERROR");
+>     this.name = "ValidationError";
+>     this.fieldErrors = fieldErrors;
+>   }
 > }
+>
+> function handleApiError(err) {
+>   if (err instanceof ValidationError) {
+>     return { status: 400, type: "VALIDATION", fields: err.fieldErrors };
+>   }
+>   if (err instanceof ApiError) {
+>     return { status: err.status, type: err.code, message: err.message };
+>   }
+>   return { status: 500, type: "UNKNOWN", message: "Unexpected server error" };
+> }
+>
+> // Verification tests
+> const vErr = new ValidationError("Invalid form data", { email: "Email required" });
+> const handled = handleApiError(vErr);
+>
+> console.assert(handled.status === 400 && handled.type === "VALIDATION", "Test 1 Failed");
+> console.assert(handled.fields.email === "Email required", "Test 2 Failed");
 > ```
-> - **Explanation:** Custom error classes attach HTTP status code metadata to exceptions.
+>
+> #### Technical Explanation
+>
+> 1. **Custom Error Classes**: Extending native JavaScript Error preserves stack trace while adding domain properties (status, code, fields).
+> 2. **instanceof Pattern Matching**: Allows catch blocks to branch logic based on specific error types (ValidationError vs NetworkError).
+> 3. **Centralized Error Formatters**: Transforms domain errors into clean HTTP responses in API controllers.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 3: Error Boundary Logger & Fallback Handler
+
+**Scenario:** An API layer logs unhandled exceptions to remote monitoring services while returning clean fallback state to the UI.
+
+**Requirements:**
+1. Write executeWithFallback(taskFn, fallbackData, loggerFn).
+2. Execute taskFn.
+3. Log error if throws.
+4. Return fallbackData on error.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeWithFallback(taskFn, fallbackData, loggerFn) {
+>   try {
+>     return await taskFn();
+>   } catch (err) {
+>     if (typeof loggerFn === "function") {
+>       loggerFn({ message: err.message, stack: err.stack, time: Date.now() });
+>     }
+>     return fallbackData;
+>   }
+> }
+>
+> // Verification tests
+> const logs = [];
+> const mockLogger = (e) => logs.push(e);
+> const brokenTask = async () => { throw new Error("Service Down"); };
+>
+> executeWithFallback(brokenTask, { items: [] }, mockLogger).then(res => {
+>   console.assert(res.items.length === 0, "Test 1 Failed: Must return fallback data");
+>   console.assert(logs.length === 1 && logs[0].message === "Service Down", "Test 2 Failed: Error must be logged");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Graceful Degradation**: Returning fallback data allows applications to render degraded UI instead of crashing completely.
+> 2. **Silent Error Logging**: Logs errors to monitoring services (Sentry, Datadog) while concealing stack traces from end-users.
+> 3. **Boundary Encapsulation**: Isolates unstable third-party API integrations from main application flow.
+---
+
+## 6. Related Terms
 - [The Response Object (res.json(), res.ok)](response_object.md) — How we check for 400 and 500 status codes inside the `try` block.
 - [async / await](async_await.md) — Related concept: async / await.
 - [Promises (in the context of networks)](promises.md) — Related concept: Promises (in the context of networks).
@@ -208,7 +300,7 @@ async function doMath() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Always wrap `await fetch()` calls inside a **`try / catch`** block.
 - The `try` block contains the "happy path" (what happens if everything works).
 - The `catch` block contains the fallback logic (show error message to user).

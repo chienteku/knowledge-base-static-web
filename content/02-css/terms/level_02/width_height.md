@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Layout Property**
+
+**Layout Property (Universal Browser Support)**: Width / Height is a fundamental concept in this technology stack. **Level 2 — The Box Model**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, the browser decides how big elements are. A `<div>` will automatically stretch to be 100% as wide as the screen, and will only be as tall as the text inside it. 
@@ -53,7 +49,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting fixed heights on text containers
 
@@ -108,7 +104,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Percentage Math
 
@@ -162,7 +158,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 >
 > **Explanation:** Percentage height resolves against explicitly defined parent height dimensions.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`box-sizing: border-box`](box_sizing.md) — Changes how Width and Height calculate padding and borders.
 - [Margin](margin.md) — Surrounds the calculated width and height.
 - [`overflow` (hidden, scroll, auto, visible)](overflow.md) — Handling content that overflows the width and height box.
@@ -170,7 +166,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `width` and `height` control the dimensions of the Content area.
 - You can use fixed units like `px` or fluid units like `%`.
 - Avoid setting fixed `height` on containers with text, as the text will overflow if it wraps.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Core Concept**
+
+**Core Concept (Universal Modern Standard .)**: Attribute Selectors is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Supported natively. Triggers browser attribute-map lookup index loops during layout rendering passes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In HTML, elements carry attributes that store data or configure behavior:
@@ -135,7 +131,7 @@ Custom data states:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving values unquoted in complex parameters
 
@@ -181,7 +177,7 @@ a[href$=".pdf"] { ... } /* ❌ Misses .PDF uppercase links! */
 a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Form Validation Highlight
 
@@ -241,13 +237,13 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 >
 > **Explanation:** `~=` matches whole words within space-separated attribute lists.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Combinator Selectors](combinators.md) — Target elements relative to parent-child tree layouts.
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Related concept: Selectors (Element, Class, ID).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Attribute selectors target HTML elements based on their attribute metadata.
 - `[attr]` checks for presence, `[attr="val"]` checks for exact character matches.
 - `^=` matches the start (prefixes), and `$=` matches the end (suffixes).

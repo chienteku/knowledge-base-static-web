@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Pure Function & Side Effects is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In software development, debugging logic errors is a major time sink. If functions frequently modify global variables, read system times, write to databases, or mutate array arguments in-place, the application state becomes unpredictable. Such external changes are called **Side Effects**. 
@@ -82,7 +78,7 @@ console.log("Updated Cart:", updatedCartPure); // [ 'Book', 'Pen', 'Notebook' ]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mutating Object Parameters
 
@@ -175,88 +171,120 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify Pure vs Impure Functions
+### Exercise 1: Side-Effect Free Financial Tax & Discount Calculator
 
-**Problem:** Determine whether each function is pure or impure and explain why.
+**Scenario:** A financial calculation engine implements pure functions that compute price subtotals and discounts without mutating external variables or accessing non-deterministic state.
 
-```javascript
-// Function A
-function greet(name) {
-  return `Hello, ${name}!`;
-}
+**Requirements:**
+1. Write computePureInvoice(basePrice, taxRate, discount).
+2. Compute total purely from arguments.
+3. Ensure no external variables are modified.
+4. Return computed total.
 
-// Function B
-function logMessage(msg) {
-  console.log(msg);
-  return msg;
-}
-
-// Function C
-function getMidnightTime() {
-  return new Date().setHours(0, 0, 0, 0);
-}
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Function A: Pure (Deterministic, no side effects).
-> Function B: Impure (console.log is a side effect that writes to standard output).
-> Function C: Impure (Depends on new Date(), which reads the external system clock).
-> ```
-> - Any write operation (to console, disk, screen, network) is a side effect.
-> - Any reliance on non-arguments (like time, random numbers) breaks determinism.
-> 
----
-
-### Exercise 2: Refactoring Impure Array Mutator to Pure Function
-
-**Problem:** Refactor `function addGuest(arr, guest) { arr.push(guest); return arr; }` into a pure function using `concat` or spread.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Original len: 1, New len: 2
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function addGuestPure(arr, guest) {
->   return [...arr, guest];
+> function computePureInvoice(basePrice, taxRate, discount) {
+>   const discounted = basePrice - discount;
+>   const tax = discounted * taxRate;
+>   const finalTotal = discounted + tax;
+>   return Number(finalTotal.toFixed(2));
 > }
-> const orig = ["Alice"];
-> const updated = addGuestPure(orig, "Bob");
-> console.log(`Original len: ${orig.length}, New len: ${updated.length}`);
+>
+> // Verification tests
+> const total1 = computePureInvoice(100, 0.10, 10);
+> const total2 = computePureInvoice(100, 0.10, 10);
+> console.assert(total1 === 99.00, "Test 1 Failed");
+> console.assert(total1 === total2, "Test 2 Failed: Determinism check failed");
 > ```
 >
-> **Explanation:** Pure functions return new data structures without mutating original input references.
+> #### Technical Explanation
+>
+> 1. **Pure Function Criteria**: A pure function is deterministic (given identical inputs, always returns identical outputs) and produces zero side-effects.
+> 2. **Zero Side-Effects**: Does not mutate input arguments, global variables, or outer object states.
+> 3. **Referential Transparency**: Pure function calls can be replaced by their evaluated values without altering program behavior.
 > 
 ---
 
-### Exercise 3: Testing Function Determinism
+### Exercise 2: Pure State Transition Reducer
 
-**Problem:** Demonstrate that calling pure function `add(2, 3)` multiple times always returns identical output `5`.
+**Scenario:** An application state architecture implements pure reducer functions to derive new state objects using immutable update patterns.
 
-**Expected output:**
+**Requirements:**
+1. Write pureReducer(state, action).
+2. Return new state object via spread operator without mutating original input state.
+3. Handle "ADD_ITEM" action.
+
 > [!check]- Answer
-> ```text
-> 5
-> 5
-> 5
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const add = (a, b) => a + b;
-> console.log(add(2, 3));
-> console.log(add(2, 3));
-> console.log(add(2, 3));
+> function pureReducer(state, action) {
+>   switch (action.type) {
+>     case "ADD_ITEM":
+>       return {
+>         ...state,
+>         items: [...state.items, action.payload]
+>       };
+>     default:
+>       return state;
+>   }
+> }
+>
+> // Verification tests
+> const initialState = Object.freeze({ items: ["Item 1"] });
+> const nextState = pureReducer(initialState, { type: "ADD_ITEM", payload: "Item 2" });
+>
+> console.assert(initialState.items.length === 1, "Test 1 Failed: Original state mutated");
+> console.assert(nextState.items.length === 2, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Pure functions are deterministic: identical inputs produce identical outputs unconditionally.
-> 
+> #### Technical Explanation
+>
+> 1. **Immutable Data Updates**: Pure state reducers construct and return new state object copies rather than mutating inputs.
+> 2. **Testability**: Pure functions are easy to unit-test because they rely exclusively on passed argument inputs.
+> 3. **Predictable State Architecture**: Eliminates unexpected bugs caused by shared mutable state references.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Pure Array Transformation Engine
+
+**Scenario:** A data processing library implements pure utility functions that transform numeric arrays without mutating the source array.
+
+**Requirements:**
+1. Write pureSquareArray(numbers).
+2. Return new array with squared values using .map().
+3. Verify source numbers array remains un-mutated.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function pureSquareArray(numbers) {
+>   return numbers.map(x => x * x);
+> }
+>
+> // Verification tests
+> const original = [1, 2, 3];
+> const squared = pureSquareArray(original);
+> console.assert(original.join(",") === "1,2,3", "Test 1 Failed: Input array mutated");
+> console.assert(squared.join(",") === "1,4,9", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Non-Mutating Array Methods**: Methods like .map(), .filter(), and .reduce() return new array instances, supporting pure function patterns.
+> 2. **Determinism**: Relies strictly on passed argument arrays without inspecting external non-deterministic data.
+> 3. **Parallelization Safety**: Pure functions can be safely executed concurrently or memoized for performance.
+---
+
+## 6. Related Terms
 - [Immutability](../level_09/immutability.md) — The practice of creating new data structures rather than modifying existing ones.
 - [Functional Programming & Composition](../level_09/functional_programming.md) — A coding paradigm built on pure functions.
 - [Method Chaining](../level_04/method_chaining.md) — Related concept: Method Chaining.
@@ -264,7 +292,7 @@ function getMidnightTime() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A pure function is deterministic: identical arguments always yield identical return values.
 - Pure functions perform no side effects: they do not modify global variables, mutate passed objects, or write to standard outputs/APIs.
 - Writing pure functions makes code predictable, modular, and extremely easy to test and debug.

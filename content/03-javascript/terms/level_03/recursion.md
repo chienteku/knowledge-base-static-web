@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Recursion is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In programming, we often need to repeat a task. While standard loops (like `for` and `while`) work well for flat, linear structures (like a flat list of numbers), they become incredibly complex and messy when dealing with nested, branching structures. Examples of nested structures include directory filesystems (folders containing folders), HTML DOM trees (elements containing elements), or comment threads (replies to replies).
@@ -106,7 +102,7 @@ printCommentTree(commentSection);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the Base Case (Stack Overflow)
 
@@ -196,87 +192,163 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Calculate Factorial
+### Exercise 1: File System Directory Tree Hierarchy Traverser
 
-**Problem:** Complete the recursive function `factorial` to calculate the mathematical factorial of a number `N` (the product of all positive integers less than or equal to `N`).
-Formula: `N! = N * (N - 1)!` where `1! = 1`.
+**Scenario:** A file system walker recursively traverses nested directory tree objects, accumulating all file path strings into a flat array.
 
-```javascript
-function factorial(n) {
-  // Base case: if n is 1, return 1
-  // Recursive step: return n multiplied by factorial of (n - 1)
-}
+**Requirements:**
+1. Write collectFilePaths(node).
+2. If node.type === "file", return [node.path].
+3. If node.type === "directory", recursively traverse node.children.
+4. Return flat array of file paths.
 
-console.log(factorial(5));
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 120
-> ```
-> - The base case check is `if (n === 1) { return 1; }`.
-> - The recursive step returns `n * factorial(n - 1)`.
-> 
----
-
-### Exercise 2: Recursive Countdown with Base Case
-
-**Problem:** Write a recursive function `countDown(n)` printing `n` down to `1`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 3
-> 2
-> 1
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function countDown(n) {
->   if (n <= 0) return;
->   console.log(n);
->   countDown(n - 1);
+> function collectFilePaths(node) {
+>   if (!node) return [];
+>   if (node.type === "file") {
+>     return [node.path];
+>   }
+>
+>   let paths = [];
+>   if (node.type === "directory" && Array.isArray(node.children)) {
+>     for (const child of node.children) {
+>       paths = paths.concat(collectFilePaths(child));
+>     }
+>   }
+>   return paths;
 > }
-> countDown(3);
+>
+> // Verification tests
+> const tree = {
+>   type: "directory",
+>   path: "/root",
+>   children: [
+>     { type: "file", path: "/root/file1.txt" },
+>     {
+>       type: "directory",
+>       path: "/root/sub",
+>       children: [
+>         { type: "file", path: "/root/sub/file2.txt" }
+>       ]
+>     }
+>   ]
+> };
+> const files = collectFilePaths(tree);
+> console.assert(files.length === 2, "Test 1 Failed");
+> console.assert(files.includes("/root/sub/file2.txt"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** Base cases (`n <= 0`) terminate call stack unwinding.
+> #### Technical Explanation
+>
+> 1. **Recursion Definition**: Recursion is a programming technique where a function calls itself to solve smaller sub-problems.
+> 2. **Base Case**: The base case (e.g. node.type === 'file') halts recursive execution, preventing infinite call stack overflow.
+> 3. **Recursive Step**: The recursive step decomposes complex nested structures into simpler sub-tree invocations.
 > 
 ---
 
-### Exercise 3: Recursive Tree Traversal
+### Exercise 2: Recursive Deep Clone Engine
 
-**Problem:** Recursively calculate sum of numbers in nested array `[1, [2, [3, 4]], 5]`.
+**Scenario:** A utility package implements a recursive deep cloning function that creates deep copies of objects and arrays without mutating source objects.
 
-**Expected output:**
+**Requirements:**
+1. Write deepClone(val).
+2. Handle primitive base cases.
+3. Recursively clone object properties and array elements.
+4. Return deep copy.
+
 > [!check]- Answer
-> ```text
-> 15
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function sumNested(arr) {
->   return arr.reduce((acc, val) => {
->     return acc + (Array.isArray(val) ? sumNested(val) : val);
->   }, 0);
+> function deepClone(val) {
+>   if (val === null || typeof val !== "object") {
+>     return val;
+>   }
+>
+>   if (Array.isArray(val)) {
+>     return val.map(item => deepClone(item));
+>   }
+>
+>   const copy = {};
+>   for (const key of Object.keys(val)) {
+>     copy[key] = deepClone(val[key]);
+>   }
+>   return copy;
 > }
-> console.log(sumNested([1, [2, [3, 4]], 5]));
+>
+> // Verification tests
+> const originalObj = { a: 1, nested: { b: 2 } };
+> const clonedObj = deepClone(originalObj);
+> clonedObj.nested.b = 99;
+>
+> console.assert(originalObj.nested.b === 2, "Test 1 Failed");
+> console.assert(clonedObj.nested.b === 99, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Recursion traverses nested tree/array hierarchies naturally.
-> 
+> #### Technical Explanation
+>
+> 1. **Deep Tree Traversal**: Recursion traverses arbitrarily deep nested object hierarchies.
+> 2. **Call Stack Execution**: Each recursive call pushes a new execution stack frame onto the call stack.
+> 3. **Stack Overflow Guarding**: Deeply nested recursive calls must manage call stack limits.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Algorithmic Binary Search Recursive Implementation
+
+**Scenario:** An algorithmic sorting package performs recursive binary search on a sorted array of numbers.
+
+**Requirements:**
+1. Write recursiveBinarySearch(arr, target, low, high).
+2. Check base case low > high (return -1).
+3. Calculate mid index.
+4. Recursively search left or right half.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function recursiveBinarySearch(arr, target, low = 0, high = arr.length - 1) {
+>   if (low > high) return -1;
+>
+>   const mid = Math.floor((low + high) / 2);
+>   if (arr[mid] === target) return mid;
+>
+>   if (arr[mid] > target) {
+>     return recursiveBinarySearch(arr, target, low, mid - 1);
+>   } else {
+>     return recursiveBinarySearch(arr, target, mid + 1, high);
+>   }
+> }
+>
+> // Verification tests
+> const sortedNums = [10, 20, 30, 40, 50];
+> console.assert(recursiveBinarySearch(sortedNums, 30) === 2, "Test 1 Failed");
+> console.assert(recursiveBinarySearch(sortedNums, 99) === -1, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Divide-and-Conquer**: Binary search recursively divides the search space in half (O(log n) complexity).
+> 2. **Terminal Base Cases**: Check low > high and arr[mid] === target to guarantee loop termination.
+> 3. **Tail Recursion Note**: Engine tail call optimization (TCO) allows certain tail-recursive calls to reuse stack frames.
+---
+
+## 6. Related Terms
 - [Call Stack](../level_06/call_stack.md) — The engine's internal tracker for active function calls.
 - [Higher-Order Function](higher_order_function.md) — Functions operating on other functions.
 - [return Statement](return_statement.md) — The keyword used to terminate recursive execution and pass values back.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Recursion is a programming technique where a function calls itself to solve nested or branching problems.
 - Every recursive function must contain a **Base Case** (stopping condition) and a **Recursive Step** (call with progress towards the base case).
 - If a recursive function lacks a base case or fails to reach it, it will cause a **Stack Overflow** crash (`RangeError: Maximum call stack size exceeded`).

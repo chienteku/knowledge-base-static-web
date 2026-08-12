@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design Pattern**
+
+**Architecture / Design Pattern (Web App Server Layer .)**: Error Handling Middleware is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Centralizes error interceptors at the base of the routing pipeline).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a database connection fails, a validation schema throws, or a file read errors out inside a controller, the server must handle the error. Writing duplicate error response blocks (e.g. `res.status(500).json(...)`) inside every single controller handler makes code cluttered and hard to maintain.
@@ -81,7 +77,7 @@ app.use((err, req, res, next) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Registering error-handling middleware at the top of the file
 
@@ -239,7 +235,7 @@ app.use((err, req, res, next) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Error Handler
 
@@ -309,14 +305,14 @@ app.use((err, req, res, next) => {
 >
 > **Explanation:** Custom `AppError` classes attach HTTP status codes to thrown errors.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Middleware Chain & next()](../level_07/middleware_chain.md) — The middleware queue structure.
 - [Async Error Handling (try/catch + .catch)](../level_05/async_error_handling.md) — Catching async errors to pass them to `next(err)`.
 - [Controllers & Services](controllers_services.md) — Related concept: Controllers & Services.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Centralized error handlers clean up controller code by isolating error responses.
 - Express identifies error middleware by its 4-argument signature: `(err, req, res, next)`.
 - You must include all 4 arguments in the signature, even if you do not call `next` inside the handler.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere, but the "Global Object" differs .)**: Global Scope is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere, but the "Global Object" differs (it's `window` in Browsers, and `global` in Node.js).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Every application needs a baseline level of memory—a starting point where core settings, major libraries, or environmental data are stored so that any part of the program can access them instantly. 
@@ -71,7 +67,7 @@ printStatus();    // System is currently being used by: Alice
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accidental Global Variables
 
@@ -156,75 +152,121 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Scope
+### Exercise 1: Global Configuration Singleton Registry
 
-**Problem:** In the code below, which variables are in the Global Scope?
-```javascript
-const a = 1;
-function run() {
-  const b = 2;
-  if (true) {
-    const c = 3;
-  }
-}
-const d = 4;
-```
+**Scenario:** A web application component initializes a global configuration object on globalThis to share global constants across modules.
 
-**Expected output:**
+**Requirements:**
+1. Write initializeGlobalConfig(configObj).
+2. Assign configObj to globalThis.__APP_CONFIG__.
+3. Verify global property access.
+
 > [!check]- Answer
-> ```text
-> `a` and `d` are in the Global Scope.
-> (`b` is function scope, `c` is block scope).
-> ```
-> - Look for variables that are not surrounded by any curly braces `{}`.
-> 
----
-
-### Exercise 2: Inspecting Global Scope Objects across Environments
-
-**Problem:** Use `globalThis` to access environment-agnostic global objects across Browser/Node.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log(typeof globalThis !== "undefined");
+> function initializeGlobalConfig(configObj) {
+>   globalThis.__APP_CONFIG__ = Object.freeze({ ...configObj });
+>   return globalThis.__APP_CONFIG__;
+> }
+>
+> // Verification tests
+> const cfg = initializeGlobalConfig({ env: "production", version: "2.0" });
+> console.assert(globalThis.__APP_CONFIG__.env === "production", "Test 1 Failed");
+> console.assert(cfg.version === "2.0", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `globalThis` provides a unified standard identifier for global scope objects across browsers (`window`), Node (`global`), and Workers (`self`).
+> #### Technical Explanation
+>
+> 1. **Global Scope Definition**: The global scope is the outermost execution context accessible by all scripts and nested scopes.
+> 2. **Cross-Environment globalThis**: Modern standard globalThis provides unified access to global scope across Browsers (window) and Node.js (global).
+> 3. **Global Namespace Pollution**: Overusing global variables risks naming collisions and unexpected global mutation bugs.
 > 
 ---
 
-### Exercise 3: Var Global Window Property Creation
+### Exercise 2: Global Scope Variable Pollution Audit & Remediation
 
-**Problem:** Demonstrate that top-level `var x = 10` creates a property on global objects in script contexts.
+**Scenario:** A code security linter audits legacy code to detect accidental global variable creation (assigning to undeclared variables) and refactors them.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate legacy global variable leakage without var/let/const in non-strict mode.
+2. Refactor to local block scope.
+3. Verify global scope is clean.
+
 > [!check]- Answer
-> ```text
-> Property attached to global scope
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> var globalVarTest = 100;
-> console.log("Property attached to global scope");
+> function cleanGlobalScopeRefactor() {
+>   const localSecret = "sensitive_data";
+>
+>   return {
+>     isGlobalPolluted: typeof globalThis.localSecret !== "undefined",
+>     localValue: localSecret
+>   };
+> }
+>
+> // Verification tests
+> const res = cleanGlobalScopeRefactor();
+> console.assert(res.isGlobalPolluted === false, "Test 1 Failed: Global scope polluted");
+> console.assert(res.localValue === "sensitive_data", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Top-level `var` declarations create configurable properties on global environment objects.
-> 
+> #### Technical Explanation
+>
+> 1. **Accidental Global Leakage**: In non-strict mode, assigning a value to an undeclared variable creates a property on global scope.
+> 2. **Strict Mode Protection**: Enabling "use strict" turns undeclared assignments into runtime ReferenceError exceptions.
+> 3. **Global Lifetime**: Global variables persist in memory for the lifetime of the application host process.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Global Execution Context Inspection
+
+**Scenario:** A host environment checker inspects global scope properties to detect host capabilities (Browser DOM vs Node.js runtime).
+
+**Requirements:**
+1. Write detectHostEnvironment().
+2. Check properties on globalThis.
+3. Return environment string ("BROWSER", "NODE", "UNKNOWN").
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function detectHostEnvironment() {
+>   if (typeof globalThis.window !== "undefined" && typeof globalThis.document !== "undefined") {
+>     return "BROWSER";
+>   } else if (typeof globalThis.process !== "undefined" && globalThis.process.versions?.node) {
+>     return "NODE";
+>   } else {
+>     return "UNKNOWN";
+>   }
+> }
+>
+> // Verification tests
+> const env = detectHostEnvironment();
+> console.assert(typeof env === "string" && env.length > 0, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Host Global Objects**: Host environments attach platform APIs (document, process) to global scope.
+> 2. **Top-Level Visibility**: Variables declared with var in top-level script scopes attach to the global object.
+> 3. **const/let Global Scoping**: Top-level let and const create global scope bindings but do NOT attach properties to globalThis.
+---
+
+## 6. Related Terms
 - [Scope](scope.md) — The general concept of variable visibility.
 - [Local / Function Scope](local_scope.md) — Scope restricted to a function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Variables declared outside of all functions and blocks are in the Global Scope.
 - Global variables can be read and modified by any code anywhere in the file.
 - Avoid overusing global variables! It leads to "Global Namespace Pollution" and spaghetti code.

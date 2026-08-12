@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal: Resolves domain references across all internet systems.)**: DNS (Domain Name System) is a fundamental concept in this technology stack. **Level 1 — Foundations of the Web**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Resolves domain references across all internet systems.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers route network messages using numerical IP addresses (such as `142.250.190.46`). However, humans find it difficult to memorize strings of numbers. We want to type simple, memorable names like `google.com` or `github.com` into our browser address bar.
@@ -66,7 +62,7 @@ Address: 2606:2800:220:1:248:1893:25c8:1946 <-- Resolved IPv6 Address!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting DNS changes to take effect instantly (Propagation Delay)
 
@@ -119,73 +115,175 @@ example.com.  IN  A  192.0.2.1
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Address Resolver
+### Exercise 1: DNS Hostname Resolver & Cache Simulator
 
-**Problem:** Trace the logical order of steps a browser takes when resolving `api.example.com` for the first time:
+**Scenario:** An API gateway implements a DNS resolution layer that maps domain names to IP addresses with local caching and TTL expiration.
 
-- **A.** The resolver queries the `.com` TLD Nameserver.
-- **B.** The browser checks its internal local memory cache.
-- **C.** The resolver queries the root nameserver.
-- **D.** The authoritative nameserver returns the IP `93.184.216.34`.
-- **E.** The recursive resolver queries the authoritative nameserver for `example.com`.
+**Requirements:**
+1. Write createDnsResolver(dnsMap).
+2. Implement resolve(domain).
+3. Return cached IP if TTL valid; else perform DNS lookup and cache.
 
 > [!check]- Answer
-> - 1. **B** (Check local cache first)
-> - 2. **C** (Query Root servers if local cache is empty)
-> - 3. **A** (Query TLD servers)
-> - 4. **E** (Query authoritative nameserver)
-> - 5. **D** (Fetch final destination IP)
+>
+> #### Implementation
+>
+> ```javascript
+> function createDnsResolver(initialDnsRecords) {
+>   const records = new Map(Object.entries(initialDnsRecords || {}));
+>   const cache = new Map();
+>
+>   return {
+>     resolve(domain) {
+>       const now = Date.now();
+>       if (cache.has(domain)) {
+>         const cached = cache.get(domain);
+>         if (now < cached.expiresAt) {
+>           return { ip: cached.ip, source: "CACHE" };
+>         }
+>       }
+>
+>       const record = records.get(domain);
+>       if (!record) {
+>         return { ip: null, source: "NXDOMAIN" };
+>       }
+>
+>       cache.set(domain, {
+>         ip: record.ip,
+>         expiresAt: now + (record.ttlMs || 5000)
+>       });
+>
+>       return { ip: record.ip, source: "DNS_LOOKUP" };
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const dns = createDnsResolver({
+>   "api.example.com": { ip: "192.0.2.1", ttlMs: 1000 }
+> });
+>
+> const step1 = dns.resolve("api.example.com");
+> console.assert(step1.source === "DNS_LOOKUP" && step1.ip === "192.0.2.1", "Test 1 Failed");
+>
+> const step2 = dns.resolve("api.example.com");
+> console.assert(step2.source === "CACHE", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Domain Name System (DNS) Purpose**: Translates human-readable hostnames (api.example.com) into machine-routable IP addresses (192.0.2.1).
+> 2. **Time-To-Live (TTL) Caching**: TTL specifies the duration in seconds/milliseconds that DNS records should be cached before re-querying.
+> 3. **NXDOMAIN Response**: NXDOMAIN indicates the specified domain name does not exist in the DNS registry.
 > 
+---
+
+### Exercise 2: CNAME & A Record Hierarchy Parser
+
+**Scenario:** A network diagnostics tool parses DNS record collections, resolving CNAME alias chains to final A record IP addresses.
+
+**Requirements:**
+1. Write resolveCnameChain(domain, dnsTable).
+2. Follow CNAME alias targets.
+3. Return final IPv4 address or error if loop detected.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveCnameChain(domain, dnsTable) {
+>   const visited = new Set();
+>   let current = domain;
+>
+>   while (current) {
+>     if (visited.has(current)) {
+>       return { error: "CNAME Loop Detected", ip: null };
+>     }
+>     visited.add(current);
+>
+>     const record = dnsTable[current];
+>     if (!record) return { error: "NXDOMAIN", ip: null };
+>
+>     if (record.type === "A") {
+>       return { ip: record.value, aliasChain: [...visited] };
+>     } else if (record.type === "CNAME") {
+>       current = record.value;
+>     } else {
+>       return { error: "Unsupported Record Type", ip: null };
+>     }
+>   }
+>   return { error: "Resolution Failed", ip: null };
+> }
+>
+> // Verification tests
+> const table = {
+>   "app.com": { type: "CNAME", value: "cdn.provider.net" },
+>   "cdn.provider.net": { type: "A", value: "198.51.100.42" }
+> };
+>
+> const res = resolveCnameChain("app.com", table);
+> console.assert(res.ip === "198.51.100.42", "Test 1 Failed");
+> console.assert(res.aliasChain.length === 2, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **A Record vs CNAME Record**: A records map hostnames directly to IPv4 addresses; CNAME records alias one hostname to another.
+> 2. **CNAME Resolution Recursion**: Resolvers follow CNAME alias chains recursively until an A or AAAA record is encountered.
+> 3. **Loop Prevention**: Tracking visited domains in a Set prevents infinite recursion loops caused by misconfigured DNS aliases.
 > 
 ---
 
-### Exercise 2: DNS Record Type Mapping
+### Exercise 3: DNS Failover & Round-Robin Load Balancing Simulator
 
-**Problem:** Match the DNS record type to its function:
-1. A Record
-2. CNAME Record
-3. MX Record
+**Scenario:** An API gateway simulates DNS Round-Robin load balancing, cycling through multiple A record IPs to distribute traffic across server nodes.
 
-**Expected output:**
+**Requirements:**
+1. Write createRoundRobinDns(domain, ipArray).
+2. Implement getNextIp().
+3. Cycle through ipArray sequentially.
+
 > [!check]- Answer
-> ```text
-> 1. Maps hostname to IPv4 address
-> 2. Maps hostname to another hostname (alias)
-> 3. Directs email traffic to mail servers
+>
+> #### Implementation
+>
+> ```javascript
+> function createRoundRobinDns(domain, ipArray) {
+>   if (!Array.isArray(ipArray) || ipArray.length === 0) {
+>     throw new Error("IP array must not be empty");
+>   }
+>   let index = 0;
+>
+>   return {
+>     domain,
+>     getNextIp() {
+>       const ip = ipArray[index];
+>       index = (index + 1) % ipArray.length;
+>       return ip;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const rrDns = createRoundRobinDns("api.service.com", ["10.0.0.1", "10.0.0.2", "10.0.0.3"]);
+>
+> console.assert(rrDns.getNextIp() === "10.0.0.1", "Test 1 Failed");
+> console.assert(rrDns.getNextIp() === "10.0.0.2", "Test 2 Failed");
+> console.assert(rrDns.getNextIp() === "10.0.0.3", "Test 3 Failed");
+> console.assert(rrDns.getNextIp() === "10.0.0.1", "Test 4 Failed: Must wrap back to first IP");
 > ```
-> ```text
-> 1. A Record -> Maps hostname to IPv4 address
-> 2. CNAME Record -> Maps hostname to another hostname (alias)
-> 3. MX Record -> Directs email traffic to mail servers
-> ```
-> - **Explanation:** Each DNS record type serves a specific resolution purpose.
+>
+> #### Technical Explanation
+>
+> 1. **DNS Round-Robin Load Balancing**: Configuring multiple A records for a single hostname rotates IP responses to balance server traffic.
+> 2. **High Availability Failover**: If a server IP fails, DNS records can be updated or client resolvers can retry alternate IPs.
+> 3. **Stateless IP Distribution**: Cycles through server nodes without requiring persistent session storage in the DNS resolver layer.
 ---
 
-### Exercise 3: Trace DNS Resolution Path
-
-**Problem:** Order the 4 servers queried when resolving a fresh domain (`api.github.com`):
-Top-Level Domain (TLD) Server, Recursive Resolver, Root Name Server, Authoritative Name Server
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Recursive Resolver
-> 2. Root Name Server
-> 3. TLD Server (.com)
-> 4. Authoritative Name Server (github.com)
-> ```
-> ```text
-> 1. Recursive Resolver (e.g. 8.8.8.8)
-> 2. Root Name Server (.)
-> 3. TLD Server (.com)
-> 4. Authoritative Name Server (ns-1.github.com)
-> ```
-> - **Explanation:** DNS resolution walks down the hierarchical namespace tree.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [URL / URI (Uniform Resource Identifier)](url_uri.md) — The string structure containing the host domain resolved by DNS.
 - [HTTP / HTTPS](http_https.md) — The web protocols initiated immediately after DNS resolves the destination IP address.
 - [IP Address & Port](ip_address_port.md) — Related concept: IP Address & Port.
@@ -193,7 +291,7 @@ Top-Level Domain (TLD) Server, Recursive Resolver, Root Name Server, Authoritati
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - DNS translates human-readable domain names (hostnames) into numerical IP addresses.
 - Resolvers queryRoot, TLD, and Authoritative nameservers recursively to locate IPs.
 - Caching occurs at browser, OS, and resolver layers to speed up future lookups.

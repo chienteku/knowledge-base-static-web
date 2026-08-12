@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture**
+
+**Node.js Core Architecture (Node.js Core Architecture .)**: Blocking the Event Loop is a fundamental concept in this technology stack. **Level 1 — Introduction & Architecture**
 
 ---
 
-## 3. Environment Context
-- **Node.js Core Architecture** (Governs execution efficiency on single-threaded runtime engines).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 "Never block the Event Loop" is the golden rule of Node.js backend development. 
@@ -108,7 +104,7 @@ app.get('/config', async (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming that `.forEach()` or `.map()` arrays run asynchronously
 
@@ -172,7 +168,7 @@ app.get('/file', async (req, res) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Code Review
 
@@ -226,7 +222,7 @@ app.post('/import-data', (req, res) => {
 >
 > **Explanation:** `fs.promises.readFile` returns a Promise, allowing the event loop to handle other requests while reading from disk.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop system frozen by blocking code.
 - [Single-Threaded Architecture](single_threaded.md) — The execution structure vulnerable to blocking.
 - [CPU-bound vs I/O-bound](cpu_vs_io.md) — Related concept: CPU-bound vs I/O-bound.
@@ -235,7 +231,7 @@ app.post('/import-data', (req, res) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Blocking the Event Loop freezes Node's single main thread.
 - When blocked, the server cannot accept new requests or run async callbacks.
 - Common causes include synchronous file methods (`readFileSync`), deep loops, large JSON parsing, and ReDoS.

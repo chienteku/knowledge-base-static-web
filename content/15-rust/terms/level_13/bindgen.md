@@ -10,7 +10,7 @@
 
 - [FFI (Foreign Function Interface)](ffi.md) — Understanding cross-language binary interfaces.
 - [`extern "C"`](extern_c.md) — C ABI function signatures.
-- [`build.rs` (Build Scripts)](../level_07/build_rs.md) — Cargo build scripts used to invoke `bindgen` automatically during compilation.
+- [`build.rs` — Build Scripts](../level_07/build_rs.md) — Cargo build scripts used to invoke `bindgen` automatically during compilation.
 
 ---
 
@@ -682,7 +682,7 @@ Write a `#![no_std]` compatible Rust module that:
 
 - [`cbindgen`](cbindgen.md) — The inverse tool (generates C headers from Rust code).
 - [FFI (Foreign Function Interface)](ffi.md) — The cross-language interface framework.
-- [`build.rs` (Build Scripts)](../level_07/build_rs.md) — The Cargo build script mechanism driving `bindgen`.
+- [`build.rs` — Build Scripts](../level_07/build_rs.md) — The Cargo build script mechanism driving `bindgen`.
 - [Build Scripts (`build.rs`)](../level_07/build_scripts.md) — Related concept: Build Scripts (`build.rs`).
 
 ---

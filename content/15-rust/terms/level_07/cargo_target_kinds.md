@@ -200,7 +200,7 @@ Answer the following:
 ## 6. Related Terms
 
 
-- [Package](../level_01/package.md)
+- [Package](../level_01/package.md) — 
 - [Integration Tests](../level_08/integration_tests.md) — The dedicated deep-dive on the `tests/` target kind specifically.
 - [Benchmarking](../level_08/benchmarking.md) — The dedicated deep-dive on the `benches/` target kind.
 - [Workspace](workspace.md) — The next layer up: multiple *packages* (each potentially with several targets) managed together.

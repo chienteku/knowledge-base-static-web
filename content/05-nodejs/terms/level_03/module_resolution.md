@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Node.js Core Architecture**
+
+**Node.js Core Architecture (Node.js Only .)**: Module Resolution is a fundamental concept in this technology stack. **Level 3 — Module Systems**
 
 ---
 
-## 3. Environment Context
-- **Node.js Only** (Browsers resolve modules purely via URLs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you write `require('./math.js')`, it's obvious to the computer: "Look in the exact same folder for a file named math.js."
@@ -49,7 +45,7 @@ const db = require('./database/connection');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Global vs Local Installs
 
@@ -96,7 +92,7 @@ const a = require('lib');
 const b = require('lib'); // Resolves to same cached instance
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Hunt
 
@@ -160,7 +156,7 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 >
 > **Explanation:** Folder module resolution checks `package.json` main field before falling back to `index` files.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [node_modules](../level_04/node_modules.md) — The folder the algorithm is desperately searching for.
 - [ES Modules (import, export)](es_modules.md) — ESM resolution is slightly stricter (e.g., forcing you to include the `.js` extension).
 - [Circular Dependencies](circular_dependencies.md) — Related concept: Circular Dependencies.
@@ -169,7 +165,7 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Module Resolution** is how Node.js finds files and packages.
 - If a path starts with `./`, it looks exactly there. If the target is a folder, it defaults to `index.js`.
 - If it's just a word (like `'react'`), it searches for a `node_modules` folder, climbing up the directory tree until it hits the hard drive root.

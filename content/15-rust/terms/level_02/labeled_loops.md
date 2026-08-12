@@ -262,7 +262,7 @@ Use iterator combinators (.any(), .find()) or break logic into smaller functions
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - None!
 

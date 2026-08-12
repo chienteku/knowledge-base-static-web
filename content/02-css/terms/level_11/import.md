@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **CSS Architecture / At-Rule**
+
+**CSS Architecture / At-Rule (Universal Standard .)**: `@import` is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Though frequently handled by bundlers like Webpack or Vite in modern JavaScript frameworks).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard professional website has thousands of lines of CSS. If you put all of that into a single `styles.css` file, it becomes completely unmanageable. Finding the code for a specific button could take five minutes of scrolling.
@@ -52,7 +48,7 @@ body {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting `@import` in the middle of a file
 
@@ -105,7 +101,7 @@ body { color: red; }
 /* Use build tool bundlers (Vite/webpack) to bundle CSS files into single network request */
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The External Font
 
@@ -154,7 +150,7 @@ body { color: red; }
 >
 > **Explanation:** `layer(layerName)` imports external stylesheets into explicit Cascade Layers.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [The Cascade](../level_01/the_cascade.md) — Because `@import` files are loaded first, any CSS you write *below* the imports in your master file will override the imported CSS (due to the cascade!).
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Modern preprocessors compile imports before browser loading loops.
 - [CSS Reset vs. Normalize](reset_normalize.md) — Resets are often loaded at the top of main files via `@import`.
@@ -162,7 +158,7 @@ body { color: red; }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `@import` allows you to split large CSS files into small, organized, manageable pieces.
 - Imports **MUST** be placed at the absolute top of your CSS file.
 - In modern web development, bundlers (like Vite) use `@import` to organize code, but automatically merge the files together for performance before sending them to the user.

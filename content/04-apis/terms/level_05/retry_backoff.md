@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Browser API / Networking**
+
+**Browser API / Networking (Universal: Crucial for client-side API calls and server-to-server microservice integrations.)**: Retry & Exponential Backoff is a fundamental concept in this technology stack. **Level 5 — Fetching Data (Client-Side)**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Crucial for client-side API calls and server-to-server microservice integrations.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Mobile and wireless network connections are inherently unstable. Temporary network dropouts, router congestion, or server-side CPU spikes can cause API requests to fail. These are known as **transient errors**—errors that resolve themselves if you wait a brief moment.
@@ -85,7 +81,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, baseDelayMs = 1000
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Retrying non-idempotent requests (like `POST`)
 
@@ -140,59 +136,213 @@ await new Promise(r => setTimeout(r, delay));
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Backoff Calculator
+### Exercise 1: Exponential Backoff & Full Jitter Retry Engine
 
-**Problem:** Calculate the exponential backoff delay (excluding jitter) for retry attempt #2 (the third try overall) if the base delay is set to `500ms`. The retry attempts are 0-indexed (Attempt 0 = 1st retry, Attempt 1 = 2nd retry).
+**Scenario:** An API client retries failed HTTP requests using exponential backoff delay with randomized Full Jitter to prevent thundering herd problems.
+
+**Requirements:**
+1. Write fetchWithBackoff(fn, maxRetries, baseDelayMs).
+2. Calculate `delay = min(maxDelay, baseDelay * 2^attempt)`.
+3. Apply Full Jitter `random() * delay`.
 
 > [!check]- Answer
-> - The formula for exponential delay is $\text{Delay} = \text{base} \times 2^{\text{attempt}}$.
-> - For attempt #1 (2nd retry), the delay is $500 \times 2^1 = 1000\text{ms}$.
-> 
-> [!check]- Answer
-> - **`2000ms`** (Calculation: $500 \times 2^2 = 500 \times 4 = 2000\text{ms}$).
-> 
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchWithBackoff(asyncFn, maxRetries = 3, baseDelayMs = 100, mockSleep) {
+>   let attempt = 0;
+>   const sleep = mockSleep || ((ms) => new Promise(r => setTimeout(r, ms)));
+>
+>   while (attempt <= maxRetries) {
+>     try {
+>       return await asyncFn();
+>     } catch (err) {
+>       if (attempt === maxRetries) throw err;
+>
+>       // Exponential backoff: base * 2^attempt
+>       const expDelay = baseDelayMs * Math.pow(2, attempt);
+>       // Full Jitter: random between 0 and expDelay
+>       const jitterDelay = Math.floor(Math.random() * expDelay);
+>
+>       await sleep(jitterDelay);
+>       attempt++;
+>     }
+>   }
+> }
+>
+> // Verification tests
+> let calls = 0;
+> const delays = [];
+> const mockSleep = async (ms) => delays.push(ms);
+> const flakyFn = async () => {
+>   calls++;
+>   if (calls < 3) throw new Error("503 Service Unavailable");
+>   return "SUCCESS";
+> };
+>
+> fetchWithBackoff(flakyFn, 3, 100, mockSleep).then(res => {
+>   console.assert(res === "SUCCESS", "Test 1 Failed");
+>   console.assert(calls === 3, "Test 2 Failed: Retried twice");
+>   console.assert(delays.length === 2, "Test 3 Failed: Slept twice");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Exponential Backoff Formula**: Multiplies delay by power of 2 (100ms, 200ms, 400ms, 800ms) on consecutive failures.
+> 2. **Full Jitter Purpose**: Randomizes delay intervals to spread out retry bursts across multiple distributed clients.
+> 3. **Thundering Herd Problem**: Without jitter, synchronized retries from thousands of clients crush recovering backend servers.
 > 
 ---
 
-### Exercise 2: Exponential Backoff Math Calculation
+### Exercise 2: Retry-After Header Aware Retry Strategy
 
-**Problem:** Calculate backoff delay for attempt #3 using formula `delay = 100ms * 2^attempt`.
+**Scenario:** An API client inspects HTTP 429 / 503 response headers and honors server-requested `Retry-After` delay intervals.
 
-**Expected output:**
+**Requirements:**
+1. Write executeRetryAfter(fetchFn, maxRetries).
+2. If 429 response, read `Retry-After` header (seconds or HTTP Date).
+3. Sleep requested duration.
+
 > [!check]- Answer
-> ```text
-> 800ms (100ms * 2^3 = 100 * 8 = 800ms).
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeRetryAfter(fetchFn, maxRetries = 2, mockSleep) {
+>   let attempt = 0;
+>   const sleep = mockSleep || ((ms) => new Promise(r => setTimeout(r, ms)));
+>
+>   while (attempt <= maxRetries) {
+>     const res = await fetchFn();
+>     if (res.status !== 429 && res.status !== 503) {
+>       return res;
+>     }
+>
+>     if (attempt === maxRetries) return res;
+>
+>     const retryAfterHeader = res.headers?.get("retry-after") || res.headers?.get("Retry-After");
+>     let delayMs = 1000; // Default fallback delay
+>
+>     if (retryAfterHeader) {
+>       const seconds = parseInt(retryAfterHeader, 10);
+>       if (!isNaN(seconds)) {
+>         delayMs = seconds * 1000;
+>       }
+>     }
+>
+>     await sleep(delayMs);
+>     attempt++;
+>   }
+> }
+>
+> // Verification tests
+> let attempts = 0;
+> const sleptMs = [];
+> const mockSleep = async (ms) => sleptMs.push(ms);
+>
+> const mockRateLimited = async () => {
+>   attempts++;
+>   if (attempts === 1) {
+>     return {
+>       status: 429,
+>       headers: new Map([["retry-after", "3"]]) // Server asks for 3s delay
+>     };
+>   }
+>   return { status: 200, data: "OK" };
+> };
+>
+> executeRetryAfter(mockRateLimited, 2, mockSleep).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed");
+>   console.assert(sleptMs[0] === 3000, "Test 2 Failed: Must honor 3 second Retry-After header");
+> });
 > ```
-> ```text
-> 800ms (100ms * 2^3 = 100 * 8 = 800ms).
-> ```
-> - **Explanation:** Exponential backoff doubles delay duration on each consecutive attempt.
+>
+> #### Technical Explanation
+>
+> 1. **Retry-After Header**: HTTP header sent with 429 Too Many Requests or 503 Service Unavailable responses.
+> 2. **Header Format Variants**: Header contains either delay integer in seconds (`Retry-After: 120`) or HTTP Date string.
+> 3. **Server Rate Governance**: Honoring server delay request prevents getting permanently IP banned by backend firewalls.
+> 
 ---
 
-### Exercise 3: Jitter Purpose in Retries
+### Exercise 3: Circuit Breaker Pattern Integration for Failed Retries
 
-**Problem:** Why is random "Jitter" added to exponential backoff delay calculations?
+**Scenario:** Implements a Circuit Breaker state machine (CLOSED -> OPEN -> HALF_OPEN) to trip and stop retries when service error rate spikes.
 
-**Expected output:**
+**Requirements:**
+1. Write createCircuitBreaker(fn, failureThreshold, resetTimeoutMs).
+2. Track failures; trip to OPEN state when threshold exceeded.
+
 > [!check]- Answer
-> ```text
-> Jitter introduces random variation to prevent thousands of retrying clients from executing retries at the exact same synchronized timestamp (thundering herd problem).
+>
+> #### Implementation
+>
+> ```javascript
+> function createCircuitBreaker(asyncFn, failureThreshold = 3, resetTimeoutMs = 1000) {
+>   let state = "CLOSED";
+>   let failureCount = 0;
+>   let nextAttemptTime = 0;
+>
+>   return async function call(...args) {
+>     const now = Date.now();
+>
+>     if (state === "OPEN") {
+>       if (now > nextAttemptTime) {
+>         state = "HALF_OPEN";
+>       } else {
+>         throw new Error("CircuitBreaker: OPEN - Request blocked");
+>       }
+>     }
+>
+>     try {
+>       const result = await asyncFn(...args);
+>       if (state === "HALF_OPEN") {
+>         state = "CLOSED";
+>         failureCount = 0;
+>       }
+>       return result;
+>     } catch (err) {
+>       failureCount++;
+>       if (failureCount >= failureThreshold) {
+>         state = "OPEN";
+>         nextAttemptTime = Date.now() + resetTimeoutMs;
+>       }
+>       throw err;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const failingApi = async () => { throw new Error("DB Error"); };
+> const breaker = createCircuitBreaker(failingApi, 2, 500);
+>
+> breaker().catch(() => {});
+> breaker().catch(() => {}); // Failure threshold (2) reached!
+>
+> breaker().catch(err => {
+>   console.assert(err.message.includes("CircuitBreaker: OPEN"), "Test 1 Failed: Circuit must trip to OPEN");
+> });
 > ```
-> ```text
-> Jitter introduces random variation to prevent thousands of retrying clients from executing retries at the exact same synchronized timestamp (thundering herd problem).
-> ```
-> - **Explanation:** Random jitter breaks synchronized client retry spikes.
+>
+> #### Technical Explanation
+>
+> 1. **Circuit Breaker Purpose**: Prevents cascading failures by stopping network requests to failing downstream services.
+> 2. **CLOSED State**: Normal operation: requests pass through.
+> 3. **OPEN State**: Failures exceeded threshold: immediately trips and fails requests without network dispatch.
+> 4. **HALF-OPEN State**: Test state: allows single probe request to check if downstream service recovered.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Idempotency](../level_06/idempotency.md) — The server property that makes repeating requests safe.
 - [Request Timeout](request_timeout.md) — The client-side cancel condition that often triggers a retry loop.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Retrying requests recovers your application from transient, temporary network drops.
 - Immediate retries risk causing a Thundering Herd problem, crashing the server.
 - Exponential backoff increases the delay exponentially between each retry attempt.

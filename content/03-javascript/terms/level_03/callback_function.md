@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Functional Programming / Asynchronous Programming**
+
+**Functional Programming / Asynchronous Programming (Universal: Works everywhere)**: Callback Function is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript is heavily reliant on "events" (like a user clicking a button) and "asynchronous tasks" (like downloading data from the internet). When you tell JavaScript to download an image, you don't want the entire program to freeze and wait. You want it to keep running other code, and then *call you back* when the image is finally ready.
@@ -77,7 +73,7 @@ processPayment(50, handleSuccess, handleError);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Callback Function Scope and Variable Hoisting
 
@@ -150,68 +146,133 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Anonymous Callbacks
+### Exercise 1: Asynchronous Task Processing Pipeline
 
-**Problem:** Use the built-in `setTimeout` function. Instead of passing it a named function, pass it an anonymous Arrow Function that logs `"Time's up!"` after 1000 milliseconds.
+**Scenario:** An event processing queue accepts callback functions to notify callers when background tasks complete successfully or fail.
 
-**Expected output:**
-*(Wait 1 second)*
+**Requirements:**
+1. Write processTaskQueue(tasks, callback).
+2. Process items and collect total.
+3. Invoke callback(err, total).
+4. Return callback invocation result.
+
 > [!check]- Answer
-> ```text
-> Time's up!
-> ```
-> - `setTimeout(() => { console.log("Time's up!"); }, 1000);`
-> - Passing anonymous arrow functions as callbacks is the most common pattern in modern React/JavaScript.
-> 
----
-
-### Exercise 2: Higher-Order Function with Callback
-
-**Problem:** Write `processData(val, callback)` that multiplies `val` by 2 and passes it to `callback`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Result: 20
-> ```
-> ```javascript
-> function processData(val, callback) {
->   const res = val * 2;
->   callback(res);
-> }
-> processData(10, (out) => console.log(`Result: ${out}`));
-> ```
 >
-> **Explanation:** Callbacks are functions passed as arguments executed inside higher-order routines.
-> 
----
-
-### Exercise 3: Error-First Callback Pattern (Node.js style)
-
-**Problem:** Simulate Node.js error-first callback `callback(err, data)` handling success vs error.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Data received: Success
-> ```
+> #### Implementation
+>
 > ```javascript
-> function fetchData(cb) {
->   cb(null, "Success");
+> function processTaskQueue(tasks, callback) {
+>   if (!Array.isArray(tasks) || tasks.length === 0) {
+>     return callback(new Error("Empty task queue"), null);
+>   }
+>   const total = tasks.reduce((sum, t) => sum + t.cost, 0);
+>   return callback(null, total);
 > }
-> fetchData((err, data) => {
->   if (err) return console.log(err);
->   console.log(`Data received: ${data}`);
+>
+> // Verification tests
+> let resultTotal = 0;
+> processTaskQueue([{ cost: 10 }, { cost: 20 }], (err, total) => {
+>   if (!err) resultTotal = total;
 > });
+> console.assert(resultTotal === 30, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Error-first callbacks receive `err` as first argument and `data` as second.
+> #### Technical Explanation
+>
+> 1. **Callback Pattern**: A callback function is passed as an argument to another function and invoked after an action completes.
+> 2. **Error-First Conventions**: Standard Node.js callbacks accept error as the first argument (err, result).
+> 3. **Synchronous vs Asynchronous**: Callbacks can be invoked synchronously or deferred asynchronously via microtask queues.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Custom Array Filter Callback Engine
+
+**Scenario:** A custom data utility implements a higher-order filter function that executes a predicate callback for every element in an array.
+
+**Requirements:**
+1. Write customFilter(array, predicateCallback).
+2. Iterate array items.
+3. Pass item, index, and array to predicateCallback.
+4. Return filtered array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function customFilter(array, predicateCallback) {
+>   const filtered = [];
+>   for (let i = 0; i < array.length; i++) {
+>     if (predicateCallback(array[i], i, array)) {
+>       filtered.push(array[i]);
+>     }
+>   }
+>   return filtered;
+> }
+>
+> // Verification tests
+> const numbers = [10, 15, 20, 25];
+> const evens = customFilter(numbers, num => num % 2 === 0);
+> console.assert(evens.join(",") === "10,20", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Higher-Order Invocations**: Higher-order functions accept callbacks and invoke them during execution.
+> 2. **Predicate Callbacks**: A predicate callback returns a boolean value to decide filtering criteria.
+> 3. **Parameter Passing**: Iterative callbacks typically receive element, index, and array parameters.
+> 
+---
+
+### Exercise 3: Event Emitter Callback Subscriber Registry
+
+**Scenario:** An event emitter module registers subscriber callback functions and dispatches payloads to registered callbacks when events fire.
+
+**Requirements:**
+1. Write createEventEmitter().
+2. Implement on(eventName, callback) and emit(eventName, data).
+3. Verify callbacks receive emitted payload.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createEventEmitter() {
+>   const listeners = {};
+>
+>   return {
+>     on(event, callback) {
+>       if (!listeners[event]) listeners[event] = [];
+>       listeners[event].push(callback);
+>     },
+>     emit(event, data) {
+>       if (!listeners[event]) return;
+>       for (const cb of listeners[event]) {
+>         cb(data);
+>       }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const emitter = createEventEmitter();
+> let receivedData = null;
+> emitter.on("userLogin", data => { receivedData = data; });
+> emitter.emit("userLogin", { username: "alice" });
+> console.assert(receivedData.username === "alice", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Observer Pattern**: Callbacks act as event subscribers in event-driven architectures.
+> 2. **Multiple Listeners**: Iterating callback arrays triggers registered handlers sequentially.
+> 3. **Memory Leak Awareness**: Unregistered callbacks retained in listener arrays prevent garbage collection.
+---
+
+## 6. Related Terms
 - [Higher-Order Function](higher_order_function.md) — The function that *receives* the callback.
 - [Arrow Function](arrow_function.md) — The most common syntax used to write inline callbacks.
 - [First-Class Function](first_class_function.md) — Related concept: First-Class Function.
@@ -220,7 +281,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Callback Function is passed into another function as an argument.
 - It delegates the responsibility of *when* the function should be executed to the receiving function.
 - Callbacks are fundamental to event listeners (like button clicks) and asynchronous programming in JavaScript.

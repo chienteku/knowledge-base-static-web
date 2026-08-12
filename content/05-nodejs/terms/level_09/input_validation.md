@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Security / Data Validation**
+
+**Security / Data Validation (Web App Server Layer .)**: Input Validation (joi / zod) is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Web App Server Layer** (Acts as an edge guard blocking invalid payloads before they enter the application logic).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, the fundamental rule of security is: **Never trust input from the client**. Malicious or poorly formatted requests can trigger database crashes, cause memory issues, corrupt data states, or expose injection vulnerabilities.
@@ -90,7 +86,7 @@ app.post('/api/register', validateRequest(registerSchema), (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing manual `if/else` checks inside controllers for input validation
 
@@ -231,7 +227,7 @@ app.post('/user', async (req, res) => {
 app.post('/user', validate(userSchema), userController.create);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Zod Schema Configuration
 
@@ -293,13 +289,13 @@ const postSchema = z.object({
 >
 > **Explanation:** Sanitizing HTML tags prevents malicious client-side script execution.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Body Parsing (express.json())](../level_07/body_parsing.md) — The parser feeding data to the validation schemas.
 - [SQL Injection](../level_08/sql_injection.md) — Database query vulnerabilities prevented by parameterized inputs and edge validation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Never trust data sent from the client; always validate at the server edge.
 - Input validation middleware blocks invalid payloads before they consume database resources.
 - Centralize validation logic using declarative schema libraries like Zod or Joi.

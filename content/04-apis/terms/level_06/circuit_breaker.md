@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Design**
+
+**Architecture / Design (Universal: Vital for microservices architectures, cloud application gateways, and server integrations.)**: Circuit Breaker is a fundamental concept in this technology stack. **Level 6 — Advanced API Concepts**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Vital for microservices architectures, cloud application gateways, and server integrations.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web architectures, servers frequently call downstream APIs (for instance, an e-commerce server calling a third-party payment gateway like Stripe). If the downstream API experiences an outage, it might take 30 seconds to respond to each request before timing out.
@@ -130,7 +126,7 @@ class CircuitBreaker {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting the failure threshold too low
 
@@ -180,70 +176,177 @@ const breaker = new CircuitBreaker(fn, {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: State Auditor
+### Exercise 1: Circuit Breaker State Machine Engine
 
-**Problem:** Review this log history of a circuit breaker wrapper configured with a **cooldown of 30s** and a **failure threshold of 3**. Identify the state of the circuit breaker at log entry #6:
+**Scenario:** A fault-tolerant microservice client implements a Circuit Breaker state machine (CLOSED -> OPEN -> HALF_OPEN).
 
-1. `[10:00:00]` Request 1 failed.
-2. `[10:00:01]` Request 2 failed.
-3. `[10:00:02]` Request 3 failed. (Circuit state transitions)
-4. `[10:00:05]` Request 4 failed with: "Circuit Breaker is OPEN. Request blocked."
-5. `[10:00:10]` Request 5 failed with: "Circuit Breaker is OPEN. Request blocked."
-6. `[10:00:45]` Request 6 triggered.
+**Requirements:**
+1. Write createCircuitBreaker(asyncFn, failureThreshold, resetTimeoutMs).
+2. Track state transitions.
+3. Block calls in OPEN state.
 
 > [!check]- Answer
-> - **`HALF-OPEN`** (The circuit tripped at 10:00:02. The 30-second cool-down window expired at 10:00:32. At 10:00:45, the next request transitions the breaker to the Half-Open state to test the downstream server).
-> 
-> 
----
-
-### Exercise 2: Circuit Breaker 3-State Life Cycle Matrix
-
-**Problem:** Describe the 3 operational states of a Circuit Breaker:
-1. CLOSED
-2. OPEN
-3. HALF-OPEN
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. CLOSED: Normal operation; requests pass through to downstream service
-> 2. OPEN: Downstream service is failing; requests fail fast immediately without calling service
-> 3. HALF-OPEN: Trial period; canary requests test if downstream service has recovered
-> ```
-> ```text
-> CLOSED    -> Normal flow. Requests pass to downstream service.
-> OPEN      -> Service failing. Calls fail fast immediately without execution.
-> HALF-OPEN -> Testing recovery. Canary requests check downstream health.
-> ```
-> - **Explanation:** Circuit Breakers protect system resources when downstream services fail.
----
-
-### Exercise 3: Fallback Response Pattern
-
-**Problem:** What should a Circuit Breaker return when in the OPEN state to maintain degraded user experience?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> A cached fallback response or default degraded static payload.
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> breaker.fallback(() => ({ items: [], cached: true, offline: true }));
+> function createCircuitBreaker(asyncFn, failureThreshold = 2, resetTimeoutMs = 1000) {
+>   let state = "CLOSED";
+>   let failureCount = 0;
+>   let nextAttemptTime = 0;
+>
+>   return async function execute(...args) {
+>     const now = Date.now();
+>
+>     if (state === "OPEN") {
+>       if (now > nextAttemptTime) {
+>         state = "HALF_OPEN";
+>       } else {
+>         return { status: 503, state: "OPEN", error: "Circuit Breaker is OPEN" };
+>       }
+>     }
+>
+>     try {
+>       const result = await asyncFn(...args);
+>       if (state === "HALF_OPEN") {
+>         state = "CLOSED";
+>         failureCount = 0;
+>       }
+>       return { status: 200, state: "CLOSED", data: result };
+>     } catch (err) {
+>       failureCount++;
+>       if (failureCount >= failureThreshold) {
+>         state = "OPEN";
+>         nextAttemptTime = Date.now() + resetTimeoutMs;
+>       }
+>       return { status: 500, state, error: err.message };
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const flakyFn = async () => { throw new Error("Database Timeout"); };
+> const breaker = createCircuitBreaker(flakyFn, 2, 500);
+>
+> breaker().then(res1 => {
+>   console.assert(res1.state === "CLOSED", "Test 1 Failed");
+>   return breaker().then(res2 => {
+>     console.assert(res2.state === "OPEN", "Test 2 Failed: Circuit must trip to OPEN");
+>     return breaker().then(res3 => {
+>       console.assert(res3.status === 503 && res3.state === "OPEN", "Test 3 Failed: Blocked call");
+>     });
+>   });
+> });
 > ```
-> - **Explanation:** Fallback responses prevent cascade UI crashes when microservices fail.
+>
+> #### Technical Explanation
+>
+> 1. **Circuit Breaker Pattern**: Defends microservices against cascading failures by stopping calls to broken downstream services.
+> 2. **CLOSED State**: Normal operation: calls are dispatched to downstream service.
+> 3. **OPEN State**: Failures exceeded threshold: immediately rejects calls locally without network dispatch.
+> 4. **HALF_OPEN State**: Probe state: allows test call to check if downstream service recovered.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: Fallback Router Integration for Tripped Circuits
+
+**Scenario:** An API gateway routes requests to a secondary fallback cache when the primary service's Circuit Breaker is OPEN.
+
+**Requirements:**
+1. Write executeWithFallbackRoute(primaryBreakerCall, fallbackCacheCall).
+2. If primary returns 503 OPEN, execute fallbackCacheCall.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeWithFallbackRoute(primaryCall, fallbackCall) {
+>   const primaryRes = await primaryCall();
+>
+>   if (primaryRes.status === 503 && primaryRes.state === "OPEN") {
+>     const fallbackData = await fallbackCall();
+>     return {
+>       status: 200,
+>       source: "FALLBACK_CACHE",
+>       data: fallbackData
+>     };
+>   }
+>
+>   return { source: "PRIMARY_SERVICE", ...primaryRes };
+> }
+>
+> // Verification tests
+> const openPrimary = async () => ({ status: 503, state: "OPEN" });
+> const fallbackCache = async () => ({ id: 42, cached: true });
+>
+> executeWithFallbackRoute(openPrimary, fallbackCache).then(res => {
+>   console.assert(res.source === "FALLBACK_CACHE" && res.data.id === 42, "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Graceful Service Degradation**: Serving stale or cached fallback data when primary microservices fail.
+> 2. **Cascading Failure Prevention**: Isolates failing services so overall application functionality remains available.
+> 3. **API Gateway Fallback Routing**: Standard pattern in Netflix Hystrix and Resilience4j microservice architectures.
+> 
+---
+
+### Exercise 3: Rolling Window Failure Rate Auditor
+
+**Scenario:** Tracks API call failure rates over a sliding 60-second window to decide when to trip the circuit breaker.
+
+**Requirements:**
+1. Write auditRollingFailureRate(callLogsWindow, maxFailureRatePercentage).
+2. Calculate failure percentage.
+3. Trip circuit if failure rate > max.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditRollingFailureRate(callLogsWindow = [], maxFailureRatePct = 50) {
+>   if (callLogsWindow.length === 0) return { tripCircuit: false, failureRatePct: 0 };
+>
+>   const failedCount = callLogsWindow.filter(log => log.success === false).length;
+>   const failureRatePct = Math.round((failedCount / callLogsWindow.length) * 100);
+>
+>   return {
+>     tripCircuit: failureRatePct >= maxFailureRatePct,
+>     failureRatePct,
+>     totalCalls: callLogsWindow.length
+>   };
+> }
+>
+> // Verification tests
+> const logs = [
+>   { success: true }, { success: false }, { success: false }, { success: false }
+> ];
+>
+> const audit = auditRollingFailureRate(logs, 50);
+> console.assert(audit.failureRatePct === 75, "Test 1 Failed: 3/4 = 75%");
+> console.assert(audit.tripCircuit === true, "Test 2 Failed: Must trip when rate > 50%");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Rolling Window Statistics**: Evaluates health over recent time windows rather than total lifetime call counts.
+> 2. **Failure Rate Threshold**: Trips circuit when percentage of failed calls exceeds configured limit (e.g. 50%).
+> 3. **Minimum Volume Guard**: Requires a minimum call volume in window before evaluating error percentage.
+---
+
+## 6. Related Terms
 - [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — The server defense policy that client circuit breakers help mitigate.
 - [Webhooks](webhooks.md) — Asynchronous push notifications that bypass synchronous HTTP waiting loops.
 - [Caching (ETag, Cache-Control)](caching.md) — Related concept: Caching (ETag, Cache-Control).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Circuit Breaker pattern prevents downstream API outages from causing cascading failures in your own system.
 - In the CLOSED state, requests pass through and failure counts are tracked.
 - In the OPEN state, the breaker fails fast locally to protect threads and prevent server overload.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Tooling / Ecosystem**
+
+**Tooling / Ecosystem (Terminal / Build Step)**: NPM (Node Package Manager) is a fundamental concept in this technology stack. **Level 4 — Package Management**
 
 ---
 
-## 3. Environment Context
-- **Terminal / Build Step**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before package managers existed, if you wanted to use a library like jQuery, you had to go to `jquery.com`, click "Download .zip", unzip it, drag the file into your project folder, and add a `<script>` tag. If a new version came out, you had to do it all over again manually.
@@ -41,7 +37,7 @@ When developers say "NPM," they actually mean two different things:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Committing downloaded packages to GitHub
 
@@ -89,7 +85,7 @@ npm install express # --save (production dependency)
 npm install --save-dev jest # --save-dev (development dependency)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Dev Dependency
 
@@ -140,7 +136,7 @@ What is the difference in how you install them?
 >
 > **Explanation:** `npm audit` checks dependency versions against known CVE vulnerability databases.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [package.json](package_json.md) — The configuration file that NPM reads and writes to.
 - [node_modules](node_modules.md) — Where NPM physically places the downloaded code.
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — Related concept: Node.js (Runtime Environment).
@@ -150,7 +146,7 @@ What is the difference in how you install them?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **NPM** is the default package manager for Node.js.
 - It is used to quickly download and manage third-party code (External Modules).
 - Normal dependencies (`npm install`) are required for the app to run.

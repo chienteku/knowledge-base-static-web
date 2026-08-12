@@ -9,7 +9,7 @@
 
 
 - [Iterator](iterator.md) — The lazy sequence of items that adapters attach to.
-- [Closure](../level_06/closure.md) — The inline anonymous functions (like `|x| x + 1`) that tell the adapters exactly what to do.
+- [Closures (`|args| body`)](../level_06/closure.md) — The inline anonymous functions (like `|x| x + 1`) that tell the adapters exactly what to do.
 
 ---
 

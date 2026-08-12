@@ -538,7 +538,7 @@ To enable dynamic equality checking across trait objects:
 - [Derive Macro](derive_macro.md) — How you get `PartialEq` and `Eq` for free 99% of the time.
 - [`Hash` Trait](../level_02/hash_trait.md) — Related concept: `Hash` Trait.
 - [`matches!` Macro](../level_02/matches_macro.md) — Related concept: `matches!` Macro.
-- [`assert!` Macros](../level_08/assert_macros.md) — Related concept: `assert!` / `assert_eq!` / `assert_ne!`.
+- [`assert!` / `assert_eq!` / `assert_ne!`](../level_08/assert_macros.md) — Related concept: `assert!` / `assert_eq!` / `assert_ne!`.
 
 ---
 

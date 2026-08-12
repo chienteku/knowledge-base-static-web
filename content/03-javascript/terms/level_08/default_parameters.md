@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Syntax Feature** *(Introduced in ES6)*
+
+**Syntax Feature *(Introduced in ES6)* (Universal)**: Default Parameters is a fundamental concept in this technology stack. **Level 8 — Modern JavaScript (ES6+)**
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, if you define a function that expects 3 arguments, but the user only passes 2, the engine doesn't crash. It simply sets the missing 3rd argument to `undefined`. 
@@ -69,7 +65,7 @@ console.log(calculatePrice(100, undefined, 20)); // 85
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Default Parameters Scope and Variable Hoisting
 
@@ -142,72 +138,118 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Using previous parameters
+### Exercise 1: Server Config Initializer with Dynamic Expression Defaults
 
-**Problem:** Can a default parameter reference a parameter that comes *before* it in the same function signature?
-```javascript
-function makeGreeting(name, message = `Hello ${name}`) {
-  console.log(message);
-}
-makeGreeting("Bob");
-```
+**Scenario:** An API gateway initializes server configuration objects, using ES6 default parameters to calculate dynamic default timeouts and ports at invocation time.
 
-**Expected output:**
+**Requirements:**
+1. Write createGatewayConfig(port = 8080, timeout = getCalculatedTimeout()).
+2. Verify default arguments trigger on undefined.
+3. Return config object.
+
 > [!check]- Answer
-> ```text
-> Yes! It will print `"Hello Bob"`.
-> Default parameters are evaluated sequentially from left to right, so later parameters have full access to earlier ones.
-> ```
-> - The parameters exist in their own little mini-scope.
-> 
----
-
-### Exercise 2: Default Parameters Evaluation Timing
-
-**Problem:** Demonstrate that default parameters evaluate at invocation time: `function add(a, b = a * 2)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 15
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function add(a, b = a * 2) { return a + b; }
-> console.log(add(5));
+> function getCalculatedTimeout() {
+>   return 5000;
+> }
+>
+> function createGatewayConfig(port = 8080, timeout = getCalculatedTimeout()) {
+>   return { port, timeout };
+> }
+>
+> // Verification tests
+> const cfg1 = createGatewayConfig();
+> console.assert(cfg1.port === 8080 && cfg1.timeout === 5000, "Test 1 Failed");
+>
+> const cfg2 = createGatewayConfig(3000, undefined);
+> console.assert(cfg2.port === 3000 && cfg2.timeout === 5000, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Default parameter expressions evaluate in parameter scope at runtime when invoked.
+> #### Technical Explanation
+>
+> 1. **Default Parameter Evaluation**: Default parameters are evaluated at call time when passed arguments are explicitly undefined.
+> 2. **Dynamic Expression Evaluation**: Defaults can be function calls or expressions that run when triggered.
+> 3. **Null vs Undefined Trigger**: Passing null does NOT trigger default parameters; defaults activate exclusively on undefined.
 > 
 ---
 
-### Exercise 3: Destructured Parameter Defaults
+### Exercise 2: Destructured Options Parameter with Default Object Fallback
 
-**Problem:** Provide defaults `{ port = 8080 } = {}` for destructured object parameters.
+**Scenario:** A UI component prop handler uses destructured object parameters with default property values and a default fallback object.
 
-**Expected output:**
+**Requirements:**
+1. Write renderBadge({ text = "Default", color = "blue", active = true } = {}).
+2. Extract props cleanly.
+3. Return formatted descriptor.
+
 > [!check]- Answer
-> ```text
-> 8080
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function start({ port = 8080 } = {}) { return port; }
-> console.log(start());
+> function renderBadge({ text = "Default", color = "blue", active = true } = {}) {
+>   return `Badge[${text}, ${color}, active=${active}]`;
+> }
+>
+> // Verification tests
+> console.assert(renderBadge() === "Badge[Default, blue, active=true]", "Test 1 Failed");
+> console.assert(renderBadge({ text: "Alert", color: "red" }) === "Badge[Alert, red, active=true]", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Combining parameter destructuring with default initializers safely handles omitted arguments.
-> 
+> #### Technical Explanation
+>
+> 1. **Destructuring Defaults**: Properties inside destructured parameters assign defaults when individual keys are missing.
+> 2. **Fallback Default Object (= {})**: = {} suffix guarantees parameter destructuring succeeds when caller passes no arguments.
+> 3. **Declarative Function Signatures**: Eliminates verbose option checking code inside function bodies.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Default Parameter Null vs Undefined Safeguard
+
+**Scenario:** A configuration parser validates that default parameters trigger ONLY when arguments are undefined, providing defensive fallback logic for null arguments.
+
+**Requirements:**
+1. Write parseConfigValue(val = "DEFAULT").
+2. Handle explicit null using val ?? "DEFAULT".
+3. Return normalized value.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parseConfigValue(val = "DEFAULT") {
+>   // Default parameter val = "DEFAULT" triggers on undefined
+>   // Nullish coalescing val ?? "DEFAULT" handles explicit null
+>   return val ?? "DEFAULT";
+> }
+>
+> // Verification tests
+> console.assert(parseConfigValue(undefined) === "DEFAULT", "Test 1 Failed");
+> console.assert(parseConfigValue(null) === "DEFAULT", "Test 2 Failed");
+> console.assert(parseConfigValue("CUSTOM") === "CUSTOM", "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Default Parameter Trigger Condition**: ES6 default parameters evaluate ONLY when argument is undefined.
+> 2. **Explicit null Argument Behavior**: Passing null explicitly sets parameter value to null, bypassing default parameter assignments.
+> 3. **Defensive Nullish Fallbacks**: Combining default parameters with nullish coalescing (??) guarantees robust default handling.
+> 
+---
+
+## 6. Related Terms
 - [undefined](../level_01/undefined.md) — The *only* value that triggers a default parameter.
 - [Destructuring](destructuring.md) — You can also use default parameters inside destructuring assignments!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Default Parameters allow you to assign fallback values in the function signature using `=`.
 - They are ONLY triggered if the argument is omitted entirely, or if you explicitly pass `undefined`.
 - Falsy values like `null`, `0`, or `""` will *not* trigger the default.

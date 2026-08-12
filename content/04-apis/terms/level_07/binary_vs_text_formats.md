@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Data Format**
+
+**Data Format (Universal: Affects database storage strategies, frontend network resource optimization, and microservice architectures.)**: Binary vs Text Formats is a fundamental concept in this technology stack. **Level 7 — Data Formats & Serialization**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Affects database storage strategies, frontend network resource optimization, and microservice architectures.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 API developers default to text-based formats (like JSON and XML) because they are human-readable, easy to debug, and work natively with web scripting. 
@@ -95,7 +91,7 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using JSON for high-throughput internal microservice networks
 
@@ -144,65 +140,150 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Format Selector
+### Exercise 1: Protocol Buffers / Binary vs JSON Payload Benchmark
 
-**Problem:** Choose the most appropriate format (**Text/JSON** or **Binary/Protobuf**) for the following scenarios:
+**Scenario:** An API architecture benchmark measures payload byte size differences between text JSON payloads and packed binary ArrayBuffers.
 
-1. A public API endpoint designed for third-party developers to query product details.
-2. Storing high-frequency real-time flight metrics from a drone's sensors to local disk.
-3. Synchronizing chat messages between a web browser client and a Node.js server.
+**Requirements:**
+1. Write comparePayloadFormats(userObject, binaryEncoderFn).
+2. Serialize userObject as JSON string.
+3. Encode userObject as binary ArrayBuffer.
+4. Return byte size comparison.
 
 > [!check]- Answer
-> - 1. **Text/JSON** (Human readability is critical for developers using public APIs).
-> - 2. **Binary/Protobuf** (The drone has limited storage, weak network transmission, and CPU constraints. Minimizing file size and parsing cycles is essential).
-> - 3. **Text/JSON** (Web applications work natively with JSON, making integration simple).
+>
+> #### Implementation
+>
+> ```javascript
+> function comparePayloadFormats(userObject, binaryEncoderFn) {
+>   const jsonString = JSON.stringify(userObject);
+>   const jsonByteSize = Buffer.byteLength(jsonString, "utf-8");
+>
+>   const binaryBuffer = binaryEncoderFn(userObject);
+>   const binaryByteSize = binaryBuffer.byteLength || binaryBuffer.length;
+>
+>   const savingsPct = Number((((jsonByteSize - binaryByteSize) / jsonByteSize) * 100).toFixed(2));
+>
+>   return {
+>     jsonByteSize,
+>     binaryByteSize,
+>     savingsPct,
+>     isBinarySmaller: binaryByteSize < jsonByteSize
+>   };
+> }
+>
+> // Verification tests
+> const user = { id: 101, active: true, balance: 49.99 };
+> const mockBinaryEncoder = (obj) => {
+>   const buf = new ArrayBuffer(13);
+>   const view = new DataView(buf);
+>   view.setUint32(0, obj.id);
+>   view.setUint8(4, obj.active ? 1 : 0);
+>   view.setFloat64(5, obj.balance);
+>   return buf;
+> };
+>
+> const res = comparePayloadFormats(user, mockBinaryEncoder);
+> console.assert(res.isBinarySmaller === true, "Test 1 Failed: Binary must be smaller than JSON");
+> console.assert(res.binaryByteSize === 13, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Text Formats (JSON/XML)**: Human-readable text strings requiring keys to be sent in every payload message.
+> 2. **Binary Formats (Protobuf/MessagePack)**: Compact schema-based binary byte arrays eliminating key strings.
+> 3. **Parsing Performance**: Binary formats deserialize orders of magnitude faster because they avoid string parsing overhead.
 > 
+---
+
+### Exercise 2: Sensor Telemetry ArrayBuffer Pack/Unpack Engine
+
+**Scenario:** An IoT gateway packs high-frequency temperature sensor readings into fixed-width binary ArrayBuffer packets for low-latency transmission.
+
+**Requirements:**
+1. Write packSensorData(sensorId, tempFloat, humidityInt).
+2. Write unpackSensorData(arrayBuffer).
+3. Ensure byte-exact roundtrip.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function packSensorData(sensorId, tempFloat, humidityInt) {
+>   const buffer = new ArrayBuffer(7);
+>   const view = new DataView(buffer);
+>
+>   view.setUint16(0, sensorId);
+>   view.setFloat32(2, tempFloat);
+>   view.setUint8(6, humidityInt);
+>
+>   return buffer;
+> }
+>
+> function unpackSensorData(buffer) {
+>   const view = new DataView(buffer);
+>   return {
+>     sensorId: view.getUint16(0),
+>     tempFloat: Number(view.getFloat32(2).toFixed(2)),
+>     humidityInt: view.getUint8(6)
+>   };
+> }
+>
+> // Verification tests
+> const packed = packSensorData(1001, 23.45, 65);
+> console.assert(packed.byteLength === 7, "Test 1 Failed: Must be 7 bytes");
+>
+> const unpacked = unpackSensorData(packed);
+> console.assert(unpacked.sensorId === 1001 && unpacked.humidityInt === 65, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Fixed Byte Offsets**: DataView reads binary fields at exact byte offsets (0, 2, 6) matching low-level struct layouts.
+> 2. **Typed Arrays**: Uint16Array, Float32Array provide high-performance typed views over raw ArrayBuffer memory.
+> 3. **Bandwidth Efficiency**: Transmits telemetry in 7 bytes vs ~80 bytes for equivalent JSON string.
 > 
 ---
 
-### Exercise 2: Text vs Binary Format Comparison
+### Exercise 3: Format Serialization Protocol Selector
 
-**Problem:** Match data format to category (Text vs Binary):
-1. JSON
-2. Protocol Buffers (Protobuf)
-3. XML
-4. MessagePack
+**Scenario:** An API client automatically selects binary format (MessagePack/Protobuf) for high-frequency streams and JSON for web UI inspection.
 
-**Expected output:**
+**Requirements:**
+1. Write selectSerializationProtocol(frequencyHz, requiresHumanReadability).
+2. Return 'BINARY' or 'JSON'.
+
 > [!check]- Answer
-> ```text
-> 1. Text
-> 2. Binary
-> 3. Text
-> 4. Binary
+>
+> #### Implementation
+>
+> ```javascript
+> function selectSerializationProtocol(frequencyHz, requiresHumanReadability = false) {
+>   if (requiresHumanReadability) {
+>     return "JSON";
+>   }
+>   if (frequencyHz >= 10) {
+>     return "BINARY_PROTOBUF";
+>   }
+>   return "JSON";
+> }
+>
+> // Verification tests
+> console.assert(selectSerializationProtocol(100, false) === "BINARY_PROTOBUF", "Test 1 Failed");
+> console.assert(selectSerializationProtocol(100, true) === "JSON", "Test 2 Failed");
 > ```
-> ```text
-> 1. JSON -> Text-based
-> 2. Protobuf -> Binary-based
-> 3. XML -> Text-based
-> 4. MessagePack -> Binary-based
-> ```
-> - **Explanation:** Text formats prioritize human readability; binary formats prioritize speed and size.
+>
+> #### Technical Explanation
+>
+> 1. **High-Frequency Streaming**: Real-time gaming, financial tickers, and sensor streams require binary formats to prevent GC pauses.
+> 2. **Human Readability Trade-off**: JSON excels in developer ergonomics and ease of debugging in browser DevTools.
+> 3. **Hybrid API Design**: Modern APIs use JSON for REST management and gRPC/Protobuf for internal microservice streams.
 ---
 
-### Exercise 3: Binary Format Bandwidth Advantage
-
-**Problem:** Why do binary formats consume significantly less network bandwidth than JSON for numeric data?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Binary formats store numbers in fixed bit representations (e.g. 4 bytes for 32-bit int), whereas JSON serializes numbers into ASCII character strings (e.g. "123456789" consumes 9 bytes).
-> ```
-> ```text
-> Binary formats store numbers in fixed bit representations (e.g. 4 bytes for 32-bit int), whereas JSON serializes numbers into ASCII character strings (e.g. "123456789" consumes 9 bytes).
-> ```
-> - **Explanation:** Binary encodings bypass string character conversion.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [gRPC (Remote Procedure Call)](../level_10/grpc.md) — The network protocol designed on top of Protocol Buffers.
 - [JSON Methods (parse / stringify)](json_methods.md) — The standard functions used to manage text-based JSON configurations.
 - [Blob & ArrayBuffer](blob_arraybuffer.md) — Related concept: Blob & ArrayBuffer.
@@ -211,7 +292,7 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Text formats are human-readable but carry syntax bloat and higher CPU parsing overhead.
 - Binary formats compile data directly into byte streams, making payloads significantly smaller and faster to parse.
 - Binary formatting requires a shared schema containing numeric tag indexes to decode payloads.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Error Handling / Architecture**
+
+**Error Handling / Architecture (Node.js)**: Unhandled Promise Rejections is a fundamental concept in this technology stack. **Level 5 — Asynchronous Patterns**
 
 ---
 
-## 3. Environment Context
-- **Node.js (Server Infrastructure)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard synchronous JavaScript, if you try to read an undefined variable, the app throws an Error. If you don't wrap it in a `try/catch` block, the entire Node.js server crashes. This is a good thing! You want the server to die rather than running in a corrupted, broken state.
@@ -45,7 +41,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `try/catch` in async Express routes
 
@@ -108,7 +104,7 @@ app.get('/data', async (req, res, next) => {
 });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Catching the Void
 
@@ -171,7 +167,7 @@ fetchWeather();
 >
 > **Explanation:** `--unhandled-rejections` mode flag sets rejection behavior (`strict`, `throw`, `warn`, `none`).
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Microtasks vs Macrotasks](microtasks_macrotasks.md) — Promise rejections happen in the VIP Microtask queue.
 - [The process Object](../level_02/process_object.md) — The object that emits the `unhandledRejection` event.
 - [async / await in Node](async_await.md) — Related concept: async / await in Node.
@@ -181,7 +177,7 @@ fetchWeather();
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An **Unhandled Promise Rejection** occurs when an asynchronous task fails without a `.catch()` or `try/catch` block to handle it.
 - In modern Node.js, this causes an intentional, fatal crash of your entire server.
 - Every `async/await` database or network call MUST be wrapped in error handling.

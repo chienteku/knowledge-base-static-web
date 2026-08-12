@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Configuration / Architecture**
+
+**Configuration / Architecture (Root Directory of Project)**: package.json is a fundamental concept in this technology stack. **Level 4 — Package Management**
 
 ---
 
-## 3. Environment Context
-- **Root Directory of Project**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a Node.js app that relies on 50 different NPM packages (like React, Express, Axios), you cannot push all that downloaded code to GitHub. It's too big.
@@ -53,7 +49,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hand-editing the dependencies list
 
@@ -112,7 +108,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Magic Command
 
@@ -170,7 +166,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 >
 > **Explanation:** `engines` restricts runtime Node.js environment version requirements.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [package-lock.json & Deterministic Installs](package_lock.md) — The sister file to `package.json` that guarantees exact versions.
 - [node_modules](node_modules.md) — The physical folder where the downloaded code is placed.
 - [ES Modules (import, export)](../level_03/es_modules.md) — Related concept: ES Modules (import, export).
@@ -179,7 +175,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`package.json`** is the blueprint for your Node.js application.
 - It keeps track of exactly which third-party packages your app needs (`dependencies`).
 - It allows you to create custom terminal shortcuts (`scripts`).

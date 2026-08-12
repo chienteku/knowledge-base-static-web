@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Tooling**
+
+**Tooling (Universal: Applies to backend applications, database connection managers, and deployment pipelines.)**: Secrets & Environment Variables is a fundamental concept in this technology stack. **Level 4 — Security & Authentication**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Applies to backend applications, database connection managers, and deployment pipelines.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 API keys, database passwords, and encryption secrets grant complete access to your services. If a developer hardcodes these keys directly inside their code files (for example: `const DB_PASS = "super-secret-123"`), and commits that code to a Git repository (like GitHub), automated scanners will instantly detect and steal the key. This leads to data breaches, database deletion, or massive billing charges.
@@ -79,7 +75,7 @@ console.log(`Using Stripe key ending in: ...${apiKey.slice(-4)}`);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Committing `.env` to Git and deleting it in a later commit
 
@@ -132,62 +128,158 @@ DB_PASSWORD=secret123 # Omit framework public prefix for server-only secrets
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Config Audit
+### Exercise 1: Environment Variable Secret Loader & Masking Engine
 
-**Problem:** You are reviewing a codebase before deployment. Which of the following configs represents a secure configuration setup?
+**Scenario:** A backend server loads application secrets from environment variables, providing fallback defaults and sanitizing values for console logging.
 
-- **A.** Storing database connection strings directly inside a `config/db.js` file.
-- **B.** Reading keys via `process.env.DB_CONNECTION` and providing a `.env.example` template containing mock placeholder values in Git.
-- **C.** Storing keys in `.env` and omitting `.env` from the `.gitignore` file.
+**Requirements:**
+1. Write getSecret(varName, envMap, defaultValue).
+2. Read secret.
+3. Provide masked version for logging (`sk_***123`).
 
 > [!check]- Answer
-> - **B** (Providing a template like `.env.example` in Git is standard practice. It shows team members which keys they need to define locally, without leaking the actual values).
-> 
-> 
----
-
-### Exercise 2: Git Leak Clean-Up Procedure
-
-**Problem:** What 2 actions must be taken immediately if a production database secret is committed to a public Git repo?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Immediately revoke and rotate the secret on the database server
-> 2. Purge secret from Git history (using BFG Repo-Cleaner or git filter-repo) and update .gitignore
-> ```
-> ```text
-> 1. Immediately revoke/rotate the leaked secret.
-> 2. Purge secret from Git commit history and add .env to .gitignore.
-> ```
-> - **Explanation:** Revocation is mandatory because public Git history cannot be guaranteed un-scraped.
----
-
-### Exercise 3: Environment Variable Access in Node.js
-
-**Problem:** Write JavaScript line reading environment variable `PORT` with fallback default to `3000`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const PORT = process.env.PORT || 3000;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const PORT = process.env.PORT || 3000;
+> function getSecret(varName, envMap = process.env, defaultValue = null) {
+>   const value = envMap[varName] || defaultValue;
+>   if (!value) {
+>     return { value: null, masked: "NOT_SET", set: false };
+>   }
+>
+>   const str = String(value);
+>   let masked = "******";
+>   if (str.length > 6) {
+>     masked = `${str.substring(0, 3)}***${str.substring(str.length - 3)}`;
+>   }
+>
+>   return {
+>     value: str,
+>     masked,
+>     set: true
+>   };
+> }
+>
+> // Verification tests
+> const env = { "DATABASE_URL": "postgres://user:supersecretpass@localhost:5432/db" };
+> const res = getSecret("DATABASE_URL", env);
+>
+> console.assert(res.set === true, "Test 1 Failed");
+> console.assert(res.masked.includes("***") && !res.masked.includes("supersecretpass"), "Test 2 Failed: Masked value must hide password");
 > ```
-> - **Explanation:** `process.env` exposes environment variables in Node.js runtime.
+>
+> #### Technical Explanation
+>
+> 1. **Environment Variables (.env)**: Stores configuration secrets outside of source code files.
+> 2. **Twelve-Factor App Methodology**: Requires strict separation of config/secrets from code.
+> 3. **Log Masking**: Sanitizes secret strings before writing to server log streams.
+> 
 ---
 
-## 7. Related Terms
+### Exercise 2: Git Repository Secret Leak Scanner
+
+**Scenario:** A pre-commit security linter scans source code files for hardcoded API keys, private keys, and database credentials.
+
+**Requirements:**
+1. Write scanFileForSecrets(fileContent).
+2. Check for AWS keys, RSA private keys, Stripe secret keys.
+3. Return detected leaks.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function scanFileForSecrets(fileContent) {
+>   if (typeof fileContent !== "string") return [];
+>
+>   const secretPatterns = [
+>     { name: "AWS Access Key", regex: /AKIA[0-9A-Z]{16}/g },
+>     { name: "RSA Private Key", regex: /-----BEGIN RSA PRIVATE KEY-----/g },
+>     { name: "Stripe Secret Key", regex: /sk_live_[0-9a-zA-Z]{24}/g },
+>     { name: "Generic Secret Hardcode", regex: /const\s+SECRET\s*=\s*["'][^"']+["']/g }
+>   ];
+>
+>   const leaks = [];
+>   for (const p of secretPatterns) {
+>     if (p.regex.test(fileContent)) {
+>       leaks.push(p.name);
+>     }
+>   }
+>
+>   return leaks;
+> }
+>
+> // Verification tests
+> const code = 'const apiKey = "AKIAIOSFODNN7EXAMPLE";';
+> const leaks = scanFileForSecrets(code);
+> console.assert(leaks.includes("AWS Access Key"), "Test 1 Failed");
+>
+> const cleanCode = 'const dbUrl = process.env.DATABASE_URL;';
+> console.assert(scanFileForSecrets(cleanCode).length === 0, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Hardcoded Secret Risk**: Committing secrets to Git repositories exposes them to unauthorized users and automated bot scanners.
+> 2. **Pre-Commit Hooks**: Automated secret scanners (git-leaks, TruffleHog) prevent secret commits before pushing.
+> 3. **Immediate Secret Revocation**: If a secret is committed to Git, consider it compromised immediately and rotate it.
+> 
+---
+
+### Exercise 3: In-Memory Secret Storage Sanitization
+
+**Scenario:** A security module clears sensitive in-memory secret buffers immediately after cryptographically processing them.
+
+**Requirements:**
+1. Write processSecretBuffer(secretBuffer, callback).
+2. Execute callback.
+3. Zero out buffer memory.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function processSecretBuffer(secretBuffer, callback) {
+>   if (!Buffer.isBuffer(secretBuffer)) {
+>     throw new Error("Expected Buffer secret");
+>   }
+>
+>   try {
+>     return callback(secretBuffer);
+>   } finally {
+>     secretBuffer.fill(0);
+>   }
+> }
+>
+> // Verification tests
+> const buf = Buffer.from("super-secret-key");
+> processSecretBuffer(buf, (b) => {
+>   console.assert(b.toString() === "super-secret-key", "Test 1 Failed");
+> });
+>
+> console.assert(buf.every(byte => byte === 0), "Test 2 Failed: Memory buffer must be zeroed out");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **In-Memory Secret Residue**: Sensitive secrets lingering in process heap memory can be extracted via memory dumps.
+> 2. **Buffer Filling / Wiping**: Overwriting memory buffers with zeros ensures secrets are scrubbed after use.
+> 3. **Defense in Depth**: Protects application secrets against heap inspection attacks.
+---
+
+## 6. Related Terms
 - [Basic & Bearer Authentication](basic_bearer_auth.md) — The credentials transport protocols initialized using environment secrets.
 - [localStorage & sessionStorage](../level_09/web_storage.md) — Browser Web Storage spaces where API secrets should **never** be placed (since client-side JavaScript can be read by XSS attacks).
 - [SDK / Client Library](../level_10/sdk.md) — Related concept: SDK / Client Library.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Environment variables isolate sensitive configuration details from application code.
 - Local configuration is stored in `.env` files which must be excluded from Git via `.gitignore`.
 - In Node.js, environment variables are loaded at startup and read via the global `process.env` object.

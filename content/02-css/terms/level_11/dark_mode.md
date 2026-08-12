@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **CSS At-Rule**
+
+**CSS At-Rule (Universal Modern Standard .)**: Dark Mode (`prefers-color-scheme`) is a fundamental concept in this technology stack. **Level 11 — Modern CSS Architecture & Functions**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Queries the operating system theme registry thread to determine default background states during browser rendering setups).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Almost all modern operating systems (iOS, Android, macOS, Windows) have a system-wide setting to switch between a **Light Theme** (black text on white background) and a **Dark Theme** (white text on dark background).
@@ -142,7 +138,7 @@ By structuring your styles this way, the browser swaps every single element's ba
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Duplicating entire component selectors inside the media query
 
@@ -203,7 +199,7 @@ By structuring your styles this way, the browser swaps every single element's ba
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Dark Mode Setup
 
@@ -278,14 +274,14 @@ By structuring your styles this way, the browser swaps every single element's ba
 >
 > **Explanation:** `prefers-color-scheme: dark` syncs app themes with operating system preferences.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Baseline responsive queries.
 - [`var()` (CSS Custom Properties)](var.md) — Dynamic color variables.
 - [`:root` Pseudo-class](root_pseudo_class.md) — Variable scopes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `prefers-color-scheme` detects OS-level theme settings (light or dark).
 - The best implementation method overrides CSS variables inside the query block.
 - Prevents styling code duplication by separating colors from layout rules.

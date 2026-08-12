@@ -622,7 +622,7 @@ Implement `aggregate_metrics(records: &[&str]) -> Result<MetricsSummary, MetricP
 
 
 - [Type Inference](type_inference.md) — The compiler's automatic behavior that type annotation manually overrides.
-- [`fn` (Functions)](fn.md) — Function declarations, the one place where type annotations are strictly mandatory.
+- [fn](fn.md) — Function declarations, the one place where type annotations are strictly mandatory.
 - [Scalar Types](scalar_types.md) — The primitive types (like `i32`, `f64`, `bool`) you will frequently use in your annotations.
 - [Constants (`const`)](constants_const.md) — Related concept: Constants (`const`).
 - [Variable](variable.md) — Related concept: Variable.

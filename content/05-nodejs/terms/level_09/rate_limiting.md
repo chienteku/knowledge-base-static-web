@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **API Security / Infrastructure**
+
+**API Security / Infrastructure (Node.js)**: Rate Limiting is a fundamental concept in this technology stack. **Level 9 — REST APIs & Best Practices**
 
 ---
 
-## 3. Environment Context
-- **Node.js (Server Infrastructure)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A well-built Node.js server can handle thousands of requests per second. But what if a malicious hacker writes a script to send 100,000 requests per second to your `/login` route? 
@@ -52,7 +48,7 @@ For enterprise applications, developers use an external, lightning-fast memory d
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not applying strict limits to Auth routes
 
@@ -168,7 +164,7 @@ app.use(rateLimit({ store: new RedisStore({ client: redisClient }) }));
 app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Status Code
 
@@ -222,13 +218,13 @@ app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 >
 > **Explanation:** Status 429 informs clients to wait before sending further requests.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Middleware](../level_07/middleware.md) — Rate limiters are just bouncer middlewares.
 - [HTTP Status Codes](status_codes.md) — The `429` code is the hallmark of rate limiting.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Rate Limiting** restricts how many requests an IP address can make to prevent DoS attacks and server crashes.
 - When the limit is exceeded, the server returns a **429 Too Many Requests** status code.
 - You can easily implement it in Node.js using the `express-rate-limit` middleware.

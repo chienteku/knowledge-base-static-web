@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Array Method / Functional Programming**
+
+**Array Method / Functional Programming (Universal: Works everywhere)**: filter() is a fundamental concept in this technology stack. **Level 4 — Iteration & Array Methods**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Often, you have a massive dataset but you only care about a specific subset of it: finding all users over age 18, finding all products under $50, or removing all empty strings from a list. 
@@ -63,7 +59,7 @@ console.log(inStockFruits);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to return the *value* instead of a *boolean*
 
@@ -148,62 +144,118 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cleanup
+### Exercise 1: Inventory Catalog Price & Stock Filter
 
-**Problem:** You have an array: `[0, "apple", false, "banana", "", "cherry", null]`. Use `filter()` to remove all falsy values from the array, leaving only the valid strings.
+**Scenario:** An e-commerce catalog service filters product items based on minimum stock and max price constraints using filter().
 
-**Expected output:**
+**Requirements:**
+1. Write filterProducts(products, maxPrice).
+2. Filter products where item.inStock is true and item.price <= maxPrice.
+3. Return new filtered array.
+
 > [!check]- Answer
-> ```text
-> ["apple", "banana", "cherry"]
-> ```
-> - The callback just needs to return truthy or falsy. 
-> - You can simply write: `array.filter(item => item);` ! If the item itself is truthy, it passes. If it is falsy, it fails.
-> 
----
-
-### Exercise 2: Filtering Even Numbers
-
-**Problem:** Filter `[1, 2, 3, 4, 5, 6]` to extract even numbers.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [ 2, 4, 6 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [1, 2, 3, 4, 5, 6];
-> const evens = nums.filter(x => x % 2 === 0);
-> console.log(evens);
+> function filterProducts(products, maxPrice) {
+>   if (!Array.isArray(products)) return [];
+>   return products.filter(item => item.inStock && item.price <= maxPrice);
+> }
+>
+> // Verification tests
+> const catalog = [
+>   { name: "Laptop", price: 1000, inStock: true },
+>   { name: "Mouse", price: 25, inStock: true },
+>   { name: "Keyboard", price: 75, inStock: false }
+> ];
+> const affordable = filterProducts(catalog, 50);
+> console.assert(affordable.length === 1 && affordable[0].name === "Mouse", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `.filter()` returns a new array containing elements that pass predicate tests.
+> #### Technical Explanation
+>
+> 1. **filter() Non-Mutating Creation**: Array.prototype.filter(predicate) constructs a brand new array containing elements that pass the predicate test.
+> 2. **Shallow Reference Retention**: Object elements in the filtered array retain reference pointers to original objects.
+> 3. **Predicate Evaluation**: If predicate returns truthy for an element, it is included; if falsy, skipped.
 > 
 ---
 
-### Exercise 3: Removing Nullish Values with `.filter(Boolean)`
+### Exercise 2: Security Audit Log Severity Filter
 
-**Problem:** Clean an array `[1, null, 2, undefined, 3, ""]` using `.filter(Boolean)`.
+**Scenario:** A security SIEM system extracts high-severity alert logs from raw log entries using filter().
 
-**Expected output:**
+**Requirements:**
+1. Write extractHighSeverityLogs(logEntries).
+2. Filter log entries where severity === "ERROR" or severity === "CRITICAL".
+3. Return filtered array.
+
 > [!check]- Answer
-> ```text
-> [ 1, 2, 3 ]
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const dirty = [1, null, 2, undefined, 3, ""];
-> const clean = dirty.filter(Boolean);
-> console.log(clean);
+> function extractHighSeverityLogs(logEntries) {
+>   if (!Array.isArray(logEntries)) return [];
+>   return logEntries.filter(log => log.severity === "ERROR" || log.severity === "CRITICAL");
+> }
+>
+> // Verification tests
+> const logs = [
+>   { id: 1, severity: "INFO" },
+>   { id: 2, severity: "ERROR" },
+>   { id: 3, severity: "CRITICAL" }
+> ];
+> const highSev = extractHighSeverityLogs(logs);
+> console.assert(highSev.length === 2, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Passing `Boolean` filters out all falsy values (`null`, `undefined`, `0`, ``).
-> 
+> #### Technical Explanation
+>
+> 1. **Subset Extraction**: filter() reduces dataset size without altering element structure.
+> 2. **Empty Result Safety**: If no elements match predicate, filter() returns an empty array [] rather than null.
+> 3. **Predicate Purity**: Keep predicate callbacks pure and free of side-effects.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Active User Subscription Filter
+
+**Scenario:** A SaaS billing engine extracts active customer subscription records for invoice generation.
+
+**Requirements:**
+1. Write getActiveSubscriptions(users).
+2. Filter users where user.subscriptionStatus === "ACTIVE".
+3. Return active users.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function getActiveSubscriptions(users) {
+>   if (!Array.isArray(users)) return [];
+>   return users.filter(user => user.subscriptionStatus === "ACTIVE");
+> }
+>
+> // Verification tests
+> const usersList = [
+>   { id: 1, subscriptionStatus: "ACTIVE" },
+>   { id: 2, subscriptionStatus: "CANCELLED" }
+> ];
+> const active = getActiveSubscriptions(usersList);
+> console.assert(active.length === 1 && active[0].id === 1, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Declarative Data Processing**: filter() replaces verbose for-loops and push statements with declarative logic.
+> 2. **Array Composition**: Filtered results can be chained directly into .map() or .reduce().
+> 3. **Source Array Immutability**: The source array is never modified by filter().
+---
+
+## 6. Related Terms
 - [Map](../level_08/map.md) — Used when you want to transform data, resulting in an array of the *same* length.
 - [find()](find.md) — Similar to `filter`, but stops and returns only the *first* item that passes the test.
 - [every()](every.md) — Related concept: every().
@@ -211,7 +263,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `filter()` creates a **new array** containing only the items that passed a test.
 - The new array will be smaller than or equal to the original array's length.
 - The callback function MUST return a boolean (or a truthy/falsy value).

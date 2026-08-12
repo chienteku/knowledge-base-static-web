@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Tooling**
+
+**Tooling (Universal: Implemented across various client programming languages .)**: SDK / Client Library is a fundamental concept in this technology stack. **Level 10 — Designing & Tooling**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Implemented across various client programming languages (TypeScript, Python, Go, Swift, etc.).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a developer wants to integrate a third-party API (like Stripe, Twilio, or Firebase) into their codebase, writing raw HTTP calls using `fetch()` or `axios` is tedious. They must:
@@ -78,7 +74,7 @@ Imagine renting a vehicle.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hardcoding secrets inside the SDK constructor initialization script
 
@@ -136,77 +132,199 @@ user = await sdk.get_user(5)
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Custom SDK Class
+### Exercise 1: Enterprise JavaScript Client SDK Factory
 
-**Problem:** Complete this simple custom SDK wrapper class designed to fetch profile data from a mock service:
+**Scenario:** An enterprise SDK wraps API authentication, base configuration, and resource models into a unified JavaScript SDK class instance.
 
-```javascript
-class UserServiceSDK {
-  constructor(baseUrl, apiKey) {
-    this.baseUrl = baseUrl;
-    this.apiKey = apiKey;
-  }
-
-  async getProfile(userId) {
-    const res = await fetch(`${this.baseUrl}/users/${userId}`, {
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`
-      }
-    });
-    if (!res.ok) throw new Error("Profile query failed");
-    return res.json();
-  }
-}
-```
-
----
+**Requirements:**
+1. Create PaymentSdk class.
+2. Implement sdk.charges.create(payload) and sdk.refunds.create(id).
+3. Handle API key authorization.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> class PaymentSdk {
+>   constructor(apiKey, config = {}) {
+>     if (!apiKey) throw new Error("API key is required to initialize PaymentSdk");
+>     this.apiKey = apiKey;
+>     this.baseUrl = (config.baseUrl || "https://api.payments.com").replace(/\/$/, "");
+>     this.mockFetch = config.mockFetch || globalThis.fetch;
+>
+>     this.charges = {
+>       create: (payload) => this.#request("POST", "/v1/charges", payload)
+>     };
+>   }
+>
+>   async #request(method, path, body) {
+>     const url = `${this.baseUrl}${path}`;
+>     const res = await this.mockFetch(url, {
+>       method,
+>       headers: {
+>         "Authorization": `Bearer ${this.apiKey}`,
+>         "Content-Type": "application/json"
+>       },
+>       body: body ? JSON.stringify(body) : null
+>     });
+>
+>     if (!res.ok) throw new Error(`SDK Request Failed with status ${res.status}`);
+>     return await res.json();
+>   }
+> }
+>
+> // Verification tests
+> const mockFetch = async (url, opts) => ({
+>   ok: true,
+>   status: 200,
+>   json: async () => ({ id: "ch_123", status: "succeeded" })
+> });
+>
+> const sdk = new PaymentSdk("sk_test_secret", { mockFetch });
+> sdk.charges.create({ amount: 5000 }).then(res => {
+>   console.assert(res.id === "ch_123" && res.status === "succeeded", "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SDK (Software Development Kit)**: Developer library wrapping raw API endpoints into idiomatic language methods and objects.
+> 2. **Encapsulation & Ergonomics**: Abstracts HTTP authentication, headers, serialization, and error handling away from developer code.
+> 3. **Version Pinning**: SDKs pin backend API version headers to shield developers from backend breaking changes.
 > 
 ---
 
-### Exercise 2: SDK vs API Distinction
+### Exercise 2: Fluent Builder Pattern for SDK Resource Queries
 
-**Problem:** Distinguish between an API and an SDK (Software Development Kit).
+**Scenario:** Implements a fluent method-chaining Query Builder in a JavaScript SDK (`sdk.users().where('role', 'admin').limit(10).execute()`).
 
-**Expected output:**
+**Requirements:**
+1. Write createUserQueryBuilder(fetchFn).
+2. Support where(), limit(), and execute() method chaining.
+
 > [!check]- Answer
-> ```text
-> API is the raw network interface protocol contract (HTTP/gRPC); SDK is a language-specific code library wrapping the API with helper methods, authentication, and error handling.
+>
+> #### Implementation
+>
+> ```javascript
+> function createUserQueryBuilder(mockFetchFn) {
+>   const queryParams = { filters: {}, limit: 20 };
+>
+>   const builder = {
+>     where(field, value) {
+>       queryParams.filters[field] = value;
+>       return builder; // Return this for method chaining!
+>     },
+>     limit(count) {
+>       queryParams.limit = count;
+>       return builder;
+>     },
+>     async execute() {
+>       return await mockFetchFn(queryParams);
+>     }
+>   };
+>
+>   return builder;
+> }
+>
+> // Verification tests
+> const mockFetch = async (params) => ({
+>   results: [{ id: 1 }],
+>   query: params
+> });
+>
+> createUserQueryBuilder(mockFetch)
+>   .where("role", "admin")
+>   .limit(5)
+>   .execute()
+>   .then(res => {
+>     console.assert(res.query.filters.role === "admin", "Test 1 Failed");
+>     console.assert(res.query.limit === 5, "Test 2 Failed");
+>   });
 > ```
-> ```text
-> API -> The raw network interface protocol (REST/HTTP endpoints).
-> SDK -> Language-specific client library wrapping the API with native code methods.
-> ```
-> - **Explanation:** SDKs provide developer-friendly language wrappers over raw network APIs.
+>
+> #### Technical Explanation
+>
+> 1. **Fluent Interface Pattern**: Method chaining syntax returning `this` for readable, expressive API query construction.
+> 2. **Query Object Accumulation**: Accumulates query options in memory before executing single network request on `.execute()`.
+> 3. **SDK Developer Ergonomics**: Provides intuitive IDE auto-completion for building complex API filters.
+> 
 ---
 
-### Exercise 3: Automated SDK Generation
+### Exercise 3: SDK Retry & Rate Limit Decorator
 
-**Problem:** Which open-source tool generates client SDK libraries in 40+ programming languages from an OpenAPI spec?
+**Scenario:** An SDK wrapper decorates API request methods with automatic retries and exponential backoff on transient HTTP 429 errors.
 
-**Expected output:**
+**Requirements:**
+1. Write wrapSdkWithRetry(sdkMethod, maxRetries).
+2. Execute method.
+3. Retry on 429/503 errors up to maxRetries.
+
 > [!check]- Answer
-> ```text
-> OpenAPI Generator (or Swagger Codegen)
+>
+> #### Implementation
+>
+> ```javascript
+> function wrapSdkWithRetry(sdkMethod, maxRetries = 2, mockSleep) {
+>   const sleep = mockSleep || ((ms) => new Promise(r => setTimeout(r, ms)));
+>
+>   return async function (...args) {
+>     let attempt = 0;
+>
+>     while (attempt <= maxRetries) {
+>       try {
+>         return await sdkMethod(...args);
+>       } catch (err) {
+>         const isRetryable = err.status === 429 || err.status === 503;
+>         if (!isRetryable || attempt === maxRetries) {
+>           throw err;
+>         }
+>
+>         const delay = Math.pow(2, attempt) * 50;
+>         await sleep(delay);
+>         attempt++;
+>       }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> let attempts = 0;
+> const mockSleep = async () => {};
+> const flakySdkCall = async () => {
+>   attempts++;
+>   if (attempts < 2) {
+>     const e = new Error("Rate limited");
+>     e.status = 429;
+>     throw e;
+>   }
+>   return { ok: true };
+> };
+>
+> const resilientCall = wrapSdkWithRetry(flakySdkCall, 2, mockSleep);
+> resilientCall().then(res => {
+>   console.assert(res.ok === true && attempts === 2, "Test 1 Failed: Retried 429 automatically");
+> });
 > ```
-> ```bash
-> npx @openapitools/openapi-generator-cli generate -i openapi.yaml -g typescript-fetch -o ./sdk
-> ```
-> - **Explanation:** OpenAPI Generator automates multi-language SDK code generation.
+>
+> #### Technical Explanation
+>
+> 1. **SDK Resilience Built-In**: Commercial SDKs (Stripe, AWS SDK) automatically handle rate limits and transient network retries internally.
+> 2. **Retryable HTTP Error Codes**: 429 (Too Many Requests), 502 (Bad Gateway), 503 (Service Unavailable), 504 (Gateway Timeout).
+> 3. **Developer Peace of Mind**: Application code calling the SDK does not need custom retry loops for network blips.
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Secrets & Environment Variables](../level_04/secrets_env.md) — The system configurations used to secure keys injected into SDK constructors.
 - [Postman / Insomnia (API Clients)](api_clients.md) — External clients used to test API behaviors before installing SDK packages.
 - [Swagger / OpenAPI Specification](openapi.md) — Related concept: Swagger / OpenAPI Specification.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SDKs / Client Libraries wrap raw HTTP requests in language-specific classes and methods.
 - They manage endpoint routing, authorization headers, data formatting, and error-handling.
 - Modern SDKs improve developer experience by offering IDE autocomplete and type safety.

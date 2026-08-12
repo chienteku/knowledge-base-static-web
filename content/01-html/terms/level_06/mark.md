@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Inline Text Semantics**
+
+**Inline Text Semantics (Universal Browser Support .)**: `<mark>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support** (Understood natively. Browsers display a bright yellow background behind `<mark>` elements by default).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users perform a search query on a site, they want to immediately scan the results list to find where their search term appears. 
@@ -91,7 +87,7 @@ Basic inline highlight:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<mark>` for aesthetic styling or warnings
 
@@ -145,7 +141,7 @@ Basic inline highlight:
 <strong>WARNING: Gas Leak!</strong>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Search Highlighting
 
@@ -195,14 +191,14 @@ Basic inline highlight:
 >
 > **Explanation:** Browsers simulate a yellow highlighter pen background by default.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<strong>` & `<em>`](../level_02/strong_em.md) — Standard inline text tags.
 - [`<span>` (Inline container)](../level_02/span.md) — The non-semantic styling container.
 - [`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`](../level_02/b_i_u_vs_strong_em.md) — Presentational vs semantic styling comparison.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<mark>` element highlights contextually relevant text on a page.
 - Its primary use case is highlighting matching search terms in search results.
 - Browsers render a bright yellow background behind `<mark>` tags by default.

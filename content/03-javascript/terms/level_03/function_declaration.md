@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Function Declaration is a fundamental concept in this technology stack. **Level 3 — Functions & Scope**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a JavaScript file, developers needed a clear, standard way to define the primary sub-programs that make up their application. The Function Declaration is the oldest and most traditional way to create a function. 
@@ -59,7 +55,7 @@ function initializeDatabase() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Function Declaration Scope and Variable Hoisting
 
@@ -132,74 +128,114 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Hoisting Test
+### Exercise 1: Top-Level Module Function Hoisting
 
-**Problem:** Write a function call `sayGoodbye();` on line 1. On line 3, write the Function Declaration for `sayGoodbye` that logs `"See ya!"`. Run the code to prove it works.
+**Scenario:** A backend API gateway declares top-level service functions using Function Declarations, allowing functions to be called anywhere in the module due to hoisting.
 
-**Expected output:**
+**Requirements:**
+1. Write code where invokeService() is called BEFORE its function declaration line.
+2. Declare function invokeService() below caller.
+3. Verify function executes cleanly due to hoisting.
+
 > [!check]- Answer
-> ```text
-> See ya!
-> ```
-> - Just write the call at the top, and `function sayGoodbye() { ... }` at the bottom.
-> 
----
-
-### Exercise 2: Hoisting Invocation Before Declaration Line
-
-**Problem:** Call `greet()` before its `function greet() {}` declaration line.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello!
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> greet();
-> function greet() {
->   console.log("Hello!");
+> // Function call BEFORE declaration statement (supported via hoisting)
+> const serviceResult = invokeService("AUTH_CHECK");
+>
+> function invokeService(action) {
+>   return "EXECUTED: " + action;
 > }
+>
+> // Verification tests
+> console.assert(serviceResult === "EXECUTED: AUTH_CHECK", "Test 1 Failed: Hoisting failed");
 > ```
 >
-> **Explanation:** Function declarations hoist both identifier names and function bodies to scope top.
+> #### Technical Explanation
+>
+> 1. **Function Declaration Hoisting**: Function declarations are completely hoisted (both name and body implementation) during context creation phase.
+> 2. **Invocation Priority**: Can be safely invoked anywhere within their enclosing scope, even before declaration lines.
+> 3. **Declaration Syntax**: Starts with the function keyword followed by mandatory identifier name: function name() {}.
 > 
 ---
 
-### Exercise 3: Function Declaration Scope Isolation
+### Exercise 2: Recursive Mathematical Function Declaration
 
-**Problem:** Demonstrate that nested function declarations are contained within parent scopes.
+**Scenario:** A math algorithm package uses named Function Declarations to support self-referential recursive calculations like factorial.
 
-**Expected output:**
+**Requirements:**
+1. Declare function calculateFactorial(n).
+2. Use recursive self-invocation.
+3. Return factorial result.
+
 > [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
-> function outer() {
->   function inner() { return "secret"; }
+>
+> #### Implementation
+>
+> ```javascript
+> function calculateFactorial(n) {
+>   if (n <= 1) return 1;
+>   return n * calculateFactorial(n - 1);
 > }
-> outer();
-> try {
->   inner();
-> } catch (err) {
->   console.log("ReferenceError caught");
-> }
+>
+> // Verification tests
+> console.assert(calculateFactorial(5) === 120, "Test 1 Failed");
+> console.assert(calculateFactorial(1) === 1, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Function declarations create local lexical scope boundaries.
-> 
+> #### Technical Explanation
+>
+> 1. **Named Binding**: Function declarations bind their identifier name in the current enclosing scope.
+> 2. **Recursive Self-Reference**: The function name identifier is available inside its own body for recursive invocations.
+> 3. **Statement Context**: Function declarations operate as standalone statements rather than expressions.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Declarative API Service Module Contracts
+
+**Scenario:** A microservice suite uses Function Declarations to define clean, declarative public API utility functions.
+
+**Requirements:**
+1. Declare function parseApiKey(headerStr).
+2. Extract API key.
+3. Return formatted key.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parseApiKey(headerStr) {
+>   if (typeof headerStr !== "string" || !headerStr.startsWith("Bearer ")) {
+>     return null;
+>   }
+>   return headerStr.slice(7).trim();
+> }
+>
+> // Verification tests
+> console.assert(parseApiKey("Bearer secret-xyz") === "secret-xyz", "Test 1 Failed");
+> console.assert(parseApiKey("invalid") === null, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Declarative Clarity**: Function declarations provide clear visual structure for top-level module utility suites.
+> 2. **Scope Binding**: Declared in enclosing script or module scope.
+> 3. **Strict Mode Enforcement**: In block scopes under strict mode, function declarations are scoped strictly to their block.
+---
+
+## 6. Related Terms
 - [Function Expression](function_expression.md) — A function assigned to a variable (which is *not* hoisted).
 - [Hoisting](hoisting.md) — The behavior of moving declarations to the top of the scope.
 - [Function](function.md) — Related concept: Function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Function Declaration starts with the `function` keyword as the very first word of the statement.
 - They must have a name.
 - They are **hoisted**, meaning you can invoke them before they appear in the source code.

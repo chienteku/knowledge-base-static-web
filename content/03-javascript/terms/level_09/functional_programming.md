@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Functional Programming & Composition is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Functional Programming (FP), we construct software applications by combining small, single-purpose, **pure functions**. Rather than writing massive class structures, we create simple functions that take data, transform it, and return a new result.
@@ -86,7 +82,7 @@ console.log(normalizeTitle(rawTitle)); // "my-first-javascript-term"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the Execution Order of `compose` and `pipe`
 
@@ -164,82 +160,141 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Create a Math Pipeline
+### Exercise 1: Functional Function Composition Pipeline (compose)
 
-**Problem:** Complete the pipeline `mathPipeline` using the `pipe` helper to subtract `2`, multiply the result by `10`, and convert it to a string.
+**Scenario:** A data processing library builds a right-to-left function composition utility (`compose`) to chain pure data transformations cleanly.
 
-```javascript
-const pipe = (...fns) => (val) => fns.reduce((acc, fn) => fn(acc), val);
-
-const subtract2 = x => x - 2;
-const multiply10 = x => x * 10;
-const toString = x => String(x);
-
-// Build the pipeline
-const mathPipeline = // Write pipe code here
-
-console.log(mathPipeline(12)); // should be "100" (string)
-console.log(typeof mathPipeline(12)); // "string"
-```
+**Requirements:**
+1. Write compose(...fns).
+2. Return function taking initial value.
+3. Execute functions right-to-left via Array.prototype.reduceRight().
 
 > [!check]- Answer
-> - Call `pipe(subtract2, multiply10, toString)`.
-> 
----
-
-### Exercise 2: Immutability and Pure Functions in FP
-
-**Problem:** Write a pure function `updateUser(user, newRole)` returning a new updated user object without mutating original input.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Original: user, Updated: admin
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> function updateUser(user, newRole) {
->   return { ...user, role: newRole };
+> function compose(...fns) {
+>   return function(initialValue) {
+>     return fns.reduceRight((acc, fn) => fn(acc), initialValue);
+>   };
 > }
-> const orig = { name: "Alice", role: "user" };
-> const updated = updateUser(orig, "admin");
-> console.log(`Original: ${orig.role}, Updated: ${updated.role}`);
+>
+> // Verification tests
+> const trim = s => s.trim();
+> const uppercase = s => s.toUpperCase();
+> const exclaim = s => `${s}!`;
+>
+> const formatGreeting = compose(exclaim, uppercase, trim);
+>
+> console.assert(formatGreeting("   hello world   ") === "HELLO WORLD!", "Test 1 Failed");
 > ```
 >
-> **Explanation:** FP emphasizes pure functions and immutable data structures.
+> #### Technical Explanation
+>
+> 1. **Function Composition Concept**: Combining two or more functions to produce a new function: (f ∘ g)(x) = f(g(x)).
+> 2. **Right-to-Left Execution Order**: Standard mathematical composition evaluates arguments right-to-left.
+> 3. **Declarative Data Transformation**: Eliminates intermediate temporary variables in multi-step data processing pipelines.
 > 
 ---
 
-### Exercise 3: Function Composition Pipeline
+### Exercise 2: Pure Function Data Pipe Utility (pipe)
 
-**Problem:** Pipe value `5` through `add2` (+2) then `square` (^2).
+**Scenario:** A analytics data engine builds a left-to-right pipe function (`pipe`) to transform transaction records without mutating raw inputs.
 
-**Expected output:**
+**Requirements:**
+1. Write pipe(...fns).
+2. Execute functions left-to-right via Array.prototype.reduce().
+3. Ensure input objects remain immutable.
+
 > [!check]- Answer
-> ```text
-> 49
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const add2 = x => x + 2;
-> const square = x => x * x;
-> const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);
-> console.log(pipe(add2, square)(5)); // (5+2)^2 = 49
+> function pipe(...fns) {
+>   return function(initialValue) {
+>     return fns.reduce((acc, fn) => fn(acc), initialValue);
+>   };
+> }
+>
+> // Verification tests
+> const filterActive = users => users.filter(u => u.active);
+> const extractNames = users => users.map(u => u.name);
+> const sortNames = names => [...names].sort();
+>
+> const getActiveUserNames = pipe(filterActive, extractNames, sortNames);
+>
+> const rawUsers = [
+>   { name: "Bob", active: true },
+>   { name: "Alice", active: true },
+>   { name: "Charlie", active: false }
+> ];
+>
+> const result = getActiveUserNames(rawUsers);
+> console.assert(result.join(",") === "Alice,Bob", "Test 1 Failed");
+> console.assert(rawUsers.length === 3, "Test 2 Failed: Pure pipe must not mutate raw inputs");
 > ```
 >
-> **Explanation:** Pipelines pass data outputs into subsequent transformation functions.
-> 
+> #### Technical Explanation
+>
+> 1. **Pipe vs Compose**: Pipe executes functions left-to-right (reading order), whereas Compose executes right-to-left.
+> 2. **Pure Function Principle**: Pure functions produce identical output for identical input with ZERO side-effects.
+> 3. **Immutable Data Flow**: Pipelines work on shallow copies or new references to preserve raw dataset integrity.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Higher-Order Function Map-Filter-Reduce Pipeline
+
+**Scenario:** An e-commerce reporting tool aggregates total revenue from active orders using a chain of higher-order array functions.
+
+**Requirements:**
+1. Write calculateActiveRevenue(orders).
+2. Filter orders with status === "COMPLETED".
+3. Map items to revenue (price * quantity).
+4. Sum total revenue using reduce().
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function calculateActiveRevenue(orders) {
+>   if (!Array.isArray(orders)) return 0;
+>
+>   return orders
+>     .filter(order => order.status === "COMPLETED")
+>     .map(order => order.price * order.quantity)
+>     .reduce((total, revenue) => total + revenue, 0);
+> }
+>
+> // Verification tests
+> const orders = [
+>   { id: 1, status: "COMPLETED", price: 100, quantity: 2 },
+>   { id: 2, status: "CANCELLED", price: 50, quantity: 1 },
+>   { id: 3, status: "COMPLETED", price: 30, quantity: 3 }
+> ];
+>
+> console.assert(calculateActiveRevenue(orders) === 290, "Test 1 Failed: 200 + 90 = 290");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Higher-Order Functions (HOFs)**: Functions that accept other functions as arguments or return functions as outputs.
+> 2. **Declarative Iteration**: Replaces imperative for/while loops with expressive declarative data methods.
+> 3. **Chainable Transformations**: Array methods filter, map, and reduce chain together without mutating original arrays.
+---
+
+## 6. Related Terms
 - [Currying](currying.md) — Splitting parameters to prepare functions for composition.
 - [Partial Application](partial_application.md) — Pre-filling function parameters.
 - [Pure Function & Side Effects](../level_03/pure_function.md) — Related concept: Pure Function & Side Effects.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Function Composition combines multiple small, pure functions into a single pipeline.
 - `compose()` executes functions from right-to-left (inside-out).
 - `pipe()` executes functions from left-to-right (data flow).

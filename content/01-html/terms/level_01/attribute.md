@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Concept / Architecture**
+
+**Concept / Architecture (Universal Browser Support)**: Attribute is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Tags tell the browser *what* an element is (a paragraph, an image, a link). But sometimes, knowing "what" it is isn't enough information. 
@@ -59,7 +55,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing attributes in the closing tag
 
@@ -129,7 +125,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 <div class="card shadow">Content</div> <!-- Combine multiple classes in single attribute -->
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Syntax Rule
 
@@ -170,7 +166,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 > ```
 > **Explanation:** Boolean attributes are true when present, so key-only syntax (`disabled`) is sufficient.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — Attributes live inside the opening tag of an element.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Self-closing elements that are configured using attributes (like `<img>`).
 - [`<a>` (Anchor / Link)](../level_02/a.md) — An element that heavily relies on the `href` attribute.
@@ -182,7 +178,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Attributes provide extra configuration or instructions to an HTML element.
 - They are ALWAYS placed inside the **opening tag**.
 - They almost always follow the syntax: `name="value"`.

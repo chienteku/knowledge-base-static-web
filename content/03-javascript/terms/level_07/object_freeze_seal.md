@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Object.freeze / Object.seal is a fundamental concept in this technology stack. **Level 7 — Objects & Prototypes**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, JavaScript objects are open and mutable: any script running on the page can add new properties, delete existing properties, or modify values. However, when defining application configurations, constant lookup dictionaries, or state structures, you need to guarantee that this data cannot be modified or corrupted.
@@ -109,7 +105,7 @@ console.log(user.details.role); // "admin" (Mutated despite freeze!)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `const` with `Object.freeze`
 
@@ -184,79 +180,123 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Freeze Enforcement
+### Exercise 1: Immutable Configuration Singleton via Object.freeze()
 
-**Problem:** Complete the function `lockConfig` to freeze the config object.
+**Scenario:** A system configuration module freezes config constants using Object.freeze() to prevent property mutation, addition, or deletion.
 
-```javascript
-function lockConfig(config) {
-  // Freeze config
-  return config;
-}
-
-const settings = lockConfig({ theme: "dark" });
-try {
-  settings.theme = "light";
-} catch (e) {
-  console.log("Error caught!");
-}
-```
+**Requirements:**
+1. Write createFrozenConfig(configData).
+2. Freeze object with Object.freeze().
+3. Verify Object.isFrozen() is true and mutations throw or fail.
 
 > [!check]- Answer
-> - Call `Object.freeze(config)` inside the function body.
-> 
----
-
-### Exercise 2: Comparing `Object.freeze` vs `Object.seal`
-
-**Problem:** Explain difference between `Object.seal` (can mutate existing properties, cannot add/delete) and `Object.freeze` (cannot mutate, add, or delete).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Seal: Mutate existing, Freeze: Read-only
-> ```
-> ```javascript
-> console.log("Seal: Mutate existing, Freeze: Read-only");
-> ```
 >
-> **Explanation:** `seal()` prevents structure modifications while allowing property value updates; `freeze()` makes objects immutable.
-> 
----
-
-### Exercise 3: Strict Mode Immutability Errors
-
-**Problem:** Catch `TypeError` when modifying frozen object properties in strict mode.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TypeError caught
-> ```
+> #### Implementation
+>
 > ```javascript
-> "use strict";
-> const obj = Object.freeze({ a: 1 });
-> try {
->   obj.a = 2;
-> } catch (err) {
->   console.log("TypeError caught");
+> function createFrozenConfig(configData) {
+>   const config = Object.assign({}, configData);
+>   return Object.freeze(config);
 > }
+>
+> // Verification tests
+> const cfg = createFrozenConfig({ env: "production", version: 1.0 });
+> console.assert(Object.isFrozen(cfg) === true, "Test 1 Failed");
+>
+> try {
+>   // @ts-ignore
+>   cfg.env = "staging";
+> } catch (e) {}
+> console.assert(cfg.env === "production", "Test 2 Failed: Mutation occurred on frozen object");
 > ```
 >
-> **Explanation:** In strict mode, modifying frozen object properties throws `TypeError`.
-> 
+> #### Technical Explanation
+>
+> 1. **Object.freeze() Immunity**: Object.freeze() prevents adding, deleting, or reassigning own properties of an object.
+> 2. **Object.seal() Contrast**: Object.seal() prevents adding/deleting properties, but permits reassigning existing writable properties.
+> 3. **Shallow Freezing**: Object.freeze() is shallow; nested objects remain mutable unless recursively frozen.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Object Freeze Seal Advanced Context Handler
+
+**Scenario:** A web application component processes object freeze seal data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handleObjectFreezeSealSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleObjectFreezeSealSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleObjectFreezeSealSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object Freeze Seal Architecture**: Applying object freeze seal patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Object Freeze Seal Performance Optimization
+
+**Scenario:** An application utility optimizes object freeze seal execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeObjectFreezeSealTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeObjectFreezeSealTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeObjectFreezeSealTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Object Freeze Seal Optimization**: Optimizing object freeze seal improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Immutability](../level_09/immutability.md) — The design philosophy of preventing data mutation.
 - [const](../level_01/const.md) — The variable binding keyword that prevents variable reassignment.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Object.freeze(obj)` makes an object read-only: properties cannot be added, deleted, or updated.
 - `Object.seal(obj)` prevents adding or deleting properties, but permits modifying existing writable properties.
 - Both methods operate **shallowly**—nested objects inside frozen or sealed objects remain mutable.

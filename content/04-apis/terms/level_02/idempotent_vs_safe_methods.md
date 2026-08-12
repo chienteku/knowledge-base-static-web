@@ -11,16 +11,12 @@
 ---
 
 ## 2. Term Category
-- **Networking Protocol**
+
+**Networking Protocol (Universal: Governs the design of web APIs and client retry logic.)**: Idempotent vs Safe Methods is a fundamental concept in this technology stack. **Level 2 — HTTP Anatomy**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Governs the design of web APIs and client retry logic.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing network code, client devices must handle unreliable connections. If a client sends a request to update a profile, but the network connection drops before receiving the server's reply, the client does not know if the update succeeded. 
@@ -75,7 +71,7 @@ function handlePost(userData) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Modifying state inside a GET request
 
@@ -140,67 +136,160 @@ DELETE /api/queue/items/item-123 HTTP/1.1 ; Targeted item deletion is idempotent
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Semantic Classifier
+### Exercise 1: Safe vs Idempotent Request Retry Safety Guard
 
-**Problem:** Classify the following API actions as either **Safe**, **Idempotent (but not safe)**, or **Neither**:
+**Scenario:** An HTTP client retry engine inspects HTTP methods to determine whether failed requests can be safely retried without duplicate side-effects.
 
-1. `GET /products/search?q=shoes`
-2. `POST /orders/checkout {"items": [101]}`
-3. `PUT /profiles/user42/avatar {"url": "avatar.jpg"}`
-4. `DELETE /messages/55`
+**Requirements:**
+1. Write canSafelyRetry(method, statusCode).
+2. Safe & Idempotent methods (GET, PUT, DELETE) can be retried.
+3. Non-idempotent methods (POST) can only be retried if error occurred BEFORE server execution.
 
 > [!check]- Answer
-> - 1. **Safe** (It is a read-only search lookup).
-> - 2. **Neither** (POST checkouts create orders; repeating it charges the user twice).
-> - 3. **Idempotent** (Replaces the avatar URL. Repeated calls result in the same avatar state).
-> - 4. **Idempotent** (Repeated deletions leave the message gone).
+>
+> #### Implementation
+>
+> ```javascript
+> function canSafelyRetry(method, statusCode, requestSent = true) {
+>   const m = method.toUpperCase();
+>   const idempotentMethods = ["GET", "HEAD", "OPTIONS", "PUT", "DELETE"];
+>
+>   if (idempotentMethods.includes(m)) {
+>     // Idempotent requests can always be retried on network or 5xx server errors
+>     return statusCode >= 500 || statusCode === 0;
+>   }
+>
+>   // Non-idempotent (POST) requests can ONLY be retried if connection failed BEFORE request was sent
+>   if (m === "POST" && !requestSent) {
+>     return true;
+>   }
+>
+>   return false;
+> }
+>
+> // Verification tests
+> console.assert(canSafelyRetry("GET", 503, true) === true, "Test 1 Failed: GET is idempotent and safe to retry");
+> console.assert(canSafelyRetry("PUT", 500, true) === true, "Test 2 Failed: PUT is idempotent");
+> console.assert(canSafelyRetry("POST", 500, true) === false, "Test 3 Failed: POST is non-idempotent");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Safe Methods**: GET, HEAD, OPTIONS read data without modifying server state.
+> 2. **Idempotent Methods**: GET, PUT, DELETE produce identical server state regardless of how many times executed.
+> 3. **Retry Policy Risks**: Retrying failed POST requests carries risk of duplicate payments or duplicate records.
 > 
+---
+
+### Exercise 2: Idempotency-Key Header Middleware for Safe POST Retries
+
+**Scenario:** A billing API enforces an `Idempotency-Key` header on POST requests to guarantee payment requests are processed at most once.
+
+**Requirements:**
+1. Write processIdempotentPost(idempotencyKey, payload, cacheMap).
+2. If key exists in cacheMap, return cached response.
+3. Else process request, store response in cacheMap, and return.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function processIdempotentPost(idempotencyKey, payload, cacheMap = new Map()) {
+>   if (!idempotencyKey || typeof idempotencyKey !== "string") {
+>     return { status: 400, error: "Missing Idempotency-Key header" };
+>   }
+>
+>   if (cacheMap.has(idempotencyKey)) {
+>     return {
+>       status: 200,
+>       cached: true,
+>       body: cacheMap.get(idempotencyKey)
+>     };
+>   }
+>
+>   // Simulate payment processing
+>   const responseBody = { chargeId: `ch_${Date.now()}`, amount: payload.amount };
+>   cacheMap.set(idempotencyKey, responseBody);
+>
+>   return {
+>     status: 201,
+>     cached: false,
+>     body: responseBody
+>   };
+> }
+>
+> // Verification tests
+> const cache = new Map();
+> const key = "key-uuid-12345";
+> const payload = { amount: 50 };
+>
+> const res1 = processIdempotentPost(key, payload, cache);
+> console.assert(res1.status === 201 && res1.cached === false, "Test 1 Failed");
+>
+> const res2 = processIdempotentPost(key, payload, cache);
+> console.assert(res2.status === 200 && res2.cached === true, "Test 2 Failed");
+> console.assert(res1.body.chargeId === res2.body.chargeId, "Test 3 Failed: Must return identical charge ID");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Idempotency-Key Pattern**: Client sends unique UUID header with non-idempotent requests (POST).
+> 2. **Deduplication Storage**: Server caches response by key; subsequent duplicate requests return cached result without re-executing.
+> 3. **Financial API Standard**: Standard practice in payment APIs (Stripe, PayPal) to handle retries safely.
 > 
 ---
 
-### Exercise 2: Safe and Idempotent Property Matrix
+### Exercise 3: HTTP Method Safety Matrix Auditor
 
-**Problem:** Classify each HTTP method as Safe (Yes/No) and Idempotent (Yes/No):
-1. GET
-2. POST
-3. PUT
-4. DELETE
+**Scenario:** An API linter inspects endpoint route definitions and verifies that GET routes contain zero mutation side-effects.
 
-**Expected output:**
+**Requirements:**
+1. Write auditRouteSafety(routeDef).
+2. Verify GET routes do not execute DB writes.
+3. Return audit result.
+
 > [!check]- Answer
-> ```text
-> 1. GET: Safe=Yes, Idempotent=Yes
-> 2. POST: Safe=No, Idempotent=No
-> 3. PUT: Safe=No, Idempotent=Yes
-> 4. DELETE: Safe=No, Idempotent=Yes
+>
+> #### Implementation
+>
+> ```javascript
+> function auditRouteSafety(routeDef) {
+>   if (!routeDef || !routeDef.method || typeof routeDef.handler !== "function") {
+>     return { valid: false };
+>   }
+>
+>   const isGet = routeDef.method.toUpperCase() === "GET";
+>   const performsWrite = routeDef.hasSideEffects || false;
+>
+>   if (isGet && performsWrite) {
+>     return {
+>       valid: false,
+>       error: "Violation: GET route performs mutation side-effects"
+>     };
+>   }
+>
+>   return { valid: true };
+> }
+>
+> // Verification tests
+> const badGet = { method: "GET", path: "/delete-user", hasSideEffects: true };
+> console.assert(auditRouteSafety(badGet).valid === false, "Test 1 Failed");
+>
+> const goodGet = { method: "GET", path: "/user-info", hasSideEffects: false };
+> console.assert(auditRouteSafety(goodGet).valid === true, "Test 2 Failed");
 > ```
-> ```text
-> 1. GET    -> Safe: Yes, Idempotent: Yes
-> 2. POST   -> Safe: No,  Idempotent: No
-> 3. PUT    -> Safe: No,  Idempotent: Yes
-> 4. DELETE -> Safe: No,  Idempotent: Yes
-> ```
-> - **Explanation:** Safe methods do not alter state; Idempotent methods yield identical results regardless of N repetitions.
+>
+> #### Technical Explanation
+>
+> 1. **GET Side-Effect Prohibition**: RFC specifications strictly prohibit GET requests from performing state-modifying side-effects.
+> 2. **Web Crawler Risk**: Search engine web crawlers follow GET links automatically; side-effecting GETs cause accidental data loss.
+> 3. **HTTP Compliance**: Keeps API implementations aligned with standard web architecture expectations.
 ---
 
-### Exercise 3: HTTP 404 Response on Repeated DELETE
-
-**Problem:** If `DELETE /users/5` returns 200 OK on first call and 404 Not Found on second call, is the endpoint still idempotent?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes. Idempotency guarantees the underlying server state is identical after N calls (the user remains deleted), even if the HTTP status code changes.
-> ```
-> ```text
-> Yes. Idempotency guarantees the underlying server state is identical after N calls (the user remains deleted), even if the HTTP status code changes.
-> ```
-> - **Explanation:** Idempotency evaluates backend state consistency, not strict status code identity.
----
-
-## 7. Related Terms
+## 6. Related Terms
 - [Statelessness](../level_03/statelessness.md) — The architectural constraint requiring requests to carry their own state.
 - [CRUD Operations](../level_03/crud.md) — The persistent database actions mapped to HTTP verbs.
 - [Idempotency Keys](../level_06/idempotency_keys.md) — Related concept: Idempotency Keys.
@@ -208,7 +297,7 @@ DELETE /api/queue/items/item-123 HTTP/1.1 ; Targeted item deletion is idempotent
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Safe methods (GET, HEAD) never modify server state and are read-only.
 - Idempotent methods (GET, PUT, DELETE) have the same final effect on server state whether called once or 100 times.
 - POST is neither safe nor idempotent; repeating it duplicates resources.

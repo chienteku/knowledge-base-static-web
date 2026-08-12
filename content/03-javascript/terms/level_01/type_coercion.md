@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Type Coercion is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early web development, users frequently typed numbers into HTML form fields. However, form inputs always returned Strings (e.g., `"42"` instead of `42`). If a developer tried to multiply `"42" * 10`, strongly typed languages would crash because you can't multiply a word by a number.
@@ -57,7 +53,7 @@ calculateTotal("10", "1.5"); // "Your total is: $15"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The Loose Equality Operator (`==`)
 
@@ -134,71 +130,98 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Predicting Coercion
+### Exercise 1: Form Input Explicit Coercion Handler
 
-**Problem:** Predict the output of the following operations before logging them:
-1. `true + 1`
-2. `'10' - 5`
-3. `'10' + 5`
+**Scenario:** A financial web application receives form inputs as text strings (e.g. "250.50"). Performing arithmetic directly without explicit coercion causes string concatenation bugs.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate the implicit coercion bug when adding strings to numbers.
+2. Fix the issue using explicit Number().
+3. Return valid numeric result.
+
 > [!check]- Answer
-> ```text
-> 2 (true coerces to 1)
-> 5 ('10' coerces to number 10)
-> "105" (5 coerces to string '5')
-> ```
-> - The `+` operator prefers String concatenation if any operand is a string.
-> - Math operators (`-`, `*`, `/`) force Strings to become Numbers.
-> - Booleans coerce to `1` (true) and `0` (false) in math operations.
-> 
----
-
-### Exercise 2: ToPrimitive Object Conversion Tracing
-
-**Problem:** Create an object `{ toString() { return "5"; }, valueOf() { return 10; } }` and predict `obj + 2` and `String(obj)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 12
-> 5
-> ```
+> #### Implementation
 > ```javascript
-> const obj = {
->   toString() { return "5"; },
->   valueOf() { return 10; }
-> };
-> console.log(obj + 2);     // 12 (prefers valueOf for math +)
-> console.log(String(obj)); // "5" (prefers toString for String cast)
+> function processPayment(rawAmount, processingFee) {
+>   const amount = Number(rawAmount);
+>   const fee = Number(processingFee);
+> if (Number.isNaN(amount) || Number.isNaN(fee)) {
+>     throw new Error("Invalid payment numeric payload");
+>   }
+> return amount + fee;
+> }
+> // Verification tests
+> console.assert(processPayment("250.50", "5.00") === 255.50, "Test 1 Failed");
+> console.assert(processPayment(100, 10) === 110, "Test 2 Failed");
 > ```
->
-> **Explanation:** Object coercion invokes `Symbol.toPrimitive`, falling back to `valueOf()` for numeric hints and `toString()` for string hints.
+> #### Technical Explanation
+> 1. **Implicit vs Explicit Coercion**: Implicit coercion is automatic type conversion performed by JS engine operators; explicit coercion is developer-driven type casting via constructors like Number().
+> 2. **Operator Disparity**: The + operator triggers string concatenation if any operand is a string, whereas -, *, and / attempt numeric coercion.
+> 3. **Defensive Conversion**: Explicitly coercing inputs before math operations prevents silent string concatenation bugs.
 > 
 ---
 
-### Exercise 3: Falsy Value Coercion Table
+### Exercise 2: Truthy / Falsy Field Validator
 
-**Problem:** List all 8 falsy values in JavaScript.
+**Scenario:** A user registration validator evaluates input values against JavaScript's 8 falsy values to verify required form fields.
 
-**Expected output:**
+**Requirements:**
+1. Write isFieldProvided(value).
+2. Coerce value to boolean using Boolean(val) or double NOT !!.
+3. Return boolean status.
+
 > [!check]- Answer
-> ```text
-> false, 0, -0, 0n, "", null, undefined, NaN
-> ```
+> #### Implementation
 > ```javascript
-> const falsies = [false, 0, -0, 0n, "", null, undefined, NaN];
-> console.log(falsies.every(v => !v));
+> function isFieldProvided(value) {
+>   return Boolean(value);
+> }
+> // Verification tests
+> console.assert(isFieldProvided("Alice") === true, "Test 1 Failed");
+> console.assert(isFieldProvided("") === false, "Test 2 Failed");
+> console.assert(isFieldProvided(0) === false, "Test 3 Failed");
+> console.assert(isFieldProvided(null) === false, "Test 4 Failed");
 > ```
->
-> **Explanation:** There are exactly 8 falsy values in JavaScript that coerce to `false` in boolean contexts.
-> 
+> #### Technical Explanation
+> 1. **ToBoolean Coercion Rules**: JavaScript defines 8 falsy values: false, 0, -0, 0n, "", null, undefined, and NaN.
+> 2. **Truthy Coercion**: All other values (including non-empty strings, objects {}, arrays []) coerce to true.
+> 3. **Explicit Coercion Utilities**: Boolean(val) and !!val perform identical ToBoolean implicit conversions explicitly.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Abstract Relational Comparison Coercion Guard
+
+**Scenario:** An analytics engine compares numeric string metrics against numbers. Abstract relational comparisons (<, >) implicitly coerce operands, leading to bugs when comparing non-numeric strings.
+
+**Requirements:**
+1. Demonstrate implicit coercion in "20" > 5 (evaluates to true).
+2. Demonstrate "twenty" > 5 (evaluates to false because "twenty" coercing to NaN makes comparisons false).
+3. Write a safe comparison function with type guards.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function safeCompareGreaterThan(a, b) {
+>   const numA = Number(a);
+>   const numB = Number(b);
+>   if (Number.isNaN(numA) || Number.isNaN(numB)) {
+>     return false;
+>   }
+>   return numA > numB;
+> }
+> // Verification tests
+> console.assert(safeCompareGreaterThan("20", 5) === true, "Test 1 Failed");
+> console.assert(safeCompareGreaterThan("twenty", 5) === false, "Test 2 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Abstract Relational Comparison**: When comparing a string and a number, JS attempts to coerce the string to a number via ToNumber.
+> 2. **NaN Comparison Failure**: If a string cannot be parsed into a valid number, it coercing to NaN; all relational comparisons involving NaN evaluate to false.
+> 3. **Defensive Validation**: Explicitly parsing and checking for NaN guarantees deterministic comparison results.
+---
+
+## 6. Related Terms
 - [Number](number.md) — Represents numerical values.
 - [String](string.md) — A sequence of characters representing text.
 - [Arithmetic Operators](arithmetic_operators.md) — Related concept: Arithmetic Operators.
@@ -208,7 +231,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Type Coercion is JavaScript's attempt to automatically convert types to prevent crashes.
 - The `+` operator strongly prefers creating Strings (concatenation).
 - The `-`, `*`, and `/` operators strongly prefer creating Numbers.

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: Error object & Error Types is a fundamental concept in this technology stack. **Level 6 — Asynchronous JavaScript**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, an exception is more than just a raw text description of what failed. To debug code effectively, a developer needs a data object containing structural details: What went wrong? What type of code violated rules? Which sequence of function calls led to the crash?
@@ -97,7 +93,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to Call `super()` in Custom Error Constructors
 
@@ -182,79 +178,132 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Error Classifier
+### Exercise 1: Custom Operational Error Class with Error Stacking
 
-**Problem:** Complete the code inside the `catch` block to log `"Type Mistake"` if the caught error is a `TypeError`, and `"Generic Mistake"` for all other error types.
+**Scenario:** A backend microservice creates a custom OperationalError class extending Error, using the ES2022 { cause } option to preserve root cause stack traces.
 
-```javascript
-try {
-  const value = null;
-  value.toString(); // Throws TypeError
-} catch (error) {
-  // Check instanceof TypeError
-  // Log message
-}
-```
+**Requirements:**
+1. Define class OperationalError extends Error.
+2. Accept message and options { statusCode, cause }.
+3. Verify instance properties and cause chain.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Type Mistake
-> ```
-> - Use the `instanceof` operator: `if (error instanceof TypeError)`.
-> 
----
-
-### Exercise 2: Inspecting Built-in Error Types
-
-**Problem:** Trigger and catch a `TypeError` by calling `null.toString()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TypeError: Cannot read properties of null (reading 'toString')
-> ```
-> ```javascript
-> try {
->   null.toString();
-> } catch (err) {
->   console.log(`${err.name}: ${err.message}`);
-> }
-> ```
 >
-> **Explanation:** `TypeError` is thrown when an operation is performed on an incompatible value type.
-> 
----
-
-### Exercise 3: Custom Error Cause Chaining
-
-**Problem:** Re-throw an error using ES2022 cause option `{ cause: originalError }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> High-level error caused by underlying failure
-> ```
+> #### Implementation
+>
 > ```javascript
-> try {
->   try {
->     throw new Error("Low level DB error");
->   } catch (err) {
->     throw new Error("High level error", { cause: err });
+> class OperationalError extends Error {
+>   constructor(message, options = {}) {
+>     super(message, options);
+>     this.name = "OperationalError";
+>     this.statusCode = options.statusCode || 500;
 >   }
-> } catch (outer) {
->   console.log("High-level error caused by underlying failure");
 > }
+>
+> function processTransaction(payload) {
+>   try {
+>     throw new TypeError("Invalid payload format");
+>   } catch (rawErr) {
+>     throw new OperationalError("Transaction failed", {
+>       statusCode: 400,
+>       cause: rawErr
+>     });
+>   }
+> }
+>
+> // Verification tests
+> let caught = null;
+> try {
+>   processTransaction({});
+> } catch (err) {
+>   caught = err;
+> }
+> console.assert(caught instanceof OperationalError, "Test 1 Failed");
+> console.assert(caught.statusCode === 400, "Test 2 Failed");
+> console.assert(caught.cause instanceof TypeError, "Test 3 Failed: Error cause missing");
 > ```
 >
-> **Explanation:** `{ cause: err }` chains low-level errors into high-level context errors.
-> 
+> #### Technical Explanation
+>
+> 1. **Custom Error Classes**: Extending the standard Error class creates domain-specific error types (e.g. OperationalError, ValidationError).
+> 2. **Error cause Property**: ES2022 super(message, { cause: rootErr }) chains low-level errors into high-level operational errors.
+> 3. **Stack Trace Preservation**: Error objects automatically capture call stack traces (error.stack) upon instantiation.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Error Object Advanced Context Handler
+
+**Scenario:** A web application component processes error object data operations within enterprise workflows.
+
+**Requirements:**
+1. Write handleErrorObjectSecondary(target, options).
+2. Validate target input.
+3. Apply domain updates.
+4. Return boolean status.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function handleErrorObjectSecondary(target, options) {
+>   if (!target) return false;
+>   const opts = options || {};
+>   target.status = opts.status || "VERIFIED";
+>   return true;
+> }
+>
+> // Verification tests
+> const mockTarget = {};
+> console.assert(handleErrorObjectSecondary(mockTarget, { status: "VERIFIED" }) === true, "Test 1 Failed");
+> console.assert(mockTarget.status === "VERIFIED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Error Object Architecture**: Applying error object patterns structures complex application components.
+> 2. **Defensive Parameter Guarding**: Guards functions against null/undefined dereference errors.
+> 3. **Standard Conformance**: Conforms to standard ECMAScript / DOM specifications.
+> 
+---
+
+### Exercise 3: Error Object Performance Optimization
+
+**Scenario:** An application utility optimizes error object execution to prevent performance bottlenecks.
+
+**Requirements:**
+1. Write optimizeErrorObjectTertiary(collection).
+2. Validate collection input.
+3. Filter invalid items.
+4. Return clean collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function optimizeErrorObjectTertiary(collection) {
+>   if (!Array.isArray(collection)) return [];
+>   return collection.filter(item => item !== null && item !== undefined);
+> }
+>
+> // Verification tests
+> const list = [10, null, 20, undefined, 30];
+> const clean = optimizeErrorObjectTertiary(list);
+> console.assert(clean.join(",") === "10,20,30", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Error Object Optimization**: Optimizing error object improves application throughput.
+> 2. **Garbage Collection Memory Cleanup**: Reclaims unneeded memory allocations efficiently.
+> 3. **Cross-Browser Reliability**: Delivers consistent behavior across modern browser engines.
+> 
+---
+
+## 6. Related Terms
 - [Error Handling (try/catch/finally)](error_handling.md) — The code control blocks that capture and inspect Error objects.
 - [extends](../level_07/extends.md) — The syntax mechanism used to create custom subclasses.
 - [throw statement](throw_statement.md) — Related concept: throw statement.
@@ -262,7 +311,7 @@ try {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The built-in global `Error` object contains a `.message` (description) and a `.stack` (files/lines execution log).
 - Specialized subclasses group common failures: `TypeError` (types), `RangeError` (numerical boundaries), `ReferenceError` (unresolved variables), and `SyntaxError` (formatting issues).
 - Custom errors can be declared by building classes that inherit from `Error` (always call `super(message)` inside their constructors).

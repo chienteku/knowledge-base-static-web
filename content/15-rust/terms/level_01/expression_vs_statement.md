@@ -244,7 +244,7 @@ Omit final block semicolon to yield value: 1 => { println!("1"); 10 }
 > 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Statements](statements.md) — Action statements.
 - [Expressions](expressions.md) — Value-producing expressions.

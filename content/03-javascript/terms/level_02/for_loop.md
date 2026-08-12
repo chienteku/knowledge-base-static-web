@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: for Loop is a fundamental concept in this technology stack. **Level 2 — Control Flow & Data Structures**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A fundamental power of computers is doing repetitive tasks incredibly fast. If you need to print out numbers 1 through 10,000, writing `console.log()` 10,000 times is impossible. We needed a construct that tells the engine, "Run this block of code over and over again, but keep track of how many times you've done it, and stop when you reach a certain limit."
@@ -63,7 +59,7 @@ for (let index = 0; index < upcomingEvents.length; index++) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Infinite Loops
 
@@ -139,77 +135,130 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Counting Backwards
+### Exercise 1: Batch Transaction Subtotal & Fee Accumulator
 
-**Problem:** Write a `for` loop that counts down from 10 to 1, logging each number to the console, and then logs "Liftoff!" after the loop finishes.
+**Scenario:** A payment gateway iterates through an array of transaction amounts using a standard counting for loop, accumulating gross subtotal, processing fees, and net payouts.
 
-**Expected output:**
+**Requirements:**
+1. Write calculateBatchFinancials(transactions, feeRate).
+2. Initialize accumulator variables.
+3. Use a 3-part for loop (let i = 0; i < transactions.length; i++).
+4. Return object { grossSubtotal, totalFees, netPayout }.
+
 > [!check]- Answer
-> ```text
-> 10
-> 9
-> ...
-> 1
-> Liftoff!
-> ```
-> - Initialization: `let i = 10`
-> - Condition: `i > 0`
-> - Update: `i--`
-> - Put the `console.log("Liftoff!")` *outside* and *after* the loop body.
-> 
----
-
-### Exercise 2: Comparing `for...in` vs `for...of`
-
-**Problem:** Iterate over `["a", "b"]` using both `for...in` and `for...of` and print values.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> for...in key: "0" (type string)
-> for...in key: "1" (type string)
-> for...of val: a
-> for...of val: b
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const arr = ["a", "b"];
-> for (const key in arr) {
->   console.log(`for...in key: "${key}" (type ${typeof key})`);
+> function calculateBatchFinancials(transactions, feeRate) {
+>   let grossSubtotal = 0;
+>   let totalFees = 0;
+>
+>   for (let i = 0; i < transactions.length; i++) {
+>     const amount = transactions[i];
+>     const fee = amount * feeRate;
+>     grossSubtotal += amount;
+>     totalFees += fee;
+>   }
+>
+>   const netPayout = grossSubtotal - totalFees;
+>   return {
+>     grossSubtotal: Number(grossSubtotal.toFixed(2)),
+>     totalFees: Number(totalFees.toFixed(2)),
+>     netPayout: Number(netPayout.toFixed(2))
+>   };
 > }
-> for (const val of arr) {
->   console.log(`for...of val: ${val}`);
-> }
+>
+> // Verification tests
+> const res = calculateBatchFinancials([100, 200, 300], 0.02);
+> console.assert(res.grossSubtotal === 600.00, "Test 1 Failed");
+> console.assert(res.totalFees === 12.00, "Test 2 Failed");
+> console.assert(res.netPayout === 588.00, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `for...in` inspects object keys as strings; `for...of` iterates values of iterable collections.
+> #### Technical Explanation
+>
+> 1. **3-Part Syntax**: A for loop defines initialization, test condition, and final update expression: for (init; test; update).
+> 2. **Counter Scope**: Declaring counter with let i = 0 binds i strictly within the loop's block scope.
+> 3. **Sequential Index Access**: Accessing array[i] sequentially in a counting loop is highly optimized by JS engines.
 > 
 ---
 
-### Exercise 3: Reverse Array Iteration
+### Exercise 2: Array Reverse Matrix In-Place Swap
 
-**Problem:** Write a `for` loop iterating an array `[10, 20, 30]` in reverse order.
+**Scenario:** A signal processing module reverses array elements in place by iterating backwards from array.length - 1 down to 0 using a decrementing for loop.
 
-**Expected output:**
+**Requirements:**
+1. Write reverseArrayInPlace(items).
+2. Iterate backwards using for (let i = items.length - 1; i >= 0; i--).
+3. Push elements into reversed array.
+4. Return reversed array.
+
 > [!check]- Answer
-> ```text
-> 30
-> 20
-> 10
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const nums = [10, 20, 30];
-> for (let i = nums.length - 1; i >= 0; i--) {
->   console.log(nums[i]);
+> function reverseArrayInPlace(items) {
+>   const reversed = [];
+>   for (let i = items.length - 1; i >= 0; i--) {
+>     reversed.push(items[i]);
+>   }
+>   return reversed;
 > }
+>
+> // Verification tests
+> const output = reverseArrayInPlace([1, 2, 3, 4]);
+> console.assert(output.join(",") === "4,3,2,1", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Setting initial index `i = length - 1` and decrementing `i--` traverses arrays backwards.
+> #### Technical Explanation
+>
+> 1. **Backward Iteration**: Setting init to length - 1 and decrementing i-- iterates elements in reverse order.
+> 2. **Condition Boundary**: Test condition i >= 0 ensures the first element (index 0) is included in iteration.
+> 3. **Index Arithmetic**: Customizing update expressions permits arbitrary step sizes or directional traversal.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Strided Telemetry Sampling Downsampler
+
+**Scenario:** A charting library downsamples high-frequency telemetry data by picking every Nth sample, incrementing the for loop index by step size (i += step).
+
+**Requirements:**
+1. Write downsampleReadings(readings, stepSize).
+2. Iterate using for (let i = 0; i < readings.length; i += stepSize).
+3. Collect sampled elements.
+4. Return downsampled array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function downsampleReadings(readings, stepSize) {
+>   if (stepSize <= 0) return [];
+>   const sampled = [];
+>   for (let i = 0; i < readings.length; i += stepSize) {
+>     sampled.push(readings[i]);
+>   }
+>   return sampled;
+> }
+>
+> // Verification tests
+> const sample = downsampleReadings([10, 20, 30, 40, 50, 60], 2);
+> console.assert(sample.join(",") === "10,30,50", "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Custom Step Update**: Updating index via i += stepSize skips array elements efficiently without evaluating unneeded slots.
+> 2. **Boundary Protection**: The condition i < readings.length prevents accessing out-of-bound undefined indices.
+> 3. **Performance Control**: Strided for loops minimize memory overhead compared to intermediate array filtering.
+---
+
+## 6. Related Terms
 - [while Loop](while_loop.md) — A simpler loop based purely on a condition.
 - [Array](array.md) — A list-like object often iterated over using loops.
 - [Increment / Decrement (++ / --)](../level_01/increment_decrement.md) — Related concept: Increment / Decrement (++ / --).
@@ -220,7 +269,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `for` loop is the most common tool for running code a specific number of times.
 - It consists of three parts separated by semicolons: `for (initialization; condition; update)`.
 - Use `let` (not `const`!) for the initialization variable, because it must be reassigned on every iteration.

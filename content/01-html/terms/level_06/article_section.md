@@ -13,16 +13,12 @@
 ---
 
 ## 2. Term Category
-- **Semantic Tag**
+
+**Semantic Tag (Universal Browser Support)**: `<article>` and `<section>` is a fundamental concept in this technology stack. **Level 6 — Semantic HTML5**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you define your `<main>` content area, you need to organize it. If a page has 5,000 words, dumping it all into paragraphs is messy. 
@@ -86,7 +82,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<section>` as a generic wrapper
 
@@ -158,7 +154,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 </div>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Article vs Section
 
@@ -220,7 +216,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 >
 > **Explanation:** Semantic `<section>` elements require a heading to establish document outline hierarchy.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic wrapper you should use if your block doesn't warrant an `<article>` or `<section>`.
 - [`<main>`](main.md) — The parent container for these elements.
 - [`<aside>`](aside.md) — The tangential layout block placed next to articles.
@@ -231,7 +227,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `<article>` for independent, self-contained content (Blog posts, comments, tweets, news stories).
 - Use `<section>` for thematic groupings of content, which usually require a heading (Chapters, tabbed content, related products).
 - Do not use either of them as generic wrappers for CSS styling; use `<div>` for that.

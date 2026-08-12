@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Structural Tag**
+
+**Structural Tag (Universal Browser Support)**: `<body>` is a fundamental concept in this technology stack. **Level 1 — The Anatomy of a Webpage**
 
 ---
 
-## 3. Environment Context
-- **Universal Browser Support**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While the `<head>` of an HTML document handles all the invisible logic and metadata, the browser needs a dedicated space for the actual content that the user came to see. 
@@ -46,7 +42,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Multiple `<body>` tags
 
@@ -116,7 +112,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 </body>
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: The Browser Viewport
 
@@ -181,7 +177,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 >
 > **Explanation:** `<body>` accepts global window lifecycle event handlers like `onload` and `onresize`.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`<html>`](html_tag.md) — The tag that contains the `<body>`.
 - [`<head>`](head.md) — The invisible metadata sibling to the `<body>`.
 - [`<noscript>`](../level_08/noscript.md) — Related concept: `<noscript>`.
@@ -190,7 +186,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<body>` element contains everything the user sees and interacts with.
 - You can only have exactly one `<body>` tag per webpage.
 - It is a direct child of the `<html>` root element.

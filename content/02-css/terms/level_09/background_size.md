@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Visual Effect**
+
+**Visual Effect (Universal Modern Standard .)**: `background-size` (cover / contain) is a fundamental concept in this technology stack. **Level 9 — Visual Effects & State**
 
 ---
 
-## 3. Environment Context
-- **Universal Modern Standard** (Governs the raster interpolation math applied to background images during window resizing loops).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, if you set a background image on a container, the browser renders it at its raw, native file dimensions. 
@@ -139,7 +135,7 @@ Custom percentage layout:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `background-repeat: no-repeat` with `contain`
 
@@ -185,7 +181,7 @@ div { background-size: 100% 100%; } /* ❌ Distorts image proportions! */
 div { background-size: cover; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hero Setup
 
@@ -246,14 +242,14 @@ div { background-size: cover; }
 >
 > **Explanation:** `position / size` syntax defines background size in shorthand rules.
 > 
-## 7. Related Terms
+## 6. Related Terms
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background settings.
 - [`object-fit` & `object-position`](object_fit.md) — Sizing content media tags.
 - [`linear-gradient` & `radial-gradient` (Gradients)](gradients.md) — Related concept: `linear-gradient` & `radial-gradient` (Gradients).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `background-size` manages background image scales inside boxes.
 - `cover` scales the image to completely fill the box (cropping edges as needed).
 - `contain` scales the image to fit entirely inside the box (leaving letterbox margins).

@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Language Core**
+
+**Language Core (Universal: Works everywhere)**: typeof is a fundamental concept in this technology stack. **Level 1 — Foundations**
 
 ---
 
-## 3. Environment Context
-- **Universal**: Works everywhere (Browsers, Node.js, Deno, etc.)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript is dynamically typed. This means you don't explicitly declare that `let score` is a Number; you just assign `score = 10` and the engine figures it out. Because variables can hold any type of data and can even change types via reassignment or coercion, developers needed a way to ask the engine, "What kind of data is currently sitting inside this variable?"
@@ -64,7 +60,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The Array and Null Quirks
 
@@ -144,68 +140,97 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Exploring Edge Cases
+### Exercise 1: Polymorphic API Payload Type Inspector
 
-**Problem:** Use `typeof` to log the type of the following values: `undefined`, `NaN`, `null`, and a function `function() {}`.
+**Scenario:** An API router validates dynamic payload fields, using typeof to route numbers, strings, objects, and functions to appropriate processing handlers.
 
-**Expected output:**
+**Requirements:**
+1. Inspect input using typeof.
+2. Return string identifier ("NUMBER", "STRING", "FUNCTION", "OBJECT").
+3. Handle null explicitly to fix the historical typeof null === "object" bug.
+
 > [!check]- Answer
-> ```text
-> "undefined"
-> "number"
-> "object"
-> "function"
-> ```
-> - Yes, `NaN` (Not a Number) is ironically of type `"number"`.
-> - Functions are a special type of object, and `typeof` uniquely identifies them as `"function"`.
-> 
----
-
-### Exercise 2: Typeof Return Values
-
-**Problem:** Check `typeof` for `[]`, `{}`, `null`, `undefined`, and `Symbol()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> object
-> object
-> object
-> undefined
-> symbol
-> ```
+> #### Implementation
 > ```javascript
-> console.log(typeof []);
-> console.log(typeof {});
-> console.log(typeof null);
-> console.log(typeof undefined);
-> console.log(typeof Symbol());
+> function inspectPayloadType(payload) {
+>   if (payload === null) {
+>     return "NULL";
+>   }
+>   const rawType = typeof payload;
+>   switch (rawType) {
+>     case "number": return "NUMBER";
+>     case "string": return "STRING";
+>     case "function": return "FUNCTION";
+>     case "object": return Array.isArray(payload) ? "ARRAY" : "OBJECT";
+>     default: return rawType.toUpperCase();
+>   }
+> }
+> // Verification tests
+> console.assert(inspectPayloadType(42) === "NUMBER", "Test 1 Failed");
+> console.assert(inspectPayloadType(null) === "NULL", "Test 2 Failed");
+> console.assert(inspectPayloadType([1, 2]) === "ARRAY", "Test 3 Failed");
 > ```
->
-> **Explanation:** `typeof` returns standard primitive or object type string names.
+> #### Technical Explanation
+> 1. **Typeof Return Values**: typeof evaluates to one of 8 literal strings: "undefined", "boolean", "number", "bigint", "string", "symbol", "function", or "object".
+> 2. **The typeof null Legacy Artifact**: typeof null returns "object", a historical bug in JS preserved for backward compatibility.
+> 3. **Array Classification**: Both arrays and objects return "object"; use Array.isArray() to distinguish arrays.
 > 
 ---
 
-### Exercise 3: Safely Checking Undeclared Functions
+### Exercise 2: Undeclared Variable Inspection Guard
 
-**Problem:** Check if a global function `myPlugin` is defined using `typeof`.
+**Scenario:** A feature detection utility checks for browser global objects (e.g. window.ethereum) without triggering a ReferenceError when inspecting undeclared variables.
 
-**Expected output:**
+**Requirements:**
+1. Check if a variable exists using typeof variable !== "undefined".
+2. Return boolean status safely.
+
 > [!check]- Answer
-> ```text
-> false
-> ```
+> #### Implementation
 > ```javascript
-> console.log(typeof myPlugin === "function");
+> const hasGlobalThis = typeof globalThis !== "undefined";
+> // Verification tests
+> console.assert(hasGlobalThis === true, "Test 1 Failed");
+> const hasFakeVar = typeof unassignedGlobalVar !== "undefined";
+> console.assert(hasFakeVar === false, "Test 2 Failed");
 > ```
->
-> **Explanation:** `typeof` safely evaluates undeclared variables to `"undefined"` without crashing.
+> #### Technical Explanation
+> 1. **Undeclared Variable Safety**: typeof is the only operator that can safely inspect an undeclared variable without throwing a ReferenceError.
+> 2. **Uninitialized vs Undeclared**: Both uninitialized variables (let x;) and undeclared variables return "undefined".
+> 3. **Unary Operator**: typeof is a unary operator that takes a single operand expression.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Primitive vs Object Classifier Utility
+
+**Scenario:** A deep cloning utility classifies incoming properties to determine whether to copy values directly or recursively clone objects.
+
+**Requirements:**
+1. Return true for primitives (including null).
+2. Return false for objects and functions.
+
+> [!check]- Answer
+> #### Implementation
+> ```javascript
+> function isPrimitive(val) {
+>   if (val === null) return true;
+>   const type = typeof val;
+>   return type !== "object" && type !== "function";
+> }
+> // Verification tests
+> console.assert(isPrimitive("hello") === true, "Test 1 Failed");
+> console.assert(isPrimitive(100) === true, "Test 2 Failed");
+> console.assert(isPrimitive({}) === false, "Test 3 Failed");
+> ```
+> #### Technical Explanation
+> 1. **Primitive Classification**: Primitives consist of strings, numbers, booleans, bigints, symbols, undefined, and null.
+> 2. **Functions as Objects**: In JavaScript, functions are first-class callable objects; typeof fn returns "function".
+> 3. **Cloning Decisions**: Primitive values can be copied directly by value, whereas objects require reference tracking or recursive cloning.
+---
+
+## 6. Related Terms
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [null](null.md) — The intentional absence of value.
 - [undefined](undefined.md) — The uninitialized state.
@@ -214,7 +239,7 @@ async function processData() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `typeof` is an operator, not a function (you don't need parentheses, just write `typeof myVar`).
 - It returns a lowercase string representing the type (e.g., `"string"`).
 - It is great for primitives but terrible for complex data types (Arrays, Dates, Null all return `"object"`).

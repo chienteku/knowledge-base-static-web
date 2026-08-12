@@ -12,16 +12,12 @@
 ---
 
 ## 2. Term Category
-- **Engine Feature / Pragma** *(Introduced in ES5 / 2009)*
+
+**Engine Feature / Pragma *(Introduced in ES5 / 2009)* (Universal)**: Strict Mode ("use strict") is a fundamental concept in this technology stack. **Level 9 — Advanced Concepts & Patterns**
 
 ---
 
-## 3. Environment Context
-- **Universal** (Note: ES6 Modules and ES6 Classes have Strict Mode enabled automatically!)
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript was famously created in 10 days in 1995. Because of this rush, the language had some "sloppy" rules. If you made a typo and assigned a value to a variable you never declared (e.g., typing `myVar = 5` instead of `let myVar = 5`), the engine wouldn't crash. Instead, it would secretly create a global variable for you. This "forgiving" nature caused thousands of silent, untraceable bugs.
@@ -71,7 +67,7 @@ checkThis(); // undefined (In sloppy mode, it would be 'Window')
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding Strict Mode Scope and Variable Hoisting
 
@@ -144,69 +140,127 @@ async function processData() {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Function-level Strictness
+### Exercise 1: Guarding Against Implicit Global Variables in Strict Mode
 
-**Problem:** Can you turn on Strict Mode for just a *single function* without affecting the rest of the file?
+**Scenario:** A modular framework uses ECMAScript Strict Mode (`"use strict"`) to prevent silent implicit global variable assignments.
 
-**Expected output:**
+**Requirements:**
+1. Write safeAssignment(val).
+2. Enable "use strict".
+3. Attempting undeclared variable assignment must throw ReferenceError.
+
 > [!check]- Answer
-> ```text
-> Yes! You can put `"use strict";` as the very first line INSIDE a function block.
-> ```
-> - The string just needs to be the very first statement in the scope.
-> 
----
-
-### Exercise 2: Undeclared Variable Assignment Protection in Strict Mode
-
-**Problem:** Catch `ReferenceError` when assigning `x = 10` without declaration in strict mode.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ReferenceError caught
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> "use strict";
-> try {
->   x = 10;
-> } catch (err) {
->   console.log("ReferenceError caught");
+> function testStrictGlobalAssignment() {
+>   "use strict";
+>   try {
+>     // Undeclared variable assignment throws ReferenceError in strict mode
+>     undeclaredVar = 42; 
+>     return false;
+>   } catch (err) {
+>     return err instanceof ReferenceError;
+>   }
 > }
+>
+> // Verification tests
+> console.assert(testStrictGlobalAssignment() === true, "Test 1 Failed: Strict mode must throw ReferenceError on undeclared variables");
 > ```
 >
-> **Explanation:** Strict mode prevents implicit creation of undeclared global variables.
+> #### Technical Explanation
+>
+> 1. **Strict Mode Directive**: Enables strict mode for an entire file or scope when placed at top: "use strict";.
+> 2. **Implicit Global Prevention**: Assigning to undeclared variables in non-strict mode creates global properties; in strict mode it throws ReferenceError.
+> 3. **Catching Typos Early**: Helps developers catch variable name typos at runtime immediately.
 > 
 ---
 
-### Exercise 3: Duplicate Parameter Name Rejection
+### Exercise 2: Preventing Silent Failures on Read-Only Assignments
 
-**Problem:** State whether `function dup(a, a) {}` is permitted in strict mode.
+**Scenario:** A security module verifies that Strict Mode converts silent mutations on non-writable properties into thrown TypeErrors.
 
-**Expected output:**
+**Requirements:**
+1. Enable "use strict".
+2. Define non-writable property via Object.defineProperty.
+3. Verify mutation attempt throws TypeError.
+
 > [!check]- Answer
-> ```text
-> Forbidden in strict mode
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> console.log("Forbidden in strict mode");
+> function testStrictReadOnlyMutation() {
+>   "use strict";
+>   const obj = {};
+>   Object.defineProperty(obj, "readOnlyProp", {
+>     value: 100,
+>     writable: false
+>   });
+>
+>   try {
+>     obj.readOnlyProp = 200; // Throws TypeError in strict mode
+>     return false;
+>   } catch (err) {
+>     return err instanceof TypeError;
+>   }
+> }
+>
+> // Verification tests
+> console.assert(testStrictReadOnlyMutation() === true, "Test 1 Failed: Strict mode must throw TypeError when writing to non-writable property");
 > ```
 >
-> **Explanation:** Strict mode throws early syntax errors on duplicate parameter names.
-> 
+> #### Technical Explanation
+>
+> 1. **Silent Failure Conversion**: In non-strict mode, assigning to non-writable properties fails silently; strict mode throws TypeError.
+> 2. **Object.freeze Compatibility**: Assigning to properties of frozen objects also throws TypeError under strict mode.
+> 3. **Deleting Non-Configurable Properties**: Attempting `delete obj.nonConfigurable` throws TypeError in strict mode.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 3: Restricting Reserved Identifiers & Duplicate Parameters
+
+**Scenario:** A syntax checker verifies that Strict Mode disallows duplicate parameter names and restricts keywords like `interface` or `private`.
+
+**Requirements:**
+1. Write function demonstrating strict parameter rules.
+2. Inspect strict mode behavior on `this` in standalone function calls.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function testStrictThisBinding() {
+>   "use strict";
+>   function getThis() {
+>     return this;
+>   }
+>   return getThis();
+> }
+>
+> // Verification tests
+> console.assert(testStrictThisBinding() === undefined, "Test 1 Failed: Standalone function call this is undefined in strict mode");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Undefined Default this**: In strict mode, standalone function calls set `this` to `undefined` instead of coercing to global object.
+> 2. **Duplicate Parameter Prevention**: Strict mode flags duplicate function parameter names (e.g. `function foo(a, a)`) as syntax errors.
+> 3. **Future Reserved Words Protection**: Reserves identifiers like `interface`, `private`, `protected`, `public`, `static`, `yield` for language extensions.
+---
+
+## 6. Related Terms
 - [this Keyword](../level_07/this_keyword.md) — Behaves differently in strict mode.
 - [Modules (import/export)](../level_08/modules.md) — Automatically enforce strict mode.
 - [Linter (ESLint) & Formatter (Prettier)](../level_10/linter_formatter.md) — Related concept: Linter (ESLint) & Formatter (Prettier).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `"use strict";` opts your code into a stricter set of rules.
 - It prevents accidental global variables, duplicate parameters, and throws errors instead of failing silently.
 - It changes the global `this` keyword from `window` to `undefined`.
