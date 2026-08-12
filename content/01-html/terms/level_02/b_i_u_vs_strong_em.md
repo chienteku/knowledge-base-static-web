@@ -225,63 +225,95 @@ Semantic vs presentational markup comparison:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Semantic Correction
+### Exercise 1: Upgrading Stylistic Tags to Semantic Tags
 
-**Problem:** The following HTML block is written using visual-only tags. Rewrite it to use the correct semantic tags for a warning message about data loss.
+**Scenario:** An accessibility advocate audits legacy article HTML, replacing purely physical presentation tags (`<b>`, `<i>`) with semantic tags (`<strong>`, `<em>`).
 
-```html
-<p>
-  Before you proceed, you <i>must</i> click save. 
-  Otherwise, you will lose <b>all your progress</b>!
-</p>
-```
+**Requirements:**
+1. Replace presentational `<b>` with semantic `<strong>` for important text.
+2. Replace presentational `<i>` with semantic `<em>` for emphasized speech.
+3. Verify screen readers correctly announce semantic emphasis.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>
->   Before you proceed, you <em>must</em> click save. 
->   Otherwise, you will lose <strong>all your progress</strong>!
+> <!-- Legacy Presentational: <b>Bold</b> and <i>Italic</i> -->
+> <!-- Modern Semantic HTML5: -->
+> <article class="notice">
+>   <p>
+>     <strong>Warning:</strong> You must save your work before closing this window. 
+>     It is <em>crucial</em> that all fields are validated.
+>   </p>
+> </article>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Semantic Importance (`<strong>`)**: `<strong>` indicates that text is of high importance or urgency; screen readers announce it with altered tone or emphasis.
+> 2. **Stress Emphasis (`<em>`)**: `<em>` indicates stress emphasis that changes the spoken tone and meaning of a sentence.
+> 3. **Separation of Structure and Style**: Physical tags (`<b>`, `<i>`) historically described visual appearance; HTML5 redefined them, but `<strong>` and `<em>` remain the primary semantic choices.
+> 
+---
+
+### Exercise 2: Technical Terminology & Idiomatic Voice Shifts
+
+**Scenario:** An author uses `<i>` for idiomatic shifts/technical terms and `<u>` for unarticulated annotations according to HTML5 specification rules.
+
+**Requirements:**
+1. Use `<i>` for scientific taxonomic names or technical terms.
+2. Use `<u>` for misspelling annotations.
+3. Ensure visual styling uses CSS.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <p class="botany-note">
+>   The domestic cat is classified as <i class="latin-term">Felis catus</i>.
+> </p>
+> <p class="grammar-check">
+>   Please correct the <u class="spelling-error">miss-spelled</u> word in the draft.
 > </p>
 > ```
-> - The warning "must" is an emphasis of vocal tone (`<em>`).
-> - The warning "all your progress" is critically important data loss information (`<strong>`).
+>
+> #### Technical Explanation
+>
+> 1. **HTML5 Redefinition of `<i>`**: In HTML5, `<i>` represents an idiomatic shift, technical term, foreign phrase, or taxonomic name without implying stress emphasis.
+> 2. **HTML5 Redefinition of `<u>`**: `<u>` represents non-textual annotations such as marking misspelled words or Chinese proper names.
+> 3. **Avoiding Link Confusion**: Because `<u>` underlines text by default, ensure styling does not cause users to mistake underlined text for hyperlinks.
 > 
 ---
 
-### Exercise 2: Semantic Tag Selection Matrix
+### Exercise 3: Auditing Presentational vs Semantic Markup in Editorial Articles
 
-**Problem:** Match element to purpose:
-1. Technical term or idiom (`<i>`)
-2. Serious urgency or warning (`<strong>`)
-3. Stress emphasis changing sentence meaning (`<em>`)
-4. Product keywords offset for readability (`<b>`)
+**Scenario:** An editor audits article body copy to ensure typographical elements match semantic intent.
 
-**Expected output:**
+**Requirements:**
+1. Audit editorial paragraph.
+2. Ensure `<strong>`, `<em>`, `<i>`, and `<b>` are used per HTML5 specs.
+
 > [!check]- Answer
-> ```text
-> 1. <i> -> Technical term / idiom
-> 2. <strong> -> Urgent warning / high importance
-> 3. <em> -> Stress emphasis
-> 4. <b> -> Visual keyword offset
+>
+> #### Implementation
+>
+> ```html
+> <article class="editorial">
+>   <h2>Editor's Pick</h2>
+>   <p>
+>     The book <i>The Great Gatsby</i> is <strong>strictly required reading</strong>. 
+>     We <em>strongly urge</em> all literature students to finish the assignment by <b class="deadline">Friday noon</b>.
+>   </p>
+> </article>
 > ```
 >
-> **Explanation:** HTML semantic text tags convey explicit acoustic emphasis for screen readers.
-> 
----
-
-### Exercise 3: Screen Reader Acoustic Difference
-
-**Problem:** How do screen readers pronounce `<strong>` vs `<b>`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `<strong>` provides semantic emphasis; `<b>` provides visual offset.
-> 
+> 1. **Book Titles with `<i>`**: Book titles, movie titles, and publication names are idiomatic shifts correctly marked with `<i>`.
+> 2. **Key Requirements with `<strong>`**: Required tasks or warnings demand `<strong>` to signal high priority.
+> 3. **Tone Emphasis with `<em>`**: Stressing specific spoken words uses `<em>`.
 ## 6. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — The baseline semantic text tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container used for visual formatting with CSS.

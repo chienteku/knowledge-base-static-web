@@ -113,62 +113,95 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Error
+### Exercise 1: Unique Document Anchor Target and Label Coupling
 
-**Problem:** Look at the following code. What is fundamentally wrong with it?
-```html
-<header id="main-header">
-  <h1 id="main-header">Welcome</h1>
-</header>
-```
+**Scenario:** An author uses unique `id` attributes to establish skip navigation targets and link form labels.
 
-**Expected output:**
+**Requirements:**
+1. Add `id="main-content"` to `<main>` for skip navigation.
+2. Add `id="user-email"` to `<input>` and link with `<label for="user-email">`.
+3. Verify `id` uniqueness.
+
 > [!check]- Answer
-> ```text
-> The `id` attribute is duplicated! You cannot have an `id="main-header"` on the `<header>` and also on the `<h1>`. One of them must be changed.
+>
+> #### Implementation
+>
+> ```html
+> <a href="#main-content" class="skip-link">Skip to main content</a>
+>
+> <main id="main-content" tabindex="-1">
+>   <h1>Account Settings</h1>
+>
+>   <form action="/update" method="post">
+>     <label for="user-email">Email Address</label>
+>     <input type="email" id="user-email" name="email" required>
+>
+>     <button type="submit">Update</button>
+>   </form>
+> </main>
 > ```
-> - Think about the license plate metaphor.
+>
+> #### Technical Explanation
+>
+> 1. **The `id` Attribute**: Assigns a unique identifier to an element across the ENTIRE HTML document.
+> 2. **Single Unique Rule**: An `id` value MUST be strictly unique; duplicate `id`s violate HTML specs and break JavaScript/accessibility targeting.
+> 3. **Accessibility Linking**: `id` is mandatory for connecting `<label for="...">`, `<a href="#...">`, and ARIA reference attributes.
 > 
 ---
 
+### Exercise 2: Enforcing Single Unique id Rule per Document
 
+**Scenario:** Corrects invalid HTML caused by duplicate `id="submit-btn"` entries in multiple forms.
 
-### Exercise 2: 3 Core Uses of id Attribute
+**Requirements:**
+1. Fix duplicate `id` values to ensure document-wide uniqueness.
 
-**Problem:** List 3 primary technical uses of the `id` attribute in web development.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. In-page anchor linking (#id)
-> 2. Form label binding (for="id")
-> 3. Unique DOM selection in JavaScript (getElementById)
-> ```
-> ```text
-> 1. In-page anchor linking (#id)
-> 2. Form label binding (for="id")
-> 3. Unique DOM selection in JavaScript (getElementById)
+>
+> #### Implementation
+>
+> ```html
+> <!-- Form 1 -->
+> <form id="form-login" action="/login" method="post">
+>   <button type="submit" id="login-submit-btn">Login</button>
+> </form>
+>
+> <!-- Form 2 (Unique ID!) -->
+> <form id="form-signup" action="/signup" method="post">
+>   <button type="submit" id="signup-submit-btn">Sign Up</button>
+> </form>
 > ```
 >
-> **Explanation:** `id` provides unique target hooks for links, labels, and scripts.
+> #### Technical Explanation
+>
+> 1. **Duplicate ID Bugs**: Duplicate `id`s cause `document.getElementById()` to return ONLY the first matching element, breaking JavaScript logic.
+> 2. **Fragment Navigation Failures**: Duplicate `id` targets cause hash URL jumps (`#submit-btn`) to break.
+> 3. **DOM Validation Integrity**: HTML linters report duplicate `id` entries as critical errors.
 > 
 ---
 
-### Exercise 3: ID vs Class Specificity
+### Exercise 3: Connecting ARIA Relationships via id References
 
-**Problem:** Which CSS selector has higher specificity: `#main` (ID) or `.main` (Class)?
+**Scenario:** Uses `id` references to link `aria-labelledby` and `aria-describedby` attributes.
 
-**Expected output:**
+**Requirements:**
+1. Link `<p id="desc">` via `aria-describedby="desc"`.
+
 > [!check]- Answer
-> ```text
-> #main (ID selector specificity 1-0-0 outweighs Class specificity 0-1-0).
-> ```
-> ```text
-> #main (ID selector specificity 1-0-0 outweighs Class specificity 0-1-0).
+>
+> #### Implementation
+>
+> ```html
+> <label for="pass-input">New Password</label>
+> <input type="password" id="pass-input" name="password" aria-describedby="pass-rules" required>
+> <p id="pass-rules" class="help-text">Password must be at least 8 characters long and contain a number.</p>
 > ```
 >
-> **Explanation:** ID selectors have higher CSS specificity rank than class selectors.
-> 
+> #### Technical Explanation
+>
+> 1. **ARIA Description Linking**: `aria-describedby="pass-rules"` reads the help paragraph aloud when the input receives focus.
+> 2. **Programmatic Relationship**: `id` references construct accessibility tree relationship graphs.
+> 3. **Enhanced Form Usability**: Informs users of input validation constraints before submission.
 ## 6. Related Terms
 - [`class` Attribute](class.md) — The attribute used for grouping *multiple* elements together (the opposite of `id`).
 - [`style` Attribute](style.md) — The inline styling attribute.

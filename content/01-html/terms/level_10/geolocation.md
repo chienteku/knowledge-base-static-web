@@ -249,63 +249,93 @@ navigator.geolocation.getCurrentPosition(
 
 ## 5. Practice Exercises
 
-### Exercise 1: Coordinate Scanner
+### Exercise 1: Geolocation Permission Trigger UI with Accessible Status Region
 
-**Problem:** Write a JavaScript snippet to check if the browser supports geolocation, and if so, watch the user's position continuously, logging the current latitude to the console.
+**Scenario:** An author builds a geolocation permission trigger button with accessible live region status updates.
 
-**Expected output:**
+**Requirements:**
+1. Create location request `<button>`.
+2. Include `<output id="geo-status">` live region for screen reader updates.
+3. Display location metrics.
+
 > [!check]- Answer
-> ```javascript
-> if (navigator.geolocation) {
->   const watchId = navigator.geolocation.watchPosition((pos) => {
->     console.log("Updated Lat: " + pos.coords.latitude);
->   });
-> }
+>
+> #### Implementation
+>
+> ```html
+> <section class="location-picker">
+>   <h2>Store Locator</h2>
+>   <p>Find the nearest Acme store location automatically.</p>
+>
+>   <button type="button" id="locate-btn" class="btn-primary">
+>     Use My Current Location
+>   </button>
+>
+>   <div class="status-container">
+>     <output id="geo-status" for="locate-btn" aria-live="polite">
+>       Location permission not requested yet.
+>     </output>
+>   </div>
+> </section>
 > ```
-> - Use the `navigator.geolocation` check.
-> - Call `watchPosition()` instead of `getCurrentPosition()`.
+>
+> #### Technical Explanation
+>
+> 1. **Geolocation API Integration**: Uses `navigator.geolocation.getCurrentPosition(success, error)` to retrieve device coordinates.
+> 2. **HTTPS Origin Requirement**: Geolocation API is restricted strictly to Secure Contexts (HTTPS); calls fail automatically on HTTP.
+> 3. **Accessible Output Announcements**: `<output aria-live="polite">` announces status changes ('Acquiring position...', 'Location found') to screen readers.
 > 
 ---
 
+### Exercise 2: High Accuracy Location Tracking Callback Integration
 
+**Scenario:** Configures high accuracy position watching via `watchPosition()`.
 
-### Exercise 2: Fetching User Coordinates
+**Requirements:**
+1. Set `enableHighAccuracy: true` option.
 
-**Problem:** Write JS snippet invoking `getCurrentPosition` logging `latitude` and `longitude`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> navigator.geolocation.getCurrentPosition(pos => { console.log(pos.coords.latitude, pos.coords.longitude); });
-> ```
-> ```javascript
-> navigator.geolocation.getCurrentPosition((position) => {
->   const { latitude, longitude } = position.coords;
->   console.log(`Lat: ${latitude}, Lng: ${longitude}`);
-> });
+>
+> #### Implementation
+>
+> ```html
+> <button type="button" id="start-tracking">Start GPS Tracking</button>
+> <p>Current Coordinates: <output id="coords-display">Waiting...</output></p>
 > ```
 >
-> **Explanation:** `position.coords` provides current device latitude and longitude.
+> #### Technical Explanation
+>
+> 1. **`watchPosition()` API**: Continuously tracks device location changes as the user moves.
+> 2. **High Accuracy Options**: `{ enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }` uses hardware GPS chip.
+> 3. **Battery Conservation**: Call `clearWatch(id)` to stop tracking and conserve device battery.
 > 
 ---
 
-### Exercise 3: Continuous Location Tracking API
+### Exercise 3: Graceful Handling of Geolocation Denial and Errors
 
-**Problem:** Which Geolocation API method continuously tracks location updates as the user moves (`getCurrentPosition` or `watchPosition`)?
+**Scenario:** Handles permission denial errors gracefully with user fallback UI.
 
-**Expected output:**
+**Requirements:**
+1. Provide manual ZIP code input fallback.
+
 > [!check]- Answer
-> ```text
-> watchPosition (use clearWatch to stop tracking).
-> ```
-> ```javascript
-> const watchId = navigator.geolocation.watchPosition((pos) => {
->   console.log(pos.coords);
-> });
+>
+> #### Implementation
+>
+> ```html
+> <div class="location-fallback">
+>   <p>Location access denied. Enter ZIP code manually:</p>
+>   <label for="zip-code">ZIP Code</label>
+>   <input type="text" id="zip-code" name="zip" pattern="[0-9]{5}">
+>   <button type="submit">Search</button>
+> </div>
 > ```
 >
-> **Explanation:** `watchPosition` streams real-time GPS coordinate updates.
-> 
+> #### Technical Explanation
+>
+> 1. **Permission Denial Code (`PERMISSION_DENIED`)**: Occurs when user rejects browser location prompt.
+> 2. **Fallback Necessity**: Always provide manual text inputs (ZIP code/city name) as fallback.
+> 3. **User Privacy**: Respect user location privacy choices gracefully.
 ## 6. Related Terms
 - [`<script>`](../level_08/script.md) — The script environment executing API commands.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Used to save coordinate preferences locally.

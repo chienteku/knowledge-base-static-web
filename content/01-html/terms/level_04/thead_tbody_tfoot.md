@@ -139,65 +139,117 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Styling the Groups
+### Exercise 1: Structuring Multi-Section Tables with thead, tbody, and tfoot
 
-**Problem:** If you want all the data rows to have a white background, but you want the header row and footer row to have a gray background, how do these grouping tags make your CSS easier?
+**Scenario:** A developer structures a financial ledger table into distinct header (`<thead>`), body (`<tbody>`), and footer (`<tfoot>`) sections.
 
-**Expected output:**
+**Requirements:**
+1. Group header rows in `<thead>`.
+2. Group main data rows in `<tbody>`.
+3. Group total summary rows in `<tfoot>`.
+
 > [!check]- Answer
-> ```text
-> Instead of adding a class to every single row, you can simply target the grouping tags in your CSS:
-> `thead, tfoot { background-color: gray; }`
-> `tbody { background-color: white; }`
-> ```
-> - Think about how applying a style to a parent container affects all its children.
-> 
----
-
-
-
-### Exercise 2: Complete 3-Section Table Structure
-
-**Problem:** Write skeletal `<table>` structure containing `<thead>`, `<tbody>`, and `<tfoot>` in correct order.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <table><thead></thead><tbody></tbody><tfoot></tfoot></table>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <table>
+> <table class="ledger-table">
+>   <caption>Monthly Financial Summary</caption>
 >   <thead>
->     <tr><th>Item</th><th>Price</th></tr>
+>     <tr>
+>       <th scope="col">Transaction ID</th>
+>       <th scope="col">Description</th>
+>       <th scope="col">Amount</th>
+>     </tr>
 >   </thead>
 >   <tbody>
->     <tr><td>Book</td><td>$15</td></tr>
+>     <tr>
+>       <th scope="row">TX-101</th>
+>       <td>Client Payment</td>
+>       <td>+$1,500.00</td>
+>     </tr>
+>     <tr>
+>       <th scope="row">TX-102</th>
+>       <td>Software License</td>
+>       <td>-$200.00</td>
+>     </tr>
 >   </tbody>
 >   <tfoot>
->     <tr><th>Total</th><td>$15</td></tr>
+>     <tr>
+>       <th scope="row" colspan="2">Net Total Balance</th>
+>       <td>+$1,300.00</td>
+>     </tr>
 >   </tfoot>
 > </table>
 > ```
 >
-> **Explanation:** Standard table sections partition header (`thead`), data body (`tbody`), and summary (`tfoot`).
+> #### Technical Explanation
+>
+> 1. **The `<thead>` Element**: Groups header rows at the top of the table.
+> 2. **The `<tbody>` Element**: Groups the primary body data rows of the table; a table can contain multiple `<tbody>` sections.
+> 3. **The `<tfoot>` Element**: Groups calculation summary rows at the bottom of the table.
 > 
 ---
 
-### Exercise 3: Printing Table Behavior
+### Exercise 2: Printing Repeat Table Headers across Page Breaks using thead
 
-**Problem:** What special behavior do print stylesheets display for `<thead>` and `<tfoot>` when printing multi-page tables?
+**Scenario:** Demonstrates how `<thead>` and `<tfoot>` repeat automatically when printed across multiple pages.
 
-**Expected output:**
+**Requirements:**
+1. Structure document table with `<thead>` and `<tfoot>` for print styling.
+
 > [!check]- Answer
-> ```text
-> Browsers repeat the <thead> and <tfoot> rows at top and bottom of every printed page.
-> ```
-> ```text
-> Browsers repeat the <thead> and <tfoot> rows at top and bottom of every printed page.
+>
+> #### Implementation
+>
+> ```html
+> <table>
+>   <caption>Multi-Page Printed Invoice Report</caption>
+>   <thead>
+>     <tr><th scope="col">Item</th><th scope="col">Price</th></tr>
+>   </thead>
+>   <tbody>
+>     <!-- Hundreds of invoice rows -->
+>   </tbody>
+>   <tfoot>
+>     <tr><th scope="row">Page Summary</th><td>End of Report</td></tr>
+>   </tfoot>
+> </table>
 > ```
 >
-> **Explanation:** Semantic table headers and footers persist across printed page breaks.
+> #### Technical Explanation
+>
+> 1. **Print Media Behavior**: When printing long tables, browsers automatically repeat `<thead>` at the top of every printed page.
+> 2. **DOM Parsing Order in HTML5**: In HTML5, `<tfoot>` MUST be placed AFTER `<tbody>` in source code.
+> 3. **Semantic Sectioning**: Provides clear structural boundaries for JavaScript DOM manipulation.
 > 
+---
+
+### Exercise 3: Calculating Column Summary Aggregations in tfoot
+
+**Scenario:** Uses `<tfoot>` to present column totals and average calculations.
+
+**Requirements:**
+1. Include sum totals in `<tfoot>` with `colspan`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <tfoot>
+>   <tr>
+>     <th scope="row" colspan="3">Grand Total Revenue</th>
+>     <td>$45,200.00</td>
+>   </tr>
+> </tfoot>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Summary Aggregations**: `<tfoot>` separates summary metadata calculations from raw data rows in `<tbody>`.
+> 2. **Accessibility Distinction**: Screen readers recognize `<tfoot>` as table summary rows.
+> 3. **Clean Table Layout**: Ensures footers remain at the table bottom regardless of row sorting.
 ## 6. Related Terms
 - [`<table>`](table.md) — The master container that holds these semantic groups.
 - [`<tr>` (Table Row)](tr.md) — The horizontal row elements nested inside these group containers.

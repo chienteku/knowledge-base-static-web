@@ -114,69 +114,117 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Browser Viewport
+### Exercise 1: Structuring a Standard Web Document Body Skeleton
 
-**Problem:** If you apply CSS background color (e.g., `background-color: blue;`) to the `<body>` element, what happens?
+**Scenario:** A web developer constructs the visible content section of an HTML document inside the `<body>` element.
 
-**Expected output:**
+**Requirements:**
+1. Create a valid `<body>` element.
+2. Include `<header>`, `<main>`, and `<footer>` top-level semantic landmarks.
+3. Ensure all user-visible page content resides inside `<body>`.
+
 > [!check]- Answer
-> ```text
-> The entire visible background of the webpage (the browser viewport) will turn blue, because the `<body>` element represents the entire canvas that the user looks at.
-> ```
-> - Think about what the `<body>` represents in our theatrical stage metaphor.
-> 
----
-
-
-
-### Exercise 2: Structure Validation
-
-**Problem:** Identify the structural error in this document:
-```html
-<!DOCTYPE html>
-<html>
-  <p>Hello World</p>
-  <head><title>Test</title></head>
-  <body></body>
-</html>
-```
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The <p> element is placed before the <head> and outside the <body>. All visible elements must be inside <body>.
-> ```
+>
+> #### Implementation
+>
 > ```html
 > <!DOCTYPE html>
-> <html>
->   <head>
->     <title>Test</title>
->   </head>
->   <body>
->     <p>Hello World</p>
->   </body>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Company Homepage</title>
+> </head>
+> <body>
+>   <header>
+>     <h1>Acme Corporation</h1>
+>   </header>
+>   <main>
+>     <p>Welcome to our official website.</p>
+>   </main>
+>   <footer>
+>     <p>&copy; 2026 Acme Corp. All rights reserved.</p>
+>   </footer>
+> </body>
 > </html>
 > ```
 >
-> **Explanation:** Document structure strictly orders `<head>` followed by `<body>` containing all visible content.
+> #### Technical Explanation
+>
+> 1. **Role of the `<body>` Element**: The `<body>` tag contains all the visible content rendered to the user, including text, images, videos, and interactive forms.
+> 2. **Single `<body>` Rule**: An HTML document MUST contain exactly one `<body>` element placed immediately after the `<head>` element.
+> 3. **Semantic Document Landmarks**: Using `<header>`, `<main>`, and `<footer>` direct descendants inside `<body>` enables screen reader landmark navigation.
 > 
 ---
 
-### Exercise 3: Body Event Handlers
+### Exercise 2: Accessible Main Content Region Identification
 
-**Problem:** Which global event listener attributes can be placed on the `<body>` tag to detect document load and unload?
+**Scenario:** A developer adds skip navigation links and explicit landmark region tags inside `<body>` to assist keyboard and screen reader users.
 
-**Expected output:**
+**Requirements:**
+1. Include a skip-to-main content link as the first child of `<body>`.
+2. Use `<main id="main-content">` as the primary content container.
+3. Add a global navigation `<nav>` landmark.
+
 > [!check]- Answer
-> ```text
-> onload and onunload
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <body onload="initApp()" onunload="cleanup()">
+> <body>
+>   <a href="#main-content" class="skip-link">Skip to main content</a>
+>   <header>
+>     <nav aria-label="Main Navigation">
+>       <ul>
+>         <li><a href="/">Home</a></li>
+>         <li><a href="/about.html">About</a></li>
+>       </ul>
+>     </nav>
+>   </header>
+>   <main id="main-content">
+>     <h2>About Our Mission</h2>
+>     <p>We build accessible digital experiences for everyone.</p>
+>   </main>
+> </body>
 > ```
 >
-> **Explanation:** `<body>` accepts global window lifecycle event handlers like `onload` and `onresize`.
+> #### Technical Explanation
+>
+> 1. **Skip Navigation Links**: A skip link placed at the top of `<body>` allows keyboard users to bypass header navigation links.
+> 2. **The `<main>` Landmark**: Identifies the unique primary content of the page; must not include repeated header/footer links.
+> 3. **Screen Reader Flow**: Assistive technology navigates direct child elements of `<body>` to announce page structure.
 > 
+---
+
+### Exercise 3: Optimizing Script Loading at Body Closure
+
+**Scenario:** A developer positions non-critical JavaScript `<script>` tags at the bottom of the `<body>` element to prevent blocking page rendering.
+
+**Requirements:**
+1. Place primary HTML content inside `<main>`.
+2. Insert `<script src="app.js">` immediately before the closing `</body>` tag.
+3. Verify DOM elements load before script execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <body>
+>   <main>
+>     <h2>Interactive Dashboard</h2>
+>     <button id="refresh-btn" type="button">Refresh Data</button>
+>   </main>
+>
+>   <!-- Scripts placed at body closure to avoid render blocking -->
+>   <script src="js/app.js"></script>
+> </body>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Render-Blocking Script Mitigation**: Placing scripts before `</body>` allows the browser to parse HTML and render UI before fetching JavaScript.
+> 2. **DOM Readiness**: Ensures elements like `#refresh-btn` exist in the DOM when `app.js` runs.
+> 3. **Performance Optimization**: Improves First Contentful Paint (FCP) metrics for end users.
 ## 6. Related Terms
 - [`<html>`](html_tag.md) — The tag that contains the `<body>`.
 - [`<head>`](head.md) — The invisible metadata sibling to the `<body>`.

@@ -164,63 +164,95 @@ An FAQ section for a service:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Building a Spoiler Alert
+### Exercise 1: Accessible Accordion Disclosure Widget
 
-**Problem:** Create an interactive details-summary widget. The visible label should read "Spoiler Warning: Click to reveal ending of Hamlet." and the hidden content should be a paragraph: "Hamlet dies at the end of the play."
+**Scenario:** An author builds a native collapsible FAQ widget using `<details>` and `<summary>` without requiring JavaScript.
 
-**Expected output:**
+**Requirements:**
+1. Create a `<details>` disclosure container.
+2. Add a `<summary>` element as the first child for the clickable heading.
+3. Place expanded content inside `<details>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <details>
->   <summary>Spoiler Warning: Click to reveal ending of Hamlet.</summary>
->   <p>Hamlet dies at the end of the play.</p>
-> </details>
+> <section class="faq-section">
+>   <h2>Frequently Asked Questions</h2>
+>
+>   <details class="faq-item">
+>     <summary>What is semantic HTML and why is it important?</summary>
+>     <p>Semantic HTML uses tags that convey meaning about their content (like <code>&lt;header&gt;</code> or <code>&lt;article&gt;</code>), improving accessibility, SEO, and maintainability.</p>
+>   </details>
+>
+>   <details class="faq-item">
+>     <summary>Do I need JavaScript to use the details tag?</summary>
+>     <p>No! The <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> tags provide native, zero-JavaScript toggle behavior built directly into all modern web browsers.</p>
+>   </details>
+> </section>
 > ```
-> - The parent container is `<details>`.
-> - The title text must be wrapped in `<summary>`.
-> - The hidden content is a standard `<p>`.
+>
+> #### Technical Explanation
+>
+> 1. **The `<details>` Element**: Creates a native disclosure widget that toggles content visibility between expanded and collapsed states.
+> 2. **The `<summary>` Element**: Provides the visible summary caption or legend for `<details>`; MUST be the first child inside `<details>`.
+> 3. **Native Accessibility & Focus**: Browsers handle keyboard Tab focus, Enter/Space key toggling, and screen reader expanded states (`aria-expanded`) automatically.
 > 
 ---
 
+### Exercise 2: Pre-Expanded FAQ Item using details open
 
+**Scenario:** Pre-expands a specific disclosure item on page load using the `open` boolean attribute.
 
-### Exercise 2: Native Accordion FAQ Entry
+**Requirements:**
+1. Add the `open` attribute to `<details>`.
 
-**Problem:** Write an expanded-by-default `<details>` element with `<summary>` `'What is HTML5?'` and paragraph answer.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <details open><summary>What is HTML5?</summary><p>HTML5 is the standard markup language.</p></details>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <details open>
->   <summary>What is HTML5?</summary>
->   <p>HTML5 is the standard markup language.</p>
+> <details class="faq-item" open>
+>   <summary>What are your customer support hours?</summary>
+>   <p>Our support team is available 24/7 via live chat and email.</p>
 > </details>
 > ```
 >
-> **Explanation:** `open` attribute sets initial expanded visibility state.
+> #### Technical Explanation
+>
+> 1. **The `open` Boolean Attribute**: When present on `<details>`, the content is expanded and visible by default on page load.
+> 2. **Dynamic Attribute Mutation**: JavaScript can inspect or toggle `details.open` programmatically.
+> 3. **CSS Styling Hooks**: Style open state via CSS selector `details[open] summary { ... }`.
 > 
 ---
 
-### Exercise 3: Styling Summary Disclosure Triangle
+### Exercise 3: Keyboard Focus and Native Open State Management
 
-**Problem:** Which CSS pseudo-element targets the default summary disclosure arrow marker for custom styling?
+**Scenario:** Ensures custom styling preserves native focus rings on `<summary>` tags.
 
-**Expected output:**
+**Requirements:**
+1. Style `<summary>` focus outline for accessibility compliance.
+
 > [!check]- Answer
-> ```text
-> summary::marker (or summary::-webkit-details-marker)
-> ```
-> ```css
-> summary::marker {
->   color: blue;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <details class="custom-disclosure">
+>   <summary class="summary-btn">Click to view System Requirements</summary>
+>   <ul>
+>     <li>RAM: 8 GB minimum</li>
+>     <li>Disk Space: 20 GB</li>
+>   </ul>
+> </details>
 > ```
 >
-> **Explanation:** `::marker` targets default disclosure triangle icons.
-> 
+> #### Technical Explanation
+>
+> 1. **Summary Click Target**: The entire `<summary>` line is an interactive click and keypress target.
+> 2. **Native Triangle Indicator**: Browsers render a native disclosure triangle next to `<summary>`; style via `summary::-webkit-details-marker` or `list-style`.
+> 3. **Zero JS Dependency**: Reduces script bundle size by replacing heavy JS accordion plugins.
 ## 6. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [`<div>` (Block container)](../level_02/div.md) — The non-interactive equivalent.

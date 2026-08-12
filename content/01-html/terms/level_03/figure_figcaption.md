@@ -156,61 +156,93 @@ A basic image wrapped in a figure with a caption:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Marking up an Illustration
+### Exercise 1: Associating Image Diagrams with Captions using figure and figcaption
 
-**Problem:** Wrap the image `chart.jpg` (description: "Line graph showing stock prices rising") with the caption "Figure 1: Quarterly stock growth." using semantic elements.
+**Scenario:** A textbook publisher wraps an educational diagram inside `<figure>` and attaches a visual caption using `<figcaption>`.
 
-**Expected output:**
+**Requirements:**
+1. Wrap `<img>` inside `<figure>`.
+2. Add `<figcaption>` as a child of `<figure>`.
+3. Verify accessible grouping.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <figure>
->   <img src="chart.jpg" alt="Line graph showing stock prices rising">
->   <figcaption>Figure 1: Quarterly stock growth.</figcaption>
-> </figure>
-> ```
-> - The parent container must be `<figure>`.
-> - The child image tag must have an `alt` attribute.
-> - The caption must use `<figcaption>`.
-> 
----
-
-
-
-### Exercise 2: Structuring Code Snippet Figure
-
-**Problem:** Wrap a `<pre><code>` block inside a `<figure>` with `<figcaption>` reading `'Listing 1: Express Server'`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <figure><figcaption>Listing 1: Express Server</figcaption><pre><code>const app = express();</code></pre></figure>
-> ```
-> ```html
-> <figure>
->   <figcaption>Listing 1: Express Server</figcaption>
->   <pre><code>const app = express();</code></pre>
+> <figure class="diagram-container">
+>   <img src="images/water-cycle.png" alt="Illustration of the water cycle showing evaporation, condensation, and precipitation" width="500" height="300">
+>   <figcaption>Figure 3.1: Continuous movement of water within the Earth's atmosphere.</figcaption>
 > </figure>
 > ```
 >
-> **Explanation:** `<figure>` can encapsulate code snippets, diagrams, quotes, and images.
+> #### Technical Explanation
+>
+> 1. **The `<figure>` Element**: Represents self-contained content (images, diagrams, code blocks) referenced as a single unit from the main text.
+> 2. **The `<figcaption>` Element**: Provides a visible legend or caption for its parent `<figure>`; must be the first or last child inside `<figure>`.
+> 3. **Semantic Association**: Screen readers announce `<figure>` as a distinct figure region and read `<figcaption>` as its official label.
 > 
 ---
 
-### Exercise 3: Figcaption Placement Order
+### Exercise 2: Wrapping Code Snippet Demonstrations with figure and figcaption
 
-**Problem:** Where can `<figcaption>` be located inside `<figure>`? (As the very first child or very last child).
+**Scenario:** A technical author wraps an HTML code snippet in `<figure>` with a descriptive code title caption.
 
-**Expected output:**
+**Requirements:**
+1. Wrap `<pre><code>` block inside `<figure>`.
+2. Add `<figcaption>` describing the code block.
+
 > [!check]- Answer
-> ```text
-> As the very first child or very last child.
-> ```
-> ```text
-> As the very first child or very last child.
+>
+> #### Implementation
+>
+> ```html
+> <figure class="code-figure">
+>   <figcaption>Listing 1: Standard HTML5 Page Template</figcaption>
+>   <pre><code>&lt;!DOCTYPE html&gt;
+> &lt;html lang="en"&gt;
+>   &lt;head&gt;&lt;title&gt;Demo&lt;/title&gt;&lt;/head&gt;
+>   &lt;body&gt;&lt;/body&gt;
+> &lt;/html&gt;</code></pre>
+> </figure>
 > ```
 >
-> **Explanation:** `<figcaption>` must be placed at the top or bottom boundary of `<figure>`.
+> #### Technical Explanation
+>
+> 1. **Non-Image Figures**: `<figure>` is NOT limited to images; it can group code listings, charts, math equations, or quote blocks.
+> 2. **Standalone Placement**: Figure content can be moved to an appendix or sidebar without altering main text flow.
+> 3. **Document Structure Clarity**: Improves code snippet presentation in tech documentation.
 > 
+---
+
+### Exercise 3: Multi-Image Gallery Card with Group Caption
+
+**Scenario:** Combines multiple related product photo thumbnails inside a single `<figure>` sharing a single `<figcaption>`.
+
+**Requirements:**
+1. Place multiple `<img>` tags inside one `<figure>`.
+2. Add a single shared `<figcaption>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <figure class="product-gallery">
+>   <div class="thumbnail-group">
+>     <img src="images/shoe-front.jpg" alt="Front view of running shoe" width="150" height="150">
+>     <img src="images/shoe-side.jpg" alt="Side profile of running shoe" width="150" height="150">
+>     <img src="images/shoe-sole.jpg" alt="Bottom sole tread of running shoe" width="150" height="150">
+>   </div>
+>   <figcaption>Photo Gallery: Marathon Pro Running Shoe in Cobalt Blue</figcaption>
+> </figure>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Grouped Figure Content**: A single `<figure>` can contain multiple related child elements sharing one caption.
+> 2. **Sub-Image Alt Text**: Each individual `<img>` inside `<figure>` still requires its own distinct `alt` attribute.
+> 3. **Visual Layout Grouping**: Simplifies CSS styling for image grids and galleries.
 ## 6. Related Terms
 - [`<img>`](img.md) — The image element wrapped inside the figure.
 - [`alt` Attribute](alt.md) — The visual description metadata.

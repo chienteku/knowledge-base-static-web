@@ -148,57 +148,90 @@ Root declaration on the HTML tag:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Multilingual markup
+### Exercise 1: Primary Document Language Declaration on Root html Element
 
-**Problem:** Write the HTML markup for a paragraph where the main sentence is in English, but it contains the Spanish phrase "Hasta la vista" wrapped in a span with the correct language attribute.
+**Scenario:** An author sets the primary document natural language using the `lang` attribute on the root `<html>` element.
 
-**Expected output:**
+**Requirements:**
+1. Set `lang="en"` on opening `<html>` tag.
+2. Include standard metadata inside `<head>`.
+3. Include page content.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>He waved goodbye and said, <span lang="es">Hasta la vista</span>, before walking away.</p>
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>International Accessibility Standards</title>
+> </head>
+> <body>
+>   <h1>Web Accessibility Principles</h1>
+>   <p>Building inclusive digital products for a global audience.</p>
+> </body>
+> </html>
 > ```
-> - The parent paragraph tag does not need a language override (it inherits English from the root).
-> - Wrap the Spanish phrase in a `<span>` element.
-> - Set `lang="es"` on that span.
+>
+> #### Technical Explanation
+>
+> 1. **The `lang` Attribute**: Declares the natural language of the document or element content using ISO 639-1 language codes (e.g. `en`, `es`, `fr`, `ja`).
+> 2. **Screen Reader Pronunciation Engine**: Screen readers inspect `lang` to select the correct voice synthesizer, accent, and pronunciation rules.
+> 3. **Search Engine Localization**: Helps search engines serve pages to regional target audiences.
 > 
 ---
 
+### Exercise 2: Inline Foreign Language Shift Annotations
 
+**Scenario:** Annotates a French phrase inside an English paragraph using `<span lang="fr">`.
 
-### Exercise 2: Sub-Element Language Override
+**Requirements:**
+1. Wrap foreign phrase in `<span>`.
+2. Set `lang="fr"` attribute.
 
-**Problem:** Write paragraph in English (`lang="en"`) containing a French phrase `'c\'est la vie'` marked up with `lang="fr"`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <p>That is life, or as the French say, <span lang="fr">c'est la vie</span>.</p>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <p>That is life, or as the French say, <span lang="fr">c'est la vie</span>.</p>
+> <p>
+>   When visiting Paris, remembering to say <span lang="fr">s'il vous plaît</span> and <span lang="fr">merci</span> is considered standard etiquette.
+> </p>
 > ```
 >
-> **Explanation:** The `lang` attribute can be applied to inline elements to override language pronunciation for screen readers.
+> #### Technical Explanation
+>
+> 1. **Inline Language Overrides**: The `lang` attribute can be applied to any HTML element to override document-level language.
+> 2. **Voice Switching**: Instructs screen readers to temporarily switch pronunciation engines for foreign phrases.
+> 3. **CSS Attribute Selectors**: Enables styling foreign phrases via CSS `span[lang="fr"] { font-style: italic; }`.
 > 
 ---
 
-### Exercise 3: CSS :lang Pseudo-Class Selector
+### Exercise 3: Sub-document Translation and Direction Metadata
 
-**Problem:** Write CSS rule styling quotes for elements with `lang="fr"` using French guillemets (`« »`).
+**Scenario:** Configures multilingual article excerpts with language and text direction.
 
-**Expected output:**
+**Requirements:**
+1. Set `lang="ar"` and `dir="rtl"` on Arabic article block.
+
 > [!check]- Answer
-> ```text
-> :lang(fr) q { quotes: "« " " »"; }
-> ```
-> ```css
-> :lang(fr) q {
->   quotes: "« " " »";
-> }
+>
+> #### Implementation
+>
+> ```html
+> <article lang="ar" dir="rtl">
+>   <h2>مرحبا بكم في موقعنا</h2>
+>   <p>نحن نقدم أفضل الخدمات الرقمية لعملائنا في جميع أنحاء العالم.</p>
+> </article>
 > ```
 >
-> **Explanation:** `:lang()` pseudo-class matches elements based on declared document language.
-> 
+> #### Technical Explanation
+>
+> 1. **Language & Direction Combination**: Combining `lang="ar"` with `dir="rtl"` ensures proper right-to-left layout and Arabic voice synthesis.
+> 2. **Multilingual Portals**: Essential for international news organizations publishing multi-language articles on one page.
+> 3. **Hyphenation & Dictionary Support**: Browsers use `lang` for automatic CSS text hyphenation (`hyphens: auto`).
 ## 6. Related Terms
 - [`<html>`](../level_01/html_tag.md) — The parent container where `lang` is declared.
 - [`<meta>`](../level_08/meta.md) — Metadata tags used for other page settings.

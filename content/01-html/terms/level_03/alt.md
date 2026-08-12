@@ -132,54 +132,88 @@ If an image is purely decorative and offers no semantic meaning, you MUST includ
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Functional Alt
+### Exercise 1: Writing Accessible Descriptive Alt Text for Product Images
 
-**Problem:** You are building a search bar. The submit button is a magnifying glass icon. What should the `alt` text be?
-`<img src="magnifying-glass.png" alt="___">`
+**Scenario:** An e-commerce store author writes alt text for a product image, ensuring screen readers receive a concise, meaningful text description.
 
-**Expected output:**
+**Requirements:**
+1. Include an `<img>` tag with `src` and `alt` attributes.
+2. Write descriptive `alt` text detailing product features (color, material, design).
+3. Specify `width` and `height` dimensions.
+
 > [!check]- Answer
-> ```text
-> alt="Search" (or "Submit search")
+>
+> #### Implementation
+>
+> ```html
+> <div class="product-card">
+>   <img src="images/leather-jacket.jpg" alt="Black men's genuine leather biker jacket with silver double-zippers and lapel snaps" width="400" height="400">
+>   <h3>Classic Biker Jacket</h3>
+>   <p class="price">$299.00</p>
+> </div>
 > ```
-> - For functional icons, describe the *action* it performs, not what it looks like. A blind user doesn't care that it's a magnifying glass; they need to know what happens if they click it!
+>
+> #### Technical Explanation
+>
+> 1. **The `alt` Attribute Purpose**: Provides an equivalent text alternative for screen readers and displays fallback text if image loading fails.
+> 2. **Concise & Meaningful Context**: Good alt text describes what the image conveys in context rather than using generic labels like 'image.jpg' or 'photo'.
+> 3. **Layout Aspect Ratio (`width`/`height`)**: Explicitly setting `width` and `height` attributes allows browsers to reserve layout aspect ratios, preventing Cumulative Layout Shift (CLS).
 > 
 ---
 
+### Exercise 2: Decorative Image Null Alt Attribute
 
+**Scenario:** A developer marks decorative background icons as decorative so screen readers skip redundant audio announcements.
 
-### Exercise 2: Contextual Alt Text Selection
+**Requirements:**
+1. Set `alt=""` (empty string) for decorative images.
+2. Add `aria-hidden="true"` where appropriate.
 
-**Problem:** Write appropriate `alt` text for an image of a red submit button inside a form.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> alt="Submit Form" (describing image function, not visual color).
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <img src="red-btn.png" alt="Submit Form">
+> <button type="button" class="btn-primary">
+>   <img src="icons/shopping-cart.svg" alt="" aria-hidden="true" width="20" height="20">
+>   Checkout Now
+> </button>
 > ```
 >
-> **Explanation:** For functional images (buttons/links), alt text should describe the action destination.
+> #### Technical Explanation
+>
+> 1. **Null Alt (`alt=""`) Rule**: Setting `alt=""` informs screen readers that the image is purely decorative and should be completely skipped.
+> 2. **Missing Alt Pitfall**: Omitting the `alt` attribute completely causes screen readers to read aloud the raw image file URL path (`icons/shopping-cart.svg`).
+> 3. **Redundant Icon Prevention**: When button text ('Checkout Now') already conveys intent, hiding the decorative icon prevents redundant screen reader chatter.
 > 
 ---
 
-### Exercise 3: Decorative Image Alt Syntax
+### Exercise 3: Complex Infographic Summary with Alt Text and Long Description Link
 
-**Problem:** How should decorative background line images be marked up with the `alt` attribute?
+**Scenario:** An author publishes a complex data chart infographic, combining a brief `alt` description with an extended text summary.
 
-**Expected output:**
+**Requirements:**
+1. Provide a concise `alt` text overview.
+2. Link to a detailed accessible data table summary.
+
 > [!check]- Answer
-> ```text
-> alt="" (empty string).
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <img src="decorative-line.png" alt="">
+> <figure class="chart-wrapper">
+>   <img src="charts/sales-2026.png" alt="Bar chart showing 2026 quarterly sales growth, peaking at $4.2M in Q4." aria-describedby="chart-desc" width="600" height="350">
+>   <figcaption id="chart-desc">
+>     Figure 1: 2026 Sales Revenue Summary. For full raw numbers, view the <a href="data/sales-2026-table.html">accessible tabular sales report</a>.
+>   </figcaption>
+> </figure>
 > ```
 >
-> **Explanation:** `alt=""` informs screen readers that the image is purely decorative and should be skipped.
-> 
+> #### Technical Explanation
+>
+> 1. **`aria-describedby` Relationship**: Connects an image to an extended text description or caption element (`<figcaption id="...">`).
+> 2. **Infographic Accessibility**: Complex diagrams (charts, flowcharts) require both a brief `alt` summary and a full accessible text equivalent.
+> 3. **W3C Image Tutorial Guidelines**: Follows W3C guidelines for complex images by offering alternative tabular data options.
 ## 6. Related Terms
 - [`<img>`](img.md) — The element that requires the `alt` attribute.
 - [`<figure>` & `<figcaption>`](figure_figcaption.md) — The semantic containers used to package images and captions.

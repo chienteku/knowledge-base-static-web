@@ -152,83 +152,96 @@ Absolute vs relative path attributes inside HTML:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Absolute vs Relative Sorting
+### Exercise 1: Absolute vs Relative URL Links and Asset Loading
 
-**Problem:** Classify each of the following path strings as either an **Absolute URL** or a **Relative Path**:
-1. `contact.html`
-2. `https://github.com`
-3. `../images/avatar.jpg`
-4. `/about/team.html`
-5. `http://localhost:3000`
+**Scenario:** Demonstrates linking external sites with absolute URLs vs local assets with relative URLs.
 
-**Expected output:**
+**Requirements:**
+1. Use absolute URL for external link.
+2. Use relative URL for internal asset.
+
 > [!check]- Answer
-> ```text
-> 1. Relative Path
-> 2. Absolute URL
-> 3. Relative Path
-> 4. Relative Path
-> 5. Absolute URL
-> ```
-> - Does the string start with a protocol prefix like `http://` or `https://`?
-> 
----
-
-
-
-### Exercise 2: Deconstructing URL Parts
-
-**Problem:** Deconstruct `https://api.example.com:8080/v1/users?sort=asc#profile` into:
-- Protocol
-- Subdomain & Domain
-- Port
-- Path
-- Query Parameter
-- Anchor Hash
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Protocol: https
-> Domain: api.example.com
-> Port: 8080
-> Path: /v1/users
-> Query: ?sort=asc
-> Hash: #profile
-> ```
-> ```text
-> Protocol: https
-> Subdomain & Domain: api.example.com
-> Port: 8080
-> Path: /v1/users
-> Query Parameter: ?sort=asc
-> Anchor Hash: #profile
-> ```
 >
-> **Explanation:** URLs consist of protocol, host, port, path, query string, and fragment identifier.
-> 
----
-
-### Exercise 3: Absolute vs Relative URL Comparison
-
-**Problem:** Compare Absolute URL vs Relative URL with code examples.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Absolute: https://example.com/about.html (includes protocol + domain)
-> Relative: /about.html or ../about.html (relative to current location)
-> ```
+> #### Implementation
+>
 > ```html
-> <!-- Absolute URL -->
-> <a href="https://example.com/about">About</a>
+> <nav>
+>   <!-- Relative URL: Links to local page within site -->
+>   <a href="about.html">About Us</a>
 >
-> <!-- Relative URL -->
-> <a href="/about">About</a>
+>   <!-- Absolute URL: Links to external domain -->
+>   <a href="https://www.w3.org" target="_blank" rel="noopener noreferrer">W3C Standards</a>
+> </nav>
+>
+> <!-- Relative Path Asset -->
+> <img src="images/logo.png" alt="Acme Logo">
 > ```
 >
-> **Explanation:** Absolute URLs specify full protocol/domain; relative URLs resolve relative to current host/path.
+> #### Technical Explanation
+>
+> 1. **Absolute URLs**: Includes complete protocol and domain (`https://example.com/page.html`); used for external links.
+> 2. **Relative URLs**: Points to paths relative to current directory (`about.html` or `../images/logo.png`); used for internal assets.
+> 3. **Portability Advantage**: Relative URLs make site code portable across local development and production domains.
 > 
+---
+
+### Exercise 2: In-Page Anchor Links using Fragment Identifiers
+
+**Scenario:** Creates smooth in-page navigation links pointing to specific element `id` fragment identifiers.
+
+**Requirements:**
+1. Create link with `href="#section-2"`.
+2. Add matching `id="section-2"` on target tag.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <nav>
+>   <a href="#faq-section">Jump to FAQ</a>
+> </nav>
+>
+> <!-- Target Section -->
+> <section id="faq-section">
+>   <h2>Frequently Asked Questions</h2>
+>   <p>Answers to common questions.</p>
+> </section>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **URL Fragment Identifiers (`#`)**: The hash `#id` in a URL targets an element with a matching `id` attribute.
+> 2. **Keyboard & Screen Reader Focus**: Jumps keyboard focus directly to the target element for fast navigation.
+> 3. **Direct Deep Linking**: Allows users to bookmark and share direct links to specific sections on long pages.
+> 
+---
+
+### Exercise 3: Protocol-Relative and Root-Relative Path Resolution
+
+**Scenario:** Uses root-relative paths (`/css/styles.css`) for consistent asset resolution from any subfolder level.
+
+**Requirements:**
+1. Link stylesheet using root-relative path `/css/styles.css`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Root Relative Demo</title>
+>   <!-- Root-relative path starts from site domain root -->
+>   <link rel="stylesheet" href="/assets/css/main.css">
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Root-Relative Paths**: Paths starting with a slash (`/`) resolve from the root domain regardless of current folder depth.
+> 2. **Broken Path Prevention**: Prevents `404 Not Found` errors when moving HTML templates into nested subdirectories.
+> 3. **Consistent Asset Referencing**: Best practice for global CSS stylesheets and JavaScript bundles.
 ## 6. Related Terms
 - [Attribute](attribute.md) — The HTML tag parameters that receive URLs as values.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The standard HTML link element utilizing `href`.

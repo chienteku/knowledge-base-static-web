@@ -157,60 +157,93 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Preview Tag Checklist
+### Exercise 1: Basic Social Media Sharing Cards via Open Graph Meta Tags
 
-**Problem:** You are building an article page on "https://codeacademy.com/blog/html-basics". Write the `<meta>` tags required to show a social card with the title "Mastering HTML5 Basics", a description "A simple layout guide for beginners", and a preview image located at "https://codeacademy.com/images/basics-banner.png".
+**Scenario:** An author adds Open Graph `<meta property="og:...">` tags to generate rich preview cards on Facebook and LinkedIn.
 
-**Expected output:**
+**Requirements:**
+1. Add `og:title`, `og:type`, `og:image`, and `og:url` meta tags inside `<head>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <meta property="og:url" content="https://codeacademy.com/blog/html-basics">
-> <meta property="og:title" content="Mastering HTML5 Basics">
-> <meta property="og:description" content="A simple layout guide for beginners">
-> <meta property="og:image" content="https://codeacademy.com/images/basics-banner.png">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Mastering HTML5 Semantics</title>
+>
+>   <!-- Open Graph Protocol Metadata -->
+>   <meta property="og:title" content="Mastering HTML5 Semantics & Accessibility">
+>   <meta property="og:type" content="article">
+>   <meta property="og:url" content="https://example.com/posts/html5-semantics">
+>   <meta property="og:image" content="https://example.com/images/cover.jpg">
+>   <meta property="og:description" content="Learn how semantic HTML tags improve web accessibility and search engine rankings.">
+> </head>
 > ```
-> - Match each parameter to its correct Open Graph `property`.
-> - Check that the image path is absolute.
+>
+> #### Technical Explanation
+>
+> 1. **Open Graph Protocol (`og:`)**: Standardized metadata vocabulary created by Facebook to control rich preview link displays.
+> 2. **The `property` Attribute**: Open Graph uses `property="og:..."` instead of standard `name="..."` attributes.
+> 3. **`og:image` Requirements**: Must supply absolute URL (`https://...`) to a high-res image (1200x630px recommended).
 > 
 ---
 
+### Exercise 2: Twitter Card Meta Extensions
 
+**Scenario:** Adds Twitter Card metadata alongside Open Graph tags for Twitter link previews.
 
-### Exercise 2: Open Graph Core Metadata Suite
+**Requirements:**
+1. Add `twitter:card`, `twitter:site`, and `twitter:creator` meta tags.
 
-**Problem:** Write 4 core Open Graph meta tags: `og:title`, `og:description`, `og:image` (absolute URL), and `og:url`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <meta property="og:title" content="Title"><meta property="og:description" content="Desc"><meta property="og:image" content="https://site.com/img.jpg"><meta property="og:url" content="https://site.com/page">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <meta property="og:title" content="Title">
-> <meta property="og:description" content="Desc">
-> <meta property="og:image" content="https://site.com/img.jpg">
-> <meta property="og:url" content="https://site.com/page">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Tech Insights Article</title>
+>   <!-- Twitter Card Metadata -->
+>   <meta name="twitter:card" content="summary_large_image">
+>   <meta name="twitter:site" content="@AcmeTech">
+>   <meta name="twitter:creator" content="@JaneDoeDev">
+> </head>
 > ```
 >
-> **Explanation:** Open Graph tags configure rich social card previews on Facebook, Twitter, and Slack.
+> #### Technical Explanation
+>
+> 1. **Twitter Card Types**: `summary_large_image` displays prominent hero image card preview on Twitter feeds.
+> 2. **Fallback Integration**: Twitter automatically falls back to `og:title` and `og:image` if Twitter-specific tags are omitted.
+> 3. **Attribution Metadata**: `twitter:creator` links article preview directly to author's handle.
 > 
 ---
 
-### Exercise 3: Twitter Card Type Tag
+### Exercise 3: Dynamic E-Commerce Product Open Graph Metadata
 
-**Problem:** Write `<meta>` tag specifying large image summary Twitter card format (`twitter:card`).
+**Scenario:** Configures Open Graph product pricing and availability metadata.
 
-**Expected output:**
+**Requirements:**
+1. Add `og:price:amount` and `og:price:currency`.
+
 > [!check]- Answer
-> ```text
-> <meta name="twitter:card" content="summary_large_image">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <meta name="twitter:card" content="summary_large_image">
+> <head>
+>   <meta property="og:type" content="product">
+>   <meta property="product:price:amount" content="29.99">
+>   <meta property="product:price:currency" content="USD">
+> </head>
 > ```
 >
-> **Explanation:** `twitter:card` configures Twitter summary card presentation layout.
-> 
+> #### Technical Explanation
+>
+> 1. **Product Type Schema**: `og:type="product"` allows social platforms to display live prices.
+> 2. **Rich Shopping Previews**: Renders rich price tags on social share cards.
+> 3. **Structured E-Commerce Metadata**: Complements JSON-LD schema markup.
 ## 6. Related Terms
 - [`<meta>`](meta.md) — The tag that packages these properties.
 - [`<head>`](../level_01/head.md) — The folder container holding the tags.

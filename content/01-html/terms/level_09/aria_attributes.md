@@ -178,54 +178,89 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 
 ## 5. Practice Exercises
 
-### Exercise 1: Accordion Accessibility
+### Exercise 1: Custom Accessible Accordion Panel using ARIA Attributes
 
-**Problem:** You are building an accordion FAQ panel. Sighted users click the question to toggle the answer visible/hidden. Write the opening `<button>` tag for the question, including the correct ARIA attribute to tell screen readers that the answer panel is currently collapsed (closed).
+**Scenario:** An author builds an accessible accordion panel using `aria-expanded`, `aria-controls`, and `aria-selected` attributes.
 
-**Expected output:**
+**Requirements:**
+1. Add `aria-expanded="true|false"` to trigger button.
+2. Add `aria-controls="panel-id"` linking to target panel.
+3. Set matching `id` on target panel.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <button type="button" aria-expanded="false">Frequently Asked Question</button>
+> <div class="accordion-group">
+>   <h3>
+>     <button type="button" id="tab-btn-1" class="accordion-trigger" aria-expanded="false" aria-controls="accordion-panel-1">
+>       What is your refund policy?
+>     </button>
+>   </h3>
+>
+>   <div id="accordion-panel-1" class="accordion-panel" role="region" aria-labelledby="tab-btn-1" hidden>
+>     <p>We offer a full 30-day money-back guarantee for all subscription plans.</p>
+>   </div>
+> </div>
 > ```
-> - The dynamic accordion state is managed by the `aria-expanded` attribute.
-> - A collapsed state translates to `false`.
+>
+> #### Technical Explanation
+>
+> 1. **The `aria-expanded` Attribute**: Communicates whether the target collapsible panel is currently open (`true`) or closed (`false`).
+> 2. **The `aria-controls` Attribute**: Identifies the element (`id`) controlled by the current interactive trigger button.
+> 3. **The `aria-labelledby` Attribute**: Associates the expanded panel region with its header button for screen reader context.
 > 
 ---
 
+### Exercise 2: Dynamic Live Region Notifications with aria-live
 
+**Scenario:** Creates a dynamic live region status bar that announces updates to screen readers automatically.
 
-### Exercise 2: ARIA Expanded and Hidden States
+**Requirements:**
+1. Add `aria-live="polite"` and `aria-atomic="true"`.
+2. Set `role="status"`.
 
-**Problem:** Write button controlling modal visibility using `aria-expanded` and `aria-controls`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <button aria-expanded="false" aria-controls="menu">Menu</button>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <button aria-expanded="false" aria-controls="menu">Menu</button>
+> <div class="status-bar" role="status" aria-live="polite" aria-atomic="true">
+>   <p id="status-message">All systems operational. Last checked 1 minute ago.</p>
+> </div>
 > ```
 >
-> **Explanation:** `aria-expanded` announces accordion/menu toggle state to screen readers.
+> #### Technical Explanation
+>
+> 1. **The `aria-live="polite"` Attribute**: Instructs screen readers to announce dynamic content updates at the next natural pause in speech.
+> 2. **The `aria-atomic="true"` Attribute**: Forces the screen reader to announce the entire container contents when any part changes.
+> 3. **Non-Disruptive Alerts**: `polite` avoids interrupting the user's current speech flow, whereas `assertive` interrupts immediately.
 > 
 ---
 
-### Exercise 3: Hiding Decorative Icons with ARIA
+### Exercise 3: Disambiguating Icon Buttons with aria-label vs aria-labelledby
 
-**Problem:** Which ARIA attribute hides decorative font icons or SVGs from screen readers?
+**Scenario:** Uses `aria-label` to supply accessible names for buttons containing visual vector icons.
 
-**Expected output:**
+**Requirements:**
+1. Add `aria-label="Search Site"` to icon-only button.
+
 > [!check]- Answer
-> ```text
-> aria-hidden="true"
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <svg aria-hidden="true"></svg>
+> <button type="button" class="icon-only-btn" aria-label="Search Site">
+>   <svg aria-hidden="true" width="20" height="20"><use href="#icon-search"></use></svg>
+> </button>
 > ```
 >
-> **Explanation:** `aria-hidden="true"` removes decorative elements from the accessibility tree.
-> 
+> #### Technical Explanation
+>
+> 1. **The `aria-label` Attribute**: Overrides or defines an explicit text string label for an element when no visible text is present.
+> 2. **`aria-labelledby` vs `aria-label`**: `aria-label` takes a direct string; `aria-labelledby` points to an existing element `id` on the page.
+> 3. **First Rule of ARIA**: Do NOT use ARIA tags when a native HTML element (like `<label>` or `<button>`) with built-in semantics already exists.
 ## 6. Related Terms
 - [Accessibility (a11y) Fundamentals](accessibility_fundamentals.md) — The parent accessibility theory.
 - [Semantic HTML](../level_06/semantic_html.md) — The native layout element list.

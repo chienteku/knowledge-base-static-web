@@ -167,60 +167,94 @@ Comparing focus properties:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Menu Navigation Repair
+### Exercise 1: Making Custom Focusable Controls Reachable with tabindex 0
 
-**Problem:** You are building a mobile dropdown menu. When the menu is collapsed (hidden), the links inside it are off-screen but still focusable via the keyboard, which confuses blind users. What attribute should you apply to the hidden menu links to solve this?
+**Scenario:** An author adds `tabindex="0"` to a custom interactive component so keyboard users can navigate to it via the Tab key.
 
-**Expected output:**
+**Requirements:**
+1. Add `tabindex="0"` to custom component `<div>`.
+2. Add matching ARIA role (`role="button"`).
+3. Ensure Enter/Space key event handling.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> Set `tabindex="-1"` on the links when the menu is collapsed.
+> <div class="custom-button" tabindex="0" role="button" aria-label="Play Video Clip">
+>   <span class="icon-play" aria-hidden="true"></span>
+>   Play Video
+> </div>
 > ```
-> - Which tabindex value completely removes an element from the keyboard tab sequence?
+>
+> #### Technical Explanation
+>
+> 1. **`tabindex="0"` Meaning**: Inserts an element into the natural keyboard Tab navigation flow in document order.
+> 2. **Custom Widget Reachability**: Required when creating custom non-native interactive elements (like `<div>` or `<span>` buttons).
+> 3. **Keyboard Activation Rule**: Elements with `tabindex="0"` MUST handle Enter and Space keypress events in JavaScript to emulate native buttons.
 > 
 ---
 
+### Exercise 2: Programmatic Script Focus Targets using tabindex -1
 
+**Scenario:** Adds `tabindex="-1"` to a modal dialog heading so JavaScript can move keyboard focus to it programmatically.
 
-### Exercise 2: Tabindex Value Rule Matrix
+**Requirements:**
+1. Add `tabindex="-1"` to modal `<div>` or `<h2>`.
+2. Focus via `element.focus()` in JavaScript.
 
-**Problem:** Match `tabindex` value to focus behavior:
-1. `tabindex="0"` 
-2. `tabindex="-1"` 
-3. `tabindex="5"` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Adds non-native element to natural tab order
-> 2. Programmatically focusable via JS (.focus()) but excluded from Tab key
-> 3. Overrides natural DOM order (Anti-pattern)
-> ```
-> ```text
-> 1. tabindex="0": Adds non-native element to natural tab order
-> 2. tabindex="-1": Programmatically focusable via JS (.focus()) but excluded from Tab key
-> 3. tabindex="5": Overrides natural DOM order (Anti-pattern)
+>
+> #### Implementation
+>
+> ```html
+> <div class="modal-dialog" id="confirm-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+>   <!-- Programmatic focus target via tabindex="-1" -->
+>   <h2 id="modal-title" tabindex="-1">Confirm Deletion</h2>
+>   <p>Are you sure you want to delete this account?</p>
+>   <button type="button" class="btn-danger">Delete</button>
+>   <button type="button" class="btn-secondary">Cancel</button>
+> </div>
 > ```
 >
-> **Explanation:** `tabindex="0"` inserts into tab flow; `-1` enables JS focus only.
+> #### Technical Explanation
+>
+> 1. **`tabindex="-1"` Meaning**: Allows an element to receive focus programmatically via JavaScript (`element.focus()`), but REMOVES it from Tab key order.
+> 2. **Modal Dialog Focus Management**: Moving focus to `tabindex="-1"` headings inside modals ensures screen readers immediately announce new dialog titles.
+> 3. **Skip Navigation Targets**: Used on `<main id="main-content" tabindex="-1">` targets for skip links.
 > 
 ---
 
-### Exercise 3: Focusing Modal Containers
+### Exercise 3: Eliminating Harmful Positive tabindex Values
 
-**Problem:** Which `tabindex` value should be assigned to a modal dialog overlay `<div>` so JavaScript can call `.focus()` when opened?
+**Scenario:** Corrects legacy code that used positive `tabindex` values (`tabindex="1"`, `tabindex="2"`), restoring natural Tab flow.
 
-**Expected output:**
+**Requirements:**
+1. Remove positive `tabindex="1"`, `tabindex="2"` attributes.
+2. Reorder HTML source code elements into natural logical reading order.
+
 > [!check]- Answer
-> ```text
-> tabindex="-1"
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <div id="modal" tabindex="-1" role="dialog">...</div>
+> <!-- Refactored: Re-ordered HTML source code naturally; removed harmful positive tabindex -->
+> <form action="/login" method="post">
+>   <label for="input-email">Email</label>
+>   <input type="email" id="input-email" name="email">
+>
+>   <label for="input-pass">Password</label>
+>   <input type="password" id="input-pass" name="password">
+>
+>   <button type="submit">Log In</button>
+> </form>
 > ```
 >
-> **Explanation:** `tabindex="-1"` allows programmatic JS `.focus()` without inserting element into tab flow.
-> 
+> #### Technical Explanation
+>
+> 1. **Positive `tabindex` Anti-Pattern**: Positive values (`tabindex="1"`, `tabindex="2"`) override natural Tab order, causing erratic focus jumping.
+> 2. **Source Order Primacy**: Always align visual layout with logical HTML DOM source order instead of using positive `tabindex`.
+> 3. **WCAG 2.1 Focus Order**: Satisfies WCAG Success Criterion 2.4.3 (Focus Order).
 ## 6. Related Terms
 - [`<button>`](../level_05/button.md) — The standard focusable trigger.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Focusable navigation elements.

@@ -120,63 +120,103 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Understanding the Acronym
+### Exercise 1: Fundamental HTML Web Document Blueprint
 
-**Problem:** What do the two parts of the acronym "HyperText" and "Markup Language" actually mean?
+**Scenario:** A developer creates the root container element `<html>` encompassing the entire document structure.
 
-**Expected output:**
+**Requirements:**
+1. Create `<!DOCTYPE html>`.
+2. Wrap all document contents in `<html lang="en">`.
+3. Include `<head>` and `<body>` children.
+
 > [!check]- Answer
-> ```text
-> HyperText: Text that contains links to other texts (the ability to click and jump).
-> Markup Language: A system for annotating a document in a way that is syntactically distinguishable from the text (using tags like `<p>` to define structure).
-> ```
-> - Think about what makes the web different from a printed book.
-> - Think about what you do with a highlighter on a textbook.
-> 
----
-
-
-
-### Exercise 2: HTML Core Language Purpose
-
-**Problem:** Explain why HTML is classified as a Markup Language rather than a Programming Language.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HTML describes document structure and content using tags; it lacks control flow logic, loops, variables, and math computation.
-> ```
-> ```text
-> HTML describes document structure and content using tags; it lacks control flow logic, loops, variables, and math computation.
-> ```
 >
-> **Explanation:** Markup languages annotate text structure; programming languages execute algorithmic logic.
-> 
----
-
-### Exercise 3: Building Barebones Valid HTML5 Page
-
-**Problem:** Write minimal valid HTML5 document structure containing DOCTYPE, html, head, title, body, and h1.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <!DOCTYPE html><html lang="en"><head><title>App</title></head><body><h1>Hello</h1></body></html>
-> ```
+> #### Implementation
+>
 > ```html
 > <!DOCTYPE html>
 > <html lang="en">
->   <head>
->     <title>App</title>
->   </head>
->   <body>
->     <h1>Hello</h1>
->   </body>
+> <head>
+>   <meta charset="utf-8">
+>   <title>Root Element Blueprint</title>
+> </head>
+> <body>
+>   <h1>Document Root Demo</h1>
+> </body>
 > </html>
 > ```
 >
-> **Explanation:** Minimal valid HTML5 document structure requires DOCTYPE, html, head with title, and body.
+> #### Technical Explanation
+>
+> 1. **Root Element**: The `<html>` tag is the top-level container for all other HTML elements on a page.
+> 2. **Mandatory `lang` Attribute**: `lang="en"` declares the natural language of the page content for screen readers and search engines.
+> 3. **Head and Body Direct Children**: `<html>` contains exactly two main sections: `<head>` and `<body>`.
 > 
+---
+
+### Exercise 2: Internationalization Language Attribute Configuration
+
+**Scenario:** A global site author sets `<html lang="es">` for Spanish translated pages.
+
+**Requirements:**
+1. Set `lang="es"` on root `<html>` element.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="es">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Página de Inicio</title>
+> </head>
+> <body>
+>   <h1>Bienvenido a nuestro sitio web</h1>
+> </body>
+> </html>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Accessibility & Pronunciation**: Screen readers use the `lang` attribute to select the correct text-to-speech voice and pronunciation rules.
+> 2. **Search Engine Targeting**: Helps search engines serve pages to regional users based on language filters.
+> 3. **Sub-element Language Overrides**: Individual tags can override document language using `<span lang="fr">Bonjour</span>`.
+> 
+---
+
+### Exercise 3: Root DOM Element Structure & Head/Body Isolation
+
+**Scenario:** An auditor verifies that all content tags reside strictly inside `<head>` or `<body>` within `<html>`.
+
+**Requirements:**
+1. Validate `<html>` structure.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>DOM Tree Structure</title>
+> </head>
+> <body>
+>   <main>
+>     <p>All visible content stays in body.</p>
+>   </main>
+> </body>
+> </html>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **DOM Tree Root**: In the browser DOM API, `document.documentElement` represents the `<html>` root node.
+> 2. **Strict Child Hierarchy**: Only `<head>` and `<body>` are valid direct children of `<html>`.
+> 3. **Clean Separation**: Keeps hidden metadata in `<head>` and visible UI in `<body>`.
 ## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The fundamental building blocks used to write HTML.
 - [Block-level vs Inline Elements](block_inline.md) — The two display behaviors of elements.

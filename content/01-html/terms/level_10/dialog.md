@@ -270,77 +270,91 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 
 ## 5. Practice Exercises
 
-### Exercise 1: Modal Setup
+### Exercise 1: Accessible Native Modal Confirmation Box with dialog Element
 
-**Problem:** Create a simple HTML document structure containing a button "View Terms". When clicked, a native modal `<dialog>` should open displaying terms text and a button "Accept" that closes the modal.
+**Scenario:** An author builds a native modal popup dialog using the `<dialog>` element and `<form method="dialog">`.
 
-**Expected output:**
+**Requirements:**
+1. Create root `<dialog id="confirm-modal">`.
+2. Include dialog heading and description.
+3. Use `<form method="dialog">` for native closing buttons.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <button id="viewBtn">View Terms</button>
-> 
-> <dialog id="termsDialog">
->   <p>Terms of service details go here...</p>
->   <button id="acceptBtn">Accept</button>
+> <!-- Native Accessible Modal Dialog -->
+> <dialog id="delete-modal" class="modal-dialog" aria-labelledby="modal-title">
+>   <form method="dialog" class="modal-form">
+>     <h2 id="modal-title">Confirm Account Deletion</h2>
+>     <p>Are you sure you want to permanently delete your account? This action cannot be undone.</p>
+>
+>     <div class="modal-actions">
+>       <button type="submit" value="cancel" class="btn-secondary">Cancel</button>
+>       <button type="submit" value="confirm" class="btn-danger">Delete Account</button>
+>     </div>
+>   </form>
 > </dialog>
-> 
-> <script>
->   const terms = document.getElementById('termsDialog');
->   document.getElementById('viewBtn').addEventListener('click', () => {
->     terms.showModal();
->   });
->   document.getElementById('acceptBtn').addEventListener('click', () => {
->     terms.close();
->   });
-> </script>
 > ```
-> - Nest the click events within script triggers.
-> - Call `showModal()` to open, and `close()` to exit.
+>
+> #### Technical Explanation
+>
+> 1. **The `<dialog>` Element**: Represents a native modal or non-modal popup dialog widget.
+> 2. **Native Modal Backdrop (`::backdrop`)**: Calling `dialog.showModal()` locks background page interaction and renders a native top-layer `::backdrop` pseudo-element.
+> 3. **Zero-JS Dialog Closing**: `<form method="dialog">` closes the modal automatically when any submit button is clicked, passing its `value` attribute to `dialog.returnValue`.
 > 
 ---
 
+### Exercise 2: Non-Modal Popover Window using dialog show
 
+**Scenario:** Creates a non-modal popup window allowing background page interactions via `dialog.show()`.
 
-### Exercise 2: Native Dialog Modal Implementation
+**Requirements:**
+1. Trigger `dialog.show()` for non-modal popovers.
 
-**Problem:** Write `<dialog id="my-modal">` with heading, close button, and JS call to open it as a modal.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <dialog id="my-modal"><h2>Modal Title</h2><button onclick="document.getElementById('my-modal').close()">Close</button></dialog>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <dialog id="my-modal">
->   <h2>Modal Title</h2>
->   <button onclick="this.closest('dialog').close()">Close</button>
+> <dialog id="notification-popover" aria-label="Notification Center">
+>   <p>New message received from Support.</p>
+>   <button type="button" onclick="document.getElementById('notification-popover').close()">Dismiss</button>
 > </dialog>
-> <script>
->   document.getElementById('my-modal').showModal();
-> </script>
 > ```
 >
-> **Explanation:** `.showModal()` opens modal dialogs; `.close()` closes them natively.
+> #### Technical Explanation
+>
+> 1. **Non-Modal `show()` vs Modal `showModal()`**: `show()` opens dialog without trapping keyboard focus or blocking background page interaction.
+> 2. **Top-Layer Rendering**: Displays in browser top-layer above z-index stacking contexts.
+> 3. **Escape Key Support**: Pressing Escape closes native modal dialogs automatically.
 > 
 ---
 
-### Exercise 3: Dialog Backdrop Styling
+### Exercise 3: Keyboard Focus Trapping & Accessibility in Native Dialogs
 
-**Problem:** Write CSS rule styling native `<dialog>` backdrop overlay to semi-transparent black (`rgba(0,0,0,0.5)`).
+**Scenario:** Demonstrates how browsers trap focus inside modal `<dialog>` elements automatically.
 
-**Expected output:**
+**Requirements:**
+1. Verify focus lands inside dialog when `showModal()` is called.
+
 > [!check]- Answer
-> ```text
-> dialog::backdrop { background-color: rgba(0, 0, 0, 0.5); }
-> ```
-> ```css
-> dialog::backdrop {
->   background-color: rgba(0, 0, 0, 0.5);
-> }
+>
+> #### Implementation
+>
+> ```html
+> <dialog id="settings-dialog" aria-labelledby="settings-heading">
+>   <h2 id="settings-heading" tabindex="-1">Settings Menu</h2>
+>   <button type="button">Save</button>
+> </dialog>
 > ```
 >
-> **Explanation:** `::backdrop` pseudo-element styles background screen overlays behind open modals.
-> 
+> #### Technical Explanation
+>
+> 1. **Automatic Focus Trapping**: `showModal()` traps keyboard Tab focus inside dialog controls automatically without custom JS.
+> 2. **Initial Focus Target**: Focus defaults to first interactive element inside dialog.
+> 3. **Restoring Focus**: Closing dialog restores focus back to the button that triggered it.
 ## 6. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`<details>` & `<summary>`](../level_06/details_summary.md) — The native toggle layout widget.

@@ -170,68 +170,116 @@ A simple blog post alongside a tangential ad banner:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Semantic Classification
+### Exercise 1: Blog Post Sidebar with Related Articles and Author Bio
 
-**Problem:** Identify whether the following page elements should be wrapped in an `<aside>` or if they belong in a different semantic container:
-1.  A list of "Related Articles" on a blog post page.
-2.  A column containing the main chapters of an online textbook.
-3.  An advertisement banner at the top of a news site.
-4.  A popup window displaying a "Sign Up for Newsletter" prompt.
+**Scenario:** An author builds a blog sidebar containing supplementary links using `<aside>`.
 
-**Expected output:**
+**Requirements:**
+1. Wrap sidebar content in an `<aside>` element.
+2. Include an accessible heading inside `<aside>`.
+3. Place related links and bio info.
+
 > [!check]- Answer
-> ```text
-> 1. <aside> (Tangential to the active article)
-> 2. <nav> (Major navigation table of contents)
-> 3. <aside> (Non-essential advertisement)
-> 4. <aside> (Tangential interaction element)
+>
+> #### Implementation
+>
+> ```html
+> <div class="layout-container">
+>   <main>
+>     <article>
+>       <h1>Mastering Modern HTML</h1>
+>       <p>Semantic HTML forms the foundation of accessible web applications.</p>
+>     </article>
+>   </main>
+>
+>   <aside class="blog-sidebar" aria-label="Related Information">
+>     <h2>About the Author</h2>
+>     <p>Jane Doe is a Web Standards Advocate with over 10 years of experience.</p>
+>
+>     <h3>Related Articles</h3>
+>     <ul>
+>       <li><a href="/posts/css-grid">CSS Grid Architecture</a></li>
+>       <li><a href="/posts/aria-guide">ARIA Accessibility Guide</a></li>
+>     </ul>
+>   </aside>
+> </div>
 > ```
-> - Ask: Is this content part of the primary document body? If not, it belongs in an `aside` or a specific navigation `nav`.
+>
+> #### Technical Explanation
+>
+> 1. **The `<aside>` Element**: Represents content tangentially related to the main page content, such as sidebars, callouts, or advertising blocks.
+> 2. **Page-Level vs Article-Level Aside**: When placed outside `<main>`, `<aside>` relates to the entire site; when placed inside `<article>`, it relates specifically to that article.
+> 3. **Complementary Landmark Role**: Browsers assign `<aside>` an implicit ARIA role of `complementary`, accessible to screen readers.
 > 
 ---
 
+### Exercise 2: Inline Article Pull Quote & Key Takeaway Callout Box
 
+**Scenario:** Embeds an inline callout box inside an article using `<aside>`.
 
-### Exercise 2: Structuring Sidebar Navigation with Aside
+**Requirements:**
+1. Place `<aside>` inside `<article>`.
+2. Style key takeaway callout box.
 
-**Problem:** Structure webpage with `<main>` article and `<aside>` containing related links list.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <main><article>...</article></main><aside><h3>Related Reading</h3><ul><li><a href="#">Link</a></li></ul></aside>
+>
+> #### Implementation
+>
+> ```html
+> <article>
+>   <h2>Web Performance Optimization</h2>
+>   <p>Minimizing DOM node depth improves rendering speed significantly.</p>
+>
+>   <aside class="key-takeaway">
+>     <h3>Key Takeaway</h3>
+>     <p>Keep your HTML node depth shallow and avoid redundant div wrapping.</p>
+>   </aside>
+>
+>   <p>Further performance benefits include deferred JavaScript loading.</p>
+> </article>
 > ```
+>
+> #### Technical Explanation
+>
+> 1. **Tangential Article Content**: `<aside>` inside `<article>` highlights pull-quotes, side notes, or glossary definitions relevant to that post.
+> 2. **Visual & Structural Separation**: Differs visually from main paragraph flow while remaining in context.
+> 3. **Screen Reader Context**: Informs screen readers that content is a side note.
+> 
+---
+
+### Exercise 3: Complementary Navigation Links in Product Detail Pages
+
+**Scenario:** Uses `<aside>` on a product page to recommend related items.
+
+**Requirements:**
+1. Wrap product recommendations in `<aside>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
 > <main>
->   <article>Main article content...</article>
+>   <article class="product-detail">
+>     <h1>Wireless Headphones</h1>
+>     <p>High-fidelity audio experience.</p>
+>   </article>
+>
+>   <aside aria-label="Customers Also Bought">
+>     <h2>Customers Also Bought</h2>
+>     <ul>
+>       <li><a href="/products/case">Carrying Case</a></li>
+>       <li><a href="/products/cable">Audio Cable</a></li>
+>     </ul>
+>   </aside>
 > </main>
-> <aside>
->   <h3>Related Reading</h3>
->   <ul>
->     <li><a href="/post-2">Related Post</a></li>
->   </ul>
-> </aside>
 > ```
 >
-> **Explanation:** `<aside>` encapsulates secondary sidebar and related resource links.
-> 
----
-
-### Exercise 3: Screen Reader Landmark for Aside
-
-**Problem:** Which ARIA landmark role is implicitly assigned to top-level `<aside>` elements?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> complementary landmark role.
-> ```
-> ```text
-> complementary landmark role.
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Screen readers announce top-level `<aside>` elements as complementary landmarks.
-> 
+> 1. **Commercial Recommendations**: Ideal for related product recommendations or ad blocks on e-commerce sites.
+> 2. **Accessible Labeling (`aria-label`)**: Disambiguates multiple `<aside>` blocks using explicit `aria-label` attributes.
+> 3. **Clean Layout Isolation**: Separates secondary shopping links from primary product details.
 ## 6. Related Terms
 - [`<main>`](main.md) — The container for the primary document content.
 - [`<article>` and `<section>`](article_section.md) — The self-contained semantic blocks.

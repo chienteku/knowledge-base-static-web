@@ -127,58 +127,98 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Multiple Nav Scenario
+### Exercise 1: Primary Website Navigation Bar with Accessible Label
 
-**Problem:** Is it acceptable to have two `<nav>` elements on a single page, for example, a primary menu at the top, and a "Table of Contents" menu for a long article?
+**Scenario:** A developer creates a primary site navigation header using `<nav aria-label="Main Navigation">`.
 
-**Expected output:**
+**Requirements:**
+1. Wrap navigation links in `<nav>`.
+2. Add an `aria-label` attribute.
+3. Use an unordered list (`<ul>`) of links inside.
+
 > [!check]- Answer
-> ```text
-> Yes! It is perfectly acceptable and encouraged to have multiple `<nav>` elements if they both represent major blocks of navigation. (Best practice is to give them unique `aria-label` attributes, like `aria-label="Main menu"` and `aria-label="Table of contents"`).
+>
+> #### Implementation
+>
+> ```html
+> <header>
+>   <nav aria-label="Main Navigation" class="main-nav">
+>     <ul>
+>       <li><a href="/" aria-current="page">Home</a></li>
+>       <li><a href="/products">Products</a></li>
+>       <li><a href="/about">About Us</a></li>
+>       <li><a href="/contact">Contact</a></li>
+>     </ul>
+>   </nav>
+> </header>
 > ```
-> - Does a Table of Contents act as a major steering wheel for an article? Yes!
+>
+> #### Technical Explanation
+>
+> 1. **The `<nav>` Element**: Represents a section of a page that contains navigation links to other pages or parts of the current page.
+> 2. **Accessible Labeling (`aria-label`)**: Using `aria-label="Main Navigation"` labels the navigation landmark for screen readers.
+> 3. **Current Page Indicator (`aria-current="page"`)**: Informs screen readers which link represents the currently active page.
 > 
 ---
 
+### Exercise 2: Secondary Breadcrumb Navigation Bar
 
+**Scenario:** Creates a secondary breadcrumb navigation bar using `<nav aria-label="Breadcrumb">`.
 
-### Exercise 2: Accessible Primary Nav Bar Structure
+**Requirements:**
+1. Create `<nav aria-label="Breadcrumb">`.
+2. Use `<ol>` list for ordered breadcrumb steps.
 
-**Problem:** Write `<nav>` with `aria-label="Main"` containing unordered list of 2 links (`Home`, `About`).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <nav aria-label="Main"><ul><li><a href="/">Home</a></li><li><a href="/about">About</a></li></ul></nav>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <nav aria-label="Main">
->   <ul>
+> <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+>   <ol>
 >     <li><a href="/">Home</a></li>
->     <li><a href="/about">About</a></li>
->   </ul>
+>     <li><a href="/store">Store</a></li>
+>     <li><a href="/store/laptops" aria-current="page">Laptops</a></li>
+>   </ol>
 > </nav>
 > ```
 >
-> **Explanation:** `<ul>` inside `<nav>` provides accessible list count context for screen readers.
+> #### Technical Explanation
+>
+> 1. **Breadcrumb Nav Semantics**: Using `<nav aria-label="Breadcrumb">` identifies breadcrumb trail landmarks to screen readers.
+> 2. **Ordered List Structure**: `<ol>` represents the sequential hierarchical order of breadcrumb trails.
+> 3. **Disambiguated Landmarks**: Differentiates breadcrumbs from the primary header navigation menu.
 > 
 ---
 
-### Exercise 3: Nav Landmark Role
+### Exercise 3: Disambiguating Multiple nav Landmarks on a Single Page
 
-**Problem:** Which implicit ARIA landmark role does the `<nav>` element convey?
+**Scenario:** Ensures multiple `<nav>` blocks on the same page have unique `aria-label` attributes.
 
-**Expected output:**
+**Requirements:**
+1. Add distinct `aria-label` strings to header, sidebar, and footer `<nav>` tags.
+
 > [!check]- Answer
-> ```text
-> navigation landmark role.
-> ```
-> ```text
-> navigation landmark role.
+>
+> #### Implementation
+>
+> ```html
+> <header>
+>   <nav aria-label="Primary Site Menu">...</nav>
+> </header>
+>
+> <aside>
+>   <nav aria-label="Category Filters">...</nav>
+> </aside>
+>
+> </footer>
 > ```
 >
-> **Explanation:** `<nav>` acts as the `navigation` accessibility landmark.
-> 
+> #### Technical Explanation
+>
+> 1. **Disambiguation Rule**: When multiple `<nav>` elements exist on a single page, EVERY `<nav>` MUST have a unique `aria-label`.
+> 2. **Navigation Landmark List**: Screen reader landmark lists display labeled nav names (e.g. 'Primary Site Menu', 'Category Filters').
+> 3. **List Container Requirement**: Always wrap navigation links inside `<ul>` or `<ol>` inside `<nav>`.
 ## 6. Related Terms
 - [`<header>`](header.md) — The parent container that usually holds the primary `<nav>`.
 - [`<ul>`, `<ol>`, and `<li>` (Lists)](../level_02/lists.md) — The element almost always used *inside* a `<nav>` to structure the links.

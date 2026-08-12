@@ -151,60 +151,86 @@ Nesting alternative sources inside a video container:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Multi-format Audio Markup
+### Exercise 1: Multi-Format Media Source Selection for Video Elements
 
-**Problem:** Write the HTML markup for an audio player that supports two formats: `music.ogg` (type: `audio/ogg`) and `music.mp3` (type: `audio/mpeg`). Ensure controls are displayed.
+**Scenario:** Embeds a video player supplying WebM and MP4 source tracks via `<source>` tags.
 
-**Expected output:**
+**Requirements:**
+1. Place `<source>` tags inside `<video>`.
+2. Set `src` and `type` attributes on each `<source>`.
+3. Order formats from modern (WebM) to universal (MP4).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <audio controls>
->   <source src="music.ogg" type="audio/ogg">
->   <source src="music.mp3" type="audio/mpeg">
-> </audio>
-> ```
-> - The outer container must be `<audio>` with the `controls` attribute.
-> - Nest two `<source>` tags inside the container.
-> 
----
-
-
-
-### Exercise 2: Video Multi-Source Setup
-
-**Problem:** Write `<video>` with 2 `<source>` elements for MP4 (`video/mp4`) and WebM (`video/webm`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <video controls><source src="clip.webm" type="video/webm"><source src="clip.mp4" type="video/mp4"></video>
-> ```
-> ```html
-> <video controls>
->   <source src="clip.webm" type="video/webm">
->   <source src="clip.mp4" type="video/mp4">
+> <video controls width="640" height="360" poster="images/video-poster.jpg">
+>   <source src="videos/presentation.webm" type="video/webm">
+>   <source src="videos/presentation.mp4" type="video/mp4">
+>   <p>Your browser does not support HTML5 video. View <a href="videos/presentation.mp4">direct MP4 file</a>.</p>
 > </video>
 > ```
 >
-> **Explanation:** Browsers evaluate `<source>` choices sequentially and play the first supported format.
+> #### Technical Explanation
+>
+> 1. **The `<source>` Void Element**: `<source>` is a void element specifying media resources for `<video>`, `<audio>`, or `<picture>` parents.
+> 2. **The `type` MIME Attribute**: Informs media engine of file codec (`video/webm`, `video/mp4`) so unsupported formats are skipped without downloading.
+> 3. **Sequential Evaluation**: Browsers evaluate `<source>` tags top-to-bottom and select the first supported media file.
 > 
 ---
 
-### Exercise 3: srcset Descriptor Types
+### Exercise 2: Media Query Source Conditions for Responsive Picture Elements
 
-**Problem:** What 2 width/density descriptor units can be used in `srcset` (e.g. `2x`, `800w`)?
+**Scenario:** Uses `<source>` inside `<picture>` to switch image sources based on screen width breakpoints.
 
-**Expected output:**
+**Requirements:**
+1. Use `<source media="(min-width: 1024px)" srcset="...">`.
+2. Use `<source media="(min-width: 600px)" srcset="...">`.
+
 > [!check]- Answer
-> ```text
-> x (pixel density descriptor e.g. 2x) and w (width descriptor e.g. 800w).
-> ```
-> ```text
-> x (pixel density descriptor e.g. 2x) and w (width descriptor e.g. 800w).
+>
+> #### Implementation
+>
+> ```html
+> <picture>
+>   <source media="(min-width: 1024px)" srcset="images/banner-desktop.jpg">
+>   <source media="(min-width: 600px)" srcset="images/banner-tablet.jpg">
+>   <img src="images/banner-mobile.jpg" alt="Seasonal Promotional Offer" width="600" height="300">
+> </picture>
 > ```
 >
-> **Explanation:** `2x` handles high-DPI retina screens; `800w` specifies source image pixel width.
+> #### Technical Explanation
+>
+> 1. **`media` Attribute Queries**: Accepts standard CSS media query strings to conditionally load media assets.
+> 2. **`srcset` on Source**: Specifies image file paths within `<picture>` element contexts.
+> 3. **No Trailing Slash**: `<source>` is a void tag; do not write `</source>` or `<source />` in HTML5.
 > 
+---
+
+### Exercise 3: Audio Source Fallbacks for Legacy Browser Compatibility
+
+**Scenario:** Provides MP3 and OGG audio source tracks inside an `<audio>` tag.
+
+**Requirements:**
+1. Provide OGG and MP3 `<source>` tags.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <audio controls>
+>   <source src="audio/track.ogg" type="audio/ogg">
+>   <source src="audio/track.mp3" type="audio/mpeg">
+> </audio>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Codec Compatibility**: OGG offers open-source compression; MP3 provides universal browser legacy support.
+> 2. **Network Savings**: Browser downloads ONLY the single chosen media source file.
+> 3. **Order Importance**: Place optimized modern formats first.
 ## 6. Related Terms
 - [`<audio>`](audio.md) — The audio container element.
 - [`<video>`](video.md) — The video container element.

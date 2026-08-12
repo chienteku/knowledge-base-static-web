@@ -241,65 +241,107 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 
 ## 5. Practice Exercises
 
-### Exercise 1: Nested Lists Syntax
+### Exercise 1: Recipe Instructions and Ingredients List Formatting
 
-**Problem:** How would you write the HTML for a bulleted list of two countries (USA, Japan), where USA has a nested bulleted list of two states (Texas, California)?
+**Scenario:** An author formats a recipe page, using an unordered list (`<ul>`) for ingredients and an ordered list (`<ol>`) for sequential steps.
 
-**Expected output:**
+**Requirements:**
+1. Use `<ul>` with `<li>` for ingredients.
+2. Use `<ol>` with `<li>` for numbered recipe steps.
+3. Ensure `<li>` tags are direct children of lists.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <ul>
+> <article class="recipe-card">
+>   <h2>Pancake Recipe</h2>
+>
+>   <h3>Ingredients</h3>
+>   <ul>
+>     <li>1 cup flour</li>
+>     <li>2 eggs</li>
+>     <li>1 cup milk</li>
+>   </ul>
+>
+>   <h3>Instructions</h3>
+>   <ol>
+>     <li>Mix dry and wet ingredients in a bowl.</li>
+>     <li>Heat a lightly oiled griddle over medium heat.</li>
+>     <li>Pour batter onto griddle and brown on both sides.</li>
+>   </ol>
+> </article>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Unordered Lists (`<ul>`)**: Used when item sequence order does NOT matter; items rendered with bullet points by default.
+> 2. **Ordered Lists (`<ol>`)**: Used for sequential numerical steps where order IS critical; items rendered with numbers by default.
+> 3. **List Item Child Rule (`<li>`)**: `<li>` tags MUST be direct children of `<ul>` or `<ol>` elements.
+> 
+---
+
+### Exercise 2: Key-Value Glossary Terms with Description Lists
+
+**Scenario:** A developer formats a glossary definition list using `<dl>`, `<dt>`, and `<dd>`.
+
+**Requirements:**
+1. Wrap glossary in `<dl>` element.
+2. Use `<dt>` for terms.
+3. Use `<dd>` for term definitions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <dl class="glossary-list">
+>   <dt>HTML</dt>
+>   <dd>HyperText Markup Language: The standard markup language for documents designed to be displayed in a web browser.</dd>
+>
+>   <dt>CSS</dt>
+>   <dd>Cascading Style Sheets: A style sheet language used for describing the presentation of a document written in HTML.</dd>
+> </dl>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Description Lists (`<dl>`)**: Used to group terms (`<dt>`) and their descriptions (`<dd>`), perfect for glossaries and key-value metadata.
+> 2. **Definition Term (`<dt>`)**: Represents the term being defined or described.
+> 3. **Definition Description (`<dd>`)**: Represents the value, definition, or description of the preceding `<dt>`.
+> 
+---
+
+### Exercise 3: Nested Category Navigation Tree List Structures
+
+**Scenario:** Formats a multi-level product category directory.
+
+**Requirements:**
+1. Nest sub-`<ul>` list inside `<li>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <ul class="category-tree">
 >   <li>
->     USA
+>     Electronics
 >     <ul>
->       <li>Texas</li>
->       <li>California</li>
+>       <li>Smartphones</li>
+>       <li>Laptops</li>
 >     </ul>
 >   </li>
->   <li>Japan</li>
-> </ul>
-> ```
-> - The nested `<ul>` must go *inside* the `<li>` of the parent item, not outside of it!
-> 
----
-
-### Exercise 2: Structuring Nested Lists
-
-**Problem:** Structure an unordered list `Fruits` containing nested sub-list with `Apples` and `Bananas`.
-
-**Expected output:**
-> [!check]- Answer
-> ```html
-> <ul>
->   <li>Fruits
->     <ul>
->       <li>Apples</li>
->       <li>Bananas</li>
->     </ul>
->   </li>
+>   <li>Clothing</li>
 > </ul>
 > ```
 >
-> **Explanation:** Nested lists must be placed inside an `<li>` element of the parent list.
-> 
----
-
-### Exercise 3: Reversing Ordered List Numbers
-
-**Problem:** Which attribute on `<ol>` reverses number ordering (e.g. 3, 2, 1)?
-
-**Expected output:**
-> [!check]- Answer
-> ```html
-> <ol reversed>
->   <li>Top 1</li>
->   <li>Top 2</li>
->   <li>Top 3</li>
-> </ol>
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `reversed` attribute counts ordered lists backwards.
-> 
+> 1. **Nested List Rule**: Sub-lists MUST be nested inside an `<li>` element, NOT directly under parent `<ul>`.
+> 2. **Screen Reader Grouping**: Announces nested list depth accurately to screen reader users.
+> 3. **CSS Tree Navigation**: Supports hierarchical CSS tree dropdown navigation menus.
 ## 6. Related Terms
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing lists.
 - [`<nav>`](../level_06/nav.md) — Unordered lists are very commonly used inside `<nav>` elements to build website navigation menus.

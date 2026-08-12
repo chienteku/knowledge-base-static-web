@@ -143,54 +143,87 @@ Basic inline highlight:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Search Highlighting
+### Exercise 1: Highlighting Search Query Keyword Matches in Search Results
 
-**Problem:** Highlight the matching query keyword "butter" inside the following sentence:
-"For this recipe, cream the butter and sugar together."
+**Scenario:** An author uses `<mark>` to highlight search term matches within search result preview snippets.
 
-**Expected output:**
+**Requirements:**
+1. Wrap matched search query keywords in `<mark>` tags.
+2. Verify yellow background visual default.
+3. Add accessible screen reader context if needed.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>For this recipe, cream the <mark>butter</mark> and sugar together.</p>
+> <section class="search-results">
+>   <h2>Search Results for "accessibility"</h2>
+>
+>   <article class="result-item">
+>     <h3><a href="/posts/a11y-guide">Introduction to Web <mark>Accessibility</mark></a></h3>
+>     <p>Web <mark>accessibility</mark> ensures that websites, tools, and technologies are designed so that people with disabilities can use them.</p>
+>   </article>
+> </section>
 > ```
-> - Wrap ONLY the word "butter" in the `<mark>` and `</mark>` tags.
+>
+> #### Technical Explanation
+>
+> 1. **The `<mark>` Element**: Represents text highlighted for reference or notation purposes due to its relevance in another context (e.g. search matches).
+> 2. **Default Visual Styling**: Browsers render `<mark>` text with a yellow background (`background-color: yellow; color: black;`) by default.
+> 3. **Relevance Highlighting**: Differs from `<em>` (stress emphasis) and `<strong>` (importance); `<mark>` signifies contextual relevance.
 > 
 ---
 
+### Exercise 2: Annotating Relevant Reference Excerpts in Educational Tutorials
 
+**Scenario:** Uses `<mark>` to highlight key phrases inside a quoted study text.
 
-### Exercise 2: Search Result Keyword Highlighting
+**Requirements:**
+1. Wrap key tutorial excerpt words in `<mark>`.
 
-**Problem:** Highlight search keyword `'javascript'` in paragraph `'Learning javascript is fun.'` using `<mark>`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <p>Learning <mark>javascript</mark> is fun.</p>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <p>Learning <mark>javascript</mark> is fun.</p>
+> <blockquote cite="https://example.com/study">
+>   <p>
+>     Our research concluded that <mark>semantic HTML tags reduce page load times</mark> by eliminating redundant JavaScript DOM wrapper libraries.
+>   </p>
+> </blockquote>
 > ```
 >
-> **Explanation:** `<mark>` semantically highlights search term matches in search result snippets.
+> #### Technical Explanation
+>
+> 1. **Contextual Relevance**: Highlights specific words inside a quote that the author wants to draw attention to.
+> 2. **Non-Semantic Stress**: Does NOT imply that the original author spoke those words with stress emphasis.
+> 3. **CSS Customization**: Customizable via CSS `mark { background-color: #ffeb3b; }`.
 > 
 ---
 
-### Exercise 3: Mark Default Background Styling
+### Exercise 3: Screen Reader Announcement of Marked Text
 
-**Problem:** What default CSS background color do browsers apply to `<mark>` elements?
+**Scenario:** Adds CSS content pseudo-elements or aria labels to ensure screen readers announce highlighted `<mark>` text.
 
-**Expected output:**
+**Requirements:**
+1. Style `<mark>` with accessible audio context.
+
 > [!check]- Answer
-> ```text
-> Yellow background (background-color: mark; / yellow).
-> ```
-> ```text
-> Yellow background (background-color: mark; / yellow).
+>
+> #### Implementation
+>
+> ```html
+> <p>
+>   The deadline for submission is <mark class="highlight">Friday at 5 PM</mark>.
+> </p>
 > ```
 >
-> **Explanation:** Browsers simulate a yellow highlighter pen background by default.
-> 
+> #### Technical Explanation
+>
+> 1. **Screen Reader Announcement Caution**: Some screen readers do NOT announce `<mark>` tags by default; supplement with text context if critical.
+> 2. **CSS Custom Accents**: Customize background colors while ensuring text maintains 4.5:1 contrast.
+> 3. **Valid Semantic HTML5**: Appropriate tag for text search highlights and reference annotations.
 ## 6. Related Terms
 - [`<strong>` & `<em>`](../level_02/strong_em.md) — Standard inline text tags.
 - [`<span>` (Inline container)](../level_02/span.md) — The non-semantic styling container.

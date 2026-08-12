@@ -153,67 +153,82 @@ Correct usage pairing a label with an example placeholder:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Form correction
+### Exercise 1: Providing Format Hints via placeholder Alongside Explicit label
 
-**Problem:** The following form has no labels. Correct the HTML so it is accessible, adding labels and converting the visual prompts into example placeholders.
+**Scenario:** An author uses a `placeholder` attribute to show an example date format hint while retaining an explicit `<label>`.
 
-```html
-<form>
-  <input type="text" name="zip" placeholder="Zip Code">
-</form>
-```
+**Requirements:**
+1. Create an explicit `<label>`.
+2. Add a `placeholder` showing format hint `YYYY-MM-DD`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <form>
->   <label for="zip">Zip Code:</label>
->   <input type="text" id="zip" name="zip" placeholder="e.g. 90210">
-> </form>
+> <div class="form-group">
+>   <label for="birth-date">Date of Birth</label>
+>   <input type="text" id="birth-date" name="dob" placeholder="YYYY-MM-DD" required>
+> </div>
 > ```
-> - Create a `<label>` element with a `for` attribute.
-> - Connect the label to the input using a unique `id`.
-> - Change the placeholder value from a label name to a format example.
+>
+> #### Technical Explanation
+>
+> 1. **The `placeholder` Attribute**: Displays short temporary hint text inside an empty input before user entry.
+> 2. **Format Guidance Role**: Best used for showing expected data formats (e.g. `YYYY-MM-DD` or `name@example.com`).
+> 3. **Labels Are Mandatory**: Placeholders do NOT replace `<label>` elements; placeholders vanish when typing begins.
 > 
 ---
 
+### Exercise 2: Preventing Misuse of placeholder as a Substitute for label
 
+**Scenario:** Corrects a form where placeholders were incorrectly used instead of `<label>` tags.
 
-### Exercise 2: Placeholder Best Practice
+**Requirements:**
+1. Add missing `<label>` tags.
+2. Keep `placeholder` for format hints only.
 
-**Problem:** Write an email input containing a proper label AND a helpful format example placeholder.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <label for="em">Email</label><input type="email" id="em" placeholder="name@domain.com">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <label for="em">Email</label>
-> <input type="email" id="em" placeholder="name@domain.com">
+> <!-- Refactored: Added missing label -->
+> <div class="form-group">
+>   <label for="account-num">Account Number</label>
+>   <input type="text" id="account-num" name="account" placeholder="e.g. ACC-123456" required>
+> </div>
 > ```
 >
-> **Explanation:** Placeholders should provide short sample format hints, not act as field labels.
+> #### Technical Explanation
+>
+> 1. **Disappearing Text Problem**: Using placeholders as labels causes users to lose context once text entry starts.
+> 2. **Low Contrast Accessibility Bug**: Default browser placeholder text often fails WCAG 4.5:1 color contrast rules.
+> 3. **Screen Reader Failure**: Some screen readers ignore placeholder text completely.
 > 
 ---
 
-### Exercise 3: CSS Placeholder Pseudo-Element Selector
+### Exercise 3: Accessible Color Contrast for Input Placeholder Text
 
-**Problem:** Write CSS rule styling input placeholder text color to `#888`.
+**Scenario:** Styles placeholder text using CSS `::placeholder` pseudo-element to meet contrast rules.
 
-**Expected output:**
+**Requirements:**
+1. Style `::placeholder` in CSS for WCAG compliance.
+
 > [!check]- Answer
-> ```text
-> input::placeholder { color: #888; }
-> ```
-> ```css
-> input::placeholder {
->   color: #888;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <label for="search-box">Search Catalog</label>
+> <input type="search" id="search-box" name="search" placeholder="Type keywords here..." class="accessible-input">
 > ```
 >
-> **Explanation:** `::placeholder` pseudo-element targets input hint text styles.
-> 
+> #### Technical Explanation
+>
+> 1. **CSS `::placeholder` Selector**: Allows customizing placeholder text color, font style, and opacity.
+> 2. **WCAG Contrast Requirement**: Ensure custom placeholder colors meet minimum 4.5:1 contrast ratios against input background.
+> 3. **Short Guidance Text**: Keep placeholder strings under 5 words.
 ## 6. Related Terms
 - [`<input>`](input.md) — The tag hosting the placeholder.
 - [`<label>`](label.md) — The mandatory companion tag for accessibility.

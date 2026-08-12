@@ -171,67 +171,90 @@ Comparing script tags in `<head>`:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Strategy Selection
+### Exercise 1: Asynchronous Independent Analytics Script Loading
 
-**Problem:** Choose the correct strategy (`default`, `async`, or `defer`) for each script:
-1.  A Google Ads script that loads marketing banner ads.
-2.  A script that draws interactive charts on elements located in the body.
-3.  A minor utility library (like jQuery) that must be loaded before your main application file executes.
+**Scenario:** An author loads an independent third-party analytics script asynchronously using the `async` attribute.
 
-**Expected output:**
+**Requirements:**
+1. Load analytics script via `<script src="..." async>`.
+2. Verify non-render-blocking execution.
+
 > [!check]- Answer
-> ```text
-> 1. async (Ads should load independently and not block rendering)
-> 2. defer (Needs the HTML body elements to be fully parsed before drawing)
-> 3. defer (Maintains declaration order, ensuring the library runs before the app script)
-> ```
-> - If order matters, choose `defer`.
-> - If DOM interaction is required, choose `defer`.
-> - If the script is standalone and independent, choose `async`.
-> 
----
-
-
-
-### Exercise 2: Script Execution Matrix: Standard vs Async vs Defer
-
-**Problem:** Match script attribute to execution timing:
-1. Standard `<script src="...">` 
-2. `<script src="..." async>` 
-3. `<script src="..." defer>` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Blocks HTML parsing immediately while downloading and executing
-> 2. Downloads in background; executes IMMEDIATELY when downloaded (pausing HTML parser)
-> 3. Downloads in background; executes AFTER HTML parsing completes (in order)
-> ```
-> ```text
-> 1. Standard: Blocks HTML parsing immediately while downloading and executing
-> 2. Async: Downloads in background; executes IMMEDIATELY when downloaded (pausing HTML parser)
-> 3. Defer: Downloads in background; executes AFTER HTML parsing completes (in order)
-> ```
 >
-> **Explanation:** `defer` preserves script execution order and waits for DOM readiness.
-> 
----
-
-### Exercise 3: Analytics Script Best Attribute
-
-**Problem:** Which attribute (`async` or `defer`) is best suited for independent third-party analytics scripts (e.g. Google Analytics)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> async (executes independently as fast as possible without order dependencies).
-> ```
+> #### Implementation
+>
 > ```html
-> <script src="https://www.google-analytics.com/analytics.js" async></script>
+> <head>
+>   <meta charset="utf-8">
+>   <title>Analytics Enabled Site</title>
+>   <!-- Asynchronous non-blocking analytics script -->
+>   <script src="https://analytics.example.com/tracker.js" async></script>
+> </head>
 > ```
 >
-> **Explanation:** `async` is ideal for standalone analytics scripts with zero dependencies.
+> #### Technical Explanation
+>
+> 1. **The `async` Attribute**: Downloads script in background without blocking HTML parsing; executes IMMEDIATELY once downloaded.
+> 2. **Independent Script Use Case**: Ideal for independent third-party scripts (analytics, ads) that do NOT depend on other scripts or DOM readiness.
+> 3. **Unordered Execution Caution**: Multiple `async` scripts execute in order of download speed, NOT DOM appearance order.
 > 
+---
+
+### Exercise 2: Deferred DOM-Dependent Application Bundle Loading
+
+**Scenario:** Loads primary application JavaScript using `defer` to ensure execution occurs after DOM parsing finishes in exact document order.
+
+**Requirements:**
+1. Load app bundle via `<script src="..." defer>`.
+2. Ensure script executes after DOM is ready.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Single Page Application</title>
+>   <!-- Deferred application scripts execute in document order after DOM parsing -->
+>   <script src="js/vendor.js" defer></script>
+>   <script src="js/app.js" defer></script>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `defer` Attribute**: Downloads script in background while HTML parses; executes ONLY after HTML parsing is 100% complete.
+> 2. **Document Order Preservation**: Multiple `defer` scripts execute in the exact order they appear in the HTML document (`vendor.js` then `app.js`).
+> 3. **DOMContentLoaded Timing**: `defer` scripts execute immediately before the `DOMContentLoaded` event fires.
+> 
+---
+
+### Exercise 3: Comparing Script Execution Timelines
+
+**Scenario:** Demonstrates render-blocking standard scripts vs async vs defer.
+
+**Requirements:**
+1. Place defer scripts in `<head>` for optimal performance.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Performance Optimized Scripts</title>
+>   <!-- Optimal: Deferred in head -->
+>   <script src="js/main.js" defer></script>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Standard Script Pitfall**: Plain `<script src="...">` halts HTML parsing until script is fetched and executed.
+> 2. **Modern Best Practice**: Place `defer` scripts in `<head>` so downloads start immediately while HTML parses.
+> 3. **Performance Metrics**: Improves First Contentful Paint (FCP) and Time to Interactive (TTI).
 ## 6. Related Terms
 - [`<script>`](script.md) — The parent script container element.
 - [`<link>`](link.md) — The element used to connect stylesheets (which are also render-blocking).

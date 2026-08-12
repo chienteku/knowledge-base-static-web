@@ -181,60 +181,93 @@ Custom key bindings in HTML:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Dataset extraction
+### Exercise 1: Storing Private Component State via Custom Data Attributes
 
-**Problem:** Given the following HTML tag:
-`<div id="profile" data-profile-status="online" data-points="2500"></div>`
+**Scenario:** An author attaches custom `data-*` attributes to an interactive tab component to store panel target IDs and active states.
 
-What are the corresponding JavaScript keys to read these values from the element's `dataset` object?
+**Requirements:**
+1. Add `data-target` and `data-state` to interactive `<button>` elements.
+2. Add matching `id` on target panel `<div>`.
+3. Ensure valid HTML5 `data-*` syntax.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. element.dataset.profileStatus
-> 2. element.dataset.points
+>
+> #### Implementation
+>
+> ```html
+> <div class="tab-component">
+>   <div role="tablist" aria-label="Settings Tabs">
+>     <button type="button" class="tab-btn" data-target="panel-general" data-state="active" role="tab" aria-selected="true" aria-controls="panel-general">
+>       General Settings
+>     </button>
+>     <button type="button" class="tab-btn" data-target="panel-security" data-state="inactive" role="tab" aria-selected="false" aria-controls="panel-security">
+>       Security Settings
+>     </button>
+>   </div>
+>
+>   <div id="panel-general" class="tab-panel" data-panel-type="general" role="tabpanel">
+>     <h3>General Configuration</h3>
+>     <p>General account preferences.</p>
+>   </div>
+> </div>
 > ```
-> - The prefix `data-` is stripped.
-> - Hyphenated keys (`profile-status`) must be converted to camelCase (`profileStatus`).
+>
+> #### Technical Explanation
+>
+> 1. **Custom Data Attributes (`data-*`)**: Allows embedding custom data on HTML elements without invalidating HTML5 conformance or using non-standard attributes.
+> 2. **JavaScript `dataset` API**: JavaScript accesses attributes via `element.dataset.target` and `element.dataset.state`.
+> 3. **CSS Attribute Selectors**: CSS can target state attributes directly using `button[data-state="active"] { ... }`.
 > 
 ---
 
+### Exercise 2: Custom Data Attributes for Analytics Tracking
 
+**Scenario:** Attaches event tracking data attributes for analytics scripts.
 
-### Exercise 2: Reading Dataset in JavaScript
+**Requirements:**
+1. Add `data-analytics-category` and `data-analytics-action` to CTAs.
 
-**Problem:** For `<button id="btn" data-product-id="99" data-category="tech">`, write JS code to access `product-id`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const id = document.getElementById('btn').dataset.productId;
-> ```
-> ```javascript
-> const id = document.getElementById('btn').dataset.productId;
+>
+> #### Implementation
+>
+> ```html
+> <a href="/pricing" class="btn-cta" data-analytics-category="Homepage Hero" data-analytics-action="Click Pricing CTA" data-analytics-label="Hero Button">
+>   View Subscription Plans
+> </a>
 > ```
 >
-> **Explanation:** `dataset` maps hyphenated `data-product-id` to camelCase `dataset.productId`.
+> #### Technical Explanation
+>
+> 1. **Analytics Event Metadata**: Stores tracking categories and click labels directly on DOM elements for global analytics listeners.
+> 2. **Decoupled Event Tracking**: Analytics scripts inspect `e.target.dataset.analyticsAction` without requiring custom inline event handlers.
+> 3. **Valid HTML5 Syntax**: Data attributes MUST start with `data-` followed by lowercase hyphens.
 > 
 ---
 
-### Exercise 3: Styling with CSS Attribute Selectors
+### Exercise 3: CSS Attribute Selectors targeting Custom Data Attributes
 
-**Problem:** Write CSS rule targeting elements with attribute `data-status="active"`.
+**Scenario:** Styles interactive components based on `data-theme` attribute values.
 
-**Expected output:**
+**Requirements:**
+1. Use `data-theme="dark"` on root container.
+
 > [!check]- Answer
-> ```text
-> [data-status="active"] { color: green; }
-> ```
-> ```css
-> [data-status="active"] {
->   color: green;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <div class="app-wrapper" data-theme="dark" data-user-role="admin">
+>   <h2>Admin Dashboard</h2>
+>   <p>Dark mode interface active.</p>
+> </div>
 > ```
 >
-> **Explanation:** CSS attribute selectors target custom `data-*` state attributes.
-> 
+> #### Technical Explanation
+>
+> 1. **Theme Switching Hooks**: CSS selectors like `[data-theme="dark"]` enable easy light/dark mode theme toggling.
+> 2. **State Storage without Class Bloat**: Prevents cluttering the `class` list with non-styling state strings.
+> 3. **DOM Inspection Clarity**: Custom data attributes make component state obvious in DevTools.
 ## 6. Related Terms
 - [`class` Attribute](class.md) — The global attribute for styling categories.
 - [`id` Attribute](id.md) — The unique identifier.

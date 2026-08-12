@@ -156,66 +156,110 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 
 ## 5. Practice Exercises
 
-### Exercise 1: Article vs Section
+### Exercise 1: Structuring Independent Reusable News Cards using article
 
-**Problem:** You are building a Twitter/X clone. Is a single "Tweet" an `<article>` or a `<section>`?
+**Scenario:** A developer structures a news portal feed using `<article>` tags for self-contained blog post entries.
 
-**Expected output:**
+**Requirements:**
+1. Wrap each standalone post in an `<article>` container.
+2. Include a heading (`<h2>` or `<h3>`) in each article.
+3. Add article publication metadata.
+
 > [!check]- Answer
-> ```text
-> An `<article>`. A Tweet is completely self-contained. It has an author, a timestamp, and a message. If you took that single Tweet and embedded it on a different website, it would still make perfect sense.
-> ```
-> - Apply the "Scissor Test." If you cut it out and hand it to a stranger, does it make sense?
-> 
----
-
-
-
-### Exercise 2: Semantic Tag Matrix: Article vs Section
-
-**Problem:** Select `<article>` or `<section>` for:
-1. Blog post listing item (`<article>`)
-2. 'About Us' tab section on company page (`<section>`)
-3. User comment in a forum thread (`<article>`)
-4. Product features grid section (`<section>`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. article
-> 2. section
-> 3. article
-> 4. section
-> ```
-> ```text
-> 1. article (standalone syndicatable content)
-> 2. section (thematic content division)
-> 3. article (independent user comment)
-> 4. section (thematic features division)
+>
+> #### Implementation
+>
+> ```html
+> <main class="news-feed">
+>   <h1>Latest Tech News</h1>
+>
+>   <article class="news-card">
+>     <h2>Web Standards 2026 Update</h2>
+>     <p class="byline">Published on <time datetime="2026-08-12">August 12, 2026</time></p>
+>     <p>The W3C announced updated accessibility guidelines for web applications.</p>
+>     <a href="/news/web-standards-2026">Read Full Article</a>
+>   </article>
+>
+>   <article class="news-card">
+>     <h2>CSS Grid Level 3 Draft</h2>
+>     <p class="byline">Published on <time datetime="2026-08-10">August 10, 2026</time></p>
+>     <p>New masonry layout features are coming to native browser CSS grid engines.</p>
+>     <a href="/news/css-grid-level-3">Read Full Article</a>
+>   </article>
+> </main>
 > ```
 >
-> **Explanation:** `<article>` for independent reusable content; `<section>` for thematic document sub-divisions.
+> #### Technical Explanation
+>
+> 1. **The `<article>` Element**: Represents a complete, self-contained composition intended to be independently reusable or distributable (e.g. blog post, news story, product card).
+> 2. **Individually Syndicatable**: An `<article>` should make complete sense on its own if syndicated in an RSS feed or shared on social media.
+> 3. **Mandatory Heading Requirement**: Every `<article>` should contain a heading element (`<h2>`-`<h6>`) identifying its topic.
 > 
 ---
 
-### Exercise 3: Section Heading Requirement
+### Exercise 2: Grouping Related Topical Content Sub-themes using section
 
-**Problem:** What element should almost always be included as the first child inside a `<section>`?
+**Scenario:** A developer divides a product page into distinct thematic sub-sections using `<section>` elements.
 
-**Expected output:**
+**Requirements:**
+1. Wrap thematic groups in `<section>` elements.
+2. Ensure every `<section>` begins with a heading tag.
+
 > [!check]- Answer
-> ```text
-> A heading element (<h2> - <h6>).
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <section>
->   <h2>Section Title</h2>
->   <p>Content...</p>
+> <main>
+>   <h1>Acme Cloud Storage</h1>
+>
+>   <section id="features">
+>     <h2>Key Features</h2>
+>     <p>Automatic sync, end-to-end encryption, and multi-device support.</p>
+>   </section>
+>
+>   <section id="pricing">
+>     <h2>Subscription Plans</h2>
+>     <p>Flexible pricing for teams of all sizes.</p>
+>   </section>
+> </main>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `<section>` Element**: Represents a standalone generic section of a document grouped by a single thematic topic.
+> 2. **Heading Requirement**: A `<section>` MUST have a heading (`<h2>`-`<h6>`) establishing its region name in the document outline.
+> 3. **Section vs Article Rule**: Use `<article>` for independent reusable items; use `<section>` for dividing a single larger document into thematic chapters.
+> 
+---
+
+### Exercise 3: Nested Articles inside Section Containers
+
+**Scenario:** Combines `<section>` and `<article>` to build a blog feed container.
+
+**Requirements:**
+1. Wrap blog feed in a `<section>`.
+2. Nest individual `<article>` posts inside.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <section class="blog-feed">
+>   <h2>Recent Posts</h2>
+>   <article class="post">
+>     <h3>Understanding ARIA Roles</h3>
+>     <p>Guide to accessible web roles.</p>
+>   </article>
 > </section>
 > ```
 >
-> **Explanation:** Semantic `<section>` elements require a heading to establish document outline hierarchy.
-> 
+> #### Technical Explanation
+>
+> 1. **Parent-Child Nesting**: Articles can be nested inside sections (`<section><article>`), and sections can be nested inside articles (`<article><section>`).
+> 2. **Document Outline Tree**: Keeps the document outline structured for search engine crawlers.
+> 3. **Screen Reader Navigation**: Enables landmark navigation between major page chapters.
 ## 6. Related Terms
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic wrapper you should use if your block doesn't warrant an `<article>` or `<section>`.
 - [`<main>`](main.md) — The parent container for these elements.

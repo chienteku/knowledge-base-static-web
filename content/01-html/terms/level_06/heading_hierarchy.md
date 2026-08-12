@@ -189,64 +189,109 @@ A simple outline schema:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Outline Repair
+### Exercise 1: Auditing and Correcting Out-of-Order Headings
 
-**Problem:** The following HTML structure has a broken heading hierarchy. Rearrange or re-tag the headings to make the outline sequential.
+**Scenario:** An accessibility author audits a document and corrects out-of-order heading levels (`<h1>` -> `<h3>`) to ensure a sequential hierarchy.
 
-```html
-<h1>Car Catalog</h1>
-<h3>Sedans</h3>
-<h4>Toyota Camry</h4>
-<h2>SUVs</h2>
-```
+**Requirements:**
+1. Audit heading levels.
+2. Fix skipped levels so headings increase sequentially (`<h1>` -> `<h2>` -> `<h3>`).
+3. Verify single `<h1>` page root.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <h1>Car Catalog</h1>
-> <h2>Sedans</h2>
-> <h3>Toyota Camry</h3>
-> <h2>SUVs</h2>
+> <!-- Corrected Sequential Heading Hierarchy -->
+> <main>
+>   <h1>Acme Store Knowledge Base</h1>
+>
+>   <section>
+>     <h2>Account Management</h2>
+>     <p>Instructions for updating your profile.</p>
+>
+>     <article>
+>       <h3>Resetting Your Password</h3>
+>       <p>Follow these steps to reset your security password.</p>
+>     </article>
+>   </section>
+> </main>
 > ```
-> - The page jumps from `<h1>` directly to `<h3>` at "Sedans". That level must be repaired to `<h2>`.
-> - "Toyota Camry" should drop to `<h3>` since it is a subsection of "Sedans".
+>
+> #### Technical Explanation
+>
+> 1. **Heading Rank Rules**: Headings MUST be ordered sequentially (`<h1>` -> `<h2>` -> `<h3>`); never skip levels (e.g. `<h1>` to `<h3>`).
+> 2. **Single `<h1>` Rule**: A webpage should have exactly one `<h1>` representing the main topic of the page.
+> 3. **Visual vs Structural Separation**: Pick heading levels based on document structure, NOT visual font size; use CSS to customize font sizes.
 > 
 ---
 
+### Exercise 2: Screen Reader Heading Tree Traversal Structure
 
+**Scenario:** Constructs a multi-level heading tree for an e-commerce catalog page.
 
-### Exercise 2: Document Heading Hierarchy Audit
+**Requirements:**
+1. Create structured heading tree (`<h1>` down to `<h4>`).
 
-**Problem:** Audit heading hierarchy order: `<h1>` -> `<h2>` -> `<h4>` -> `<h3>`. Identify error and fix.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Error: <h4> comes before <h3>. Fix: <h1> -> <h2> -> <h3> -> <h4>.
-> ```
-> ```text
-> Error: <h4> comes before <h3>. Fix: <h1> -> <h2> -> <h3> -> <h4>.
+>
+> #### Implementation
+>
+> ```html
+> <main>
+>   <h1>Electronics Catalog</h1>
+>
+>   <section>
+>     <h2>Laptops & Computers</h2>
+>
+>     <article>
+>       <h3>Gaming Laptops</h3>
+>       <h4>15-inch Models</h4>
+>       <p>Product list...</p>
+>     </article>
+>   </section>
+> </main>
 > ```
 >
-> **Explanation:** Heading levels must descend sequentially without skipping or reversing levels.
+> #### Technical Explanation
+>
+> 1. **Screen Reader Shortcut Navigation**: Blind users press `H` or `1`-`6` to jump across heading outline levels.
+> 2. **Logical Tree Outline**: Proper hierarchy builds an automatic table of contents for assistive technology.
+> 3. **WCAG 2.1 SC 1.3.1**: Satisfies Information and Relationships accessibility requirements.
 > 
 ---
 
-### Exercise 3: Screen Reader Heading Navigation Shortcut
+### Exercise 3: Single h1 Rule with Nested Section Outlines
 
-**Problem:** Which keyboard shortcut key do screen reader users (NVDA/JAWS) press to cycle through headings on a webpage?
+**Scenario:** Verifies single `<h1>` usage across multiple `<section>` elements.
 
-**Expected output:**
+**Requirements:**
+1. Ensure only one `<h1>` exists on the entire page.
+
 > [!check]- Answer
-> ```text
-> H key (or 1-6 number keys for specific heading levels).
-> ```
-> ```text
-> H key (or 1-6 number keys for specific heading levels).
+>
+> #### Implementation
+>
+> ```html
+> <header>
+>   <h1>Company Annual Report 2026</h1>
+> </header>
+> <main>
+>   <section>
+>     <h2>Executive Summary</h2>
+>   </section>
+>   <section>
+>     <h2>Financial Results</h2>
+>   </section>
+> </main>
 > ```
 >
-> **Explanation:** Screen reader users rely on heading hotkeys to scan document outlines.
-> 
+> #### Technical Explanation
+>
+> 1. **Single Page Title Alignment**: Single `<h1>` aligns with document `<title>` tag for search engines.
+> 2. **Section `<h2>` Boundaries**: Use `<h2>` for top-level section chapters under the main `<h1>`.
+> 3. **Clean HTML Outline**: Ensures predictable W3C outline algorithm rendering.
 ## 6. Related Terms
 - [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — The tags that define outline points.
 - [Semantic HTML](semantic_html.md) — The concept framework.

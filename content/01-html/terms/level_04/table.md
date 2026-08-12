@@ -138,66 +138,138 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 
 ## 5. Practice Exercises
 
-### Exercise 1: Tabular Data Identification
+### Exercise 1: Complete Accessible HTML Data Table Architecture
 
-**Problem:** Which of the following should be built using a `<table>` tag?
-1. A photo gallery with 3 columns of images.
-2. A comparison chart showing the features of 3 different pricing plans.
-3. The layout of a newspaper with a left column and right column.
+**Scenario:** A developer constructs a complete, accessible data table containing `<caption>`, `<thead>`, `<tbody>`, `<tfoot>`, and semantic headers.
 
-**Expected output:**
+**Requirements:**
+1. Create root `<table>` element.
+2. Add `<caption>` as first child.
+3. Structure with `<thead>`, `<tbody>`, and `<tfoot>`.
+4. Use `<th>` with `scope` for all headers.
+
 > [!check]- Answer
-> ```text
-> Only #2 (The comparison chart). It is actual tabular data. The photo gallery and newspaper layout should be built using CSS Grid or Flexbox, because they are layout problems, not data relationships.
-> ```
-> - Does the data lose its meaning if it's not strictly aligned in specific rows and columns?
-> 
----
-
-
-
-### Exercise 2: Structuring Basic Data Table
-
-**Problem:** Write complete `<table>` containing `caption`, `thead` with 2 `th` cells, and `tbody` with 1 data row.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <table><caption>Users</caption><thead><tr><th>ID</th><th>Name</th></tr></thead><tbody><tr><td>1</td><td>Alice</td></tr></tbody></table>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <table>
->   <caption>Users</caption>
+> <table class="inventory-table">
+>   <caption>Quarterly Product Inventory & Valuation</caption>
 >   <thead>
->     <tr><th>ID</th><th>Name</th></tr>
+>     <tr>
+>       <th scope="col">SKU Code</th>
+>       <th scope="col">Item Description</th>
+>       <th scope="col">Quantity</th>
+>       <th scope="col">Unit Price</th>
+>     </tr>
 >   </thead>
 >   <tbody>
->     <tr><td>1</td><td>Alice</td></tr>
+>     <tr>
+>       <th scope="row">SKU-881</th>
+>       <td>Ergonomic Keyboard</td>
+>       <td>50</td>
+>       <td>$120.00</td>
+>     </tr>
+>     <tr>
+>       <th scope="row">SKU-882</th>
+>       <td>Vertical Optical Mouse</td>
+>       <td>80</td>
+>       <td>$45.00</td>
+>     </tr>
 >   </tbody>
+>   <tfoot>
+>     <tr>
+>       <th scope="row" colspan="2">Total Inventory Count</th>
+>       <td>130</td>
+>       <td>--</td>
+>     </tr>
+>   </tfoot>
 > </table>
 > ```
 >
-> **Explanation:** Semantic table structure organizes data into `caption`, `thead`, and `tbody` sections.
+> #### Technical Explanation
+>
+> 1. **The `<table>` Element**: Represents tabular data formatted in rows and columns.
+> 2. **Complete Table Anatomy**: Consists of `<caption>`, `<thead>` (headers), `<tbody>` (data), and `<tfoot>` (summaries).
+> 3. **Accessibility Principles**: Data tables require semantic headers (`<th>`), explicit `scope`, and a descriptive `<caption>` for 100% accessibility compliance.
 > 
 ---
 
-### Exercise 3: Table Border-Collapse CSS Property
+### Exercise 2: Responsive Scrollable Data Table Container Wrapper
 
-**Problem:** Which CSS property merges adjacent table cell borders into a single thin border?
+**Scenario:** Wraps a wide data table inside a responsive container (`div.table-container`) allowing horizontal scrolling on mobile screens.
 
-**Expected output:**
+**Requirements:**
+1. Wrap `<table>` inside `<div class="table-container" tabindex="0" role="region" aria-label="...">`.
+2. Enable horizontal overflow scrolling in CSS.
+
 > [!check]- Answer
-> ```text
-> border-collapse: collapse;
-> ```
-> ```css
-> table {
->   border-collapse: collapse;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <div class="table-container" tabindex="0" role="region" aria-label="Quarterly Product Inventory Table">
+>   <table class="data-table">
+>     <caption>Quarterly Sales Data</caption>
+>     <thead>
+>       <tr>
+>         <th scope="col">Region</th>
+>         <th scope="col">Q1</th>
+>         <th scope="col">Q2</th>
+>         <th scope="col">Q3</th>
+>         <th scope="col">Q4</th>
+>       </tr>
+>     </thead>
+>     <tbody>
+>       <tr>
+>         <th scope="row">North America</th>
+>         <td>$100k</td>
+>         <td>$120k</td>
+>         <td>$140k</td>
+>         <td>$160k</td>
+>       </tr>
+>     </tbody>
+>   </table>
+> </div>
 > ```
 >
-> **Explanation:** `border-collapse: collapse` eliminates double cell border spacing.
+> #### Technical Explanation
+>
+> 1. **Responsive Table Wrappers**: Wide tables cause page overflow on mobile devices; wrapping in a scrollable container prevents layout breaking.
+> 2. **Keyboard Scrollability (`tabindex="0"`)**: Adding `tabindex="0"` allows keyboard-only users to focus and scroll the container using arrow keys.
+> 3. **Landmark Announcement (`role="region"`)**: Provides accessible labels (`aria-label`) for scrollable table regions.
 > 
+---
+
+### Exercise 3: Fixing Misuse of HTML Tables for Page Layout
+
+**Scenario:** An auditor refactors a legacy webpage that used `<table>` tags for visual multi-column page layout into modern CSS Grid/Flexbox.
+
+**Requirements:**
+1. Replace layout `<table>` with semantic HTML5 containers and CSS.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Refactored: Modern CSS Flexbox Layout replaces legacy layout table -->
+> <main class="content-layout">
+>   <article class="primary-column">
+>     <h2>Main Article</h2>
+>     <p>Article body content.</p>
+>   </article>
+>   <aside class="sidebar-column">
+>     <h3>Sidebar Widgets</h3>
+>   </aside>
+> </main>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Tables Are for Data Only**: HTML `<table>` tags MUST only be used for tabular data, NEVER for visual webpage layouts.
+> 2. **Accessibility Destruction**: Using tables for page layout confuses screen readers, which announce non-existent table columns and rows.
+> 3. **CSS Grid/Flexbox Standards**: Modern CSS Grid and Flexbox handle multi-column layouts cleanly.
 ## 6. Related Terms
 - [`<tr>` (Table Row)](tr.md) — The tag that defines a horizontal row inside the table.
 - [`<td>` (Table Data)](td.md) — The tag that holds the actual data inside the row.

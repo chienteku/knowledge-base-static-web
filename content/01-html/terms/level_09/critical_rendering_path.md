@@ -159,65 +159,101 @@ for (let i = 0; i < 100; i++) {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Render Tree Diagnosis
+### Exercise 1: Optimizing Critical Path HTML with Inlined CSS and Deferred Scripts
 
-**Problem:** Why is it that an element containing `visibility: hidden;` still triggers the Layout step (Step 4), but an element containing `display: none;` does not?
+**Scenario:** An author optimizes the Critical Rendering Path by inlining critical above-the-fold CSS and deferring non-critical scripts.
 
-**Expected output:**
+**Requirements:**
+1. Inline critical CSS rules in `<style>` in `<head>`.
+2. Defer non-critical JavaScript files using `defer`.
+3. Preload primary font assets.
+
 > [!check]- Answer
-> ```text
-> `display: none;` completely removes the element from the Render Tree, so the browser doesn't calculate its geometry. 
-> `visibility: hidden;` keeps the element inside the Render Tree (it still takes up blank space on the screen, like an invisible box), so the browser must calculate its size and position during the Layout step.
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Critical Rendering Path Optimization</title>
+>
+>   <!-- 1. Preload critical web font -->
+>   <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+>
+>   <!-- 2. Inline critical above-the-fold CSS -->
+>   <style>
+>     body { margin: 0; font-family: system-ui; }
+>     .hero { min-height: 80vh; background: #0f172a; color: white; padding: 2rem; }
+>   </style>
+>
+>   <!-- 3. Defer non-critical scripts -->
+>   <script src="js/app.js" defer></script>
+> </head>
 > ```
-> - Does an invisible box with `visibility: hidden` push other paragraphs down the page? Yes!
+>
+> #### Technical Explanation
+>
+> 1. **Critical Rendering Path (CRP)**: The sequence of steps browsers take to parse HTML, construct DOM/CSSOM trees, render layout, and paint pixels to screen.
+> 2. **Eliminating Render-Blocking CSS**: Inlining critical CSS eliminates network round-trips for the initial page paint.
+> 3. **Non-Blocking Deferred Scripts**: Using `defer` allows HTML DOM parsing to finish without waiting for JavaScript execution.
 > 
 ---
 
+### Exercise 2: Resource Preloading and Early Preconnect to Unblock Assets
 
+**Scenario:** Uses `preconnect` and `preload` resource hints to accelerate network fetching.
 
-### Exercise 2: 5 Steps of Critical Rendering Path
+**Requirements:**
+1. Add `<link rel="preconnect" href="...">`.
+2. Add `<link rel="preload" href="..." as="script">`.
 
-**Problem:** Order the 5 steps of browser Critical Rendering Path:
-Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. DOM Construction
-> 2. CSSOM Construction
-> 3. Render Tree Construction
-> 4. Layout (Reflow)
-> 5. Paint
-> ```
-> ```text
-> 1. DOM Construction
-> 2. CSSOM Construction
-> 3. Render Tree Construction
-> 4. Layout (Reflow)
-> 5. Paint
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Preconnect Demo</title>
+>   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+>   <link rel="preload" href="images/hero-banner.jpg" as="image">
+> </head>
 > ```
 >
-> **Explanation:** Browsers construct DOM and CSSOM trees before combining them into Render Tree for Layout and Paint.
+> #### Technical Explanation
+>
+> 1. **`preconnect` Speedup**: Establishes early DNS, TCP, and TLS connections to external domains before asset discovery.
+> 2. **`preload` Prioritization**: Instructs browser to download high-priority hero images before layout calculations finish.
+> 3. **Faster First Contentful Paint**: Reduces overall page render latency on mobile networks.
 > 
 ---
 
-### Exercise 3: Reflow vs Repaint
+### Exercise 3: Reducing HTML DOM Depth to Minimize Render Tree Time
 
-**Problem:** Which browser rendering phase is triggered by changing CSS `width` (Reflow or Repaint)? Which phase is triggered by `color`?
+**Scenario:** Simplifies HTML DOM node depth to accelerate style recalculation and layout paint times.
 
-**Expected output:**
+**Requirements:**
+1. Refactor over-nested `<div>` trees into flat semantic elements.
+
 > [!check]- Answer
-> ```text
-> width -> Reflow (Layout recalculation)
-> color -> Repaint (Paint layer recalculation)
-> ```
-> ```text
-> width -> Reflow (Layout recalculation)
-> color -> Repaint (Paint layer recalculation)
+>
+> #### Implementation
+>
+> ```html
+> <!-- Optimized Flat DOM Tree Structure -->
+> <main class="page-container">
+>   <article class="content-card">
+>     <h1>Page Title</h1>
+>     <p>Direct paragraph content without redundant wrapper divs.</p>
+>   </article>
+> </main>
 > ```
 >
-> **Explanation:** Geometry changes trigger Reflow + Repaint; visual-only changes trigger Repaint.
-> 
+> #### Technical Explanation
+>
+> 1. **DOM Tree Depth Impact**: Excessive DOM node nesting slows down CSSOM matching and layout paint calculations.
+> 2. **Memory Footprint**: Flatter HTML trees use less memory in V8 and browser layout engines.
+> 3. **Smooth 60fps Rendering**: Improves scrolling animation performance.
 ## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The foundational node representation.
 - [The Tree Structure](tree_structure.md) — The parent-child layout hierarchy.

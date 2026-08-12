@@ -128,58 +128,82 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 
 ## 5. Practice Exercises
 
-### Exercise 1: Button vs Anchor
+### Exercise 1: Explicit Form Submit Button
 
-**Problem:** You want to create a big, blue, clickable rectangle that takes the user to `about.html`. Should you use a `<button>` or an `<a>` (Anchor)?
+**Scenario:** An author constructs a form submit button using `<button type="submit">`.
 
-**Expected output:**
+**Requirements:**
+1. Use `<button type="submit">`.
+2. Provide clear descriptive button text.
+3. Include visual button styling class.
+
 > [!check]- Answer
-> ```text
-> You should use an `<a>` tag and style it with CSS to LOOK like a button! 
-> Buttons (`<button>`) are for actions (submitting forms, opening modals). Anchors (`<a>`) are for navigation (going to a new URL). Using a button for navigation breaks accessibility and prevents users from right-clicking to "Open in new tab".
-> ```
-> - Think about the semantic *purpose* of the action. Is the user traveling, or is the user commanding?
-> 
----
-
-
-
-### Exercise 2: 3 Button Type Attribute Values
-
-**Problem:** List 3 valid values for `<button type="...">` attribute.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. submit (submits form data)
-> 2. reset (resets form fields to initial values)
-> 3. button (generic button with no default behavior)
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <button type="submit">Submit</button>
-> <button type="reset">Reset</button>
-> <button type="button">Custom Action</button>
+> <form action="/register" method="post">
+>   <button type="submit" class="btn-submit">Create Account</button>
+> </form>
 > ```
 >
-> **Explanation:** `type` dictates button form interaction behavior.
+> #### Technical Explanation
+>
+> 1. **Explicit `type="submit"`**: Always declare `type="submit"` explicitly; missing type defaults to submit in forms, causing accidental submissions when clicked.
+> 2. **Button vs Input Submit**: `<button>` can contain inner HTML (icons, sub-spans), whereas `<input type="submit">` only supports plain text.
+> 3. **Keyboard Activation**: Submit buttons can be activated via Enter key anywhere inside form inputs.
 > 
 ---
 
-### Exercise 3: Keyboard Button Triggering
+### Exercise 2: Non-Submitting Script Action Button
 
-**Problem:** Which two keyboard keys automatically trigger a focused `<button>` element?
+**Scenario:** A UI developer creates a modal dialog toggle button using `<button type="button">` to prevent form submission.
 
-**Expected output:**
+**Requirements:**
+1. Use `<button type="button">`.
+2. Attach click handler hook or ARIA expanded state.
+
 > [!check]- Answer
-> ```text
-> Enter key and Spacebar.
-> ```
-> ```text
-> Enter key and Spacebar.
+>
+> #### Implementation
+>
+> ```html
+> <button type="button" class="btn-toggle" aria-expanded="false" aria-controls="menu-panel">
+>   Toggle Navigation Menu
+> </button>
 > ```
 >
-> **Explanation:** Native `<button>` tags provide built-in keyboard accessibility for Enter and Space.
+> #### Technical Explanation
+>
+> 1. **The `type="button"` Attribute**: Prevents the button from submitting parent forms when clicked; essential for JavaScript interactive controls.
+> 2. **Keyboard Focusability**: Native `<button>` elements are automatically focusable via Tab key and activated via Space/Enter keys.
+> 3. **Accessibility Role**: Screen readers announce the `button` role automatically without needing `role="button"`.
 > 
+---
+
+### Exercise 3: Accessible Icon-Only Button with Screen Reader Label
+
+**Scenario:** Creates a close icon button with visually hidden text for screen readers.
+
+**Requirements:**
+1. Include `<span class="sr-only">` inside `<button type="button">`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <button type="button" class="close-btn" aria-label="Close Dialog">
+>   <svg aria-hidden="true" width="16" height="16"><use href="#icon-close"></use></svg>
+>   <span class="sr-only">Close Dialog</span>
+> </button>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Accessible Button Names**: Buttons MUST have accessible text labels for screen readers.
+> 2. **Decorative SVG Hiding**: `aria-hidden="true"` hides vector icon markup from audio output.
+> 3. **Screen Reader Only Text**: `<span class="sr-only">` supplies text for audio readers while keeping UI minimal.
 ## 6. Related Terms
 - [`<form>`](form.md) — The element that the button usually submits.
 - [`action` & `method` Attributes](action_method.md) — The parameters that govern form submission when `type="submit"` is pressed.

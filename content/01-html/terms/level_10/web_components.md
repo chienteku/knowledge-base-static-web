@@ -260,64 +260,102 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Element Scaffold
+### Exercise 1: Defining a Custom HTML Element Template using template and slot
 
-**Problem:** Build the JavaScript class scaffold to define a custom element `<info-box>`. You do not need to build the template logic, just register the tag name with the browser.
+**Scenario:** An author defines a reusable Web Component template using `<template>` and `<slot>` elements.
 
-**Expected output:**
+**Requirements:**
+1. Create `<template id="user-card-template">`.
+2. Use `<slot name="...">` for component projection placeholders.
+3. Include component scoped CSS.
+
 > [!check]- Answer
-> ```javascript
-> class InfoBox extends HTMLElement {
->   constructor() {
->     super();
+>
+> #### Implementation
+>
+> ```html
+> <!-- Native Web Component Template Definition -->
+> <template id="user-card-template">
+>   <style>
+>     .card { border: 1px solid #e2e8f0; padding: 16px; border-radius: 8px; font-family: sans-serif; }
+>     .card-title { color: #1e293b; margin-top: 0; }
+>   </style>
+>
+>   <article class="card">
+>     <h3 class="card-title"><slot name="username">Default Name</slot></h3>
+>     <p class="card-role"><slot name="role">Default Role</slot></p>
+>   </article>
+> </template>
+>
+> <!-- Custom Autonomous Web Component Tag Usage -->
+> <user-card>
+>   <span slot="username">Jane Doe</span>
+>   <span slot="role">Lead Web Architect</span>
+> </user-card>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `<template>` Element**: Holds HTML markup that is parsed by the browser but NOT rendered on page load until cloned via JavaScript.
+> 2. **The `<slot>` Element**: Acts as a projection placeholder inside Web Components where light DOM consumer markup is rendered.
+> 3. **Native Component Encapsulation**: Provides framework-free native component reusability across modern browsers.
+> 
+---
+
+### Exercise 2: Encapsulating Styles within Shadow DOM
+
+**Scenario:** Attaches an open Shadow DOM root to encapsulate component styles from global page CSS.
+
+**Requirements:**
+1. Attach Shadow DOM via `element.attachShadow({ mode: 'open' })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <script>
+>   class UserCardComponent extends HTMLElement {
+>     constructor() {
+>       super();
+>       const shadow = this.attachShadow({ mode: 'open' });
+>       const tmpl = document.getElementById('user-card-template');
+>       shadow.appendChild(tmpl.content.cloneNode(true));
+>     }
 >   }
-> }
-> customElements.define('info-box', InfoBox);
+>   customElements.define('user-card', UserCardComponent);
+> </script>
 > ```
-> - Extend `HTMLElement` in your class definition.
-> - Call `super()` inside the constructor.
-> - Bind the tag using the `customElements` registry.
+>
+> #### Technical Explanation
+>
+> 1. **Shadow DOM Architecture**: Provides scoped DOM subtree isolation; page CSS does NOT leak into Shadow DOM.
+> 2. **The `attachShadow` API**: `mode: 'open'` allows JavaScript access to shadow root via `element.shadowRoot`.
+> 3. **Encapsulated Styles**: Styles inside `<template>` apply strictly to component internals.
 > 
 ---
 
+### Exercise 3: Declaring Custom Autonomous HTML Elements
 
+**Scenario:** Registers custom element names using valid hyphenated syntax (`customElements.define()`).
 
-### Exercise 2: 3 Core Web Components Technologies
+**Requirements:**
+1. Register custom element with hyphenated name `user-card`.
 
-**Problem:** List the 3 web standard technologies that comprise Web Components.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Custom Elements
-> 2. Shadow DOM
-> 3. HTML Templates (<template> and <slot>)
-> ```
-> ```text
-> 1. Custom Elements
-> 2. Shadow DOM
-> 3. HTML Templates (<template> and <slot>)
+>
+> #### Implementation
+>
+> ```html
+> <!-- Custom element tag MUST contain a hyphen -->
+> <user-card></user-card>
 > ```
 >
-> **Explanation:** Web Components combine Custom Elements, Shadow DOM, and Templates for reusable UI widgets.
-> 
----
-
-### Exercise 3: Shadow DOM Mode Syntax
-
-**Problem:** Write JavaScript line inside custom element constructor attaching an open Shadow Root.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> this.attachShadow({ mode: 'open' });
-> ```
-> ```javascript
-> this.attachShadow({ mode: 'open' });
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `attachShadow({ mode: 'open' })` creates an encapsulated Shadow DOM tree.
-> 
+> 1. **Hyphenated Naming Mandatory Rule**: Custom element tag names MUST contain at least one hyphen (`<user-card>`, `<app-navbar>`) to prevent collisions with future native HTML tags.
+> 2. **Custom Element Lifecycle**: Supports lifecycle hooks (`connectedCallback`, `disconnectedCallback`, `attributeChangedCallback`).
+> 3. **Full DOM API Support**: Custom elements inherit standard `HTMLElement` methods and properties.
 ## 6. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent document object model.
 - [`<canvas>`](canvas.md) — Programmatic visual boards.

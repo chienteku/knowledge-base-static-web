@@ -168,61 +168,86 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 
 ## 5. Practice Exercises
 
-### Exercise 1: CSS Interaction
+### Exercise 1: Accessible Inline SVG Graphic with Title and Desc Elements
 
-**Problem:** How could you use standard CSS to make an SVG circle turn red when the user hovers over it with their mouse?
+**Scenario:** An author embeds an inline vector graphic using SVG with accessible `<title>` and `<desc>` child tags.
 
-**Expected output:**
+**Requirements:**
+1. Embed inline `<svg viewBox="...">`.
+2. Add `role="img"` and `aria-labelledby="svg-title svg-desc"`.
+3. Include inner `<title id="svg-title">` and `<desc id="svg-desc">`.
+
 > [!check]- Answer
-> ```css
-> /* Because SVGs are in the DOM, you can target them exactly like normal HTML! */
-> circle {
->   fill: blue;
-> }
-> circle:hover {
->   fill: red;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <div class="graphic-card">
+>   <svg viewBox="0 0 100 100" width="100" height="100" role="img" aria-labelledby="icon-title icon-desc" class="vector-logo">
+>     <title id="icon-title">Acme Brand Logo</title>
+>     <desc id="icon-desc">A stylized blue triangular logo representing innovation</desc>
+>
+>     <polygon points="50,15 90,85 10,85" fill="#2563eb"></polygon>
+>   </svg>
+> </div>
 > ```
-> - Think about how you would change the background color of a `<div>` on hover. SVG is just as easy!
+>
+> #### Technical Explanation
+>
+> 1. **The `<svg>` Element**: Embeds scalable vector graphics inline in HTML documents.
+> 2. **Accessible SVG Title & Desc**: `<title>` acts as the accessible name; `<desc>` acts as extended description for screen readers.
+> 3. **ARIA Label Coupling**: `role="img"` combined with `aria-labelledby="icon-title icon-desc"` guarantees screen reader announcements across browsers.
 > 
 ---
 
+### Exercise 2: Hiding Decorative SVG Icons from Audio Screen Readers
 
+**Scenario:** Hides decorative UI vector icons from screen readers using `aria-hidden="true"`.
 
-### Exercise 2: Inline SVG Circle Syntax
+**Requirements:**
+1. Add `aria-hidden="true"` to decorative `<svg>` tag.
 
-**Problem:** Write inline `<svg>` with `viewBox="0 0 100 100"` containing a red circle centered at (50,50) with radius 40.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="red"/></svg>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <svg viewBox="0 0 100 100">
->   <circle cx="50" cy="50" r="40" fill="red"/>
+> <button type="button" class="btn-primary">
+>   <svg aria-hidden="true" width="16" height="16"><use href="#icon-download"></use></svg>
+>   Download Document PDF
+> </button>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Decorative Vector Icons**: Icons placed next to visible text labels are decorative and MUST be hidden from audio readers.
+> 2. **`aria-hidden="true"`**: Prevents screen readers from announcing raw vector path data or unlabelled graphics.
+> 3. **SVG Sprite Symbol Sharing**: Using `<use href="#icon-id">` shares vector symbols efficiently.
+> 
+---
+
+### Exercise 3: Responsive Vector Graphics Scaling using viewBox
+
+**Scenario:** Configures SVG viewport scaling using `viewBox` and `preserveAspectRatio`.
+
+**Requirements:**
+1. Set `viewBox="0 0 400 300"` for responsive vector scaling.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" class="responsive-svg">
+>   <circle cx="200" cy="150" r="100" fill="#10b981"></circle>
 > </svg>
 > ```
 >
-> **Explanation:** `<circle>` element draws vector circles using center `cx`/`cy` and radius `r`.
-> 
----
-
-### Exercise 3: SVG Reusability with use Tag
-
-**Problem:** Which SVG element allows referencing and reusing pre-defined `<symbol>` vector icons across a page?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <use href="#symbol-id">
-> ```
-> ```html
-> <svg><use href="#logo-symbol"></use></svg>
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `<use>` clones pre-defined SVG symbol definitions for efficient vector reusability.
-> 
+> 1. **The `viewBox` Attribute**: Defines coordinate system bounds (`min-x, min-y, width, height`) for responsive scaling.
+> 2. **Infinite Resolution**: Scales crisp vector graphics to any screen PPI without pixelation.
+> 3. **CSS Responsive Control**: Style with `width: 100%; height: auto;` for responsive container fitting.
 ## 6. Related Terms
 - [`<canvas>`](canvas.md) — The pixel-based alternative for graphics.
 - [`<map>` & `<area>` (Image Maps)](map_area.md) — Traditional pixel coordinate click targets.

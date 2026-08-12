@@ -161,64 +161,96 @@ Basic base URL definition:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Path Resolution
+### Exercise 1: Specifying Document-Wide Base Target URL
 
-**Problem:** Given the following HTML configuration:
+**Scenario:** An author sets up a central CDN base URL using the `<base>` element so all relative asset links resolve from a single domain.
 
-```html
-<head>
-  <base href="https://secure.myshop.com/store/">
-</head>
-<body>
-  <a href="checkout/pay.html">Pay Now</a>
-</body>
-```
+**Requirements:**
+1. Place `<base>` inside `<head>`.
+2. Set `href="https://cdn.example.com/assets/"`.
+3. Set default `target="_blank"` for links.
 
-What is the absolute URL the browser will navigate to when the user clicks the "Pay Now" link?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> https://secure.myshop.com/store/checkout/pay.html
-> ```
-> - Combine the `base` URL and the link's `href` string.
-> 
----
-
-
-
-### Exercise 2: Base URL Resolution
-
-**Problem:** If `<base href="https://cdn.example.com/assets/">` is set, what absolute URL does `<img src="logo.png">` resolve to?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> https://cdn.example.com/assets/logo.png
-> ```
-> ```text
-> https://cdn.example.com/assets/logo.png
-> ```
 >
-> **Explanation:** Relative URL paths prepend the `<base href>` prefix.
-> 
----
-
-### Exercise 3: Base Target Attribute
-
-**Problem:** Write `<base>` tag setting base URL `https://example.com/` and default target `_blank` for all links.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <base href="https://example.com/" target="_blank">
-> ```
+> #### Implementation
+>
 > ```html
-> <base href="https://example.com/" target="_blank">
+> <head>
+>   <meta charset="utf-8">
+>   <!-- Central Base URL for asset resolution -->
+>   <base href="https://cdn.example.com/assets/" target="_blank">
+>   <title>CDN Document Base Demo</title>
+>   <link rel="stylesheet" href="css/styles.css">
+> </head>
+> <body>
+>   <!-- Resolves to https://cdn.example.com/assets/images/logo.png -->
+>   <img src="images/logo.png" alt="Acme Logo" width="150" height="50">
+>
+>   <!-- Opens in new tab automatically due to <base target="_blank"> -->
+>   <a href="https://example.com/about" rel="noopener noreferrer">About Us</a>
+> </body>
 > ```
 >
-> **Explanation:** `target="_blank"` on `<base>` sets global default link opening behavior.
+> #### Technical Explanation
+>
+> 1. **The `<base>` Void Element**: Specifies the base URL and default target for all relative URLs in a document.
+> 2. **First Head Position Rule**: MUST be placed inside `<head>` BEFORE any elements with relative URL attributes (`<link>`, `<script>`, `<img>`).
+> 3. **Single Base Rule**: A document MUST contain at most ONE `<base>` element.
 > 
+---
+
+### Exercise 2: Preventing Base Tag Conflicts with In-Page Fragment Anchors
+
+**Scenario:** Fixes broken in-page jump links caused by `<base>` URL resolution.
+
+**Requirements:**
+1. Demonstrate how `<base href="...">` alters relative `#fragment` links.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Full URL required for in-page fragment jump when <base> is active -->
+> <a href="https://currentsite.com/page.html#section-2" target="_self">Jump to Section 2</a>
+>
+> <section id="section-2">
+>   <h2>Section 2</h2>
+> </section>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Fragment Link Override Bug**: Setting `<base href="https://cdn...">` causes simple `<a href="#section-2">` to jump to the CDN domain instead of current page!
+> 2. **Overriding Default Target (`target="_self"`)**: Use `target="_self"` on internal links when `<base target="_blank">` is active.
+> 3. **Architecture Caution**: Avoid using `<base>` if your site relies heavily on relative in-page fragment hash links.
+> 
+---
+
+### Exercise 3: Auditing Single Base Tag Placement in Head
+
+**Scenario:** Audits and corrects an invalid document with multiple `<base>` elements.
+
+**Requirements:**
+1. Remove extra `<base>` tags to ensure single head placement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <base href="https://example.com/app/">
+>   <title>Valid Single Base Declaration</title>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Single Base Requirement**: HTML specifications strictly mandate that only the first `<base>` element in `<head>` is recognized.
+> 2. **Relative Path Resolution**: All subsequent relative URLs resolve relative to the `<base>` href string.
+> 3. **W3C Validator Rules**: Multiple `<base>` tags fail W3C HTML validation.
 ## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The parent metadata container.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Elements impacted by base target modifications.

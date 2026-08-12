@@ -236,51 +236,86 @@ The `<p>` tag is the equivalent of the author hitting the "Return/Enter" key to 
 
 ## 5. Practice Exercises
 
-### Exercise 1: White Space Collapse
+### Exercise 1: Formatting Multi-Paragraph Article Copy with p Elements
 
-**Problem:** If you type this exact code into an HTML file:
-`<p>Word1          Word2</p>`
-How many spaces will actually appear between Word1 and Word2 when viewed in the browser?
+**Scenario:** An author formats news article copy using proper `<p>` elements.
 
-**Expected output:**
+**Requirements:**
+1. Wrap each text block in a separate `<p>` element.
+2. Verify paragraphs separate text logically.
+
 > [!check]- Answer
-> ```text
-> Exactly ONE space. HTML automatically collapses multiple spaces (and line breaks) into a single space.
+>
+> #### Implementation
+>
+> ```html
+> <article class="news-article">
+>   <h2>Web Semantics Progress</h2>
+>   <p>Semantic HTML tags allow web developers to build accessible web applications that communicate structure clearly to all devices.</p>
+>   <p>By prioritizing semantic standards, engineers create resilient applications that rank higher in search results and provide better user experiences.</p>
+> </article>
 > ```
-> - Think about how HTML handles raw formatting vs tagged formatting.
+>
+> #### Technical Explanation
+>
+> 1. **The `<p>` Paragraph Element**: Represents a distinct paragraph of text; automatically adds top and bottom vertical margin spacing in browsers.
+> 2. **Block-Level Flow**: `<p>` is a block-level element that starts on a new line and spans full container width.
+> 3. **Screen Reader Speech Pauses**: Screen readers pause briefly between `<p>` tags, giving listeners time to process distinct ideas.
 > 
 ---
 
-### Exercise 2: Paragraph Element Rules
+### Exercise 2: Preventing Invalid Nesting of Block Containers Inside p
 
-**Problem:** Which 2 of these elements can be nested inside a `<p>` tag?
-1. `<span>` 
-2. `<div>` 
-3. `<strong>` 
-4. `<h2>` 
+**Scenario:** Fixes invalid HTML syntax caused by placing block elements (like `<div>` or `<ul>`) inside a `<p>` tag.
 
-**Expected output:**
+**Requirements:**
+1. Ensure `<p>` contains only inline elements.
+2. Move block elements outside `<p>`.
+
 > [!check]- Answer
-> ```text
-> 1. <span> and 3. <strong>
+>
+> #### Implementation
+>
+> ```html
+> <!-- Correct Layout: List placed OUTSIDE paragraph block -->
+> <p>Please review the following requirements before submitting your form:</p>
+> <ul>
+>   <li>Valid email address</li>
+>   <li>Password at least 8 characters</li>
+> </ul>
 > ```
 >
-> **Explanation:** Paragraphs can contain inline phrasing content (`<span>`, `<strong>`, `<a>`), but cannot contain block containers (`<div>`, `<h2>`).
+> #### Technical Explanation
+>
+> 1. **HTML Parsing Rules for `<p>`**: `<p>` elements can ONLY contain inline elements; encountering a block tag automatically forces the `<p>` element to close early.
+> 2. **Browser Auto-Correction Artifacts**: Placing `<div>` or `<ul>` inside `<p>` creates invalid broken DOM trees in browser developer tools.
+> 3. **Valid Content Model**: Keep paragraphs focused purely on text prose and inline formatting tags.
 > 
 ---
 
-### Exercise 3: Default Paragraph CSS Margins
+### Exercise 3: Accessible Paragraph Spacing via CSS vs HTML Break Misuse
 
-**Problem:** What default CSS top and bottom margin spacing do browsers apply to `<p>` elements?
+**Scenario:** Replaces double `<br><br>` line break spacing between paragraphs with clean CSS margins.
 
-**Expected output:**
+**Requirements:**
+1. Use separate `<p>` elements with CSS margins instead of `<br><br>`.
+
 > [!check]- Answer
-> ```text
-> 1em (16px default font-size equivalent).
+>
+> #### Implementation
+>
+> ```html
+> <article class="content-block">
+>   <p class="lead-paragraph">First paragraph content block.</p>
+>   <p>Second paragraph content block.</p>
+> </article>
 > ```
 >
-> **Explanation:** User-agent stylesheets apply `1em` top and bottom block margins to paragraphs.
-> 
+> #### Technical Explanation
+>
+> 1. **Separation of Content and Presentation**: Use `<p>` for content structure and CSS `margin` for spacing adjustments.
+> 2. **Screen Reader Readability**: Multiple `<br>` tags create confusing empty line reader stops.
+> 3. **Responsive Layout Control**: CSS margins scale cleanly across mobile viewports.
 ## 6. Related Terms
 - [Headings (`<h1>` to `<h6>`)](headings.md) — The titles that usually precede a `<p>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing paragraphs.

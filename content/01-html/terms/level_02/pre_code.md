@@ -222,48 +222,84 @@ fruits.forEach((fruit) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: HTML Entity Escaping
+### Exercise 1: Displaying Multiline Code Snippets with pre and code
 
-**Problem:** You want to write a blog post showing how to link a stylesheet in HTML. Write the correct HTML block using `<pre>` and `<code>` to display the following line exactly as text:
-`<link rel="stylesheet" href="style.css">`
+**Scenario:** A technical blogger displays a formatted JavaScript code snippet preserving exact spacing and line breaks.
 
-**Expected output:**
+**Requirements:**
+1. Wrap code block inside `<pre><code>...</code></pre>`.
+2. Escape HTML special characters inside code block.
+3. Verify monospace font rendering.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <pre><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
+> <figure class="code-example">
+>   <figcaption>JavaScript Function Example:</figcaption>
+>   <pre><code>function greetUser(name) {
+>   // Preserves exact 2-space indentation and newlines
+>   return `Hello, ${name}!`;
+> }</code></pre>
+> </figure>
 > ```
-> - Replace `<` at the start with `&lt;`.
-> - Replace `>` at the end with `&gt;`.
-> - Wrap the entire line in `<pre><code>` to ensure monospacing.
+>
+> #### Technical Explanation
+>
+> 1. **Combining `<pre>` and `<code>`**: `<pre>` preserves whitespace and newlines; `<code>` identifies the text as computer programming language.
+> 2. **Verbatim Whitespace Rendering**: Text inside `<pre>` renders verbatim in a monospace font without collapsing spaces.
+> 3. **No Extra Outer Spacing**: Avoid newline spaces immediately after `<code>` tag to prevent unwanted blank lines in rendering.
 > 
 ---
 
-### Exercise 2: Escaping Code Snippet
+### Exercise 2: Inline Technical Identifiers using code inside Paragraphs
 
-**Problem:** Write HTML snippet displaying raw text `<h1>Title</h1>` using `<pre><code>` and HTML entities.
+**Scenario:** An author mentions function names and file paths inline within narrative sentences.
 
-**Expected output:**
+**Requirements:**
+1. Use `<code>` tags inline inside `<p>` elements.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
+> <p>
+>   To configure your app, update the <code>config.json</code> file and execute the <code>npm run build</code> script in your terminal.
+> </p>
 > ```
 >
-> **Explanation:** `&lt;` and `&gt;` escape angle brackets so code displays as text.
+> #### Technical Explanation
+>
+> 1. **Inline `<code>` Semantics**: Indicates short inline computer code, variable names, or filenames within text prose.
+> 2. **Monospace Styling**: Browsers render inline `<code>` in monospace font without breaking paragraph layout.
+> 3. **Screen Reader Context**: Helps assistive tools recognize code terminology.
 > 
 ---
 
-### Exercise 3: pre Font Family Default
+### Exercise 3: Escaping HTML Special Characters inside pre and code Blocks
 
-**Problem:** What font family type do browsers apply by default to `<pre>` and `<code>` elements?
+**Scenario:** Displays HTML markup examples safely inside `<code>` blocks without triggering browser rendering.
 
-**Expected output:**
+**Requirements:**
+1. Escape `<` as `&lt;` and `>` as `&gt;` inside code text.
+
 > [!check]- Answer
-> ```text
-> Monospace font family (e.g. Courier, Consolas).
+>
+> #### Implementation
+>
+> ```html
+> <pre><code>&lt;div class="container"&gt;
+>   &lt;p&gt;Sample HTML markup example&lt;/p&gt;
+> &lt;/div&gt;</code></pre>
 > ```
 >
-> **Explanation:** Monospace fonts ensure uniform character width for code readability.
-> 
+> #### Technical Explanation
+>
+> 1. **HTML Entity Escaping**: Must replace `<` with `&lt;`, `>` with `&gt;`, and `&` with `&amp;` inside code snippets.
+> 2. **Preventing Browser HTML Parsing**: Unescaped HTML tags inside `<code>` will be rendered as real DOM elements by the browser parser.
+> 3. **Code Block Safety**: Ensures tutorial code examples display text accurately.
 ## 6. Related Terms
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The default browser behavior that `<pre>` overrides.
 - [`<span>` (Inline container)](span.md) — A generic inline container that does not enforce monospacing.

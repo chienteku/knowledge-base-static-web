@@ -112,56 +112,91 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Poster Attribute
+### Exercise 1: Accessible HTML5 Video Player with Subtitles and Captions
 
-**Problem:** What is the purpose of the `poster` attribute on a `<video>` tag?
+**Scenario:** An author embeds an accessible HTML5 video player with playback controls, poster frame, and `<track>` closed caption subtitles.
 
-**Expected output:**
+**Requirements:**
+1. Create a `<video>` element with `controls` and `poster`.
+2. Include `<source>` media files.
+3. Add a `<track>` element for English closed captions (`kind="captions"`).
+
 > [!check]- Answer
-> ```text
-> It acts like a YouTube thumbnail. It displays a static image in the video player area while the video is downloading, or before the user has clicked the "Play" button.
+>
+> #### Implementation
+>
+> ```html
+> <div class="video-wrapper">
+>   <video controls width="800" height="450" poster="images/poster-frame.jpg" preload="metadata">
+>     <source src="videos/tutorial.webm" type="video/webm">
+>     <source src="videos/tutorial.mp4" type="video/mp4">
+>
+>     <!-- Closed Captions for Deaf and Hard of Hearing Users -->
+>     <track kind="captions" src="subtitles/tutorial-en.vtt" srclang="en" label="English Captions" default>
+>
+>     <p>Your browser does not support HTML5 video. Download <a href="videos/tutorial.mp4">MP4 video</a>.</p>
+>   </video>
+> </div>
 > ```
-> - Think about what you see on Netflix before you actually hit play.
+>
+> #### Technical Explanation
+>
+> 1. **The `<video>` Element**: Embeds video streams natively in HTML5 without requiring Flash plugins.
+> 2. **Accessibility via `<track>`**: The `<track>` element attaches WebVTT subtitle/caption files (`.vtt`), essential for WCAG compliance for deaf users.
+> 3. **Poster Image (`poster`)**: Displays a preview image frame before the video is played.
 > 
 ---
 
+### Exercise 2: Responsive Silent Background Video
 
+**Scenario:** Configures an ambient background video that loops silently on hero sections.
 
-### Exercise 2: Accessible Video Setup with Subtitles
+**Requirements:**
+1. Set `autoplay`, `loop`, `muted`, and `playsinline` attributes.
 
-**Problem:** Write `<video>` with `controls`, poster `'thumb.jpg'`, and `<track>` element for English subtitles (`subtitles.vtt`).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <video controls poster="thumb.jpg"><source src="video.mp4" type="video/mp4"><track src="subtitles.vtt" kind="subtitles" srclang="en" label="English"></video>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <video controls poster="thumb.jpg">
->   <source src="video.mp4" type="video/mp4">
->   <track src="subtitles.vtt" kind="subtitles" srclang="en" label="English">
+> <div class="hero-video-container">
+>   <video autoplay loop muted playsinline poster="images/bg-poster.jpg">
+>     <source src="videos/ambient-bg.mp4" type="video/mp4">
+>   </video>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `muted` Attribute Mandate**: Browsers block `autoplay` video streams UNLESS the `muted` attribute is present.
+> 2. **Mobile Support (`playsinline`)**: `playsinline` prevents iOS Safari from forcing background videos into full-screen video player controls.
+> 3. **Background Video Performance**: Keep ambient video files small and low-framerate to prevent draining mobile battery life.
+> 
+---
+
+### Exercise 3: Video Poster Image Placeholder and Preload Optimizations
+
+**Scenario:** Optimizes video buffering performance on bandwidth-constrained networks.
+
+**Requirements:**
+1. Set `preload="metadata"`.
+2. Specify explicit `width` and `height`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <video controls width="640" height="360" poster="images/thumbnail.jpg" preload="metadata">
+>   <source src="videos/lecture.mp4" type="video/mp4">
 > </video>
 > ```
 >
-> **Explanation:** `<track>` element provides WebVTT closed captions and subtitles for accessibility.
-> 
----
-
-### Exercise 3: Poster Attribute Function
-
-**Problem:** What is the purpose of the `poster` attribute on `<video>` elements?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Displays a preview thumbnail image before the video is played or downloaded.
-> ```
-> ```html
-> <video poster="thumbnail.jpg" controls></video>
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `poster` specifies image preview displayed before video playback begins.
-> 
+> 1. **`preload="metadata"`**: Downloads only video duration and dimensions initially, avoiding premature multi-megabyte video downloads.
+> 2. **Aspect Ratio Locking**: `width` and `height` attributes reserve layout space before video metadata downloads.
+> 3. **Native Browser Controls**: `controls` attribute renders browser-native accessible volume and play buttons.
 ## 6. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the video source.
 - [`<source>` Element](source.md) — The child element used for multi-format video sources.

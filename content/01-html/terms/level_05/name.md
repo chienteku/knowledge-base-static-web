@@ -166,64 +166,98 @@ Form payload fields declaring names:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Radio Button Grouping Error
+### Exercise 1: Server Payload Parameter Binding with name Attributes
 
-**Problem:** Sighted users find they can check both "Yes" and "No" bubbles simultaneously in this form, which breaks the logic. Fix the HTML.
+**Scenario:** An author assigns `name` attributes to form fields so submitted form data binds correctly on the server.
 
-```html
-<form>
-  <input type="radio" name="opt_yes" value="y"> Yes
-  <input type="radio" name="opt_no" value="n"> No
-</form>
-```
+**Requirements:**
+1. Add `name` attributes to all form inputs.
+2. Verify submitted payload key-value pairs.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <form>
->   <input type="radio" name="newsletter_accept" value="y"> Yes
->   <input type="radio" name="newsletter_accept" value="n"> No
+> <form action="/api/v1/profile" method="post">
+>   <label for="first-name">First Name</label>
+>   <input type="text" id="first-name" name="first_name" value="Jane">
+>
+>   <label for="last-name">Last Name</label>
+>   <input type="text" id="last-name" name="last_name" value="Doe">
+>
+>   <button type="submit">Save Profile</button>
 > </form>
 > ```
-> - To make radio buttons group together so only one can be checked at a time, they must share the exact same `name` attribute.
-> 
----
-
-
-
-### Exercise 2: Form Data Key-Value Payload Construction
-
-**Problem:** For `<input name="user_age" value="25">`, what key-value pair is submitted in the HTTP form payload?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> user_age=25
-> ```
-> ```text
-> user_age=25
-> ```
 >
-> **Explanation:** Form submission payloads map `name=value` pairs.
+> #### Technical Explanation
+>
+> 1. **The `name` Attribute Purpose**: The `name` attribute defines the key identifier sent to the server in POST payloads or GET query strings (`first_name=Jane&last_name=Doe`).
+> 2. **Un-named Inputs Omitted**: Form controls WITHOUT a `name` attribute are completely ignored during form submission.
+> 3. **Server API Mapping**: Ensure `name` values match backend database or API parameter naming conventions.
 > 
 ---
 
-### Exercise 3: Multi-Select Array Syntax in PHP/Frameworks
+### Exercise 2: Grouping Radio Button Selections via Identical name Attributes
 
-**Problem:** Write `name` attribute on `<input type="checkbox">` to submit an array of values in PHP/Express array parsers (`tags[]`).
+**Scenario:** Groups multiple radio button options under a shared `name` attribute so only one option can be selected at a time.
 
-**Expected output:**
+**Requirements:**
+1. Create radio inputs sharing `name="plan_choice"`.
+2. Assign unique `value` attributes to each radio button.
+
 > [!check]- Answer
-> ```text
-> <input type="checkbox" name="tags[]" value="news">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <input type="checkbox" name="tags[]" value="news">
-> <input type="checkbox" name="tags[]" value="sports">
+> <fieldset>
+>   <legend>Select Subscription Plan</legend>
+>
+>   <label>
+>     <input type="radio" name="plan_choice" value="basic" checked>
+>     Basic Plan ($9/mo)
+>   </label>
+>
+>   <label>
+>     <input type="radio" name="plan_choice" value="premium">
+>     Premium Plan ($29/mo)
+>   </label>
+> </fieldset>
 > ```
 >
-> **Explanation:** Trailing brackets `name[]` signal backend server body parsers to aggregate values into an array.
+> #### Technical Explanation
+>
+> 1. **Radio Grouping Rule**: Radio buttons sharing the exact same `name` attribute form a single mutually-exclusive selection group.
+> 2. **Single Value Submission**: Only the selected radio button's `value` is sent to the server (e.g. `plan_choice=premium`).
+> 3. **Arrow Key Navigation**: Identical `name` values allow users to navigate between radio options using keyboard arrow keys.
 > 
+---
+
+### Exercise 3: Multi-Select Checkbox Payload Mapping
+
+**Scenario:** Configures multiple checkboxes to submit array values.
+
+**Requirements:**
+1. Use array notation `name="roles[]"` for multi-checkbox groups.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <fieldset>
+>   <legend>User Permissions</legend>
+>   <label><input type="checkbox" name="roles[]" value="editor"> Editor</label>
+>   <label><input type="checkbox" name="roles[]" value="admin"> Admin</label>
+> </fieldset>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Array Parameter Submission**: Using `name="roles[]"` passes multiple checked values to backend scripts as an array.
+> 2. **Independent Checkbox Selection**: Checkboxes allow zero, one, or multiple items to be selected simultaneously.
+> 3. **Distinct Values Required**: Each checkbox MUST specify its unique `value` attribute.
 ## 6. Related Terms
 - [`<input>`](input.md) — The input controls mapped by name tags.
 - [`<form>`](form.md) — The form collector.

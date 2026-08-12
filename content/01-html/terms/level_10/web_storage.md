@@ -185,53 +185,111 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 
 ## 5. Practice Exercises
 
-### Exercise 1: Session vs Local
+### Exercise 1: Client-Side User Preferences Persistence with localStorage
 
-**Problem:** A user is filling out a massive 5-page insurance form. If they accidentally close the browser tab, you want their progress to be lost for security reasons. However, if they just refresh the page, the data should stay. Should you save their draft in `localStorage` or `sessionStorage`?
+**Scenario:** An author persists user UI theme choices across browser sessions using HTML5 `localStorage`.
 
-**Expected output:**
+**Requirements:**
+1. Create theme selector inputs.
+2. Persist selection to `localStorage.setItem('theme', value)`.
+3. Restore state on load.
+
 > [!check]- Answer
-> ```text
-> `sessionStorage`. It is designed perfectly for this. It survives page reloads, but is instantly wiped clean the second the specific browser tab is closed.
+>
+> #### Implementation
+>
+> ```html
+> <section class="theme-picker">
+>   <h2>Theme Preferences</h2>
+>
+>   <form id="theme-form">
+>     <label>
+>       <input type="radio" name="theme-choice" value="light" checked>
+>       Light Theme
+>     </label>
+>     <label>
+>       <input type="radio" name="theme-choice" value="dark">
+>       Dark Theme
+>     </label>
+>   </form>
+> </section>
+>
+> <script>
+>   // Restore persisted theme choice from localStorage
+>   const savedTheme = localStorage.getItem('user-theme') || 'light';
+>   document.body.setAttribute('data-theme', savedTheme);
+> </script>
 > ```
-> - Which one lives forever, and which one dies with the tab?
+>
+> #### Technical Explanation
+>
+> 1. **The `localStorage` Object**: Stores key-value data in the browser with NO expiration date; data persists across tab closes and system reboots.
+> 2. **String-Only Storage**: The `localStorage` object stores values strictly as strings; objects/arrays MUST be serialized using `JSON.stringify()`.
+> 3. **5MB Storage Limit**: Provides ~5MB storage per origin, synchronous execution, and Same-Origin Policy isolation.
 > 
 ---
 
+### Exercise 2: Temporary Form Input Draft Auto-Saving with sessionStorage
 
+**Scenario:** Saves unsubmitted form drafts temporarily during active browser tab sessions using `sessionStorage`.
 
-### Exercise 2: localStorage vs sessionStorage Comparison
+**Requirements:**
+1. Save form draft to `sessionStorage.setItem('draft', value)`.
+2. Clear on form submission.
 
-**Problem:** Compare `localStorage` vs `sessionStorage` persistence lifespan.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> localStorage persists indefinitely until cleared; sessionStorage expires when browser tab/window closes.
-> ```
-> ```text
-> localStorage persists indefinitely until cleared; sessionStorage expires when browser tab/window closes.
+>
+> #### Implementation
+>
+> ```html
+> <form id="comment-form" action="/comment" method="post">
+>   <label for="comment-text">Leave a Comment (Draft Auto-Saved):</label>
+>   <textarea id="comment-text" name="comment" rows="4"></textarea>
+>   <button type="submit">Publish Comment</button>
+> </form>
+>
+> <script>
+>   const txt = document.getElementById('comment-text');
+>   txt.value = sessionStorage.getItem('comment-draft') || '';
+>   txt.addEventListener('input', () => sessionStorage.setItem('comment-draft', txt.value));
+> </script>
 > ```
 >
-> **Explanation:** `sessionStorage` scope is limited to active tab sessions.
+> #### Technical Explanation
+>
+> 1. **The `sessionStorage` Object**: Stores key-value data scoped strictly to the current browser tab session; data is erased when the tab closes.
+> 2. **Tab Isolation**: Data stored in `sessionStorage` is isolated to that specific tab and cannot be read by other open tabs.
+> 3. **Auto-Save Recovery**: Prevents data loss if user accidentally refreshes the page.
 > 
 ---
 
-### Exercise 3: JSON Parsing Web Storage Objects
+### Exercise 3: Handling storage Events for Multi-Tab State Synchronization
 
-**Problem:** Write JS line safely retrieving and parsing JSON object `'settings'` from `localStorage`.
+**Scenario:** Listens to `window.addEventListener('storage', ...)` to sync state changes across open browser tabs.
 
-**Expected output:**
+**Requirements:**
+1. Attach `storage` event listener to `window`.
+
 > [!check]- Answer
-> ```text
-> const settings = JSON.parse(localStorage.getItem('settings') || '{}');
-> ```
-> ```javascript
-> const settings = JSON.parse(localStorage.getItem('settings') || '{}');
+>
+> #### Implementation
+>
+> ```html
+> <script>
+>   // Synchronize state changes across open browser tabs
+>   window.addEventListener('storage', (e) => {
+>     if (e.key === 'user-theme') {
+>       document.body.setAttribute('data-theme', e.newValue);
+>     }
+>   });
+> </script>
 > ```
 >
-> **Explanation:** `JSON.parse()` deserializes string data back into JavaScript objects.
-> 
+> #### Technical Explanation
+>
+> 1. **The `storage` Event**: Fires on ALL OTHER open tabs of the same domain when `localStorage` is mutated.
+> 2. **Event Properties**: Provides `key`, `oldValue`, `newValue`, and `url` of the mutation.
+> 3. **Multi-Tab State Sync**: Keeps user settings synchronized in real-time across multiple open tabs.
 ## 6. Related Terms
 - [`<script>`](../level_08/script.md) — Web Storage is an API accessed entirely through JavaScript.
 - [Content Security Policy (CSP) & HTML Security](security.md) — Securing local database structures against injection exploits.

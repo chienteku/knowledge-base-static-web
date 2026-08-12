@@ -114,57 +114,93 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Controls
+### Exercise 1: Accessible Audio Player with Multiple Source Fallbacks
 
-**Problem:** If you write `<audio src="song.mp3"></audio>` (without the `controls` attribute), what will the user see on the screen?
+**Scenario:** A podcast author embeds an HTML5 audio player supporting MP3 and AAC audio formats with visible playback controls.
 
-**Expected output:**
+**Requirements:**
+1. Create an `<audio>` element with the `controls` attribute.
+2. Include `<source>` elements for `audio/mpeg` and `audio/aac`.
+3. Provide fallback text for legacy browsers.
+
 > [!check]- Answer
-> ```text
-> Absolutely nothing! Without the `controls` attribute, the audio element is completely invisible. The user will have no way to play the song. (This is sometimes used intentionally by game developers who want to trigger sounds using JavaScript instead of a UI).
+>
+> #### Implementation
+>
+> ```html
+> <figure class="podcast-player">
+>   <figcaption>Episode 42: Building Accessible Web Interfaces</figcaption>
+>   <audio controls preload="metadata">
+>     <source src="audio/episode-42.mp3" type="audio/mpeg">
+>     <source src="audio/episode-42.aac" type="audio/aac">
+>     Your browser does not support the HTML5 audio element. Download the <a href="audio/episode-42.mp3">audio file</a> instead.
+>   </audio>
+> </figure>
 > ```
-> - Think about what the word `controls` actually renders on the screen.
+>
+> #### Technical Explanation
+>
+> 1. **The `<audio>` Element**: Embeds sound content into a webpage without requiring third-party media plugins.
+> 2. **The `controls` Attribute**: Displays native browser audio controls (play/pause, volume, timeline seeker).
+> 3. **Multiple Format Fallbacks**: Including multiple `<source>` tags ensures playback support across different browsers and codecs.
 > 
 ---
 
+### Exercise 2: Audio Element with Text Transcript Link for Deaf Users
 
+**Scenario:** An author embeds an audio speech and provides an accessible text transcript link directly below the player for deaf and hard-of-hearing users.
 
-### Exercise 2: Multi-Format Audio Player Fallback
+**Requirements:**
+1. Embed `<audio controls>`.
+2. Provide a link to a full text transcript.
 
-**Problem:** Write `<audio>` element with `controls` offering MP3 and OGG fallback sources and fallback text.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <audio controls><source src="audio.mp3" type="audio/mpeg"><source src="audio.ogg" type="audio/ogg">Your browser does not support audio.</audio>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <audio controls>
->   <source src="podcast.mp3" type="audio/mpeg">
->   <source src="podcast.ogg" type="audio/ogg">
->   Your browser does not support the audio element.
+> <section class="interview-section">
+>   <h3>Keynote Address Audio</h3>
+>   <audio controls preload="none">
+>     <source src="audio/keynote.mp3" type="audio/mpeg">
+>   </audio>
+>   <p class="transcript-link">
+>     <a href="transcripts/keynote.html">Read full text transcript of the Keynote Address</a>
+>   </p>
+> </section>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Transcript Accessibility Mandate**: WCAG guidelines require text transcripts for pre-recorded audio-only content to accommodate deaf users.
+> 2. **`preload="none"` Optimization**: Prevents automatic background downloading of large audio files until the user clicks play, saving mobile bandwidth.
+> 3. **Search Engine Indexing**: Text transcripts allow search engines to index spoken audio content.
+> 
+---
+
+### Exercise 3: Preloading and Autoplay Best Practices
+
+**Scenario:** Configures audio settings to prevent intrusive background autoplay and control network buffering behavior.
+
+**Requirements:**
+1. Set `preload="metadata"`.
+2. Avoid intrusive `autoplay` attributes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <audio controls preload="metadata">
+>   <source src="audio/sample.mp3" type="audio/mpeg">
 > </audio>
 > ```
 >
-> **Explanation:** `<source>` tags provide fallback audio formats for browser compatibility.
-> 
----
-
-### Exercise 3: Loop and Mute Attributes
-
-**Problem:** Write `<audio>` attributes to loop playback continuously and start muted.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <audio controls loop muted src="sound.mp3"></audio>
-> ```
-> ```html
-> <audio controls loop muted src="sound.mp3"></audio>
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `loop` repeats audio; `muted` sets initial volume to zero.
-> 
+> 1. **Avoiding `autoplay` Intrusiveness**: Autoplaying audio startles users, disrupts screen reader speech synthesis, and is blocked by modern browsers.
+> 2. **`preload` Attribute Values**: `none` (no buffer), `metadata` (fetch duration/dimensions only), `auto` (fetch entire file).
+> 3. **User Control First**: Always allow users to manually initiate media playback.
 ## 6. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the audio source.
 - [`<source>` Element](source.md) — The child element used for multi-format audio sources.

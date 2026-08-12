@@ -140,69 +140,106 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Cell
+### Exercise 1: Formatting Standard Data Cells inside tbody with Numeric Alignment
 
-**Problem:** In this table, what word is in the 2nd row, 1st column?
-```html
-<table>
-  <tr>
-    <td>Dog</td>
-    <td>Cat</td>
-  </tr>
-  <tr>
-    <td>Bird</td>
-    <td>Fish</td>
-  </tr>
-</table>
-```
+**Scenario:** An author formats data cells (`<td>`) inside a financial table, applying CSS numeric alignment classes.
 
-**Expected output:**
+**Requirements:**
+1. Use `<td>` for data values inside `<tbody>` rows.
+2. Apply text alignment classes for numbers.
+
 > [!check]- Answer
-> ```text
-> "Bird"
+>
+> #### Implementation
+>
+> ```html
+> <table>
+>   <caption>Monthly Expense Report</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Expense Category</th>
+>       <th scope="col">Amount</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Office Supplies</th>
+>       <td class="text-right">$245.50</td>
+>     </tr>
+>     <tr>
+>       <th scope="row">Internet Utility</th>
+>       <td class="text-right">$129.99</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
-> - The first `<tr>` is row 1. The second `<tr>` is row 2. The first `<td>` inside that row is column 1.
+>
+> #### Technical Explanation
+>
+> 1. **The `<td>` Element**: Represents a standard data cell in a table; MUST be contained inside a `<tr>` row.
+> 2. **Data Cell vs Header Cell**: `<td>` holds data values; `<th>` holds header labels.
+> 3. **Numeric Alignment**: Aligning numeric `<td>` values to the right (`text-right`) improves visual scannability and column alignment.
 > 
 ---
 
+### Exercise 2: Empty Data Cell Fallbacks for Missing Values
 
+**Scenario:** Replaces blank `<td></td>` cells with explicit fallback text (`<td>N/A</td>` or `<td>--</td>`).
 
-### Exercise 2: Table Cell Data Alignment
+**Requirements:**
+1. Provide explicit fallback content for empty data cells.
 
-**Problem:** Write CSS rule aligning numbers right inside `<td>` data cells.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> td.number { text-align: right; }
-> ```
-> ```css
-> td.number {
->   text-align: right;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <tbody>
+>   <tr>
+>     <th scope="row">John Doe</th>
+>     <td>john@example.com</td>
+>     <td>N/A</td> <!-- Explicit fallback instead of empty <td></td> -->
+>   </tr>
+> </tbody>
 > ```
 >
-> **Explanation:** Numerical table data cells should be right-aligned for column readability.
+> #### Technical Explanation
+>
+> 1. **Empty Cell Pitfall**: Leaving `<td></td>` blank confuses screen reader users who cannot tell if data is missing or skipped.
+> 2. **Explicit Fallback Text**: Using 'N/A', '--', or 'None' clarifies missing data values.
+> 3. **Table Structure Consistency**: Ensures every row maintains the exact same number of `<td>` cells.
 > 
 ---
 
-### Exercise 3: Empty Cell Display
+### Exercise 3: Structuring Action Cells with Buttons inside td
 
-**Problem:** Which CSS property controls whether borders and backgrounds are rendered for empty `<td>` cells?
+**Scenario:** Includes interactive action buttons inside data table cells (`<td>`).
 
-**Expected output:**
+**Requirements:**
+1. Place `<button>` tags inside `<td>` cells for row action controls.
+
 > [!check]- Answer
-> ```text
-> empty-cells: show; (or empty-cells: hide;)
-> ```
-> ```css
-> table {
->   empty-cells: hide;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <tbody>
+>   <tr>
+>     <th scope="row">Order #4092</th>
+>     <td>Shipped</td>
+>     <td>
+>       <button type="button" class="btn-sm">View Details</button>
+>       <button type="button" class="btn-sm btn-danger">Cancel</button>
+>     </td>
+>   </tr>
+> </tbody>
 > ```
 >
-> **Explanation:** `empty-cells` controls rendering behavior for table cells with no content.
-> 
+> #### Technical Explanation
+>
+> 1. **Interactive `<td>` Content**: `<td>` cells can contain interactive buttons, links, or form controls.
+> 2. **Accessible Action Labels**: Ensure action buttons inside `<td>` specify accessible names (e.g. 'Cancel Order #4092').
+> 3. **DOM Validation**: `<td>` can contain flow content including buttons and links.
 ## 6. Related Terms
 - [`<th>` (Table Header)](th.md) — The bold header equivalent of the data cell.
 - [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.

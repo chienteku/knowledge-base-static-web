@@ -266,68 +266,91 @@ function allowDrop(ev) {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Draggable Box Config
+### Exercise 1: HTML5 Drag-and-Drop File Upload Target Container
 
-**Problem:** You have a custom element `<div id="box">Move Me</div>`. Write the HTML change to make this element draggable, and write the JavaScript listener that hides the box (e.g. setting `style.opacity = "0.5"`) when the user starts dragging it.
+**Scenario:** An author constructs a file drop zone using HTML5 Drag and Drop API attributes and event handlers.
 
-**Expected output:**
+**Requirements:**
+1. Create a drop target container `<div>`.
+2. Add `draggable="true"` to draggable items.
+3. Handle `dragover` and `drop` events.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <div id="box" draggable="true">Move Me</div>
-> 
-> <script>
->   const box = document.getElementById('box');
->   box.addEventListener('dragstart', (e) => {
->     e.target.style.opacity = '0.5';
->   });
-> </script>
+> <div class="drag-drop-demo">
+>   <!-- Draggable Item -->
+>   <div id="drag-item-1" class="draggable-card" draggable="true" aria-grabbed="false">
+>     <p>📄 Document_Report.pdf (Draggable File)</p>
+>   </div>
+>
+>   <!-- Drop Zone Target -->
+>   <div id="drop-target" class="drop-zone" aria-dropeffect="copy">
+>     <p>Drag files here to upload</p>
+>   </div>
+> </div>
 > ```
-> - Add the global `draggable` attribute.
-> - Connect a listener for the `dragstart` event.
+>
+> #### Technical Explanation
+>
+> 1. **The `draggable="true"` Attribute**: Enables native HTML5 element dragging when set to `"true"`.
+> 2. **Drag Events Flow**: Triggers `dragstart`, `dragover`, `dragleave`, and `drop` events.
+> 3. **`event.preventDefault()` Requirement**: Calling `e.preventDefault()` inside the `dragover` event listener is MANDATORY to allow dropping.
 > 
 ---
 
+### Exercise 2: Managing dataTransfer Data Types in Drag and Drop
 
+**Scenario:** Sets custom data types during drag initialization using `DataTransfer.setData()`.
 
-### Exercise 2: Drag DataTransfer Data Payload
+**Requirements:**
+1. Attach data payload to `dataTransfer` object.
 
-**Problem:** Write `dragstart` JS code storing element ID `'card-1'` into `event.dataTransfer` payload.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> function drag(ev) { ev.dataTransfer.setData('text/plain', ev.target.id); }
-> ```
-> ```javascript
-> function drag(ev) {
->   ev.dataTransfer.setData('text/plain', ev.target.id);
-> }
+>
+> #### Implementation
+>
+> ```html
+> <div id="task-card" draggable="true" class="task-card">
+>   <h3>Task #101</h3>
+>   <p>Refactor HTML semantics.</p>
+> </div>
 > ```
 >
-> **Explanation:** `dataTransfer.setData()` attaches drag payload data passed to drop targets.
+> #### Technical Explanation
+>
+> 1. **The `dataTransfer` Object**: Holds the payload data transferred during drag-and-drop operations (`e.dataTransfer.setData('text/plain', id)`).
+> 2. **MIME Types**: Supports transfer of plain text, HTML, URLs, or custom JSON data strings.
+> 3. **Visual Feedback**: Customize drag feedback image via `e.dataTransfer.setDragImage()`.
 > 
 ---
 
-### Exercise 3: HTML Drag & Drop Event Sequence
+### Exercise 3: Accessible Drag-and-Drop Alternatives
 
-**Problem:** Order HTML Drag and Drop events sequence from start to finish:
-`dragover`, `drop`, `dragstart`
+**Scenario:** Provides keyboard accessible button controls alongside drag-and-drop zones.
 
-**Expected output:**
+**Requirements:**
+1. Include keyboard accessible move buttons.
+
 > [!check]- Answer
-> ```text
-> 1. dragstart (on source element)
-> 2. dragover (on target container)
-> 3. drop (on target container)
-> ```
-> ```text
-> 1. dragstart (on source element)
-> 2. dragover (on target container)
-> 3. drop (on target container)
+>
+> #### Implementation
+>
+> ```html
+> <div class="list-item">
+>   <span>Item Title</span>
+>   <button type="button" aria-label="Move Item Up">▲</button>
+>   <button type="button" aria-label="Move Item Down">▼</button>
+> </div>
 > ```
 >
-> **Explanation:** Drag events track source pickup, target hover, and drop release.
-> 
+> #### Technical Explanation
+>
+> 1. **Keyboard Accessibility Gap**: Native Drag and Drop API is NOT accessible to keyboard-only or screen reader users.
+> 2. **WCAG 2.1 SC 2.5.7 (Dragging Movements)**: Must provide non-dragging single-pointer alternatives (like Up/Down buttons).
+> 3. **Screen Reader Announcements**: Announce item reordering via `aria-live` regions.
 ## 6. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`data-*` Attributes](../level_07/data_attributes.md) — Used to store custom metadata identifiers on dragged items.

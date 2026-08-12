@@ -150,70 +150,104 @@ Leaving documentation notes and hiding code:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Write a Comment
+### Exercise 1: Documenting Major Layout Landmarks with Comments
 
-**Problem:** Comment out the `<button>` element in the block below so it is hidden from the browser screen, leaving a note explaining it's "disabled for maintenance."
+**Scenario:** A frontend author adds clean HTML comments (`<!-- ... -->`) to label major structural sections for team collaboration.
 
-```html
-<div>
-  <h3>Special Offer</h3>
-  <button>Claim Reward</button>
-</div>
-```
+**Requirements:**
+1. Add header comment `<!-- Header Landmark -->`.
+2. Add main content comment `<!-- Main Content Landmark -->`.
+3. Add footer comment `<!-- Footer Landmark -->`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <div>
->   <h3>Special Offer</h3>
->   <!-- Disabled for maintenance: -->
->   <!-- <button>Claim Reward</button> -->
-> </div>
-> ```
-> - Wrap the entire `<button>` block in `<!--` and `-->` markers.
-> 
----
-
-
-
-### Exercise 2: Writing Valid HTML Comments
-
-**Problem:** Write a multi-line HTML comment explaining that the `<main>` section contains article listings.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <!-- 
->   The main section contains article listings.
-> -->
-> ```
-> ```html
-> <!-- 
->   The main section contains article listings.
-> -->
+> <!-- Header Landmark: Logo & Primary Navigation -->
+> <header class="site-header">
+>   <a href="/" class="logo">Acme</a>
+> </header>
+>
+> <!-- Main Content Landmark: Product Listing -->
+> <main class="content-container">
+>   <h2>Product Catalog</h2>
+> </main>
+>
+> <!-- Footer Landmark: Copyright & Legal Links -->
+> <footer class="site-footer">
+>   <p>&copy; 2026 Acme Inc.</p>
+> </footer>
 > ```
 >
-> **Explanation:** HTML comments begin with `<!--` and end with `-->`.
+> #### Technical Explanation
+>
+> 1. **HTML Comment Syntax**: Written as `<!-- comment content -->`; ignored by layout engine during rendering.
+> 2. **Code Base Maintainability**: Helps team members quickly identify layout boundaries in large templates.
+> 3. **Production Stripping**: Production build tools strip comments to minimize final HTML byte transfer sizes.
 > 
 ---
 
-### Exercise 3: Commenting Out Code Blocks
+### Exercise 2: Temporarily Disabling Unreleased Features via Comments
 
-**Problem:** Comment out the `<p>` element in `<main><p>Draft</p></main>`.
+**Scenario:** A developer temporarily hides an unreleased promotional banner without deleting the code from the template.
 
-**Expected output:**
+**Requirements:**
+1. Wrap unreleased HTML code in comment brackets `<!-- ... -->`.
+2. Verify browser hides commented markup.
+
 > [!check]- Answer
-> ```text
-> <main><!-- <p>Draft</p> --></main>
-> ```
+>
+> #### Implementation
+>
 > ```html
 > <main>
->   <!-- <p>Draft</p> -->
+>   <h2>Summer Sale</h2>
+>   <p>Check out our latest discount offers below.</p>
+>
+>   <!-- Temporarily disabled unreleased promo banner until July 1st
+>   <section class="promo-banner">
+>     <h3>Flash Sale: 50% Off</h3>
+>     <a href="/sale">Shop Now</a>
+>   </section>
+>   -->
 > </main>
 > ```
 >
-> **Explanation:** Wrapping HTML tags in `<!-- -->` disables rendering while preserving code in source.
+> #### Technical Explanation
+>
+> 1. **Code Disabling via Comments**: Wrapping HTML code in comments prevents rendering without deleting markup.
+> 2. **Nested Comment Pitfall**: HTML comments cannot be nested inside other comments (`<!-- <!-- inner --> -->` is invalid syntax).
+> 3. **Security Warning**: Never put sensitive secrets, passwords, or internal API keys in HTML comments since users can view page source.
 > 
+---
+
+### Exercise 3: Annotating Complex Accessibility & ARIA Attributes
+
+**Scenario:** An accessibility author adds comments explaining why specific ARIA attributes were used on a custom tab control.
+
+**Requirements:**
+1. Annotate `aria-selected` and `aria-controls` with explanatory comments.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Accessibility Note: Dynamic Tab Control requiring ARIA role management -->
+> <div role="tablist" aria-label="Account Tabs">
+>   <!-- Tab button controls panel-1; state updated dynamically via JS -->
+>   <button role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1">
+>     Overview
+>   </button>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Documentation for Accessibility Rules**: Explains subtle accessibility features to junior developers so attributes aren't removed by mistake.
+> 2. **DevTools Inspection**: Comments remain visible in browser Inspect Element tools during debugging.
+> 3. **Clean Code Guidelines**: Keep comments clear, concise, and focused on *why* non-standard code exists.
 ## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — Standard nodes that comments can wrap.
 - [Nesting](nesting.md) — Comments must be nested correctly and not overlap with other active tags.

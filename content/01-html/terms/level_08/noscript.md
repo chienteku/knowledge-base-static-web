@@ -173,65 +173,93 @@ A simple warning banner in the body:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Fallback warning
+### Exercise 1: Accessible Graceful Degradation Warning for Non-JS Users
 
-**Problem:** Build an HTML fragment containing a heading "Daily Weather Portal" and a paragraph warning users "This site is best viewed with JavaScript enabled" that is *only* visible to users who are blocking script files.
+**Scenario:** An author displays an informational fallback message using `<noscript>` for users with JavaScript disabled.
 
-**Expected output:**
+**Requirements:**
+1. Place `<noscript>` fallback inside `<body>`.
+2. Include user guidance text.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <h1>Daily Weather Portal</h1>
-> <noscript>
->   <p>This site is best viewed with JavaScript enabled</p>
-> </noscript>
-> ```
-> - The heading should be outside the `<noscript>` block (it is plain HTML that should always display).
-> - Wrap the warning paragraph in `<noscript>` tags.
-> 
----
-
-
-
-### Exercise 2: Noscript Fallback Banner
-
-**Problem:** Write `<noscript>` banner inside `<body>` warning users that JavaScript is disabled.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <noscript><div class="warning">Please enable JavaScript for full functionality.</div></noscript>
-> ```
-> ```html
-> <noscript>
->   <div class="warning">
->     Please enable JavaScript for full functionality.
->   </div>
-> </noscript>
+> <body>
+>   <noscript>
+>     <div class="noscript-banner">
+>       <h2>JavaScript Required</h2>
+>       <p>This web application requires JavaScript to function properly. Please enable JavaScript in your browser settings to continue.</p>
+>     </div>
+>   </noscript>
+>
+>   <div id="app"></div>
+> </body>
 > ```
 >
-> **Explanation:** `<noscript>` renders fallback markup only when browser JavaScript is disabled.
+> #### Technical Explanation
+>
+> 1. **The `<noscript>` Element**: Renders inner HTML fallback content ONLY when JavaScript is disabled or unsupported in browser.
+> 2. **Graceful Degradation**: Informs users why interactive elements or single-page apps may appear blank.
+> 3. **Styling Fallbacks**: Can contain fallback CSS `<link>` or messaging blocks.
 > 
 ---
 
-### Exercise 3: Noscript CSS Fallback Loading
+### Exercise 2: Alternative Static Form Fallback inside noscript
 
-**Problem:** Write `<noscript>` element inside `<head>` loading `no-js.css` when scripts are disabled.
+**Scenario:** Provides a static HTML contact form fallback for non-JS clients.
 
-**Expected output:**
+**Requirements:**
+1. Embed plain HTML form inside `<noscript>`.
+
 > [!check]- Answer
-> ```text
-> <head><noscript><link rel="stylesheet" href="no-js.css"></noscript></head>
+>
+> #### Implementation
+>
+> ```html
+> <main>
+>   <h1>Contact Support</h1>
+>   <noscript>
+>     <p>JavaScript is disabled. Use our direct mail fallback below:</p>
+>     <a href="mailto:support@example.com">Email Support Directly</a>
+>   </noscript>
+> </main>
 > ```
+>
+> #### Technical Explanation
+>
+> 1. **Functional Fallbacks**: Offers static alternative links or forms for accessibility compliance.
+> 2. **Zero Script Execution**: Renders seamlessly without requiring client-side script execution.
+> 3. **Screen Reader Compatibility**: Screen readers process `<noscript>` content when JavaScript is inactive.
+> 
+---
+
+### Exercise 3: Auditing noscript Styling and Placement Restrictions
+
+**Scenario:** Audits valid `<noscript>` placement in `<head>` vs `<body>`.
+
+**Requirements:**
+1. Place `<noscript>` inside `<body>` for HTML UI markup.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
 > <head>
 >   <noscript>
->     <link rel="stylesheet" href="no-js.css">
+>     <!-- Head noscript can ONLY contain <link>, <style>, and <meta> -->
+>     <link rel="stylesheet" href="css/no-js-styles.css">
 >   </noscript>
 > </head>
 > ```
 >
-> **Explanation:** `<noscript>` inside `<head>` can load fallback CSS stylesheets.
-> 
+> #### Technical Explanation
+>
+> 1. **Head vs Body Restrictions**: `<noscript>` inside `<head>` can ONLY contain `<link>`, `<style>`, and `<meta>` elements.
+> 2. **Body Usage**: `<noscript>` inside `<body>` can contain any flow HTML content.
+> 3. **W3C Conformance**: Fails validation if visual HTML tags (`<div>`, `<p>`) are placed in `<head>` noscript.
 ## 6. Related Terms
 - [`<script>`](script.md) — The parent scripting element.
 - [`<body>`](../level_01/body.md) — The visual wrapper hosting the warning tags.

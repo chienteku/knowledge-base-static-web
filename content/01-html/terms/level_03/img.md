@@ -130,53 +130,83 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Broken Image
+### Exercise 1: Optimizing Responsive Images with srcset and sizes
 
-**Problem:** What will physically appear on the user's screen if you write `<img src="missing-file.jpg" alt="Company Logo">` but the image file has been deleted from the server?
+**Scenario:** A frontend developer delivers responsive images using `srcset` and `sizes` to supply optimal resolution variants to different screen sizes.
 
-**Expected output:**
+**Requirements:**
+1. Create an `<img>` tag with `src` fallback.
+2. Add `srcset` specifying pixel width descriptors (`400w`, `800w`).
+3. Add `sizes` media conditions.
+4. Include `alt`, `width`, and `height`.
+
 > [!check]- Answer
-> ```text
-> A small "broken image" icon will appear, followed immediately by the plain text: "Company Logo".
-> ```
-> - What is the backup plan when the `src` fails?
-> 
----
-
-
-
-### Exercise 2: Lazy-Loading Images
-
-**Problem:** Write `<img>` tag with `src="hero.jpg"`, `alt="Hero"`, dimensions 800x600, and native browser lazy loading.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <img src="hero.jpg" alt="Hero" width="800" height="600" loading="lazy">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <img src="hero.jpg" alt="Hero" width="800" height="600" loading="lazy">
+> <img src="images/hero-medium.jpg" srcset="images/hero-small.jpg 400w, images/hero-medium.jpg 800w, images/hero-large.jpg 1200w" sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 800px" alt="Team collaborating around a conference table with laptops" width="800" height="450" loading="lazy">
 > ```
 >
-> **Explanation:** `loading="lazy"` defers image fetching until element approaches the viewport.
+> #### Technical Explanation
+>
+> 1. **The `<img>` Element**: Embeds an image in the document; void element requiring no closing tag.
+> 2. **Responsive `srcset` Descriptors**: Provides a list of image file URLs with width descriptors (`400w`), allowing the browser to select the optimal image for screen resolution.
+> 3. **`sizes` Media Layout Hints**: Informs the browser layout engine how wide the image will render at different media query breakpoints.
 > 
 ---
 
-### Exercise 3: Modern Image Format Support
+### Exercise 2: Native Lazy Loading & Aspect Ratio Layout Preservation
 
-**Problem:** Name 2 modern compressed web image formats offering superior compression over legacy JPEG/PNG.
+**Scenario:** Applies performance attributes to prevent Cumulative Layout Shift (CLS) when loading below-the-fold content images.
 
-**Expected output:**
+**Requirements:**
+1. Set `loading="lazy"`.
+2. Provide explicit `width` and `height` values.
+
 > [!check]- Answer
-> ```text
-> WebP and AVIF.
-> ```
-> ```text
-> WebP and AVIF.
+>
+> #### Implementation
+>
+> ```html
+> <article class="news-item">
+>   <img src="images/article-thumb.jpg" alt="Close-up of keyboard with glowing RGB backlighting" width="300" height="200" loading="lazy">
+>   <h3>Next-Gen Hardware Released</h3>
+> </article>
 > ```
 >
-> **Explanation:** WebP and AVIF formats reduce file size by 30-50% while preserving image quality.
+> #### Technical Explanation
+>
+> 1. **`loading="lazy"` Attribute**: Defers fetching off-screen images until they are near the user's scroll viewport.
+> 2. **Preventing CLS Layout Shifts**: Specifying `width` and `height` allows modern browsers to calculate intrinsic aspect ratio boxes before image downloads finish.
+> 3. **Void Tag Rules**: `<img>` is a void tag; do not write `</img>` or `<img />` in HTML5.
 > 
+---
+
+### Exercise 3: Accessible Hero Banner Image Implementation
+
+**Scenario:** Implements a high-resolution hero banner with text accessibility and priority loading.
+
+**Requirements:**
+1. Set `loading="eager"` or omit for above-the-fold hero images.
+2. Ensure descriptive `alt` text.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <header class="hero-header">
+>   <img src="images/banner.jpg" alt="Acme Annual Developer Conference 2026 Banner" width="1200" height="400">
+>   <h1>Welcome to DevCon 2026</h1>
+> </header>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Above-the-Fold Images**: Do NOT lazy-load hero images displayed above the fold; load them eagerly to optimize Largest Contentful Paint (LCP).
+> 2. **Alternative Text Quality**: Hero alt text must state the purpose of the banner clearly.
+> 3. **Image Sizing Integrity**: Keep aspect ratios consistent between HTML attributes and CSS styling.
 ## 6. Related Terms
 - [`alt` Attribute](alt.md) — The required accessibility attribute for images.
 - [`src` Attribute](src.md) — The attribute used to define the image source URL.

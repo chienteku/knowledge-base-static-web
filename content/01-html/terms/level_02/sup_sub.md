@@ -215,50 +215,90 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Formulating Chemistry
+### Exercise 1: Formatting Chemical Formulas and Mathematical Exponents
 
-**Problem:** Write the HTML markup to display the following text exactly as shown:
-"Sulfuric acid is represented as H2SO4."
+**Scenario:** A science author formats chemical formulas using `<sub>` and mathematical exponents using `<sup>`.
 
-**Expected output:**
+**Requirements:**
+1. Use `<sub>` for chemical subscript numbers (`H<sub>2</sub>O`).
+2. Use `<sup>` for mathematical exponents (`x<sup>2</sup>`).
+3. Verify text baseline alignment.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>Sulfuric acid is represented as H<sub>2</sub>SO<sub>4</sub>.</p>
+> <article class="science-note">
+>   <p>Water is represented by the chemical formula H<sub>2</sub>O.</p>
+>   <p>The Pythagorean theorem is expressed as a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>.</p>
+> </article>
 > ```
-> - Only the numbers "2" and "4" need to be shifted downwards.
-> - Wrap those specific numbers in `<sub>` and `</sub>` tags.
+>
+> #### Technical Explanation
+>
+> 1. **Subscript Tag (`<sub>`)**: Renders text lower and smaller than the main baseline; used for chemical formulas and math subscripts.
+> 2. **Superscript Tag (`<sup>`)**: Renders text higher and smaller than the main baseline; used for exponents, footnotes, and ordinal numbers.
+> 3. **CSS Line-Height Fixes**: Browsers adjust font size for `<sup>`/`<sub>`, but CSS `line-height: 0` is often used to prevent distending paragraph line spacing.
 > 
 ---
 
-### Exercise 2: Mathematical and Chemical Notation
+### Exercise 2: Footnote Citation Numbers Linked to References
 
-**Problem:** Write HTML for:
-1. $E = mc^2$
-2. $H_2O$
+**Scenario:** An academic author formats superscript footnote numbers linking to bibliography references.
 
-**Expected output:**
+**Requirements:**
+1. Wrap footnote number in `<sup>` containing an `<a>` link.
+2. Target matching footnote reference ID.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>E = mc<sup>2</sup></p>
-> <p>H<sub>2</sub>O</p>
+> <p>
+>   Web accessibility is mandated by international law<sup><a href="#fn1" id="ref1">[1]</a></sup>.
+> </p>
+>
+> <!-- Footnotes Footer -->
+> <footer class="footnotes">
+>   <hr>
+>   <ol>
+>     <li id="fn1">WCAG 2.1 International Standards Guideline. <a href="#ref1">Back to text</a></li>
+>   </ol>
+> </footer>
 > ```
 >
-> **Explanation:** `<sup>` renders exponent superscript; `<sub>` renders chemical subscript.
+> #### Technical Explanation
+>
+> 1. **Academic Footnotes**: `<sup>` is standard HTML markup for footnote numbers in academic prose.
+> 2. **Accessible Link Wrapping**: Wrapping `<a>` inside `<sup>` makes footnote citations keyboard accessible.
+> 3. **Bi-directional Navigation**: Links allow users to jump to footnote details and back to reading position.
 > 
 ---
 
-### Exercise 3: Footnote Anchor Reference
+### Exercise 3: Formatting Ordinal Numbers in Legal Dates
 
-**Problem:** Write HTML footnote link reference `[1]` pointing to `#fn1` using `<sup>`.
+**Scenario:** Formats ordinal date suffixes using `<sup>` tags in legal documents.
 
-**Expected output:**
+**Requirements:**
+1. Use `<sup>` for ordinal suffixes (`1<sup>st</sup>`, `2<sup>nd</sup>`).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <sup><a href="#fn1">[1]</a></sup>
+> <p class="legal-date">
+>   Executed on this 15<sup>th</sup> day of August, 2026.
+> </p>
 > ```
 >
-> **Explanation:** `<sup>` wraps footnote numbers above the baseline.
-> 
+> #### Technical Explanation
+>
+> 1. **Ordinal Date Formatting**: `<sup>` formats ordinal suffixes (`st`, `nd`, `rd`, `th`) in dates and rankings.
+> 2. **Screen Reader Behavior**: Screen readers pronounce ordinal superscript suffixes naturally.
+> 3. **Typographic Elegance**: Improves visual alignment of legal document dates.
 ## 6. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — Standard inline formatting tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container.

@@ -133,69 +133,100 @@ Nesting layout elements to create a profile card:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Fix the Nesting
+### Exercise 1: Nested Navigation Menu List Structure
 
-**Problem:** The following HTML block has invalid nesting. Identify the errors and write the correct nested markup.
+**Scenario:** An accessibility author constructs a multi-level navigation menu using correctly nested list elements.
 
-```html
-<div>
-  <h1>Welcome to our store!
-  <p>Find the best <strong>deals here.</p></strong>
-</div>
-```
+**Requirements:**
+1. Create `<nav>` container.
+2. Nest `<ul>` inside `<nav>`.
+3. Nest `<li>` inside `<ul>` and `<a>` inside `<li>`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <div>
->   <h1>Welcome to our store!</h1>
->   <p>Find the best <strong>deals here.</strong></p>
-> </div>
+> <nav aria-label="Main Menu">
+>   <ul>
+>     <li><a href="/">Home</a></li>
+>     <li>
+>       <a href="/products">Products</a>
+>       <ul>
+>         <li><a href="/products/software">Software</a></li>
+>         <li><a href="/products/hardware">Hardware</a></li>
+>       </ul>
+>     </li>
+>     <li><a href="/contact">Contact</a></li>
+>   </ul>
+> </nav>
 > ```
-> - The `<h1>` tag is opened but never closed.
-> - The `<strong>` tag closes after the `</p>` tag, creating an overlap.
+>
+> #### Technical Explanation
+>
+> 1. **Valid List Nesting**: Sub-lists (`<ul>`) MUST be nested directly inside list items (`<li>`), never directly inside parent `<ul>`.
+> 2. **Screen Reader Menu Traversal**: Proper list nesting allows screen readers to announce nested sub-menu levels accurately.
+> 3. **DOM Tree Hierarchy**: Correct parent-child nesting maintains predictable CSS selector matching (`nav > ul > li`).
 > 
 ---
 
+### Exercise 2: Fixing Overlapping Tag Nesting Errors
 
+**Scenario:** A developer fixes illegal overlapping tags (`<p><strong>text</p></strong>`) to ensure valid DOM tree hierarchy.
 
-### Exercise 2: Correcting Improper Nesting
+**Requirements:**
+1. Ensure inner tags are closed before outer tags close.
 
-**Problem:** Fix nesting error in `<div><p><span>Content</div></p></span>`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <div><p><span>Content</span></p></div>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <div><p><span>Content</span></p></div>
+> <!-- Fixed: Tags are closed in First-In-Last-Out order -->
+> <p>
+>   This text contains <strong>properly nested bold emphasis</strong> within a paragraph.
+> </p>
 > ```
 >
-> **Explanation:** Tags must be closed in exact reverse order of opening (`span` -> `p` -> `div`).
+> #### Technical Explanation
+>
+> 1. **FILO Closure Order**: Tags must be closed in First-In, Last-Out (FILO) order: `<outer><inner></inner></outer>`.
+> 2. **Overlapping Tag Bugs**: Overlapping tags (`<a><b></a></b>`) force browser error recovery to mutate DOM structure unexpectedly.
+> 3. **Linter Validation**: HTML linters flag improperly nested tags before deployment.
 > 
 ---
 
-### Exercise 3: Anchor Tag Nesting Rules in HTML5
+### Exercise 3: Hierarchical Heading and Container Nesting
 
-**Problem:** Can an `<a>` anchor tag contain a `<div>` element in modern HTML5? (Yes/No).
+**Scenario:** Structures article sections with matching heading levels (`<h1>` -> `<h2>` -> `<h3>`) for accessibility outline.
 
-**Expected output:**
+**Requirements:**
+1. Nest `<h2>` inside `<section>`.
+2. Nest `<h3>` inside subsection.
+
 > [!check]- Answer
-> ```text
-> Yes. HTML5 allows block elements inside <a> anchors as long as no interactive elements (like buttons or other links) are nested.
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <a href="/card">
->   <div>
->     <h2>Card Title</h2>
->     <p>Card description</p>
->   </div>
-> </a>
+> <main>
+>   <h1>Web Accessibility Guide</h1>
+>   <section>
+>     <h2>Visual Accessibility</h2>
+>     <p>Overview of color contrast requirements.</p>
+>     <article>
+>       <h3>Color Contrast Ratios</h3>
+>       <p>Ensure text achieves at least 4.5:1 contrast ratio.</p>
+>     </article>
+>   </section>
+> </main>
 > ```
 >
-> **Explanation:** HTML5 expanded `<a>` element flow content model to wrap block elements.
-> 
+> #### Technical Explanation
+>
+> 1. **Heading Hierarchy**: Headings must form a logical outline without skipping levels (`<h1>` -> `<h2>` -> `<h3>`).
+> 2. **Semantic Sectioning**: Nesting heading tags inside `<section>` and `<article>` defines structural document boundaries.
+> 3. **Screen Reader Heading Outline**: Screen readers navigate documents by hopping through heading levels.
 ## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The building blocks that are nested.
 - [Block-level vs Inline Elements](block_inline.md) — Nesting rules differ based on display properties (e.g., inline elements cannot contain block elements).

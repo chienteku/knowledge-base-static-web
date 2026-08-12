@@ -108,60 +108,115 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 
 ## 5. Practice Exercises
 
-### Exercise 1: Replacing Divs
+### Exercise 1: Refactoring a Non-Semantic div-Heavy Layout into Semantic Landmarks
 
-**Problem:** Look at the following block of HTML4 code. Which modern Semantic HTML5 tag should you use to replace the `<div>`?
-`<div id="navigation-menu"> <ul>...</ul> </div>`
+**Scenario:** An author refactors a legacy `<div id="header">` layout into accessible HTML5 semantic landmark elements.
 
-**Expected output:**
+**Requirements:**
+1. Replace `<div id="header">` with `<header>`.
+2. Replace `<div id="nav">` with `<nav>`.
+3. Replace `<div id="main">` with `<main>`.
+4. Replace `<div id="footer">` with `<footer>`.
+
 > [!check]- Answer
-> ```text
-> The `<nav>` tag.
-> ```
-> - "nav" is short for "navigation"!
-> 
----
-
-
-
-### Exercise 2: 3 Core Benefits of Semantic HTML
-
-**Problem:** List 3 primary technical advantages of using Semantic HTML5 elements over `<div>` tags.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Accessibility (Screen readers navigate landmarks)
-> 2. SEO (Search engines understand page content hierarchy)
-> 3. Maintainability (Code is clean and self-documenting)
-> ```
-> ```text
-> 1. Accessibility (Screen readers navigate landmarks)
-> 2. SEO (Search engines understand page content hierarchy)
-> 3. Maintainability (Code is clean and self-documenting)
-> ```
 >
-> **Explanation:** Semantic HTML provides machine-readable structure for devices and search crawlers.
-> 
----
-
-### Exercise 3: Semantic Refactoring Challenge
-
-**Problem:** Refactor `<div class="nav-link"><a href="/">Home</a></div>` to clean semantic HTML.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <nav><a href="/">Home</a></nav>
-> ```
+> #### Implementation
+>
 > ```html
-> <nav>
->   <a href="/">Home</a>
-> </nav>
+> <!-- Refactored HTML5 Semantic Architecture -->
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Semantic Architecture Demo</title>
+> </head>
+> <body>
+>   <header class="site-header">
+>     <h1>Tech Portal</h1>
+>     <nav aria-label="Main Navigation">
+>       <ul>
+>         <li><a href="/">Home</a></li>
+>       </ul>
+>     </nav>
+>   </header>
+>
+>   <main>
+>     <article>
+>       <h2>Semantic Web Benefits</h2>
+>       <p>Semantic tags convey meaning to browsers, search engines, and screen readers.</p>
+>     </article>
+>   </main>
+>
+>   <footer class="site-footer">
+>     <p>&copy; 2026 Tech Portal</p>
+>   </footer>
+> </body>
+> </html>
 > ```
 >
-> **Explanation:** Eliminate redundant wrapper divs by using native semantic containers.
+> #### Technical Explanation
+>
+> 1. **Semantic HTML Definition**: Semantic HTML uses elements that convey meaningful information about their content (like `<header>`, `<main>`, `<article>`) rather than generic presentation (`<div>`).
+> 2. **Accessibility Landmarks**: Browsers map semantic HTML5 tags into accessible landmark roles automatically.
+> 3. **SEO & Maintainability**: Search engines index semantic page structures easily, and developers read clean code faster.
 > 
+---
+
+### Exercise 2: Screen Reader Accessibility Landmark Auditing
+
+**Scenario:** Audits page structure to ensure screen readers can navigate major landmark regions.
+
+**Requirements:**
+1. Verify `<header>`, `<nav>`, `<main>`, `<aside>`, and `<footer>` tags.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <header>...</header>
+> <nav aria-label="Main">...</nav>
+> <main>
+>   <article>...</article>
+>   <aside aria-label="Related">...</aside>
+> </main>
+> <footer>...</footer>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Implicit ARIA Landmarks**: HTML5 tags map implicitly to ARIA landmarks without needing explicit `role="..."` attributes.
+> 2. **Keyboard Navigation Efficiency**: Blind users press landmark shortcut keys to jump straight to `<main>` or `<nav>`.
+> 3. **Clean Code Standards**: Eliminates redundant `role` declarations on standard HTML5 tags.
+> 
+---
+
+### Exercise 3: SEO Impact of Semantic Tag Hierarchy over Generic Containers
+
+**Scenario:** Demonstrates how semantic sectioning improves search engine indexing clarity.
+
+**Requirements:**
+1. Use `<article>` and `<section>` with explicit heading tags.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <article>
+>   <h2>Understanding Web Semantics</h2>
+>   <section>
+>     <h3>Benefits for SEO</h3>
+>     <p>Search crawlers parse headings and articles to understand topic hierarchy.</p>
+>   </section>
+> </article>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Search Engine Crawling**: Search engine bots prioritize text enclosed in semantic headings and `<article>` tags.
+> 2. **Featured Snippets**: Well-structured semantic sections increase chances of earning Google Featured Snippets.
+> 3. **Document Outline Tree**: Establishes structured metadata trees.
 ## 6. Related Terms
 - [`<main>`](main.md) — The most important semantic tag, denoting the primary content.
 - [`<article>` and `<section>`](article_section.md) — Semantic tags used to break up large blocks of text.

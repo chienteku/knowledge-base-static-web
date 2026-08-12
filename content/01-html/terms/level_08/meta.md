@@ -124,57 +124,86 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Meta
+### Exercise 1: Essential Responsive Viewport Configuration
 
-**Problem:** If you look at the source code of a news article, you might see a tag like `<meta property="og:image" content="article-thumbnail.jpg">`. What does "og" mean and what is it doing?
+**Scenario:** An author configures responsive mobile viewport scaling using `<meta name="viewport">`.
 
-**Expected output:**
+**Requirements:**
+1. Add `<meta name="viewport" content="width=device-width, initial-scale=1.0">` in `<head>`.
+
 > [!check]- Answer
-> ```text
-> "og" stands for Open Graph. This is a specific type of meta tag invented by Facebook. It tells social media platforms exactly which image to display as the large thumbnail when a user shares the link on Facebook, Twitter, or LinkedIn!
-> ```
-> - Have you ever wondered how iMessage knows which picture to show when you text a link?
-> 
----
-
-
-
-### Exercise 2: Essential Meta Tags Template
-
-**Problem:** Write `<head>` section with 3 core meta tags: UTF-8 charset, responsive viewport, and 150-char SEO description.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Learn web dev."></head>
-> ```
+>
+> #### Implementation
+>
 > ```html
 > <head>
->   <meta charset="UTF-8">
+>   <meta charset="utf-8">
 >   <meta name="viewport" content="width=device-width, initial-scale=1.0">
->   <meta name="description" content="Learn web dev.">
+>   <title>Responsive Mobile Page</title>
 > </head>
 > ```
 >
-> **Explanation:** Essential meta tags configure character encoding, mobile viewport scaling, and SEO search snippets.
+> #### Technical Explanation
+>
+> 1. **The `<meta>` Void Element**: Provides machine-readable metadata about document (charset, viewport, description, security).
+> 2. **`width=device-width`**: Instructs mobile browsers to render page width matching physical device screen width.
+> 3. **`initial-scale=1.0`**: Sets initial zoom scale to 1:1, enabling responsive CSS media queries.
 > 
 ---
 
-### Exercise 3: Robots Noindex Meta Tag
+### Exercise 2: SEO Meta Description and Robots Directives
 
-**Problem:** Write `<meta>` tag instructing search engine crawlers NOT to index a private admin page.
+**Scenario:** Configures search engine description snippets and indexing rules.
 
-**Expected output:**
+**Requirements:**
+1. Add `<meta name="description" content="...">`.
+2. Add `<meta name="robots" content="index, follow">`.
+
 > [!check]- Answer
-> ```text
-> <meta name="robots" content="noindex, nofollow">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <meta name="robots" content="noindex, nofollow">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Web Accessibility Guide</title>
+>   <meta name="description" content="Comprehensive guide to building accessible HTML5 websites compliant with WCAG 2.1 standards.">
+>   <meta name="robots" content="index, follow">
+> </head>
 > ```
 >
-> **Explanation:** `noindex, nofollow` prevents search engine crawlers from indexing private pages.
+> #### Technical Explanation
+>
+> 1. **SEO Description Snippet**: `description` content provides text preview under search result title links.
+> 2. **Robots Indexing Directive**: `index, follow` instructs search crawlers to index page and follow links.
+> 3. **Optimal Description Length**: Keep meta descriptions between 150-160 characters to avoid search truncation.
 > 
+---
+
+### Exercise 3: Content-Security-Policy Header via Meta HTTP-Equiv
+
+**Scenario:** Applies security policy restrictions via `<meta http-equiv="Content-Security-Policy">`.
+
+**Requirements:**
+1. Set `http-equiv="Content-Security-Policy"` with strict script src rules.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://trusted.example.com;">
+>   <title>Security Hardened App</title>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`http-equiv` Attribute**: Simulates HTTP response headers directly within HTML markup.
+> 2. **Content-Security-Policy (CSP)**: Mitigates Cross-Site Scripting (XSS) attacks by restricting allowed script origins.
+> 3. **Security Compliance**: Restricts unauthorized script execution.
 ## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The parent container for all `<meta>` tags.
 - [`title` Attribute](../level_07/title.md) — Another form of metadata (the name of the browser tab).

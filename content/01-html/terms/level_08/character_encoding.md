@@ -159,54 +159,92 @@ Correct placement of the charset tag:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Encoding Diagnosis
+### Exercise 1: Mandatory UTF-8 Character Encoding Declaration
 
-**Problem:** A client complains that their website displays black diamonds containing question marks () or random symbols (like `Ã©`) instead of the word "café". What are the two most likely causes?
+**Scenario:** An author configures mandatory UTF-8 character encoding as the very first child of `<head>` to prevent garbled text rendering.
 
-**Expected output:**
+**Requirements:**
+1. Place `<meta charset="utf-8">` as first element in `<head>`.
+2. Include international multi-byte text in body.
+
 > [!check]- Answer
-> ```text
-> 1. The developer forgot to include `<meta charset="UTF-8">` in the HTML `<head>`.
-> 2. The developer's text editor saved the HTML file using a legacy encoding (like Windows-1252 or ASCII) instead of UTF-8.
-> ```
-> - The replacement character  is the browser's way of saying: "A byte was sent that does not match a valid symbol in my current lookup table."
-> 
----
-
-
-
-### Exercise 2: Charset Declaration Syntax
-
-**Problem:** Write modern HTML5 UTF-8 character encoding declaration tag.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <meta charset="UTF-8">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <meta charset="UTF-8">
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Multilingual Web Portal</title>
+> </head>
+> <body>
+>   <h1>International Text: Español, Français, 日本語, العربية</h1>
+> </body>
+> </html>
 > ```
 >
-> **Explanation:** Standard UTF-8 declaration covers all international character sets and emojis.
+> #### Technical Explanation
+>
+> 1. **The `charset` Attribute**: Declares document character encoding; `utf-8` covers virtually all human languages and symbols.
+> 2. **First 1024 Bytes Rule**: `<meta charset="utf-8">` MUST be declared within the first 1024 bytes of the document to prevent browser encoding re-parsing.
+> 3. **Preventing Mojibake**: Proper encoding prevents garbled characters (e.g. `Ã©` instead of `é`).
 > 
 ---
 
-### Exercise 3: HTTP Header vs Meta Encoding
+### Exercise 2: Preventing Garbled Text & Mojibake for Multilingual Characters
 
-**Problem:** If HTTP header specifies `Content-Type: text/html; charset=ISO-8859-1` and HTML meta specifies `UTF-8`, which encoding wins?
+**Scenario:** Fixes rendering issues for mathematical symbols and foreign currency characters.
 
-**Expected output:**
+**Requirements:**
+1. Ensure `<meta charset="utf-8">` is present before title tag.
+
 > [!check]- Answer
-> ```text
-> HTTP header encoding takes precedence over HTML meta tag.
-> ```
-> ```text
-> HTTP header encoding takes precedence over HTML meta tag.
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Currency & Math Prices</title>
+> </head>
+> <body>
+>   <p>Price: €49.99 / ¥5,000 / £35.00 — Special Discount: 50% &ge; Limit</p>
+> </body>
 > ```
 >
-> **Explanation:** Server HTTP `Content-Type` headers override HTML `<meta>` tags.
+> #### Technical Explanation
+>
+> 1. **Universal Symbol Support**: UTF-8 handles currency symbols (€, ¥, £) and math operators (≥, ≤) without requiring HTML entities.
+> 2. **HTTP Header Coherence**: Ensure HTTP response headers (`Content-Type: text/html; charset=utf-8`) match `<meta charset="utf-8">`.
+> 3. **Source File Encoding**: Save HTML source files in UTF-8 encoding format without Byte Order Mark (BOM).
 > 
+---
+
+### Exercise 3: Security & XSS Mitigation via Early Encoding Declaration
+
+**Scenario:** Ensures character encoding is declared before `<title>` to prevent UTF-7 XSS security exploits.
+
+**Requirements:**
+1. Place `<meta charset="utf-8">` before any text or titles in `<head>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <!-- Security Best Practice: Charset declaration MUST precede title -->
+>   <meta charset="utf-8">
+>   <title>Secure Document Header</title>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **XSS Vector Prevention**: Early charset declaration prevents attackers from injecting malicious UTF-7 or legacy byte sequences to bypass XSS filters.
+> 2. **Browser Parser Optimization**: Allows the browser HTML parser to establish character byte mapping immediately.
+> 3. **Standard Conformance**: Required for 100% W3C HTML5 compliance.
 ## 6. Related Terms
 - [`<meta>`](meta.md) — The parent tag containing the charset key.
 - [`<head>`](../level_01/head.md) — The container housing the charset definition.

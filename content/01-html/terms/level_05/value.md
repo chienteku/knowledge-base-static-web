@@ -169,63 +169,88 @@ const liveText = inputElement.value; // Accesses current live DOM property
 
 ## 5. Practice Exercises
 
-### Exercise 1: Form value mapping
+### Exercise 1: Defining Default and Preset Input Values
 
-**Problem:** Look at the following form snippet:
+**Scenario:** An author pre-fills a profile edit form with existing user data using the `value` attribute.
 
-```html
-<select name="tier">
-  <option value="t1">Bronze Tier</option>
-  <option value="t2" selected>Silver Tier</option>
-</select>
-```
+**Requirements:**
+1. Set `value="Jane Doe"` on text input.
+2. Set `value="jane@example.com"` on email input.
 
-If the user clicks "Submit" immediately without changing the dropdown, what key-value pair will the server receive?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> tier=t2
-> ```
-> - The key is defined by the `name` attribute of the container.
-> - The value is the selected option's `value` attribute.
-> 
----
-
-
-
-### Exercise 2: Setting Default Input Values
-
-**Problem:** Write text `<input>` named `country` with default initial value `'USA'`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <input type="text" name="country" value="USA">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <input type="text" name="country" value="USA">
+> <form action="/profile/update" method="post">
+>   <label for="edit-name">Full Name</label>
+>   <input type="text" id="edit-name" name="name" value="Jane Doe">
+>
+>   <label for="edit-email">Email Address</label>
+>   <input type="email" id="edit-email" name="email" value="jane@example.com">
+>
+>   <button type="submit">Update Profile</button>
+> </form>
 > ```
 >
-> **Explanation:** `value` sets initial field input content.
+> #### Technical Explanation
+>
+> 1. **The `value` Attribute**: Defines the initial value or submitted data value of an input control.
+> 2. **Form Payload Submission**: The string specified in `value` is sent to the server as the parameter value (`name=Jane+Doe`).
+> 3. **Dynamic Mutation**: User typing mutates the DOM property value without altering the initial HTML `value` attribute.
 > 
 ---
 
-### Exercise 3: Reading Value Property in JavaScript
+### Exercise 2: Radio and Checkbox Submitted Values
 
-**Problem:** Write JavaScript line extracting current text from input with ID `'email-field'`. 
+**Scenario:** Specifies explicit payload strings submitted by radio buttons and checkboxes using `value`.
 
-**Expected output:**
+**Requirements:**
+1. Assign distinct `value` strings to radio inputs.
+
 > [!check]- Answer
-> ```text
-> const val = document.getElementById('email-field').value;
-> ```
-> ```javascript
-> const val = document.getElementById('email-field').value;
+>
+> #### Implementation
+>
+> ```html
+> <fieldset>
+>   <legend>User Role</legend>
+>   <label><input type="radio" name="role" value="admin"> Administrator</label>
+>   <label><input type="radio" name="role" value="editor" checked> Content Editor</label>
+> </fieldset>
 > ```
 >
-> **Explanation:** `.value` property retrieves live user input text.
+> #### Technical Explanation
+>
+> 1. **Mandatory Radio/Checkbox `value`**: Checkboxes and radios MUST have explicit `value` attributes; otherwise browsers submit default `value="on"`.
+> 2. **Server Data Clarity**: `value="editor"` provides clear domain data keys to backend APIs.
+> 3. **Boolean Checked State**: Only checked radio/checkbox values are transmitted in form submissions.
 > 
+---
+
+### Exercise 3: Button Value Submissions for Multi-Action Forms
+
+**Scenario:** Uses `name` and `value` on multiple submit buttons to determine which action the user triggered.
+
+**Requirements:**
+1. Add identical `name` and distinct `value` attributes to submit buttons.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <form action="/article/101/action" method="post">
+>   <button type="submit" name="action" value="draft">Save as Draft</button>
+>   <button type="submit" name="action" value="publish">Publish Immediately</button>
+> </form>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Multi-Action Button Values**: Submitting via a specific button sends that button's `name=value` pair (e.g. `action=publish`).
+> 2. **Server Action Routing**: Allows backend handlers to distinguish user intent without needing multiple form endpoints.
+> 3. **Accessible Action Labels**: Button text remains clean while `value` passes computer-readable keys.
 ## 6. Related Terms
 - [`<input>`](input.md) — The input elements hosting values.
 - [`<select>` and `<option>`](select_option.md) — Predefined value listings.

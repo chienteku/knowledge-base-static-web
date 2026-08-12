@@ -222,58 +222,103 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Outline
+### Exercise 1: Constructing Hierarchical Heading Outlines for Screen Readers
 
-**Problem:** If you were writing a recipe page for "Chocolate Chip Cookies", what heading tags would you use for: The Recipe Title, The Ingredients List, The Instructions, and The Baking Time (which is a subsection of Instructions)?
+**Scenario:** An author builds a structured article outline using logical heading levels (`<h1>` through `<h3>`).
 
-**Expected output:**
+**Requirements:**
+1. Use a single `<h1>` for the primary document title.
+2. Use `<h2>` for major sections.
+3. Use `<h3>` for nested sub-sections.
+
 > [!check]- Answer
-> ```text
-> <h1>Chocolate Chip Cookies</h1>
-> <h2>Ingredients</h2>
-> <h2>Instructions</h2>
-> <h3>Baking Time</h3>
-> ```
-> - The title is the most important.
-> - Ingredients and Instructions are equal siblings.
-> - Baking Time belongs *inside* Instructions.
-> 
----
-
-### Exercise 2: Structuring Sequential Heading Hierarchy
-
-**Problem:** Structure heading levels for: 1 Page Title; 2 Main Sections; 2 Sub-sections under Section 1.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <h1>Page Title</h1>
-> <section>
->   <h2>Section 1</h2>
->   <h3>Sub-section 1.1</h3>
->   <h3>Sub-section 1.2</h3>
-> </section>
-> <section>
->   <h2>Section 2</h2>
-> </section>
+> <main>
+>   <h1>Complete Web Development Roadmap</h1>
+>
+>   <section>
+>     <h2>Frontend Engineering</h2>
+>     <p>Overview of client-side web technologies.</p>
+>
+>     <article>
+>       <h3>HTML5 & Accessibility</h3>
+>       <p>Semantic markup and WCAG standards.</p>
+>     </article>
+>
+>     <article>
+>       <h3>CSS Architecture</h3>
+>       <p>Responsive flexbox and grid layouts.</p>
+>     </article>
+>   </section>
+> </main>
 > ```
 >
-> **Explanation:** Heading tags construct a nested outline tree for accessibility and search engines.
+> #### Technical Explanation
+>
+> 1. **Heading Hierarchy (`<h1>`-`<h6>`)**: Headings define document outline structure; `<h1>` is highest rank, `<h6>` is lowest rank.
+> 2. **Screen Reader Heading Navigation**: Screen reader users press shortcut keys (like `H` or `1`-`6`) to jump directly across heading outlines.
+> 3. **Visual Size vs Heading Rank**: Do NOT pick heading levels for visual font sizes; use CSS to adjust font sizes and pick HTML heading ranks for structure.
 > 
 ---
 
-### Exercise 3: Styling Headings vs Heading Semantics
+### Exercise 2: Fixing Skipped Heading Levels for Accessibility Compliance
 
-**Problem:** Should you change `<h2>` to `<h4>` because the font size looks too big on screen? (Yes/No). Explain.
+**Scenario:** An accessibility auditor corrects a page that skipped from `<h1>` directly down to `<h4>`.
 
-**Expected output:**
+**Requirements:**
+1. Fix heading hierarchy so levels increase sequentially by 1.
+
 > [!check]- Answer
-> ```text
-> No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.
+>
+> #### Implementation
+>
+> ```html
+> <!-- Fixed Sequential Heading Order -->
+> <h1>Product Documentation</h1>
+> <h2>Installation Guide</h2>
+> <h3>Prerequisites</h3>
+> <p>System requirements and software packages.</p>
 > ```
 >
-> **Explanation:** Heading tags dictate structural hierarchy; CSS dictates visual font size.
+> #### Technical Explanation
+>
+> 1. **No Skipped Levels Rule**: Never skip heading levels (e.g. `<h1>` to `<h3>` or `<h4>`); sequential progression maintains accessible outlines.
+> 2. **WCAG 2.1 Compliance**: Proper heading rank sequence satisfies WCAG Success Criterion 1.3.1 (Info and Relationships).
+> 3. **Document Tree Parsing**: Search engines build page summaries based on strict heading hierarchy trees.
 > 
+---
+
+### Exercise 3: Single h1 Rule in Multi-Section Documents
+
+**Scenario:** An auditor ensures that a web page contains exactly one primary `<h1>` element representing the main page topic.
+
+**Requirements:**
+1. Ensure only one `<h1>` exists per webpage.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <header>
+>   <h1>Acme Portal Customer Dashboard</h1>
+> </header>
+> <main>
+>   <section>
+>     <h2>Account Overview</h2>
+>     <p>Your current plan details.</p>
+>   </section>
+> </main>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Single `<h1>` Best Practice**: Having a single `<h1>` per page clearly identifies the primary topic for users and search engines.
+> 2. **Sectioning Heading Scope**: Sub-sections should use `<h2>` through `<h6>` nested under the main `<h1>` topic.
+> 3. **Page Title Alignment**: The `<h1>` text should closely align with the document `<title>` tag.
 ## 6. Related Terms
 - [`<p>` (Paragraph)](p.md) — The text that usually follows a heading.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing headings.

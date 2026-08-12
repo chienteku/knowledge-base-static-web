@@ -103,55 +103,82 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 
 ## 5. Practice Exercises
 
-### Exercise 1: SEO Impact
+### Exercise 1: Writing Descriptive SEO & Accessibility Page Titles
 
-**Problem:** Why is the `<title>` tag considered the most important HTML element for SEO (Search Engine Optimization)?
+**Scenario:** An author writes a descriptive, unique page `<title>` inside `<head>`.
 
-**Expected output:**
+**Requirements:**
+1. Place `<title>` inside `<head>`.
+2. Follow format: `Page Name - Brand Name`.
+
 > [!check]- Answer
-> ```text
-> Because search engines (like Google) use the text inside the `<title>` element as the primary clickable headline in their search results. If your title is missing or poorly written, users are unlikely to click on your website.
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Shopping Cart | Acme Online Store</title>
+> </head>
 > ```
-> - Think about what you click on when you search for something on Google.
+>
+> #### Technical Explanation
+>
+> 1. **Role of `<title>`**: Sets the text displayed on browser tab titles, search engine results, and bookmarks.
+> 2. **Screen Reader Announcement**: The `<title>` is the very first thing announced by screen readers when a new page loads.
+> 3. **SEO Importance**: Title tags are one of the most critical on-page SEO factors for search engine rankings.
 > 
 ---
 
+### Exercise 2: Dynamic Page Title Formatting for Product Pages
 
+**Scenario:** Configures title tags for specific e-commerce items to improve bookmarking and search clarity.
 
-### Exercise 2: Title Best Practices
+**Requirements:**
+1. Write specific product title.
 
-**Problem:** List 2 primary reasons why descriptive `<title>` tags are crucial.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. SEO: Displayed as clickable headline in search engine result pages
-> 2. Accessibility & UX: Announced by screen readers and displayed on browser tabs
-> ```
-> ```text
-> 1. SEO: Displayed as clickable headline in search engine result pages
-> 2. Accessibility & UX: Announced by screen readers and displayed on browser tabs
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Wireless Noise-Canceling Headphones - TechStore</title>
+> </head>
 > ```
 >
-> **Explanation:** `<title>` provides primary identity context for search crawlers and browser tabs.
+> #### Technical Explanation
+>
+> 1. **Unique Titles Requirement**: Every page on a website should have a unique, specific `<title>` tag.
+> 2. **Browser Tab Identification**: Helps users identify tabs when multiple pages are open simultaneously.
+> 3. **Bookmark Labeling**: Becomes default name when users bookmark a webpage.
 > 
 ---
 
-### Exercise 3: Optimal Title Length
+### Exercise 3: Tab Navigation Title Formatting for Admin Portals
 
-**Problem:** What is recommended character length for `<title>` tags to avoid truncation in Google search results?
+**Scenario:** Formated title for web application dashboards displaying active status.
 
-**Expected output:**
+**Requirements:**
+1. Include status notification in title.
+
 > [!check]- Answer
-> ```text
-> 50 to 60 characters (or under 600 pixels).
-> ```
-> ```text
-> 50 to 60 characters (or under 600 pixels).
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>(3) New Messages - Admin Dashboard</title>
+> </head>
 > ```
 >
-> **Explanation:** Keeping titles under 60 characters prevents text clipping on search engine result pages.
-> 
+> #### Technical Explanation
+>
+> 1. **Dynamic Title Updates**: JavaScript can update `document.title` to notify users of new messages or alerts.
+> 2. **Contextual Awareness**: Provides immediate feedback even when user is viewing another tab.
+> 3. **Concise Wording**: Keep titles concise (50-60 characters) to avoid truncation in search engine results.
 ## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The container that holds the `<title>` tag.
 - [`<meta>`](../level_08/meta.md) — The tag used for other types of invisible head data.

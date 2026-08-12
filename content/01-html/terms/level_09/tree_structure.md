@@ -111,68 +111,98 @@ html (Root)
 
 ## 5. Practice Exercises
 
-### Exercise 1: Family Relationships
+### Exercise 1: Validating Parent-Child Ancestry and Nested DOM Tree Structures
 
-**Problem:** Look at the following code. What is the relationship between the `<ul>` and the `<li>`? What is the relationship between the two `<li>` tags?
-```html
-<ul>
-  <li>Apple</li>
-  <li>Banana</li>
-</ul>
-```
+**Scenario:** An author constructs a deeply nested HTML tree structure, verifying valid parent-child element relationships.
 
-**Expected output:**
+**Requirements:**
+1. Create valid nested DOM tree structure (`<html>` -> `<body>` -> `<main>` -> `<article>`).
+2. Verify tags are closed in FILO order.
+
 > [!check]- Answer
-> ```text
-> The `<ul>` is the Parent of the `<li>` elements.
-> The `<li>` elements are Children of the `<ul>`.
-> The two `<li>` elements are Siblings to each other.
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>DOM Tree Hierarchy</title>
+> </head>
+> <body>
+>   <main>
+>     <article class="card">
+>       <header>
+>         <h2>Article Title</h2>
+>       </header>
+>       <p>Body paragraph inside article node.</p>
+>     </article>
+>   </main>
+> </body>
+> </html>
 > ```
-> - Who contains who?
+>
+> #### Technical Explanation
+>
+> 1. **Tree Architecture**: HTML elements form a strict hierarchical tree graph of parent, child, ancestor, and sibling relationships.
+> 2. **First-In-Last-Out (FILO) Closure**: Inner tags MUST close before outer parent tags close (`<parent><child></child></parent>`).
+> 3. **Parser Error Recovery**: Improper nesting forces browser parsers to alter DOM node placement, breaking layout and CSS selectors.
 > 
 ---
 
+### Exercise 2: Correcting Invalid Overlapping Elements in DOM Tree Nodes
 
+**Scenario:** Corrects invalid overlapping tags (`<p><strong>text</p></strong>`) that break DOM tree construction.
 
-### Exercise 2: Parent, Child, and Sibling DOM Relationships
+**Requirements:**
+1. Fix overlapping tags.
 
-**Problem:** Given `<main><h1>Title</h1><p>Text <span>Word</span></p></main>`, identify:
-1. Parent of `<span>` 
-2. Sibling of `<h1>` 
-3. Children of `<main>` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Parent of span: <p>
-> 2. Sibling of h1: <p>
-> 3. Children of main: <h1> and <p>
-> ```
-> ```text
-> 1. Parent of span: <p>
-> 2. Sibling of h1: <p>
-> 3. Children of main: <h1> and <p>
+>
+> #### Implementation
+>
+> ```html
+> <!-- Fixed: Proper FILO tag nesting -->
+> <p>
+>   This is <strong>properly nested text</strong> inside paragraph.
+> </p>
 > ```
 >
-> **Explanation:** DOM tree hierarchy defines parent-child and sibling relationships.
+> #### Technical Explanation
+>
+> 1. **Overlapping Tag Bugs**: Overlapping tags force browsers to insert implicit closing tags, mutating the expected DOM tree.
+> 2. **CSS Selector Failures**: Broken DOM trees break descendant CSS selectors (`p > strong`).
+> 3. **HTML Validator Rules**: Fails W3C HTML validation.
 > 
 ---
 
-### Exercise 3: DOM Node Traversal API
+### Exercise 3: DOM Tree Node Depth Optimization for Smooth Layouts
 
-**Problem:** Which JavaScript DOM property accesses the immediate parent element of a node (`node.parentNode` or `node.parentElement`)?
+**Scenario:** Optimizes HTML markup to maintain a shallow DOM tree depth under 32 levels.
 
-**Expected output:**
+**Requirements:**
+1. Flatten DOM tree depth.
+
 > [!check]- Answer
-> ```text
-> node.parentElement (or node.parentNode)
-> ```
-> ```javascript
-> const parent = element.parentElement;
+>
+> #### Implementation
+>
+> ```html
+> <!-- Flattened DOM Structure -->
+> <main class="grid-layout">
+>   <article class="item-card">
+>     <h3>Item Title</h3>
+>     <p>Item description text.</p>
+>   </article>
+> </main>
 > ```
 >
-> **Explanation:** `.parentElement` travels up one level in the DOM tree hierarchy.
-> 
+> #### Technical Explanation
+>
+> 1. **DOM Tree Depth Metric**: Lighthouse audits recommend keeping DOM depth under 32 levels and total nodes under 1,500.
+> 2. **Layout Performance**: Shallow DOM trees accelerate browser style calculations and repaints.
+> 3. **Memory Footprint Reduction**: Fewer DOM nodes improve mobile browser performance.
 ## 6. Related Terms
 - [DOM (Document Object Model)](dom.md) — The system that uses this tree structure.
 - [Nesting](../level_01/nesting.md) — The act of writing the HTML code that generates this tree.

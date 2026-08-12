@@ -185,66 +185,103 @@ Basic selector templates:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Building a Checklist
+### Exercise 1: Accessible Single-Choice Radio Button Group with fieldset and legend
 
-**Problem:** Write the HTML markup for a checkbox checklist asking the user to "Agree to the Privacy Policy" (value: "privacy_ok") and "Agree to the Cookie Policy" (value: "cookies_ok"). Ensure the entire label text is clickable for both.
+**Scenario:** An author builds a mutually exclusive shipping method selection using radio buttons inside `<fieldset>`.
 
-**Expected output:**
+**Requirements:**
+1. Group radio inputs inside `<fieldset>`.
+2. Add `<legend>` title.
+3. Share identical `name` attribute across radio group.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>
->   <input type="checkbox" id="privacy" name="agree_privacy" value="privacy_ok">
->   <label for="privacy">Agree to the Privacy Policy</label>
-> </p>
-> <p>
->   <input type="checkbox" id="cookies" name="agree_cookies" value="cookies_ok">
->   <label for="cookies">Agree to the Cookie Policy</label>
-> </p>
+> <fieldset>
+>   <legend>Select Shipping Method</legend>
+>
+>   <label class="radio-option">
+>     <input type="radio" name="shipping" value="standard" checked>
+>     Standard Shipping (3-5 Days) - Free
+>   </label>
+>
+>   <label class="radio-option">
+>     <input type="radio" name="shipping" value="express">
+>     Express Shipping (Overnight) - $15.00
+>   </label>
+> </fieldset>
 > ```
-> - Create two separate checkbox `<input>` elements.
-> - Assign unique `id` values and connect them to `<label>` tags.
+>
+> #### Technical Explanation
+>
+> 1. **Radio Buttons (`type="radio"`)**: Used for mutually exclusive single-choice selections within a group.
+> 2. **Group Name Requirement**: Radio buttons MUST share the same `name` attribute to operate as a single group.
+> 3. **Fieldset & Legend Grouping**: Wrapping in `<fieldset>`/`<legend>` ensures screen readers announce the group question before each option.
 > 
 ---
 
+### Exercise 2: Multi-Choice Checkbox Selection Group with Explicit Labels
 
+**Scenario:** Builds an opt-in notification settings list using checkboxes.
 
-### Exercise 2: Creating Radio Button Group
+**Requirements:**
+1. Create independent `<input type="checkbox">` inputs.
+2. Include explicit labels.
 
-**Problem:** Create radio button group for selecting plan (`'free'`, `'pro'`) with `'free'` checked by default.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <label><input type="radio" name="plan" value="free" checked> Free</label><label><input type="radio" name="plan" value="pro"> Pro</label>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <label>
->   <input type="radio" name="plan" value="free" checked> Free
-> </label>
-> <label>
->   <input type="radio" name="plan" value="pro"> Pro
-> </label>
+> <fieldset>
+>   <legend>Notification Preferences</legend>
+>
+>   <label>
+>     <input type="checkbox" name="notify_email" value="1" checked>
+>     Receive Email Newsletters
+>   </label>
+>
+>   <label>
+>     <input type="checkbox" name="notify_sms" value="1">
+>     Receive SMS Order Alerts
+>   </label>
+> </fieldset>
 > ```
 >
-> **Explanation:** Shared `name="plan"` creates a radio group; `checked` sets default selection.
+> #### Technical Explanation
+>
+> 1. **Checkboxes (`type="checkbox"`)**: Used for independent multi-choice options; users can check zero, one, or multiple boxes.
+> 2. **Independent States**: Checking one checkbox does NOT uncheck other checkboxes in the group.
+> 3. **The `checked` Attribute**: Sets default selected state on page load.
 > 
 ---
 
-### Exercise 3: Checkbox Checked State In JavaScript
+### Exercise 3: Custom Stylized Checkbox Wrappers maintaining Keyboard Focusability
 
-**Problem:** Which JavaScript property reads the boolean selection status of a checkbox element (`input.value` or `input.checked`)?
+**Scenario:** Creates accessible custom checkboxes without hiding input elements from keyboard navigation.
 
-**Expected output:**
+**Requirements:**
+1. Ensure native `<input type="checkbox">` remains keyboard focusable.
+
 > [!check]- Answer
-> ```text
-> input.checked (returns boolean true/false).
-> ```
-> ```javascript
-> const isAgree = checkboxElement.checked; // boolean true/false
+>
+> #### Implementation
+>
+> ```html
+> <label class="custom-checkbox">
+>   <input type="checkbox" name="agree" required class="visually-hidden">
+>   <span class="checkbox-box" aria-hidden="true"></span>
+>   I accept the license terms
+> </label>
 > ```
 >
-> **Explanation:** Checkboxes use boolean `.checked` property, not string `.value`.
-> 
+> #### Technical Explanation
+>
+> 1. **Preserving Focus Outlines**: Never use `display: none` on native inputs; use clip-path or visual hiding to preserve keyboard Tab focus.
+> 2. **Custom Checkbox Styling**: Style pseudo-elements or adjacent `<span>` indicators based on `:checked` state.
+> 3. **Native Touch/Click Handlers**: Leverage native `<label>` click handling for custom checkboxes.
 ## 6. Related Terms
 - [`<input>`](input.md) — The parent element.
 - [`<label>`](label.md) — The text label companion.

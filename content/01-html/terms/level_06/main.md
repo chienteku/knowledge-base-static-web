@@ -148,56 +148,103 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Core
+### Exercise 1: Defining Primary Page Content Area using main and Skip Link
 
-**Problem:** In a standard blog layout with a Top Menu, a Left Sidebar (links to other posts), the Blog Post, and a Footer, which of those four items belongs inside the `<main>` tag?
+**Scenario:** A developer structures the main content area using `<main>` and provides a skip-to-content link.
 
-**Expected output:**
+**Requirements:**
+1. Include a skip link `<a href="#main-content">`.
+2. Wrap primary content in `<main id="main-content">`.
+3. Exclude repeated headers/footers from `<main>`.
+
 > [!check]- Answer
-> ```text
-> ONLY the Blog Post. The Top Menu, Left Sidebar, and Footer are repeated across the whole site, so they belong outside the `<main>` tag.
+>
+> #### Implementation
+>
+> ```html
+> <body>
+>   <a href="#main-content" class="skip-link">Skip to main content</a>
+>
+>   <header>
+>     <a href="/" class="logo">Acme</a>
+>     <nav aria-label="Main Navigation">...</nav>
+>   </header>
+>
+>   <main id="main-content">
+>     <h1>Dashboard Overview</h1>
+>     <p>Welcome to your personal dashboard.</p>
+>   </main>
+>
+>   <footer>...</footer>
+> </body>
 > ```
-> - What is unique to *this exact URL*?
+>
+> #### Technical Explanation
+>
+> 1. **The `<main>` Element**: Represents the dominant, unique content of the `<body>` of a document.
+> 2. **Single Main Rule**: A document MUST NOT have more than one visible `<main>` element at a time.
+> 3. **Skip Navigation Target**: Pairing `<main id="main-content">` with a skip link allows keyboard users to bypass header menus.
 > 
 ---
 
+### Exercise 2: Ensuring Single Active main Landmark Rule per Document
 
+**Scenario:** Audits a page to ensure only one `<main>` element exists in the DOM tree.
 
-### Exercise 2: Skip-to-Main Accessibility Link
+**Requirements:**
+1. Remove duplicate `<main>` tags.
 
-**Problem:** Write an accessible 'Skip to Content' link targeting `<main id="main-content">`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <a href="#main-content" class="skip-link">Skip to Main Content</a>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <a href="#main-content" class="skip-link">Skip to Main Content</a>
-> <main id="main-content">
->   <h1>Main Content</h1>
+> <body>
+>   <header>...</header>
+>
+>   <!-- Single active main landmark -->
+>   <main>
+>     <article>
+>       <h1>Primary Article Topic</h1>
+>       <p>Body text...</p>
+>     </article>
+>   </main>
+>
+>   <footer>...</footer>
+> </body>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Unique Content Mandate**: Content inside `<main>` MUST be unique to the document; do NOT put site header/footer links inside `<main>`.
+> 2. **Main Landmark Role**: Screen readers jump directly to `<main>` using landmark navigation keys.
+> 3. **HTML5 Conformance**: Multiple `<main>` tags violate HTML5 specifications unless hidden via `hidden` attribute.
+> 
+---
+
+### Exercise 3: Accessible Keyboard Focus to main Container
+
+**Scenario:** Configures `<main>` to receive keyboard focus when target of skip link.
+
+**Requirements:**
+1. Add `tabindex="-1"` to `<main>` for smooth JS/keyboard focus.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <main id="main-content" tabindex="-1">
+>   <h1>Page Title</h1>
+>   <p>Content area.</p>
 > </main>
 > ```
 >
-> **Explanation:** Skip links allow keyboard users to bypass global navigation directly to `<main>`.
-> 
----
-
-### Exercise 3: Main Landmark Role
-
-**Problem:** Which implicit ARIA landmark role does the `<main>` element convey?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> main landmark role.
-> ```
-> ```text
-> main landmark role.
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `<main>` acts as the primary content accessibility landmark.
-> 
+> 1. **`tabindex="-1"` Focus Target**: Allows keyboard focus to land on `<main>` when activated via skip links without adding it to standard Tab order.
+> 2. **Focus Ring Styling**: Style `:focus` state cleanly for keyboard users.
+> 3. **Accessibility Best Practice**: Recommended pattern for SPA client-side route changes.
 ## 6. Related Terms
 - [`<article>` and `<section>`](article_section.md) — The tags that usually live *inside* the `<main>` tag to break up the content.
 - [`<aside>`](aside.md) — The tangential layout block placed outside main content boundaries.

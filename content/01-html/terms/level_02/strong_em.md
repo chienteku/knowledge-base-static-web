@@ -179,52 +179,85 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Screen Reader Test
+### Exercise 1: Emphasizing Urgent Warnings with strong and Tone Stress with em
 
-**Problem:** How does a screen reader (software for blind users) treat `<strong>` differently than a `<span>` styled to look bold with CSS?
+**Scenario:** An author uses `<strong>` for critical safety alerts and `<em>` for vocal stress emphasis.
 
-**Expected output:**
+**Requirements:**
+1. Use `<strong>` for critical security warnings.
+2. Use `<em>` for tone emphasis inside sentences.
+
 > [!check]- Answer
-> ```text
-> The screen reader will change its vocal inflection/tone to announce the `<strong>` text with importance. It will read the `<span>` text exactly like normal, plain text, ignoring the visual CSS bolding entirely.
+>
+> #### Implementation
+>
+> ```html
+> <div class="alert-box">
+>   <p>
+>     <strong>CRITICAL WARNING:</strong> Never share your account password with anyone. 
+>     We will <em>never</em> ask for your password via email.
+>   </p>
+> </div>
 > ```
-> - HTML is for meaning. CSS is for eyeballs. Screen readers don't have eyeballs!
+>
+> #### Technical Explanation
+>
+> 1. **High Importance (`<strong>`)**: `<strong>` indicates seriousness, urgency, or critical warning importance; screen readers announce with higher priority tone.
+> 2. **Vocal Stress Emphasis (`<em>`)**: `<em>` indicates vocal stress emphasis that changes the implied tone and meaning of the sentence.
+> 3. **Semantic vs Physical**: `<strong>` and `<em>` convey meaning; CSS `font-weight` and `font-style` convey visual appearance.
 > 
 ---
 
-### Exercise 2: Contextual Semantic Selection
+### Exercise 2: Nested Combination of Importance and Stress Emphasis
 
-**Problem:** Select `<strong>` or `<em>` for:
-1. Warning: Password required (`<strong>`)
-2. I *love* coding (`<em>`)
-3. Mandatory field (`<strong>`)
+**Scenario:** Combines `<strong>` and `<em>` to convey both high importance and vocal stress simultaneously.
 
-**Expected output:**
+**Requirements:**
+1. Nest `<em>` inside `<strong>` for critical stressed points.
+
 > [!check]- Answer
-> ```text
-> 1. <strong>
-> 2. <em>
-> 3. <strong>
+>
+> #### Implementation
+>
+> ```html
+> <p class="policy-notice">
+>   <strong>Submission deadline is <em>final</em>; no extensions will be granted under any circumstances.</strong>
+> </p>
 > ```
 >
-> **Explanation:** `<strong>` denotes mandatory/urgent importance; `<em>` denotes stress emphasis.
+> #### Technical Explanation
+>
+> 1. **Nested Emphasis Semantics**: Nesting `<em>` inside `<strong>` signals that text is both critically important AND vocally stressed.
+> 2. **Screen Reader Multi-Tone**: Assistive tools combine emphasis cues when tags are nested.
+> 3. **Order Independence**: Order of nesting (`<strong><em>` vs `<em><strong>`) carries identical semantic meaning.
 > 
 ---
 
-### Exercise 3: CSS Styling Override
+### Exercise 3: Distinguishing CSS Styling from Semantic Meaning
 
-**Problem:** Can CSS override `<strong>` font-weight from bold to normal? (Yes/No).
+**Scenario:** Replaces visual CSS bold styling with `<strong>` where semantic urgency is required.
 
-**Expected output:**
+**Requirements:**
+1. Use `<strong>` for semantic importance.
+2. Use CSS classes for purely aesthetic bold styling.
+
 > [!check]- Answer
-> ```css
-> strong {
->   font-weight: normal;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <!-- Aesthetic styling only: <span class="bold-text"> -->
+> <!-- Semantic importance: -->
+> <p>
+>   <strong>Note:</strong> All server maintenance will occur at midnight EST.
+> </p>
 > ```
 >
-> **Explanation:** CSS controls visual appearance while HTML tags dictate semantic meaning.
-> 
+> #### Technical Explanation
+>
+> 1. **Visual vs Semantic Bold**: Use CSS `font-weight: bold` for visual styling; use `<strong>` for structural importance.
+> 2. **Accessibility Priority**: Screen readers ignore CSS font-weight styling but act on `<strong>` semantic tags.
+> 3. **Search Engine Indexing**: Search engines give higher weight to keywords wrapped in `<strong>` tags.
 ## 6. Related Terms
 - [`<span>` (Inline container)](span.md) — The non-semantic alternative for purely visual styling.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing text wrappers.

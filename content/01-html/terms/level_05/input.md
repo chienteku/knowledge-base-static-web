@@ -118,63 +118,101 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 
 ## 5. Practice Exercises
 
-### Exercise 1: Form Validation
+### Exercise 1: Accessible User Contact Form with Specialized Input Types
 
-**Problem:** What happens if a user tries to submit a form containing `<input type="number">` but they typed the letter "A" into the box?
+**Scenario:** An author builds a contact form utilizing specialized HTML5 input types (`email`, `tel`, `text`).
 
-**Expected output:**
+**Requirements:**
+1. Create labeled inputs for name (`type="text"`), email (`type="email"`), and phone (`type="tel"`).
+2. Add validation attributes (`required`, `pattern`).
+
 > [!check]- Answer
-> ```text
-> The browser will natively block the form submission and display a built-in error message telling the user to enter a valid number. (This is why choosing the correct `type` is so important!)
-> ```
-> - Modern HTML5 does a lot of heavy lifting for you so you don't have to write JavaScript!
-> 
----
-
-
-
-### Exercise 2: Matching Input Types to Use Cases
-
-**Problem:** Match task to input type:
-1. Masked password entry (`type="password"`)
-2. Date selection calendar (`type="date"`)
-3. Color picker (`type="color"`)
-4. Range slider (`type="range"`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. password
-> 2. date
-> 3. color
-> 4. range
-> ```
-> ```text
-> 1. password
-> 2. date
-> 3. color
-> 4. range
-> ```
 >
-> **Explanation:** Specialized input types activate native browser UI controls and mobile keyboards.
-> 
----
-
-### Exercise 3: Input Pattern Regular Expression Validation
-
-**Problem:** Write `pattern` attribute on `<input>` enforcing a 5-digit US ZIP code.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <input type="text" pattern="[0-9]{5}" title="5-digit ZIP code">
-> ```
+> #### Implementation
+>
 > ```html
-> <input type="text" pattern="[0-9]{5}" title="Five digit ZIP code">
+> <form action="/contact" method="post">
+>   <div class="form-group">
+>     <label for="contact-name">Full Name</label>
+>     <input type="text" id="contact-name" name="name" required autocomplete="name">
+>   </div>
+>
+>   <div class="form-group">
+>     <label for="contact-email">Email Address</label>
+>     <input type="email" id="contact-email" name="email" required autocomplete="email">
+>   </div>
+>
+>   <div class="form-group">
+>     <label for="contact-phone">Phone Number</label>
+>     <input type="tel" id="contact-phone" name="phone" placeholder="123-456-7890" autocomplete="tel">
+>   </div>
+>
+>   <button type="submit">Send Message</button>
+> </form>
 > ```
 >
-> **Explanation:** `pattern` accepts regular expressions for native input validation.
+> #### Technical Explanation
+>
+> 1. **Specialized Input Types**: `type="email"` and `type="tel"` trigger mobile virtual keyboards optimized with `@` and numeric keys.
+> 2. **Void Element Syntax**: `<input>` is a void element in HTML5; do not write `</input>` or `<input />`.
+> 3. **Autocomplete Hints**: `autocomplete` attributes help browsers autofill user contact data.
 > 
+---
+
+### Exercise 2: Date and Time Selection Inputs
+
+**Scenario:** Creates date and time picker input fields using `<input type="date">` and `<input type="time">`.
+
+**Requirements:**
+1. Use `<input type="date">` with `min` and `max` constraints.
+2. Use `<input type="time">`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <div class="booking-form">
+>   <label for="booking-date">Select Appointment Date</label>
+>   <input type="date" id="booking-date" name="date" min="2026-01-01" max="2026-12-31" required>
+>
+>   <label for="booking-time">Select Time</label>
+>   <input type="time" id="booking-time" name="time" min="09:00" max="17:00" required>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Native Date Pickers**: `type="date"` renders native calendar pickers across desktop and mobile devices.
+> 2. **Min/Max Constraints**: The `min` and `max` attributes enforce valid date range selections natively.
+> 3. **ISO Format**: Date values are submitted in standardized `YYYY-MM-DD` ISO format.
+> 
+---
+
+### Exercise 3: Secure Password and PIN Inputs
+
+**Scenario:** Builds a secure PIN entry field using numeric input constraints.
+
+**Requirements:**
+1. Use `<input type="password">`.
+2. Set `inputmode="numeric"` and `pattern="[0-9]*"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <div class="pin-entry">
+>   <label for="security-pin">Enter 4-Digit Security PIN</label>
+>   <input type="password" id="security-pin" name="pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="one-time-code">
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Masked Password Inputs**: `type="password"` masks typed characters visually on screen.
+> 2. **`inputmode="numeric"`**: Forces numeric-only keypad display on mobile touch keyboards.
+> 3. **Pattern Validation**: The `pattern="[0-9]{4}"` attribute validates exact 4-digit numeric input before form submission.
 ## 6. Related Terms
 - [`<label>`](label.md) — The tag that provides an accessible text description for the input.
 - [`placeholder` Attribute](placeholder.md) — The inline visual text hint.

@@ -127,45 +127,91 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Syntax Rule
+### Exercise 1: Accessible Profile Card with Attributes
 
-**Problem:** True or False: You can place as many attributes as you want inside a single opening tag, as long as they are separated by spaces.
+**Scenario:** An accessibility author creates an HTML profile card for a team member, ensuring all global, image, and link attributes are properly defined for assistive technology.
 
-**Expected output:**
+**Requirements:**
+1. Create an `<article>` container with a `class` attribute.
+2. Add an `<img>` tag with `src`, `alt`, and `width` attributes.
+3. Include an `<a>` link with `href`, `target="_blank"`, and `rel="noopener noreferrer"`.
+
 > [!check]- Answer
-> ```text
-> True! You can stack attributes.
-> Example: `<input type="text" placeholder="Enter name" required maxlength="10">`
-> ```
-> - Look at the `<img>` example in the snippets above.
-> 
----
-
-### Exercise 2: Identifying Attributes and Values
-
-**Problem:** Given `<a href="https://example.com" target="_blank">Link</a>`, identify the two attribute names and their corresponding values.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Attribute 1 Name: href, Value: "https://example.com"
-> Attribute 2 Name: target, Value: "_blank"
-> ```
-> **Explanation:** Attributes modify element behavior or provide metadata in `name="value"` format.
-> 
----
-
-### Exercise 3: Boolean Attribute Syntax
-
-**Problem:** Write `disabled` attribute on `<button>` using valid boolean attribute shorthand.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <button disabled>Submit</button>
+> <article class="profile-card" id="user-101">
+>   <img src="images/avatar.jpg" alt="Portrait of Jane Doe, Lead Web Developer" width="150" height="150">
+>   <h2>Jane Doe</h2>
+>   <p>Web Accessibility Specialist</p>
+>   <a href="https://example.com/portfolio" target="_blank" rel="noopener noreferrer">View Portfolio</a>
+> </article>
 > ```
-> **Explanation:** Boolean attributes are true when present, so key-only syntax (`disabled`) is sufficient.
+>
+> #### Technical Explanation
+>
+> 1. **Attribute Syntax**: HTML attributes provide extra information about elements, written as `name="value"` inside the opening tag.
+> 2. **Accessible Text Equivalents**: The `alt` attribute on `<img>` supplies a text description for screen readers and when images fail to load.
+> 3. **Security Attributes on Links**: When opening links in a new tab (`target="_blank"`), `rel="noopener noreferrer"` prevents reverse tabnabbing vulnerabilities.
 > 
+---
+
+### Exercise 2: Interactive Form Input Attributes
+
+**Scenario:** A form author constructs a user registration input field, applying validation, placeholder, and identification attributes.
+
+**Requirements:**
+1. Create a `<label>` linked to an `<input>` using the `for` and `id` attributes.
+2. Set the input `type` to `email`.
+3. Apply `required`, `placeholder`, and `autocomplete` attributes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <div class="form-group">
+>   <label for="user-email">Email Address</label>
+>   <input type="email" id="user-email" name="email" required placeholder="name@example.com" autocomplete="email">
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Explicit Label Association**: Matching the `<label>` element's `for` attribute to the `<input>` element's `id` attribute makes the input accessible to screen readers and enlarges the clickable touch area.
+> 2. **Boolean Attributes**: Attributes like `required` do not require a value; their presence on an element represents `true`.
+> 3. **Browser Autocomplete Hints**: The `autocomplete` attribute helps browsers accurately auto-fill user information safely.
+> 
+---
+
+### Exercise 3: Custom Data Attributes for Dynamic UI Components
+
+**Scenario:** A frontend author attaches custom `data-*` attributes to an interactive accordion element so JavaScript can manage state without polluting class lists.
+
+**Requirements:**
+1. Create a `<button>` with a `data-target` attribute.
+2. Add a `data-expanded="false"` custom attribute.
+3. Include an `aria-controls` attribute for accessibility.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <button type="button" class="accordion-header" id="panel-btn-1" data-target="panel-content-1" data-expanded="false" aria-controls="panel-content-1">
+>   Frequently Asked Questions
+> </button>
+> <div id="panel-content-1" class="accordion-content" hidden>
+>   <p>Here are the answers to common questions about our service.</p>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Custom Data Attributes (`data-*`)**: Allows storing custom private information on HTML elements without invalidating HTML5 syntax.
+> 2. **DOM dataset API Access**: JavaScript can inspect and mutate custom attributes via `element.dataset.target` or `element.dataset.expanded`.
+> 3. **Separation of Styling and State**: Using `data-*` attributes for JavaScript state logic prevents breaking CSS styling when class names change.
 ## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — Attributes live inside the opening tag of an element.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Self-closing elements that are configured using attributes (like `<img>`).

@@ -144,61 +144,97 @@ Serving a desktop image versus a mobile image:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Responsive Banner
+### Exercise 1: Art Direction for Mobile vs Desktop Layouts
 
-**Problem:** Write the HTML markup to serve a hero banner: `banner-large.jpg` for screens 800px wide and larger, and `banner-small.jpg` (with description: "Winter clearance sale banner") as the default mobile/fallback image.
+**Scenario:** A designer uses `<picture>` and `<source media="...">` to serve a cropped vertical image on mobile devices and a wide landscape image on desktops.
 
-**Expected output:**
+**Requirements:**
+1. Wrap `<source>` elements and `<img>` inside `<picture>`.
+2. Use `<source media="(max-width: 767px)">` for mobile.
+3. Use `<img>` as the ultimate fallback.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <picture>
->   <source media="(min-width: 800px)" srcset="banner-large.jpg">
->   <img src="banner-small.jpg" alt="Winter clearance sale banner">
-> </picture>
-> ```
-> - Nest a `<source>` tag with the `media` filter first.
-> - The fallback `<img>` must carry the `src` and `alt` attributes.
-> 
----
-
-
-
-### Exercise 2: Next-Gen Format Fallback Chain
-
-**Problem:** Write `<picture>` element offering AVIF first, WebP second, falling back to JPEG `<img>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <picture><source srcset="img.avif" type="image/avif"><source srcset="img.webp" type="image/webp"><img src="img.jpg" alt="Fallback"></picture>
-> ```
-> ```html
-> <picture>
->   <source srcset="img.avif" type="image/avif">
->   <source srcset="img.webp" type="image/webp">
->   <img src="img.jpg" alt="Fallback">
+> <picture class="hero-media">
+>   <!-- Mobile Layout: Vertical Cropped Image -->
+>   <source media="(max-width: 767px)" srcset="images/hero-mobile-crop.jpg">
+>
+>   <!-- Desktop Layout: Wide Landscape Image -->
+>   <source media="(min-width: 768px)" srcset="images/hero-desktop-wide.jpg">
+>
+>   <!-- Ultimate Fallback Element (Mandatory!) -->
+>   <img src="images/hero-desktop-wide.jpg" alt="Architectural rendering of the new eco-friendly corporate headquarters" width="1200" height="500">
 > </picture>
 > ```
 >
-> **Explanation:** `<picture>` matches `type` formats top-to-bottom, delivering optimal image codec files.
+> #### Technical Explanation
+>
+> 1. **Art Direction with `<picture>`**: The `<picture>` wrapper allows switching completely different image crops or aspect ratios based on CSS media queries.
+> 2. **The `<source media="...">` Element**: Evaluates media queries top-to-bottom; the first matching `<source>` is selected by the browser.
+> 3. **Mandatory `<img>` Fallback**: The `<picture>` element is a wrapper; the actual image is ALWAYS rendered via the inner `<img>` tag, which holds `alt` and `loading` attributes.
 > 
 ---
 
-### Exercise 3: Art Direction vs Resolution Switching
+### Exercise 2: Modern Image Format Fallback (AVIF -> WebP -> JPEG)
 
-**Problem:** When should `<picture>` with media queries be used instead of `srcset` on standard `<img>`?
+**Scenario:** Delivers next-gen AVIF and WebP image formats with fallback to standard JPEG for older browsers.
 
-**Expected output:**
+**Requirements:**
+1. Use `<source type="image/avif">`.
+2. Use `<source type="image/webp">`.
+3. Fallback to `<img>` JPEG.
+
 > [!check]- Answer
-> ```text
-> Use <picture> for Art Direction (cropping/changing image composition across screen sizes); use img srcset for Resolution Switching (same image, different resolutions).
-> ```
-> ```text
-> Use <picture> for Art Direction (cropping/changing image composition across screen sizes); use img srcset for Resolution Switching (same image, different resolutions).
+>
+> #### Implementation
+>
+> ```html
+> <picture>
+>   <!-- Next-Gen Format 1: AVIF (Highest Compression) -->
+>   <source type="image/avif" srcset="images/photo.avif">
+>
+>   <!-- Next-Gen Format 2: WebP (Widespread Support) -->
+>   <source type="image/webp" srcset="images/photo.webp">
+>
+>   <!-- Fallback: Standard JPEG -->
+>   <img src="images/photo.jpg" alt="Sunset over mountain ridge" width="800" height="600" loading="lazy">
+> </picture>
 > ```
 >
-> **Explanation:** `<picture>` supports structural art direction changes via media queries.
+> #### Technical Explanation
+>
+> 1. **Format Content Negotiation**: Browsers test `<source type="...">` MIME types and download the first supported modern format (e.g. AVIF), ignoring unsupported ones.
+> 2. **Bandwidth Reduction**: AVIF and WebP formats can reduce image file sizes by 30% to 50% compared to legacy JPEGs.
+> 3. **Single `alt` Source of Truth**: Alt text is declared once on the nested `<img>` tag, serving all formats seamlessly.
 > 
+---
+
+### Exercise 3: High-DPI Retina Display Image Source Switching
+
+**Scenario:** Serves 1x, 2x, and 3x resolution images for high-density smartphone screens.
+
+**Requirements:**
+1. Use `srcset` pixel density descriptors (`1x`, `2x`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <picture>
+>   <source media="(min-width: 800px)" srcset="images/logo-1x.png 1x, images/logo-2x.png 2x">
+>   <img src="images/logo-1x.png" alt="Company Logo" width="200" height="50">
+> </picture>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Pixel Density Descriptors (`2x`)**: Instructs browser to fetch crisp `2x` resolution assets on Apple Retina or high-DPI screens.
+> 2. **Bandwidth Optimization**: Standard 1x screens don't waste data downloading oversized 2x image assets.
+> 3. **Seamless Display Scaling**: Maintains sharp vector/raster presentation across monitor types.
 ## 6. Related Terms
 - [`<img>`](img.md) — The rendering image element.
 - [`<source>` Element](source.md) — The sibling element specifying source lists.

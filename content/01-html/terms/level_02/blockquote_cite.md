@@ -216,55 +216,94 @@ A simple nested blockquote showing visual indentation and attribution:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Quote Markup
+### Exercise 1: Structuring Long Quotations with blockquote and figcaption
 
-**Problem:** Mark up the following quote from Abraham Lincoln's Gettysburg Address. Include the source URL (`https://www.loc.gov/resource/al0187/`) and wrap the name of the speech ("The Gettysburg Address") in the correct tag.
+**Scenario:** A publisher formats a multi-paragraph quotation from an external research paper using `<figure>`, `<blockquote>`, `<figcaption>`, and `<cite>`.
 
-"Four score and seven years ago our fathers brought forth on this continent, a new nation..."
+**Requirements:**
+1. Wrap quote in a `<figure>` element.
+2. Use `blockquote` with a `cite` URL attribute.
+3. Include `<figcaption>` with a `<cite>` element for author attribution.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <blockquote cite="https://www.loc.gov/resource/al0187/">
->   <p>Four score and seven years ago our fathers brought forth on this continent, a new nation...</p>
-> </blockquote>
-> <p>— Abraham Lincoln, <cite>The Gettysburg Address</cite></p>
+> <figure class="quote-card">
+>   <blockquote cite="https://www.w3.org/TR/html52/">
+>     <p>The HTML specification defines the abstract structure and semantics of documents, providing the foundation for accessibility and interoperability across the Web.</p>
+>   </blockquote>
+>   <figcaption>
+>     &mdash; W3C Editorial Team, <cite><a href="https://www.w3.org/TR/html52/">HTML 5.2 Recommendation</a></cite>
+>   </figcaption>
+> </figure>
 > ```
-> - The quote itself is a block of text, so use `<blockquote>`.
-> - The source URL goes in the `cite` attribute.
-> - The title of the speech is a citation, so wrap it in `<cite>`.
+>
+> #### Technical Explanation
+>
+> 1. **The `<blockquote>` Element**: Represents a section that is quoted from another external source; indented by default in browsers.
+> 2. **The `cite` Attribute**: The machine-readable `cite="URL"` attribute on `blockquote` links to the original online source document.
+> 3. **The `<cite>` Tag**: The `<cite>` element represents the title of a work (book, paper, specification); it must contain the title, not the author's name.
 > 
 ---
 
-### Exercise 2: Structuring Complete Blockquote with Cite
+### Exercise 2: Inline Quotations and Work Citations with q and cite
 
-**Problem:** Structure blockquote for quote from book '1984' including URL `cite` attribute and `<cite>` tag.
+**Scenario:** An author quotes a famous line inline within a narrative paragraph.
 
-**Expected output:**
+**Requirements:**
+1. Use `<q>` for short inline quotations.
+2. Include a `cite` URL attribute on `<q>`.
+3. Use `<cite>` for the title of the work.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <blockquote cite="https://example.com/1984">
->   <p>Big Brother is watching you.</p>
->   <footer>— George Orwell, <cite>1984</cite></footer>
-> </blockquote>
+> <p>
+>   As Tim Berners-Lee wrote in his seminal work <cite>Weaving the Web</cite>, 
+>   <q cite="https://www.w3.org/People/Berners-Lee/">The Web is more a social creation than a technical one.</q>
+> </p>
 > ```
 >
-> **Explanation:** `cite` attribute holds source URL; `<cite>` tag holds work title inside quote attribution.
+> #### Technical Explanation
+>
+> 1. **The `<q>` Element**: Represents a short inline quotation; browsers automatically insert appropriate quotation marks around `<q>` content.
+> 2. **Automatic Quotation Marks**: Do NOT manually type quote marks inside `<q>`; browsers handle localized quote punctuation automatically.
+> 3. **Inline Work Citation**: `<cite>` marks the title of the cited work inline without breaking paragraph flow.
 > 
 ---
 
-### Exercise 3: q Tag for Inline Quotations
+### Exercise 3: Academic & Legal Reference Blockquote Formatting
 
-**Problem:** Which tag should be used for short inline quotes embedded inside a paragraph instead of `<blockquote>`?
+**Scenario:** A legal portal formats statutory quotes with citation links.
 
-**Expected output:**
+**Requirements:**
+1. Format statutory text in `blockquote`.
+2. Include attribution in `<figcaption>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>He said <q>Hello</q> and left.</p>
+> <figure class="legal-quote">
+>   <blockquote cite="https://www.law.example.gov/section-508">
+>     <p>Individuals with disabilities shall have access to and use of information that is comparable to the access provided to individuals without disabilities.</p>
+>   </blockquote>
+>   <figcaption>
+>     Section 508 Amendment, <cite><a href="https://www.law.example.gov/section-508">Rehabilitation Act of 1973</a></cite>
+>   </figcaption>
+> </figure>
 > ```
 >
-> **Explanation:** `<q>` automatically adds language-appropriate quotation marks around inline quotes.
-> 
+> #### Technical Explanation
+>
+> 1. **Accessible Citation Architecture**: Combining `<figure>` and `<figcaption>` explicitly associates the citation caption with the `blockquote`.
+> 2. **Screen Reader Announcement**: Screen readers announce 'blockquote start' and 'blockquote end' when encountering `blockquote` tags.
+> 3. **Machine-Readable Metadata**: The `cite` attribute provides programmatic traceability for automated web crawlers.
 ## 6. Related Terms
 - [`<p>` (Paragraph)](p.md) — Standard text container, often nested inside `<blockquote>`.
 - [`<strong>` & `<em>`](strong_em.md) — Inline emphasis tags that sit alongside `<cite>`.

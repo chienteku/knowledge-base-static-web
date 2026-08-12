@@ -116,56 +116,87 @@ button:hover { color: blue; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: CSS Syntax inside HTML
+### Exercise 1: Refactoring Bad Practice Inline Style Attributes to External CSS Classes
 
-**Problem:** Look at the following code. Why is the text not turning blue?
-```html
-<p style="color=blue">Hello World</p>
-```
+**Scenario:** An author refactors maintenance-heavy inline `style` attributes into clean CSS classes.
 
-**Expected output:**
+**Requirements:**
+1. Remove inline `style="color: red; font-size: 20px;"`.
+2. Replace with semantic CSS class `class="alert-text"`.
+
 > [!check]- Answer
-> ```text
-> The syntax inside the `style` attribute must be strictly valid CSS! CSS uses colons (`:`) to separate properties and values, not equal signs (`=`). It should be `style="color: blue;"`.
-> ```
-> - HTML uses `=`, but what does CSS use?
-> 
----
-
-
-
-### Exercise 2: Inline Style Specificity Override
-
-**Problem:** Which CSS rule wins for element `<div id="box" class="card" style="color: red;">` if external CSS specifies `#box { color: blue; }`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> color: red (Inline style specificity 1-0-0-0 outweighs ID selector specificity 0-1-0-0).
-> ```
-> ```text
-> color: red (Inline style specificity 1-0-0-0 outweighs ID selector specificity 0-1-0-0).
-> ```
 >
-> **Explanation:** Inline `style` attributes have higher specificity than ID, class, and element selectors.
-> 
----
-
-### Exercise 3: Valid Inline Style Use Case
-
-**Problem:** When IS an inline `style` attribute appropriate in modern web development?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> For dynamic, runtime-calculated values (e.g. progress bar width percentages calculated in JavaScript).
-> ```
+> #### Implementation
+>
 > ```html
-> <div class="progress-bar" style="width: 75%;"></div>
+> <!-- Refactored: Moved inline CSS into external class stylesheet -->
+> <p class="alert-text">
+>   <strong>Warning:</strong> System maintenance scheduled for midnight.
+> </p>
 > ```
 >
-> **Explanation:** Inline styles excel at binding dynamic JavaScript runtime properties.
+> #### Technical Explanation
+>
+> 1. **The `style` Attribute**: Applies inline CSS styling directly to an individual HTML element.
+> 2. **Bad Practice Warnings**: Inline `style` attributes clutter HTML code, violate Content Security Policies (CSP), and create specificity override issues.
+> 3. **Maintainability Principle**: Keep styling in external CSS files and use `class` names for maintainable code bases.
 > 
+---
+
+### Exercise 2: Legitimate Dynamic CSS Custom Property Injections via Inline Style
+
+**Scenario:** Uses inline `style` legitimately to inject dynamic server-calculated CSS custom properties (variables).
+
+**Requirements:**
+1. Inject `--progress` CSS variable via inline `style` attribute.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <div class="progress-bar-container">
+>   <!-- Dynamic inline style used LEGITIMATELY for runtime calculation -->
+>   <div class="progress-fill" style="--progress-val: 75%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+>     <span class="sr-only">75% Complete</span>
+>   </div>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Legitimate Inline Style Use Case**: Injecting runtime-calculated CSS variables (`--progress-val: 75%`) via inline `style` is a valid modern pattern.
+> 2. **CSS Variable Reading**: External CSS reads the variable via `width: var(--progress-val);` without hardcoding presentation rules in HTML.
+> 3. **Clean Separation**: Keeps CSS rules in stylesheets while passing dynamic percentage metrics from HTML/JS.
+> 
+---
+
+### Exercise 3: Overriding Specific Styles in HTML Email Templates
+
+**Scenario:** Uses inline `style` attributes in HTML email templates where external CSS is unsupported.
+
+**Requirements:**
+1. Apply inline styles for HTML email client rendering compatibility.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+>   <tr>
+>     <td style="padding: 20px; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+>       <h2 style="color: #333333; margin: 0 0 10px 0;">Welcome to Our Newsletter</h2>
+>     </td>
+>   </tr>
+> </table>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **HTML Email Exemption**: HTML email clients (Outlook, Gmail) strip external `<style>` tags, requiring inline `style` attributes.
+> 2. **Cross-Client Rendering**: Guarantees visual formatting across legacy email clients.
+> 3. **Explicit Unit Measure**: Always specify explicit units (`px`, `%`) in email inline styles.
 ## 6. Related Terms
 - [`class` Attribute](class.md) — The correct, maintainable way to apply CSS to elements.
 - [`id` Attribute](id.md) — The unique identifier attribute.

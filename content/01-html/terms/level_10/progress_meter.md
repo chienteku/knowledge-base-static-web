@@ -234,63 +234,85 @@ Basic progress and meter tags:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Password Strength Gauge
+### Exercise 1: File Upload Progress Bar using progress Element
 
-**Problem:** Write the markup for a password strength gauge. The maximum score is 4. The password has a score of 1. Set the warning thresholds so a score of 1 displays as a warning color, and set the optimum score target to 4. Include screen-reader fallback text.
+**Scenario:** An author uses the `<progress>` element to show current file upload completion status.
 
-**Expected output:**
+**Requirements:**
+1. Create `<progress value="75" max="100">`.
+2. Provide inner text fallback for screen readers.
+3. Link with explicit `<label>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <meter value="1" min="0" max="4" low="2" high="3" optimum="4">Strength: 1 out of 4</meter>
+> <div class="upload-widget">
+>   <label for="file-progress">File Upload Progress:</label>
+>   <progress id="file-progress" value="75" max="100">75%</progress>
+>   <output for="file-progress">75% Completed</output>
+> </div>
 > ```
-> - Use the `<meter>` element.
-> - Connect the `value` to `1` and `max` to `4`.
-> - Set `low="2"` so 1 falls below the low threshold, triggering warning colors.
-> - Set `optimum="4"`.
+>
+> #### Technical Explanation
+>
+> 1. **The `<progress>` Element**: Represents the completion progress of a task (e.g. file upload, download).
+> 2. **Progress Attributes**: `value` sets current progress position; `max` sets total target value (default 1.0).
+> 3. **Semantics vs Meter**: Use `<progress>` for tasks with a completion target; use `<meter>` for static scalar measurements.
 > 
 ---
 
+### Exercise 2: Disk Storage Capacity Gauge using meter Element
 
+**Scenario:** Uses the `<meter>` element to display disk storage usage with low, high, and optimum thresholds.
 
-### Exercise 2: Progress vs Meter Code Comparison
+**Requirements:**
+1. Create `<meter value="85" min="0" max="100" low="70" high="90" optimum="50">`.
+2. Provide explicit `<label>`.
 
-**Problem:** Write HTML for:
-1. File upload 70% completed (`<progress>`)
-2. Battery charge 90% level (`<meter>`)
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. <progress value="70" max="100">70%</progress>
-> 2. <meter value="0.9" min="0" max="1.0">90%</meter>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <!-- Progress bar -->
-> <label>Upload: <progress value="70" max="100">70%</progress></label>
->
-> <!-- Meter gauge -->
-> <label>Battery: <meter value="0.9" min="0" max="1.0">90%</meter></label>
+> <div class="storage-gauge">
+>   <label for="disk-meter">Server Disk Storage Usage:</label>
+>   <meter id="disk-meter" value="85" min="0" max="100" low="70" high="90" optimum="50">85 GB used out of 100 GB</meter>
+>   <span>85% Used (Warning Threshold Reached)</span>
+> </div>
 > ```
 >
-> **Explanation:** `<progress>` tracks task completion; `<meter>` measures scalar gauge values.
+> #### Technical Explanation
+>
+> 1. **The `<meter>` Element**: Represents a scalar measurement within a known range, or a fractional value (e.g. disk usage, battery level).
+> 2. **Threshold Attributes**: `low`, `high`, and `optimum` allow browsers to colorize the gauge automatically (green, yellow, red).
+> 3. **Fallback Text**: Text inside `<meter>...</meter>` is rendered by legacy browsers that do not support the element.
 > 
 ---
 
-### Exercise 3: Indeterminate Progress State
+### Exercise 3: Accessibility Live Region Announcements for Dynamic Meter Updates
 
-**Problem:** How do you create an indeterminate progress bar (loading spinner style) where completion % is unknown?
+**Scenario:** Announces dynamic progress updates via `aria-valuenow` and `<output>`.
 
-**Expected output:**
+**Requirements:**
+1. Add `aria-valuenow` and `aria-valuemax` to `<progress>`.
+
 > [!check]- Answer
-> ```text
-> Omit the `value` attribute on `<progress>`.
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <progress></progress> <!-- Indeterminate progress bar -->
+> <div role="region" aria-label="Task Status">
+>   <progress id="job-prog" value="40" max="100" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</progress>
+> </div>
 > ```
 >
-> **Explanation:** Omitting the `value` attribute renders an indeterminate loading animation.
-> 
+> #### Technical Explanation
+>
+> 1. **Implicit ARIA Roles**: `<progress>` maps to `role="progressbar"`; `<meter>` maps to `role="meter"`.
+> 2. **Screen Reader Value Reading**: Screen readers announce value updates automatically.
+> 3. **CSS Custom Styling**: Customize bar appearance using `progress::-webkit-progress-bar` and `meter::-webkit-meter-optimum-value`.
 ## 6. Related Terms
 - [`value` Attribute (in Form Fields)](../level_05/value.md) — The data value tag.
 - [The `<output>` Element](../level_05/output.md) — The semantic tag displaying calculation results.

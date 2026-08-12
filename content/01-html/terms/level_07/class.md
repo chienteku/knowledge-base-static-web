@@ -113,53 +113,97 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 
 ## 5. Practice Exercises
 
-### Exercise 1: ID vs Class
+### Exercise 1: Reusable Component Styling Hooks using Space-Separated Class Names
 
-**Problem:** You are building a navigation menu with 5 links. When the user hovers over any of the links, they should turn blue. Should you use an `id` or a `class` to apply this style?
+**Scenario:** An author builds a product card component using multiple space-separated class names for layout, theme, and modifier styling.
 
-**Expected output:**
+**Requirements:**
+1. Create an `<article>` container.
+2. Apply multiple space-separated class names (`card card-featured card-dark`).
+3. Add nested elements styled via class hooks.
+
 > [!check]- Answer
-> ```text
-> A `class`! Because you want to apply the exact same style to 5 different elements. IDs must be unique and can only be used once.
-> ```
-> - Are there multiple elements that need to share this behavior?
-> 
----
-
-
-
-### Exercise 2: Multiple Class Application
-
-**Problem:** Apply classes `card`, `card-featured`, and `shadow` to a `<div>` element.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <div class="card card-featured shadow">Content</div>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <div class="card card-featured shadow">Content</div>
+> <article class="card card-featured card-dark" id="product-101">
+>   <div class="card-badge">Bestseller</div>
+>   <h2 class="card-title">Pro Developer Headset</h2>
+>   <p class="card-description">High-fidelity audio with noise cancellation.</p>
+>   <button type="button" class="btn btn-primary btn-large">Buy Now</button>
+> </article>
 > ```
 >
-> **Explanation:** Multiple CSS classes are declared in a space-delimited list.
+> #### Technical Explanation
+>
+> 1. **The `class` Attribute**: Assigns one or more class names to an element, acting as reusable hooks for CSS styling and JavaScript selectors.
+> 2. **Space-Separated Values**: Multiple class names are separated by spaces (`class="btn btn-primary"`), allowing modular BEM or utility styling combinations.
+> 3. **Non-Unique Reusability**: Unlike `id`, the same `class` name can be shared across multiple elements in the same HTML document.
 > 
 ---
 
-### Exercise 3: JavaScript classList API
+### Exercise 2: Utility-First CSS Class Combinations vs Semantic Component Classes
 
-**Problem:** Which JavaScript DOM API method adds a class to an element without overwriting existing classes?
+**Scenario:** Combines layout utility classes with semantic HTML structure for responsive flex grids.
 
-**Expected output:**
+**Requirements:**
+1. Use utility class names for spacing and layout alignment.
+2. Maintain semantic element structure.
+
 > [!check]- Answer
-> ```text
-> element.classList.add('className')
-> ```
-> ```javascript
-> element.classList.add('active');
+>
+> #### Implementation
+>
+> ```html
+> <section class="container mx-auto py-8">
+>   <h2 class="text-2xl font-bold text-center">Our Services</h2>
+>   <div class="flex flex-col md:flex-row gap-4 mt-6">
+>     <article class="flex-1 p-6 bg-white rounded-lg shadow">
+>       <h3 class="text-xl font-semibold">Web Development</h3>
+>       <p class="text-gray-600 mt-2">Fast, responsive websites.</p>
+>     </article>
+>   </div>
+> </section>
 > ```
 >
-> **Explanation:** `.classList.add()` safely appends classes to the element class token list.
+> #### Technical Explanation
+>
+> 1. **Utility Class Architecture**: Frameworks like Tailwind CSS use small single-purpose utility class names (`py-8`, `flex-row`).
+> 2. **Semantic Tag Preservation**: Even when using utility class styling, maintain semantic HTML5 tags (`<section>`, `<article>`, `<h2>`).
+> 3. **CSS Specificity Balance**: Classes have equal CSS specificity (0,1,0), preventing specificity wars.
 > 
+---
+
+### Exercise 3: Managing Dynamic JavaScript Class Mutations
+
+**Scenario:** Prepares component HTML class hooks for dynamic JavaScript `classList` toggling.
+
+**Requirements:**
+1. Include state classes (`is-active`, `is-hidden`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <button type="button" class="nav-toggle-btn" id="menu-trigger">
+>   <span class="btn-icon"></span>
+>   <span class="sr-only">Toggle Menu</span>
+> </button>
+>
+> <nav class="nav-drawer is-hidden" id="main-drawer" aria-label="Main Drawer">
+>   <ul>
+>     <li><a href="/">Home</a></li>
+>   </ul>
+> </nav>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **State Classes (`is-active`)**: Using explicit state classes like `is-hidden` or `is-active` decouples JS state logic from visual design.
+> 2. **JavaScript `classList` API**: Scripts can toggle classes easily via `element.classList.toggle('is-hidden')`.
+> 3. **Performance Optimization**: Toggling CSS classes triggers batch layout recalculations efficiently.
 ## 6. Related Terms
 - [`id` Attribute](id.md) — The strictly unique identifier.
 - [`style` Attribute](style.md) — Another global attribute used to apply CSS directly to an element.

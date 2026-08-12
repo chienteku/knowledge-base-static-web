@@ -160,68 +160,83 @@ Displaying code examples safely:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Entity Translation
+### Exercise 1: Safely Encoding Reserved HTML Characters in Code Snippets
 
-**Problem:** Write the HTML code to display the following sentence exactly as it appears, preventing the browser from interpreting the tags:
-"The syntax for a line break is <br>."
+**Scenario:** An author uses HTML entity codes (`&lt;`, `&gt;`, `&amp;`) to display HTML markup examples inside a tutorial without triggering browser parsing.
 
-**Expected output:**
+**Requirements:**
+1. Use `&lt;` for `<` and `&gt;` for `>`.
+2. Use `&amp;` for `&` and `&quot;` for `"`.
+3. Wrap in `<pre><code>` block.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <p>The syntax for a line break is &lt;br&gt;.</p>
+> <pre><code>&lt;div class=&quot;container&quot;&gt;
+>   &lt;p&gt;This text contains an ampersand (&amp;) symbol.&lt;/p&gt;
+> &lt;/div&gt;</code></pre>
 > ```
-> - Replace `<` with `&lt;`.
-> - Replace `>` with `&gt;`.
+>
+> #### Technical Explanation
+>
+> 1. **HTML Entity Purpose**: Special character sequences starting with `&` and ending with `;` used to display reserved characters or special symbols.
+> 2. **Reserved Character Escaping**: `<` (`&lt;`), `>` (`&gt;`), `&` (`&amp;`), and `"` (`&quot;`) MUST be escaped in text to prevent HTML parsing errors.
+> 3. **Preventing Script Injection**: Escaping user-generated text into entities prevents Cross-Site Scripting (XSS) attacks.
 > 
 ---
 
+### Exercise 2: Rendering Special Copyright and Currency Entities
 
+**Scenario:** Displays special typographical symbols using standard named HTML entities.
 
-### Exercise 2: Core HTML Entity Matching
+**Requirements:**
+1. Use `&copy;` for copyright.
+2. Use `&trade;` and `&reg;` for trademarks.
+3. Use `&euro;` and `&pound;` for currency.
 
-**Problem:** Match character symbol to entity name code:
-1. `<` 
-2. `>` 
-3. `&` 
-4. `"` 
-5. `©` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. &lt;
-> 2. &gt;
-> 3. &amp;
-> 4. &quot;
-> 5. &copy;
-> ```
-> ```text
-> 1. <  -> &lt;
-> 2. >  -> &gt;
-> 3. &  -> &amp;
-> 4. "  -> &quot;
-> 5. ©  -> &copy;
+>
+> #### Implementation
+>
+> ```html
+> <footer>
+>   <p>&copy; 2026 Acme&trade; Corp. All Rights Reserved &reg;.</p>
+>   <p>Pricing: &euro;19.99 / &pound;15.00 / &yen;2,500</p>
+> </footer>
 > ```
 >
-> **Explanation:** HTML entities escape reserved character symbols.
+> #### Technical Explanation
+>
+> 1. **Typographical Entities**: Named entities represent symbols like `&copy;` (©), `&trade;` (™), `&reg;` (®), and `&euro;` (€).
+> 2. **Browser Encoding Safety**: Ensures correct symbol rendering across older non-UTF-8 servers.
+> 3. **UTF-8 Equivalent**: In modern UTF-8 documents, literal symbols (©, €) can be used directly, but entities remain standard fallbacks.
 > 
 ---
 
-### Exercise 3: Non-Breaking Space Entity
+### Exercise 3: Non-Breaking Space (&nbsp;) Usage vs CSS Margin Spacing
 
-**Problem:** Which HTML entity creates a non-breaking space character that prevents line wrapping between two words?
+**Scenario:** Uses `&nbsp;` to prevent unwanted word wrapping in brand titles while using CSS for layout spacing.
 
-**Expected output:**
+**Requirements:**
+1. Use `&nbsp;` between brand words.
+
 > [!check]- Answer
-> ```text
-> &nbsp;
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <span>100&nbsp;km/h</span>
+> <p>
+>   Welcome to Acme&nbsp;Enterprises.
+> </p>
 > ```
 >
-> **Explanation:** `&nbsp;` prevents automatic line wrapping between adjacent words.
-> 
+> #### Technical Explanation
+>
+> 1. **Non-Breaking Space (`&nbsp;`)**: Prevents automatic line breaks between adjacent words.
+> 2. **Layout Misuse Warning**: Do NOT use multiple `&nbsp;&nbsp;&nbsp;` strings for visual layout margins; use CSS `margin`/`padding` instead.
+> 3. **Numeric Entities**: Can also be written using Unicode numbers (`&#160;`).
 ## 6. Related Terms
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tags that require less-than/greater-than signs.
 - [Character Encoding (`charset`)](../level_08/character_encoding.md) — The underlying byte mapping.

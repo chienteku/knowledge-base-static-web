@@ -119,53 +119,102 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Root Hierarchy
+### Exercise 1: Enclosing Document Root with html Tag Pair
 
-**Problem:** Look at a standard HTML boilerplate. Which two elements are the *direct children* of the `<html>` root element?
+**Scenario:** Demonstrates opening `<html>` and closing `</html>` tag pair wrapping document content.
 
-**Expected output:**
+**Requirements:**
+1. Write opening `<html lang="en">`.
+2. Include document contents.
+3. Close with `</html>`.
+
 > [!check]- Answer
-> ```text
-> The `<head>` and `<body>` elements.
-> ```
-> - Look at the "Fuller Example" above. What is nested immediately one level deep inside `<html>`?
-> 
----
-
-
-
-### Exercise 2: Root Element Identification
-
-**Problem:** What is the top-level root element of every HTML document called?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The <html> element (Document Root).
-> ```
-> ```text
-> The <html> element (Document Root).
-> ```
 >
-> **Explanation:** `<html>` is the top-level root container encapsulating `<head>` and `<body>`.
-> 
----
-
-### Exercise 3: Declaring Multiple Sub-Languages
-
-**Problem:** If a page is in English (`lang="en"`) but contains a Spanish quote, how do you mark up the Spanish span?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <span lang="es">Hola amigo</span>
-> ```
+> #### Implementation
+>
 > ```html
-> <p>He said, <span lang="es">Hola amigo</span>, and smiled.</p>
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>HTML Tag Demo</title>
+> </head>
+> <body>
+>   <p>Root container tag demonstration.</p>
+> </body>
+> </html>
 > ```
 >
-> **Explanation:** The `lang` attribute can be applied to inline elements to override document language for screen readers.
+> #### Technical Explanation
+>
+> 1. **Root Container Tag**: `<html>` opens document tree; `</html>` closes document tree.
+> 2. **Language Declaration**: Always specify `lang` attribute on opening `<html>` tag.
+> 3. **Valid Parsing**: Ensures browser parser establishes root DOM element correctly.
 > 
+---
+
+### Exercise 2: Specifying Primary Page Language and Text Direction
+
+**Scenario:** Configures `<html>` tag for Right-To-Left (RTL) languages like Arabic.
+
+**Requirements:**
+1. Set `lang="ar"`.
+2. Set `dir="rtl"` on `<html>` tag.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="ar" dir="rtl">
+> <head>
+>   <meta charset="utf-8">
+>   <title>عنوان الصفحة</title>
+> </head>
+> <body>
+>   <h1>مرحبا بكم</h1>
+> </body>
+> </html>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Text Direction (`dir`)**: `dir="rtl"` sets right-to-left layout for Arabic, Hebrew, and Persian.
+> 2. **Global Layout Mirroring**: Browsers automatically mirror text alignment and flexbox direction when `dir="rtl"` is set on `<html>`.
+> 3. **Bi-directional Text Support**: Ensures inclusive accessibility for international audiences.
+> 
+---
+
+### Exercise 3: Validating XML Namespace Attributes in html
+
+**Scenario:** Adds XHTML legacy namespace attributes to `<html>` for XML-compatible parsers.
+
+**Requirements:**
+1. Add `xmlns="http://www.w3.org/1999/xhtml"` to `<html>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+> <head>
+>   <meta charset="utf-8">
+>   <title>XHTML Compatible HTML5</title>
+> </head>
+> <body>
+>   <p>Polyglot document markup.</p>
+> </body>
+> </html>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **XML Namespaces**: `xmlns` attribute defines XML namespace for XHTML polyglot documents.
+> 2. **HTML5 Backward Compatibility**: HTML5 parsers ignore `xmlns`, but XML validators require it.
+> 3. **Polyglot Markup**: Allows HTML documents to be parsed by both XML and HTML parsers.
 ## 6. Related Terms
 - [`<head>`](head.md) — The first child of the `<html>` element.
 - [`<body>`](body.md) — The second child of the `<html>` element.

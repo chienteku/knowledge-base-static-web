@@ -187,52 +187,80 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 
 ## 5. Practice Exercises
 
-### Exercise 1: Block vs Inline
+### Exercise 1: Styling Specific Words inside Headlines with span Wrappers
 
-**Problem:** What happens visually if you accidentally swap a `<span>` for a `<div>` in the middle of a sentence?
-`I love <div class="red">apples</div> and bananas.`
+**Scenario:** A UI designer wraps a key action word inside a `<span>` to apply a distinct color accent via CSS.
 
-**Expected output:**
+**Requirements:**
+1. Wrap target word in `<span>` tag with a class name.
+2. Verify text flow remains inline.
+
 > [!check]- Answer
-> ```text
-> The word "apples" will be forced onto its own line, breaking the sentence into three separate lines:
-> I love
-> apples
-> and bananas.
-> ```
-> - `<div>` is a block element. `<span>` is an inline element.
-> 
----
-
-### Exercise 2: Span vs Div Comparison
-
-**Problem:** Compare `<span>` vs `<div>` across:
-1. Default display mode
-2. Semantic meaning
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. span: inline, div: block
-> 2. Both are non-semantic generic containers
-> ```
 >
-> **Explanation:** `<span>` is generic inline wrapper; `<div>` is generic block wrapper.
-> 
----
-
-### Exercise 3: Styling Text Substring
-
-**Problem:** Wrap word `'red'` in sentence `'The car is red.'` to color it red with CSS.
-
-**Expected output:**
-> [!check]- Answer
+> #### Implementation
+>
 > ```html
-> <p>The car is <span style="color: red;">red</span>.</p>
+> <h1 class="hero-title">
+>   Build <span class="accent-text">Accessible</span> Web Applications
+> </h1>
 > ```
 >
-> **Explanation:** `<span>` allows targeting specific inline text substrings for CSS styling.
+> #### Technical Explanation
+>
+> 1. **Generic Inline Container (`<span>`)**: `<span>` is a non-semantic inline container used to group text for styling or scripting.
+> 2. **No Semantic Impact**: `<span>` does not convey structural meaning, making it neutral for screen readers.
+> 3. **Targeted CSS Styling**: Attach CSS classes to `<span>` to customize font color, weight, or background accents inline.
 > 
+---
+
+### Exercise 2: Screen Reader Visually Hidden Text Wrappers
+
+**Scenario:** An author adds visually hidden text using `<span class="sr-only">` to provide extra context for screen readers.
+
+**Requirements:**
+1. Add `<span class="sr-only">` inside icon buttons.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <button type="button" class="icon-btn">
+>   <svg aria-hidden="true" width="16" height="16"><use href="#icon-search"></use></svg>
+>   <span class="sr-only">Search Products</span>
+> </button>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Screen Reader Only Text (`sr-only`)**: Hides text visually with CSS while keeping it accessible to screen reader audio output.
+> 2. **Icon Button Context**: Ensures icon buttons without visible labels have accessible names for screen readers.
+> 3. **Hiding Decorative SVGs (`aria-hidden="true"`)**: Prevents screen readers from announcing raw vector icons.
+> 
+---
+
+### Exercise 3: Language Shift Annotations with span lang
+
+**Scenario:** Annotates foreign language phrases within an English paragraph.
+
+**Requirements:**
+1. Use `<span lang="fr">` around French phrases.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <p>
+>   She described the experience as having a certain <span lang="fr">je ne sais quoi</span>.
+> </p>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `lang` Attribute on `<span>`**: Overrides document language for specific inline phrases.
+> 2. **Pronunciation Switching**: Instructs screen readers to switch to French voice engine for accurate pronunciation.
+> 3. **Styling Hook**: Allows styling foreign phrases (e.g. italics) via CSS `span[lang]`.
 ## 6. Related Terms
 - [`<div>` (Block container)](div.md) — The block-level equivalent of `<span>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic inline tags.

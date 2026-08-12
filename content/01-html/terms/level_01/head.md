@@ -120,64 +120,90 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 
 ## 5. Practice Exercises
 
-### Exercise 1: Head vs Body Sorting
+### Exercise 1: Configuring Essential Page Metadata in head
 
-**Problem:** Decide whether each of the following tags belongs in the `<head>` or the `<body>`:
-1. `<img src="logo.png">`
-2. `<meta name="description" content="A site about cats">`
-3. `<p>Hello world</p>`
-4. `<link rel="stylesheet" href="style.css">`
+**Scenario:** A web author sets up mandatory document metadata inside the `<head>` tag for character encoding and responsive viewports.
 
-**Expected output:**
+**Requirements:**
+1. Include `<meta charset="utf-8">` as first child of `<head>`.
+2. Add responsive viewport `<meta>` tag.
+3. Include `<title>`.
+
 > [!check]- Answer
-> ```text
-> 1. <body> (It's a visible image)
-> 2. <head> (It's invisible metadata for Google)
-> 3. <body> (It's visible text)
-> 4. <head> (It's behind-the-scenes styling instructions)
-> ```
-> - Ask yourself: "Does the user need to look directly at this on the page?"
-> 
----
-
-
-
-### Exercise 2: Essential Head Metadata Template
-
-**Problem:** Write a standard `<head>` section containing UTF-8 charset meta, viewport meta, and page title `'Home'`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Home</title></head>
-> ```
+>
+> #### Implementation
+>
 > ```html
 > <head>
->   <meta charset="UTF-8">
+>   <meta charset="utf-8">
 >   <meta name="viewport" content="width=device-width, initial-scale=1.0">
->   <title>Home</title>
+>   <title>Accessibility First Design</title>
 > </head>
 > ```
 >
-> **Explanation:** Standard `<head>` metadata includes character set, responsive viewport scaling, and page title.
+> #### Technical Explanation
+>
+> 1. **Role of `<head>`**: The `<head>` element contains machine-readable metadata about the document not rendered directly in the page body.
+> 2. **UTF-8 Encoding**: `<meta charset="utf-8">` prevents garbled text by specifying international UTF-8 character encoding.
+> 3. **Responsive Viewport**: `width=device-width` ensures mobile browsers scale pages correctly to screen dimensions.
 > 
 ---
 
-### Exercise 3: Head vs Body Display Rule
+### Exercise 2: Linking External Stylesheets and Favicons
 
-**Problem:** Do elements inside the `<head>` section render as visible UI components on the webpage screen? (Yes/No).
+**Scenario:** A developer connects external CSS resources and site icons inside `<head>`.
 
-**Expected output:**
+**Requirements:**
+1. Link CSS stylesheet via `<link rel="stylesheet">`.
+2. Link site favicon via `<link rel="icon">`.
+
 > [!check]- Answer
-> ```text
-> No (head elements provide machine-readable metadata, styles, and scripts; body handles visible rendering).
-> ```
-> ```text
-> No (head elements provide machine-readable metadata, styles, and scripts; body handles visible rendering).
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Acme Portal</title>
+>   <link rel="stylesheet" href="css/styles.css">
+>   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+> </head>
 > ```
 >
-> **Explanation:** `<head>` contents are non-rendered document metadata.
+> #### Technical Explanation
+>
+> 1. **`<link>` Element**: Connects current document to external resources like stylesheets and icons.
+> 2. **`rel` Attribute**: Specifies relationship type (`stylesheet`, `icon`, `preload`).
+> 3. **Non-Rendered Head Metadata**: Resource links in `<head>` load assets before body content displays.
 > 
+---
+
+### Exercise 3: Open Graph Social Media Share Metadata
+
+**Scenario:** An SEO specialist adds Open Graph `<meta>` tags in `<head>` for rich social media link previews.
+
+**Requirements:**
+1. Add `og:title`, `og:description`, and `og:image` metadata tags.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Guide to Web Semantics</title>
+>   <meta property="og:title" content="Guide to Web Semantics">
+>   <meta property="og:description" content="Learn how semantic HTML improves accessibility and SEO.">
+>   <meta property="og:image" content="https://example.com/cover.jpg">
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Open Graph Protocol**: Standardized metadata used by Facebook, Twitter, and LinkedIn for social preview cards.
+> 2. **`property` Attribute**: Specifies Open Graph metadata keys (`og:title`, `og:image`).
+> 3. **SEO Enhancement**: Rich previews increase click-through rates when links are shared.
 ## 6. Related Terms
 - [`<body>`](body.md) — The sibling to `<head>` that handles all visible content.
 - [`title` Attribute](../level_07/title.md) — The most important tag that lives inside the `<head>`.

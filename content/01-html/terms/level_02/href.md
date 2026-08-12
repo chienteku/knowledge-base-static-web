@@ -183,58 +183,85 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 
 ## 5. Practice Exercises
 
-### Exercise 1: Identifying Link Types
+### Exercise 1: Linking Relative Paths, Absolute URLs, and Email Links
 
-**Problem:** Look at the following `href` values. Identify if they are Absolute, Relative, or Mailto links.
-1. `href="contact.html"`
-2. `href="https://facebook.com"`
-3. `href="mailto:hello@world.com"`
+**Scenario:** A developer creates three distinct link types using relative paths, absolute URLs, and the `mailto:` email protocol.
 
-**Expected output:**
+**Requirements:**
+1. Create internal link using relative path `href="contact.html"`.
+2. Create external link using absolute URL `href="https://example.com"`.
+3. Create email link using `href="mailto:support@example.com"`.
+
 > [!check]- Answer
-> ```text
-> 1. Relative (points to a local file)
-> 2. Absolute (points to a full URL on another server)
-> 3. Mailto (opens an email client)
-> ```
-> - Does it have `https://`?
-> - Does it have `mailto:`?
-> 
----
-
-### Exercise 2: Valid href Value Formats
-
-**Problem:** Match `href` format to target link behavior:
-1. `href="/about"` 
-2. `href="#top"` 
-3. `href="mailto:a@b.com"` 
-4. `href="tel:123456"` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Root-relative page navigation
-> 2. In-page anchor element ID
-> 3. Email client prompt
-> 4. Telephone dialer prompt
-> ```
 >
-> **Explanation:** `href` accepts web URLs, element IDs, and URI protocol schemes.
-> 
----
-
-### Exercise 3: Downloading Files via href
-
-**Problem:** Which attribute can be added to `<a href="file.pdf">` to force the browser to download the file instead of displaying it inline?
-
-**Expected output:**
-> [!check]- Answer
+> #### Implementation
+>
 > ```html
-> <a href="file.pdf" download="Report.pdf">Download Report</a>
+> <ul class="nav-links">
+>   <li><a href="contact.html">Contact Us</a></li>
+>   <li><a href="https://example.com" target="_blank" rel="noopener noreferrer">Partner Site</a></li>
+>   <li><a href="mailto:support@example.com">Email Support</a></li>
+> </ul>
 > ```
 >
-> **Explanation:** `download` attribute instructs browsers to save linked resources to disk.
+> #### Technical Explanation
+>
+> 1. **The `href` Attribute**: Specifies the hyperlink target destination URL on `<a>`, `<link>`, and `<base>` tags.
+> 2. **Email Protocol (`mailto:`)**: The `mailto:` scheme opens the user's default email client pre-addressed to the recipient.
+> 3. **Relative vs Absolute Target Paths**: Relative paths link within the site; absolute URLs include complete `https://` domain schemes.
 > 
+---
+
+### Exercise 2: URL Fragment Anchors for Table of Contents
+
+**Scenario:** Creates smooth navigation targets using `href="#fragment-id"`.
+
+**Requirements:**
+1. Link `href="#features"` to `<section id="features">`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <a href="#features">Jump to Features Section</a>
+>
+> <section id="features">
+>   <h2>Product Features</h2>
+>   <p>Detailed feature descriptions.</p>
+> </section>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Fragment Hash (`#`)**: `href="#id"` targets an element with a matching `id` on the current page.
+> 2. **Top of Page Target (`href="#"`)**: `href="#"` jumps to top of document window.
+> 3. **Keyboard Focus Routing**: Moves keyboard focus directly to target section element.
+> 
+---
+
+### Exercise 3: Handling Missing or Dummy href Attributes
+
+**Scenario:** Fixes anti-pattern where `<a>` tags lack `href` attributes or use `javascript:void(0)`.
+
+**Requirements:**
+1. Replace dummy `<a href="#">` buttons with semantic `<button type="button">`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Incorrect: <a href="#" onclick="doSomething()">Click Me</a> -->
+> <!-- Correct Semantic HTML5 Button for JS Actions: -->
+> <button type="button" class="btn-action">Perform Action</button>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Links vs Buttons**: Links (`<a>`) navigate to URLs; Buttons (`<button>`) perform actions or trigger scripts.
+> 2. **Keyboard Accessibility**: `<a>` without `href` is NOT focusable via Tab key navigation.
+> 3. **Screen Reader Announcement**: Links without `href` lose hyperlink role accessibility semantics.
 ## 6. Related Terms
 - [`<a>` (Anchor / Link)](a.md) — The tag that utilizes the `href` attribute.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.

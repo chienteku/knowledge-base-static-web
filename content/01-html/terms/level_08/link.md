@@ -126,57 +126,91 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Favicon
+### Exercise 1: Preloading Critical Resources with link rel=preload
 
-**Problem:** When you open a website, there is usually a tiny logo in the browser tab next to the page title. How do you think the browser knows where to find that image?
+**Scenario:** An author preloads a critical web font using `<link rel="preload">` to prevent FOUT (Flash of Unstyled Text).
 
-**Expected output:**
+**Requirements:**
+1. Add `<link rel="preload" href="..." as="font" type="font/woff2" crossorigin>`.
+2. Verify `as` and `crossorigin` attributes.
+
 > [!check]- Answer
-> ```text
-> It uses a `<link>` tag! Specifically: `<link rel="icon" href="logo.png">`. By changing the `rel` attribute to "icon" instead of "stylesheet", the browser knows to put that image in the browser tab.
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>High Performance Web Font</title>
+>   <!-- Preload critical WOFF2 font asset -->
+>   <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+>   <link rel="stylesheet" href="/css/styles.css">
+> </head>
 > ```
-> - Look closely at the "Fuller Example" snippet above.
+>
+> #### Technical Explanation
+>
+> 1. **The `<link>` Void Element**: Connects current document to external resources or specifies resource hints.
+> 2. **Resource Preloading (`rel="preload"`)**: Forces browser to download critical assets early before layout engine discovers them in CSS.
+> 3. **The `as="font"` Attribute**: Specifies resource type (`font`, `script`, `style`, `image`); fonts require `crossorigin="anonymous"`.
 > 
 ---
 
+### Exercise 2: DNS Prefetching and Preconnecting to External Third-Party APIs
 
+**Scenario:** Uses `preconnect` to establish early TCP/TLS handshakes with third-party domains.
 
-### Exercise 2: Resource Preconnect and Preload Links
+**Requirements:**
+1. Add `<link rel="preconnect" href="https://api.example.com">`.
+2. Add `<link rel="dns-prefetch" href="...">` fallback.
 
-**Problem:** Write `<link>` tags for:
-1. Preconnecting to Google Fonts domain `https://fonts.googleapis.com`
-2. Preloading critical font `font.woff2`
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. <link rel="preconnect" href="https://fonts.googleapis.com">
-> 2. <link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <link rel="preconnect" href="https://fonts.googleapis.com">
-> <link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
+> <head>
+>   <meta charset="utf-8">
+>   <title>API Connected Portal</title>
+>   <!-- Preconnect to external API domain -->
+>   <link rel="preconnect" href="https://api.example.com">
+>   <link rel="dns-prefetch" href="https://api.example.com">
+> </head>
 > ```
 >
-> **Explanation:** `preconnect` warms up DNS/TLS connections; `preload` fetches critical assets early.
+> #### Technical Explanation
+>
+> 1. **`rel="preconnect"` Resource Hint**: Performs DNS lookup, TCP handshake, and TLS negotiation in background.
+> 2. **Latency Reduction**: Eliminates 100-300ms network connection latency when fetching third-party API data later.
+> 3. **`dns-prefetch` Fallback**: Provides DNS lookup fallback for older browsers.
 > 
 ---
 
-### Exercise 3: Canonical Link Tag Purpose
+### Exercise 3: Canonical URL Linking for SEO
 
-**Problem:** Write canonical `<link>` tag preventing duplicate content SEO penalties for URL `https://example.com/page`.
+**Scenario:** Specifies canonical URL link to prevent duplicate content SEO penalties.
 
-**Expected output:**
+**Requirements:**
+1. Add `<link rel="canonical" href="https://example.com/canonical-page">`.
+
 > [!check]- Answer
-> ```text
-> <link rel="canonical" href="https://example.com/page">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <link rel="canonical" href="https://example.com/page">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Product Page</title>
+>   <!-- Prevents duplicate content SEO issues -->
+>   <link rel="canonical" href="https://example.com/products/item-101">
+> </head>
 > ```
 >
-> **Explanation:** `rel="canonical"` informs search engine crawlers of the primary authoritative URL.
-> 
+> #### Technical Explanation
+>
+> 1. **Canonical Link (`rel="canonical"`)**: Tells search engine crawlers which URL is the authoritative primary version of a page.
+> 2. **Consolidating Link Metrics**: Merges SEO ranking signals across URL parameters (`?ref=twitter`).
+> 3. **Absolute URL Required**: Canonical URLs MUST be absolute HTTP/HTTPS addresses.
 ## 6. Related Terms
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The clickable user navigation link (do not confuse with `<link>`).
 - [`<head>`](../level_01/head.md) — The parent container where the `<link>` tag lives.

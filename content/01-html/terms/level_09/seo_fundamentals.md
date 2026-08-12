@@ -169,68 +169,115 @@ Add a canonical link in the `<head>` to declare the "master copy":
 
 ## 5. Practice Exercises
 
-### Exercise 1: SEO Header Fix
+### Exercise 1: Comprehensive On-Page Technical SEO Architecture
 
-**Problem:** You are reviewing a landing page for a local dog grooming salon. The page currently has the following tags:
+**Scenario:** An author builds a technical SEO-optimized HTML page structure with title, meta description, canonical link, and heading outline.
 
-```html
-<head>
-  <title>Welcome to the best salon in Chicago!</title>
-</head>
-```
+**Requirements:**
+1. Include unique `<title>` (50-60 chars).
+2. Include `<meta name="description">` (150-160 chars).
+3. Add `<link rel="canonical">`.
+4. Use single `<h1>`.
 
-How would you improve the `<title>` tag to target local keywords like "dog grooming Chicago" and "pet salon"?
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <title>Dog Grooming Chicago | Pet Salon Services - Bark & Bubble</title>
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>
+>   <title>Web Accessibility Guide | Acme Training</title>
+>   <meta name="description" content="Master W3C web accessibility guidelines and semantic HTML5 to build inclusive, high-ranking web applications.">
+>   <link rel="canonical" href="https://example.com/guides/web-accessibility">
+> </head>
+> <body>
+>   <header>
+>     <h1>Web Accessibility & Technical SEO Guide</h1>
+>   </header>
+>   <main>
+>     <article>
+>       <h2>Why Semantics Matter for SEO</h2>
+>       <p>Search engine crawlers rely on semantic markup to index page content.</p>
+>     </article>
+>   </main>
+> </body>
+> </html>
 > ```
-> - Place the primary target keywords near the beginning of the title.
-> - Include the brand name at the end separated by a dash or pipe.
+>
+> #### Technical Explanation
+>
+> 1. **Technical On-Page SEO**: Technical SEO involves structuring HTML tags so search crawlers can parse, index, and rank web pages efficiently.
+> 2. **The `<title>` and `description` Meta Tags**: The `<title>` sets search result headline text; `description` supplies the snippet text below the title link.
+> 3. **Canonical Link Protection**: `<link rel="canonical">` prevents duplicate content indexing penalties across parameter variations.
 > 
 ---
 
+### Exercise 2: JSON-LD Structured Data Schema Markup
 
+**Scenario:** Embeds JSON-LD schema markup inside `<script type="application/ld+json">` to generate Google Rich Snippets.
 
-### Exercise 2: Core Technical SEO HTML Checklist
+**Requirements:**
+1. Create `<script type="application/ld+json">` block.
+2. Add valid Article schema JSON.
 
-**Problem:** List 4 essential HTML elements required for technical SEO optimization.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Unique, descriptive <title> tag
-> 2. Meta description tag
-> 3. Single <h1> headline per page
-> 4. Descriptive alt text on <img> elements
-> ```
-> ```text
-> 1. Unique, descriptive <title> tag
-> 2. Meta description tag
-> 3. Single <h1> headline per page
-> 4. Descriptive alt text on <img> elements
+>
+> #### Implementation
+>
+> ```html
+> <script type="application/ld+json">
+> {
+>   "@context": "https://schema.org",
+>   "@type": "Article",
+>   "headline": "Web Accessibility Guide",
+>   "author": {
+>     "@type": "Person",
+>     "name": "Jane Doe"
+>   },
+>   "publisher": {
+>     "@type": "Organization",
+>     "name": "Acme Training"
+>   }
+> }
+> </script>
 > ```
 >
-> **Explanation:** Technical SEO requires clear, machine-readable page metadata and semantic structure.
+> #### Technical Explanation
+>
+> 1. **JSON-LD Schema Markup**: Structured data format recommended by Google to understand page entity content.
+> 2. **Rich Search Snippets**: Generates star ratings, article carousels, and author info in search engine result pages.
+> 3. **Non-Visible Metadata**: Embedded safely inside a non-executable JSON script tag.
 > 
 ---
 
-### Exercise 3: Meta Description Character Limit
+### Exercise 3: Accessible & Search Engine Friendly Heading Outlines
 
-**Problem:** What is the recommended character count limit for `<meta name="description">` to prevent truncation in Google search results?
+**Scenario:** Ensures heading hierarchy matches topic importance for search engine indexing.
 
-**Expected output:**
+**Requirements:**
+1. Structure headings logically (`<h1>` -> `<h2>` -> `<h3>`).
+
 > [!check]- Answer
-> ```text
-> 150 to 160 characters.
-> ```
-> ```text
-> 150 to 160 characters.
+>
+> #### Implementation
+>
+> ```html
+> <h1>Frontend Development Services</h1>
+> <section>
+>   <h2>React Development</h2>
+>   <p>Building single page applications.</p>
+> </section>
 > ```
 >
-> **Explanation:** Keeping meta descriptions under 160 characters prevents search snippet clipping.
-> 
+> #### Technical Explanation
+>
+> 1. **Semantic Relevance**: Search crawlers give higher weight to keywords inside `<h1>` and `<h2>` heading tags.
+> 2. **Topic Clustering**: Nested `<h2>`/`<h3>` tags signal sub-topic relationships.
+> 3. **Single `<h1>` Rule**: Ensures a clear primary page focus.
 ## 6. Related Terms
 - [`<meta>`](../level_08/meta.md) — The container for search descriptions.
 - [`title` Attribute](../level_07/title.md) — The primary SEO page title.

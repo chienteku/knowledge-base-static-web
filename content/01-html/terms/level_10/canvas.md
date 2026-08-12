@@ -187,49 +187,91 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 
 ## 5. Practice Exercises
 
-### Exercise 1: Canvas Accessibility
+### Exercise 1: Accessible HTML5 Canvas Drawing Surface with Fallback DOM Content
 
-**Problem:** The `<canvas>` just renders raw colored pixels on the screen. Screen readers cannot "see" pixels. How can you make a canvas accessible to a blind user?
+**Scenario:** An author embeds an interactive HTML5 data chart canvas with accessible text fallback content for screen readers.
 
-**Expected output:**
+**Requirements:**
+1. Create `<canvas>` with explicit `width` and `height` attributes.
+2. Add `role="img"` and `aria-label`.
+3. Provide inner fallback HTML content for non-supporting clients.
+
 > [!check]- Answer
-> ```text
-> Any text or HTML placed *between* the `<canvas>` and `</canvas>` tags acts as fallback content! Screen readers will read this text, while sighted users will only see the drawn graphics.
-> Example: `<canvas>A graph showing a 20% increase in sales.</canvas>`
+>
+> #### Implementation
+>
+> ```html
+> <div class="chart-container">
+>   <h2>Quarterly Revenue Chart</h2>
+>
+>   <canvas id="revenue-chart" width="600" height="400" role="img" aria-label="Quarterly Revenue Bar Chart for 2026">
+>     <!-- Accessible Fallback Content for Screen Readers & Legacy Browsers -->
+>     <p>Revenue summary for 2026: Q1 $1.2M, Q2 $1.5M, Q3 $1.8M, Q4 $2.1M.</p>
+>   </canvas>
+> </div>
 > ```
-> - Remember that `<canvas>` is not a void element; it has a closing tag. What happens if you put text inside it?
+>
+> #### Technical Explanation
+>
+> 1. **The `<canvas>` Element**: Provides a bitmap canvas surface for real-time script rendering (2D graphics or WebGL).
+> 2. **Fallback Content**: Content placed INSIDE `<canvas>...</canvas>` is rendered ONLY by browsers that do not support `<canvas>` or by screen readers.
+> 3. **Explicit Pixel Dimensions**: Dimensions MUST be set via HTML `width` and `height` attributes (in pixels) rather than CSS to prevent canvas image distortion.
 > 
 ---
 
-### Exercise 2: Drawing Rectangle on Canvas 2D Context
+### Exercise 2: Responsive High-DPI (Retina) Canvas Scaling
 
-**Problem:** Write JavaScript code getting 2D context of `<canvas id="cv">` and drawing a blue filled rectangle at (10, 10) sized 100x50.
+**Scenario:** Configures canvas internal resolution for high-DPI (Retina) displays while maintaining CSS responsive bounds.
 
-**Expected output:**
+**Requirements:**
+1. Set internal canvas dimensions to 2x resolution.
+2. Constrain visual size using CSS percentage width.
+
 > [!check]- Answer
-> ```javascript
-> const canvas = document.getElementById('cv');
-> const ctx = canvas.getContext('2d');
-> ctx.fillStyle = 'blue';
-> ctx.fillRect(10, 10, 100, 50);
+>
+> #### Implementation
+>
+> ```html
+> <!-- Internal resolution 1200x800 for 2x Retina scaling -->
+> <canvas id="high-dpi-canvas" width="1200" height="800" style="width: 100%; max-width: 600px; height: auto;"></canvas>
 > ```
 >
-> **Explanation:** `getContext('2d')` provides the 2D rendering API for drawing canvas shapes.
+> #### Technical Explanation
+>
+> 1. **Internal vs Visual Resolution**: HTML `width`/`height` set pixel buffer size; CSS `width`/`height` set visual layout size.
+> 2. **High-DPI Sharpness**: Scaling canvas 2x internally prevents blurry graphics on Retina screens.
+> 3. **Aspect Ratio Maintenance**: Keep HTML width/height ratio identical to CSS aspect ratio.
 > 
 ---
 
-### Exercise 3: Canvas vs SVG Comparison
+### Exercise 3: Providing ARIA Accessible Description Labels for Graphic Canvas Elements
 
-**Problem:** Compare Canvas vs SVG rendering modes (Raster/Bitmap vs Vector).
+**Scenario:** Connects dynamic canvas graphics with accessible ARIA description tables.
 
-**Expected output:**
+**Requirements:**
+1. Add `aria-describedby="data-table"` to canvas.
+
 > [!check]- Answer
-> ```text
-> Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).
+>
+> #### Implementation
+>
+> ```html
+> <canvas id="sales-canvas" width="800" height="400" role="img" aria-label="Sales Distribution Chart" aria-describedby="chart-data-summary"></canvas>
+>
+> <div id="chart-data-summary" class="sr-only">
+>   <table>
+>     <caption>Sales Distribution Raw Data</caption>
+>     <tr><th scope="col">Region</th><th scope="col">Sales</th></tr>
+>     <tr><td>North America</td><td>45%</td></tr>
+>   </table>
+> </div>
 > ```
 >
-> **Explanation:** Canvas renders pixels procedurally; SVG manages XML vector DOM node trees.
-> 
+> #### Technical Explanation
+>
+> 1. **Visual Graphic ARIA Labeling**: `role="img"` exposes canvas bitmap as a graphics image to screen readers.
+> 2. **Accessible Data Tables**: `aria-describedby` links complex charts to accessible screen-reader tables.
+> 3. **Screen Reader Parity**: Guarantees equal access to graphic chart metrics for blind users.
 ## 6. Related Terms
 - [`<svg>` (Scalable Vector Graphics)](svg.md) — The alternative way to draw graphics on the web (Vector vs. Raster).
 - [`<progress>` & `<meter>` Elements](progress_meter.md) — Semantic gauges for loading states and scalars.

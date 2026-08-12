@@ -136,54 +136,89 @@ document.getElementById('out').value = '$100'; // Correct form control property 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Range Input Live Feedback
+### Exercise 1: Interactive Range Calculator with output Element
 
-**Problem:** Create a volume slider `<input type="range" id="vol">` with an `<output>` element displaying the current percentage value.
+**Scenario:** An author uses `<output>` to display the live calculated result of a range slider input.
 
-**Expected output:**
+**Requirements:**
+1. Create an `<input type="range">`.
+2. Create an `<output>` element linked via `for` attribute.
+3. Display dynamic value.
+
 > [!check]- Answer
-> ```html
-> <label for="vol">Volume:</label>
-> <input type="range" id="vol" min="0" max="100" value="50" oninput="out.value = this.value + '%'">
-> <output id="out" for="vol">50%</output>
-> ```
 >
-> **Explanation:** The `oninput` handler dynamically updates `output.value` whenever the slider moves.
-> 
----
-
-### Exercise 2: Two-Input Sum Calculation
-
-**Problem:** Create a form with two numeric inputs `num1` and `num2` and an `<output>` element displaying their sum.
-
-**Expected output:**
-> [!check]- Answer
+> #### Implementation
+>
 > ```html
-> <form oninput="total.value = Number(num1.value) + Number(num2.value)">
->   <input type="number" id="num1" value="10"> +
->   <input type="number" id="num2" value="20"> =
->   <output name="total" for="num1 num2">30</output>
+> <form oninput="result.value = parseInt(a.value) * parseInt(b.value)">
+>   <label for="qty">Quantity</label>
+>   <input type="range" id="qty" name="a" min="1" max="10" value="2">
+>
+>   <label for="price">Price ($)</label>
+>   <input type="number" id="price" name="b" value="50" readonly>
+>
+>   <p>Total Estimated Cost: $<output name="result" for="qty price">100</output></p>
 > </form>
 > ```
 >
-> **Explanation:** Form-level `oninput` captures events from both child inputs and updates the `<output>` element.
+> #### Technical Explanation
+>
+> 1. **The `<output>` Element**: Represents the result of a calculation or user action in a form.
+> 2. **The `for` Relationship**: The `for` attribute explicitly lists the IDs of inputs (`for="qty price"`) that contributed to the output value.
+> 3. **Accessible Live Region**: Browsers treat `<output>` as an accessible live region, announcing value updates to screen readers.
 > 
 ---
 
-### Exercise 3: Accessing `<output>` via `form.elements`
+### Exercise 2: Real-time Loan Payment Estimator Output Display
 
-**Problem:** Access an `<output name="score">` element from a form DOM reference.
+**Scenario:** Displays real-time updated monthly payment figures using `<output>`.
 
-**Expected output:**
+**Requirements:**
+1. Include `<output id="payment-output">`.
+
 > [!check]- Answer
-> ```javascript
-> const form = document.querySelector('form');
-> const scoreOutput = form.elements['score'];
-> scoreOutput.value = '100 pts';
+>
+> #### Implementation
+>
+> ```html
+> <form class="calculator">
+>   <label for="loan-amount">Loan Amount ($)</label>
+>   <input type="number" id="loan-amount" name="amount" value="10000">
+>
+>   <p>Estimated Monthly Payment: $<output id="payment-output" name="payment" for="loan-amount">250.00</output></p>
+> </form>
 > ```
 >
-> **Explanation:** `<output>` participates in standard HTML form control collection APIs (`form.elements`).
+> #### Technical Explanation
+>
+> 1. **Semantic Calculation Display**: `<output>` is the proper HTML5 tag for calculated figures, superior to generic `<span>`.
+> 2. **Form Submissibility**: `<output>` participates in form ownership and name collection.
+> 3. **Screen Reader Announcements**: Screen readers re-read `<output>` when values update dynamically.
 > 
+---
+
+### Exercise 3: Accessibility Live Region Announcements with output
+
+**Scenario:** Demonstrates how `<output>` acts as an automatic `aria-live="polite"` region.
+
+**Requirements:**
+1. Verify `<output>` live region accessibility.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <label for="char-input">Comments</label>
+> <textarea id="char-input" maxlength="200"></textarea>
+> <p>Characters Remaining: <output id="char-count" for="char-input">200</output></p>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Implicit `aria-live` Behavior**: `<output>` elements have an implicit ARIA role of `status` and `aria-live="polite"`.
+> 2. **Non-Intrusive Updates**: Announces changes to screen reader users without interrupting current speech.
+> 3. **Form Association**: Can be programmatically associated with form controls.
 ---
 
 ## 6. Related Terms

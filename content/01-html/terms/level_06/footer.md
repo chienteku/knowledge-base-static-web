@@ -149,59 +149,104 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Footer
+### Exercise 1: Global Site Footer Landmark
 
-**Problem:** True or False: The `<footer>` tag must physically be the very last element inside the `<body>` tag in your HTML file.
+**Scenario:** A developer constructs a global site footer landmark (`<footer>`) containing copyright notices, navigation, and contact info.
 
-**Expected output:**
+**Requirements:**
+1. Create root `<footer>` landmark element.
+2. Include copyright notice.
+3. Include footer navigation `<nav>`.
+4. Include contact `<address>`.
+
 > [!check]- Answer
-> ```text
-> False. While the main page footer is almost always at the bottom of the page visually and structurally, you can also use `<footer>` tags inside `<article>` or `<section>` elements, meaning they might appear in the middle of your HTML document!
-> ```
-> - Think about how the `<header>` tag works. Is it limited to just the top of the page?
-> 
----
-
-
-
-### Exercise 2: Page Footer Metadata Structure
-
-**Problem:** Write page `<footer>` containing copyright paragraph, sitemap nav list, and back-to-top anchor link.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <footer><nav><ul><li><a href="/sitemap">Sitemap</a></li></ul></nav><p>&copy; 2026 Company</p><a href="#top">Back to Top</a></footer>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <footer>
->   <nav>
->     <ul><li><a href="/sitemap">Sitemap</a></li></ul>
->   </nav>
->   <p>&copy; 2026 Company</p>
->   <a href="#top">Back to Top</a>
+> <footer class="site-footer">
+>   <div class="footer-content">
+>     <nav aria-label="Footer Navigation">
+>       <ul>
+>         <li><a href="/privacy.html">Privacy Policy</a></li>
+>         <li><a href="/terms.html">Terms of Service</a></li>
+>         <li><a href="/sitemap.html">Sitemap</a></li>
+>       </ul>
+>     </nav>
+>     <address>
+>       Questions? Email <a href="mailto:support@example.com">support@example.com</a>
+>     </address>
+>     <p>&copy; 2026 Acme Web Standards Inc. All rights reserved.</p>
+>   </div>
 > </footer>
 > ```
 >
-> **Explanation:** `<footer>` encapsulates page copyright, sitemap links, and site attribution metadata.
+> #### Technical Explanation
+>
+> 1. **The `<footer>` Element**: Represents a footer for its nearest sectioning ancestor or body root, containing copyright, author, and legal links.
+> 2. **Contentinfo Landmark Role**: A `<footer>` directly inside `<body>` receives an implicit ARIA role of `contentinfo` for screen readers.
+> 3. **Footer Navigation Grouping**: Wrap legal links inside a labeled `<nav>` element within the footer.
 > 
 ---
 
-### Exercise 3: Footer Landmark Role
+### Exercise 2: Blog Article Footer with Metadata Tags
 
-**Problem:** Which implicit ARIA landmark role does a top-level `<footer>` element convey to screen readers?
+**Scenario:** Includes an article-specific `<footer>` containing tags, author bio, and publication dates.
 
-**Expected output:**
+**Requirements:**
+1. Place `<footer>` inside `<article>`.
+
 > [!check]- Answer
-> ```text
-> contentinfo landmark role.
-> ```
-> ```text
-> contentinfo landmark role.
+>
+> #### Implementation
+>
+> ```html
+> <article class="blog-post">
+>   <h1>Understanding CSS Grid</h1>
+>   <p>CSS Grid layout allows building 2D web layouts easily.</p>
+>
+>   <footer>
+>     <p>Categories: <a href="/tag/css">CSS</a>, <a href="/tag/web">Web Design</a></p>
+>     <p>Published by Jane Doe on <time datetime="2026-08-12">August 12, 2026</time></p>
+>   </footer>
+> </article>
 > ```
 >
-> **Explanation:** Root-level `<footer>` elements act as `contentinfo` accessibility landmarks.
+> #### Technical Explanation
+>
+> 1. **Article-Scoped Footer**: `<footer>` inside `<article>` applies strictly to that article, NOT the global website.
+> 2. **Multiple Footers Supported**: A single webpage can contain multiple `<footer>` tags (one global footer plus individual article footers).
+> 3. **Metadata Placement**: Ideal location for article tags, share buttons, and author bios.
 > 
+---
+
+### Exercise 3: Accessible Footer Landmark Navigation
+
+**Scenario:** Disambiguates footer navigation links for keyboard and screen reader users.
+
+**Requirements:**
+1. Add `<nav aria-label="Footer Navigation">` inside `<footer>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <footer class="main-footer">
+>   <nav aria-label="Legal & Policy Links">
+>     <ul>
+>       <li><a href="/terms">Terms</a></li>
+>       <li><a href="/privacy">Privacy</a></li>
+>     </ul>
+>   </nav>
+> </footer>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Disambiguated Footer Links**: Using `aria-label` differentiates footer navigation from main header navigation.
+> 2. **Screen Reader Landmark Lists**: Screen reader users can hop directly to the footer landmark.
+> 3. **Valid DOM Hierarchy**: Supports valid HTML5 nesting rules.
 ## 6. Related Terms
 - [`<header>`](header.md) — The introductory equivalent to the footer.
 - [`<article>` and `<section>`](article_section.md) — Often contains its own specific `<footer>`.

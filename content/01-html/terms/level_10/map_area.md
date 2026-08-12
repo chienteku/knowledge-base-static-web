@@ -240,63 +240,93 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 
 ## 5. Practice Exercises
 
-### Exercise 1: Hotspot Alignment
+### Exercise 1: Accessible Image Map with Interactive Hotspots and Alt Labels
 
-**Problem:** You have a logo image of size 100x100 pixels. You want the right-half of the logo to link to "right.html" and the left-half to link to "left.html". Write the `<map>` and `<area>` tags to achieve this.
+**Scenario:** An author creates an interactive image map with clickable region hotspots using `<map>` and `<area>` with mandatory `alt` text.
 
-**Expected output:**
+**Requirements:**
+1. Embed `<img>` with `usemap="#planet-map"`.
+2. Create `<map name="planet-map">`.
+3. Include `<area>` tags with `shape`, `coords`, `href`, and `alt`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <map name="logo-map">
->   <area shape="rect" coords="0,0,50,100" href="left.html" alt="Left side link">
->   <area shape="rect" coords="50,0,100,100" href="right.html" alt="Right side link">
+> <div class="image-map-container">
+>   <h2>Solar System Interactive Map</h2>
+>
+>   <img src="images/solar-system.jpg" alt="Solar System Diagram" usemap="#planet-map" width="800" height="400">
+>
+>   <map name="planet-map">
+>     <area shape="circle" coords="100,200,40" href="/wiki/sun" alt="Sun - Solar Center Detail" title="Sun">
+>     <area shape="circle" coords="250,200,25" href="/wiki/earth" alt="Earth - Home Planet Detail" title="Earth">
+>     <area shape="rect" coords="400,150,550,250" href="/wiki/jupiter" alt="Jupiter - Gas Giant Detail" title="Jupiter">
+>   </map>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `<map>` and `<area>` Elements**: Creates an image map with defined clickable coordinate shapes (`rect`, `circle`, `poly`).
+> 2. **The `usemap` Relationship**: The `usemap="#name"` attribute on `<img>` MUST match the `name` attribute on `<map>`.
+> 3. **Mandatory `alt` Attributes**: EVERY `<area>` tag MUST contain a descriptive `alt` attribute for screen reader accessibility compliance.
+> 
+---
+
+### Exercise 2: Responsive Scaling for Image Maps using SVG Overlays
+
+**Scenario:** Explains why modern responsive web design replaces static pixel `<area>` maps with scalable inline SVG overlays.
+
+**Requirements:**
+1. Demonstrate inline SVG link overlays over images.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <div class="responsive-map">
+>   <svg viewBox="0 0 1000 500" class="svg-overlay">
+>     <image href="images/floorplan.jpg" width="1000" height="500"></image>
+>     <a href="/room/101" aria-label="Conference Room 101">
+>       <rect x="100" y="100" width="200" height="150" class="hotspot-rect"></rect>
+>     </a>
+>   </svg>
+> </div>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Static Coordinate Limitation**: HTML `<area>` pixel coordinates do NOT scale automatically when `<img>` resizes on mobile devices.
+> 2. **SVG Overlay Superiority**: SVG `<a href="...">` overlays scale responsively while maintaining vector sharpness.
+> 3. **Full CSS Styling**: SVG hotspots support CSS `:hover` and `:focus` styling hooks.
+> 
+---
+
+### Exercise 3: Keyboard Focusability and Screen Reader Testing for area Links
+
+**Scenario:** Ensures `<area>` links receive keyboard Tab focus and outline rings.
+
+**Requirements:**
+1. Verify `<area>` elements appear in natural Tab key order.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <map name="site-map">
+>   <area shape="rect" coords="0,0,50,50" href="/home" alt="Home Navigation Node">
 > </map>
 > ```
-> - The left rectangle starts at (0,0) and ends at middle-right (50,100).
-> - The right rectangle starts at middle-left (50,0) and ends at bottom-right (100,100).
-> 
----
-
-
-
-### Exercise 2: Defining Rectangular Area Shape
-
-**Problem:** Write `<area>` element for rectangular region from top-left (0,0) to bottom-right (100,200) linking to `/details`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <area shape="rect" coords="0,0,100,200" href="/details" alt="Details">
-> ```
-> ```html
-> <area shape="rect" coords="0,0,100,200" href="/details" alt="Details">
-> ```
 >
-> **Explanation:** `shape="rect"` expects `coords="x1,y1,x2,y2"` pixel coordinates.
-> 
----
-
-### Exercise 3: Supported Area Shapes
-
-**Problem:** List the 4 valid `shape` attribute options for `<area>` elements.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. rect (rectangular)
-> 2. circle (circular)
-> 3. poly (polygonal)
-> 4. default (entire image region)
-> ```
-> ```text
-> 1. rect
-> 2. circle
-> 3. poly
-> 4. default
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `shape` defines geometric bounds for interactive image maps.
-> 
+> 1. **Keyboard Reachability**: Browsers include `<area href="...">` tags in natural keyboard Tab navigation order.
+> 2. **Focus Ring Display**: Modern browsers render visual focus rings around target shape coordinates.
+> 3. **Valid HTML5 Conformance**: Requires valid `href` attribute to be keyboard focusable.
 ## 6. Related Terms
 - [`<img>`](../level_03/img.md) — The host image element.
 - [`href` Attribute](../level_02/href.md) — The destination hyperlink path.

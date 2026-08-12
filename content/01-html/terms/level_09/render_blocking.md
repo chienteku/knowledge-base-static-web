@@ -156,69 +156,98 @@ JavaScript has the power to modify the DOM (e.g. adding new elements or writing 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Bottleneck Audit
+### Exercise 1: Unblocking Browser Render Pipeline by Deferring Resources
 
-**Problem:** Look at this page code:
-```html
-<head>
-  <meta charset="UTF-8">
-  <script src="modal-widget.js"></script>
-  <link rel="stylesheet" href="custom-theme.css">
-</head>
-```
-Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the other from starting to download?
+**Scenario:** An author refactors a page that blocks initial rendering due to synchronous external CSS and JavaScript files.
 
-**Expected output:**
+**Requirements:**
+1. Use `defer` on external `<script>` tags.
+2. Use `media="print" onload="this.media='all'"` for non-critical CSS.
+3. Inline critical above-the-fold CSS.
+
 > [!check]- Answer
-> ```text
-> The script `modal-widget.js` blocks the stylesheet from downloading. Because the script tag is synchronous and declared first, the browser halts HTML parsing and stops searching for other links until the script is fully downloaded and executed.
-> ```
-> - The browser reads top-to-bottom. If a synchronous script halts the parser, does it see the lines below it?
-> 
----
-
-
-
-### Exercise 2: Identifying Render-Blocking Resources
-
-**Problem:** Which 2 of these resources are Render-Blocking by default in HTML?
-1. External `<link rel="stylesheet">` in head
-2. `<img>` tag assets
-3. Synchronous `<script src="...">` in head without async/defer
-4. Video media assets
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1 and 3.
-> ```
-> ```text
-> 1. External <link rel="stylesheet"> in head
-> 3. Synchronous <script src="..."> in head without async/defer
-> ```
 >
-> **Explanation:** External CSS stylesheets and synchronous scripts block initial page paint.
-> 
----
-
-### Exercise 3: Eliminating Render-Blocking CSS for Critical Path
-
-**Problem:** How can critical above-the-fold CSS be delivered to eliminate render-blocking stylesheet network requests?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Inline critical above-the-fold CSS inside a <style> tag in <head>, deferring non-critical CSS.
-> ```
+> #### Implementation
+>
 > ```html
 > <head>
->   <style>/* Critical above-the-fold CSS */</style>
->   <link rel="stylesheet" href="non-critical.css" media="print" onload="this.media='all'">
+>   <meta charset="utf-8">
+>   <title>Non-Render-Blocking Web Page</title>
+>
+>   <!-- Critical CSS inlined -->
+>   <style>
+>     body { font-family: sans-serif; margin: 0; }
+>   </style>
+>
+>   <!-- Non-critical CSS loaded asynchronously -->
+>   <link rel="stylesheet" href="css/theme.css" media="print" onload="this.media='all'">
+>
+>   <!-- JavaScript deferred -->
+>   <script src="js/bundle.js" defer></script>
 > </head>
 > ```
 >
-> **Explanation:** Inlining critical CSS enables instant above-the-fold rendering.
+> #### Technical Explanation
+>
+> 1. **Render-Blocking Resources**: By default, synchronous `<link rel="stylesheet">` and `<script>` tags block the browser from painting pixels until downloaded.
+> 2. **Eliminating Script Blockers**: Adding `defer` or `async` allows HTML DOM parsing to continue concurrently during script fetching.
+> 3. **Asynchronous CSS Pattern**: `media="print" onload="this.media='all'"` fetches CSS without blocking initial page render.
 > 
+---
+
+### Exercise 2: Asynchronous Third-Party Script Loading for Non-Blocking Load
+
+**Scenario:** Loads analytics and ad scripts asynchronously using `<script async>`.
+
+**Requirements:**
+1. Load third-party tracker via `<script src="..." async>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Fast Loading Portal</title>
+>   <script src="https://example-analytics.com/tag.js" async></script>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`async` Non-Blocking Behavior**: Fetches scripts asynchronously in background without pausing HTML parser execution.
+> 2. **Preventing Third-Party Outage Blocks**: Ensures third-party server slowdowns do not block local site rendering.
+> 3. **Speed Metrics Impact**: Drastically improves First Contentful Paint (FCP) and Time to Interactive (TTI).
+> 
+---
+
+### Exercise 3: Analyzing First Contentful Paint Gains via Resource Removal
+
+**Scenario:** Eliminates render-blocking font loading delays using `font-display: swap` in CSS.
+
+**Requirements:**
+1. Use `font-display: swap` in CSS font declarations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <style>
+>   @font-face {
+>     font-family: 'CustomFont';
+>     src: url('font.woff2') format('woff2');
+>     font-display: swap;
+>   }
+> </style>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **FOUT vs FOIT**: `font-display: swap` displays system fallback text immediately, preventing invisible text during font loading.
+> 2. **Core Web Vitals**: Directly improves Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS).
+> 3. **User Experience**: Ensures text content is readable instantly on slow 3G networks.
 ## 6. Related Terms
 - [Critical Rendering Path](critical_rendering_path.md) — The pipeline that gets blocked.
 - [`<link>`](../level_08/link.md) — The stylesheet wrapper.

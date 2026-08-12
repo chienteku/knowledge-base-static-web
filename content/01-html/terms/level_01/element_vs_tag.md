@@ -139,63 +139,85 @@ The **Element** is the *entire sandwich*—the top slice of bread, the meat and 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Identify the parts
+### Exercise 1: Constructing Full Elements from Start Tag, Content, and End Tag
 
-**Problem:** Look at this line of HTML: `<strong>Warning!</strong>`.
-Identify the opening tag, the closing tag, the content, and the element.
+**Scenario:** An author constructs a complete HTML text element, identifying the start tag, text content, and end tag.
 
-**Expected output:**
+**Requirements:**
+1. Write a `<p>` start tag.
+2. Include text content.
+3. Close with a `</p>` end tag.
+
 > [!check]- Answer
-> ```text
-> Opening Tag: <strong>
-> Closing Tag: </strong>
-> Content: Warning!
-> Element: The entire string `<strong>Warning!</strong>`
-> ```
-> - Tags have angle brackets.
-> - The element is the whole sandwich!
-> 
----
-
-
-
-### Exercise 2: Deconstructing HTML Element Parts
-
-**Problem:** Identify the 3 parts of the HTML element `<h1 class="main">Header</h1>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Opening Tag: <h1 class="main">
-> 2. Content: Header
-> 3. Closing Tag: </h1>
-> ```
-> ```text
-> 1. Opening Tag: <h1 class="main">
-> 2. Content: Header
-> 3. Closing Tag: </h1>
-> ```
 >
-> **Explanation:** An element consists of start tag (with optional attributes), inner content, and end tag.
-> 
----
-
-### Exercise 3: Self-Closing vs Void Terminology
-
-**Problem:** Give 2 examples of HTML Void Elements that do not require closing tags.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <img>, <input> (or <br>, <hr>, <meta>)
-> ```
+> #### Implementation
+>
 > ```html
-> <img src="pic.jpg" alt="Picture">
-> <input type="text" name="user">
+> <p class="intro-text">This complete unit is an HTML element.</p>
 > ```
 >
-> **Explanation:** Void elements cannot enclose child content and do not have closing tags.
+> #### Technical Explanation
+>
+> 1. **Element vs Tag Distinction**: A **tag** is the code in brackets (`<p>` or `</p>`); an **element** is the full unit from start tag through content to end tag.
+> 2. **Opening and Closing Tags**: Opening tag `<p>` initiates the element; closing tag `</p>` terminates it.
+> 3. **Element Content**: The text or nested markup inside tags forms the element's inner content.
 > 
+---
+
+### Exercise 2: Identifying Void Elements vs Content-Bearing Elements
+
+**Scenario:** A developer builds a card containing both content-bearing elements (`<h2>`, `<p>`) and void elements (`<img>`, `<hr>`).
+
+**Requirements:**
+1. Use content-bearing elements with closing tags.
+2. Use void elements without closing tags.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <section class="card">
+>   <h2>Featured Article</h2>
+>   <img src="images/banner.jpg" alt="Scenic mountain landscape">
+>   <hr>
+>   <p>Read our latest insights on web development.</p>
+> </section>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Content-Bearing Elements**: Elements like `<h2>` and `<p>` contain inner content and require closing tags.
+> 2. **Void Elements**: Elements like `<img>` and `<hr>` cannot contain content and do NOT have closing tags or inner text.
+> 3. **No Trailing Slash**: In HTML5, self-closing trailing slashes (`<img />`) are optional and generally omitted (`<img >`).
+> 
+---
+
+### Exercise 3: Auditing Nested Element Structures and Unclosed Tag Fixes
+
+**Scenario:** A linter fixes missing closing tags to restore valid DOM tree element structures.
+
+**Requirements:**
+1. Fix unclosed list item tags.
+2. Ensure proper DOM element hierarchy.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <ul class="feature-list">
+>   <li>Semantic Markup</li>
+>   <li>Accessibility Compliance</li>
+>   <li>Responsive Design</li>
+> </ul>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Unclosed Tag Pitfalls**: Omitting closing tags causes browsers to guess DOM boundaries, leading to layout bugs.
+> 2. **DOM Representation**: Browsers parse tags into an in-memory tree of DOM Element nodes.
+> 3. **Valid Hierarchy**: Every opening content tag must have a matching closing tag in nested structures.
 ## 6. Related Terms
 - [Attribute](attribute.md) — Extra information that is placed *inside* the opening tag.
 - [Block-level vs Inline Elements](block_inline.md) — The display behaviors of HTML elements.

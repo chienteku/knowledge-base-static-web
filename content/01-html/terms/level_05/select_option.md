@@ -118,72 +118,98 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Optgroup
+### Exercise 1: Accessible Dropdown Menu with select, option, and optgroup
 
-**Problem:** Look at the following code. What does the `<optgroup>` tag do?
-```html
-<select name="food">
-  <optgroup label="Fruits">
-    <option value="apple">Apple</option>
-    <option value="banana">Banana</option>
-  </optgroup>
-  <optgroup label="Vegetables">
-    <option value="carrot">Carrot</option>
-  </optgroup>
-</select>
-```
+**Scenario:** An author constructs a country selection dropdown menu grouped by continents using `<select>`, `<optgroup>`, and `<option>`.
 
-**Expected output:**
+**Requirements:**
+1. Create `<select>` with explicit `<label>`.
+2. Group choices using `<optgroup label="...">`.
+3. Use `<option value="...">` for choices.
+
 > [!check]- Answer
-> ```text
-> It creates unclickable, bolded categorical headers inside the dropdown menu, allowing you to organize a massive list of options into smaller, readable sections!
+>
+> #### Implementation
+>
+> ```html
+> <div class="form-group">
+>   <label for="country-select">Select Residence Country</label>
+>   <select id="country-select" name="country" required>
+>     <option value="" disabled selected>-- Choose a Country --</option>
+>     <optgroup label="North America">
+>       <option value="US">United States</option>
+>       <option value="CA">Canada</option>
+>     </optgroup>
+>     <optgroup label="Europe">
+>       <option value="UK">United Kingdom</option>
+>       <option value="FR">France</option>
+>     </optgroup>
+>   </select>
+> </div>
 > ```
-> - Think about navigating a massive dropdown with 100 items. How do you group them visually?
+>
+> #### Technical Explanation
+>
+> 1. **The `<select>` Element**: Creates a dropdown select list control.
+> 2. **The `<optgroup>` Element**: Groups related `<option>` choices under a non-selectable bold label heading.
+> 3. **The `<option>` Element**: Defines selectable choices; the `value` attribute specifies data submitted to the server.
 > 
 ---
 
+### Exercise 2: Multi-Select Box with Selected Values
 
+**Scenario:** Creates a multi-select box allowing users to select multiple options using `<select multiple>`.
 
-### Exercise 2: Structuring Select Dropdown with Disabled Placeholder
+**Requirements:**
+1. Add `multiple` attribute to `<select>`.
+2. Mark default choices with `selected`.
 
-**Problem:** Create `<select>` named `category` with disabled selected placeholder option `'Select Category'`. 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <select name="category"><option value="" disabled selected>Select Category</option><option value="tech">Tech</option></select>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <select name="category">
->   <option value="" disabled selected>Select Category</option>
->   <option value="tech">Tech</option>
->   <option value="books">Books</option>
+> <label for="skills-select">Select Technical Skills (Hold Ctrl/Cmd to select multiple)</label>
+> <select id="skills-select" name="skills" multiple size="4">
+>   <option value="html" selected>HTML5</option>
+>   <option value="css" selected>CSS3</option>
+>   <option value="js">JavaScript</option>
+>   <option value="sql">SQL</option>
 > </select>
 > ```
 >
-> **Explanation:** `disabled selected` option acts as a prompt without allowing re-selection.
+> #### Technical Explanation
+>
+> 1. **The `multiple` Attribute**: Allows users to select more than one option from the select list.
+> 2. **The `selected` Attribute**: Pre-selects option choices on page load.
+> 3. **The `size` Attribute**: Defines the number of visible option rows displayed without opening a dropdown.
 > 
 ---
 
-### Exercise 3: Grouping Options with optgroup
+### Exercise 3: Placeholder First Option Best Practice
 
-**Problem:** Which HTML tag groups related `<option>` items under labeled sub-heading headers inside a `<select>`?
+**Scenario:** Configures an unselectable placeholder prompt option as the first item in a dropdown.
 
-**Expected output:**
+**Requirements:**
+1. Set `<option value="" disabled selected>` as first option.
+
 > [!check]- Answer
-> ```text
-> <optgroup label="Group Name">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <select name="car">
->   <optgroup label="German Cars">
->     <option value="bmw">BMW</option>
->   </optgroup>
+> <select id="role-select" name="role" required>
+>   <option value="" disabled selected>Select user role...</option>
+>   <option value="author">Author</option>
+>   <option value="editor">Editor</option>
 > </select>
 > ```
 >
-> **Explanation:** `<optgroup>` organizes select dropdown choices into categorized sections.
-> 
+> #### Technical Explanation
+>
+> 1. **Placeholder Prompt Option**: Setting `value=""` combined with `disabled` and `selected` prevents submitting dummy prompt choices.
+> 2. **Native Required Validation**: Browsers enforce required validation if `value=""` is selected.
+> 3. **Clean Mobile UI**: Displays prompt clearly on mobile select pickers.
 ## 6. Related Terms
 - [`<input>`](input.md) — The alternative way to collect data (free-form typing).
 - [`placeholder` Attribute](placeholder.md) — The visual cue comparison.

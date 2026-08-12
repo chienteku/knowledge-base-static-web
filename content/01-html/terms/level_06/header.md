@@ -151,59 +151,102 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Multiple Header Rule
+### Exercise 1: Global Website Header Landmark with Brand and Navigation
 
-**Problem:** Is it valid HTML5 to have more than one `<header>` element on a single webpage?
+**Scenario:** A developer constructs a global website header landmark (`<header>`) containing logo, title, and primary navigation.
 
-**Expected output:**
+**Requirements:**
+1. Create root `<header>` element.
+2. Include site title or logo.
+3. Include primary `<nav>` landmark.
+
 > [!check]- Answer
-> ```text
-> Yes! While you typically have one main `<header>` for the whole page (the top nav bar), you can also have a `<header>` inside every single `<article>` or `<section>` to contain their specific titles and introductory text.
-> ```
-> - Look closely at the "Fuller Example" code snippet above.
-> 
----
-
-
-
-### Exercise 2: Structuring Primary Page Header
-
-**Problem:** Write document `<header>` containing logo `<img>`, `<h1>` site title, and `<nav>` navigation links.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <header><img src="logo.png" alt="Logo"><h1>Acme Inc</h1><nav><a href="/">Home</a></nav></header>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <header>
->   <img src="logo.png" alt="Logo">
->   <h1>Acme Inc</h1>
->   <nav>
->     <a href="/">Home</a>
+> <header class="site-header">
+>   <div class="brand">
+>     <a href="/" class="logo">
+>       <img src="images/logo.svg" alt="Acme Corporation" width="120" height="40">
+>     </a>
+>   </div>
+>   <nav aria-label="Primary Navigation">
+>     <ul>
+>       <li><a href="/">Home</a></li>
+>       <li><a href="/services">Services</a></li>
+>       <li><a href="/contact">Contact</a></li>
+>     </ul>
 >   </nav>
 > </header>
 > ```
 >
-> **Explanation:** `<header>` groups introductory branding, headings, and site navigation.
+> #### Technical Explanation
+>
+> 1. **The `<header>` Element**: Represents introductory content or navigation links at the top of a page or section.
+> 2. **Banner Landmark Role**: A `<header>` directly inside `<body>` receives an implicit ARIA role of `banner` for screen readers.
+> 3. **Brand & Navigation Container**: Groups logo, search bar, and primary navigation in one semantic landmark.
 > 
 ---
 
-### Exercise 3: Header Landmark Role
+### Exercise 2: Blog Post Article Header with Title, Author, and Time
 
-**Problem:** Which implicit ARIA landmark role does a top-level `<header>` element convey?
+**Scenario:** Uses an article-specific `<header>` to group post titles, author credits, and timestamps.
 
-**Expected output:**
+**Requirements:**
+1. Place `<header>` inside `<article>`.
+
 > [!check]- Answer
-> ```text
-> banner landmark role.
-> ```
-> ```text
-> banner landmark role.
+>
+> #### Implementation
+>
+> ```html
+> <article class="post">
+>   <header>
+>     <h1>Exploring Modern HTML5 Features</h1>
+>     <p class="post-meta">By <strong>Jane Doe</strong> on <time datetime="2026-08-12">August 12, 2026</time></p>
+>   </header>
+>   <p>Article body paragraph content follows here...</p>
+> </article>
 > ```
 >
-> **Explanation:** Root-level `<header>` elements act as `banner` accessibility landmarks.
+> #### Technical Explanation
+>
+> 1. **Article-Scoped Header**: `<header>` inside `<article>` groups intro metadata for that specific post.
+> 2. **Multiple Headers Supported**: A page can contain a global site `<header>` plus individual section/article `<header>` tags.
+> 3. **Clean Separation**: Separates post titles and metadata from body paragraphs.
 > 
+---
+
+### Exercise 3: Section Header Landmark with Filter Controls
+
+**Scenario:** Groups section titles and filter controls using `<header>` inside `<section>`.
+
+**Requirements:**
+1. Place `<header>` inside `<section>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <section class="product-catalog">
+>   <header class="section-header">
+>     <h2>Catalog Products</h2>
+>     <div class="filter-controls">
+>       <label for="sort-by">Sort By:</label>
+>       <select id="sort-by"><option>Price</option></select>
+>     </div>
+>   </header>
+>   <div class="grid">...</div>
+> </section>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Section Intro Grouping**: Groups section titles alongside contextual controls (filters, sorting dropdowns).
+> 2. **Structural Clarity**: Keeps section controls neatly organized before data content.
+> 3. **Accessibility Outline**: Establishes clear sectioning boundaries for screen reader navigation.
 ## 6. Related Terms
 - [`<head>`](../level_01/head.md) — The metadata container (do not confuse with `<header>`).
 - [`<footer>`](footer.md) — The semantic opposite of the `<header>`.

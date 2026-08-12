@@ -192,50 +192,101 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 
 ## 5. Practice Exercises
 
-### Exercise 1: Wrapping Images
+### Exercise 1: Accessible External Link Card
 
-**Problem:** How would you make an image clickable, so that clicking the image takes the user to `home.html`?
+**Scenario:** An author creates a resource link that opens an external domain in a new tab, ensuring security and accessibility for screen reader users.
 
-**Expected output:**
+**Requirements:**
+1. Create an `<a>` element linking to `https://www.w3.org`.
+2. Set `target="_blank"` and `rel="noopener noreferrer"`.
+3. Include explicit visual and screen reader text indicating external link behavior.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <a href="home.html">
->   <img src="logo.png" alt="Company Logo">
-> </a>
+> <p class="resource-link">
+>   Read the official specification on 
+>   <a href="https://www.w3.org" target="_blank" rel="noopener noreferrer">
+>     W3C Web Standards <span class="sr-only">(opens in a new tab)</span>
+>   </a>.
+> </p>
 > ```
-> - The `<a>` element is a container. It can wrap text, but it can also wrap other elements!
+>
+> #### Technical Explanation
+>
+> 1. **The `<a>` Anchor Element**: The `<a>` element creates hyperlinks to other web pages, resources, or locations within the same document via the `href` attribute.
+> 2. **Tabnabbing Defense (`rel="noopener noreferrer"`)**: Opening links in a new tab (`target="_blank"`) without `rel="noopener"` allows the target page to control the origin window via JavaScript `window.opener`.
+> 3. **Accessible New Tab Warnings**: Screen readers cannot see visual new tab icons; adding hidden screen reader text (`<span class="sr-only">`) warns users of tab context switches.
 > 
 ---
 
-### Exercise 2: Email and Telephone Anchor Links
+### Exercise 2: Smooth In-Page Section Anchor Jump Link
 
-**Problem:** Write HTML anchor tags for:
-1. Email link to `support@example.com`
-2. Phone call link to `+15551234567`
+**Scenario:** A developer builds a table of contents navigation bar with jump links that scroll smoothly to specific section IDs on the same page.
 
-**Expected output:**
+**Requirements:**
+1. Create a navigation list containing `<a>` tags.
+2. Target matching section IDs using `#id` fragment identifiers.
+3. Include matching target `<section>` elements.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <a href="mailto:support@example.com">Email Us</a>
-> <a href="tel:+15551234567">Call Us</a>
+> <nav aria-label="Table of Contents">
+>   <ul>
+>     <li><a href="#overview">Overview</a></li>
+>     <li><a href="#specifications">Specifications</a></li>
+>   </ul>
+> </nav>
+>
+> <section id="overview">
+>   <h2>Overview</h2>
+>   <p>System overview content goes here.</p>
+> </section>
+>
+> <section id="specifications">
+>   <h2>Specifications</h2>
+>   <p>Technical specifications content goes here.</p>
+> </section>
 > ```
 >
-> **Explanation:** `mailto:` opens email client; `tel:` initiates phone call on mobile devices.
+> #### Technical Explanation
+>
+> 1. **Fragment Identifiers (`#`)**: Using `href="#id"` creates an internal link targeting an element with a matching `id` attribute on the current page.
+> 2. **Keyboard Focus Transfer**: Clicking fragment links moves both visual viewport scroll position and keyboard focus to the target element.
+> 3. **URL Hash State**: Appends `#overview` to the browser URL, allowing users to bookmark direct sections within a long document.
 > 
 ---
 
-### Exercise 3: In-Page Smooth Anchor Jumping
+### Exercise 3: Accessible Action Links for Telephone and Downloads
 
-**Problem:** Write anchor link targeting section `<section id="features">` on the same page.
+**Scenario:** A web author adds direct action links for mobile telephone dialing and file downloading.
 
-**Expected output:**
+**Requirements:**
+1. Create a telephone link using `href="tel:+18005550199"`.
+2. Create a file download link using `href="files/report.pdf" download`.
+3. Add informative accessible label text.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <a href="#features">Jump to Features</a>
+> <div class="contact-actions">
+>   <p>Need support? <a href="tel:+18005550199">Call Support at 1-800-555-0199</a></p>
+>   <p>Download documentation: <a href="files/report.pdf" download="Annual-Report-2026.pdf">Download Annual Report (PDF, 2.4MB)</a></p>
+> </div>
 > ```
 >
-> **Explanation:** Hash link `#id` targets matching element ID on the current page.
-> 
+> #### Technical Explanation
+>
+> 1. **Telephone Protocol (`tel:`)**: The `tel:` URI scheme prompts mobile devices to open the native phone dialer with pre-filled numbers.
+> 2. **Download Attribute (`download`)**: Forces browser download behavior instead of navigating to the file; optional value specifies the saved filename.
+> 3. **File Metadata Guidance**: Including file type and size in the link text helps users make informed download decisions on mobile networks.
 ## 6. Related Terms
 - [`href` Attribute](href.md) — The required attribute that makes the anchor tag function.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.

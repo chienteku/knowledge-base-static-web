@@ -155,71 +155,92 @@ Void elements in action alongside standard container elements:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding Void Elements
+### Exercise 1: Structuring Void Tags in HTML5 Forms and Media
 
-**Problem:** Identify which of the following tags are **Void Elements** and which are **Container Elements** (require a closing tag):
-1. `<p>`
-2. `<br>`
-3. `<a>`
-4. `<input>`
-5. `<img>`
-6. `<h1>`
+**Scenario:** An author uses void elements (`<img>`, `<input>`, `<br>`, `<hr>`) correctly without inner content or closing tags.
 
-**Expected output:**
+**Requirements:**
+1. Use `<img>` with `alt` tag.
+2. Use `<input>` with `<label>`.
+3. Use `<hr>` separator.
+
 > [!check]- Answer
-> ```text
-> 1. Container Element (requires </p>)
-> 2. Void Element (no closing tag)
-> 3. Container Element (requires </a>)
-> 4. Void Element (no closing tag)
-> 5. Void Element (no closing tag)
-> 6. Container Element (requires </h1>)
+>
+> #### Implementation
+>
+> ```html
+> <form action="/subscribe" method="post">
+>   <img src="images/banner.jpg" alt="Newsletter subscription banner">
+>   <hr>
+>   <label for="user-email">Email:</label>
+>   <input type="email" id="user-email" name="email" required>
+> </form>
 > ```
-> - Does the element wrap around text or other tags?
-> - Standard links and paragraphs hold content, while line breaks, inputs, and images are single-tag directives.
+>
+> #### Technical Explanation
+>
+> 1. **Void Element Definition**: Void elements (`<img>`, `<input>`, `<hr>`, `<br>`, `<meta>`, `<link>`) cannot have inner content or child nodes.
+> 2. **No Closing Tags Required**: Void elements do NOT have closing tags (`</img>` is invalid HTML).
+> 3. **HTML5 Slash Convention**: In HTML5, trailing slashes on void tags (`<input />`) are unnecessary and omitted (`<input>`).
 > 
 ---
 
+### Exercise 2: Void Element Formatting in Document Metadata
 
+**Scenario:** Configures `<meta>` and `<link>` void elements in `<head>`.
 
-### Exercise 2: Identifying Void Elements
+**Requirements:**
+1. Write `<meta>` and `<link>` void tags correctly.
 
-**Problem:** Which 4 of these elements are Void Elements?
-1. `<img>` 
-2. `<div>` 
-3. `<br>` 
-4. `<input>` 
-5. `<p>` 
-6. `<meta>` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. img, 3. br, 4. input, 6. meta
-> ```
-> ```text
-> 1. img, 3. br, 4. input, 6. meta
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <meta name="description" content="Accessible web development tutorials.">
+>   <link rel="stylesheet" href="styles.css">
+> </head>
 > ```
 >
-> **Explanation:** `img`, `br`, `input`, `meta`, `hr`, `link`, `source` are HTML void elements.
+> #### Technical Explanation
+>
+> 1. **Metadata Void Tags**: `<meta>` and `<link>` are self-contained void tags carrying metadata via attributes.
+> 2. **HTML5 Parser Rule**: The HTML5 parser automatically treats void tags as self-closing.
+> 3. **Syntax Cleanliness**: Omit trailing slashes for clean, modern HTML5 codebase standards.
 > 
 ---
 
-### Exercise 3: XHTML Trailing Slash Syntax in HTML5
+### Exercise 3: Line Breaks br vs Paragraph Block Elements p Usage
 
-**Problem:** Is `<img src="a.jpg" />` with trailing slash `/` valid in modern HTML5? (Yes/No).
+**Scenario:** Replaces incorrect multiple `<br>` tags with semantic paragraph `<p>` elements.
 
-**Expected output:**
+**Requirements:**
+1. Use `<p>` for separate paragraphs instead of `<br>`.
+
 > [!check]- Answer
-> ```text
-> Yes. Trailing slashes on void elements are permitted in HTML5 (ignored by HTML5 parser).
-> ```
-> ```text
-> Yes. Trailing slashes on void elements are permitted in HTML5 (ignored by HTML5 parser).
+>
+> #### Implementation
+>
+> ```html
+> <!-- Correct: Semantic Paragraph Blocks -->
+> <p>First distinct paragraph of text information.</p>
+> <p>Second distinct paragraph of text information.</p>
+>
+> <!-- Correct <br> Usage: Address lines where break is part of content -->
+> <address>
+>   123 Web Way<br>
+>   Suite 400<br>
+>   Tech City, CA 94016
+> </address>
 > ```
 >
-> **Explanation:** Modern HTML5 parsers ignore optional trailing `/` slashes on void tags.
-> 
+> #### Technical Explanation
+>
+> 1. **Paragraphs vs Line Breaks**: Use `<p>` for separate paragraphs; use `<br>` ONLY for line breaks within addresses or poetry.
+> 2. **Accessibility Impact**: Screen readers announce paragraphs as distinct blocks, whereas consecutive `<br>` tags create awkward pauses.
+> 3. **Layout Separation**: Use CSS margin/padding for vertical spacing instead of stacking `<br>` void tags.
 ## 6. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The fundamental components of markup.
 - [Block-level vs Inline Elements](block_inline.md) — How display properties apply to void elements (e.g. `<img>` is inline, while `<hr>` behaves like a block).

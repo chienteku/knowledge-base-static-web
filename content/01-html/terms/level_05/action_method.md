@@ -171,71 +171,100 @@ Comparing GET and POST form definitions:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Method Selection
+### Exercise 1: Secure User Authentication Login Form
 
-**Problem:** Choose the correct `method` (`GET` or `POST`) for each of the following scenarios:
-1.  A user is searching for flights on a travel website.
-2.  A user is updating their profile email address.
-3.  A user is submitting a credit card payment.
-4.  A user is filtering a list of shirts by color (red, blue).
+**Scenario:** An author constructs a secure login form using `method="post"` and a HTTPS destination URL in the `action` attribute.
 
-**Expected output:**
+**Requirements:**
+1. Create a `<form>` tag with `action="/api/v1/login"` and `method="post"`.
+2. Include labeled inputs for email and password.
+3. Include a submit button.
+
 > [!check]- Answer
-> ```text
-> 1. GET (Search filters should be shareable and bookmarkable)
-> 2. POST (Changing profile details modifies database records)
-> 3. POST (Financial transaction requires data security and payload size)
-> 4. GET (Filters can be bookmarked)
+>
+> #### Implementation
+>
+> ```html
+> <form action="/api/v1/login" method="post" class="login-form">
+>   <h2>Account Sign-In</h2>
+>
+>   <div class="form-group">
+>     <label for="login-email">Email Address</label>
+>     <input type="email" id="login-email" name="email" required autocomplete="email">
+>   </div>
+>
+>   <div class="form-group">
+>     <label for="login-password">Password</label>
+>     <input type="password" id="login-password" name="password" required autocomplete="current-password">
+>   </div>
+>
+>   <button type="submit" class="btn-primary">Sign In</button>
+> </form>
 > ```
-> - If bookmarking the resulting page is useful, choose GET.
-> - If data changes a database state or contains private details, choose POST.
+>
+> #### Technical Explanation
+>
+> 1. **The `method="post"` Attribute**: HTTP POST submits form payload data in the HTTP request body rather than the URL, essential for sensitive credentials.
+> 2. **The `action` Attribute**: Specifies the endpoint URL where submitted form data is processed.
+> 3. **Security Best Practice**: Never use `method="get"` for login forms, as passwords would be exposed in browser history and server access logs.
 > 
 ---
 
+### Exercise 2: Site Search Query Form with GET Method
 
+**Scenario:** A developer builds a site-wide search bar using `method="get"` so search results URLs can be bookmarked and shared.
 
-### Exercise 2: GET vs POST Method Selection Matrix
+**Requirements:**
+1. Set `action="/search"` and `method="get"`.
+2. Include a search input with `name="q"`.
+3. Add an explicit label.
 
-**Problem:** Select `GET` or `POST` method for:
-1. Search input filtering (`GET`)
-2. User registration form (`POST`)
-3. Contact us message submission (`POST`)
-4. Pagination page switching (`GET`)
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. GET
-> 2. POST
-> 3. POST
-> 4. GET
-> ```
-> ```text
-> 1. GET (idempotent search query parameter)
-> 2. POST (secure data creation payload)
-> 3. POST (form submission action)
-> 4. GET (idempotent page navigation)
+>
+> #### Implementation
+>
+> ```html
+> <form action="/search" method="get" role="search" class="search-form">
+>   <label for="site-search">Search Portal</label>
+>   <input type="search" id="site-search" name="q" placeholder="Search articles..." required>
+>   <button type="submit">Search</button>
+> </form>
 > ```
 >
-> **Explanation:** Use `GET` for safe, bookmarkable read queries; use `POST` for state mutations and sensitive data.
+> #### Technical Explanation
+>
+> 1. **The `method="get"` Attribute**: HTTP GET appends form input name/value pairs to the URL as a query string (e.g. `/search?q=accessibility`).
+> 2. **URL Shareability**: GET requests allow users to bookmark, share, and refresh search result pages directly.
+> 3. **Search Role (`role="search"`)**: Provides landmark role accessibility so screen readers can jump directly to the search form.
 > 
 ---
 
-### Exercise 3: Default Form Action and Method
+### Exercise 3: File Upload Form with Multipart Encoding
 
-**Problem:** What are default values for `action` and `method` attributes if omitted on `<form>`?
+**Scenario:** Constructs a user profile avatar upload form requiring `enctype="multipart/form-data"`.
 
-**Expected output:**
+**Requirements:**
+1. Set `method="post"`.
+2. Set `enctype="multipart/form-data"`.
+3. Include an `<input type="file">`.
+
 > [!check]- Answer
-> ```text
-> action defaults to current page URL; method defaults to GET.
-> ```
-> ```text
-> action defaults to current page URL; method defaults to GET.
+>
+> #### Implementation
+>
+> ```html
+> <form action="/api/v1/avatar" method="post" enctype="multipart/form-data" class="upload-form">
+>   <label for="avatar-file">Upload Profile Avatar (JPG or PNG)</label>
+>   <input type="file" id="avatar-file" name="avatar" accept="image/png, image/jpeg" required>
+>   <button type="submit">Upload Image</button>
+> </form>
 > ```
 >
-> **Explanation:** Omitted form attributes target current page with GET requests by default.
-> 
+> #### Technical Explanation
+>
+> 1. **Multipart Encoding (`enctype`)**: Required when uploading binary files (`<input type="file">`) via POST requests.
+> 2. **Default Encoding**: Default `application/x-www-form-urlencoded` cannot transfer binary file streams.
+> 3. **Accept Constraint (`accept`)**: Restricts file picker options to specified MIME image types.
 ## 6. Related Terms
 - [`<form>`](form.md) — The parent container wrapper.
 - [`<button>`](button.md) — The button element which acts as the submission trigger.

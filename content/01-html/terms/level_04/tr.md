@@ -116,64 +116,105 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 
 ## 5. Practice Exercises
 
-### Exercise 1: Counting Rows
+### Exercise 1: Structuring Data Rows inside Table Sections
 
-**Problem:** Look at the following code. How many horizontal rows will this table have?
-```html
-<table>
-  <tr><td>A</td><td>B</td></tr>
-  <tr><td>C</td><td>D</td></tr>
-  <tr><td>E</td><td>F</td></tr>
-</table>
-```
+**Scenario:** An author creates table rows (`<tr>`) containing appropriate header and data cells.
 
-**Expected output:**
+**Requirements:**
+1. Create `<tr>` elements inside `<thead>`, `<tbody>`, and `<tfoot>`.
+2. Ensure `<tr>` contains only `<th>` or `<td>` children.
+
 > [!check]- Answer
-> ```text
-> 3 Rows. (There are three `<tr>` elements).
+>
+> #### Implementation
+>
+> ```html
+> <table>
+>   <caption>Employee Roster</caption>
+>   <thead>
+>     <tr> <!-- Header Row -->
+>       <th scope="col">ID</th>
+>       <th scope="col">Name</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr> <!-- Data Row 1 -->
+>       <th scope="row">#1</th>
+>       <td>Alice</td>
+>     </tr>
+>     <tr> <!-- Data Row 2 -->
+>       <th scope="row">#2</th>
+>       <td>Bob</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
-> - Just count the `<tr>` tags!
+>
+> #### Technical Explanation
+>
+> 1. **The `<tr>` Table Row Element**: Represents a single horizontal row of cells in a table.
+> 2. **Valid Children of `<tr>`**: `<tr>` elements can ONLY contain `<th>` and `<td>` cell tags.
+> 3. **Parent Sectioning**: `<tr>` must be nested inside `<thead>`, `<tbody>`, `<tfoot>`, or directly inside `<table>`.
 > 
 ---
 
+### Exercise 2: Alternating Row Colors for Visual Scannability
 
+**Scenario:** Applies CSS zebra-striping to `<tr>` elements for improved scannability.
 
-### Exercise 2: Zebra Striping Table Rows with CSS
+**Requirements:**
+1. Style alternating `<tr>` rows using CSS `:nth-child(even)`.
 
-**Problem:** Write CSS pseudo-class selector to apply background `#f2f2f2` to even `<tr>` rows inside `<tbody>`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> tbody tr:nth-child(even) { background-color: #f2f2f2; }
-> ```
-> ```css
-> tbody tr:nth-child(even) {
->   background-color: #f2f2f2;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <tbody class="zebra-table">
+>   <tr>
+>     <th scope="row">Row 1</th>
+>     <td>Data A</td>
+>   </tr>
+>   <tr>
+>     <th scope="row">Row 2</th>
+>     <td>Data B</td>
+>   </tr>
+> </tbody>
 > ```
 >
-> **Explanation:** `:nth-child(even)` targets alternating table rows for zebra-striping.
+> #### Technical Explanation
+>
+> 1. **Zebra Striping Rows**: Alternating background colors on `<tr>` elements helps users track horizontal data rows.
+> 2. **Pure CSS Styling**: Use CSS `tr:nth-child(even)` instead of cluttering HTML with hardcoded `class="even"` attributes.
+> 3. **No Impact on Semantics**: Row styling does not affect screen reader navigation.
 > 
 ---
 
-### Exercise 3: Table Row Hover Effect
+### Exercise 3: Interactive Table Rows with Keyboard Focus and ARIA Roles
 
-**Problem:** Write CSS rule highlighting table row on mouse hover.
+**Scenario:** Adds interactive selection capabilities to table rows for dynamic web apps.
 
-**Expected output:**
+**Requirements:**
+1. Add `tabindex="0"` and `aria-selected` to interactive `<tr>` elements.
+
 > [!check]- Answer
-> ```text
-> tr:hover { background-color: #e0e0e0; }
-> ```
-> ```css
-> tr:hover {
->   background-color: #e0e0e0;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <tbody role="rowgroup">
+>   <tr tabindex="0" aria-selected="true" class="selected-row">
+>     <th scope="row">Message #101</th>
+>     <td>Unread Email Subject</td>
+>   </tr>
+> </tbody>
 > ```
 >
-> **Explanation:** `tr:hover` highlights the active data row for visual tracking.
-> 
+> #### Technical Explanation
+>
+> 1. **Interactive Table Rows**: Adding `tabindex="0"` allows users to navigate data rows via Tab and arrow keys.
+> 2. **ARIA Selection State**: `aria-selected="true"` communicates selected row state to screen readers.
+> 3. **Application Web Apps**: Used in email clients and data grids for row selection.
 ## 6. Related Terms
 - [`<table>`](table.md) — The parent that holds the `<tr>`.
 - [`<td>` (Table Data)](td.md) — The data cells that go *inside* the `<tr>`.

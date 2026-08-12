@@ -137,72 +137,83 @@ Different elements using `src` to load resources:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Attribute Selection
+### Exercise 1: Asset Path Resolution for Local Media vs CDN Resources
 
-**Problem:** Choose the correct attribute (`src` or `href`) for each of the following HTML tags:
-1. `<img ____="photo.jpg" alt="Photo">`
-2. `<a ____="https://wikipedia.org">Wikipedia</a>`
-3. `<script ____="script.js"></script>`
-4. `<link rel="stylesheet" ____="style.css">`
-5. `<iframe ____="map.html"></iframe>`
+**Scenario:** Demonstrates specifying resource URLs using the `src` attribute on `<img>`, `<script>`, and `<iframe>` elements.
 
-**Expected output:**
+**Requirements:**
+1. Set `src` on `<img>` for local image path.
+2. Set `src` on `<script>` for CDN JavaScript.
+3. Set `src` on `<iframe>` for embedded document.
+
 > [!check]- Answer
-> ```text
-> 1. src
-> 2. href
-> 3. src
-> 4. href
-> 5. src
+>
+> #### Implementation
+>
+> ```html
+> <!-- Local Image Asset -->
+> <img src="assets/images/logo.png" alt="Company Logo" width="180" height="40">
+>
+> <!-- Embedded External Map Document -->
+> <iframe src="https://maps.example.com/embed" title="Office Location Map" width="400" height="300"></iframe>
+>
+> <!-- External CDN Script Asset -->
+> <script src="https://cdn.example.com/js/library.min.js"></script>
 > ```
-> - Remember that stylesheets (`<link>`) are references, so they use `href`, while scripts (`<script>`) are embedded sources, so they use `src`.
+>
+> #### Technical Explanation
+>
+> 1. **The `src` (Source) Attribute**: Specifies the external resource URL to embed or execute within elements like `<img>`, `<script>`, `<iframe>`, `<video>`, and `<audio>`.
+> 2. **Absolute vs Relative `src` Paths**: Relative paths (`assets/...`) load local domain assets; absolute URLs (`https://...`) fetch cross-origin resources.
+> 3. **Mandatory Asset Attribute**: Without a valid `src` attribute, media tags cannot fetch or render external assets.
 > 
 ---
 
+### Exercise 2: Script Integrity Verification with Subresource Integrity
 
+**Scenario:** Secures external CDN JavaScript `src` files using `integrity` hashes.
 
-### Exercise 2: Attribute Selection Matrix: src vs href
+**Requirements:**
+1. Add `src` CDN URL.
+2. Add `integrity` hash and `crossorigin="anonymous"`.
 
-**Problem:** Specify `src` or `href` for:
-1. `<script>` (`src`)
-2. `<link rel="stylesheet">` (`href`)
-3. `<iframe>` (`src`)
-4. `<a>` (`href`)
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. script -> src
-> 2. link -> href
-> 3. iframe -> src
-> 4. a -> href
-> ```
-> ```text
-> 1. script -> src
-> 2. link -> href
-> 3. iframe -> src
-> 4. a -> href
+>
+> #### Implementation
+>
+> ```html
+> <script src="https://cdn.example.com/libs/framework.js" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>
 > ```
 >
-> **Explanation:** `src` embeds external resources; `href` links external documents or style resources.
+> #### Technical Explanation
+>
+> 1. **Subresource Integrity (SRI)**: The `integrity` attribute verifies that fetched `src` files have not been maliciously tampered with on CDNs.
+> 2. **`crossorigin` Attribute**: Required when performing SRI checks on cross-origin script requests.
+> 3. **Security Hardening**: Prevents compromised CDNs from injecting malicious scripts into web apps.
 > 
 ---
 
-### Exercise 3: Relative vs Absolute src Paths
+### Exercise 3: Relative Path Navigation for Subfolder Assets
 
-**Problem:** Explain the difference between `<img src="/logo.png">` and `<img src="logo.png">` on page `/blog/post-1`.
+**Scenario:** Navigates relative folder structures (`../images/pic.png`) to locate asset sources.
 
-**Expected output:**
+**Requirements:**
+1. Use relative parent directory navigation `src="../images/photo.jpg"`.
+
 > [!check]- Answer
-> ```text
-> src="/logo.png" resolves to domain root (/logo.png); src="logo.png" resolves relative to current path (/blog/post-1/logo.png).
-> ```
-> ```text
-> src="/logo.png" resolves to domain root (/logo.png); src="logo.png" resolves relative to current path (/blog/post-1/logo.png).
+>
+> #### Implementation
+>
+> ```html
+> <!-- Executing from /pages/about.html referencing /images/hero.jpg -->
+> <img src="../images/hero.jpg" alt="About Acme Team" width="600" height="400">
 > ```
 >
-> **Explanation:** Leading slash `/` anchors path resolution to the domain root.
-> 
+> #### Technical Explanation
+>
+> 1. **Parent Directory Navigation (`../`)**: `../` moves up one folder level in relative file directory structures.
+> 2. **Root Relative (`/images/...`)**: Paths starting with `/` resolve directly from domain root.
+> 3. **Path Case Sensitivity**: Linux web servers are case-sensitive (`Hero.jpg` vs `hero.jpg`).
 ## 6. Related Terms
 - [Attribute](../level_01/attribute.md) — The concept of tag configuration keys.
 - [`href` Attribute](../level_02/href.md) — The coordinate system attribute for links.

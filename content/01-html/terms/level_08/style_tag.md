@@ -170,67 +170,98 @@ A simple internal CSS block:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Stylesheet Conversion
+### Exercise 1: Critical Above-the-Fold CSS Inlining using style in head
 
-**Problem:** Convert these inline styles into a single `<style>` block targeting the paragraph class "card-desc".
+**Scenario:** An author inlines critical above-the-fold CSS styles using `<style>` in `<head>` to speed up First Contentful Paint.
 
-```html
-<p class="card-desc" style="color: gray; margin: 10px;">Card description.</p>
-```
+**Requirements:**
+1. Place `<style>` inside `<head>`.
+2. Write valid CSS rules inside.
+3. Target core layout elements.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <title>Fast FCP Web Portal</title>
+>
+>   <!-- Critical Above-The-Fold CSS -->
+>   <style>
+>     body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; }
+>     .hero { background: #0f172a; color: #ffffff; padding: 4rem 2rem; text-align: center; }
+>   </style>
+>
+>   <!-- Non-critical stylesheet deferred -->
+>   <link rel="stylesheet" href="css/non-critical.css" media="print" onload="this.media='all'">
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `<style>` Element**: Embeds CSS styling rules directly within an HTML document; MUST be placed in `<head>`.
+> 2. **Critical CSS Inlining**: Inlining small critical CSS (under 10KB) eliminates RTT network round-trips for initial page rendering.
+> 3. **FCP Performance Optimization**: Dramatically improves First Contentful Paint (FCP) scores on mobile connections.
+> 
+---
+
+### Exercise 2: Scoped Component Styles for Web Components
+
+**Scenario:** Uses `<style>` inside Shadow DOM web components for component-scoped CSS isolation.
+
+**Requirements:**
+1. Place `<style>` inside web component template.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <template id="custom-card-template">
+>   <style>
+>     :host { display: block; border: 1px solid #ccc; padding: 16px; }
+>     h2 { color: #2563eb; margin-top: 0; }
+>   </style>
+>   <h2>Component Title</h2>
+>   <slot></slot>
+> </template>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Shadow DOM Styling Isolation**: Styles defined inside Shadow DOM templates do NOT leak out to main document elements.
+> 2. **Component Encapsulation**: Prevents class name collisions in large component libraries.
+> 3. **Native Web Components**: Standard pattern for native HTML5 Web Components.
+> 
+---
+
+### Exercise 3: Media-Query Conditioned Embedded Stylesheet Rules
+
+**Scenario:** Includes media queries within `<style>` tag for responsive embedded themes.
+
+**Requirements:**
+1. Write `@media` print rules inside `<style>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
 > <style>
->   .card-desc {
->     color: gray;
->     margin: 10px;
+>   @media print {
+>     body { background: white; color: black; }
+>     .no-print { display: none !important; }
 >   }
 > </style>
-> <p class="card-desc">Card description.</p>
-> ```
-> - Write class selectors in CSS starting with a dot (`.card-desc`).
-> - Wrap the rules in curly braces (`{ ... }`).
-> - Remove the `style="..."` attribute from the `<p>` tag.
-> 
----
-
-
-
-### Exercise 2: Media Query Internal Style Tag
-
-**Problem:** Write `<style>` tag with `media="print"` hiding element `.no-print`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <style media="print">.no-print { display: none; }</style>
-> ```
-> ```html
-> <style media="print">
->   .no-print { display: none; }
-> </style>
 > ```
 >
-> **Explanation:** `media` attribute restricts internal CSS rules to specific output media (e.g. print).
-> 
----
-
-### Exercise 3: CSS Type Attribute Redundancy
-
-**Problem:** Is `type="text/css"` required on HTML5 `<style>` tags? (Yes/No).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No. HTML5 defaults <style> elements to CSS automatically.
-> ```
-> ```text
-> No. HTML5 defaults <style> elements to CSS automatically.
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `type="text/css"` is redundant in modern HTML5.
-> 
+> 1. **Print Media Rules**: Customizes document output when printed to paper or PDF.
+> 2. **Hiding Unnecessary UI**: Hides navigation menus and advertisements (`display: none`) in print mode.
+> 3. **Valid HTML5 Placement**: `<style>` tags should reside in `<head>`.
 ## 6. Related Terms
 - [`style` Attribute](../level_07/style.md) — The inline styling attribute.
 - [`<link>`](link.md) — The element used to connect external CSS.

@@ -131,56 +131,79 @@ textarea {
 
 ## 5. Practice Exercises
 
-### Exercise 1: CSS Resizing
+### Exercise 1: Multi-line Comment Field with label, rows, cols, and maxlength
 
-**Problem:** By default, users can click and drag the corner of a `<textarea>` to resize it in any direction. How can you use CSS to restrict them so they can only drag it taller, but not wider?
+**Scenario:** An author constructs a multi-line customer feedback comment box using `<textarea>`.
 
-**Expected output:**
+**Requirements:**
+1. Create `<textarea>` with explicit `<label>`.
+2. Set `rows="5"` and `cols="40"`.
+3. Set `maxlength="500"` constraint.
+
 > [!check]- Answer
-> ```text
-> You use the CSS resize property: 
-> `textarea { resize: vertical; }`
-> ```
-> - Search for "CSS textarea resize".
-> 
----
-
-
-
-### Exercise 2: Configuring Textarea Dimensions and Max Length
-
-**Problem:** Write `<textarea>` named `bio` with 4 rows, 50 columns, and max length 200 characters.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <textarea name="bio" rows="4" cols="50" maxlength="200"></textarea>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <textarea name="bio" rows="4" cols="50" maxlength="200"></textarea>
+> <div class="form-group">
+>   <label for="feedback-text">Customer Feedback (Max 500 characters)</label>
+>   <textarea id="feedback-text" name="feedback" rows="5" cols="40" maxlength="500" placeholder="Type your comments here..." required></textarea>
+> </div>
 > ```
 >
-> **Explanation:** `rows`/`cols` specify initial box dimensions; `maxlength` enforces character limits.
+> #### Technical Explanation
+>
+> 1. **The `<textarea>` Element**: Creates a multi-line plain text editing control.
+> 2. **Content-Bearing Element**: `<textarea>` requires a closing tag `</textarea>`; initial content is placed BETWEEN tags, NOT in a `value` attribute.
+> 3. **Dimension Attributes**: `rows` sets visible height in text lines; `cols` sets visible width in average character widths.
 > 
 ---
 
-### Exercise 3: Preserving Textarea Line Breaks
+### Exercise 2: Resizable vs Fixed Textarea Formatting using CSS
 
-**Problem:** Which CSS property preserves multi-line line breaks entered inside a `<textarea>` when displaying text on a web page?
+**Scenario:** Controls textarea resizing behavior via CSS `resize` property.
 
-**Expected output:**
+**Requirements:**
+1. Set CSS `resize: vertical` on textarea.
+
 > [!check]- Answer
-> ```text
-> white-space: pre-wrap;
-> ```
-> ```css
-> .output {
->   white-space: pre-wrap;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <label for="user-notes">Personal Notes</label>
+> <textarea id="user-notes" name="notes" rows="4" class="vertical-resize-only"></textarea>
 > ```
 >
-> **Explanation:** `white-space: pre-wrap` preserves newlines and wraps text output.
+> #### Technical Explanation
+>
+> 1. **CSS `resize` Control**: `resize: vertical` allows users to stretch textarea height without breaking horizontal page width.
+> 2. **Default Resizability**: Browsers add a draggable resize handle to bottom-right corner of textareas by default.
+> 3. **Closing Tag Requirement**: Always write `<textarea></textarea>`; leaving it unclosed breaks subsequent page HTML parsing.
 > 
+---
+
+### Exercise 3: Preserving User Line Breaks and Character Counts
+
+**Scenario:** Configures textarea line wrapping and character counter limits.
+
+**Requirements:**
+1. Set `wrap="soft"` and `maxlength`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <label for="bio-text">Short Biography</label>
+> <textarea id="bio-text" name="bio" rows="3" maxlength="200" wrap="soft"></textarea>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Line Wrap Control**: `wrap="soft"` wraps text visually without submitting hard line breaks; `wrap="hard"` submits `\r\n` breaks.
+> 2. **Native `maxlength` Constraint**: Enforces maximum character limits directly in the browser editor.
+> 3. **No Default Value Attribute**: Initial text MUST be placed inside opening and closing tags (`<textarea>Default text</textarea>`).
 ## 6. Related Terms
 - [`<input>`](input.md) — The single-line equivalent for short data.
 - [`placeholder` Attribute](placeholder.md) — The visual cue comparison.

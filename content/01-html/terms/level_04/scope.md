@@ -154,80 +154,133 @@ Using row and column header scopes in the same table:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Scoping headers
+### Exercise 1: Explicit Column and Row Heading Association with scope
 
-**Problem:** Add the correct `scope` attributes to the header cells in the table structure below:
+**Scenario:** An author adds `scope="col"` and `scope="row"` to a pricing comparison table so screen readers announce exact header names when users navigate data cells.
 
-```html
-<table>
-  <tr>
-    <th>Task</th>
-    <th>Deadline</th>
-  </tr>
-  <tr>
-    <th>Write report</th>
-    <td>Friday</td>
-  </tr>
-</table>
-```
+**Requirements:**
+1. Add `scope="col"` to all header cells in `<thead>`.
+2. Add `scope="row"` to row header cells in `<tbody>`.
+3. Verify data cells read associated headers.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <table>
->   <tr>
->     <th scope="col">Task</th>
->     <th scope="col">Deadline</th>
->   </tr>
->   <tr>
->     <th scope="row">Write report</th>
->     <td>Friday</td>
->   </tr>
+> <table class="pricing-table">
+>   <caption>Subscription Plan Features</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Feature</th>
+>       <th scope="col">Basic Plan</th>
+>       <th scope="col">Pro Plan</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Monthly Price</th>
+>       <td>$9.99</td>
+>       <td>$29.99</td>
+>     </tr>
+>     <tr>
+>       <th scope="row">Storage Space</th>
+>       <td>10 GB</td>
+>       <td>100 GB</td>
+>     </tr>
+>   </tbody>
 > </table>
 > ```
-> - The top row labels columns vertically downwards (`col`).
-> - The cell "Write report" labels its horizontal row of details (`row`).
+>
+> #### Technical Explanation
+>
+> 1. **The `scope` Attribute**: Explicitly defines whether a `<th>` cell is a header for a column (`scope="col"`) or a row (`scope="row"`).
+> 2. **Screen Reader Cell Context**: When a blind user moves focus to `$29.99`, the screen reader announces: 'Pro Plan, Monthly Price: $29.99'.
+> 3. **WCAG 2.1 Compliance**: Using `scope` satisfies WCAG Success Criterion 1.3.1 (Info and Relationships) for tabular data.
 > 
 ---
 
+### Exercise 2: Multi-Header Roster Table using colgroup and rowgroup Scope
 
+**Scenario:** Uses `scope="colgroup"` and `scope="rowgroup"` for multi-level grouped data tables.
 
-### Exercise 2: Applying Header Scope Values
+**Requirements:**
+1. Apply `scope="colgroup"` to spanned column headers.
+2. Apply `scope="rowgroup"` to multi-row category headers.
 
-**Problem:** Specify appropriate `scope` value (`col`, `row`, `colgroup`, `rowgroup`) for:
-1. Top column header cell
-2. Leftmost row header cell
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. scope="col"
-> 2. scope="row"
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <th scope="col">Header</th>
-> <th scope="row">Row Name</th>
+> <table>
+>   <caption>Regional Personnel Breakdown</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Department</th>
+>       <th scope="colgroup" colspan="2">Staff Count</th>
+>     </tr>
+>     <tr>
+>       <th scope="col">Name</th>
+>       <th scope="col">Full-Time</th>
+>       <th scope="col">Part-Time</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Engineering</th>
+>       <td>45</td>
+>       <td>5</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
 >
-> **Explanation:** `scope="col"` sets column scope; `scope="row"` sets row scope for screen readers.
+> #### Technical Explanation
+>
+> 1. **`scope="colgroup"`**: Associates a header with a group of columns spanned by `colspan`.
+> 2. **`scope="rowgroup"`**: Associates a header with a group of rows spanned by `rowspan`.
+> 3. **Complex Table Navigation**: Essential for multi-level statistical data tables.
 > 
 ---
 
-### Exercise 3: Colgroup Scope Usage
+### Exercise 3: Auditing Missing scope Attributes in Data Tables
 
-**Problem:** When should `scope="colgroup"` be used in data tables?
+**Scenario:** An auditor refactors legacy `<th>` elements to add explicit `scope` attributes.
 
-**Expected output:**
+**Requirements:**
+1. Add explicit `scope="col"` and `scope="row"` attributes to legacy `<th>` tags.
+
 > [!check]- Answer
-> ```text
-> When a header cell spans multiple columns via colspan over a column group (<colgroup>).
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <th colspan="2" scope="colgroup">2026 Sales</th>
+> <!-- Refactored Table with Explicit Scope Attributes -->
+> <table>
+>   <caption>Class Roster</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Student ID</th>
+>       <th scope="col">Student Name</th>
+>       <th scope="col">Grade</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">#1001</th>
+>       <td>Alice Smith</td>
+>       <td>A+</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
 >
-> **Explanation:** `scope="colgroup"` associates a header spanning multiple columns with the entire group.
-> 
+> #### Technical Explanation
+>
+> 1. **Default Browser Behavior**: Browsers infer scope for simple tables, but explicit `scope` is required for robust screen reader support.
+> 2. **Disambiguating Headers**: Differentiates horizontal row headers from vertical column headers.
+> 3. **Accessibility Auditing**: Automated tools flag missing `scope` attributes on `<th>` tags.
 ## 6. Related Terms
 - [`<th>` (Table Header)](th.md) — The tag that hosts the `scope` attribute.
 - [`<caption>`](caption.md) — The table title helper.

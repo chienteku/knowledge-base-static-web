@@ -118,56 +118,105 @@ Usually, you type your column names there and make the text bold so it stands ou
 
 ## 5. Practice Exercises
 
-### Exercise 1: Row Headers
+### Exercise 1: Column and Row Header Differentiation with th and scope
 
-**Problem:** Can a `<th>` be used for the first item in a horizontal row, instead of just at the top of a vertical column?
+**Scenario:** An author uses `<th>` elements to define both column headers and row headers with explicit `scope` attributes.
 
-**Expected output:**
+**Requirements:**
+1. Use `<th> scope="col"` for column headers in `<thead>`.
+2. Use `<th> scope="row"` for row headers in `<tbody>`.
+
 > [!check]- Answer
-> ```text
-> Yes! A table can have row headers. For example, in a schedule, the left-most column might be `<th>` elements representing the days of the week (Monday, Tuesday), while the rest of the row contains `<td>` elements for the events on those days.
-> ```
-> - Think about a timetable or a calendar. Where are the labels?
-> 
----
-
-
-
-### Exercise 2: Row Header vs Column Header Syntax
-
-**Problem:** Write a `<tr>` row containing 1 row header `<th>` for user `'Alice'` and 1 data `<td>` for age `30`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <tr><th scope="row">Alice</th><td>30</td></tr>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <tr>
->   <th scope="row">Alice</th>
->   <td>30</td>
-> </tr>
+> <table>
+>   <caption>Student Test Scores</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Student Name</th>
+>       <th scope="col">Math Score</th>
+>       <th scope="col">Science Score</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Alice Johnson</th>
+>       <td>95%</td>
+>       <td>98%</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
 >
-> **Explanation:** `scope="row"` designates `<th>` as header for the horizontal row.
+> #### Technical Explanation
+>
+> 1. **The `<th>` Element**: Represents a header cell in a table, rendered in bold and centered by default.
+> 2. **Row Headers (`<th scope="row">`)**: Using `<th>` as the first cell in a `<tbody>` row identifies the subject of that row.
+> 3. **Screen Reader Header Pairing**: Screen readers pair `<th>` headers with corresponding `<td>` data values during navigation.
 > 
 ---
 
-### Exercise 3: Default th Styling
+### Exercise 2: Sortable Data Table Headers with aria-sort Attributes
 
-**Problem:** What default CSS font-weight and text-alignment do browsers apply to `<th>` cells?
+**Scenario:** Adds interactive sorting accessibility state attributes (`aria-sort`) to table column headers.
 
-**Expected output:**
+**Requirements:**
+1. Add `aria-sort="ascending"` to active sorted `<th>`.
+2. Add `aria-sort="none"` to sortable headers.
+
 > [!check]- Answer
-> ```text
-> font-weight: bold; text-align: center;
-> ```
-> ```text
-> font-weight: bold; text-align: center;
+>
+> #### Implementation
+>
+> ```html
+> <thead>
+>   <tr>
+>     <th scope="col" aria-sort="ascending">
+>       <button type="button">Employee Name ▲</button>
+>     </th>
+>     <th scope="col" aria-sort="none">
+>       <button type="button">Department</button>
+>     </th>
+>   </tr>
+> </thead>
 > ```
 >
-> **Explanation:** Browsers render header cells bold and centered by default.
+> #### Technical Explanation
+>
+> 1. **The `aria-sort` Attribute**: Communicates column sort direction (`ascending`, `descending`, `none`, `other`) to assistive tools.
+> 2. **Interactive Sort Buttons**: Wrap sortable header text in a `<button>` to make it keyboard focusable and clickable.
+> 3. **Dynamic State Updates**: Update `aria-sort` values via JavaScript when user sorts columns.
 > 
+---
+
+### Exercise 3: Distinguishing th Headers from td Data Values
+
+**Scenario:** Corrects legacy tables that used `<td><b>Header</b></td>` instead of semantic `<th>` tags.
+
+**Requirements:**
+1. Replace `<td><b>` with semantic `<th> scope="col"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Correct Semantic Header: -->
+> <thead>
+>   <tr>
+>     <th scope="col">Product ID</th>
+>     <th scope="col">Stock Count</th>
+>   </tr>
+> </thead>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Semantic `<th>` vs Physical `<b>`**: `<td><b>Text</b></td>` looks bold visually but carries ZERO header accessibility semantics.
+> 2. **Accessibility Tree Role**: `<th>` establishes header roles in the browser accessibility tree.
+> 3. **Standard Compliance**: Required for W3C HTML5 table conformance.
 ## 6. Related Terms
 - [`<tr>` (Table Row)](tr.md) — The row that contains the `<th>`.
 - [`<td>` (Table Data)](td.md) — The standard data cell that corresponds to the `<th>`.

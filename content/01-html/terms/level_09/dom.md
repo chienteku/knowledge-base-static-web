@@ -100,60 +100,94 @@ document.body.appendChild(fragment); // Single DOM reflow!
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Translator
+### Exercise 1: Document Object Model Node Tree Navigation and Relationship Mapping
 
-**Problem:** If HTML is a markup language and JavaScript is a programming language, what is the DOM's role between them?
+**Scenario:** An author structures HTML elements knowing how browsers convert HTML tags into a tree of DOM Element, Text, and Attribute nodes.
 
-**Expected output:**
+**Requirements:**
+1. Construct a valid nested HTML hierarchy.
+2. Verify DOM parent, child, and sibling relationships.
+
 > [!check]- Answer
-> ```text
-> The DOM acts as a translator or a bridge. It takes the static structure of HTML and translates it into interactive JavaScript Objects, allowing the programming language to manipulate the visual markup.
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>DOM Tree Representation</title>
+> </head>
+> <body>
+>   <!-- Parent Element Node: <main> -->
+>   <main id="app-root">
+>     <!-- Child Element Node: <h1> -->
+>     <h1>Document Object Model</h1>
+>     <!-- Child Element Node: <p> with inner Text Node -->
+>     <p>Browsers parse HTML tags into an in-memory DOM tree graph.</p>
+>   </main>
+> </body>
+> </html>
 > ```
-> - Think about the "O" in DOM. What does "Object" mean in programming?
+>
+> #### Technical Explanation
+>
+> 1. **The Document Object Model (DOM)**: An in-memory object tree representation of the HTML document created by the browser parser.
+> 2. **DOM Node Types**: Includes Element Nodes (`<p>`), Text Nodes (`'Hello'`), Attribute Nodes (`class="..."`), and Comment Nodes.
+> 3. **Programmatic API Access**: JavaScript inspects and mutates the DOM tree via methods like `document.getElementById()` or `element.appendChild()`.
 > 
 ---
 
+### Exercise 2: Inspecting Element Nodes, Text Nodes, and Attribute Nodes
 
+**Scenario:** Demonstrates how attributes and text are represented as nodes in the DOM.
 
-### Exercise 2: DOM Tree Node Types
+**Requirements:**
+1. Structure elements with explicit attributes and text content.
 
-**Problem:** Identify the DOM node type (`Element`, `Text`, or `Comment`) for:
-1. `<h1>` tag node
-2. Raw text string node inside paragraph
-3. `<!-- Note -->` node
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Element Node (nodeType 1)
-> 2. Text Node (nodeType 3)
-> 3. Comment Node (nodeType 8)
-> ```
-> ```text
-> 1. Element Node (nodeType 1)
-> 2. Text Node (nodeType 3)
-> 3. Comment Node (nodeType 8)
+>
+> #### Implementation
+>
+> ```html
+> <article class="card" id="card-1">
+>   <h2 class="title">Card Title</h2>
+>   <p class="body">Text node content inside paragraph node.</p>
+> </article>
 > ```
 >
-> **Explanation:** DOM trees consist of Element, Text, Comment, and Attribute nodes.
+> #### Technical Explanation
+>
+> 1. **Element Nodes (`nodeType 1`)**: Represents HTML tags (`<article>`, `<h2>`).
+> 2. **Text Nodes (`nodeType 3`)**: Represents the text string content inside tags.
+> 3. **Attribute Nodes (`nodeType 2`)**: Represents key-value attributes (`id="card-1"`) attached to elements.
 > 
 ---
 
-### Exercise 3: Efficient DOM Querying
+### Exercise 3: Dynamic DOM Node Traversal Hierarchy
 
-**Problem:** Which method is faster for querying a single element by ID: `document.getElementById('app')` or `document.querySelector('#app')`?
+**Scenario:** Structures HTML elements to support predictable DOM parent-child traversal.
 
-**Expected output:**
+**Requirements:**
+1. Ensure clean parent-child DOM tree boundaries.
+
 > [!check]- Answer
-> ```text
-> document.getElementById('app') is faster (direct hash table lookup).
-> ```
-> ```javascript
-> document.getElementById('app'); // Fast direct lookup
+>
+> #### Implementation
+>
+> ```html
+> <ul id="item-list">
+>   <li class="item">Item 1</li>
+>   <li class="item">Item 2</li>
+> </ul>
 > ```
 >
-> **Explanation:** `getElementById` performs optimized direct ID hash lookups.
-> 
+> #### Technical Explanation
+>
+> 1. **DOM Tree Traversal**: JavaScript navigates nodes via `parentElement`, `children`, `firstElementChild`, `nextElementSibling`.
+> 2. **Live DOM Updates**: Mutating DOM nodes updates screen visual pixels automatically.
+> 3. **Valid DOM Hierarchy**: Ensures predictable JavaScript event bubbling and capturing.
 ## 6. Related Terms
 - [The Tree Structure](tree_structure.md) — How the DOM organizes all of these objects in memory.
 - [Critical Rendering Path](critical_rendering_path.md) — The browser pipeline that compiles DOM into pixels.

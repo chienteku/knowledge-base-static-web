@@ -160,73 +160,106 @@ button:focus-visible {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Accessibility Audit
+### Exercise 1: Accessible Form with Error Summary and ARIA State Attributes
 
-**Problem:** Identify three accessibility errors in the following code block:
+**Scenario:** An author builds an accessible user registration form incorporating error messages, explicit labels, and WCAG 2.1 AA accessibility attributes.
 
-```html
-<body>
-  <div class="header">
-    <img src="banner.png">
-  </div>
-  <form>
-    <span>Enter Age:</span>
-    <input type="text">
-  </form>
-</body>
-```
+**Requirements:**
+1. Include an error summary block with `role="alert"` and `tabindex="-1"`.
+2. Link inputs with explicit `<label>` tags.
+3. Use `aria-invalid="true"` and `aria-describedby` on invalid fields.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. The header uses a generic `<div class="header">` instead of the semantic `<header>` landmark tag.
-> 2. The image `<img src="banner.png">` is missing a required `alt` attribute.
-> 3. The text field uses a generic `<span>` instead of a semantic `<label>` tag, meaning screen readers will not link "Enter Age" to the input.
+>
+> #### Implementation
+>
+> ```html
+> <form action="/register" method="post" class="accessible-form" novalidate>
+>   <!-- Accessibility Error Summary Banner -->
+>   <div class="error-summary" role="alert" aria-labelledby="error-title" tabindex="-1">
+>     <h2 id="error-title">There is a problem with your submission</h2>
+>     <ul>
+>       <li><a href="#user-email">Email address is invalid</a></li>
+>     </ul>
+>   </div>
+>
+>   <div class="form-group">
+>     <label for="user-email">Email Address</label>
+>     <input type="email" id="user-email" name="email" aria-invalid="true" aria-describedby="email-error" required>
+>     <p id="email-error" class="error-message">Enter a valid email address (e.g. name@example.com).</p>
+>   </div>
+>
+>   <button type="submit" class="btn-primary">Create Account</button>
+> </form>
 > ```
-> - Think about semantic landmarks, form label bindings, and image fallback descriptions.
+>
+> #### Technical Explanation
+>
+> 1. **Accessible Error Alerts (`role="alert"`)**: The `role="alert"` attribute causes screen readers to interrupt speech and announce error messages immediately upon form submission failure.
+> 2. **Programmatic Description (`aria-describedby`)**: `aria-describedby="email-error"` explicitly connects the input control to its error explanation message.
+> 3. **Keyboard Focus Management**: Setting `tabindex="-1"` on the error summary block enables moving keyboard focus to the top of the form via JavaScript.
 > 
 ---
 
+### Exercise 2: Accessible Custom Control with Keyboard Focusability
 
+**Scenario:** Creates a custom interactive toggle button that avoids keyboard traps and supports Space/Enter key activations.
 
-### Exercise 2: POUR Accessibility Principles
+**Requirements:**
+1. Add `tabindex="0"` to custom component.
+2. Add `role="switch"` and `aria-checked`.
+3. Provide visual focus indicator.
 
-**Problem:** List the 4 foundational principles of the Web Content Accessibility Guidelines (WCAG).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Perceivable
-> 2. Operable
-> 3. Understandable
-> 4. Robust
-> ```
-> ```text
-> 1. Perceivable
-> 2. Operable
-> 3. Understandable
-> 4. Robust
+>
+> #### Implementation
+>
+> ```html
+> <div class="setting-row">
+>   <span id="dark-mode-label">Enable Dark Mode Theme</span>
+>   <button type="button" role="switch" aria-checked="false" aria-labelledby="dark-mode-label" class="toggle-switch">
+>     <span class="switch-slider" aria-hidden="true"></span>
+>   </button>
+> </div>
 > ```
 >
-> **Explanation:** POUR principles guide accessible web content design.
+> #### Technical Explanation
+>
+> 1. **Native `button` vs Custom `div`**: Using native `<button>` automatically handles keyboard Tab focus and Space/Enter key presses without extra JS.
+> 2. **ARIA Switch Semantics (`role="switch"`)**: Communicates a binary ON/OFF state to screen readers via `aria-checked="true|false"`.
+> 3. **Accessible Labeling (`aria-labelledby`)**: Associates the toggle button with the adjacent text span label.
 > 
 ---
 
-### Exercise 3: WCAG Minimum Color Contrast Ratio
+### Exercise 3: Auditing WCAG 2.1 AA Compliance for Interactive Dropdown Controls
 
-**Problem:** What is the WCAG AA minimum required color contrast ratio for normal body text against background?
+**Scenario:** Audits an interactive custom menu control for keyboard navigation compliance.
 
-**Expected output:**
+**Requirements:**
+1. Ensure all interactive elements are focusable via Tab.
+2. Ensure visual focus indicators are visible.
+
 > [!check]- Answer
-> ```text
-> 4.5:1 ratio (3:1 for large text).
-> ```
-> ```text
-> 4.5:1 ratio (3:1 for large text).
+>
+> #### Implementation
+>
+> ```html
+> <div class="dropdown-wrapper">
+>   <button type="button" id="menu-btn" aria-haspopup="true" aria-expanded="false" class="dropdown-trigger">
+>     Options Menu ▼
+>   </button>
+>   <ul id="menu-list" role="menu" aria-labelledby="menu-btn" class="dropdown-menu" hidden>
+>     <li role="menuitem"><a href="/profile">View Profile</a></li>
+>     <li role="menuitem"><a href="/logout">Sign Out</a></li>
+>   </ul>
+> </div>
 > ```
 >
-> **Explanation:** 4.5:1 contrast guarantees text readability for low-vision users.
-> 
+> #### Technical Explanation
+>
+> 1. **Keyboard Operability (WCAG 2.1 SC 2.1.1)**: All interactive functions MUST be operable through a keyboard interface without requiring specific timing for individual keystrokes.
+> 2. **Visible Focus (WCAG 2.1 SC 2.4.7)**: Never remove CSS focus outlines (`outline: none`) unless replacing them with high-contrast custom focus styles.
+> 3. **ARIA Popup Semantics**: `aria-haspopup="true"` and `aria-expanded` communicate dropdown menu availability and state.
 ## 6. Related Terms
 - [Semantic HTML](../level_06/semantic_html.md) — The foundation of structured layouts.
 - [`alt` Attribute](../level_03/alt.md) — Media text descriptors.

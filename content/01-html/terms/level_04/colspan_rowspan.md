@@ -189,53 +189,138 @@ A calendar schedule using both column and row spans:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Spanning Row Count
+### Exercise 1: Complex Financial Balance Sheet with Multi-Column Headers
 
-**Problem:** You are building a table with 3 columns and 3 rows. The cell in Row 1, Column 1 has `rowspan="3"`. How many total cell tags (`<td>` or `<th>`) will you write inside Row 2?
+**Scenario:** An author builds a financial summary table using `colspan="2"` to span category header cells across multiple sub-columns.
 
-**Expected output:**
+**Requirements:**
+1. Use `colspan="2"` on header cells to group columns.
+2. Use `scope="colgroup"` for merged headers.
+3. Verify column alignment in data rows.
+
 > [!check]- Answer
-> ```text
-> 2 cells. (Column 1 is occupied by the rowspan from Row 1, so Row 2 only needs tags for Column 2 and Column 3).
+>
+> #### Implementation
+>
+> ```html
+> <table>
+>   <caption>Company Balance Sheet (2025 vs 2026)</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col" rowspan="2">Category</th>
+>       <th scope="colgroup" colspan="2">2025 Fiscal Year</th>
+>       <th scope="colgroup" colspan="2">2026 Fiscal Year</th>
+>     </tr>
+>     <tr>
+>       <th scope="col">Budget</th>
+>       <th scope="col">Actual</th>
+>       <th scope="col">Budget</th>
+>       <th scope="col">Actual</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Research & Development</th>
+>       <td>$1.2M</td>
+>       <td>$1.1M</td>
+>       <td>$1.5M</td>
+>       <td>$1.4M</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
-> - Sketch a 3x3 grid on paper and shade in the merged block starting from cell 1,1.
+>
+> #### Technical Explanation
+>
+> 1. **The `colspan` Attribute**: Merges a table cell horizontally across multiple adjacent columns (`colspan="2"`).
+> 2. **The `rowspan` Attribute**: Merges a table cell vertically across multiple adjacent rows (`rowspan="2"`).
+> 3. **Screen Reader Grid Navigation**: When using `colspan`/`rowspan`, ensure grid cell coordinates remain consistent for screen readers.
 > 
 ---
 
+### Exercise 2: Multi-Day Conference Schedule Table with Spanning Row Cells
 
+**Scenario:** A developer creates a conference schedule where a single key-note speech spans across 3 time slots using `rowspan="3"`.
 
-### Exercise 2: Multi-Column Header Cell
+**Requirements:**
+1. Use `rowspan="3"` on a `<td>` cell to span multiple time rows.
+2. Ensure adjacent rows omit the spanned column cell.
 
-**Problem:** Write a `<th>` cell spanning 3 columns with text `'Quarterly Performance'`. 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <th colspan="3">Quarterly Performance</th>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <th colspan="3">Quarterly Performance</th>
+> <table>
+>   <caption>Tech Conference Track Schedule</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Time</th>
+>       <th scope="col">Main Stage</th>
+>       <th scope="col">Workshop Room</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">09:00 AM</th>
+>       <td rowspan="2">Keynote: Future of Web Standards (2 Hours)</td>
+>       <td>CSS Grid Deep Dive</td>
+>     </tr>
+>     <tr>
+>       <th scope="row">10:00 AM</th>
+>       <td>Accessibility Testing Lab</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
 >
-> **Explanation:** `colspan="N"` merges N horizontal column cells together.
+> #### Technical Explanation
+>
+> 1. **Row Merging Logic**: `rowspan="2"` causes a cell to extend down into the next row's layout vertical space.
+> 2. **Omitting Spanned Cells**: Subsequent rows covered by a `rowspan` MUST omit that cell column entry to prevent table row distortion.
+> 3. **Visual Timetable Layouts**: `rowspan` is ideal for scheduling grids and calendar timetables.
 > 
 ---
 
-### Exercise 3: Combining Colspan and Rowspan
+### Exercise 3: Accessible Data Matrix Grid with Combined colspan and rowspan
 
-**Problem:** Write a `<td>` cell spanning 2 rows vertically and 2 columns horizontally.
+**Scenario:** Constructs a multi-dimensional matrix combining column and row spanning.
 
-**Expected output:**
+**Requirements:**
+1. Combine `colspan` and `rowspan` attributes.
+
 > [!check]- Answer
-> ```text
-> <td rowspan="2" colspan="2">Merged Block</td>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <td rowspan="2" colspan="2">Merged Block</td>
+> <table>
+>   <caption>Regional Sales Matrix</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col" rowspan="2">Region</th>
+>       <th scope="colgroup" colspan="2">Q1 Sales</th>
+>     </tr>
+>     <tr>
+>       <th scope="col">Online</th>
+>       <th scope="col">Retail</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">North America</th>
+>       <td>$500K</td>
+>       <td>$300K</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
 >
-> **Explanation:** `rowspan` and `colspan` can be combined on a single cell to create multi-cell grid blocks.
-> 
+> #### Technical Explanation
+>
+> 1. **Matrix Header Grouping**: `colspan` groups sub-headers; `rowspan` preserves primary axis labels.
+> 2. **Cell Count Verification**: Always count total spans (`colspan` + remaining cells) to match expected row cell count.
+> 3. **Accessibility Testing**: Test complex spanned tables with screen readers to verify headers are announced correctly.
 ## 6. Related Terms
 - [`<td>` (Table Data)](td.md) — The tag that receives span attributes.
 - [`<th>` (Table Header)](th.md) — Header cells which frequently span across categories.

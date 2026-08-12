@@ -151,55 +151,94 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Favicon Link Builder
+### Exercise 1: Modern Multi-Resolution Favicon Configuration
 
-**Problem:** Write the `<link>` tag to set a favicon using a PNG image file located in the root directory named "brand-icon.png". The image is 32x32 pixels.
+**Scenario:** An author configures site icons using `<link rel="icon">` for PNG and ICO formats.
 
-**Expected output:**
+**Requirements:**
+1. Add `<link rel="icon" type="image/png" sizes="32x32" href="...">`.
+2. Add standard ICO fallback.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <link rel="icon" type="image/png" href="/brand-icon.png" sizes="32x32">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Acme Portal</title>
+>   <!-- Standard Favicon ICO -->
+>   <link rel="icon" href="/favicon.ico" sizes="any">
+>   <!-- High-Res PNG Favicon -->
+>   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+>   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+> </head>
 > ```
-> - The link relationship is `icon`.
-> - Set the MIME `type` to `image/png`.
-> - Include the `sizes` attribute.
+>
+> #### Technical Explanation
+>
+> 1. **The `<link rel="icon">` Tag**: Specifies site icons displayed on browser tabs, bookmarks, and mobile home screens.
+> 2. **The `sizes` Attribute**: Defines icon pixel dimensions (`32x32`, `16x16`, `any`).
+> 3. **Root `favicon.ico` Fallback**: Placing `favicon.ico` at domain root satisfies legacy browsers automatically.
 > 
 ---
 
+### Exercise 2: SVG Vector Favicon for Automatic Dark Mode Adaptation
 
+**Scenario:** Embeds a scalable SVG favicon supporting CSS dark mode media queries.
 
-### Exercise 2: SVG Favicon Syntax
+**Requirements:**
+1. Link SVG icon via `<link rel="icon" type="image/svg+xml" href="favicon.svg">`.
 
-**Problem:** Write `<link>` tag specifying vector SVG favicon `icon.svg`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <link rel="icon" href="icon.svg" type="image/svg+xml">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <link rel="icon" href="icon.svg" type="image/svg+xml">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Modern Vector Favicon</title>
+>   <!-- SVG Vector Favicon supporting dark mode -->
+>   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+> </head>
 > ```
 >
-> **Explanation:** `image/svg+xml` declares sharp, scalable vector favicons for all resolutions.
+> #### Technical Explanation
+>
+> 1. **SVG Favicon Support**: SVG icons scale infinitely to any screen resolution without pixelation.
+> 2. **Dark Mode Adaptation**: CSS inside `favicon.svg` (`@media (prefers-color-scheme: dark)`) changes icon color automatically.
+> 3. **File Size Efficiency**: Single lightweight vector file replaces multiple PNG raster sizes.
 > 
 ---
 
-### Exercise 3: Apple Touch Icon Syntax
+### Exercise 3: Apple Touch Icon & Web App Manifest Link Integration
 
-**Problem:** Write `<link>` tag declaring Apple iOS home screen bookmark icon `apple-touch-icon.png`.
+**Scenario:** Configures iOS home screen icons and Web App Manifest links.
 
-**Expected output:**
+**Requirements:**
+1. Add `<link rel="apple-touch-icon" href="...">`.
+2. Add `<link rel="manifest" href="...">`.
+
 > [!check]- Answer
-> ```text
-> <link rel="apple-touch-icon" href="apple-touch-icon.png">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <link rel="apple-touch-icon" href="apple-touch-icon.png">
+> <head>
+>   <meta charset="utf-8">
+>   <title>PWA Ready Web App</title>
+>   <!-- Apple Touch Icon for iOS Home Screen -->
+>   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+>   <!-- Web App Manifest for PWA installation -->
+>   <link rel="manifest" href="/site.webmanifest">
+> </head>
 > ```
 >
-> **Explanation:** `rel="apple-touch-icon"` specifies home screen bookmark icon for iOS Safari.
-> 
+> #### Technical Explanation
+>
+> 1. **Apple Touch Icon**: 180x180 PNG icon used when users add website to iOS home screen.
+> 2. **Web App Manifest**: JSON file declaring PWA theme colors, app name, and launcher icons.
+> 3. **Mobile Bookmark Branding**: Provides app-like launcher icons across Android and iOS.
 ## 6. Related Terms
 - [`<link>`](link.md) — The resource connection element.
 - [`<head>`](../level_01/head.md) — The parent container.

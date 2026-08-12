@@ -201,50 +201,105 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Invisible Box
+### Exercise 1: Replacing Generic div Tags with Semantic Landmarks
 
-**Problem:** If you write `<div>Hello</div>` in an HTML file with no CSS, how will it look different from `<p>Hello</p>`?
+**Scenario:** A developer refactors a generic `<div>` layout into accessible HTML5 semantic landmark tags.
 
-**Expected output:**
+**Requirements:**
+1. Replace top layout `<div>` with `<header>`, `<main>`, and `<footer>`.
+2. Wrap blog article in `<article>` instead of `<div class="post">`.
+3. Ensure document structure passes W3C validation.
+
 > [!check]- Answer
-> ```text
-> To the naked eye, it will look almost identical. The only difference is that the browser automatically adds vertical spacing (margin) above and below a `<p>`, but adds absolutely no styling or spacing to a `<div>`.
-> ```
-> - Remember that `<div>` has zero semantic meaning and zero default styling (other than being a block).
-> 
----
-
-### Exercise 2: Refactoring Divitis to Semantic HTML
-
-**Problem:** Refactor `<div class="footer"><p>Copyright 2026</p></div>` to semantic HTML.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <footer>
->   <p>Copyright 2026</p>
+> <!-- Refactored Semantic Layout -->
+> <header class="site-header">
+>   <h1>Tech Insights Blog</h1>
+> </header>
+> <main class="main-content">
+>   <article class="post-card">
+>     <h2>Understanding Modern Semantics</h2>
+>     <p>Semantic tags improve accessibility and SEO rankings.</p>
+>   </article>
+> </main>
+> <footer class="site-footer">
+>   <p>&copy; 2026 Tech Insights</p>
 > </footer>
 > ```
 >
-> **Explanation:** Replace generic `<div>` wrappers with semantic layout elements (`<header>`, `<footer>`, `<main>`).
+> #### Technical Explanation
+>
+> 1. **The Generic `<div>` Container**: `<div>` is a generic non-semantic container with no intrinsic meaning; use it ONLY when no semantic tag fits.
+> 2. **Semantic Landmarks**: Replacing `<div>` with `<header>`, `<main>`, `<article>`, and `<footer>` exposes landmark regions to screen readers.
+> 3. **Maintainability & SEO**: Semantic landmarks make code structure clear to search engines and team developers.
 > 
 ---
 
-### Exercise 3: Valid Div Usage
+### Exercise 2: Using div Strictly as a Non-Semantic CSS Layout Wrapper
 
-**Problem:** When IS a `<div>` element the correct semantic choice in HTML?
+**Scenario:** A UI engineer uses `<div>` purely as a CSS Flexbox grid layout wrapper without conveying false semantics.
 
-**Expected output:**
+**Requirements:**
+1. Use `<div>` to group semantic cards for CSS flex alignment.
+2. Verify inner card elements use semantic tags.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <div class="grid-wrapper">
->   <article>Post 1</article>
->   <article>Post 2</article>
-> </div>
+> <main>
+>   <h2>Our Services</h2>
+>   <!-- div used strictly as a non-semantic CSS Flexbox container -->
+>   <div class="card-grid-wrapper">
+>     <article class="service-card">
+>       <h3>Web Development</h3>
+>       <p>Building fast modern websites.</p>
+>     </article>
+>     <article class="service-card">
+>       <h3>Accessibility Audits</h3>
+>       <p>Ensuring WCAG 2.1 compliance.</p>
+>     </article>
+>   </div>
+> </main>
 > ```
 >
-> **Explanation:** `<div>` is the designated element for non-semantic CSS layout grouping.
+> #### Technical Explanation
+>
+> 1. **Valid `<div>` Use Cases**: Using `<div>` as a CSS layout hook (Flexbox/Grid container) is completely valid when no semantic tag applies.
+> 2. **No Accessibility Impact**: Browsers treat `<div>` as a neutral box, ensuring screen readers focus strictly on inner semantic elements.
+> 3. **Class Name Hooks**: Attach CSS layout classes (e.g. `class="card-grid-wrapper"`) to `<div>` elements for styling.
 > 
+---
+
+### Exercise 3: Auditing Excessive Divitis in Component Cards
+
+**Scenario:** An author simplifies nested card markup by removing unnecessary wrapping `<div>` elements.
+
+**Requirements:**
+1. Remove nested `<div>` wrappers around text elements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Simplified Card Markup -->
+> <article class="user-card">
+>   <img src="images/user.jpg" alt="Alice Smith">
+>   <h3>Alice Smith</h3>
+>   <p>Software Engineer</p>
+> </article>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Divitis Anti-Pattern**: Divitis is the bad practice of over-nesting multiple redundant `<div>` containers around single elements.
+> 2. **DOM Tree Optimization**: Reducing DOM element depth improves browser rendering performance and memory usage.
+> 3. **Clean HTML**: Keep component HTML flat and minimal.
 ## 6. Related Terms
 - [`<span>` (Inline container)](span.md) — The inline equivalent of the `<div>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic divisions.

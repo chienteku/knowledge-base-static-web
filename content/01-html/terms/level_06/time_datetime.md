@@ -149,55 +149,97 @@ Basic date wrapping:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Timestamp Formatting
+### Exercise 1: Machine-Readable Event Publication Dates using time and datetime
 
-**Problem:** Wrap the text "Christmas Day at 8 PM" in a `<time>` tag. Ensure the machine value is set to December 25th, 2026 at 20:00 (8:00 PM).
+**Scenario:** An author marks up publication dates and event times using `<time>` and ISO 8601 `datetime` values.
 
-**Expected output:**
+**Requirements:**
+1. Create a `<time>` element.
+2. Set `datetime="2026-08-12"`.
+3. Write human-readable date text inside.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <time datetime="2026-12-25T20:00">Christmas Day at 8 PM</time>
+> <article class="event-card">
+>   <h2>Annual Developer Conference</h2>
+>   <p>
+>     Event Date: 
+>     <time datetime="2026-08-12">August 12, 2026</time>
+>   </p>
+>   <p>
+>     Start Time: 
+>     <time datetime="2026-08-12T09:00:00-07:00">9:00 AM PDT</time>
+>   </p>
+> </article>
 > ```
-> - The date prefix is `2026-12-25`.
-> - Use a capital `T` to separate the date from the time.
-> - The time suffix is `20:00` (8 PM in 24-hour time).
+>
+> #### Technical Explanation
+>
+> 1. **The `<time>` Element**: Represents a specific point in time or duration; provides machine-readable timestamps via the `datetime` attribute.
+> 2. **ISO 8601 Format (`YYYY-MM-DD`)**: The `datetime` attribute MUST use standardized ISO 8601 strings (e.g. `2026-08-12` or `2026-08-12T09:00:00Z`).
+> 3. **Machine Readability**: Allows search engines, calendar apps, and web crawlers to parse event dates accurately regardless of human display text.
 > 
 ---
 
+### Exercise 2: Human-Readable Relative Time Annotations with ISO Timestamp
 
+**Scenario:** Annotates relative time text ('3 hours ago') with machine-readable precise timestamps.
 
-### Exercise 2: Writing Machine-Readable Time Elements
+**Requirements:**
+1. Set `datetime="2026-08-12T14:30:00Z"`.
+2. Write relative display text ('3 hours ago').
 
-**Problem:** Write `<time>` element displaying text `'3:00 PM'` with machine-readable `datetime` for 15:00 UTC.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <time datetime="15:00">3:00 PM</time>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <time datetime="15:00">3:00 PM</time>
+> <p class="comment-byline">
+>   Posted by Alice 
+>   <time datetime="2026-08-12T14:30:00Z">3 hours ago</time>
+> </p>
 > ```
 >
-> **Explanation:** `datetime="15:00"` provides machine-readable 24-hour time format.
+> #### Technical Explanation
+>
+> 1. **Relative Time Context**: While users see human relative phrases ('3 hours ago'), bots read the exact `datetime` ISO timestamp.
+> 2. **Timezone Offsets**: ISO timestamps can include timezone offsets (`-07:00`) or UTC (`Z`).
+> 3. **Calendar Export Support**: Enables web browsers to offer 'Add to Calendar' features for `<time>` elements.
 > 
 ---
 
-### Exercise 3: ISO 8601 Timestamp Formats
+### Exercise 3: Duration Specifications using ISO 8601 Duration Format
 
-**Problem:** Write valid ISO 8601 `datetime` string for July 25, 2026 at 9:30 AM.
+**Scenario:** Specifies media or recipe preparation durations using the ISO duration format (`PT2H30M`).
 
-**Expected output:**
+**Requirements:**
+1. Use `datetime="PT2H30M"` for a 2-hour 30-minute duration.
+
 > [!check]- Answer
-> ```text
-> 2026-07-25T09:30
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <time datetime="2026-07-25T09:30">July 25, 2026 at 9:30 AM</time>
+> <div class="recipe-meta">
+>   <p>
+>     Preparation Time: 
+>     <time datetime="PT45M">45 minutes</time>
+>   </p>
+>   <p>
+>     Total Cooking Duration: 
+>     <time datetime="PT2H30M">2 hours and 30 minutes</time>
+>   </p>
+> </div>
 > ```
 >
-> **Explanation:** ISO 8601 standard combines YYYY-MM-DD and T hh:mm.
-> 
+> #### Technical Explanation
+>
+> 1. **ISO Duration Format (`PT...`)**: Durations use `P` (period), `T` (time), `H` (hours), `M` (minutes), `S` (seconds) (e.g. `PT2H30M`).
+> 2. **Rich Snippet SEO**: Search engines use duration timestamps for recipe and video search cards.
+> 3. **Semantic Time Representation**: Distinguishes durations from specific calendar date points.
 ## 6. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [Attribute](../level_01/attribute.md) — The parameter concept.

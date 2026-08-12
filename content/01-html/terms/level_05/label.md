@@ -123,66 +123,84 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Implicit Wrapping Method
+### Exercise 1: Explicit Label Association via for and id
 
-**Problem:** There is a second, valid way to bind a label to an input without using the `for` and `id` attributes. Can you guess how you might achieve this structurally?
+**Scenario:** An author links a text label explicitly to an input using matching `for` and `id` attributes.
 
-**Expected output:**
+**Requirements:**
+1. Create a `<label>` with a `for` attribute.
+2. Create an `<input>` with matching `id` attribute.
+3. Verify clicking label focuses input.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> You can physically place the `<input>` INSIDE the `<label>` tags! This is called "implicit binding."
-> <label>
->   Email Address:
->   <input type="email" name="email">
-> </label>
+> <div class="form-control">
+>   <label for="user-bio">User Biography</label>
+>   <textarea id="user-bio" name="bio" rows="4"></textarea>
+> </div>
 > ```
-> - Think about nesting. How do you group things together in HTML?
+>
+> #### Technical Explanation
+>
+> 1. **Explicit Label Linking**: The `for` attribute on `<label>` MUST match the `id` attribute of the target form control.
+> 2. **Enlarged Touch Target**: Clicking or tapping an explicit `<label>` focuses the associated input, expanding touch usability.
+> 3. **Screen Reader Announcement**: When focus enters the input, screen readers announce the exact text inside the linked `<label>`.
 > 
 ---
 
+### Exercise 2: Implicit Label Wrapping Around Inputs
 
+**Scenario:** Creates an implicit label by nesting a checkbox input directly inside the `<label>` tag.
 
-### Exercise 2: 2 Label Association Methods
+**Requirements:**
+1. Wrap `<input type="checkbox">` inside `<label>`.
 
-**Problem:** Write HTML demonstrating both Explicit (`for`/`id`) and Implicit (Nesting) label association.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Explicit: <label for="a">A</label><input id="a">
-> Implicit: <label>B <input></label>
-> ```
-> ```html
-> <!-- Explicit association -->
-> <label for="user-id">Username</label>
-> <input type="text" id="user-id">
 >
-> <!-- Implicit association -->
-> <label>
->   Password
->   <input type="password">
+> #### Implementation
+>
+> ```html
+> <label class="checkbox-label">
+>   <input type="checkbox" name="terms" required>
+>   I agree to the Terms of Service and Privacy Policy
 > </label>
 > ```
 >
-> **Explanation:** Explicit binding uses `for`/`id`; implicit binding wraps `<input>` inside `<label>`.
+> #### Technical Explanation
+>
+> 1. **Implicit Label Syntax**: Nesting an input inside `<label>` automatically associates them without requiring `for` and `id` attributes.
+> 2. **Checkbox Hit Areas**: Wrapping checkbox inputs in labels makes the entire text phrase clickable.
+> 3. **Explicit Preferred for Complex Forms**: Explicit `for`/`id` linking is preferred for complex form layouts.
 > 
 ---
 
-### Exercise 3: Click Target Enlargement Benefit
+### Exercise 3: Fixing Unlabeled Form Controls for Screen Readers
 
-**Problem:** How do `<label>` elements improve user experience for checkboxes and radio buttons on touch screens?
+**Scenario:** Audits and fixes an unlabeled text input.
 
-**Expected output:**
+**Requirements:**
+1. Add explicit `<label>` to unlabeled input.
+
 > [!check]- Answer
-> ```text
-> Clicking the label text toggles the checkbox/radio, expanding the clickable touch target area.
-> ```
-> ```text
-> Clicking the label text toggles the checkbox/radio, expanding the clickable touch target area.
+>
+> #### Implementation
+>
+> ```html
+> <!-- Fixed: Added explicit label for accessibility -->
+> <div class="form-group">
+>   <label for="search-input">Search Knowledge Base</label>
+>   <input type="text" id="search-input" name="search">
+> </div>
 > ```
 >
-> **Explanation:** Bound labels enlarge small touch target areas for mobile users.
-> 
+> #### Technical Explanation
+>
+> 1. **Unlabeled Input Anti-Pattern**: Inputs without labels are unannounced by screen readers, failing WCAG 2.1 SC 3.3.2.
+> 2. **Placeholder Is Not a Label**: Placeholders disappear when typing and do NOT replace `<label>` elements.
+> 3. **Accessibility Auditing**: Automated auditors flag missing `<label>` tags as critical errors.
 ## 6. Related Terms
 - [`<input>`](input.md) — The element that requires a label.
 - [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Selection toggles that heavily depend on labels for target clicking.

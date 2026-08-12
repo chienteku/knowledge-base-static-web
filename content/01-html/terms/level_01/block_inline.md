@@ -138,77 +138,90 @@ div > span -- Block container wrapping inline child
 
 ## 5. Practice Exercises
 
-### Exercise 1: Element Classification
+### Exercise 1: Structuring a Blog Article with Block Elements
 
-**Problem:** Classify each of the following elements as either **Block-level** or **Inline**:
-1. `<a>`
-2. `<h1>`
-3. `<li>`
-4. `<strong>`
-5. `<div>`
-6. `<span>`
+**Scenario:** A web developer structures a news article layout using block-level semantic elements that stack vertically and take up full container width.
 
-**Expected output:**
+**Requirements:**
+1. Wrap content in an `<article>` block element.
+2. Use `<h1>` for the main title and `<p>` for paragraph blocks.
+3. Include a `<blockquote>` for a featured quote.
+
 > [!check]- Answer
-> ```text
-> 1. Inline
-> 2. Block-level
-> 3. Block-level
-> 4. Inline
-> 5. Block-level
-> 6. Inline
+>
+> #### Implementation
+>
+> ```html
+> <article class="blog-post">
+>   <h1>Understanding Web Standards</h1>
+>   <p>Web standards ensure that all users have equal access to information on the internet regardless of device or browser choice.</p>
+>   <blockquote>
+>     <p>The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect.</p>
+>   </blockquote>
+>   <p>By following semantic HTML practices, developers build a more inclusive web for everyone.</p>
+> </article>
 > ```
-> - Ask yourself: does this tag force a line break in normal text flow?
-> - Heading tags and wrappers take full width, while anchors and emphasis tags flow with words.
+>
+> #### Technical Explanation
+>
+> 1. **Block-Level Element Behavior**: Block elements (like `<article>`, `<h1>`, `<p>`, `blockquote`) start on a new line and stretch horizontally to fill their parent container width.
+> 2. **Structural Stacking**: Block elements create the primary layout framework and vertical structural flow of a webpage.
+> 3. **Semantic Containers**: Wrapping content inside semantic block containers improves document outline readability for search engines and screen readers.
 > 
 ---
 
+### Exercise 2: Inline Text Formatting for Product Labels
 
+**Scenario:** A UI author formats a product pricing card, using inline elements to style specific words within a single paragraph without breaking text flow.
 
-### Exercise 2: Classifying Display Types
+**Requirements:**
+1. Use a `<p>` tag as the parent block container.
+2. Wrap key highlights in `<strong>` and `<em>` inline tags.
+3. Use `<span>` for custom price styling.
 
-**Problem:** Classify default display type (Block or Inline) for:
-1. `<div>` 
-2. `<span>` 
-3. `<h1>` 
-4. `<a>` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. div -> Block
-> 2. span -> Inline
-> 3. h1 -> Block
-> 4. a -> Inline
-> ```
-> ```text
-> 1. div -> Block
-> 2. span -> Inline
-> 3. h1 -> Block
-> 4. a -> Inline
+>
+> #### Implementation
+>
+> ```html
+> <p class="product-summary">
+>   Special Offer: Get <strong>50% off</strong> all premium subscriptions during our <em>summer sale</em>! Only <span class="price-highlight">$19.99</span> per month.
+> </p>
 > ```
 >
-> **Explanation:** Block elements start on a new line and stretch full width; inline elements take up only as much width as content needs.
+> #### Technical Explanation
+>
+> 1. **Inline Element Behavior**: Inline elements (like `<strong>`, `<em>`, `<span>`) do not start on a new line; they take up only as much width as their content requires.
+> 2. **Semantic Importance vs Emphasis**: `<strong>` indicates strong importance or urgency; `<em>` indicates stress emphasis.
+> 3. **Generic Text Containers (`<span>`)**: `<span>` is a generic inline container used to group text for styling without implying any semantic meaning.
 > 
 ---
 
-### Exercise 3: Converting Inline to Block-Block Display
+### Exercise 3: Correcting Invalid Inline-Block Nesting
 
-**Problem:** Which CSS property allows an inline `<span>` to respect `width` and `height` while staying on the same line as surrounding text?
+**Scenario:** A developer audits a navigation menu to fix an accessibility bug caused by nesting block-level headings inside an inline link.
 
-**Expected output:**
+**Requirements:**
+1. Replace invalid nesting where a block element is inside an inline element.
+2. Wrap the block element around the link or use appropriate inline tags inside the link.
+
 > [!check]- Answer
-> ```text
-> display: inline-block;
-> ```
-> ```css
-> span {
->   display: inline-block;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <header class="site-header">
+>   <h2 class="brand-title">
+>     <a href="/index.html">Acme Corporation</a>
+>   </h2>
+> </header>
 > ```
 >
-> **Explanation:** `display: inline-block` combines inline flow with block-level box-model dimensions.
-> 
+> #### Technical Explanation
+>
+> 1. **HTML Nesting Rules**: Historically, block-level elements could not be placed inside inline-level elements; HTML5 allows `<a>` to wrap blocks, but heading tags must be placed logically.
+> 2. **DOM Tree Validation**: Proper nesting ensures predictable browser layout rendering and correct screen reader traversal.
+> 3. **Screen Reader Heading Navigation**: Screen readers rely on `<h1>`-`<h6>` tags being root containers for text links to construct heading lists.
 ## 6. Related Terms
 - [`<div>` (Block container)](../level_02/div.md) — The most common block-level generic container.
 - [`<span>` (Inline container)](../level_02/span.md) — The most common inline generic container.

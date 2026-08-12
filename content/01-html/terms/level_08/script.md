@@ -136,63 +136,85 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Bug
+### Exercise 1: Modern ES Module Script Import
 
-**Problem:** Why will this code result in an error saying `myButton is null`?
-```html
-<head>
-  <script>
-    document.getElementById('myButton').style.color = 'red';
-  </script>
-</head>
-<body>
-  <button id="myButton">Click Here</button>
-</body>
-```
+**Scenario:** An author imports a modern JavaScript module using `<script type="module" src="...">`.
 
-**Expected output:**
+**Requirements:**
+1. Add `<script type="module" src="...">` in `<head>`.
+2. Verify automatic deferred execution and strict mode.
+
 > [!check]- Answer
-> ```text
-> Because the browser executes the script immediately when it reads the `<head>`. At that exact millisecond, the browser hasn't reached the `<body>` yet, so the button doesn't exist! You must move the script to the bottom of the body, below the button.
-> ```
-> - Browsers read top-to-bottom, line-by-line.
-> 
----
-
-
-
-### Exercise 2: ES Modules Script Setup
-
-**Problem:** Write `<script>` tag loading ES module file `main.js` with deferred module parsing.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <script type="module" src="main.js"></script>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <script type="module" src="main.js"></script>
+> <head>
+>   <meta charset="utf-8">
+>   <title>ES Module Web App</title>
+>   <!-- ES6 Module Script (Auto-deferred, strict mode enabled) -->
+>   <script type="module" src="js/main.js"></script>
+> </head>
 > ```
 >
-> **Explanation:** `type="module"` enables ES Module import/export syntax and defers execution automatically.
+> #### Technical Explanation
+>
+> 1. **The `<script>` Element**: Embeds or references executable JavaScript code.
+> 2. **`type="module"` Semantics**: Imports code as an ES module; automatically executed with `defer` behavior and in strict mode (`"use strict"`).
+> 3. **Module Scope Isolation**: Variables defined in modules do NOT pollute the global `window` namespace.
 > 
 ---
 
-### Exercise 3: Script Type Attribute Default
+### Exercise 2: Inline Application State Bootstrapping Data Script
 
-**Problem:** Is `type="text/javascript"` required on modern HTML5 `<script>` tags? (Yes/No).
+**Scenario:** Embeds raw JSON data for client-side state initialization using `<script type="application/json">`.
 
-**Expected output:**
+**Requirements:**
+1. Embed JSON inside `<script type="application/json" id="init-data">`.
+
 > [!check]- Answer
-> ```text
-> No. HTML5 defaults <script> tags to JavaScript automatically.
-> ```
-> ```text
-> No. HTML5 defaults <script> tags to JavaScript automatically.
+>
+> #### Implementation
+>
+> ```html
+> <!-- Non-executable JSON data payload embedded safely in HTML -->
+> <script type="application/json" id="user-session-data">
+>   {
+>     "userId": 101,
+>     "username": "JaneDoe",
+>     "roles": ["editor", "admin"]
+>   }
+> </script>
 > ```
 >
-> **Explanation:** `type="text/javascript"` is redundant in modern HTML5.
+> #### Technical Explanation
+>
+> 1. **Non-Executable Data Scripts**: Setting `type="application/json"` prevents browser from executing content as JS.
+> 2. **Safe State Bootstrapping**: Prevents inline XSS vulnerabilities when passing backend data to client scripts.
+> 3. **DOM Parsing Access**: Client JS reads data via `JSON.parse(document.getElementById('user-session-data').textContent)`.
 > 
+---
+
+### Exercise 3: Cross-Origin Script Integrity Verification
+
+**Scenario:** Includes external CDN script with Subresource Integrity (SRI).
+
+**Requirements:**
+1. Add `integrity` hash and `crossorigin="anonymous"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <script src="https://cdn.example.com/library.js" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Subresource Integrity (SRI)**: Verifies fetched CDN script hash matches `integrity` attribute value.
+> 2. **Tampering Prevention**: Blocks script execution if CDN file is modified or compromised.
+> 3. **Mandatory `crossorigin`**: Requires `crossorigin="anonymous"` for cross-domain SRI validation.
 ## 6. Related Terms
 - [`<link>`](link.md) — Used to import CSS, whereas `<script>` is used to import JavaScript.
 - [`defer` & `async` (Script Loading Strategies)](defer_async.md) — Tag parameters optimized for asynchronous asset parsing.

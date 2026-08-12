@@ -235,54 +235,86 @@ div.textContent = userInput; // Safe text-only assignment
 
 ## 5. Practice Exercises
 
-### Exercise 1: Secure Tag Constructor
+### Exercise 1: Hardening External Target Links with rel noopener noreferrer
 
-**Problem:** You are importing a styling framework from `https://cdn.styles.com/theme.css`. The developer documentation lists the file's SHA384 security hash as `abc123xyz...`. Write the secure HTML `<link>` tag including the required attributes to verify file integrity.
+**Scenario:** An author secures all external target `_blank` links against tabnabbing phishing attacks using `rel="noopener noreferrer"`.
 
-**Expected output:**
+**Requirements:**
+1. Add `target="_blank"` to external link.
+2. Add `rel="noopener noreferrer"` security attribute.
+3. Add screen reader context.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <link rel="stylesheet" href="https://cdn.styles.com/theme.css" integrity="sha384-abc123xyz..." crossorigin="anonymous">
+> <article class="resource-card">
+>   <h2>External Web Standards Reference</h2>
+>   <p>Read the official W3C specifications for full documentation.</p>
+>
+>   <a href="https://www.w3.org/TR/html52/" target="_blank" rel="noopener noreferrer" class="btn-external">
+>     Visit W3C HTML5 Specification 
+>     <span class="sr-only">(opens in new window)</span>
+>   </a>
+> </article>
 > ```
-> - Use the `integrity` attribute containing the type prefix `sha384-`.
-> - Include the `crossorigin="anonymous"` attribute (SRI checks require cross-origin attributes to prevent CORS blockage).
+>
+> #### Technical Explanation
+>
+> 1. **Reverse Tabnabbing Attack**: Opening links with `target="_blank"` without `noopener` allows the target page to execute `window.opener.location = 'phishing.html'`.
+> 2. **The `rel="noopener"` Protection**: Prevents the newly opened window from acquiring a reference to the source page's `window.opener` object.
+> 3. **The `rel="noreferrer"` Protection**: Prevents browser from sending HTTP Referer headers to external destination servers.
 > 
 ---
 
+### Exercise 2: Restricting Unsafe Iframe Permissions using Sandbox Attribute
 
+**Scenario:** Restricts embedded third-party iframe capabilities using the `sandbox` security attribute.
 
-### Exercise 2: Sanitizing User HTML Output
+**Requirements:**
+1. Add `sandbox="allow-scripts allow-forms"` to `<iframe>`.
 
-**Problem:** Which DOM property safely sets plain text without risk of XSS HTML injection (`innerHTML` or `textContent`)?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> textContent
-> ```
-> ```javascript
-> element.textContent = userInput;
+>
+> #### Implementation
+>
+> ```html
+> <iframe src="https://third-party.example.com/widget" width="400" height="300" title="Third Party Widget" sandbox="allow-scripts allow-forms" loading="lazy"></iframe>
 > ```
 >
-> **Explanation:** `textContent` escapes HTML entity tags automatically, preventing XSS script execution.
+> #### Technical Explanation
+>
+> 1. **The `sandbox` Attribute**: Applies strict security restrictions to embedded iframes (disables scripts, forms, same-origin access, popups).
+> 2. **Principle of Least Privilege**: Explicitly list allowed capabilities (e.g. `allow-scripts allow-forms`); omit `allow-same-origin` unless necessary.
+> 3. **Mitigating Malicious Ads**: Prevents third-party ad widgets from executing malicious redirects or accessing parent window DOM.
 > 
 ---
 
-### Exercise 3: Clickjacking Protection Header
+### Exercise 3: Mitigating Reflected XSS via Content-Security-Policy Meta Headers
 
-**Problem:** Which HTTP security header prevents unauthorized sites from embedding your page inside malicious `<iframe` frames?
+**Scenario:** Configures Content-Security-Policy rules to block unauthorized script execution.
 
-**Expected output:**
+**Requirements:**
+1. Set strict `Content-Security-Policy` via `<meta>`.
+
 > [!check]- Answer
-> ```text
-> X-Frame-Options: DENY (or SAMEORIGIN) / CSP frame-ancestors.
-> ```
-> ```text
-> X-Frame-Options: DENY (or SAMEORIGIN) / CSP frame-ancestors.
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <meta charset="utf-8">
+>   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.example.com; object-src 'none';">
+>   <title>Hardened Security Application</title>
+> </head>
 > ```
 >
-> **Explanation:** `X-Frame-Options` blocks Clickjacking iframe embedding attacks.
-> 
+> #### Technical Explanation
+>
+> 1. **Content-Security-Policy (CSP)**: Restricts resource loading to explicitly whitelisted trusted domains.
+> 2. **XSS Attack Mitigation**: Blocks inline script execution (`<script>alert(1)</script>`) and unauthorized eval() calls.
+> 3. **Security Header Compliance**: Satisfies OWASP web security guidelines.
 ## 6. Related Terms
 - [`<noscript>`](../level_08/noscript.md) — Fallbacks displayed when scripting is turned off.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Storage blocks vulnerable to XSS data theft.

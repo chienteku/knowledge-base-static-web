@@ -149,57 +149,83 @@ Hover tooltips on different elements:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Hover prompts
+### Exercise 1: Providing Supplementary Advisory Tooltips on Abbreviation Elements
 
-**Problem:** Add a hover tooltip saying "Goes to homepage" to the following link:
+**Scenario:** An author uses the `title` attribute on an `<abbr>` element to provide the full expanded text of an acronym as a hover tooltip.
 
-```html
-<a href="index.html">Home</a>
-```
+**Requirements:**
+1. Wrap acronym in an `<abbr>` tag.
+2. Add `title="World Health Organization"` attribute.
+3. Verify browser native hover tooltip.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <a href="index.html" title="Goes to homepage">Home</a>
+> <p>
+>   Global health guidelines are published by the 
+>   <abbr title="World Health Organization">WHO</abbr> in Geneva.
+> </p>
 > ```
-> - Add the `title` attribute directly inside the opening `<a>` tag.
+>
+> #### Technical Explanation
+>
+> 1. **The `title` Attribute Purpose**: Provides advisory tooltip information displayed when users hover over an element with a mouse.
+> 2. **Valid Use Case (`<abbr>`)**: Pairing `title` with `<abbr>` is one of the few standard HTML usages for explaining acronyms.
+> 3. **Touchscreen & Keyboard Limitations**: Mouse hover tooltips (`title`) cannot be triggered by keyboard focus or mobile touchscreens.
 > 
 ---
 
+### Exercise 2: Preventing Misuse of title Attribute as a Substitute for Accessible Labels
 
+**Scenario:** Corrects a form control where a `title` attribute was used instead of an explicit `<label>` or `aria-label`.
 
-### Exercise 2: Hover Tooltip Syntax
+**Requirements:**
+1. Replace `<input title="Email">` with explicit `<label for="email">`.
 
-**Problem:** Write an `<a>` link to `https://example.com` with hover tooltip reading `'Visit Example Website'`. 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> <a href="https://example.com" title="Visit Example Website">Example</a>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <a href="https://example.com" title="Visit Example Website">Example</a>
+> <!-- Refactored: Added explicit label instead of relying on title tooltip -->
+> <div class="form-group">
+>   <label for="user-email-input">Email Address</label>
+>   <input type="email" id="user-email-input" name="email" required placeholder="name@example.com">
+> </div>
 > ```
 >
-> **Explanation:** The global `title` attribute displays hover tooltips on desktop browsers.
+> #### Technical Explanation
+>
+> 1. **`title` Is NOT an Accessible Label**: Do NOT rely on `title` for form labels; screen readers often ignore `title` attributes if other labels exist.
+> 2. **Disappearing Tooltips**: `title` tooltips fade away quickly and cannot be resized or restyled via CSS.
+> 3. **Explicit Label Superiority**: Explicit `<label>` elements provide enlarged click targets and guaranteed screen reader announcements.
 > 
 ---
 
-### Exercise 3: Touchscreen Tooltip Problem
+### Exercise 3: Native Browser Tooltip Hover Behavior and Touchscreen Limitations
 
-**Problem:** Why is the global `title` attribute problematic for mobile smartphone web users?
+**Scenario:** Demonstrates supplementary advisory note tooltips on truncated table text headers.
 
-**Expected output:**
+**Requirements:**
+1. Add advisory `title` tooltips to truncated text.
+
 > [!check]- Answer
-> ```text
-> Touchscreens do not have a mouse cursor hover state, making tooltips impossible to reveal on mobile devices.
-> ```
-> ```text
-> Touchscreens do not have a mouse cursor hover state, making tooltips impossible to reveal on mobile devices.
+>
+> #### Implementation
+>
+> ```html
+> <th scope="col" title="Average Order Value in US Dollars">
+>   Avg Order Value ($)
+> </th>
 > ```
 >
-> **Explanation:** Hover tooltips require desktop mouse hover interactions.
-> 
+> #### Technical Explanation
+>
+> 1. **Advisory Metadata**: Use `title` only for non-essential supplementary advisory hints.
+> 2. **No CSS Customization**: Native browser `title` tooltips cannot be styled with CSS fonts or background colors.
+> 3. **Accessible Tooltip Alternatives**: For critical information, build custom CSS/ARIA tooltips triggered by hover AND focus.
 ## 6. Related Terms
 - [Attribute](../level_01/attribute.md) — The general tag parameter concept.
 - [`alt` Attribute](../level_03/alt.md) — The required visual description attribute for images.

@@ -129,63 +129,104 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 
 ## 5. Practice Exercises
 
-### Exercise 1: Form Boundaries
+### Exercise 1: Complete Accessible Registration Form Structure
 
-**Problem:** If you have two `<form>` elements on a single page, and the user clicks the submit button inside the *second* form, does the data from the *first* form get sent?
+**Scenario:** An author builds a complete user registration form using `<form>`, `<fieldset>`, `<legend>`, `<label>`, and `<input>`.
 
-**Expected output:**
+**Requirements:**
+1. Create root `<form>` with `action` and `method`.
+2. Group inputs using `<fieldset>` and `<legend>`.
+3. Associate all inputs with explicit `<label>` tags.
+
 > [!check]- Answer
-> ```text
-> No! A form acts as a strict boundary. When a submit button is clicked, the browser ONLY collects the data from the input fields that exist inside that specific `<form>` container.
-> ```
-> - Think back to the manila envelope metaphor.
-> 
----
-
-
-
-### Exercise 2: Building Complete Login Form
-
-**Problem:** Write `<form>` POSTing to `/login` with `email` and `password` inputs, labels, and submit button.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <form method="POST" action="/login"><label>Email <input type="email" name="email" required></label><label>Password <input type="password" name="password" required></label><button type="submit">Login</button></form>
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <form method="POST" action="/login">
->   <label>
->     Email:
->     <input type="email" name="email" required>
->   </label>
->   <label>
->     Password:
->     <input type="password" name="password" required>
->   </label>
->   <button type="submit">Login</button>
+> <form action="/signup" method="post" class="registration-form">
+>   <h2>New User Registration</h2>
+>
+>   <fieldset>
+>     <legend>Account Credentials</legend>
+>
+>     <div class="form-group">
+>       <label for="reg-username">Username</label>
+>       <input type="text" id="reg-username" name="username" required autocomplete="username">
+>     </div>
+>
+>     <div class="form-group">
+>       <label for="reg-email">Email</label>
+>       <input type="email" id="reg-email" name="email" required autocomplete="email">
+>     </div>
+>   </fieldset>
+>
+>   <button type="submit">Register Now</button>
 > </form>
 > ```
 >
-> **Explanation:** Complete form encapsulates input controls, labels, methods, actions, and submit buttons.
+> #### Technical Explanation
+>
+> 1. **The `<form>` Element**: Represents a document section containing interactive controls for submitting information to a server.
+> 2. **Fieldset & Legend Semantics**: `<fieldset>` groups related form fields; `<legend>` provides a screen-reader caption for the group.
+> 3. **Implicit Form Validation**: Browsers automatically validate required input fields when submitted.
 > 
 ---
 
-### Exercise 3: Disabling Native HTML5 Form Validation
+### Exercise 2: Preventing Default Submission in Single-Page Applications
 
-**Problem:** Which attribute on `<form>` disables native browser validation when testing custom JS validation?
+**Scenario:** Configures form attributes for client-side JavaScript handling.
 
-**Expected output:**
+**Requirements:**
+1. Add `novalidate` attribute when custom JS validation is used.
+2. Intercept submission via JavaScript.
+
 > [!check]- Answer
-> ```text
-> novalidate attribute
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <form novalidate>
+> <form id="spa-form" action="/api/v1/data" method="post" novalidate>
+>   <label for="custom-input">Input Data</label>
+>   <input type="text" id="custom-input" name="data" required>
+>   <button type="submit">Save</button>
+> </form>
 > ```
 >
-> **Explanation:** `novalidate` bypasses native browser input validation popups.
+> #### Technical Explanation
+>
+> 1. **The `novalidate` Attribute**: Disables native browser popup validation bubbles so custom JavaScript validation UI can be used.
+> 2. **SPA Event Interception**: JavaScript handles `form.addEventListener('submit', e => e.preventDefault())`.
+> 3. **Semantic Fallback**: Retaining `action` and `method` ensures non-JS form submission fallbacks work.
 > 
+---
+
+### Exercise 3: Accessible Search Bar Form with Landmark Role
+
+**Scenario:** Builds a global website header search form with search landmark semantics.
+
+**Requirements:**
+1. Add `role="search"`.
+2. Use `<input type="search">`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <header>
+>   <form action="/search" method="get" role="search">
+>     <label for="header-search" class="sr-only">Search Website</label>
+>     <input type="search" id="header-search" name="query" placeholder="Search...">
+>     <button type="submit">Search</button>
+>   </form>
+> </header>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Landmark `role="search"`**: Exposes the form as a search landmark in screen reader navigation menus.
+> 2. **`type="search"` Input**: Renders native search clear buttons on modern mobile OS keyboards.
+> 3. **Visually Hidden Labels**: Use `class="sr-only"` to keep labels accessible when visual design omits visible text.
 ## 6. Related Terms
 - [`action` & `method` Attributes](action_method.md) — The destination and request details for form data.
 - [`<input>`](input.md) — The text boxes and checkboxes that go *inside* the form.

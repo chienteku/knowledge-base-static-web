@@ -110,45 +110,103 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 
 ## 5. Practice Exercises
 
-### Exercise 1: Quirks Mode Investigation
+### Exercise 1: Declaring Standard HTML5 Document Type
 
-**Problem:** What happens if you completely delete the `<!DOCTYPE html>` line from an HTML document?
+**Scenario:** A developer creates a new web document beginning with the standard HTML5 `<!DOCTYPE html>` declaration.
 
-**Expected output:**
+**Requirements:**
+1. Place `<!DOCTYPE html>` as the very first line of the file.
+2. Include `<html lang="en">`.
+3. Add standard `<head>` and `<body>` tags.
+
 > [!check]- Answer
-> ```text
-> The browser will enter "Quirks Mode." It will intentionally emulate bugs and non-standard behavior from the late 1990s (like Netscape Navigator 4) to ensure ancient websites don't break. This will likely completely destroy modern CSS layouts.
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Standard HTML5 Page</title>
+> </head>
+> <body>
+>   <h1>Valid Document Declaration</h1>
+> </body>
+> </html>
 > ```
-> - Search for the term "Quirks Mode vs Standards Mode".
+>
+> #### Technical Explanation
+>
+> 1. **Purpose of DOCTYPE**: `<!DOCTYPE html>` tells the browser that the document is written in modern HTML5.
+> 2. **First Line Mandate**: Must be the very first line of the document before any tags or comments.
+> 3. **Case Insensitivity**: DOCTYPE is case-insensitive, but lowercase `<!DOCTYPE html>` is standard convention.
 > 
 ---
 
-### Exercise 2: DOCTYPE Placement Rule
+### Exercise 2: Preventing Legacy Browser Quirks Mode Rendering
 
-**Problem:** Where must `<!DOCTYPE html>` be located in an HTML document?
+**Scenario:** An auditor verifies that a legacy page uses `<!DOCTYPE html>` to force modern Standards Mode rendering across browsers.
 
-**Expected output:**
+**Requirements:**
+1. Ensure no characters or whitespace precede `<!DOCTYPE html>`.
+2. Verify page renders in Standards Mode.
+
 > [!check]- Answer
-> ```text
-> At the very first line of the document, before the <html> tag.
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>Standards Mode Demo</title>
+> </head>
+> <body>
+>   <p>Renders consistently in modern Standards Mode across all browsers.</p>
+> </body>
+> </html>
 > ```
 >
-> **Explanation:** `<!DOCTYPE html>` must be line 1 to inform browser rendering engines to use Standards Mode.
+> #### Technical Explanation
+>
+> 1. **Standards Mode vs Quirks Mode**: Missing DOCTYPE forces browsers into Quirks Mode, emulating 1990s layout bugs.
+> 2. **CSS Rendering Consistency**: Standards Mode ensures CSS box-model and flexbox layouts render identically across Chrome, Firefox, and Safari.
+> 3. **Minimal HTML5 Declaration**: HTML5 replaced complex HTML4 DTD URLs with simple `<!DOCTYPE html>`.
 > 
 ---
 
-### Exercise 3: Case Sensitivity of DOCTYPE
+### Exercise 3: Auditing Valid Document Declarations in Modern Web Apps
 
-**Problem:** Is `<!doctype html>` valid in modern HTML5? (Yes/No).
+**Scenario:** A CI linter checks single-page app index HTML files for valid `<!DOCTYPE html>` declarations.
 
-**Expected output:**
+**Requirements:**
+1. Validate `<!DOCTYPE html>` placement in root template.
+
 > [!check]- Answer
-> ```text
-> Yes. DOCTYPE is case-insensitive in HTML5.
+>
+> #### Implementation
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>   <title>App Dashboard</title>
+> </head>
+> <body>
+>   <div id="root"></div>
+> </body>
+> </html>
 > ```
 >
-> **Explanation:** `<!DOCTYPE html>`, `<!doctype html>`, and `<!DoCtYpE hTmL>` are all valid HTML5 declarations.
-> 
+> #### Technical Explanation
+>
+> 1. **Single Page App (SPA) Templates**: SPAs like React and Vue rely on a static `index.html` file starting with `<!DOCTYPE html>`.
+> 2. **Viewport Compatibility**: Enables responsive layout calculations in mobile browsers.
+> 3. **HTML5 Conformance**: Required for 100% W3C HTML5 validator compliance.
 ## 6. Related Terms
 - [`<html>`](html_tag.md) — The tag that immediately follows the DOCTYPE declaration.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Like the DOCTYPE declaration, void elements stand as single declarations without closing pairs.

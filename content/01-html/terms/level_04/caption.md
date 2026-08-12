@@ -161,84 +161,128 @@ A simple table with a caption:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Setting a Caption
+### Exercise 1: Accessible Financial Table with Title Caption
 
-**Problem:** Add a caption saying "Weekly Class Schedule" to the following table structure:
+**Scenario:** An author creates a quarterly revenue report table, adding a `<caption>` element so screen readers can state the table's purpose before reading data cells.
 
-```html
-<table>
-  <tr>
-    <th>Day</th>
-    <th>Time</th>
-  </tr>
-  <tr>
-    <td>Monday</td>
-    <td>9:00 AM</td>
-  </tr>
-</table>
-```
+**Requirements:**
+1. Place `<caption>` as the very first child of the `<table>` element.
+2. Write a clear, descriptive title summarizing table contents.
+3. Include semantic `<thead>` and `<tbody>` rows.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```html
-> <table>
->   <caption>Weekly Class Schedule</caption>
->   <tr>
->     <th>Day</th>
->     <th>Time</th>
->   </tr>
->   <tr>
->     <td>Monday</td>
->     <td>9:00 AM</td>
->   </tr>
-> </table>
-> ```
-> - The `<caption>` tag must be nested right after the opening `<table>` tag.
-> 
----
-
-
-
-### Exercise 2: Accessible Table with Caption
-
-**Problem:** Write `<table>` with `<caption>` reading `'Q1 Sales Summary'`, containing single row with `th` and `td`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <table><caption>Q1 Sales Summary</caption><tr><th>Region</th><td>East</td></tr></table>
-> ```
-> ```html
-> <table>
->   <caption>Q1 Sales Summary</caption>
->   <tr>
->     <th>Region</th>
->     <td>East</td>
->   </tr>
+> <table class="financial-table">
+>   <caption>Quarterly Revenue Report 2026 (in USD Millions)</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Quarter</th>
+>       <th scope="col">Revenue</th>
+>       <th scope="col">Expenses</th>
+>       <th scope="col">Profit</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Q1 2026</th>
+>       <td>$12.5M</td>
+>       <td>$8.2M</td>
+>       <td>$4.3M</td>
+>     </tr>
+>     <tr>
+>       <th scope="row">Q2 2026</th>
+>       <td>$14.1M</td>
+>       <td>$9.0M</td>
+>       <td>$5.1M</td>
+>     </tr>
+>   </tbody>
 > </table>
 > ```
 >
-> **Explanation:** `<caption>` acts as accessible header title for tabular data for screen readers.
+> #### Technical Explanation
+>
+> 1. **The `<caption>` Element**: Provides a visible title and accessible label for a data table; must be the FIRST direct child of `<table>`.
+> 2. **Screen Reader Announcement**: Screen readers read the `<caption>` first when users focus on or navigate to a table, giving instant context.
+> 3. **Visual & Accessible Title**: `<caption>` eliminates the need for separate disconnected heading tags (`<h3>`) above tables.
 > 
 ---
 
-### Exercise 3: Caption CSS Positioning
+### Exercise 2: Caption Placement and Screen Reader Announcement Rules
 
-**Problem:** Which CSS property moves `<caption>` display rendering to the bottom of the table?
+**Scenario:** An auditor verifies that table captions are placed correctly as the immediate child of `<table>`.
 
-**Expected output:**
+**Requirements:**
+1. Ensure `<caption>` precedes `<thead>`.
+2. Verify caption text describes data context.
+
 > [!check]- Answer
-> ```text
-> caption-side: bottom;
-> ```
-> ```css
-> caption {
->   caption-side: bottom;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <table>
+>   <caption>Employee Department Directory</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Name</th>
+>       <th scope="col">Department</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Jane Doe</th>
+>       <td>Engineering</td>
+>     </tr>
+>   </tbody>
+> </table>
 > ```
 >
-> **Explanation:** `caption-side: bottom` positions table caption below table data while preserving HTML structure.
+> #### Technical Explanation
+>
+> 1. **First Child Rule**: The `<caption>` element MUST appear immediately after the opening `<table>` tag, before `<thead>` or `<tr>`.
+> 2. **Table Title Association**: Programmatically links the caption title with the table structure in the accessibility tree.
+> 3. **No Extra Wrapper Required**: Do NOT place `<caption>` inside `<thead>` or `<tr>` tags.
 > 
+---
+
+### Exercise 3: Styling Table Captions with CSS without Losing Semantics
+
+**Scenario:** Styles a table caption using CSS `caption-side: bottom` while maintaining semantic DOM order.
+
+**Requirements:**
+1. Place `<caption>` first in HTML markup.
+2. Style caption positioning using CSS.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <table class="styled-table">
+>   <caption class="caption-bottom">Table 1.2: Annual Metric Comparisons (Source: Internal Audit 2026)</caption>
+>   <thead>
+>     <tr>
+>       <th scope="col">Metric</th>
+>       <th scope="col">Value</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <th scope="row">Conversion Rate</th>
+>       <td>3.4%</td>
+>     </tr>
+>   </tbody>
+> </table>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **DOM Order Independence**: Keep `<caption>` as the first HTML child of `<table>` regardless of visual CSS placement.
+> 2. **CSS `caption-side` Property**: CSS `caption-side: bottom` moves the visual caption display below the table without breaking DOM accessibility.
+> 3. **Informative Metadata Subtitles**: Captions can include data source notes and table number identifiers.
 ## 6. Related Terms
 - [`<table>`](table.md) — The parent container that holds the caption.
 - [`<th>` (Table Header)](th.md) — The header cell tag inside rows.

@@ -136,69 +136,85 @@ Whitespace collapse demonstration showing different source formatting yielding t
 
 ## 5. Practice Exercises
 
-### Exercise 1: Spacing Analysis
+### Exercise 1: Managing Single-Space Collapse in HTML Text Nodes
 
-**Problem:** How many spaces will the browser render on the screen for the following block of HTML?
+**Scenario:** Demonstrates how browsers collapse multiple spaces, tabs, and newlines into a single space during rendering.
 
-```html
-<p>
-  Hello,
-  
-  
-  
-  World!
-</p>
-```
+**Requirements:**
+1. Write HTML paragraph with multiple consecutive spaces and newlines.
+2. Observe browser collapsed single-space output.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Exactly one space.
-> All consecutive carriage returns (new lines) and blank spaces are collapsed by the browser into a single space character.
-> ```
-> - Remember that whitespace collapse treats line breaks (Enters) and spaces as the exact same block of collapse.
-> 
----
-
-
-
-### Exercise 2: Preserving Whitespace with pre Tag
-
-**Problem:** Which HTML tag preserves exact spaces, tabs, and line breaks without collapsing?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <pre> (Preformatted Text element).
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <pre>
->   Line 1
->     Indented Line 2
-> </pre>
+> <!-- Input with multiple spaces and newlines -->
+> <p>
+>   This text     has multiple      spaces
+>   and multiple
+>   lines.
+> </p>
+>
+> <!-- Browser Renders As: "This text has multiple spaces and multiple lines." -->
 > ```
 >
-> **Explanation:** `<pre>` tag displays text in monospace font, preserving all whitespace verbatim.
+> #### Technical Explanation
+>
+> 1. **Whitespace Collapse Rule**: HTML parsers collapse contiguous sequences of tabs, spaces, and line breaks into a single space character.
+> 2. **Clean Source Formatting**: Allows developers to indent HTML source code for readability without affecting page layout spacing.
+> 3. **CSS Control**: Whitespace collapse behavior can be controlled using the CSS `white-space` property.
 > 
 ---
 
-### Exercise 3: CSS white-space Property
+### Exercise 2: Preserving Preformatted Code and Poetry with pre Element
 
-**Problem:** Which CSS property disables whitespace collapsing on standard `<div>` elements?
+**Scenario:** Uses the `<pre>` element to preserve exact spaces, tabs, and line breaks for code snippets.
 
-**Expected output:**
+**Requirements:**
+1. Wrap code snippet inside `<pre><code>...</code></pre>`.
+
 > [!check]- Answer
-> ```text
-> white-space: pre; (or pre-wrap / pre-line)
-> ```
-> ```css
-> div {
->   white-space: pre-wrap;
-> }
+>
+> #### Implementation
+>
+> ```html
+> <pre><code>function calculateTotal(price, tax) {
+>   // Preserves exact indentation and line breaks
+>   return price + (price * tax);
+> }</code></pre>
 > ```
 >
-> **Explanation:** `white-space: pre-wrap` preserves source spaces and newlines while wrapping lines.
+> #### Technical Explanation
+>
+> 1. **`<pre>` Element Behavior**: The `<pre>` (preformatted) element displays text using a monospace font while preserving all spaces and line breaks.
+> 2. **Combining `<pre>` and `<code>`**: Best practice for code snippets is wrapping `<code>` inside `<pre>`.
+> 3. **Indentation Caution**: Whitespace inside `<pre>` tags is rendered verbatim, so avoid extra indentation before code content.
 > 
+---
+
+### Exercise 3: HTML Entities for Controlled Spacing
+
+**Scenario:** Uses non-breaking space entities (`&nbsp;`) to prevent unwanted word wrapping in brand names.
+
+**Requirements:**
+1. Use `&nbsp;` between brand words.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <p>
+>   Learn more about products from Acme&nbsp;Corp.
+> </p>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Non-Breaking Space (`&nbsp;`)**: Prevents automatic line wrapping between two words while adding a single space.
+> 2. **Misuse Warning**: Do NOT use multiple `&nbsp;` entities to create layout margins; use CSS spacing properties instead.
+> 3. **HTML Entity Encoding**: Entities encode special or non-collapsible characters safely.
 ## 6. Related Terms
 - [Nesting](nesting.md) — Proper tag structure which relies on source code indentation.
 - [`<pre>` & `<code>`](../level_02/pre_code.md) — Related concept: `<pre>` & `<code>`.
